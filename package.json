@@ -1,0 +1,15 @@
+{
+  "name": "se-2",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/frontend",
+      "packages/hardhat"
+    ]
+  },
+  "scripts": {
+    "chain": "yarn workspace @se-2/hardhat chain",
+    "start": "yarn workspace @se-2/frontend dev"
+  }
+}
