@@ -36,8 +36,7 @@ Run smart contract test with `yarn hardhat:test`
 
 ## ToDo.
 
-- [ ] Use hardhat-deploy
-- [ ] Hardhat contracts json copy to front-end
+- [ ] Set up initial Tailwind (+ daisy) front-end structure.
 - [ ] Front-end: Contract UI component (abi.nina / se => remove antd)
 - [ ] Front-end: Burner wallets on RainbowKit. 
 - [ ] Linter / prettier
