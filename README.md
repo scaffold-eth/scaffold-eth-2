@@ -36,8 +36,9 @@ Run smart contract test with `yarn hardhat:test`
 
 ## ToDo.
 
-- [ ] Set up initial Tailwind (+ daisy) front-end structure.
 - [ ] Front-end: Contract UI component (abi.nina / se => remove antd)
-- [ ] Front-end: Burner wallets on RainbowKit. 
+- [ ] Front-end: Burner wallets on RainbowKit.
+- [ ] Navigation + frontpage (check scaffold-eth-tailwind)
+- [ ] Daisy?
 - [ ] Linter / prettier
 - [ ] React Scaffold-eth Context? 
