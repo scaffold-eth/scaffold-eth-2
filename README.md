@@ -37,6 +37,10 @@ Run smart contract test with `yarn hardhat:test`
 ## ToDo.
 
 - [ ] Front-end: Contract UI component (abi.nina / se => remove antd)
+    - [x] Address
+    - [ ] AddressInput
+    - [ ] Balance
+    - [ ] ..
 - [ ] Front-end: Burner wallets on RainbowKit.
 - [ ] Navigation + frontpage (check scaffold-eth-tailwind)
 - [ ] Daisy?

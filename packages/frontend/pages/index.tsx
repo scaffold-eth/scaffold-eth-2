@@ -1,6 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import Head from "next/head";
+import Address from "../components/scaffold-eth/Address";
 
 const Home: NextPage = () => {
   return (
@@ -31,6 +32,9 @@ const Home: NextPage = () => {
             packages/frontend/pages/index.tsx
           </code>
         </p>
+
+        <h3 className="font-bold">Address Component</h3>
+        <Address address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045" />
       </main>
     </div>
   );
