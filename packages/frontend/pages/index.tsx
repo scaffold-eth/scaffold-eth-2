@@ -35,6 +35,10 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold">Address Component</h3>
         <Address address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045" />
+
+        <p>
+          <button className="btn btn-primary">Daisy UI Button</button>
+        </p>
       </main>
     </div>
   );
