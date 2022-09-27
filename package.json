@@ -14,5 +14,6 @@
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
     "lint": "yarn workspace @se-2/frontend lint"
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
