@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Blockies from "react-blockies";
-import {
-  DocumentDuplicateIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/outline";
+import { DocumentDuplicateIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEnsName } from "wagmi";
 
@@ -65,12 +62,7 @@ export default function Address({
   if (minimized) {
     return (
       <a target="_blank" href={explorerLink} rel="noopener noreferrer">
-        <Blockies
-          className="inline rounded-md"
-          size={8}
-          scale={2}
-          seed={address.toLowerCase()}
-        />
+        <Blockies className="inline rounded-md" size={8} scale={2} seed={address.toLowerCase()} />
       </a>
     );
   }
@@ -86,9 +78,7 @@ export default function Address({
         />
       </div>
       {disableAddressLink ? (
-        <span className="ml-1.5 text-lg font-normal text-gray-900 dark:text-white">
-          {displayAddress}
-        </span>
+        <span className="ml-1.5 text-lg font-normal text-gray-900 dark:text-white">{displayAddress}</span>
       ) : (
         <a
           className="ml-1.5 text-lg font-normal text-gray-900 dark:text-white"

@@ -1,5 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import type { NextPage, NextPageContext } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import Address from "../components/scaffold-eth/Address";
 
@@ -9,7 +9,6 @@ const Home: NextPage = () => {
       <Head>
         <title>Scaffod-eth App</title>
         <meta name="description" content="Created with 🏗 scaffold-eth" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="flex items-center flex-col py-16">
@@ -19,18 +18,16 @@ const Home: NextPage = () => {
           Welcome to{" "}
           <a
             className="text-blue-600 hover:underline"
-            href="https://github.com/scaffold-eth/scaffold-eth"
+            href="https://github.com/scaffold-eth/se-2"
             target="_blank"
+            rel="noreferrer"
           >
-            scaffold-eth
+            scaffold-eth 2
           </a>
         </h1>
 
         <p className="text-center text-xl">
-          Get started by editing{" "}
-          <code className="italic bg-gray-200">
-            packages/frontend/pages/index.tsx
-          </code>
+          Get started by editing <code className="italic bg-gray-200">packages/frontend/pages/index.tsx</code>
         </p>
 
         <h3 className="font-bold">Address Component</h3>

@@ -1,9 +1,5 @@
 import type { AppProps } from "next/app";
-import {
-  RainbowKitProvider,
-  connectorsForWallets,
-  wallet,
-} from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
@@ -27,7 +23,7 @@ const { chains, provider, webSocketProvider } = configureChains(
       apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
     }),
     publicProvider(),
-  ]
+  ],
 );
 
 const connectors = connectorsForWallets([
