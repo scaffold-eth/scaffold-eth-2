@@ -32,17 +32,3 @@ yarn deploy
 Visit `http://localhost:3000`.
 
 Run smart contract test with `yarn hardhat:test`
-
-
-## ToDo.
-
-- [ ] Front-end: Contract UI component (abi.nina / se => remove antd)
-    - [x] Address
-    - [ ] AddressInput
-    - [ ] Balance
-    - [ ] ..
-- [ ] Front-end: Burner wallets on RainbowKit.
-- [ ] Navigation + frontpage (check scaffold-eth-tailwind)
-- [ ] Daisy?
-- [ ] Linter / prettier
-- [ ] React Scaffold-eth Context? 
