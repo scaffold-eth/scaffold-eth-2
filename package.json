@@ -13,7 +13,7 @@
     "deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
-    "lint": "yarn workspace @se-2/frontend lint",
+    "frontend:lint": "yarn workspace @se-2/frontend lint",
     "postinstall": "husky install",
     "precommit": "lint-staged"
   },
