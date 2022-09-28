@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "next:lint": "next lint",
+    "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
+    "format": "yarn prettier -w"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",

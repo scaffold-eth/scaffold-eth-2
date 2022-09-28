@@ -24,8 +24,8 @@
   },
   "lint-staged": {
     "packages/frontend/**/*.{ts,tsx}": [
-      "yarn eslint --fix",
-      "yarn prettier --write"
+      "yarn workspace  @se-2/frontend lint --fix",
+      "yarn workspace  @se-2/frontend format"
     ]
   }
 }
