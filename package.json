@@ -13,7 +13,19 @@
     "deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
-    "lint": "yarn workspace @se-2/frontend lint"
+    "lint": "yarn workspace @se-2/frontend lint",
+    "postinstall": "husky install",
+    "precommit": "lint-staged"
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.2.3",
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
+  },
+  "lint-staged": {
+    "packages/frontend/**/*.{ts,tsx}": [
+      "yarn eslint --fix",
+      "yarn prettier --write"
+    ]
+  }
 }
