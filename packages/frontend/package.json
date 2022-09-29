@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ethersproject/networks": "^5.7.1",
+    "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
     "@rainbow-me/rainbowkit": "^0.6.0",
     "@types/react-blockies": "^1.4.1",

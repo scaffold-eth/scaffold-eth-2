@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "requirePragma": false,
+  "arrowParens": "always",
+  "bracketSameLine": true,
+  "tabWidth": 2,
+  "printWidth": 160,
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "compiler": "0.8.0",
+        "explicitTypes": "always",
+        "printWidth": 160,
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": false,
+        "bracketSpacing": true,
+        "arrowParens": "always",
+        "semi": true
+      }
+    }
+  ]
+}
