@@ -20,8 +20,7 @@ const Home: NextPage = () => {
             className="text-blue-600 hover:underline"
             href="https://github.com/scaffold-eth/se-2"
             target="_blank"
-            rel="noreferrer"
-          >
+            rel="noreferrer">
             scaffold-eth 2
           </a>
         </h1>
