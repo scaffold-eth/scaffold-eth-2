@@ -4,8 +4,8 @@ import { BurnerConnectorError, BurnerProvider } from "./";
 import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from "./";
 
 export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOptions> {
-  readonly id = "coolWallet";
-  readonly name = "Cool Wallet";
+  readonly id = "burnerWallet";
+  readonly name = "Burner Wallet";
   readonly ready = true;
 
   private provider?: BurnerProvider;
@@ -24,8 +24,18 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
   // Implement other methods
   // connect, disconnect, getAccount, etc.
   async connect(config?: { chainId?: number | undefined } | undefined): Promise<Required<BurnerConnectorData>> {
-    this.provider = new StaticJsonRpcProvider(this.options.url, this.options.network);
-    const account = await this.getAccount(this.options.accountId);
+    console.log("connect;");
+    console.log(this.chains, config, this.options);
+
+    const chain = this.chains.find((f) => f.id === config?.chainId);
+    console.log(chain);
+
+    if (chain == null) {
+      throw new BurnerConnectorError(BurnerConnectorErrorList.chainNotSupported);
+    }
+
+    this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
+    const account = await this.getAccount();
     const chainId = await this.getChainId();
 
     if (this.provider == null || account == null || chainId == null) {
@@ -49,28 +59,49 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
     return data;
   }
   disconnect(): Promise<void> {
-    throw new Error("Method not implemented.");
+    console.log("disconnect from burnerwallet");
+    return Promise.resolve();
   }
 
-  async getAccount(id?: number): Promise<string> {
+  async getAccount(): Promise<string> {
     const accounts = await this.provider?.listAccounts();
-    if (accounts == null || accounts[0] == null || (id != null && accounts[id] == null)) {
+    if (accounts == null || accounts[0] == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
     }
 
-    const account = id ? accounts[id] : accounts[0];
-
+    const account = accounts[0];
     return account;
   }
-  getChainId(): Promise<number> {
-    throw new Error("Method not implemented.");
+
+  async getChainId(): Promise<number> {
+    const network = await this.provider?.getNetwork();
+    const chainId = network?.chainId ?? this.options.defaultChainId;
+    if (chainId == null) {
+      throw new BurnerConnectorError(BurnerConnectorErrorList.chainIdNotResolved);
+    }
+
+    return Promise.resolve(chainId);
   }
-  getSigner(config?: { chainId?: number | undefined } | undefined): Promise<any> {
-    throw new Error("Method not implemented.");
+
+  async getSigner(config?: { chainId?: number | undefined } | undefined): Promise<any> {
+    const account = await this.getAccount();
+    const signer = this.provider?.getSigner(account);
+
+    if (signer == null || (await signer.getAddress()) !== account) {
+      throw new BurnerConnectorError(BurnerConnectorErrorList.signerNotResolved);
+    }
+
+    return Promise.resolve(signer);
   }
-  isAuthorized(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async isAuthorized() {
+    try {
+      const account = await this.getAccount();
+      return !!account;
+    } catch {
+      return false;
+    }
   }
+
   protected onAccountsChanged(accounts: string[]): void {
     throw new Error("Method not implemented.");
   }
@@ -78,6 +109,6 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
     throw new Error("Method not implemented.");
   }
   protected onDisconnect(error: Error): void {
-    throw new Error("Method not implemented.");
+    if (error) console.warn(error);
   }
 }

@@ -4,11 +4,8 @@ import { ConnectorData } from "wagmi";
 import { BurnerProvider } from "./BurnerProvider";
 
 export type BurnerConnectorOptions = {
-  /** Name of connector */
-  name?: string | ((detectedName: string | string[]) => string);
-  url?: ConnectionInfo | string;
-  network?: Networkish;
-  accountId?: number;
+  defaultChainId: number;
+  //defaultAccount?: string;
 };
 
 export type BurnerConnectorData = ConnectorData<BurnerProvider> & {};

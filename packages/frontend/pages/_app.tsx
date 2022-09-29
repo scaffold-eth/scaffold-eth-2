@@ -5,20 +5,19 @@ import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { createClient, WagmiConfig } from "wagmi";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import { wagmiChains } from "~~/web3/chains";
-import { wagmiConnectors } from "~~/web3/walletConnectors";
+import { appChains, wagmiConnectors } from "~~/web3/wagmiConnectors";
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors: wagmiConnectors,
-  provider: wagmiChains.provider,
-  webSocketProvider: wagmiChains.webSocketProvider,
+  provider: appChains.provider,
+  webSocketProvider: appChains.webSocketProvider,
 });
 
 function ScaffoldEthApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={wagmiChains.chains}>
+      <RainbowKitProvider chains={appChains.chains}>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>

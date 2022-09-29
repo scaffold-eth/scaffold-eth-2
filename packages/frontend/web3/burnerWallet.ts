@@ -1,19 +1,16 @@
 import { Chain, Wallet, getWalletConnectConnector } from "@rainbow-me/rainbowkit";
+import config from "next/config";
+import { Connector } from "wagmi";
+import { BurnerConnector } from "~~/web3/wagmi-connectors";
+import { chain, configureChains } from "wagmi";
 
 export interface BurnerWalletOptions {
   chains: Chain[];
 }
 
-import { chain, configureChains } from "wagmi";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+const defaultChainId = chain.hardhat.id;
 
-const data = jsonRpcProvider({
-  rpc: () => ({
-    http: `https://www.example.com`,
-  }),
-});
-
-export const burnerWallet = (): Wallet => ({
+export const burnerWallet = ({ chains }: BurnerWalletOptions): Wallet => ({
   id: "burner-wallet",
   name: "Burner Wallet",
   iconUrl: "https://avatars.githubusercontent.com/u/56928858?s=200&v=4",
@@ -21,16 +18,10 @@ export const burnerWallet = (): Wallet => ({
   //todo add conditions to hide burner wallet
   hidden: () => false,
   createConnector: () => {
-    const connector = data(chains);
+    const connector = new BurnerConnector({ chains, options: { defaultChainId } });
 
     return {
       connector,
-      mobile: {
-        getUri: async () => {
-          const { uri } = (await connector.getProvider()).connector;
-          return uri;
-        },
-      },
     };
   },
 });
