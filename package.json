@@ -13,7 +13,7 @@
     "deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
-    "frontend:lint": "yarn workspace @se-2/frontend lint",
+    "next:lint": "yarn workspace @se-2/frontend lint",
     "postinstall": "husky install",
     "precommit": "lint-staged"
   },
@@ -21,11 +21,5 @@
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
-  },
-  "lint-staged": {
-    "packages/frontend/**/*.{ts,tsx}": [
-      "yarn workspace  @se-2/frontend lint --fix",
-      "yarn workspace  @se-2/frontend format"
-    ]
   }
 }

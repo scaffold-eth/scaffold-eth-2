@@ -31,4 +31,4 @@ jobs:
         run: yarn install --immutable
 
       - name: Run frontend lint
-        run: yarn frontend:lint --max-warnings=0
+        run: yarn next:lint --max-warnings=0

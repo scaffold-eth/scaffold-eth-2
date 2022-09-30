@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "next:lint": "next lint",
-    "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
+    "lint": "next lint",
     "format": "yarn prettier -w"
   },
   "dependencies": {
