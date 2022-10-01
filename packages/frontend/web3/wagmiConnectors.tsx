@@ -2,8 +2,8 @@ import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
 import { configureChains, chain } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { burnerWallet } from "~~/web3/burnerWallet";
-import { BurnerConnector } from "~~/web3/wagmi-connectors";
+import { burnerWalletConfig } from "~~/web3/wagmi-burner/burnerWalletConfig";
+import { BurnerConnector } from "~~/web3/wagmi-burner";
 
 export const appChains = configureChains(
   [
@@ -13,8 +13,9 @@ export const appChains = configureChains(
     chain.arbitrum,
     chain.hardhat,
     chain.localhost,
+    chain.polygon,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten]
+      ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten, chain.polygonMumbai]
       : []),
   ],
   [
@@ -43,13 +44,13 @@ export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Supported Wallets",
     wallets: [
-      wallet.metaMask({ chains: appChains.chains }),
+      wallet.metaMask({ chains: appChains.chains, shimDisconnect: true }),
       wallet.walletConnect({ chains: appChains.chains }),
       wallet.ledger({ chains: appChains.chains }),
       wallet.brave({ chains: appChains.chains }),
       wallet.coinbase({ appName: "scaffold-eth", chains: appChains.chains }),
       wallet.rainbow({ chains: appChains.chains }),
-      burnerWallet({ chains: burnerChains.chains }),
+      burnerWalletConfig({ chains: burnerChains.chains }),
     ],
   },
 ]);

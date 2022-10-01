@@ -1,11 +1,10 @@
 import { Networkish } from "@ethersproject/networks";
 import { ConnectionInfo } from "@ethersproject/web";
 import { ConnectorData } from "wagmi";
-import { BurnerProvider } from "./BurnerProvider";
+import { StaticJsonRpcProvider } from "@ethersproject/providers";
 
 export type BurnerConnectorOptions = {
   defaultChainId: number;
-  //defaultAccount?: string;
 };
 
-export type BurnerConnectorData = ConnectorData<BurnerProvider> & {};
+export type BurnerConnectorData = ConnectorData<StaticJsonRpcProvider> & {};

@@ -1,7 +1,6 @@
 # se-2
 
-A new version of scaffold-eth with its core functionality. Using NextJS, RainbowKit & Wagmi.
-
+A new version of scaffold-eth with its core functionality. Using NextJS, RainbowKit, Wagmi and Typescript.
 
 ## Set up
 
@@ -25,6 +24,7 @@ yarn chain
 ```
 
 3rd terminal, deploy test contract
+
 ```
 yarn deploy
 ```

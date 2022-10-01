@@ -1,14 +1,19 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Connector, Chain, ConnectorData, chain } from "wagmi";
-import { BurnerConnectorError, BurnerProvider } from "./";
-import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from "./";
+import { loadBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerSigner";
+import { BurnerConnectorError } from ".";
+import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from ".";
 
-export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOptions> {
-  readonly id = "burnerWallet";
-  readonly name = "Burner Wallet";
+export const burnerWalletId = "burner-wallet";
+export const burnerWalletName = "Burner Wallet";
+export const defaultBurnerChainId = chain.hardhat.id;
+
+export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConnectorOptions> {
+  readonly id = burnerWalletId;
+  readonly name = burnerWalletName;
   readonly ready = true;
 
-  private provider?: BurnerProvider;
+  private provider?: StaticJsonRpcProvider;
 
   constructor(config: { chains?: Chain[]; options: BurnerConnectorOptions }) {
     super(config);
@@ -16,7 +21,8 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
 
   async getProvider() {
     if (!this.provider) {
-      this.provider = new BurnerProvider(this.options);
+      const chain = this.getChainFromId(this.options.defaultChainId);
+      this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
     }
     return this.provider;
   }
@@ -24,15 +30,7 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
   // Implement other methods
   // connect, disconnect, getAccount, etc.
   async connect(config?: { chainId?: number | undefined } | undefined): Promise<Required<BurnerConnectorData>> {
-    console.log("connect;");
-    console.log(this.chains, config, this.options);
-
-    const chain = this.chains.find((f) => f.id === config?.chainId);
-    console.log(chain);
-
-    if (chain == null) {
-      throw new BurnerConnectorError(BurnerConnectorErrorList.chainNotSupported);
-    }
+    const chain = this.getChainFromId(config?.chainId);
 
     this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
     const account = await this.getAccount();
@@ -58,6 +56,14 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
 
     return data;
   }
+  private getChainFromId(chainId: number | undefined) {
+    const chain = this.chains.find((f) => f.id === chainId);
+    if (chain == null) {
+      throw new BurnerConnectorError(BurnerConnectorErrorList.chainNotSupported);
+    }
+    return chain;
+  }
+
   disconnect(): Promise<void> {
     console.log("disconnect from burnerwallet");
     return Promise.resolve();
@@ -69,7 +75,8 @@ export class BurnerConnector extends Connector<BurnerProvider, BurnerConnectorOp
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
     }
 
-    const account = accounts[0];
+    const wallet = loadBurnerWallet();
+    const account = wallet.address ?? accounts[0];
     return account;
   }
 
