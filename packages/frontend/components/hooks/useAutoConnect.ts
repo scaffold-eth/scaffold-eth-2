@@ -1,11 +1,8 @@
-import { Provider } from "@wagmi/core";
-import { ethers } from "ethers";
-import { JsonRpcProvider, FallbackProvider } from "@ethersproject/providers";
 import { useEffect } from "react";
-import { chain, Connector, useAccount, useConnect, useProvider } from "wagmi";
-import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWallet";
-import { useEffectOnce, useIsMounted, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
-import { burnerWalletId, burnerWalletName, defaultBurnerChainId } from "~~/web3";
+import { Connector, useAccount, useConnect } from "wagmi";
+import { useEffectOnce, useLocalStorage } from "usehooks-ts";
+import { burnerWalletId, defaultBurnerChainId } from "~~/web3/wagmi-burner";
+import { useBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 
 // const supportedRpcUrls = [
 //   chain.localhost.rpcUrls.default,

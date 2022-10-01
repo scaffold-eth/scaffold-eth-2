@@ -1,11 +1,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useAccount, useConnect, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
-import { TAutoConnect, useAutoConnect } from "~~/components/scaffold-eth/hooks/useAutoConnect";
+import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import { tempContract } from "~~/generated/tempContract";
 import Address from "../components/scaffold-eth/Address";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
@@ -23,7 +20,7 @@ const Home: NextPage = () => {
   return (
     <div className="px-8">
       <Head>
-        <title>Scaffod-eth App</title>
+        <title>Scaffold-eth App</title>
         <meta name="description" content="Created with 🏗 scaffold-eth" />
       </Head>
 

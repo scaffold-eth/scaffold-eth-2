@@ -5,6 +5,9 @@ import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/web3/wagmi-burner/burnerWalletConfig";
 import { BurnerConnector } from "~~/web3/wagmi-burner";
 
+/**
+ * chains for the app
+ */
 export const appChains = configureChains(
   [
     chain.mainnet,
@@ -14,6 +17,7 @@ export const appChains = configureChains(
     chain.hardhat,
     chain.localhost,
     chain.polygon,
+    // todo replace with config instead of env
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
       ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten, chain.polygonMumbai]
       : []),
@@ -28,6 +32,9 @@ export const appChains = configureChains(
   ],
 );
 
+/**
+ * list of burner wallet compatable chains
+ */
 export const burnerChains = configureChains(
   [chain.localhost, chain.hardhat],
   [
@@ -40,6 +47,9 @@ export const burnerChains = configureChains(
   ],
 );
 
+/**
+ * wagmi connectors for the wagmi context
+ */
 export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Supported Wallets",

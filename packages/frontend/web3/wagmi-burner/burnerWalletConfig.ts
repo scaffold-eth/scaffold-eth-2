@@ -5,6 +5,11 @@ export interface BurnerWalletOptions {
   chains: Chain[];
 }
 
+/**
+ * Wagmi config for burner wallet
+ * @param param0
+ * @returns
+ */
 export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => ({
   id: burnerWalletId,
   name: burnerWalletName,

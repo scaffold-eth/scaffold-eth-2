@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { usePrepareContractWrite, useContractWrite, useContractRead } from "wagmi";
-import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWallet";
+import { useBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 import { tempContract } from "~~/generated/tempContract";
 
 // todo remove this, this is until we have contract element

@@ -1,3 +1,6 @@
+/**
+ * Error list used by {@link BurnerConnectorError}
+ */
 export const BurnerConnectorErrorList = {
   accountNotFound: "Account not found",
   couldNotConnect: "Could not connect to network",
@@ -7,6 +10,9 @@ export const BurnerConnectorErrorList = {
   chainNotSupported: "Chain is not supported, check burner wallet config",
 } as const;
 
+/**
+ * A union of all the BurnerConnectorErrorList
+ */
 export type BurnerConnectorErrorTypes = typeof BurnerConnectorErrorList[keyof typeof BurnerConnectorErrorList];
 
 export class BurnerConnectorError extends Error {
