@@ -4,7 +4,7 @@ import { useProvider } from "wagmi";
 import { useDebounce } from "use-debounce";
 import { useLocalStorage } from "usehooks-ts";
 
-const storageKey = "scaffoldEth2.burnerwallet.sk";
+const burnerStorageKey = "scaffoldEth2.burnerWallet.sk";
 
 /**
  * Is the private key valid
@@ -30,7 +30,7 @@ const newDefaultWallet = ethers.Wallet.createRandom();
 export const loadBurnerWallet = (): Wallet => {
   let currentSk = "";
   if (typeof window != "undefined" && window != null) {
-    currentSk = window?.localStorage?.getItem?.(storageKey)?.replaceAll('"', "") ?? "";
+    currentSk = window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "";
   }
   if (!!currentSk && isValidSk(currentSk)) {
     return new ethers.Wallet(currentSk);
@@ -56,7 +56,11 @@ export type TBurnerSigner = {
   /**
    * create a new burner signer
    */
-  generateNewBurnerSigner: () => void;
+  generateNewBurner: () => void;
+  /**
+   * explictly save burner to storage
+   */
+  saveBurner: () => void;
 };
 
 /**
@@ -69,8 +73,8 @@ export type TBurnerSigner = {
  * @param localProvider localhost provider
  * @returns IBurnerSigner
  */
-export const useBurnerSigner = (): TBurnerSigner => {
-  const [burnerSk, setBurnerSk] = useLocalStorage<BytesLike>(storageKey, newDefaultWallet.privateKey);
+export const useBurnerWallet = (): TBurnerSigner => {
+  const [burnerSk, setBurnerSk] = useLocalStorage<BytesLike>(burnerStorageKey, newDefaultWallet.privateKey);
 
   const provider = useProvider();
   const walletRef = useRef<Wallet>();
@@ -82,10 +86,15 @@ export const useBurnerSigner = (): TBurnerSigner => {
   });
   const account = walletRef.current?.address;
 
+  const saveBurner = useCallback(() => {
+    console.log("🔥 ...Setting burner");
+    setBurnerSk(walletRef.current?.privateKey ?? "");
+  }, [setBurnerSk]);
+
   /**
    * create a new burnerkey
    */
-  const generateNewBurnerSigner = useCallback(() => {
+  const generateNewBurner = useCallback(() => {
     if (provider && !isCreatingNewBurnerRef.current) {
       console.log("🔑 Create new burner wallet...");
       isCreatingNewBurnerRef.current = true;
@@ -110,7 +119,7 @@ export const useBurnerSigner = (): TBurnerSigner => {
       if (isValidSk(burnerSk)) {
         wallet = new ethers.Wallet(burnerSk);
       } else {
-        wallet = generateNewBurnerSigner();
+        wallet = generateNewBurner();
       }
 
       if (wallet == null) {
@@ -121,11 +130,12 @@ export const useBurnerSigner = (): TBurnerSigner => {
       walletRef.current = newSigner;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [burnerSk, generateNewBurnerSigner, provider]);
+  }, [burnerSk, generateNewBurner, provider]);
 
   return {
     signer,
     account,
-    generateNewBurnerSigner,
+    generateNewBurner,
+    saveBurner,
   };
 };

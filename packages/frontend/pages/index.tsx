@@ -11,7 +11,7 @@ import Address from "../components/scaffold-eth/Address";
 // todo: move this later scaffold config
 const tempAutoConnectConfig: TAutoConnect = {
   enableBurner: true,
-  alwaysAutoConnectToBurner: true,
+  alwaysAutoConnectToBurner: false,
   autoConnect: true,
   connectToBurnerIfDisconnected: true,
 };

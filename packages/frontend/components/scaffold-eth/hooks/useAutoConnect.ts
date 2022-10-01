@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { JsonRpcProvider, FallbackProvider } from "@ethersproject/providers";
 import { useEffect } from "react";
 import { chain, Connector, useAccount, useConnect, useProvider } from "wagmi";
-import { useBurnerSigner } from "~~/components/scaffold-eth/hooks/useBurnerSigner";
+import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWallet";
 import { useEffectOnce, useIsMounted, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { burnerWalletId, burnerWalletName, defaultBurnerChainId } from "~~/web3";
 
@@ -14,25 +14,6 @@ const supportedRpcUrls = [
   chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
 ];
 
-// const doesCurrentNetworkSupportBurner = (provider: Provider, currentConnector: Connector): boolean => {
-//   try {
-//     return true;
-//     // if (currentConnector == null || currentConnector.id === burnerWalletId) {
-//     //   return true;
-//     // }
-
-//     // if (provider instanceof FallbackProvider) {
-//     //   await provider.get();
-//     //   provider.providerConfigs.find((f) => f.provider.getNetwork());
-//     // }
-
-//     const jsonProvider: JsonRpcProvider = provider as JsonRpcProvider;
-//     const sameUrl = supportedRpcUrls.some((s) => s === jsonProvider?.connection?.url);
-//     return sameUrl;
-//   } catch {
-//     return false;
-//   }
-// };
 export type TAutoConnect = {
   /**
    * is burnerwallet enabled
@@ -54,18 +35,24 @@ export type TAutoConnect = {
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
 
+/**
+ * This function will get the initial connector (if any), the app will connect to
+ * @param config
+ * @param previousWalletId
+ * @param connectors
+ * @returns
+ */
 const getInitialConnector = (
   config: TAutoConnect,
-  previousWalletName: string,
-  isBurnerSupported: boolean,
+  previousWalletId: string,
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
-  const allowBurner = config.enableBurner && isBurnerSupported;
+  const allowBurner = config.enableBurner;
 
   if (allowBurner && config.alwaysAutoConnectToBurner) {
     const connector = connectors.find((f) => f.id === burnerWalletId);
     return { connector, chainId: defaultBurnerChainId };
-  } else if (!!!previousWalletName) {
+  } else if (!!!previousWalletId) {
     // The user was not connected to a wallet
     if (allowBurner && config.connectToBurnerIfDisconnected) {
       const connector = connectors.find((f) => f.id === burnerWalletId);
@@ -74,7 +61,7 @@ const getInitialConnector = (
   } else {
     // the user was connected to wallet
     if (config.autoConnect) {
-      const connector = connectors.find((f) => f.name === previousWalletName);
+      const connector = connectors.find((f) => f.id === previousWalletId);
       return { connector };
     }
   }
@@ -82,13 +69,15 @@ const getInitialConnector = (
   return undefined;
 };
 
+/**
+ * Automatically connect to a wallet/connector based on config and prior wallet
+ * @param config
+ */
 export const useAutoConnect = (config: TAutoConnect): void => {
   const [walletId, setWalletId] = useLocalStorage<string>(walletIdStorageKey, "");
-  const provider = useProvider();
   const connectState = useConnect();
   const accountState = useAccount();
-
-  const isBurnerSupported = true; //doesCurrentNetworkSupportBurner(provider, accountState.connector);
+  const { saveBurner } = useBurnerWallet();
 
   useEffect(() => {
     if (accountState.isConnected) {
@@ -102,10 +91,14 @@ export const useAutoConnect = (config: TAutoConnect): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
-    const initialConnector = getInitialConnector(config, walletId, isBurnerSupported, connectState.connectors);
+    const initialConnector = getInitialConnector(config, walletId, connectState.connectors);
 
     if (initialConnector?.connector) {
       connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
+
+      if (initialConnector.connector.id == burnerWalletId) {
+        saveBurner();
+      }
     }
   });
 };

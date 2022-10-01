@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { usePrepareContractWrite, useContractWrite, useContractRead } from "wagmi";
-import { useBurnerSigner } from "~~/components/scaffold-eth/hooks/useBurnerSigner";
+import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWallet";
 import { tempContract } from "~~/generated/tempContract";
 
 const newPurpose = "new puropose j18";
 
 export const useTempTestContract = () => {
-  const data = useBurnerSigner();
+  const data = useBurnerWallet();
 
   const testContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const { config } = usePrepareContractWrite({
