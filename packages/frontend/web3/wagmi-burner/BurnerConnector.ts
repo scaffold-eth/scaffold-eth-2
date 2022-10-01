@@ -21,7 +21,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
   async getProvider() {
     if (!this.provider) {
-      const chain = this.getChainFromId(this.options.defaultChainId);
+      const chain = this.getChainFromId();
       this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
     }
     return this.provider;
@@ -40,8 +40,9 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
       throw new BurnerConnectorError(BurnerConnectorErrorList.couldNotConnect);
     }
 
-    // todo unsported chains
-    if (config?.chainId !== chainId) {
+    // todo unsported chains?? should i populate unsupported param
+
+    if (!!!account) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
     }
 
@@ -56,8 +57,9 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
     return data;
   }
-  private getChainFromId(chainId: number | undefined) {
-    const chain = this.chains.find((f) => f.id === chainId);
+  private getChainFromId(chainId?: number) {
+    const resolveChainId = chainId ?? this.options.defaultChainId;
+    const chain = this.chains.find((f) => f.id === resolveChainId);
     if (chain == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.chainNotSupported);
     }

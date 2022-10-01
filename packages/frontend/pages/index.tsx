@@ -10,10 +10,10 @@ import Address from "../components/scaffold-eth/Address";
 
 // todo: move this later scaffold config
 const tempAutoConnectConfig: TAutoConnect = {
-  enableBurner: true,
-  alwaysAutoConnectToBurner: false,
-  autoConnect: true,
-  connectToBurnerIfDisconnected: true,
+  enableBurnerWallet: true,
+  alwaysAutoConnectToBurnerOnLoad: false,
+  allowAutoConnect: true,
+  connectToBurnerIfDisconnectedOnLoad: false,
 };
 
 const Home: NextPage = () => {
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
         <Address address="0xd8da6bf26964af9d7eed9e03e53415d37aa96045" />
 
         <p>
-          <button className="btn btn-primary" onClick={tempTest.onClick}>
+          <button className="btn btn-primary" onClick={() => tempTest.onClick()}>
             Daisy UI Button
           </button>
         </p>

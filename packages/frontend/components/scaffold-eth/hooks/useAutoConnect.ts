@@ -16,21 +16,21 @@ const supportedRpcUrls = [
 
 export type TAutoConnect = {
   /**
-   * is burnerwallet enabled
+   * Enable the burner wallet.  If this is disabled, burner wallet is entierly disabled
    */
-  enableBurner: boolean;
+  enableBurnerWallet: boolean;
   /**
-   * always autoConnectToBurner to burner wallet on load
+   * Always autoConnectToBurner to burner wallet on page load.
    */
-  alwaysAutoConnectToBurner: boolean;
+  alwaysAutoConnectToBurnerOnLoad: boolean;
   /**
-   * if user is disconnected, reconnect to burner
+   * If user is not connected to any wallet:  On reload, connect to burner wallet
    */
-  connectToBurnerIfDisconnected: boolean;
+  connectToBurnerIfDisconnectedOnLoad: boolean;
   /**
-   * If the user was connected into a wallet before, reconnect automatically
+   * Auto connect: If the user was connected into a wallet before, on page reload reconnect automatically
    */
-  autoConnect: boolean;
+  allowAutoConnect: boolean;
 };
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
@@ -47,20 +47,20 @@ const getInitialConnector = (
   previousWalletId: string,
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
-  const allowBurner = config.enableBurner;
+  const allowBurner = config.enableBurnerWallet;
 
-  if (allowBurner && config.alwaysAutoConnectToBurner) {
+  if (allowBurner && config.alwaysAutoConnectToBurnerOnLoad) {
     const connector = connectors.find((f) => f.id === burnerWalletId);
     return { connector, chainId: defaultBurnerChainId };
   } else if (!!!previousWalletId) {
     // The user was not connected to a wallet
-    if (allowBurner && config.connectToBurnerIfDisconnected) {
+    if (allowBurner && config.connectToBurnerIfDisconnectedOnLoad) {
       const connector = connectors.find((f) => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
-    if (config.autoConnect) {
+    if (config.allowAutoConnect) {
       const connector = connectors.find((f) => f.id === previousWalletId);
       return { connector };
     }
