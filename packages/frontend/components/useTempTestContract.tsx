@@ -3,6 +3,8 @@ import { usePrepareContractWrite, useContractWrite, useContractRead } from "wagm
 import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWallet";
 import { tempContract } from "~~/generated/tempContract";
 
+// todo remove this, this is until we have contract element
+
 const newPurpose = "new puropose j18";
 
 export const useTempTestContract = () => {
