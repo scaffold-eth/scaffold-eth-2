@@ -14,6 +14,7 @@
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
     "next:lint": "yarn workspace @se-2/frontend lint",
+    "next:format" : "yarn workspace @se-2/frontend format",
     "postinstall": "husky install",
     "precommit": "lint-staged"
   },
