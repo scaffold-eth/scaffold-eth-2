@@ -7,12 +7,12 @@ import { useBurnerWallet } from "~~/components/scaffold-eth/hooks/useBurnerWalle
 import { useEffectOnce, useIsMounted, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { burnerWalletId, burnerWalletName, defaultBurnerChainId } from "~~/web3";
 
-const supportedRpcUrls = [
-  chain.localhost.rpcUrls.default,
-  chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
-  chain.hardhat.rpcUrls.default,
-  chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
-];
+// const supportedRpcUrls = [
+//   chain.localhost.rpcUrls.default,
+//   chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
+//   chain.hardhat.rpcUrls.default,
+//   chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
+// ];
 
 export type TAutoConnect = {
   /**

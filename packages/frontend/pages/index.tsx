@@ -13,7 +13,7 @@ const tempAutoConnectConfig: TAutoConnect = {
   enableBurnerWallet: true,
   alwaysAutoConnectToBurnerOnLoad: false,
   allowAutoConnect: true,
-  connectToBurnerIfDisconnectedOnLoad: false,
+  connectToBurnerIfDisconnectedOnLoad: true,
 };
 
 const Home: NextPage = () => {
