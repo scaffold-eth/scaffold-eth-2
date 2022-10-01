@@ -8,9 +8,7 @@ import Address from "../components/scaffold-eth/Address";
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
   enableBurnerWallet: true,
-  alwaysAutoConnectToBurnerOnLoad: false,
-  allowAutoConnect: true,
-  connectToBurnerIfDisconnectedOnLoad: true,
+  allowAutoConnect: "autoConnectToBurnerIfDisconnectedOnLoad",
 };
 
 const Home: NextPage = () => {

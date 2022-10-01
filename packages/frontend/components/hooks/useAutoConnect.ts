@@ -17,17 +17,17 @@ export type TAutoConnect = {
    */
   enableBurnerWallet: boolean;
   /**
-   * Always autoConnectToBurner to burner wallet on page load.
+   * Auto connect:
+   * 1. off
+   * 2. autoConnectIfNotDisconnected: If the user was connected into a wallet before, on page reload reconnect automatically
+   * 3. alwaysConnectToBurner: Always autoConnectToBurner to burner wallet on page load.
+   * 4. autoConnectToBurnerIfDisconnectedOnLoad: If user is not connected to any wallet:  On reload, connect to burner wallet
    */
-  alwaysAutoConnectToBurnerOnLoad: boolean;
-  /**
-   * If user is not connected to any wallet:  On reload, connect to burner wallet
-   */
-  connectToBurnerIfDisconnectedOnLoad: boolean;
-  /**
-   * Auto connect: If the user was connected into a wallet before, on page reload reconnect automatically
-   */
-  allowAutoConnect: boolean;
+  allowAutoConnect:
+    | "off"
+    | "autoConnectIfNotDisconnected"
+    | "alwaysAutoConnectToBurner"
+    | "autoConnectToBurnerIfDisconnected";
 };
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
@@ -46,18 +46,18 @@ const getInitialConnector = (
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
 
-  if (allowBurner && config.alwaysAutoConnectToBurnerOnLoad) {
+  if (allowBurner && config.allowAutoConnect === "alwaysAutoConnectToBurner") {
     const connector = connectors.find((f) => f.id === burnerWalletId);
     return { connector, chainId: defaultBurnerChainId };
   } else if (!!!previousWalletId) {
     // The user was not connected to a wallet
-    if (allowBurner && config.connectToBurnerIfDisconnectedOnLoad) {
+    if (allowBurner && config.allowAutoConnect === "autoConnectToBurnerIfDisconnected") {
       const connector = connectors.find((f) => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
-    if (config.allowAutoConnect) {
+    if (config.allowAutoConnect === "autoConnectIfNotDisconnected") {
       const connector = connectors.find((f) => f.id === previousWalletId);
       return { connector };
     }
