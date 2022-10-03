@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write . '!(node_module|.next|contracts)/**/*'"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",
