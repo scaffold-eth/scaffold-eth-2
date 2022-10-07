@@ -18,16 +18,10 @@ export type TAutoConnect = {
   enableBurnerWallet: boolean;
   /**
    * Auto connect:
-   * 1. off
-   * 2. autoConnectIfNotDisconnected: If the user was connected into a wallet before, on page reload reconnect automatically
-   * 3. alwaysConnectToBurner: Always autoConnectToBurner to burner wallet on page load.
-   * 4. autoConnectToBurnerIfDisconnectedOnLoad: If user is not connected to any wallet:  On reload, connect to burner wallet
+   * 1. If the user was connected into a wallet before, on page reload reconnect automatically
+   * 2. If user is not connected to any wallet:  On reload, connect to burner wallet
    */
-  allowAutoConnect:
-    | "off"
-    | "autoConnectIfNotDisconnected"
-    | "alwaysAutoConnectToBurner"
-    | "autoConnectToBurnerIfDisconnected";
+  autoConnect: boolean;
 };
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
@@ -46,18 +40,15 @@ const getInitialConnector = (
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
 
-  if (allowBurner && config.allowAutoConnect === "alwaysAutoConnectToBurner") {
-    const connector = connectors.find((f) => f.id === burnerWalletId);
-    return { connector, chainId: defaultBurnerChainId };
-  } else if (!!!previousWalletId) {
+  if (!!!previousWalletId) {
     // The user was not connected to a wallet
-    if (allowBurner && config.allowAutoConnect === "autoConnectToBurnerIfDisconnected") {
+    if (allowBurner && config.autoConnect) {
       const connector = connectors.find((f) => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
-    if (config.allowAutoConnect === "autoConnectIfNotDisconnected") {
+    if (config.autoConnect) {
       const connector = connectors.find((f) => f.id === previousWalletId);
       return { connector };
     }

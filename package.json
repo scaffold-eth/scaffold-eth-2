@@ -13,7 +13,14 @@
     "deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
-    "lint": "yarn workspace @se-2/frontend lint"
+    "next:lint": "yarn workspace @se-2/frontend lint",
+    "next:format" : "yarn workspace @se-2/frontend format",
+    "postinstall": "husky install",
+    "precommit": "lint-staged"
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.2.3",
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
+  }
 }

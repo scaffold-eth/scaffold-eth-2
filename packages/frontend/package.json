@@ -7,7 +7,8 @@
     "start": "next dev",
     "build": "next build",
     "serve": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write . '!(node_module|.next|contracts)/**/*'"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
