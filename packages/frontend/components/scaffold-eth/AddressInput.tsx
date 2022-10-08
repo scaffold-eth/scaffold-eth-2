@@ -18,7 +18,7 @@ export const Sleep = async (time: number): Promise<any> =>
 Address input component with ens name resolution
 */
 
-const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
+export default function AddressInput({ value, onChange, placeholder, wrapperClasses }: IAddressInput) {
   const { data: ensData, isLoading } = useEnsAddress({
     name: isENS(value) ? value : "",
   });
@@ -66,6 +66,4 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
       </div>
     </>
   );
-};
-
-export default AddressInput;
+}

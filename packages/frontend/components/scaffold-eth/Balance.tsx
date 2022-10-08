@@ -14,7 +14,7 @@ Display balance of an address
 
 export default function Balance({ address, price, wrapperClasses }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<any>();
+  const [balance, setBalance] = useState<unknown>();
 
   const {
     data: fetchBalanceData,
