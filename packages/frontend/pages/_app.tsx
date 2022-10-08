@@ -45,7 +45,6 @@ const wagmiClient = createClient({
   provider,
   webSocketProvider,
 });
-
 function ScaffoldEthApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={wagmiClient}>
