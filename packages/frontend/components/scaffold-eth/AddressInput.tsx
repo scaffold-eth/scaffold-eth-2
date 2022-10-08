@@ -11,14 +11,14 @@ interface IAddressInput {
 // can we move this functions to other utility file ?
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
 
-export const Sleep = async (time: number): Promise<any> =>
+export const Sleep = async (time: number): Promise<boolean> =>
   new Promise(resolve => setTimeout(() => resolve(true), time));
 
 /**
 Address input component with ens name resolution
 */
 
-const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
+export default function AddressInput({ value, onChange, placeholder, wrapperClasses }: IAddressInput) {
   const { data: ensData, isLoading } = useEnsAddress({
     name: isENS(value) ? value : "",
   });
@@ -66,6 +66,4 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
       </div>
     </>
   );
-};
-
-export default AddressInput;
+}
