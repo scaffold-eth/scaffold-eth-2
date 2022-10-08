@@ -4,7 +4,6 @@ import { useEnsAddress } from "wagmi";
 
 interface IAddressInput {
   value?: string;
-  // eslint-disable-next-line no-unused-vars
   onChange?: (arg: string) => void;
   placeholder?: string;
   wrapperClasses?: string;
