@@ -1,5 +1,5 @@
 import { BigNumberish, ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useBalance } from "wagmi";
 
 type BalanceProps = {
@@ -14,10 +14,9 @@ Display balance of an address
 
 export default function Balance({ address, price, wrapperClasses }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<any>();
 
   const {
-    data: fetchBalanceData,
+    data: balance,
     isError,
     isLoading,
   } = useBalance({
@@ -27,10 +26,6 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
   const onToggleBalance = () => {
     setIsEthBalance(!isEthBalance);
   };
-
-  useEffect(() => {
-    setBalance(fetchBalanceData);
-  }, [fetchBalanceData]);
 
   if (!address || isLoading || Boolean(balance) === false) {
     return (

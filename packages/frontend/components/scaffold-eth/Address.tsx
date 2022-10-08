@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import Blockies from "react-blockies";
-import { DocumentDuplicateIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEnsName } from "wagmi";
 
@@ -28,15 +28,9 @@ export default function Address({
   format,
   minimized,
 }: AddressProps) {
-  const [ens, setEns] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 
-  const { data: fetchedEns } = useEnsName({ address, chainId: 1 });
-
-  // We need to apply this pattern to avoid Hydration errors.
-  useEffect(() => {
-    setEns(fetchedEns);
-  }, [fetchedEns]);
+  const { data: ens } = useEnsName({ address, chainId: 1 });
 
   const explorerLink = blockExplorerLink(address, blockExplorer);
   let displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);

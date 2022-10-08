@@ -1,6 +1,7 @@
 import { connectorsForWallets, RainbowKitProvider, wallet } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
+import { useState, useEffect } from "react";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
@@ -46,6 +47,15 @@ const wagmiClient = createClient({
 });
 
 function ScaffoldEthApp({ Component, pageProps }: AppProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  // fix for wagmi hydration issue on reload page
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
