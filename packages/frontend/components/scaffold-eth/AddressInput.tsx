@@ -15,6 +15,10 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 export const Sleep = async (time: number): Promise<any> =>
   new Promise(resolve => setTimeout(() => resolve(true), time));
 
+/**
+Address input component with ens name resolution
+*/
+
 const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
   const { data: ensData, isLoading } = useEnsAddress({
     name: isENS(value) ? value : "",
@@ -26,7 +30,6 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
     }
   };
 
-  //   load an address from ens name
   const loadEnsAddress = useCallback(async () => {
     if (ensData && onChange) {
       await Sleep(100);
@@ -34,6 +37,7 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
     }
 
     if (ensData === null && onChange) {
+      // add a little delay on load
       await Sleep(100);
       onChange("");
     }
