@@ -11,7 +11,7 @@ interface IAddressInput {
 // can we move this functions to other utility file ?
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
 
-export const Sleep = async (time: number): Promise<any> =>
+export const Sleep = async (time: number): Promise<boolean> =>
   new Promise(resolve => setTimeout(() => resolve(true), time));
 
 /**
