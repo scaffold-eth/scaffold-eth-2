@@ -4,7 +4,8 @@ import { useEnsAddress } from "wagmi";
 
 interface IAddressInput {
   value?: string;
-  onChange?: (arg) => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (arg: string) => void;
   placeholder?: string;
   wrapperClasses?: string;
 }
@@ -12,7 +13,7 @@ interface IAddressInput {
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
 
 export const Sleep = async (time: number): Promise<any> =>
-  new Promise((resolve, reject) => setTimeout(() => resolve(true), time));
+  new Promise(resolve => setTimeout(() => resolve(true), time));
 
 const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
   const { data: ensData, isLoading } = useEnsAddress({
