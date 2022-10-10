@@ -4,13 +4,6 @@ import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { burnerWalletId, defaultBurnerChainId } from "~~/web3/wagmi-burner";
 import { useBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 
-// const supportedRpcUrls = [
-//   chain.localhost.rpcUrls.default,
-//   chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
-//   chain.hardhat.rpcUrls.default,
-//   chain.localhost.rpcUrls.default.replace("127.0.0.1", "localhost"),
-// ];
-
 export type TAutoConnect = {
   /**
    * Enable the burner wallet.  If this is disabled, burner wallet is entierly disabled
