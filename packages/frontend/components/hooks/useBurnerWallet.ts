@@ -28,17 +28,16 @@ const newDefaultWallet = ethers.Wallet.createRandom();
  * @internal
  * @returns
  */
-export const loadBurnerWallet = (provider?: StaticJsonRpcProvider): Wallet => {
+export const loadBurnerSK = (): string => {
   let currentSk = "";
   if (typeof window != "undefined" && window != null) {
     currentSk = window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "";
   }
 
   if (!!currentSk && isValidSk(currentSk)) {
-    console.log(currentSk, isValidSk(currentSk));
-    return new ethers.Wallet(currentSk, provider);
+    return currentSk;
   } else {
-    return provider ? new Wallet(newDefaultWallet.privateKey, provider) : newDefaultWallet;
+    return newDefaultWallet.privateKey;
   }
 };
 

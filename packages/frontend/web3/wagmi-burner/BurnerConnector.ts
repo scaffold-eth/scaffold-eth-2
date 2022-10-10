@@ -1,6 +1,7 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
+import { Wallet } from "ethers";
 import { Connector, Chain, chain } from "wagmi";
-import { loadBurnerWallet } from "~~/components/hooks/useBurnerWallet";
+import { loadBurnerSK } from "~~/components/hooks/useBurnerWallet";
 import { BurnerConnectorError } from ".";
 import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from ".";
 
@@ -17,9 +18,14 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   readonly ready = true;
 
   private provider?: StaticJsonRpcProvider;
+  /**
+   * this is the store for getWallet()
+   */
+  private burnerWallet: Wallet | undefined;
 
   constructor(config: { chains?: Chain[]; options: BurnerConnectorOptions }) {
     super(config);
+    this.burnerWallet = undefined;
   }
 
   async getProvider() {
@@ -30,8 +36,6 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     return this.provider;
   }
 
-  // Implement other methods
-  // connect, disconnect, getAccount, etc.
   async connect(config?: { chainId?: number | undefined } | undefined): Promise<Required<BurnerConnectorData>> {
     const chain = this.getChainFromId(config?.chainId);
 
@@ -80,8 +84,8 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
     }
 
-    const wallet = loadBurnerWallet();
-    const account = wallet.address ?? accounts[0];
+    const wallet = this.getWallet();
+    const account = wallet.address;
     return account;
   }
 
@@ -97,7 +101,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
   async getSigner(): Promise<any> {
     const account = await this.getAccount();
-    const signer = this.provider?.getSigner(account);
+    const signer = this.getWallet();
 
     if (signer == null || (await signer.getAddress()) !== account) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.signerNotResolved);
@@ -114,11 +118,18 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     }
   }
 
+  private getWallet(): Wallet {
+    if (this.burnerWallet == null) {
+      this.burnerWallet = new Wallet(loadBurnerSK(), this.provider);
+    }
+    return this.burnerWallet;
+  }
+
   protected onAccountsChanged(): void {
-    throw new Error("Method not implemented.");
+    this.burnerWallet = new Wallet(loadBurnerSK(), this.provider);
   }
   protected onChainChanged(): void {
-    throw new Error("Method not implemented.");
+    this.burnerWallet = new Wallet(loadBurnerSK(), this.provider);
   }
   protected onDisconnect(error: Error): void {
     if (error) console.warn(error);
