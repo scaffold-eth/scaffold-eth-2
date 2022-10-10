@@ -1,3 +1,4 @@
+import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { BytesLike, ethers, Signer, Wallet } from "ethers";
 import { useEffect, useCallback, useRef } from "react";
 import { useProvider } from "wagmi";
@@ -27,15 +28,17 @@ const newDefaultWallet = ethers.Wallet.createRandom();
  * @internal
  * @returns
  */
-export const loadBurnerWallet = (): Wallet => {
+export const loadBurnerWallet = (provider?: StaticJsonRpcProvider): Wallet => {
   let currentSk = "";
   if (typeof window != "undefined" && window != null) {
     currentSk = window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "";
   }
+
   if (!!currentSk && isValidSk(currentSk)) {
-    return new ethers.Wallet(currentSk);
+    console.log(currentSk, isValidSk(currentSk));
+    return new ethers.Wallet(currentSk, provider);
   } else {
-    return newDefaultWallet;
+    return provider ? new Wallet(newDefaultWallet.privateKey, provider) : newDefaultWallet;
   }
 };
 
@@ -86,8 +89,10 @@ export const useBurnerWallet = (): TBurnerSigner => {
   });
   const account = walletRef.current?.address;
 
+  /**
+   * callback to save current wallet sk
+   */
   const saveBurner = useCallback(() => {
-    console.log("🔥 ...Setting burner");
     setBurnerSk(walletRef.current?.privateKey ?? "");
   }, [setBurnerSk]);
 
@@ -101,7 +106,7 @@ export const useBurnerWallet = (): TBurnerSigner => {
 
       const wallet = Wallet.createRandom();
       setBurnerSk(() => {
-        console.log("🔥 ...Setting burner");
+        console.log("🔥 ...Save new burner wallet");
         isCreatingNewBurnerRef.current = false;
         return wallet.privateKey;
       });
@@ -110,16 +115,19 @@ export const useBurnerWallet = (): TBurnerSigner => {
       console.log("⚠ Could not create burner wallet");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider]);
+  }, [provider?.network?.chainId]);
 
+  /**
+   * Load wallet with burnerSk
+   */
   useEffect(() => {
     // connect and set wallet, once we have burnerSk and valid provider
-    if (burnerSk && provider) {
+    if (burnerSk && provider.network.chainId) {
       let wallet: Wallet | undefined = undefined;
       if (isValidSk(burnerSk)) {
         wallet = new ethers.Wallet(burnerSk);
       } else {
-        wallet = generateNewBurner();
+        wallet = generateNewBurner?.();
       }
 
       if (wallet == null) {
@@ -128,9 +136,11 @@ export const useBurnerWallet = (): TBurnerSigner => {
 
       const newSigner = wallet.connect(provider);
       walletRef.current = newSigner;
+      saveBurner?.();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [burnerSk, generateNewBurner, provider]);
+  }, [burnerSk, provider?.network?.chainId]);
 
   return {
     signer,

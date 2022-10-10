@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Connector, useAccount, useConnect } from "wagmi";
 import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { burnerWalletId, defaultBurnerChainId } from "~~/web3/wagmi-burner";
-import { useBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 
 export type TAutoConnect = {
   /**
@@ -58,7 +57,6 @@ export const useAutoConnect = (config: TAutoConnect): void => {
   const [walletId, setWalletId] = useLocalStorage<string>(walletIdStorageKey, "");
   const connectState = useConnect();
   const accountState = useAccount();
-  const { saveBurner } = useBurnerWallet();
 
   useEffect(() => {
     if (accountState.isConnected) {
@@ -76,10 +74,6 @@ export const useAutoConnect = (config: TAutoConnect): void => {
 
     if (initialConnector?.connector) {
       connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
-
-      if (initialConnector.connector.id == burnerWalletId) {
-        saveBurner();
-      }
     }
   });
 };

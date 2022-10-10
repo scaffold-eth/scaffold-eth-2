@@ -1,38 +1,47 @@
+/* eslint-disable no-unused-vars */
 import { useEffect } from "react";
-import { usePrepareContractWrite, useContractWrite, useContractRead } from "wagmi";
+import { usePrepareContractWrite, useContractWrite, useContractRead, chain } from "wagmi";
 import { useBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 import { tempContract } from "~~/generated/tempContract";
 
 // todo remove this, this is until we have contract element
 
-const newPurpose = "new puropose j18";
+let inc = 0;
+const newPurpose = (): string => {
+  inc++;
+  return "new puropose " + inc;
+};
+
+const testChainId = chain.hardhat.id;
 
 export const useTempTestContract = () => {
-  useBurnerWallet();
-
-  const testContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-  const { config } = usePrepareContractWrite({
-    addressOrName: testContractAddress,
-    contractInterface: tempContract.abi,
-    functionName: "setPurpose",
-    args: newPurpose,
-  });
-  const cw = useContractWrite(config);
-
-  const cr = useContractRead({
-    addressOrName: testContractAddress,
+  const cRead = useContractRead({
+    addressOrName: tempContract.address,
     contractInterface: tempContract.abi,
     functionName: "purpose",
+    chainId: testChainId,
+    watch: true,
+    cacheOnBlock: true,
   });
 
+  const { config } = usePrepareContractWrite({
+    addressOrName: tempContract.address,
+    contractInterface: tempContract.abi,
+    functionName: "setPurpose",
+    args: newPurpose(),
+    chainId: testChainId,
+  });
+  const cWrite = useContractWrite(config);
+
   useEffect(() => {
-    if (cr.isSuccess) {
-      console.log(cr.data);
+    if (cRead.isSuccess) {
+      console.log("read contract:  ", cRead.data);
     }
-  }, [cr.status, cw.status]);
+  }, [cRead.data, cRead.status]);
 
   const onClick = () => {
-    cw.write?.();
+    console.log("...attempting to write");
+    cWrite.write?.();
   };
   return { onClick };
 };
