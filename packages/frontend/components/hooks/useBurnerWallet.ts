@@ -1,4 +1,3 @@
-import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { BytesLike, ethers, Signer, Wallet } from "ethers";
 import { useEffect, useCallback, useRef } from "react";
 import { useProvider } from "wagmi";
