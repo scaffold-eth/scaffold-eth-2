@@ -40,7 +40,7 @@ const getInitialConnector = (
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
 
-  if (!!!previousWalletId) {
+  if (!previousWalletId) {
     // The user was not connected to a wallet
     if (allowBurner && config.autoConnect) {
       const connector = connectors.find(f => f.id === burnerWalletId);

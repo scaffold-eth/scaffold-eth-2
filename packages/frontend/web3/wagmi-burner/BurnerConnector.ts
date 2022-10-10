@@ -45,7 +45,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
     // todo unsported chains?? should i populate unsupported param
 
-    if (!!!account) {
+    if (!account) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
     }
 
@@ -62,7 +62,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   }
   private getChainFromId(chainId?: number) {
     const resolveChainId = chainId ?? this.options.defaultChainId;
-    const chain = this.chains.find((f) => f.id === resolveChainId);
+    const chain = this.chains.find(f => f.id === resolveChainId);
     if (chain == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.chainNotSupported);
     }
