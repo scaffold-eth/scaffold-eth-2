@@ -8,7 +8,7 @@ import { tempContract } from "~~/generated/tempContract";
 const newPurpose = "new puropose j18";
 
 export const useTempTestContract = () => {
-  const data = useBurnerWallet();
+  useBurnerWallet();
 
   const testContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const { config } = usePrepareContractWrite({

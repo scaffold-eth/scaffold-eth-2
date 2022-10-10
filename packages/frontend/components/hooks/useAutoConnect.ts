@@ -43,13 +43,13 @@ const getInitialConnector = (
   if (!!!previousWalletId) {
     // The user was not connected to a wallet
     if (allowBurner && config.autoConnect) {
-      const connector = connectors.find((f) => f.id === burnerWalletId);
+      const connector = connectors.find(f => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
     if (config.autoConnect) {
-      const connector = connectors.find((f) => f.id === previousWalletId);
+      const connector = connectors.find(f => f.id === previousWalletId);
       return { connector };
     }
   }
