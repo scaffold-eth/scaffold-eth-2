@@ -1,5 +1,5 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
-import { Connector, Chain, ConnectorData, chain } from "wagmi";
+import { Connector, Chain, chain } from "wagmi";
 import { loadBurnerWallet } from "~~/components/hooks/useBurnerWallet";
 import { BurnerConnectorError } from ".";
 import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from ".";
@@ -95,7 +95,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     return Promise.resolve(chainId);
   }
 
-  async getSigner(config?: { chainId?: number | undefined } | undefined): Promise<any> {
+  async getSigner(): Promise<any> {
     const account = await this.getAccount();
     const signer = this.provider?.getSigner(account);
 
@@ -114,10 +114,10 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     }
   }
 
-  protected onAccountsChanged(accounts: string[]): void {
+  protected onAccountsChanged(): void {
     throw new Error("Method not implemented.");
   }
-  protected onChainChanged(chain: string | number): void {
+  protected onChainChanged(): void {
     throw new Error("Method not implemented.");
   }
   protected onDisconnect(error: Error): void {
