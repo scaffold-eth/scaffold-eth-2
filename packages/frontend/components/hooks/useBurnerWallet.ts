@@ -22,8 +22,20 @@ const isValidSk = (pk: BytesLike | undefined | null): boolean => {
 const newDefaultWallet = ethers.Wallet.createRandom();
 
 /**
+ * Save the current burner private key from storage
+ * Can be used outside of react.  Used by the burnerConnector.
+ * @internal
+ * @returns
+ */
+export const saveBurnerSK = (wallet: Wallet): void => {
+  if (typeof window != "undefined" && window != null) {
+    window?.localStorage?.setItem(burnerStorageKey, wallet.privateKey);
+  }
+};
+
+/**
  * Gets the current burner private key from storage
- * Can be used outside of react
+ * Can be used outside of react.  Used by the burnerConnector.
  * @internal
  * @returns
  */
@@ -36,6 +48,7 @@ export const loadBurnerSK = (): string => {
   if (!!currentSk && isValidSk(currentSk)) {
     return currentSk;
   } else {
+    saveBurnerSK(newDefaultWallet);
     return newDefaultWallet.privateKey;
   }
 };
@@ -102,7 +115,7 @@ export const useBurnerWallet = (): TBurnerSigner => {
       console.log("🔑 Create new burner wallet...");
       isCreatingNewBurnerRef.current = true;
 
-      const wallet = Wallet.createRandom();
+      const wallet = Wallet.createRandom().connect(provider);
       setBurnerSk(() => {
         console.log("🔥 ...Save new burner wallet");
         isCreatingNewBurnerRef.current = false;
@@ -117,13 +130,13 @@ export const useBurnerWallet = (): TBurnerSigner => {
 
   /**
    * Load wallet with burnerSk
+   * connect and set wallet, once we have burnerSk and valid provider
    */
   useEffect(() => {
-    // connect and set wallet, once we have burnerSk and valid provider
     if (burnerSk && provider.network.chainId) {
       let wallet: Wallet | undefined = undefined;
       if (isValidSk(burnerSk)) {
-        wallet = new ethers.Wallet(burnerSk);
+        wallet = new ethers.Wallet(burnerSk, provider);
       } else {
         wallet = generateNewBurner?.();
       }
@@ -131,9 +144,7 @@ export const useBurnerWallet = (): TBurnerSigner => {
       if (wallet == null) {
         throw "Error:  Could not create burner wallet";
       }
-
-      const newSigner = wallet.connect(provider);
-      walletRef.current = newSigner;
+      walletRef.current = wallet;
       saveBurner?.();
     }
 

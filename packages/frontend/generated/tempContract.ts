@@ -1,7 +1,10 @@
 // todo remove this, this is until we have contract element
 
+/**
+ * This is just for testing.  you have to deploy the contract yourself and change the address.
+ */
 export const tempContract = {
-  address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
   abi: [
     {
       inputs: [],
