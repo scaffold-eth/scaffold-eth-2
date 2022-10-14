@@ -4,12 +4,15 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
+    "start": "next dev",
     "build": "next build",
-    "start": "next start",
+    "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'"
   },
   "dependencies": {
+    "@ethersproject/networks": "^5.7.1",
+    "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
     "@rainbow-me/rainbowkit": "^0.6.0",
     "@types/react-blockies": "^1.4.1",
@@ -21,6 +24,8 @@
     "react-blockies": "^1.4.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.1.0",
+    "use-debounce": "^8.0.4",
+    "usehooks-ts": "^2.7.2",
     "wagmi": "^0.6.0"
   },
   "devDependencies": {
