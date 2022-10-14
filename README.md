@@ -37,4 +37,4 @@ Run smart contract test with `yarn hardhat:test`
 
 We welcome contributions to Scaffold-Eth 2!
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/se-2/blob/master/CONTRIBUTING.md) for more information and guidelines to contributing to Scaffold-Eth 2. 
+Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/se-2/blob/master/CONTRIBUTING.md) for more information and guidelines to contributing to Scaffold-Eth 2.
