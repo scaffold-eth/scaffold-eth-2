@@ -9,7 +9,7 @@ type BalanceProps = {
 };
 
 /**
-Display balance of an address
+ Display balance of an address
 */
 
 export default function Balance({ address, price, wrapperClasses }: BalanceProps) {
