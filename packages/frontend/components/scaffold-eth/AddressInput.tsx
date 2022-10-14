@@ -5,7 +5,7 @@ import { useEnsAddress } from "wagmi";
 interface IAddressInput {
   value?: string;
   // eslint-disable-next-line no-unused-vars
-  onChange?: (arg: string) => void;
+  onChange?: (arg: string) => void; // above comment is temp fix as no ts config for this currently
   placeholder?: string;
   wrapperClasses?: string;
 }
@@ -16,7 +16,7 @@ export const Sleep = async (time: number): Promise<any> =>
   new Promise(resolve => setTimeout(() => resolve(true), time));
 
 /**
-Address input component with ens name resolution
+ Address input component with ens name resolution
 */
 
 const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
@@ -59,7 +59,6 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-
           <span className="p-0 rounded-md bg-base-100 h-10 ">
             <Blockies seed={value?.toLowerCase() as string} size={11} />
           </span>

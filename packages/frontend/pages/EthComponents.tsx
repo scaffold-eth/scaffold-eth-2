@@ -4,7 +4,7 @@ import AddressInput from "../components/scaffold-eth/AddressInput";
 import { useState } from "react";
 
 const EthComponents: NextPage = () => {
-  const [address, setAddress] = useState<string>("0x0fAb64624733a7020D332203568754EB1a37DB89");
+  const [address, setAddress] = useState<string>("");
   return (
     <div className="px-8 flex flex-col items-center justify-center">
       <h2 className="text-xl">Balance component</h2>
