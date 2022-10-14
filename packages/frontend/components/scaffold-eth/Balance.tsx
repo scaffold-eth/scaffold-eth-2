@@ -9,7 +9,7 @@ type BalanceProps = {
 };
 
 /**
-Display balance of an address
+ Display balance of an address
 */
 
 export default function Balance({ address, price, wrapperClasses }: BalanceProps) {
@@ -22,6 +22,8 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
     isLoading,
   } = useBalance({
     addressOrName: address,
+    watch: true,
+    cacheTime: 5_000,
   });
 
   const onToggleBalance = () => {
@@ -58,16 +60,14 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
       className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer  ${wrapperClasses}`}
       onClick={onToggleBalance}
     >
-      {/* display  eth or doller balance  */}
+      {/* display  eth or dollar balance  */}
       <div className="w-full flex items-center  justify-center">
-        {isEthBalance === true && (
+        {isEthBalance ? (
           <>
-            <span>{balance?.formatted}</span>
+            <span>{Number(balance?.formatted).toFixed(2)}</span>
             <span className="text-xs font-bold m-1">ETH</span>
           </>
-        )}
-
-        {isEthBalance === false && (
+        ) : (
           <>
             <span className="text-xs font-bold m-1">$</span>
             <span>

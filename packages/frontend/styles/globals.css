@@ -13,12 +13,3 @@ h4 {
 p {
   margin: 1rem 0;
 }
-
-/* temprory classes for bordering on ui */
-.bd-red {
-  border: 1px solid red;
-}
-
-.bd-blue {
-  border: 1px solid blue;
-}
