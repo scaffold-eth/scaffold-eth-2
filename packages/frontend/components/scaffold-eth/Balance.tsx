@@ -34,9 +34,11 @@ export default function Balance({ address, price }: BalanceProps) {
     if (isEthBalance && fetchedBalanceData?.formatted) {
       setBalance(+Number(fetchedBalanceData?.formatted).toFixed(2));
     } else {
-      if (fetchedBalanceData?.value) {
-        setBalance(+ethers.utils.formatEther(fetchedBalanceData?.value.mul(price) as BigNumberish));
-      }
+      setBalance(
+        +ethers.utils.formatEther(
+          fetchedBalanceData?.value ? (fetchedBalanceData?.value.mul(price) as BigNumberish) : "0",
+        ),
+      );
     }
   }, [fetchedBalanceData, isEthBalance, price]);
 
