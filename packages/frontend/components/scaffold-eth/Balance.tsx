@@ -13,8 +13,7 @@ type BalanceProps = {
 
 export default function Balance({ address, price }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balanceData, setBalanceData] = useState<unknown>();
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState<number | undefined>(undefined);
 
   const {
     data: fetchBalanceData,
@@ -32,16 +31,12 @@ export default function Balance({ address, price }: BalanceProps) {
   };
 
   useEffect(() => {
-    setBalanceData(fetchBalanceData);
-
     if (isEthBalance && fetchBalanceData?.formatted) {
-      setBalance(+fetchBalanceData?.formatted);
-    } else {
-      setBalance(+ethers.utils.formatEther(fetchBalanceData?.value.mul(price) as BigNumberish));
+      setBalance(Number(fetchBalanceData?.formatted));
     }
   }, [fetchBalanceData, isEthBalance, price]);
 
-  if (!address || isLoading || Boolean(balanceData) === false) {
+  if (!address || isLoading || balance == undefined) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
@@ -69,14 +64,14 @@ export default function Balance({ address, price }: BalanceProps) {
       <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
-            <span>{balance.toFixed(2)}</span>
+            <span>{balance?.toFixed(2)}</span>
             <span className="text-xs font-bold m-1">ETH</span>
           </>
         ) : (
           <>
             <span className="text-xs font-bold m-1">$</span>
             <span>
-              <span>{balance.toFixed(2)}</span>
+              {Number(ethers.utils.formatEther(fetchBalanceData?.value.mul(price) as BigNumberish)).toFixed(2)}
             </span>
           </>
         )}
