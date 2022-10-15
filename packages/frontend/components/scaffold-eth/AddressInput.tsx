@@ -53,12 +53,12 @@ const AddressInput = ({ value, onChange, placeholder }: IAddressInput): any => {
           <input
             type="text"
             placeholder={placeholder}
-            className="input input-bordered h-10 "
+            className="input input-bordered h-10"
             value={value}
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-          <span className="p-0 rounded-md bg-base-100 h-10 ">
+          <span className="p-0 rounded-md bg-base-100 h-10">
             <Blockies seed={value?.toLowerCase() as string} size={11} />
           </span>
         </label>
