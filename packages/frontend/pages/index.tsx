@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Address from "../components/scaffold-eth/Address";
+import Balance from "../components/scaffold-eth/Balance";
 
 const Home: NextPage = () => {
   return (
@@ -36,6 +37,9 @@ const Home: NextPage = () => {
         <p>
           <button className="btn btn-primary">Daisy UI Button</button>
         </p>
+
+        <h3 className="font-bold">Balance Component</h3>
+        <Balance address="0x0fAb64624733a7020D332203568754EB1a37DB89" price={1350} />
       </main>
     </div>
   );

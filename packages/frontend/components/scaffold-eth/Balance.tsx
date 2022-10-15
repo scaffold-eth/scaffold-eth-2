@@ -5,16 +5,15 @@ import { useBalance } from "wagmi";
 type BalanceProps = {
   address: string;
   price: number;
-  wrapperClasses?: string;
 };
 
 /**
  Display balance of an address
 */
 
-export default function Balance({ address, price, wrapperClasses }: BalanceProps) {
+export default function Balance({ address, price }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<any>();
+  const [balance, setBalance] = useState(0);
 
   const {
     data: fetchBalanceData,
@@ -23,6 +22,7 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
   } = useBalance({
     addressOrName: address,
     watch: true,
+    // TODO: a dynamic on local and other networks
     cacheTime: 5_000,
   });
 
@@ -31,8 +31,12 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
   };
 
   useEffect(() => {
-    setBalance(fetchBalanceData);
-  }, [fetchBalanceData]);
+    if (isEthBalance && fetchBalanceData?.formatted) {
+      setBalance(+fetchBalanceData?.formatted);
+    } else {
+      setBalance(+ethers.utils.formatEther(fetchBalanceData?.value.mul(price) as BigNumberish));
+    }
+  }, [fetchBalanceData, isEthBalance, price]);
 
   if (!address || isLoading || Boolean(balance) === false) {
     return (
@@ -47,9 +51,7 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
 
   if (isError) {
     return (
-      <div
-        className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer  ${wrapperClasses}`}
-      >
+      <div className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}>
         <div className="text-warning text-xs">Error</div>
       </div>
     );
@@ -57,21 +59,21 @@ export default function Balance({ address, price, wrapperClasses }: BalanceProps
 
   return (
     <div
-      className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer  ${wrapperClasses}`}
+      className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}
       onClick={onToggleBalance}
     >
       {/* display  eth or dollar balance  */}
-      <div className="w-full flex items-center  justify-center">
+      <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
-            <span>{Number(balance?.formatted).toFixed(2)}</span>
+            <span>{balance.toFixed(2)}</span>
             <span className="text-xs font-bold m-1">ETH</span>
           </>
         ) : (
           <>
             <span className="text-xs font-bold m-1">$</span>
             <span>
-              {Number(ethers.utils.formatEther(balance?.value.mul(price).toString() as BigNumberish)).toFixed(2)}
+              <span>{balance.toFixed(2)}</span>
             </span>
           </>
         )}
