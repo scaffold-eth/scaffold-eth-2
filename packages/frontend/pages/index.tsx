@@ -1,9 +1,12 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import Address from "../components/scaffold-eth/Address";
+import AddressInput from "../components/scaffold-eth/AddressInput";
 
 const Home: NextPage = () => {
+  const [address, setAddress] = useState<string>("");
   return (
     <div className="px-8">
       <Head>
@@ -36,6 +39,9 @@ const Home: NextPage = () => {
         <p>
           <button className="btn btn-primary">Daisy UI Button</button>
         </p>
+
+        <h3 className="font-bold">Address Input Component</h3>
+        <AddressInput value={address} onChange={setAddress} placeholder="Enter address" />
       </main>
     </div>
   );

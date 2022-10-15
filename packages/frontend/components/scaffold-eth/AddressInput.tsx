@@ -7,7 +7,6 @@ interface IAddressInput {
   // eslint-disable-next-line no-unused-vars
   onChange?: (arg: string) => void; // above comment is temp fix as no ts config for this currently
   placeholder?: string;
-  wrapperClasses?: string;
 }
 // can we move this functions to other utility file ?
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
@@ -19,7 +18,7 @@ export const Sleep = async (time: number): Promise<any> =>
  Address input component with ens name resolution
 */
 
-const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddressInput): any => {
+const AddressInput = ({ value, onChange, placeholder }: IAddressInput): any => {
   const { data: ensData, isLoading } = useEnsAddress({
     name: isENS(value) ? value : "",
   });
@@ -49,7 +48,7 @@ const AddressInput = ({ value, onChange, placeholder, wrapperClasses }: IAddress
 
   return (
     <>
-      <div className={`form-control ${wrapperClasses}`}>
+      <div className={`form-control`}>
         <label className="input-group input-group-sm">
           <input
             type="text"
