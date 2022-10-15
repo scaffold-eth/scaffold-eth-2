@@ -17,6 +17,7 @@ export const appChains = configureChains(
     chain.hardhat,
     chain.localhost,
     chain.polygon,
+    chain.goerli,
     // todo replace with config instead of env
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
       ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten, chain.polygonMumbai]

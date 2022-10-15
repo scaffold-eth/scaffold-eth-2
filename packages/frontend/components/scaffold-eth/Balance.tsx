@@ -16,7 +16,7 @@ export default function Balance({ address, price }: BalanceProps) {
   const [balance, setBalance] = useState<number | undefined>(undefined);
 
   const {
-    data: fetchBalanceData,
+    data: fetchedBalanceData,
     isError,
     isLoading,
   } = useBalance({
@@ -31,10 +31,14 @@ export default function Balance({ address, price }: BalanceProps) {
   };
 
   useEffect(() => {
-    if (isEthBalance && fetchBalanceData?.formatted) {
-      setBalance(Number(fetchBalanceData?.formatted));
+    if (isEthBalance && fetchedBalanceData?.formatted) {
+      setBalance(+Number(fetchedBalanceData?.formatted).toFixed(2));
+    } else {
+      if (fetchedBalanceData?.value) {
+        setBalance(+ethers.utils.formatEther(fetchedBalanceData?.value.mul(price) as BigNumberish));
+      }
     }
-  }, [fetchBalanceData, isEthBalance, price]);
+  }, [fetchedBalanceData, isEthBalance, price]);
 
   if (!address || isLoading || balance == undefined) {
     return (
@@ -70,9 +74,7 @@ export default function Balance({ address, price }: BalanceProps) {
         ) : (
           <>
             <span className="text-xs font-bold m-1">$</span>
-            <span>
-              {Number(ethers.utils.formatEther(fetchBalanceData?.value.mul(price) as BigNumberish)).toFixed(2)}
-            </span>
+            <span>{balance?.toFixed(2)}</span>
           </>
         )}
       </div>
