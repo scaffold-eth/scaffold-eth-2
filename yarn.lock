@@ -382,7 +382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/networks@npm:5.7.1, @ethersproject/networks@npm:^5.7.0":
+"@ethersproject/networks@npm:5.7.1, @ethersproject/networks@npm:^5.7.0, @ethersproject/networks@npm:^5.7.1":
   version: 5.7.1
   resolution: "@ethersproject/networks@npm:5.7.1"
   dependencies:
@@ -559,7 +559,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/web@npm:5.7.1, @ethersproject/web@npm:^5.7.0":
+"@ethersproject/web@npm:5.7.1, @ethersproject/web@npm:^5.7.0, @ethersproject/web@npm:^5.7.1":
   version: 5.7.1
   resolution: "@ethersproject/web@npm:5.7.1"
   dependencies:
@@ -1293,6 +1293,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@se-2/frontend@workspace:packages/frontend"
   dependencies:
+    "@ethersproject/networks": ^5.7.1
+    "@ethersproject/web": ^5.7.1
     "@heroicons/react": ^2.0.11
     "@rainbow-me/rainbowkit": ^0.6.0
     "@types/node": ^17.0.35
@@ -1315,6 +1317,8 @@ __metadata:
     react-dom: ^18.1.0
     tailwindcss: ^3.1.8
     typescript: ^4.7.2
+    use-debounce: ^8.0.4
+    usehooks-ts: ^2.7.2
     wagmi: ^0.6.0
   languageName: unknown
   linkType: soft
@@ -10414,6 +10418,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-debounce@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "use-debounce@npm:8.0.4"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 0f8b9e571f68a4694033ec00690bf73d781ac890140ae9ed4b330f71f7adb3f7d7df5cdaa32923c4d03fdc9de8a11be0f84301175ae4f66208af52ad03c55504
+  languageName: node
+  linkType: hard
+
 "use-sidecar@npm:^1.1.2":
   version: 1.1.2
   resolution: "use-sidecar@npm:1.1.2"
@@ -10436,6 +10449,16 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 5c639e0f8da3521d605f59ce5be9e094ca772bd44a4ce7322b055a6f58eeed8dda3c94cabd90c7a41fb6fa852210092008afe48f7038792fd47501f33299116a
+  languageName: node
+  linkType: hard
+
+"usehooks-ts@npm:^2.7.2":
+  version: 2.7.2
+  resolution: "usehooks-ts@npm:2.7.2"
+  peerDependencies:
+    react: ^16.8.0  || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+  checksum: c4edfc53aa60f6c107c8724dbd60c06b5888f1905091797c1639255924dd45ea337355c5d51e4826f7f07c0167742f9f2d3bf23e11fb6d9b15ad7abe01d1d51d
   languageName: node
   linkType: hard
 

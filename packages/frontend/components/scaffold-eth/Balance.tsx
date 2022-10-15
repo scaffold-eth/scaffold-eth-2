@@ -13,6 +13,7 @@ type BalanceProps = {
 
 export default function Balance({ address, price }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
+  const [balanceData, setBalanceData] = useState<unknown>();
   const [balance, setBalance] = useState(0);
 
   const {
@@ -31,6 +32,8 @@ export default function Balance({ address, price }: BalanceProps) {
   };
 
   useEffect(() => {
+    setBalanceData(fetchBalanceData);
+
     if (isEthBalance && fetchBalanceData?.formatted) {
       setBalance(+fetchBalanceData?.formatted);
     } else {
@@ -38,7 +41,7 @@ export default function Balance({ address, price }: BalanceProps) {
     }
   }, [fetchBalanceData, isEthBalance, price]);
 
-  if (!address || isLoading || Boolean(balance) === false) {
+  if (!address || isLoading || Boolean(balanceData) === false) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
