@@ -76,7 +76,7 @@ Here are some tips for a high-quality pull request:
 - Have a good commit message that summarises the work done.
 
 Once you submit your PR:
--  We may ask questions, request additional information or ask for changes to be made before a PR can be merged.
+-  We may ask questions, request additional information or ask for changes to be made before a PR can be merged. Please note that these are to make the PR clear for everyone involved and aims to create a frictionless interaction process.
 - As you update your PR and apply changes, mark each conversation resolved.
 
 Once the PR is approved, we'll "squash-and-merge" to keep the git commit history clean.
