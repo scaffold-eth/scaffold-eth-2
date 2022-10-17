@@ -2,6 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
+import { useEthPrice } from "~~/components/hooks/useEthPrice";
 import { useTempTestContract } from "~~/components/useTempTestContract";
 import Address from "../components/scaffold-eth/Address";
 import Balance from "../components/scaffold-eth/Balance";
@@ -15,6 +16,9 @@ const tempAutoConnectConfig: TAutoConnect = {
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
+
+  const price = useEthPrice();
+  console.log("ETH price", price);
 
   return (
     <div className="px-8">
@@ -62,7 +66,7 @@ const Home: NextPage = () => {
         </p>
 
         <h3 className="font-bold">Balance Component</h3>
-        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
+        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={price} />
       </main>
     </div>
   );

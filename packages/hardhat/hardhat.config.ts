@@ -10,7 +10,7 @@ const config: HardhatUserConfig = {
       default: 0,
     },
   },
-  solidity: "0.8.17",
+  solidity: "0.8.15",
 };
 
 export default config;
