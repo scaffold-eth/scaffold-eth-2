@@ -34,7 +34,7 @@ export default function Balance({ address, price }: BalanceProps) {
     if (fetchedBalanceData?.formatted) {
       setBalance(Number(fetchedBalanceData.formatted));
     }
-  }, [fetchedBalanceData, isEthBalance, price]);
+  }, [fetchedBalanceData]);
 
   if (!address || isLoading || balance === null) {
     return (
