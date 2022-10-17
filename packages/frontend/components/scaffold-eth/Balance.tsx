@@ -7,7 +7,7 @@ type BalanceProps = {
 };
 
 /**
- Display balance of an address
+ Display (ETH & USD) balance of an ETH address.
 */
 
 // ToDo. Get ETH price hook.
@@ -60,7 +60,6 @@ export default function Balance({ address, price }: BalanceProps) {
       className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}
       onClick={onToggleBalance}
     >
-      {/* display  eth or dollar balance  */}
       <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
