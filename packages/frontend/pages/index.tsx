@@ -3,8 +3,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import Address from "../components/scaffold-eth/Address";
-import Balance from "../components/scaffold-eth/Balance";
+import Address from "~~/components/scaffold-eth/Address";
+import Balance from "~~/components/scaffold-eth/Balance";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
