@@ -1,4 +1,3 @@
-import { BigNumberish, ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 
@@ -11,9 +10,10 @@ type BalanceProps = {
  Display balance of an address
 */
 
+// ToDo. Get ETH price hook.
 export default function Balance({ address, price }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<number | undefined>(undefined);
+  const [balance, setBalance] = useState<number | null>(null);
 
   const {
     data: fetchedBalanceData,
@@ -22,8 +22,8 @@ export default function Balance({ address, price }: BalanceProps) {
   } = useBalance({
     addressOrName: address,
     watch: true,
-    // TODO: a dynamic on local and other networks
-    cacheTime: 5_000,
+    // ToDo: Read this value from config. Disabled for localhost.
+    cacheTime: 30_000,
   });
 
   const onToggleBalance = () => {
@@ -31,18 +31,12 @@ export default function Balance({ address, price }: BalanceProps) {
   };
 
   useEffect(() => {
-    if (isEthBalance && fetchedBalanceData?.formatted) {
-      setBalance(+Number(fetchedBalanceData?.formatted).toFixed(2));
-    } else {
-      setBalance(
-        +ethers.utils.formatEther(
-          fetchedBalanceData?.value ? (fetchedBalanceData?.value.mul(price) as BigNumberish) : "0",
-        ),
-      );
+    if (fetchedBalanceData?.formatted) {
+      setBalance(Number(fetchedBalanceData.formatted));
     }
   }, [fetchedBalanceData, isEthBalance, price]);
 
-  if (!address || isLoading || balance == undefined) {
+  if (!address || isLoading || balance === null) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
@@ -76,7 +70,7 @@ export default function Balance({ address, price }: BalanceProps) {
         ) : (
           <>
             <span className="text-xs font-bold m-1">$</span>
-            <span>{balance?.toFixed(2)}</span>
+            <span>{(balance * price).toFixed(2)}</span>
           </>
         )}
       </div>

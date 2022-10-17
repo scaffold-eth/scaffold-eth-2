@@ -62,7 +62,7 @@ const Home: NextPage = () => {
         </p>
 
         <h3 className="font-bold">Balance Component</h3>
-        <Balance address="0x0fAb64624733a7020D332203568754EB1a37DB89" price={1350} />
+        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
       </main>
     </div>
   );

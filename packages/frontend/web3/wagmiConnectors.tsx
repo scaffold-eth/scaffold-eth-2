@@ -3,7 +3,6 @@ import { configureChains, chain } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/web3/wagmi-burner/burnerWalletConfig";
-// import { BurnerConnector } from "~~/web3/wagmi-burner";
 
 /**
  * chains for the app
