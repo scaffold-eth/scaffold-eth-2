@@ -1,6 +1,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import { useProvider } from "wagmi";
 import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
 import { useEthPrice } from "~~/components/hooks/useEthPrice";
 import { useTempTestContract } from "~~/components/useTempTestContract";
@@ -14,11 +16,22 @@ const tempAutoConnectConfig: TAutoConnect = {
 };
 
 const Home: NextPage = () => {
+  const [price, setPrice] = useState<number>(0);
+  const mainnetProvider = useProvider({ chainId: 1 });
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
 
-  const price = useEthPrice();
-  console.log("ETH price", price);
+  // shows example of using the useEthPrice hook
+  useEffect(() => {
+    const getPrice = async () => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      await useEthPrice(mainnetProvider).then(result => {
+        setPrice(result);
+      });
+    };
+
+    getPrice();
+  }, [mainnetProvider]);
 
   return (
     <div className="px-8">
