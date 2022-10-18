@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useEffect } from "react";
-import { usePrepareContractWrite, useContractWrite, useContractRead, chain } from "wagmi";
+import { useContractWrite, useContractRead, chain } from "wagmi";
 import { tempContract } from "~~/generated/tempContract";
 
 // todo remove this, this is until we have contract element
