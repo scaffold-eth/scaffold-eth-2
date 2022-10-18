@@ -22,6 +22,10 @@ const config: HardhatUserConfig = {
       url: `https://arb-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
+    arbiturumTestnet: {
+      url: `https://arb-rinkeby.g.alchemy.com/v2/${defaultApiKey}`,
+      accounts: [deployerPrivateKey]
+    },
     goerli: {
       url: `https://eth-goerli.alchemyapi.io/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
@@ -34,8 +38,16 @@ const config: HardhatUserConfig = {
       url: `https://opt-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
+    optimisimKovan: {
+      url: `https://opt-kovan.g.alchemy.com/v2/${defaultApiKey}`,
+      accounts: [deployerPrivateKey]
+    },
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
+      accounts: [deployerPrivateKey]
+    },
+    polygonMumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
   },
