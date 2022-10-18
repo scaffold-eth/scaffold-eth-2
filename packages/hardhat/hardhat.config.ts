@@ -18,7 +18,10 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // order by abc
+    arbiturum: {
+      url: `https://arb-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
+      accounts: [deployerPrivateKey]
+    },
     goerli: {
       url: `https://eth-goerli.alchemyapi.io/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
@@ -29,10 +32,6 @@ const config: HardhatUserConfig = {
     },
     optimisim: {
       url: `https://opt-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
-      accounts: [deployerPrivateKey]
-    },
-    arbiturum: {
-      url: `https://arb-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
     polygon: {
