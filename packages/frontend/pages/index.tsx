@@ -1,7 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
+import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
 import { Address, Balance, Faucet } from "../components/scaffold-eth";
 
