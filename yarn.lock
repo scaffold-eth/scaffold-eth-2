@@ -1301,8 +1301,8 @@ __metadata:
     "@types/react": ^18.0.9
     "@types/react-blockies": ^1.4.1
     "@types/react-copy-to-clipboard": ^5.0.4
-    "@uniswap/sdk": ^3.0.3
     "@typescript-eslint/eslint-plugin": ^5.39.0
+    "@uniswap/sdk": ^3.0.3
     autoprefixer: ^10.4.12
     daisyui: ^2.31.0
     eslint: ^8.15.0
