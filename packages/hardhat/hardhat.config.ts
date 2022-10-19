@@ -18,12 +18,12 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    arbiturum: {
+    arbitrum: {
       url: `https://arb-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
-    arbiturumTestnet: {
-      url: `https://arb-rinkeby.g.alchemy.com/v2/${defaultApiKey}`,
+    arbitrumTestnet: {
+      url: `https://arb-goerli.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
     goerli: {
