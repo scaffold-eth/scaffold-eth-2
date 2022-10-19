@@ -4,8 +4,9 @@ import Head from "next/head";
 import { useState } from "react";
 import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import Address from "../components/scaffold-eth/Address";
 import AddressInput from "../components/scaffold-eth/AddressInput";
+import Address from "~~/components/scaffold-eth/Address";
+import Balance from "~~/components/scaffold-eth/Balance";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -65,6 +66,8 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold">Address Input Component</h3>
         <AddressInput value={address} onChange={setAddress} placeholder="Enter address" />
+        <h3 className="font-bold">Balance Component</h3>
+        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
       </main>
     </div>
   );

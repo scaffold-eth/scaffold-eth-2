@@ -4,8 +4,7 @@ import { useEnsAddress } from "wagmi";
 
 interface IAddressInput {
   value?: string;
-  // eslint-disable-next-line no-unused-vars
-  onChange?: (arg: string) => void; // above comment is temp fix as no ts config for this currently
+  onChange?: (arg: string) => void;
   placeholder?: string;
 }
 // can we move this functions to other utility file ?
