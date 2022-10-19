@@ -22,7 +22,7 @@ const config: HardhatUserConfig = {
       url: `https://arb-mainnet.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
-    arbitrumTestnet: {
+    arbitrumGoerli: {
       url: `https://arb-goerli.g.alchemy.com/v2/${defaultApiKey}`,
       accounts: [deployerPrivateKey]
     },
