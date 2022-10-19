@@ -7,7 +7,7 @@ import { Address, Balance, Faucet } from "../components/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
-  enableBurnerWallet: false,
+  enableBurnerWallet: true,
   autoConnect: true,
 };
 
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
 
       <main className="flex items-center flex-col py-16">
         {/* Wallet connect and Faucet buttons */}
-        <div className="flex space-x-4">
+        <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
           <ConnectButton
             accountStatus={{
               smallScreen: "avatar",
