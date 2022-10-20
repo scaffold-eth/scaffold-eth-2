@@ -2,9 +2,9 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import { TAutoConnect, useAutoConnect } from "~~/components/hooks/useAutoConnect";
+import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import AddressInput from "../components/scaffold-eth/AddressInput";
+import AddressInput from "~~/components/scaffold-eth/AddressInput";
 import Address from "~~/components/scaffold-eth/Address";
 import Balance from "~~/components/scaffold-eth/Balance";
 
@@ -16,6 +16,8 @@ const tempAutoConnectConfig: TAutoConnect = {
 
 const Home: NextPage = () => {
   const [address, setAddress] = useState<string>("");
+  console.log("address: input result ", address);
+
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
 
@@ -65,8 +67,9 @@ const Home: NextPage = () => {
         </p>
 
         <h3 className="font-bold">Address Input Component</h3>
-        <AddressInput value={address} onChange={setAddress} placeholder="Enter address" />
-        <h3 className="font-bold">Balance Component</h3>
+        <AddressInput placeholder="Enter address" onChange={setAddress} />
+
+        <h3 className="font-bold mt-4">Balance Component</h3>
         <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
       </main>
     </div>
