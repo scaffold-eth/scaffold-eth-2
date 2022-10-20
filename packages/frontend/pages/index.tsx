@@ -5,6 +5,7 @@ import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConne
 import { useTempTestContract } from "~~/components/useTempTestContract";
 import Address from "~~/components/scaffold-eth/Address";
 import Balance from "~~/components/scaffold-eth/Balance";
+import { useAppStore } from "~~/services/store/store";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -15,6 +16,10 @@ const tempAutoConnectConfig: TAutoConnect = {
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
+
+  const tempState = useAppStore(state => state.tempState);
+
+  console.log("In index.tsx:  " + tempState?.tempStuff);
 
   return (
     <div className="px-8">

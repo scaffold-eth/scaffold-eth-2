@@ -8,7 +8,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import { wagmiClient } from "~~/services/web3/wagmiClient";
 
-function ScaffoldEthApp({ Component, pageProps }: AppProps) {
+const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={appChains.chains}>
@@ -16,6 +16,6 @@ function ScaffoldEthApp({ Component, pageProps }: AppProps) {
       </RainbowKitProvider>
     </WagmiConfig>
   );
-}
+};
 
 export default ScaffoldEthApp;
