@@ -1340,6 +1340,7 @@ __metadata:
     "@typechain/hardhat": ^6.1.3
     "@types/mocha": ^9.1.1
     chai: ^4.3.6
+    dotenv: ^16.0.3
     ethers: ^5.7.1
     hardhat: ^2.11.2
     hardhat-deploy: ^0.11.15
@@ -4270,6 +4271,13 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3"
+  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 

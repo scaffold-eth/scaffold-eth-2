@@ -1,7 +1,7 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
 import { Connector, Chain, chain } from "wagmi";
-import { loadBurnerSK } from "~~/components/hooks/useBurnerWallet";
+import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
 import { BurnerConnectorError } from ".";
 import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from ".";
 
