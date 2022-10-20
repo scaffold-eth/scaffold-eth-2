@@ -1,9 +1,9 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-const fs = require("fs");
-import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
+import fs from "fs";
 import "hardhat-deploy";
+import { HardhatUserConfig } from "hardhat/config";
+dotenv.config();
 
 // If not set, it uses the Alchemy's default API key.
 const providerApiKey =
@@ -60,7 +60,7 @@ const config: HardhatUserConfig = {
 
 export default config;
 
-const DEBUG = false;
+const DEBUG = true;
 
 function debug(text: string) {
   if (DEBUG) {
@@ -84,42 +84,48 @@ function mnemonic() {
 task(
   "generate",
   "Create a mnemonic for builder deploys",
-  async (_, { ethers }) => {
-    const bip39 = require("bip39");
-    const { hdkey } = require('ethereumjs-wallet')
-    const mnemonic = bip39.generateMnemonic();
-    if (DEBUG) console.log("mnemonic", mnemonic);
-    const seed = await bip39.mnemonicToSeed(mnemonic);
-    if (DEBUG) console.log("seed", seed);
-    const hdwallet = hdkey.fromMasterSeed(seed);
-    const wallet_hdpath = "m/44'/60'/0'/0/";
-    const account_index = 0;
-    const fullPath = wallet_hdpath + account_index;
-    if (DEBUG) console.log("fullPath", fullPath);
-    const wallet = hdwallet.derivePath(fullPath).getWallet();
-    // const privateKey = "0x" + wallet._privKey.toString("hex");
-    // if (DEBUG) console.log("privateKey", privateKey);
-    const EthUtil = require("ethereumjs-util");
-    const address =
-      "0x" + EthUtil.privateToAddress(wallet._privKey).toString("hex");
-    console.log(
-      "🔐 Account Generated as " +
+  async () => {
+    if (!fs.readFileSync("./mnemonic.txt")) {
+      const bip39 = require("bip39");
+      const { hdkey } = require("ethereumjs-wallet")
+      const mnemonic = bip39.generateMnemonic();
+      if (DEBUG) console.log("mnemonic", mnemonic);
+      const seed = await bip39.mnemonicToSeed(mnemonic);
+      if (DEBUG) console.log("seed", seed);
+      const hdwallet = hdkey.fromMasterSeed(seed);
+      if (DEBUG) console.log("hdwallet", hdwallet);
+      const wallet_hdpath = "m/44'/60'/0'/0/";
+      const account_index = 0;
+      const fullPath = wallet_hdpath + account_index;
+      if (DEBUG) console.log("fullPath", fullPath);
+      const wallet = hdwallet.derivePath(fullPath).getWallet();
+      if (DEBUG) console.log("wallet", wallet);
+      const privateKey = "0x" + wallet.privateKey.toString("hex");
+      if (DEBUG) console.log("privateKey", privateKey);
+      const EthUtil = require("@nomicfoundation/ethereumjs-util");
+      const address =
+        "0x" + EthUtil.privateToAddress(privateKey).toString("hex");
+      console.log(
+        "🔐 Account Generated as " +
         address +
         " and set as mnemonic in packages/hardhat"
-    );
-    console.log(
-      "💬 Use 'yarn run account' to get more information about the deployment account."
-    );
+      );
+      console.log(
+        "💬 Use 'yarn run account' to get more information about the deployment account."
+      );
 
-    fs.writeFileSync("./" + address + ".txt", mnemonic.toString());
-    fs.writeFileSync("./mnemonic.txt", mnemonic.toString());
+      fs.writeFileSync("./" + address + ".txt", mnemonic.toString());
+      fs.writeFileSync("./mnemonic.txt", mnemonic.toString());
+    } else {
+      console.log("🔐 Account already generated");
+    }
   }
 );
 
 task(
   "account",
   "Get balance informations for the deployment account.",
-  async (_, { ethers }: { ethers: any}) => {
+  async (_, { ethers }: { ethers: any }) => {
     const { hdkey } = require('ethereumjs-wallet')
     const bip39 = require("bip39");
     try {
@@ -133,23 +139,22 @@ task(
       const fullPath = wallet_hdpath + account_index;
       if (DEBUG) console.log("fullPath", fullPath);
       const wallet = hdwallet.derivePath(fullPath).getWallet();
-      const privateKey = "0x" + wallet._privKey.toString("hex");
+      const privateKey = "0x" + wallet.privateKey.toString("hex");
       if (DEBUG) console.log("privateKey", privateKey);
-      const EthUtil = require("ethereumjs-util");
+      const EthUtil = require("@nomicfoundation/ethereumjs-util");
       const address =
-        "0x" + EthUtil.privateToAddress(wallet._privKey).toString("hex");
+        "0x" + EthUtil.privateToAddress(wallet.privateKey).toString("hex");
 
       const qrcode = require("qrcode-terminal");
       qrcode.generate(address);
       console.log("‍📬 Deployer Account is " + address);
-      for (const n in config.networks) {
-        // console.log(config.networks[n],n)
+      for (const network in config.networks) {
         try {
           const provider = new ethers.providers.JsonRpcProvider(
-            config.networks[n].url
+            config.networks[network]?.url
           );
           const balance = await provider.getBalance(address);
-          console.log(" -- " + n + " --  -- -- 📡 ");
+          console.log(" -- " + network + " --  -- -- 📡 ");
           console.log("   balance: " + ethers.utils.formatEther(balance));
           console.log(
             "   nonce: " + (await provider.getTransactionCount(address))
@@ -161,9 +166,9 @@ task(
         }
       }
     } catch (err) {
-      console.log(`--- Looks like there is no mnemonic file created yet.`);
+      console.log("--- Looks like there is no mnemonic file created yet.");
       console.log(
-        `--- Please run ${("yarn generate")} to create one`
+        "--- Please run yarn generate to create one"
       );
     }
   }
