@@ -3,9 +3,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import Address from "~~/components/scaffold-eth/Address";
-import Balance from "~~/components/scaffold-eth/Balance";
 import { useAppStore } from "~~/services/store/store";
+import { Address, Balance, Faucet } from "../components/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -29,17 +28,21 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex items-center flex-col py-16">
-        <ConnectButton
-          accountStatus={{
-            smallScreen: "avatar",
-            largeScreen: "full",
-          }}
-          showBalance={true}
-          chainStatus={{
-            smallScreen: "icon",
-            largeScreen: "icon",
-          }}
-        />
+        {/* Wallet connect and Faucet buttons */}
+        <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
+          <ConnectButton
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+            showBalance={true}
+            chainStatus={{
+              smallScreen: "icon",
+              largeScreen: "icon",
+            }}
+          />
+          <Faucet />
+        </div>
 
         <h1 className="text-center my-12 text-4xl">
           Welcome to{" "}
