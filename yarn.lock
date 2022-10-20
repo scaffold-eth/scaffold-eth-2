@@ -1321,6 +1321,7 @@ __metadata:
     use-debounce: ^8.0.4
     usehooks-ts: ^2.7.2
     wagmi: ^0.6.0
+    zustand: ^4.1.2
   languageName: unknown
   linkType: soft
 
@@ -11126,5 +11127,22 @@ __metadata:
     react:
       optional: true
   checksum: 03eefb193e2ecb43a761c81cb60f517c2780289dab0f55f2cbdb91400924c6291abb5a007b32ee19787b8f72b6769f891a38b64fd296660c170d632c3182f6e1
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "zustand@npm:4.1.2"
+  dependencies:
+    use-sync-external-store: 1.2.0
+  peerDependencies:
+    immer: ">=9.0"
+    react: ">=16.8"
+  peerDependenciesMeta:
+    immer:
+      optional: true
+    react:
+      optional: true
+  checksum: e7fefc5deb232082edd2abef072b92554d5effc261594d633ee55d7d4fe0e54c5b16ee8c5e628fab2e1090946d9e493865b72ad76280a413e8ff5bea6d0ca642
   languageName: node
   linkType: hard

@@ -5,8 +5,8 @@ import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiConfig } from "wagmi";
 
 import "@rainbow-me/rainbowkit/styles.css";
-import { appChains } from "~~/web3/wagmiConnectors";
-import { wagmiClient } from "~~/web3/wagmiClient";
+import { appChains } from "~~/services/web3/wagmiConnectors";
+import { wagmiClient } from "~~/services/web3/wagmiClient";
 
 function ScaffoldEthApp({ Component, pageProps }: AppProps) {
   return (

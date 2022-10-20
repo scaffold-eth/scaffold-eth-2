@@ -2,7 +2,7 @@ import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
 import { configureChains, chain } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { burnerWalletConfig } from "~~/web3/wagmi-burner/burnerWalletConfig";
+import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
 
 /**
  * chains for the app

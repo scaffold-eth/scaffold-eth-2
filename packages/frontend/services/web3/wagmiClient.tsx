@@ -1,5 +1,5 @@
 import { createClient } from "wagmi";
-import { appChains, wagmiConnectors } from "~~/web3/wagmiConnectors";
+import { appChains, wagmiConnectors } from "~~/services/web3/wagmiConnectors";
 
 export const wagmiClient = createClient({
   autoConnect: false,
