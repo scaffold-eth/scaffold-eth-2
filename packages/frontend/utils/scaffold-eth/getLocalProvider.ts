@@ -7,11 +7,9 @@ import { publicProvider } from "wagmi/providers/public";
   @return public provider for passed chain
 **/
 export default function getLocalProvider(chain: Chain) {
-  const chainProviderFunc = publicProvider();
-
-  const chainProviderObj = chainProviderFunc(chain);
-
-  const provider = chainProviderObj?.provider();
+  const chainProviderLoader = publicProvider();
+  const chainProviderData = chainProviderLoader(chain);
+  const provider = chainProviderData?.provider();
 
   return provider;
 }

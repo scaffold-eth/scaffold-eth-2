@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import { chain, useAccount, useNetwork } from "wagmi";
-import { getLocalProvider } from "~~/utils";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -29,13 +29,13 @@ export default function Faucet() {
   };
 
   // Render only on local chain
-  if (ConnectedChain?.id === 31337) {
-    return (
-      <button className={`btn btn-warning ${loading && "loading"} text-gray-700`} onClick={sendETH} disabled={loading}>
-        💰 Get funds from faucet
-      </button>
-    );
-  } else {
-    return <></>;
+  if (ConnectedChain?.id !== chain.hardhat.id) {
+    return null;
   }
+
+  return (
+    <button className={`btn btn-warning ${loading && "loading"} text-gray-700`} onClick={sendETH} disabled={loading}>
+      💰 Get funds from faucet
+    </button>
+  );
 }
