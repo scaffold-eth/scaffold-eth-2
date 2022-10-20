@@ -4,6 +4,9 @@
   "scripts": {
     "chain": "hardhat node --network hardhat --no-deploy",
     "deploy": "hardhat deploy --export-all ../frontend/contracts/hardhat_contracts.json",
+    "compile": "hardhat compile",
+    "generate": "hardhat generate",
+    "account": "hardhat account",
     "test": "REPORT_GAS=true hardhat test --network hardhat"
   },
   "devDependencies": {
@@ -28,6 +31,9 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "bip39": "^3.0.4",
+    "dotenv": "^16.0.3",
+    "ethereumjs-util": "^7.1.5",
+    "ethereumjs-wallet": "^1.0.2"
   }
 }
