@@ -2,10 +2,13 @@ import { Fetcher, Route, Token, WETH } from "@uniswap/sdk";
 import { useEffect, useState } from "react";
 import { useProvider } from "wagmi";
 
-// Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
+/**
+ * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
+ * @returns ethPrice: number
+ */
 export const useEthPrice = () => {
   const provider = useProvider({ chainId: 1 });
-  const [ethPrice, setEthPrice] = useState<number>(0);
+  const [ethPrice, setEthPrice] = useState(0);
 
   useEffect(() => {
     Promise.resolve(
@@ -14,7 +17,7 @@ export const useEthPrice = () => {
         setEthPrice(price);
       }),
     );
-  }, [provider]);
+  }, []);
 
   const fetchPriceFromUniswap = async (provider: any): Promise<number> => {
     try {
