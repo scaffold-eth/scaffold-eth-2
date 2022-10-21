@@ -6,14 +6,14 @@ interface IAddressInput {
   onSuccess?: (arg: string) => void;
   placeholder?: string;
 }
-// todo:  move this functions to other utility file
+
+// ToDo:  move this function to an utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
 
 /**
- Address input component with ens name resolution
-*/
-
-const AddressInput = ({ placeholder, onSuccess }: IAddressInput): any => {
+ * Address input with ENS name resolution
+ */
+const AddressInput = ({ placeholder, onSuccess }: IAddressInput) => {
   const [address, setAddress] = useState("");
 
   const { data: ensData, isLoading } = useEnsAddress({
@@ -28,12 +28,11 @@ const AddressInput = ({ placeholder, onSuccess }: IAddressInput): any => {
   };
 
   useEffect(() => {
-    if (ensData) {
-      setAddress(ensData as string);
-    }
+    if (!ensData) return;
 
-    if (ensData && onSuccess) {
-      onSuccess(ensData as string);
+    setAddress(ensData);
+    if (onSuccess) {
+      onSuccess(ensData);
     }
   }, [ensData, onSuccess]);
 
