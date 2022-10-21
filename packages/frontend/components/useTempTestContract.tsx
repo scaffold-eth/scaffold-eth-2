@@ -11,7 +11,9 @@ export const useTempTestContract = () => {
   const tempState = useAppStore(state => state.tempState);
   const setTempState = useAppStore(state => state.setTempState);
 
-  console.log("in useTempTestContract: " + tempState.tempStuff);
+  useEffect(() => {
+    console.log("test state, in useTempTestContract: " + tempState.tempStuff);
+  }, [tempState?.tempStuff]);
 
   const cRead = useContractRead({
     addressOrName: tempContract.address,
