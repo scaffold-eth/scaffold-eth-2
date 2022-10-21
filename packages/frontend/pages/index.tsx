@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         {/* Wallet connect and Faucet buttons */}
         <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
           <ConnectButton
-            key={refresh}
+            key={`${refresh}`}
             accountStatus={{
               smallScreen: "avatar",
               largeScreen: "full",
