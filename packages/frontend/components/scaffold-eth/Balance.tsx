@@ -6,11 +6,10 @@ type BalanceProps = {
   price: number;
 };
 
-/**
- Display (ETH & USD) balance of an ETH address.
-*/
-
 // ToDo. Get ETH price hook.
+/**
+ * Display (ETH & USD) balance of an ETH address.
+ */
 export default function Balance({ address, price }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);

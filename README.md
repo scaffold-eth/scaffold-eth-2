@@ -1,5 +1,7 @@
 # Scaffold-Eth 2
 
+⚠️ This project is currently under active development. Things might break. Feel free to check the open issues & create new ones.
+
 *The best way to get started building decentralized applications on Ethereum!*
 
 A new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Wagmi and Typescript.
