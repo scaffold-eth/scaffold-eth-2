@@ -4,7 +4,7 @@ import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useEthPrice } from "../hooks/scaffold-eth/index";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import { Address, Balance, Faucet } from "../components/scaffold-eth";
+import { Address, Balance, Faucet, AddressInput } from "~~/components/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -71,6 +71,10 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold">Balance Component</h3>
         <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={price} />
+
+        <h3 className="font-bold">Address Input Component</h3>
+        <AddressInput placeholder="Enter address" />
+
       </main>
     </div>
   );
