@@ -4,6 +4,7 @@ import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
 import { Address, Balance, Faucet } from "../components/scaffold-eth";
+import { useState } from "react";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -14,6 +15,7 @@ const tempAutoConnectConfig: TAutoConnect = {
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
+  const [refresh, setRefresh] = useState(false);
 
   return (
     <div className="px-8">
@@ -26,6 +28,7 @@ const Home: NextPage = () => {
         {/* Wallet connect and Faucet buttons */}
         <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
           <ConnectButton
+            key={refresh}
             accountStatus={{
               smallScreen: "avatar",
               largeScreen: "full",
@@ -36,7 +39,7 @@ const Home: NextPage = () => {
               largeScreen: "icon",
             }}
           />
-          <Faucet />
+          <Faucet refresh={refresh} setRefresh={setRefresh} />
         </div>
 
         <h1 className="text-center my-12 text-4xl">

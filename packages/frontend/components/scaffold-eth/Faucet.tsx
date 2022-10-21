@@ -10,7 +10,12 @@ const NUM_OF_ETH = "1";
   Faucet button which lets you grab eth.
 **/
 
-export default function Faucet() {
+type FaucetProps = {
+  refresh?: boolean;
+  setRefresh: (arg: boolean) => void;
+};
+
+export default function Faucet({ refresh, setRefresh }: FaucetProps) {
   const { address } = useAccount();
   const { chain: ConnectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
@@ -22,6 +27,7 @@ export default function Faucet() {
       const signer = provider?.getSigner();
       await signer?.sendTransaction({ to: address, value: ethers.utils.parseEther(NUM_OF_ETH) });
       setLoading(false);
+      setRefresh(!refresh);
     } catch (error) {
       console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
       setLoading(false);
