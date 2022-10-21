@@ -7,9 +7,8 @@ import { getLocalProvider } from "~~/utils/scaffold-eth";
 const NUM_OF_ETH = "1";
 
 /**
-  Faucet button which lets you grab eth.
-**/
-
+ * Faucet button which lets you grab eth.
+ */
 export default function Faucet() {
   const { address } = useAccount();
   const { chain: ConnectedChain } = useNetwork();
