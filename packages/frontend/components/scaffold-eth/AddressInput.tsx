@@ -3,17 +3,17 @@ import Blockies from "react-blockies";
 import { useEnsAddress } from "wagmi";
 
 interface IAddressInput {
-  onChange?: (arg: string) => void;
+  onSuccess?: (arg: string) => void;
   placeholder?: string;
 }
-// todo: we move this functions to other utility file ?
+// todo:  move this functions to other utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
 
 /**
  Address input component with ens name resolution
 */
 
-const AddressInput = ({ placeholder, onChange }: IAddressInput): any => {
+const AddressInput = ({ placeholder, onSuccess }: IAddressInput): any => {
   const [address, setAddress] = useState("");
 
   const { data: ensData, isLoading } = useEnsAddress({
@@ -28,11 +28,14 @@ const AddressInput = ({ placeholder, onChange }: IAddressInput): any => {
   };
 
   useEffect(() => {
-    if (ensData && onChange) {
+    if (ensData) {
       setAddress(ensData as string);
-      onChange(ensData as string);
     }
-  }, [ensData, onChange]);
+
+    if (ensData && onSuccess) {
+      onSuccess(ensData as string);
+    }
+  }, [ensData, onSuccess]);
 
   return (
     <>
@@ -41,7 +44,7 @@ const AddressInput = ({ placeholder, onChange }: IAddressInput): any => {
           <input
             type="text"
             placeholder={placeholder}
-            className="input input-bordered h-10"
+            className={`input input-bordered h-10 ${ensData === null && "input-error"}`}
             value={address || ""}
             onChange={onChangeAddress}
             disabled={isLoading}

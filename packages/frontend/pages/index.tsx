@@ -1,12 +1,9 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import AddressInput from "~~/components/scaffold-eth/AddressInput";
-import Address from "~~/components/scaffold-eth/Address";
-import Balance from "~~/components/scaffold-eth/Balance";
+import { Address, Balance, Faucet, AddressInput } from "~~/components/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -15,9 +12,6 @@ const tempAutoConnectConfig: TAutoConnect = {
 };
 
 const Home: NextPage = () => {
-  const [address, setAddress] = useState<string>("");
-  console.log("address: input result ", address);
-
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
 
@@ -29,17 +23,21 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex items-center flex-col py-16">
-        <ConnectButton
-          accountStatus={{
-            smallScreen: "avatar",
-            largeScreen: "full",
-          }}
-          showBalance={true}
-          chainStatus={{
-            smallScreen: "icon",
-            largeScreen: "icon",
-          }}
-        />
+        {/* Wallet connect and Faucet buttons */}
+        <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
+          <ConnectButton
+            accountStatus={{
+              smallScreen: "avatar",
+              largeScreen: "full",
+            }}
+            showBalance={true}
+            chainStatus={{
+              smallScreen: "icon",
+              largeScreen: "icon",
+            }}
+          />
+          <Faucet />
+        </div>
 
         <h1 className="text-center my-12 text-4xl">
           Welcome to{" "}
@@ -67,7 +65,7 @@ const Home: NextPage = () => {
         </p>
 
         <h3 className="font-bold">Address Input Component</h3>
-        <AddressInput placeholder="Enter address" onChange={setAddress} />
+        <AddressInput placeholder="Enter address" />
 
         <h3 className="font-bold mt-4">Balance Component</h3>
         <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
