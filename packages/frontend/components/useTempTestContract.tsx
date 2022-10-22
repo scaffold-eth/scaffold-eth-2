@@ -8,8 +8,8 @@ import { useAppStore } from "~~/services/store/store";
 const testChainId = chain.hardhat.id;
 
 export const useTempTestContract = () => {
-  const tempState = useAppStore(state => state.tempState);
-  const setTempState = useAppStore(state => state.setTempState);
+  const tempState = useAppStore(state => state.tempSlice.tempState);
+  const setTempState = useAppStore(state => state.tempSlice.setTempState);
 
   useEffect(() => {
     console.log("test state, in useTempTestContract: " + tempState.tempStuff);

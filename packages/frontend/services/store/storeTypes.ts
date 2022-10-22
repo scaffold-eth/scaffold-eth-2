@@ -1,13 +1,17 @@
 import { StateCreator } from "zustand";
-import { TempStateSlice } from "~~/services/store/slices/tempExampleState";
-import { AnotherTempStateSlice } from "~~/services/store/slices/anotherExampleTempState";
+import { TempSlice } from "~~/services/store/slices/tempSlice";
+import { TAnotherExampleSlice } from "~~/services/store/slices/anotherExampleSlice";
 
 /**
- * The App store
- * All your slices of state should be joined here
+ * The App store definition
  */
-
-export type TAppStore = TempStateSlice & AnotherTempStateSlice;
+export type TAppStore = {
+  tempSlice: TempSlice;
+  anotherExampleSlice: TAnotherExampleSlice;
+  /**
+   * Add more slices here
+   */
+};
 
 /***
  * Helper to create slices

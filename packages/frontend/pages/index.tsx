@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
 
-  const tempState = useAppStore(state => state.tempState);
+  const tempState = useAppStore(state => state.wow);
 
   useEffect(() => {
     console.log("test state, in index.tsx:  " + tempState?.tempStuff);
