@@ -23,9 +23,10 @@ export const appChains = configureChains(
   ],
   [
     alchemyProvider({
-      // This is Alchemy's default API key.
+      // ToDo. Move to .env || scaffold config
+      // This is ours Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
+      apiKey: "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
     }),
     publicProvider(),
   ],
@@ -38,9 +39,10 @@ export const burnerChains = configureChains(
   [chain.localhost, chain.hardhat],
   [
     alchemyProvider({
-      // This is Alchemy's default API key.
+      // ToDo. Move to .env || scaffold config
+      // This is ours Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
-      apiKey: "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC",
+      apiKey: "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
     }),
     publicProvider(),
   ],
