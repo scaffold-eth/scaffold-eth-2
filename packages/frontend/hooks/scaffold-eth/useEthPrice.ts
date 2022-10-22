@@ -11,28 +11,27 @@ export const useEthPrice = () => {
   const [ethPrice, setEthPrice] = useState(0);
 
   useEffect(() => {
+    const fetchPriceFromUniswap = async (): Promise<number> => {
+      try {
+        const DAI = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18);
+        const pair = await Fetcher.fetchPairData(DAI, WETH[DAI.chainId], provider);
+        const route = new Route([pair], WETH[DAI.chainId]);
+        const price = parseFloat(route.midPrice.toSignificant(6));
+
+        return price;
+      } catch (error) {
+        console.log("Error fetching ETH price from Uniswap: ", error);
+
+        return 0;
+      }
+    };
+
     Promise.resolve(
-      fetchPriceFromUniswap(provider).then((price: any) => {
-        console.log("price", price);
+      fetchPriceFromUniswap().then((price: any) => {
         setEthPrice(price);
       }),
     );
-  }, []);
-
-  const fetchPriceFromUniswap = async (provider: any): Promise<number> => {
-    try {
-      const DAI = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18);
-      const pair = await Fetcher.fetchPairData(DAI, WETH[DAI.chainId], provider);
-      const route = new Route([pair], WETH[DAI.chainId]);
-      const price = parseFloat(route.midPrice.toSignificant(6));
-
-      return price;
-    } catch (error) {
-      console.log("Error fetching ETH price from Uniswap: ", error);
-
-      return 0;
-    }
-  };
+  }, [provider]);
 
   return ethPrice;
 };
