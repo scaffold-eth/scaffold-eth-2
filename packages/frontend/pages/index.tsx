@@ -74,7 +74,6 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold">Address Input Component</h3>
         <AddressInput placeholder="Enter address" />
-
       </main>
     </div>
   );
