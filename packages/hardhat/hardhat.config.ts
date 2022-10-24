@@ -5,9 +5,10 @@ import "hardhat-deploy";
 import { HardhatUserConfig } from "hardhat/config";
 dotenv.config();
 
-// If not set, it uses the Alchemy's default API key.
+// If not set, it uses ours Alchemy's default API key.
+// You can get your own at https://dashboard.alchemyapi.io
 const providerApiKey =
-  process.env.ALCHEMY_API_KEY ?? "_gg7wSSi0KMBsdKnGVfHDueq6xMB9EkC";
+  process.env.ALCHEMY_API_KEY ?? "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ??

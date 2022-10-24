@@ -7,10 +7,6 @@ import { useEnsName } from "wagmi";
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
 
-/**
- Displays an address (or ENS) with a Blockie image and option to copy address.
-**/
-
 type AddressProps = {
   address: string;
   blockExplorer?: string;
@@ -20,6 +16,9 @@ type AddressProps = {
   minimized?: boolean;
 };
 
+/**
+ * Displays an address (or ENS) with a Blockie image and option to copy address.
+ */
 export default function Address({
   address,
   blockExplorer,

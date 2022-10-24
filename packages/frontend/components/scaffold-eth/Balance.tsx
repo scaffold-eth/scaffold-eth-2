@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
+import { useEthPrice } from "~~/hooks/scaffold-eth";
 
 type BalanceProps = {
   address: string;
-  price: number;
 };
 
 /**
- Display (ETH & USD) balance of an ETH address.
-*/
-
-// ToDo. Get ETH price hook.
-export default function Balance({ address, price }: BalanceProps) {
+ * Display (ETH & USD) balance of an ETH address.
+ */
+export default function Balance({ address }: BalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
+
+  // ToDo. We could move this to zustand state.
+  const price = useEthPrice();
 
   const {
     data: fetchedBalanceData,
