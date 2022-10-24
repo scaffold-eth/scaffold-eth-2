@@ -4,6 +4,10 @@ import * as fs from "fs";
 
 const envFilePath = "./.env";
 
+/**
+ * Generate a new random private key and write it to the .env file
+ * @param existingEnvConfig
+ */
 const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");
   const randomWallet = ethers.Wallet.createRandom();
@@ -19,14 +23,13 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
 };
 
 async function main() {
-  // Check if wallet exists (defined on .env) => return.
-
   if (!fs.existsSync(envFilePath)) {
+    // No .env file yet.
     setNewEnvConfig();
     return;
   }
 
-  // file exists
+  // .env file exists
   const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
   if (existingEnvConfig.DEPLOYER_PRIVATE_KEY) {
     console.log(

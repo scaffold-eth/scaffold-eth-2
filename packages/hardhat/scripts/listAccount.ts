@@ -5,7 +5,6 @@ import QRCode from "qrcode";
 import { config } from "hardhat";
 
 async function main() {
-  // Read mnemonic / private key from .env => if not => return
   const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
   if (!privateKey) {
