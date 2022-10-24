@@ -38,12 +38,12 @@ const config: HardhatUserConfig = {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
-    optimisim: {
+    optimism: {
       url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
-    optimisimKovan: {
-      url: `https://opt-kovan.g.alchemy.com/v2/${providerApiKey}`,
+    optimismGoerli: {
+      url: `https://opt-goerli.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
     polygon: {
