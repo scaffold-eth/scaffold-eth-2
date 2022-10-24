@@ -17,7 +17,7 @@ A new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tre
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/carletex/se-2.git
+git clone https://github.com/scaffold-eth/se-2.git
 cd se-2
 yarn install
 ```
