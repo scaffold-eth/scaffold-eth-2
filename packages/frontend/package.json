@@ -15,8 +15,6 @@
     "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
     "@rainbow-me/rainbowkit": "^0.6.0",
-    "@types/react-blockies": "^1.4.1",
-    "@types/react-copy-to-clipboard": "^5.0.4",
     "@uniswap/sdk": "^3.0.3",
     "daisyui": "^2.31.0",
     "ethers": "^5.0.0",
@@ -27,11 +25,14 @@
     "react-dom": "^18.1.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
-    "wagmi": "^0.6.0"
+    "wagmi": "^0.6.0",
+    "zustand": "^4.1.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.35",
     "@types/react": "^18.0.9",
+    "@types/react-blockies": "^1.4.1",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "autoprefixer": "^10.4.12",
     "eslint": "^8.15.0",

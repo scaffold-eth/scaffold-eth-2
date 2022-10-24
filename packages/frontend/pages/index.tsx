@@ -3,7 +3,9 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth/useAutoConnect";
 import { useTempTestContract } from "~~/components/useTempTestContract";
-import { Address, Balance, Faucet, AddressInput } from "~~/components/scaffold-eth";
+import { useAppStore } from "~~/services/store/store";
+import { Address, AddressInput, Balance, Faucet } from "../components/scaffold-eth";
+import { useEffect } from "react";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -14,6 +16,12 @@ const tempAutoConnectConfig: TAutoConnect = {
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
   useAutoConnect(tempAutoConnectConfig);
+
+  const tempState = useAppStore(state => state.tempSlice.tempState);
+
+  useEffect(() => {
+    console.log("test state, in index.tsx:  " + tempState?.tempStuff);
+  }, [tempState?.tempStuff]);
 
   return (
     <div className="px-8">

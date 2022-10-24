@@ -2,8 +2,8 @@ import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
 import { Connector, Chain, chain } from "wagmi";
 import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
-import { BurnerConnectorError } from ".";
-import { BurnerConnectorData, BurnerConnectorOptions, BurnerConnectorErrorList } from ".";
+import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
+import { BurnerConnectorOptions, BurnerConnectorData } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
 
 export const burnerWalletId = "burner-wallet";
 export const burnerWalletName = "Burner Wallet";
