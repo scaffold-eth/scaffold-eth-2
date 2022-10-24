@@ -52,7 +52,8 @@ const Home: NextPage = () => {
         </h1>
 
         <p className="text-center text-xl">
-          Get started by editing <code className="italic bg-gray-200">packages/frontend/pages/index.tsx</code>
+          Get started by editing
+          <code className="italic bg-gray-200">packages/frontend/pages/index.tsx</code>
         </p>
 
         <h3 className="font-bold">Address Component</h3>
@@ -64,11 +65,11 @@ const Home: NextPage = () => {
           </button>
         </p>
 
-        <h3 className="font-bold">Address Input Component</h3>
-        <AddressInput placeholder="Enter address" />
+        <h3 className="font-bold">Balance Component</h3>
+        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" />
 
-        <h3 className="font-bold mt-4">Balance Component</h3>
-        <Balance address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" price={1350} />
+        <h3 className="font-bold mt-4">Address Input Component</h3>
+        <AddressInput placeholder="Enter address" />
       </main>
     </div>
   );
