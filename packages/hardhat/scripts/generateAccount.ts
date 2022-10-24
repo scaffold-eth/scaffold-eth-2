@@ -1,17 +1,41 @@
 import { ethers } from "ethers";
+import { parse, stringify } from "envfile";
+import * as fs from "fs";
+
+const envFilePath = "./.env";
+
+const setNewEnvConfig = (existingEnvConfig = {}) => {
+  console.log("👛 Generating new Wallet");
+  const randomWallet = ethers.Wallet.createRandom();
+
+  const newEnvConfig = {
+    ...existingEnvConfig,
+    DEPLOYER_PRIVATE_KEY: randomWallet.privateKey,
+  };
+
+  // Store in .env
+  fs.writeFileSync(envFilePath, stringify(newEnvConfig));
+  console.log("📄 Mnemonic/Private key saved to packages/hardhat/.env file");
+};
 
 async function main() {
   // Check if wallet exists (defined on .env) => return.
 
-  // Generate random wallet
-  console.log("👛 Generating new Wallet");
-  const randomWallet = ethers.Wallet.createRandom();
+  if (!fs.existsSync(envFilePath)) {
+    setNewEnvConfig();
+    return;
+  }
 
-  console.log("Private key", randomWallet.privateKey);
-  console.log("Mnemonic", randomWallet.mnemonic.phrase);
+  // file exists
+  const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
+  if (existingEnvConfig.DEPLOYER_PRIVATE_KEY) {
+    console.log(
+      "⚠️ You already have a deployer account. Check the packages/hardhat/.env file"
+    );
+    return;
+  }
 
-  // Store in .env
-  console.log("📄 Mnemonic/Private key saved to packages/hardhat/.env file");
+  setNewEnvConfig(existingEnvConfig);
 }
 
 main().catch((error) => {

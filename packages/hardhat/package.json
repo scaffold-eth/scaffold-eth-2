@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "envfile": "^6.18.0",
     "qrcode": "^1.5.1"
   }
 }

@@ -61,6 +61,8 @@ ALCHEMY_API_KEY="",
 DEPLOYER_PRIVATE_KEY=""
 ```
 
+You can also generate a random account / private key with `yarn generate` (and check the generated account with `yarn account`)
+
 2. Run the command below to deploy the contract to the target network. Make sure to have the funds in your deployer account to pay for the transaction.
 
 ```

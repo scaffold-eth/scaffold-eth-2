@@ -1,11 +1,19 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import { ethers, Wallet } from "ethers";
 import QRCode from "qrcode";
 import { config } from "hardhat";
 
 async function main() {
   // Read mnemonic / private key from .env => if not => return
-  const privateKey =
-    "0x4cdb52ad027bffde212d5a8eeeeb308ee70c4add12f7a4fbba38cf5bb6eb474e";
+  const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
+
+  if (!privateKey) {
+    console.log(
+      "🚫️ You don't have a deployer account. Run `yarn generate` first"
+    );
+    return;
+  }
 
   // Get account from private key.
   const wallet = new Wallet(privateKey);
@@ -20,8 +28,9 @@ async function main() {
   for (const networkName in availableNetworks) {
     try {
       const network = availableNetworks[networkName];
+      // @ts-ignore
       if (!network?.url) continue;
-
+      // @ts-ignore
       const provider = new ethers.providers.JsonRpcProvider(network.url);
       const balance = await provider.getBalance(address);
       console.log("--", networkName, "-- 📡");

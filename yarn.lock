@@ -1343,6 +1343,7 @@ __metadata:
     "@types/qrcode": ^1
     chai: ^4.3.6
     dotenv: ^16.0.3
+    envfile: ^6.18.0
     ethers: ^5.7.1
     hardhat: ^2.11.2
     hardhat-deploy: ^0.11.15
@@ -4391,6 +4392,15 @@ __metadata:
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
+  languageName: node
+  linkType: hard
+
+"envfile@npm:^6.18.0":
+  version: 6.18.0
+  resolution: "envfile@npm:6.18.0"
+  bin:
+    envfile: bin.cjs
+  checksum: 3a3762994d7b84ccf0293c1269cdfa5ea8971bdbbf7e3571fb686a6415eee2029e43d3faf36ed4222a83eaaf38fbc4fa37b3f50b77ea417ca35561e0e54059c1
   languageName: node
   linkType: hard
 
