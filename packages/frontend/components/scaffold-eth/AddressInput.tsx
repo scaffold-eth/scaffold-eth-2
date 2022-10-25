@@ -49,7 +49,7 @@ const AddressInput = ({ placeholder, onSuccess }: IAddressInput) => {
             disabled={isLoading}
           />
           <span className="p-0 rounded-md bg-base-100 h-10">
-            <Blockies seed={address?.toLowerCase() as string} size={11} />
+            <Blockies seed={address?.toLowerCase() as string} size={8} scale={5} />
           </span>
         </label>
       </div>
