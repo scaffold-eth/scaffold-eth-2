@@ -9,8 +9,10 @@
     ]
   },
   "scripts": {
+    "account": "yarn workspace @se-2/hardhat account",
     "chain": "yarn workspace @se-2/hardhat chain",
     "deploy": "yarn workspace @se-2/hardhat deploy",
+    "generate": "yarn workspace @se-2/hardhat generate",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/frontend dev",
     "next:lint": "yarn workspace @se-2/frontend lint",
