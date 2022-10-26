@@ -6,6 +6,7 @@ import { useTempTestContract } from "~~/components/useTempTestContract";
 import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance, Faucet } from "../components/scaffold-eth";
 import { useEffect } from "react";
+import Link from "next/link";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -78,6 +79,10 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold mt-4">Address Input Component</h3>
         <AddressInput placeholder="Enter address" />
+
+        <Link href={"/debug"}>
+          <button className="mt-4 btn btn-primary">Got to contract component</button>
+        </Link>
       </main>
     </div>
   );
