@@ -19,7 +19,7 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
 
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
-  console.log("📄 Mnemonic/Private key saved to packages/hardhat/.env file");
+  console.log("📄 Private Key saved to packages/hardhat/.env file");
 };
 
 async function main() {
