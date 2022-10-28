@@ -5,13 +5,13 @@ import React, { ReactElement } from "react";
 import Address from "../Address";
 
 export const tryToDisplay = (
-  thing: string | number | BigNumber | Record<string, any> | TransactionResponse | undefined,
+  element: string | number | BigNumber | Record<string, any> | TransactionResponse | undefined,
 ): string | ReactElement | number => {
-  if (thing == null) {
+  if (element == null) {
     return "";
   }
 
-  let displayContent = thing;
+  let displayContent = element;
   if (
     Array.isArray(displayContent) &&
     displayContent.length === 1 &&

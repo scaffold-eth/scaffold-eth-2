@@ -2,7 +2,7 @@ import { ContractFunction } from "ethers";
 import { PropsWithChildren, useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import DisplayVariable from "./DisplayVariables";
-import { getGeneratedContract, isQueryable } from "./utils";
+import { getAllContractFunctions, getGeneratedContract, isQueryable } from "./utils";
 
 interface IGenericContract {
   contractName: string;
@@ -14,7 +14,6 @@ interface IGenericContract {
  * handle types correctly
  * handle loading state
  * handle payable, public, functions
- * ! fix the problem if you directly go to `/debug` we get : "chain is undefined"
  **/
 const Contract = (props: PropsWithChildren<IGenericContract>) => {
   const { chain } = useNetwork();
@@ -29,11 +28,9 @@ const Contract = (props: PropsWithChildren<IGenericContract>) => {
     signerOrProvider: provider,
   });
 
-  // maybe put this into utils files ?
-  const displayedContractFunctions = contract
-    ? Object.values(contract.interface.functions).filter(fn => fn.type === "function")
-    : [];
+  const displayedContractFunctions = getAllContractFunctions(contract);
 
+  // TODO abstract this too in other file(future)
   const contractDisplay = displayedContractFunctions.map((fn, index) => {
     const contractFunc: ContractFunction<any> =
       fn.stateMutability === "view" || fn.stateMutability === "pure" ? contract?.functions[fn.name] : null;

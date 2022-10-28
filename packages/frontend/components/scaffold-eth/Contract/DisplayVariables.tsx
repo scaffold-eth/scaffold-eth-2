@@ -13,16 +13,21 @@ interface IDisplayVariableProps {
 
 // TODO Check for the need of useIsMounted
 
-export const DisplayVariable: FC<IDisplayVariableProps> = props => {
+export const DisplayVariable: FC<IDisplayVariableProps> = ({
+  contractFunction,
+  refreshRequired,
+  setTriggerRefresh,
+  functionInfo,
+}) => {
   const [variable, setVariable] = useState("");
   // const isMounted = useIsMounted();
 
   const refresh = useCallback(async () => {
     try {
-      if (props.contractFunction) {
-        const contractReturnValue = await props.contractFunction();
+      if (contractFunction) {
+        const contractReturnValue = await contractFunction();
         setVariable(contractReturnValue);
-        props.setTriggerRefresh(false);
+        setTriggerRefresh(false);
 
         // if (isMounted()) {
         // }
@@ -30,17 +35,17 @@ export const DisplayVariable: FC<IDisplayVariableProps> = props => {
     } catch (e: any) {
       console.log(e?.message);
     }
-  }, [props]);
+  }, [contractFunction, setTriggerRefresh]);
 
   useEffect((): void => {
     void refresh();
-  }, [refresh, props.refreshRequired, props.contractFunction]);
+  }, [refresh, refreshRequired, contractFunction]);
 
   // TODO add refresh button for each variables
-  // TODO fix warning "<div> cannot appear descendant of <p>"(Reason : <Address> component)
+  // TODO fix warning "<div> cannot appear descendant of <p>"(Reason : <Address> component rendered inside p tag due tryToDisplay func)
   return (
     <div className="border-b-2 border-black space-y-1 pb-2">
-      <p className="text-black text-lg">{props.functionInfo.name}</p>
+      <p className="text-black text-lg">{functionInfo.name}</p>
       <p className="text-black font-normal">{tryToDisplay(variable)}</p>
     </div>
   );

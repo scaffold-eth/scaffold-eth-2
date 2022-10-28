@@ -34,4 +34,8 @@ function isQueryable(fn: FunctionFragment): boolean {
   return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
 }
 
-export { getGeneratedContract, isQueryable };
+function getAllContractFunctions(contract: any) {
+  return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
+}
+
+export { getGeneratedContract, isQueryable, getAllContractFunctions };
