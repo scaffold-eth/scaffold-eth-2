@@ -6,7 +6,8 @@
     "chain": "hardhat node --network hardhat --no-deploy",
     "deploy": "hardhat deploy --export-all ../frontend/contracts/hardhat_contracts.json",
     "generate": "hardhat run scripts/generateAccount.ts",
-    "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
+    "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
+    "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
     "test": "REPORT_GAS=true hardhat test --network hardhat"
   },
   "devDependencies": {

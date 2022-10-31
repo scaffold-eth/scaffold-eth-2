@@ -6,7 +6,7 @@ const buildNextEslintCommand = (filenames) =>
     .join(" --file ")}`;
 
 const buildHardhatEslintCommand = (filenames) =>
-  `yarn hardhat:lint --fix ${filenames
+  `yarn hardhat:lint-staged --fix ${filenames
     .map((f) => path.relative(path.join("packages", "hardhat"), f))
     .join(" ")}`;
 

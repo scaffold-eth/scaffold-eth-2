@@ -10,7 +10,6 @@ describe("YourContract", function () {
     const YourContract = await ethers.getContractFactory("YourContract");
     yourContract = await YourContract.deploy();
     await yourContract.deployed();
-
   });
 
   describe("Deployment", function () {
@@ -19,7 +18,7 @@ describe("YourContract", function () {
     });
 
     it("Should allow setting a new message", async function () {
-      const newPurpose = "Learn scaffold-eth! :)"
+      const newPurpose = "Learn scaffold-eth! :)";
 
       await yourContract.setPurpose(newPurpose);
       expect(await yourContract.purpose()).to.equal(newPurpose);
