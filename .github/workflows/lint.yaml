@@ -25,10 +25,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          cache : yarn 
+          cache : yarn
 
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Run frontend lint
         run: yarn next:lint --max-warnings=0
+
+      - name: Run hardhat lint
+        run: yarn hardhat:lint --max-warnings=0
