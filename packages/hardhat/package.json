@@ -6,6 +6,7 @@
     "chain": "hardhat node --network hardhat --no-deploy",
     "deploy": "hardhat deploy --export-all ../frontend/contracts/hardhat_contracts.json",
     "generate": "hardhat run scripts/generateAccount.ts",
+    "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
     "test": "REPORT_GAS=true hardhat test --network hardhat"
   },
   "devDependencies": {
@@ -26,6 +27,8 @@
     "@typescript-eslint/parser": "latest",
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "ethers": "^5.7.1",
     "hardhat": "^2.11.2",
     "hardhat-deploy": "^0.11.15",

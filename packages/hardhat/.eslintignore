@@ -1,11 +1,8 @@
 # folders
-.next
+artifacts
+cache
+contracts
 node_modules/
+typechain-types
 # files
-**/*.less
-**/*.css
-**/*.scss
 **/*.json
-**/*.png
-**/*.svg
-**/generated/**/*
