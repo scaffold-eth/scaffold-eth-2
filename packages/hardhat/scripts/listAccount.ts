@@ -8,18 +8,14 @@ async function main() {
   const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
   if (!privateKey) {
-    console.log(
-      "🚫️ You don't have a deployer account. Run `yarn generate` first"
-    );
+    console.log("🚫️ You don't have a deployer account. Run `yarn generate` first");
     return;
   }
 
   // Get account from private key.
   const wallet = new Wallet(privateKey);
   const address = wallet.address;
-  console.log(
-    await QRCode.toString(address, { type: "terminal", small: true })
-  );
+  console.log(await QRCode.toString(address, { type: "terminal", small: true }));
   console.log("Public address:", address, "\n");
 
   // Balance on each network
@@ -27,9 +23,7 @@ async function main() {
   for (const networkName in availableNetworks) {
     try {
       const network = availableNetworks[networkName];
-      // @ts-ignore
       if (!network?.url) continue;
-      // @ts-ignore
       const provider = new ethers.providers.JsonRpcProvider(network.url);
       const balance = await provider.getBalance(address);
       console.log("--", networkName, "-- 📡");
@@ -41,7 +35,7 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(error);
   process.exitCode = 1;
 });
