@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Contract from "~~/components/scaffold-eth/Contract";
+import { Contract } from "~~/components/scaffold-eth";
 
 const Debug: NextPage = () => {
   return (
