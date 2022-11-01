@@ -45,8 +45,10 @@ export const DisplayVariable: FC<IDisplayVariableProps> = ({
   // TODO fix warning "<div> cannot appear descendant of <p>"(Reason : <Address> component rendered inside p tag due tryToDisplay func)
   return (
     <div className="border-b-2 border-black space-y-1 pb-2">
-      <p className="text-black text-lg">{functionInfo.name}</p>
-      <p className="text-black font-normal">{tryToDisplay(variable)}</p>
+      <h3 className="text-black text-lg">{functionInfo.name}</h3>
+      <div className="text-black font-normal">
+        <span>{tryToDisplay(variable)}</span>
+      </div>
     </div>
   );
 };
