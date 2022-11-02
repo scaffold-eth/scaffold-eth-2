@@ -42,7 +42,7 @@ const DisplayVariable = ({
     <div className="border-b-2 border-black space-y-1 pb-2">
       <h3 className="text-black text-lg">{functionInfo.name}</h3>
       <div className="text-black font-normal">
-        <span>{tryToDisplay(variable)}</span>
+        <span className="break-words">{tryToDisplay(variable)}</span>
       </div>
     </div>
   );

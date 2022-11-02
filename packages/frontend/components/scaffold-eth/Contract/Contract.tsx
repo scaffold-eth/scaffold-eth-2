@@ -31,7 +31,7 @@ const Contract = ({ contractName }: ContractProps) => {
   const displayedContractFunctions = getAllContractFunctions(contract);
 
   // TODO abstract this too in other file(future)
-  const contractDisplay = displayedContractFunctions.map((fn, index) => {
+  const contractVariablesDisplay = displayedContractFunctions.map((fn, index) => {
     const contractFunc: ContractFunction<any> =
       fn.stateMutability === "view" || fn.stateMutability === "pure" ? contract?.functions[fn.name] : null;
 
@@ -51,13 +51,19 @@ const Contract = ({ contractName }: ContractProps) => {
     return null;
   });
 
+  // ToDo.
+  const contractMethodsDisplay: Array<JSX.Element> = [];
+
   if (!contractAddress) {
     return <p className="text-2xl text-white">No Contract found !</p>;
   }
 
   return (
-    <div>
-      <div className="bg-white rounded-sm px-4 py-2">{contractDisplay}</div>
+    <div className="flex gap-4">
+      <div className="w-1/2 bg-white rounded-sm px-4 py-2 border-solid border-2">
+        {contractMethodsDisplay.length ? contractMethodsDisplay : "Here Read/Write methods with params will display"}
+      </div>
+      <div className=" w-1/2 bg-white rounded-sm px-4 py-2 border-solid border-2">{contractVariablesDisplay}</div>
     </div>
   );
 };

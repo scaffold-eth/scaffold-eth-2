@@ -1,5 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import ContractData from "~~/contracts/hardhat_contracts.json";
+import { Contract } from "ethers";
 
 type GeneratedContractType = {
   address: string;
@@ -34,7 +35,7 @@ function isQueryable(fn: FunctionFragment): boolean {
   return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
 }
 
-function getAllContractFunctions(contract: any) {
+function getAllContractFunctions(contract: Contract) {
   return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
 }
 
