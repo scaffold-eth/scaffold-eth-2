@@ -1,26 +1,24 @@
 import { ContractFunction } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { FC, SetStateAction, useCallback, useEffect, useState, Dispatch } from "react";
-// import { useIsMounted } from "usehooks-ts";
+import React, { SetStateAction, useCallback, useEffect, useState, Dispatch } from "react";
 import { tryToDisplay } from "./displayUtils";
 
-interface IDisplayVariableProps {
+type DisplayVariableProps = {
   contractFunction: ContractFunction | undefined;
   functionInfo: FunctionFragment;
   refreshRequired: boolean;
   setTriggerRefresh: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 // TODO Check for the need of useIsMounted
 
-export const DisplayVariable: FC<IDisplayVariableProps> = ({
+const DisplayVariable = ({
   contractFunction,
   refreshRequired,
   setTriggerRefresh,
   functionInfo,
-}) => {
+}: DisplayVariableProps) => {
   const [variable, setVariable] = useState("");
-  // const isMounted = useIsMounted();
 
   const refresh = useCallback(async () => {
     try {
@@ -28,9 +26,6 @@ export const DisplayVariable: FC<IDisplayVariableProps> = ({
         const contractReturnValue = await contractFunction();
         setVariable(contractReturnValue);
         setTriggerRefresh(false);
-
-        // if (isMounted()) {
-        // }
       }
     } catch (e: any) {
       console.log(e?.message);

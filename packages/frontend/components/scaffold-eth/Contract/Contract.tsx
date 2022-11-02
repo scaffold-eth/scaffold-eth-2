@@ -1,12 +1,12 @@
 import { ContractFunction } from "ethers";
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import DisplayVariable from "./DisplayVariables";
 import { getAllContractFunctions, getGeneratedContract, isQueryable } from "./utils";
 
-interface IGenericContract {
+type ContractProps = {
   contractName: string;
-}
+};
 
 /**
  * TODO
@@ -15,12 +15,12 @@ interface IGenericContract {
  * handle loading state
  * handle payable, public, functions
  **/
-const Contract = (props: PropsWithChildren<IGenericContract>) => {
+const Contract = ({ contractName }: ContractProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
   const [refreshRequired, setTriggerRefresh] = useState(false);
 
-  const { address: contractAddress, abi: contractABI } = getGeneratedContract(chain?.id.toString(), props.contractName);
+  const { address: contractAddress, abi: contractABI } = getGeneratedContract(chain?.id.toString(), contractName);
 
   const contract = useContract({
     addressOrName: contractAddress,
