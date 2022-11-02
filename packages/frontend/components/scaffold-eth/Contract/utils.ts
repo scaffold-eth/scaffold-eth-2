@@ -13,10 +13,10 @@ type GeneratedContractType = {
  * @param contractName - name of deployed contract
  * @returns object containing contract address and abi
  */
-function getGeneratedContract(
+const getGeneratedContract = (
   chainId: string | undefined,
   contractName: string | undefined | null,
-): GeneratedContractType {
+): GeneratedContractType => {
   if (!chainId || !contractName) {
     return { address: "", abi: [] };
   }
@@ -29,14 +29,14 @@ function getGeneratedContract(
   const contractData: GeneratedContractType = contractsAtChain[0].contracts[contractName];
 
   return contractData;
-}
+};
 
-function isQueryable(fn: FunctionFragment): boolean {
+const isQueryable = (fn: FunctionFragment): boolean => {
   return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-}
+};
 
-function getAllContractFunctions(contract: Contract) {
+const getAllContractFunctions = (contract: Contract) => {
   return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
-}
+};
 
 export { getGeneratedContract, isQueryable, getAllContractFunctions };
