@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, FC, ReactElement, SetStateAction } from "react";
 import Address from "../Address";
 
 type ParamType = {
@@ -16,14 +16,14 @@ interface IInputUI {
   functionFragment: FunctionFragment;
 }
 
-const InputUI = React.forwardRef<HTMLInputElement, IInputUI>(({ setForm, form, stateObjectKey, paramType }, ref) => {
+// TODO use AddressInput component instead
+const InputUI: FC<IInputUI> = ({ setForm, form, stateObjectKey, paramType }) => {
   let buttons: ReactElement = <></>;
 
+  // TODO maybe abstract each `div` as a small util Component, use switch case and cleanUp
   if (paramType.type === "bytes32") {
     buttons = (
-      // <Tooltip placement="right" title="to bytes32">
       <div
-        // type="dashed"
         style={{ cursor: "pointer" }}
         onClick={(): void => {
           if (ethers.utils.isHexString(form[stateObjectKey])) {
@@ -39,13 +39,10 @@ const InputUI = React.forwardRef<HTMLInputElement, IInputUI>(({ setForm, form, s
       >
         #️⃣
       </div>
-      // </Tooltip>
     );
   } else if (paramType.type === "bytes") {
     buttons = (
-      // <Tooltip placement="right" title="to hex">
       <div
-        // type="dashed"
         style={{ cursor: "pointer" }}
         onClick={(): void => {
           if (ethers.utils.isHexString(form[stateObjectKey])) {
@@ -61,13 +58,10 @@ const InputUI = React.forwardRef<HTMLInputElement, IInputUI>(({ setForm, form, s
       >
         #️⃣
       </div>
-      // </Tooltip>
     );
   } else if (paramType.type === "uint256") {
     buttons = (
-      // <Tooltip placement="right" title="* 10 ** 18">
       <div
-        // type="dashed"
         style={{ cursor: "pointer" }}
         onClick={(): void => {
           const formUpdate = { ...form };
@@ -77,7 +71,6 @@ const InputUI = React.forwardRef<HTMLInputElement, IInputUI>(({ setForm, form, s
       >
         ✴️
       </div>
-      // </Tooltip>
     );
   } else if (paramType.type === "address") {
     const possibleAddress =
@@ -88,19 +81,22 @@ const InputUI = React.forwardRef<HTMLInputElement, IInputUI>(({ setForm, form, s
   }
 
   return (
-    <>
+    <div className="flex space-x-2 items-center">
       <input
         placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
         autoComplete="off"
-        ref={ref}
         className="input input-sm"
         name={stateObjectKey}
+        value={form[stateObjectKey]}
+        onChange={(event): void => {
+          const formUpdate = { ...form };
+          formUpdate[event.target.name] = event.target.value;
+          setForm(formUpdate);
+        }}
       />
       {buttons}
-    </>
+    </div>
   );
-});
-
-InputUI.displayName = "InputUI";
+};
 
 export default InputUI;

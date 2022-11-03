@@ -2,12 +2,7 @@ import { FunctionFragment } from "ethers/lib/utils";
 import ContractData from "~~/contracts/hardhat_contracts.json";
 import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
-import { Dispatch, SetStateAction } from "react";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
-
-const isQueryableWithNoParams = (fn: FunctionFragment): boolean => {
-  return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-};
 
 type GeneratedContractType = {
   address: string;
@@ -45,19 +40,13 @@ const getAllContractFunctions = (contract: Contract) => {
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-  refreshRequired: boolean,
-  setTriggerRefresh: Dispatch<SetStateAction<boolean>>,
 ) => {
   return contractMethodsAndVariables.map((fn, index) => {
-    if (isQueryableWithNoParams(fn)) {
+    const isQueryableWithNoParams =
+      (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
+    if (isQueryableWithNoParams) {
       return (
-        <DisplayVariable
-          key={`DV_${fn.name}_${index}`}
-          contractFunction={contract?.functions[fn.name]}
-          functionInfo={fn}
-          refreshRequired={refreshRequired}
-          setTriggerRefresh={setTriggerRefresh}
-        />
+        <DisplayVariable key={`DV_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
       );
     }
     return null;
@@ -66,7 +55,9 @@ const getContractVariablesAndNoParamsReadMethods = (
 
 const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
   return contractMethodsAndVariables.map((fn, index) => {
-    if (!isQueryableWithNoParams(fn) && fn.constant) {
+    const isQueryableWithParams =
+      (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
+    if (isQueryableWithParams) {
       return (
         <ReadOnlyFunctionForm key={`FF_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
       );

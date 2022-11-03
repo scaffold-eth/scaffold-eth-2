@@ -31,7 +31,7 @@ contract YourContract {
     myBytes = _b;
   }
 
-  function counterPlusX(address _add, uint256 _x) public returns (uint256) {
+  function counterPlusX(address _add, uint256 _x) public view returns (uint256) {
     return counter[_add] + _x;
   }
 

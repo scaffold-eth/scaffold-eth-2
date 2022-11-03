@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Contract } from "ethers";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import {
@@ -22,7 +21,6 @@ type ContractProps = {
 const ContractUI = ({ contractName }: ContractProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
-  const [refreshRequired, setTriggerRefresh] = useState(false);
 
   const { address: contractAddress, abi: contractABI } = getGeneratedContract(chain?.id.toString(), contractName);
 
@@ -33,18 +31,9 @@ const ContractUI = ({ contractName }: ContractProps) => {
   });
 
   const displayedContractFunctions = getAllContractFunctions(contract);
-  console.log(
-    "⚡️ ~ file: ContractUI.tsx ~ line 36 ~ ContractUI ~ displayedContractFunctions",
-    displayedContractFunctions,
-  );
-  const contractVariablesDisplay = getContractVariablesAndNoParamsReadMethods(
-    contract,
-    displayedContractFunctions,
-    refreshRequired,
-    setTriggerRefresh,
-  );
 
-  // ToDo.
+  const contractVariablesDisplay = getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions);
+
   const contractMethodsDisplay = getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions);
 
   if (!contractAddress) {
@@ -52,11 +41,11 @@ const ContractUI = ({ contractName }: ContractProps) => {
   }
 
   return (
-    <div className="flex gap-4">
-      <div className="w-1/2 bg-white rounded-sm px-4 py-2 border-solid border-2">
+    <div className="grid grid-cols-1  lg:grid-cols-2 gap-4 max-w-4xl">
+      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
         {contractMethodsDisplay.length ? contractMethodsDisplay : "Here Read/Write methods with params will display"}
       </div>
-      <div className=" w-1/2 bg-white rounded-sm px-4 py-2 border-solid border-2">{contractVariablesDisplay}</div>
+      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">{contractVariablesDisplay}</div>
     </div>
   );
 };

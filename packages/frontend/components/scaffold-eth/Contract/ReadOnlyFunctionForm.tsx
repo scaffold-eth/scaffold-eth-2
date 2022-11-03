@@ -1,11 +1,12 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { createRef, FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { useContractRead } from "wagmi";
+import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./displayUtils";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utils";
 
-const getInitialForm = (functionFragment: FunctionFragment) => {
+const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
   functionFragment.inputs.forEach((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
@@ -20,21 +21,29 @@ interface IFunctionForm {
 }
 
 export const ReadOnlyFunctionForm: FC<IFunctionForm> = ({ functionFragment, contractAddress }) => {
-  const [form, setForm] = useState<Record<string, any>>(() => getInitialForm(functionFragment));
-  const refs = useMemo(
-    () => Array.from({ length: functionFragment.inputs.length }).map(() => createRef<HTMLInputElement>()),
-    [functionFragment.inputs.length],
-  );
+  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
+
+  const [error, setError] = useState("");
 
   const keys = Object.keys(form);
 
-  const { data: Result, isFetching } = useContractRead({
+  const {
+    data: Result,
+    isFetching,
+    refetch,
+  } = useContractRead({
     addressOrName: contractAddress,
     contractInterface: [functionFragment],
     functionName: functionFragment.name,
     args: keys.map(key => form[key]),
+    enabled: false,
+    onError: error => {
+      setError(error.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    },
   });
-  console.log("⚡️ ~ file: InputUI.tsx ~ line 35 ~ isFetching", isFetching);
 
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
@@ -46,11 +55,11 @@ export const ReadOnlyFunctionForm: FC<IFunctionForm> = ({ functionFragment, cont
         stateObjectKey={key}
         paramType={input}
         functionFragment={functionFragment}
-        ref={refs[inputIndex]}
       />
     );
   });
 
+  // TODO Handle Error with nice toast
   return (
     <div className="flex flex-col items-start space-y-2 border-b-2 border-black pb-2">
       <p className="text-black my-0">{functionFragment.name}</p>
@@ -58,20 +67,13 @@ export const ReadOnlyFunctionForm: FC<IFunctionForm> = ({ functionFragment, cont
       <button
         className={`btn btn-primary btn-sm ${isFetching && "loading"}`}
         onClick={async () => {
-          setForm(prevState => {
-            const formUpdate = { ...prevState };
-            refs.forEach(element => {
-              if (element.current) {
-                formUpdate[element.current.name] = element.current.value;
-              }
-            });
-            return formUpdate;
-          });
+          await refetch();
         }}
       >
-        Read📡
+        Read 📡
       </button>
       {tryToDisplay(Result)}
+      {error && <ErrorToast errorMessage={error} />}
     </div>
   );
 };
