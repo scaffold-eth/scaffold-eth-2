@@ -1,8 +1,13 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import ContractData from "~~/contracts/hardhat_contracts.json";
-import { Contract } from "ethers";
+import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
 import { Dispatch, SetStateAction } from "react";
+import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
+
+const isQueryableWithNoParams = (fn: FunctionFragment): boolean => {
+  return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
+};
 
 type GeneratedContractType = {
   address: string;
@@ -33,10 +38,6 @@ const getGeneratedContract = (
   return contractData;
 };
 
-const isQueryable = (fn: FunctionFragment): boolean => {
-  return (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-};
-
 const getAllContractFunctions = (contract: Contract) => {
   return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
 };
@@ -48,13 +49,10 @@ const getContractVariablesAndNoParamsReadMethods = (
   setTriggerRefresh: Dispatch<SetStateAction<boolean>>,
 ) => {
   return contractMethodsAndVariables.map((fn, index) => {
-    const isQueryableWithNoParams =
-      (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-
-    if (isQueryableWithNoParams) {
+    if (isQueryableWithNoParams(fn)) {
       return (
         <DisplayVariable
-          key={`${fn.name}_${index}`}
+          key={`DV_${fn.name}_${index}`}
           contractFunction={contract?.functions[fn.name]}
           functionInfo={fn}
           refreshRequired={refreshRequired}
@@ -66,15 +64,32 @@ const getContractVariablesAndNoParamsReadMethods = (
   });
 };
 
+const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
+  return contractMethodsAndVariables.map((fn, index) => {
+    if (!isQueryableWithNoParams(fn) && fn.constant) {
+      return (
+        <ReadOnlyFunctionForm key={`FF_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
+      );
+    }
+    return null;
+  });
+};
+
 // ToDo.
 const getContractMethodsWithParams = () => {
   return [];
 };
 
+function getFunctionInputKey(functionInfo: FunctionFragment, input: utils.ParamType, inputIndex: number): string {
+  const name = input?.name ? input.name : `input_${inputIndex}_`;
+  return functionInfo.name + "_" + name + "_" + input.type;
+}
+
 export {
   getGeneratedContract,
-  isQueryable,
+  getContractReadOnlyMethodsWithParams,
   getAllContractFunctions,
   getContractVariablesAndNoParamsReadMethods,
   getContractMethodsWithParams,
+  getFunctionInputKey,
 };

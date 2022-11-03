@@ -3,7 +3,7 @@ import { Contract } from "ethers";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import {
   getAllContractFunctions,
-  getContractMethodsWithParams,
+  getContractReadOnlyMethodsWithParams,
   getContractVariablesAndNoParamsReadMethods,
   getGeneratedContract,
 } from "./utils";
@@ -33,6 +33,10 @@ const ContractUI = ({ contractName }: ContractProps) => {
   });
 
   const displayedContractFunctions = getAllContractFunctions(contract);
+  console.log(
+    "⚡️ ~ file: ContractUI.tsx ~ line 36 ~ ContractUI ~ displayedContractFunctions",
+    displayedContractFunctions,
+  );
   const contractVariablesDisplay = getContractVariablesAndNoParamsReadMethods(
     contract,
     displayedContractFunctions,
@@ -41,7 +45,7 @@ const ContractUI = ({ contractName }: ContractProps) => {
   );
 
   // ToDo.
-  const contractMethodsDisplay = getContractMethodsWithParams();
+  const contractMethodsDisplay = getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions);
 
   if (!contractAddress) {
     return <p className="text-2xl text-white">No Contract found !</p>;
