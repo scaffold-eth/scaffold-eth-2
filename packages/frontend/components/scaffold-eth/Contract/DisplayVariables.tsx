@@ -30,7 +30,6 @@ const DisplayVariable = ({ contractAddress, functionFragment }: DisplayVariableP
     },
   });
 
-  // TODO use SVGComponent from @heroicons instead
   return (
     <div className="border-b-2 border-black space-y-1 pb-2">
       <div className="flex items-center gap-2">
