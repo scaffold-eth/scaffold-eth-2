@@ -3,6 +3,7 @@ import ContractData from "~~/contracts/hardhat_contracts.json";
 import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
+import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 
 type GeneratedContractType = {
   address: string;
@@ -46,6 +47,7 @@ const getContractVariablesAndNoParamsReadMethods = (
       (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
     if (isQueryableWithNoParams) {
       return (
+        // DV -> DisplayVariables
         <DisplayVariable key={`DV_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
       );
     }
@@ -59,7 +61,12 @@ const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethod
       (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
     if (isQueryableWithParams) {
       return (
-        <ReadOnlyFunctionForm key={`FF_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
+        // FFR -> FunctionFormRead
+        <ReadOnlyFunctionForm
+          key={`FFR_${fn.name}_${index}`}
+          functionFragment={fn}
+          contractAddress={contract.address}
+        />
       );
     }
     return null;
@@ -67,8 +74,21 @@ const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethod
 };
 
 // ToDo.
-const getContractMethodsWithParams = () => {
-  return [];
+const getContractWriteMethods = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
+  return contractMethodsAndVariables.map((fn, index) => {
+    const isQueryableWithParams = fn.stateMutability === "view" || fn.stateMutability === "pure";
+    if (!isQueryableWithParams) {
+      // FFW -> FunctionFormWrite
+      return (
+        <WriteOnlyFunctionForm
+          key={`FFW_${fn.name}_${index}`}
+          functionFragment={fn}
+          contractAddress={contract.address}
+        />
+      );
+    }
+    return null;
+  });
 };
 
 function getFunctionInputKey(functionInfo: FunctionFragment, input: utils.ParamType, inputIndex: number): string {
@@ -81,6 +101,6 @@ export {
   getContractReadOnlyMethodsWithParams,
   getAllContractFunctions,
   getContractVariablesAndNoParamsReadMethods,
-  getContractMethodsWithParams,
+  getContractWriteMethods,
   getFunctionInputKey,
 };

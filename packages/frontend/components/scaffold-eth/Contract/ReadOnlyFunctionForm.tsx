@@ -1,5 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useContractRead } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./displayUtils";
@@ -20,7 +20,7 @@ interface IFunctionForm {
   contractAddress: string;
 }
 
-export const ReadOnlyFunctionForm: FC<IFunctionForm> = ({ functionFragment, contractAddress }) => {
+export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: IFunctionForm) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
 
   const [error, setError] = useState("");

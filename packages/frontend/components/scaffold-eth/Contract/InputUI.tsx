@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { Dispatch, FC, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import Address from "../Address";
 
 type ParamType = {
@@ -17,10 +17,11 @@ interface IInputUI {
 }
 
 // TODO use AddressInput component instead
-const InputUI: FC<IInputUI> = ({ setForm, form, stateObjectKey, paramType }) => {
+const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   let buttons: ReactElement = <></>;
 
   // TODO maybe abstract each `div` as a small util Component, use switch case and cleanUp
+  // TODO handle when input filed is empty
   if (paramType.type === "bytes32") {
     buttons = (
       <div
