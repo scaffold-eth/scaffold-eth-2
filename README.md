@@ -57,7 +57,7 @@ By default, ```yarn deploy``` will deploy the contract to the local network. Y
 
 Check the `hardhat.config.js` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
-2. Generate or add a deployer account & add your Alchemy API key. Rename .env.example to .env and fill the required keys.
+2. Generate a new account or add one to deploy the contract(s) from. Additionally you will need to add your Alchemy API key. Rename .env.example to .env and fill the required keys.
 
 ```
 ALCHEMY_API_KEY="",
