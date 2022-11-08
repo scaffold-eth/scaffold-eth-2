@@ -3,7 +3,7 @@ import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
-import { tryToDisplay } from "./displayUtils";
+import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utils";
 

@@ -2,7 +2,7 @@ import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
-import { tryToDisplay } from "./displayUtils";
+import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utils";
 

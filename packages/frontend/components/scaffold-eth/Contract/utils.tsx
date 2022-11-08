@@ -97,7 +97,6 @@ const getFunctionInputKey = (functionInfo: FunctionFragment, input: utils.ParamT
 };
 
 const getParsedEthersError = (e: any): string => {
-  // Accounts for Metamask and default signer on all networks
   let message =
     e.data && e.data.message
       ? e.data.message

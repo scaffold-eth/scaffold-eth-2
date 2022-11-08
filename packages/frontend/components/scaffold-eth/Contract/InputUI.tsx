@@ -1,8 +1,8 @@
-import { ethers } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import Address from "../Address";
 import AddressInput from "../AddressInput";
+import { ConvertStringToBytes, ConvertStringToBytes32, ConvertUintToEther } from "./utilsDisplay";
 
 type ParamType = {
   name: string | null;
@@ -20,65 +20,27 @@ interface IInputUI {
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   let buttons: ReactElement = <></>;
 
-  // TODO maybe abstract each `div` as a small util Component, use switch case and cleanUp
   // TODO handle when input filed is empty
-  if (paramType.type === "bytes32") {
-    buttons = (
-      <div
-        style={{ cursor: "pointer" }}
-        onClick={(): void => {
-          if (ethers.utils.isHexString(form[stateObjectKey])) {
-            const formUpdate = { ...form };
-            formUpdate[stateObjectKey] = ethers.utils.parseBytes32String(form[stateObjectKey]);
-            setForm(formUpdate);
-          } else {
-            const formUpdate = { ...form };
-            formUpdate[stateObjectKey] = ethers.utils.formatBytes32String(form[stateObjectKey]);
-            setForm(formUpdate);
-          }
-        }}
-      >
-        #️⃣
-      </div>
-    );
-  } else if (paramType.type === "bytes") {
-    buttons = (
-      <div
-        style={{ cursor: "pointer" }}
-        onClick={(): void => {
-          if (ethers.utils.isHexString(form[stateObjectKey])) {
-            const formUpdate = { ...form };
-            formUpdate[stateObjectKey] = ethers.utils.toUtf8String(form[stateObjectKey]);
-            setForm(formUpdate);
-          } else {
-            const formUpdate = { ...form };
-            formUpdate[stateObjectKey] = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(form[stateObjectKey]));
-            setForm(formUpdate);
-          }
-        }}
-      >
-        #️⃣
-      </div>
-    );
-  } else if (paramType.type === "uint256") {
-    buttons = (
-      <div
-        style={{ cursor: "pointer" }}
-        onClick={(): void => {
-          const formUpdate = { ...form };
-          formUpdate[stateObjectKey] = ethers.utils.parseEther(form[stateObjectKey]);
-          setForm(formUpdate);
-        }}
-      >
-        ✴️
-      </div>
-    );
-  } else if (paramType.type === "address") {
-    const possibleAddress =
-      form[stateObjectKey] && form[stateObjectKey].toLowerCase && form[stateObjectKey].toLowerCase().trim();
-    if (possibleAddress && possibleAddress.length === 42) {
-      buttons = <Address address={possibleAddress} />;
-    }
+  switch (paramType.type) {
+    case "bytes32":
+      buttons = <ConvertStringToBytes32 setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
+      break;
+
+    case "bytes":
+      buttons = <ConvertStringToBytes setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
+      break;
+
+    case "uint256":
+      buttons = <ConvertUintToEther setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
+      break;
+
+    case "address":
+      const possibleAddress =
+        form[stateObjectKey] && form[stateObjectKey].toLowerCase && form[stateObjectKey].toLowerCase().trim();
+      if (possibleAddress && possibleAddress.length === 42) {
+        buttons = <Address address={possibleAddress} />;
+      }
+      break;
   }
 
   return (

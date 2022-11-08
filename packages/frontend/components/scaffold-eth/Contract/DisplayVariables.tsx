@@ -2,7 +2,7 @@ import { FunctionFragment } from "ethers/lib/utils";
 import React, { useState } from "react";
 import { useContractRead } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
-import { tryToDisplay } from "./displayUtils";
+import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 type DisplayVariableProps = {
