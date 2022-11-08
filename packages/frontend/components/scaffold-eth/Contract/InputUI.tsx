@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import Address from "../Address";
+import AddressInput from "../AddressInput";
 
 type ParamType = {
   name: string | null;
@@ -16,7 +17,6 @@ interface IInputUI {
   functionFragment: FunctionFragment;
 }
 
-// TODO use AddressInput component instead
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   let buttons: ReactElement = <></>;
 
@@ -82,19 +82,33 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   }
 
   return (
-    <div className="flex space-x-2 items-center">
-      <input
-        placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
-        autoComplete="off"
-        className="input input-sm"
-        name={stateObjectKey}
-        value={form[stateObjectKey]}
-        onChange={(event): void => {
-          const formUpdate = { ...form };
-          formUpdate[event.target.name] = event.target.value;
-          setForm(formUpdate);
-        }}
-      />
+    <div className="flex space-x-2 items-end">
+      {paramType.type === "address" ? (
+        <AddressInput
+          placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
+          name={stateObjectKey}
+          value={form[stateObjectKey]}
+          onChange={(value): void => {
+            const formUpdate = { ...form };
+            formUpdate[stateObjectKey] = value;
+            setForm(formUpdate);
+          }}
+        />
+      ) : (
+        <input
+          placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
+          autoComplete="off"
+          className="input input-sm"
+          name={stateObjectKey}
+          value={form[stateObjectKey]}
+          onChange={(event): void => {
+            const formUpdate = { ...form };
+            formUpdate[event.target.name] = event.target.value;
+            setForm(formUpdate);
+          }}
+        />
+      )}
+
       {buttons}
     </div>
   );
