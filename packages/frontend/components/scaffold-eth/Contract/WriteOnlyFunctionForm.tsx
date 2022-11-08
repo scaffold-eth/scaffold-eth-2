@@ -1,13 +1,13 @@
 import { BigNumber } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./displayUtils";
 import InputUI from "./InputUI";
-import { getFunctionInputKey } from "./utils";
+import { getFunctionInputKey, getParsedEthersError } from "./utils";
 
-// TODO set sensible initial state values to avoid errors on first render
+// TODO set sensible initial state values to avoid error Toast on first render
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
   functionFragment.inputs.forEach((input, inputIndex) => {
@@ -66,7 +66,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
 
   const keys = Object.keys(form);
 
-  // TODO handle gasLimit
+  // TODO handle gasPrice, handle parsing of proper error
   const { config } = usePrepareContractWrite({
     addressOrName: contractAddress,
     functionName: functionFragment.name,
@@ -75,17 +75,31 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
     overrides: {
       value: txValue,
     },
-    onError: error => {
-      setError(error.message);
+    onError: (e: any) => {
+      const message = getParsedEthersError(e);
+      setError(message);
       setTimeout(() => {
         setError("");
       }, 3000);
     },
   });
-  const { data: Result, isLoading, write } = useContractWrite(config);
+  const { data: result, isLoading, write, error: transactionError } = useContractWrite(config);
+
+  // TODO check for performance issues
+  useEffect(() => {
+    console.log("UseEffect ran");
+    if (transactionError) {
+      const message = getParsedEthersError(transactionError);
+      setError(message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  }, [transactionError]);
 
   const handleWrite = () => {
     if (!write) {
+      // TODO Show more descriptive error message
       setError("Please input correct value");
       setTimeout(() => {
         setError("");
@@ -111,7 +125,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
     );
   });
 
-  // TODO Handle Error with nice toast
+  // TODO Handle Error with nice toast, prettify json result
   return (
     <div className="flex flex-col items-start space-y-2 border-b-2 border-black pb-2">
       <p className="text-black my-0">{functionFragment.name}</p>
@@ -120,7 +134,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
       <button className={`btn btn-primary btn-sm ${isLoading && "loading"}`} onClick={handleWrite}>
         Send 💸
       </button>
-      {tryToDisplay(Result)}
+      <span className="break-all  block">{tryToDisplay(result)}</span>
       {error && <ErrorToast errorMessage={error} />}
     </div>
   );
