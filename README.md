@@ -49,21 +49,28 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
 ## Deploying Smart Contracts
+Once you are ready to deploy your smart contracts, there are a few things you need to adjust.
 
-By default, `yarn deploy` will deploy the contract to the local network.
+1. Select the network
 
-You can deploy your contracts to other networks. Check the `hardhat.config.js` for the networks that are pre-configured, you'll need to add your Alchemy API key & the private key of the deployer account. You can also add other network settings to the `hardhat.config.js` file. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+By default, ```yarn deploy``` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.js.` You could also simply run ```yarn deploy --network target_network``` to deploy to another network.
 
-1. Rename `.env.example` to `.env` and fill the required keys.
+Check the `hardhat.config.js` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+
+2. Generate or add a deployer account & add your Alchemy API key. Rename .env.example to .env and fill the required keys.
 
 ```
 ALCHEMY_API_KEY="",
 DEPLOYER_PRIVATE_KEY=""
 ```
 
-You can also generate a random account / private key with `yarn generate` (and check the generated account with `yarn account`)
+The deployer account is the account that will deploy your contracts and execute calls you make in your deployment script.
 
-2. Run the command below to deploy the contract to the target network. Make sure to have the funds in your deployer account to pay for the transaction.
+You can generate a random account / private key with ```yarn generate``` or add the private key of your crypto wallet. ```yarn generate``` will create a random account and add the DEPLOYER_PRIVATE_KEY to the .env file. You can check the generated account with ```yarn account```.
+
+3. Deploy your smart contract(s)
+
+Run the command below to deploy the smart contract to the target network. Make sure to have some funds in your deployer account to pay for the transaction.
 
 ```
 yarn deploy --network network_name
