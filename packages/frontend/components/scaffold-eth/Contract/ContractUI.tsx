@@ -44,14 +44,18 @@ const ContractUI = ({ contractName }: ContractProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1  lg:grid-cols-2 gap-4 max-w-4xl">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl items-start">
       <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
+        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
+          Read Functions
+        </p>
         {contractMethodsDisplay.length ? contractMethodsDisplay : "Here Read methods with params will display"}
-      </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
+        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
+          Write Functions
+        </p>
         {contractWriteMethods.length ? contractWriteMethods : "Here Write methods with params will be display"}
       </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">{contractVariablesDisplay}</div>
+      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">{contractVariablesDisplay}</div>
     </div>
   );
 };

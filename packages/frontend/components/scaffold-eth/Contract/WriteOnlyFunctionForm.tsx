@@ -7,7 +7,7 @@ import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utils";
 
-// TODO set sensible initial state values to avoid error Toast on first render
+// TODO set sensible initial state values to avoid error on first render
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
   functionFragment.inputs.forEach((input, inputIndex) => {
