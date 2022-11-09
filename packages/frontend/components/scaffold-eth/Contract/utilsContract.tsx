@@ -14,7 +14,7 @@ type GeneratedContractType = {
 /**
  * @param chainId - deployed contract chainId
  * @param contractName - name of deployed contract
- * @returns object containing contract address and abi
+ * @returns {GeneratedContractType} object containing contract address and abi
  */
 const getGeneratedContract = (
   chainId: string | undefined,
@@ -34,14 +34,24 @@ const getGeneratedContract = (
   return contractData;
 };
 
-const getAllContractFunctions = (contract: Contract) => {
+/**
+ * @param {Contract} contract
+ * @returns {FunctionFragment[]} array of function fragments
+ */
+const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
   return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
 };
 
+/**
+ * @dev used to filter all readOnly functions with zero params
+ * @param {Contract} contract
+ * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
+ * @returns {(JSX.Element | null)[]} - array of DisplayVariable component which has corresponding input field for param type and button to read
+ */
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-) => {
+): (JSX.Element | null)[] => {
   return contractMethodsAndVariables.map((fn, index) => {
     const isQueryableWithNoParams =
       (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
@@ -55,6 +65,12 @@ const getContractVariablesAndNoParamsReadMethods = (
   });
 };
 
+/**
+ * @dev used to filter all readOnly functions with greater than or equal to 1 params
+ * @param {Contract} contract
+ * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
+ * @returns {(JSX.Element | null)[]} array of ReadOnlyFunctionForm component which has corresponding input field for param type and button to read
+ */
 const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
   return contractMethodsAndVariables.map((fn, index) => {
     const isQueryableWithParams =
@@ -73,11 +89,16 @@ const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethod
   });
 };
 
-// ToDo.
+/**
+ * @dev used to filter all write functions
+ * @param {Contract} contract
+ * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
+ * @returns {(JSX.Element | null)[]} array of WriteOnlyFunctionForm component which has corresponding input field for param type, txnValue input if required and button to send transaction
+ */
 const getContractWriteMethods = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
   return contractMethodsAndVariables.map((fn, index) => {
-    const isQueryableWithParams = fn.stateMutability === "view" || fn.stateMutability === "pure";
-    if (!isQueryableWithParams) {
+    const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
+    if (isWriteableFunction) {
       // FFW -> FunctionFormWrite
       return (
         <WriteOnlyFunctionForm
@@ -91,11 +112,23 @@ const getContractWriteMethods = (contract: Contract, contractMethodsAndVariables
   });
 };
 
+/**
+ * @dev utility function to generate key corresponding to function metaData
+ * @param {FunctionFragment} functionInfo
+ * @param {utils.ParamType} input - object containing function name and input type corresponding to index
+ * @param {number} inputIndex
+ * @returns {string} key
+ */
 const getFunctionInputKey = (functionInfo: FunctionFragment, input: utils.ParamType, inputIndex: number): string => {
   const name = input?.name ? input.name : `input_${inputIndex}_`;
   return functionInfo.name + "_" + name + "_" + input.type;
 };
 
+/**
+ * @dev utility function to parse error thrown by ethers
+ * @param e - ethers error object
+ * @returns {string} parsed error string
+ */
 const getParsedEthersError = (e: any): string => {
   let message =
     e.data && e.data.message

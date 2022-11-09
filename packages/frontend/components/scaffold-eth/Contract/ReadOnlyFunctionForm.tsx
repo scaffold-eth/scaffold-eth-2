@@ -4,7 +4,7 @@ import { useContractRead } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
-import { getFunctionInputKey } from "./utils";
+import { getFunctionInputKey } from "./utilsContract";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};

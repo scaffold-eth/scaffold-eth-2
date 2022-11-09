@@ -17,6 +17,9 @@ interface IInputUI {
   functionFragment: FunctionFragment;
 }
 
+/**
+ * Generic Input component to handle input's based on their function param type
+ */
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   let buttons: ReactElement = <></>;
 

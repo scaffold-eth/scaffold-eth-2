@@ -6,7 +6,7 @@ import {
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
   getGeneratedContract,
-} from "./utils";
+} from "./utilsContract";
 
 type ContractProps = {
   contractName: string;

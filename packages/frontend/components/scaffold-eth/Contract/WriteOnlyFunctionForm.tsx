@@ -1,13 +1,13 @@
-import { BigNumber } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
-import { getFunctionInputKey, getParsedEthersError } from "./utils";
+import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
+import { TxValueInput } from "./utilsComponents";
 
-// TODO set sensible initial state values to avoid error on first render
+// TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
   functionFragment.inputs.forEach((input, inputIndex) => {
@@ -15,42 +15,6 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
     initialForm[key] = "";
   });
   return initialForm;
-};
-
-// TODO extract this component
-const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
-  return (
-    <div className="flex space-x-2 items-center">
-      <input
-        placeholder="Value"
-        autoComplete="off"
-        className="input input-sm"
-        value={txValue}
-        onChange={e => setTxValue(e.target.value)}
-      />
-      <div
-        className="helper-button-contract-input"
-        style={{ cursor: "pointer" }}
-        onClick={async () => {
-          if (!txValue) return;
-
-          const floatValue = parseFloat(txValue);
-          if (floatValue) setTxValue("" + floatValue * 10 ** 18);
-        }}
-      >
-        ✴️
-      </div>
-      <div
-        className="helper-button-contract-input"
-        style={{ cursor: "pointer" }}
-        onClick={async () => {
-          setTxValue(BigNumber.from(txValue).toHexString());
-        }}
-      >
-        #️⃣
-      </div>
-    </div>
-  );
 };
 
 interface IFunctionForm {
