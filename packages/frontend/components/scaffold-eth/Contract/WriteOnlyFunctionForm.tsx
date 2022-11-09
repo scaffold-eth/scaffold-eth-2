@@ -1,6 +1,6 @@
 import { BigNumber } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
@@ -66,8 +66,8 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
 
   const keys = Object.keys(form);
 
-  // TODO handle gasPrice, handle parsing of proper error
-  const { config } = usePrepareContractWrite({
+  // TODO handle gasPrice
+  const { config, error: inputError } = usePrepareContractWrite({
     addressOrName: contractAddress,
     functionName: functionFragment.name,
     contractInterface: [functionFragment],
@@ -75,6 +75,14 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
     overrides: {
       value: txValue,
     },
+  });
+
+  const {
+    data: result,
+    isLoading,
+    write,
+  } = useContractWrite({
+    ...config,
     onError: (e: any) => {
       const message = getParsedEthersError(e);
       setError(message);
@@ -83,31 +91,21 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
       }, 3000);
     },
   });
-  const { data: result, isLoading, write, error: transactionError } = useContractWrite(config);
-
-  // TODO check for performance issues
-  useEffect(() => {
-    console.log("UseEffect ran");
-    if (transactionError) {
-      const message = getParsedEthersError(transactionError);
-      setError(message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-    }
-  }, [transactionError]);
 
   const handleWrite = () => {
-    if (!write) {
-      // TODO Show more descriptive error message
-      setError("Please input correct value");
+    // TODO Show more descriptive error message
+    if (inputError) {
+      const message = getParsedEthersError(inputError);
+      setError(message);
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
 
-    write();
+    if (write) {
+      write();
+    }
   };
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
