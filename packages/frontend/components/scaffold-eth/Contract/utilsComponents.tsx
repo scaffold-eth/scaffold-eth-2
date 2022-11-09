@@ -28,6 +28,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
       <button
         style={{ cursor: "pointer" }}
         onClick={async () => {
+          if (!txValue) return;
           setTxValue(BigNumber.from(txValue).toHexString());
         }}
       >

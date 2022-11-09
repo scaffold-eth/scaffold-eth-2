@@ -89,9 +89,11 @@ export const ConvertUintToEther = ({ form, setForm, stateObjectKey }: IUtilityBu
     <div
       style={{ cursor: "pointer" }}
       onClick={(): void => {
-        const formUpdate = { ...form };
-        formUpdate[stateObjectKey] = ethers.utils.parseEther(form[stateObjectKey]);
-        setForm(formUpdate);
+        if (form[stateObjectKey]) {
+          const formUpdate = { ...form };
+          formUpdate[stateObjectKey] = ethers.utils.parseEther(form[stateObjectKey]);
+          setForm(formUpdate);
+        }
       }}
     >
       ✴️

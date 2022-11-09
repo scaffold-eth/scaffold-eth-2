@@ -23,7 +23,6 @@ interface IInputUI {
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
   let buttons: ReactElement = <></>;
 
-  // TODO handle when input filed is empty
   switch (paramType.type) {
     case "bytes32":
       buttons = <ConvertStringToBytes32 setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
