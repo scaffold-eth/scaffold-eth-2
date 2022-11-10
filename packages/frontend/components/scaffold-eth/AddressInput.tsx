@@ -47,18 +47,18 @@ const AddressInput = ({ value, name, placeholder, onChange }: IAddressInput) => 
   return (
     <>
       <div className="form-control">
-        <label className="input-group input-group-sm">
+        <label className="input-group">
           <input
             name={name}
             type="text"
             placeholder={placeholder}
-            className={`input input-bordered h-10 ${ensData === null && "input-error"}`}
+            className={`input input-bordered ${ensData === null && "input-error"}`}
             value={isControlledInput ? value : address || ""}
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-          <span className="p-0 rounded-md bg-base-100 h-10">
-            <Blockies seed={address?.toLowerCase() as string} size={8} scale={5} />
+          <span className="p-0 rounded-md bg-base-100">
+            <Blockies seed={address?.toLowerCase() as string} size={9.5} scale={5} />
           </span>
         </label>
       </div>

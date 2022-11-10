@@ -34,9 +34,7 @@ const ContractUI = ({ contractName }: ContractProps) => {
   const displayedContractFunctions = getAllContractFunctions(contract);
 
   const contractVariablesDisplay = getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions);
-
   const contractMethodsDisplay = getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions);
-
   const contractWriteMethods = getContractWriteMethods(contract, displayedContractFunctions);
 
   if (!contractAddress) {
@@ -49,13 +47,15 @@ const ContractUI = ({ contractName }: ContractProps) => {
         <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
           Read Functions
         </p>
-        {contractMethodsDisplay.length ? contractMethodsDisplay : "Here Read methods with params will display"}
+        {contractMethodsDisplay.length ? contractMethodsDisplay : "Loading read methods..."}
         <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
           Write Functions
         </p>
-        {contractWriteMethods.length ? contractWriteMethods : "Here Write methods with params will be display"}
+        {contractWriteMethods.length ? contractWriteMethods : "Loading write methods..."}
       </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">{contractVariablesDisplay}</div>
+      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">
+        {contractVariablesDisplay.length ? contractVariablesDisplay : "Loading contract variables..."}
+      </div>
     </div>
   );
 };

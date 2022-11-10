@@ -62,7 +62,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
         <input
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
           autoComplete="off"
-          className="input input-sm"
+          className="input input-bordered"
           name={stateObjectKey}
           value={form[stateObjectKey]}
           onChange={(event): void => {
