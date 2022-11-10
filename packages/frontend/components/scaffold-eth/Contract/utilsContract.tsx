@@ -20,7 +20,7 @@ const getDeployedContract = (
   contractName: string | undefined | null,
 ): GeneratedContractType | undefined => {
   if (!chainId || !contractName) {
-    return { address: "", abi: [] };
+    return;
   }
 
   const contractsAtChain = ContractData[chainId as keyof typeof ContractData];
