@@ -19,7 +19,7 @@ type GeneratedContractType = {
 const getDeployedContract = (
   chainId: string | undefined,
   contractName: string | undefined | null,
-): GeneratedContractType | undefined => {
+): GeneratedContractType => {
   if (!chainId || !contractName) {
     return { address: "", abi: [] };
   }
@@ -27,6 +27,7 @@ const getDeployedContract = (
   const contractsAtChain = ContractData[chainId as keyof typeof ContractData];
   const contractsData = contractsAtChain[0]?.contracts;
 
+  // ToDo. This could return undefined. Change the type (| undefined) and handle it on the caller
   return contractsData[contractName as keyof typeof contractsData];
 };
 
