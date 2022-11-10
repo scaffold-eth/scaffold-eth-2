@@ -10,7 +10,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
       <input
         placeholder="Value"
         autoComplete="off"
-        className="input input-sm"
+        className="input input-bordered"
         value={txValue}
         onChange={e => setTxValue(e.target.value)}
       />
