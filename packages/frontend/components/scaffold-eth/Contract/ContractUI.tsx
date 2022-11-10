@@ -23,7 +23,13 @@ const ContractUI = ({ contractName }: ContractProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
 
-  const { address: contractAddress, abi: contractABI } = getDeployedContract(chain?.id.toString(), contractName);
+  let contractAddress = "";
+  let contractABI = [];
+  const deployedContractData = getDeployedContract(chain?.id.toString(), contractName);
+
+  if (deployedContractData) {
+    ({ address: contractAddress, abi: contractABI } = deployedContractData);
+  }
 
   const contract: Contract = useContract({
     addressOrName: contractAddress,
@@ -38,7 +44,7 @@ const ContractUI = ({ contractName }: ContractProps) => {
   const contractWriteMethods = getContractWriteMethods(contract, displayedContractFunctions);
 
   if (!contractAddress) {
-    return <p className="text-2xl text-white">No Contract found !</p>;
+    return <p className="text-2xl">No Contract found !</p>;
   }
 
   return (

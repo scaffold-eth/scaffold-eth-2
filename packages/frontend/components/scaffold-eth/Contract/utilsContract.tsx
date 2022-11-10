@@ -10,7 +10,6 @@ type GeneratedContractType = {
   abi: any[];
 };
 
-// TODO Add checks if the contract is not present at `contracts` directory
 /**
  * @param chainId - deployed contract chainId
  * @param contractName - name of deployed contract
@@ -19,16 +18,15 @@ type GeneratedContractType = {
 const getDeployedContract = (
   chainId: string | undefined,
   contractName: string | undefined | null,
-): GeneratedContractType => {
+): GeneratedContractType | undefined => {
   if (!chainId || !contractName) {
     return { address: "", abi: [] };
   }
 
   const contractsAtChain = ContractData[chainId as keyof typeof ContractData];
-  const contractsData = contractsAtChain[0]?.contracts;
+  const contractsData = contractsAtChain?.[0]?.contracts;
 
-  // ToDo. This could return undefined. Change the type (| undefined) and handle it on the caller
-  return contractsData[contractName as keyof typeof contractsData];
+  return contractsData?.[contractName as keyof typeof contractsData];
 };
 
 /**
