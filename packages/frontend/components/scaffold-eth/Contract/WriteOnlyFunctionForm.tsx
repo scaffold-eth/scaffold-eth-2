@@ -1,11 +1,11 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
-import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
+import { toast } from "~~/components/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -24,9 +24,7 @@ interface IFunctionForm {
 
 export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFunctionForm) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-
-  const [txValue, setTxValue] = useState<string>("");
-  const [error, setError] = useState("");
+  const [txValue, setTxValue] = useState("");
 
   const keys = Object.keys(form);
 
@@ -49,10 +47,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
     ...config,
     onError: (e: any) => {
       const message = getParsedEthersError(e);
-      setError(message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      toast.error(message);
     },
   });
 
@@ -60,11 +55,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
     // TODO Show more descriptive error message
     if (inputError) {
       const message = getParsedEthersError(inputError);
-      setError(message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-      return;
+      toast.error(message);
     }
 
     if (write) {
@@ -97,7 +88,6 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
         Send 💸
       </button>
       <span className="break-all  block">{tryToDisplay(result)}</span>
-      {error && <ErrorToast errorMessage={error} />}
     </div>
   );
 };

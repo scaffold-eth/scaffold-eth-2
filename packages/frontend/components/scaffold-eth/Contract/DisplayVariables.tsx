@@ -1,9 +1,9 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { useState } from "react";
+import React from "react";
 import { useContractRead } from "wagmi";
-import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { toast } from "~~/components/scaffold-eth";
 
 type DisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -11,8 +11,6 @@ type DisplayVariableProps = {
 };
 
 const DisplayVariable = ({ contractAddress, functionFragment }: DisplayVariableProps) => {
-  const [error, setError] = useState("");
-
   const {
     data: result,
     isFetching,
@@ -23,10 +21,7 @@ const DisplayVariable = ({ contractAddress, functionFragment }: DisplayVariableP
     functionName: functionFragment.name,
     args: [],
     onError: error => {
-      setError(error.message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      toast.error(error.message);
     },
   });
 
@@ -41,7 +36,6 @@ const DisplayVariable = ({ contractAddress, functionFragment }: DisplayVariableP
       <div className="text-black font-normal">
         <span className="break-words block">{tryToDisplay(result)}</span>
       </div>
-      {error && <ErrorToast errorMessage={error} />}
     </div>
   );
 };

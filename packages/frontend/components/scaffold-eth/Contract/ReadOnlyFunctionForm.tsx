@@ -1,10 +1,10 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
-import ErrorToast from "~~/components/ErrorToast";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utilsContract";
+import { toast } from "~~/components/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -22,9 +22,6 @@ interface IFunctionForm {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: IFunctionForm) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-
-  const [error, setError] = useState("");
-
   const keys = Object.keys(form);
 
   const {
@@ -38,10 +35,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: IFun
     args: keys.map(key => form[key]),
     enabled: false,
     onError: error => {
-      setError(error.message);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      toast.error(error.message);
     },
   });
 
@@ -73,7 +67,6 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: IFun
         Read 📡
       </button>
       {tryToDisplay(Result)}
-      {error && <ErrorToast errorMessage={error} />}
     </div>
   );
 };
