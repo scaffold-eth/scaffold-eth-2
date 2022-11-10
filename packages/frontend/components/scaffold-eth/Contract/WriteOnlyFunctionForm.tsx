@@ -6,6 +6,7 @@ import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { toast } from "~~/components/scaffold-eth";
+import reactHotToast from "react-hot-toast";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -42,24 +43,37 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFu
   const {
     data: result,
     isLoading,
-    write,
+    writeAsync,
   } = useContractWrite({
     ...config,
-    onError: (e: any) => {
-      const message = getParsedEthersError(e);
-      toast.error(message);
-    },
   });
 
-  const handleWrite = () => {
+  const handleWrite = async () => {
     // TODO Show more descriptive error message
     if (inputError) {
       const message = getParsedEthersError(inputError);
       toast.error(message);
     }
 
-    if (write) {
-      write();
+    if (writeAsync) {
+      try {
+        await reactHotToast.promise(
+          writeAsync(),
+          {
+            loading: "Mining transaction, Hold tight!",
+            success: "Mined successfully !",
+            error: "Error while processing the transaction",
+          },
+          {
+            success: {
+              icon: "🔥",
+            },
+          },
+        );
+      } catch (e: any) {
+        const message = getParsedEthersError(e);
+        toast.error(message);
+      }
     }
   };
 
