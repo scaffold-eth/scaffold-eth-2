@@ -5,7 +5,7 @@ import {
   getContractReadOnlyMethodsWithParams,
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
-  getGeneratedContract,
+  getDeployedContract,
 } from "./utilsContract";
 
 type ContractProps = {
@@ -23,7 +23,7 @@ const ContractUI = ({ contractName }: ContractProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
 
-  const { address: contractAddress, abi: contractABI } = getGeneratedContract(chain?.id.toString(), contractName);
+  const { address: contractAddress, abi: contractABI } = getDeployedContract(chain?.id.toString(), contractName);
 
   const contract: Contract = useContract({
     addressOrName: contractAddress,
