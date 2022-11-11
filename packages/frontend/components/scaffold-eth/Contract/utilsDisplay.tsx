@@ -4,38 +4,38 @@ import { BigNumber, ethers } from "ethers";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import Address from "../Address";
 
+type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
+
 export const tryToDisplay = (
-  element: string | number | BigNumber | Record<string, any> | TransactionResponse | undefined,
+  displayContent: displayContentType | displayContentType[],
+  asText = false,
 ): string | ReactElement | number => {
-  if (element == null) {
+  if (displayContent == null) {
     return "";
   }
 
-  let displayContent = element;
-  if (
-    Array.isArray(displayContent) &&
-    displayContent.length === 1 &&
-    (typeof displayContent[0] === "string" ||
-      typeof displayContent[0] === "number" ||
-      BigNumber.isBigNumber(displayContent[0]))
-  ) {
-    // unroll ethers.js array
-    displayContent = displayContent[0];
-  }
-
-  // ! handle arrays
-  if (BigNumber.isBigNumber(displayContent)) {
+  if (displayContent && BigNumber.isBigNumber(displayContent)) {
     try {
       return displayContent.toNumber();
     } catch (e) {
       return "Ξ" + formatUnits(displayContent, "ether");
     }
   } else if (typeof displayContent === "string" && displayContent.indexOf("0x") === 0 && displayContent.length === 42) {
-    return <Address address={displayContent} />;
-  } else {
-    return JSON.stringify(displayContent);
+    return asText ? displayContent : <Address address={displayContent} />;
+  } else if (displayContent && Array.isArray(displayContent)) {
+    const mostReadable = (v: displayContentType) =>
+      ["number", "boolean"].includes(typeof v) ? v : tryToDisplayAsText(v);
+    const displayable = JSON.stringify(displayContent.map(mostReadable));
+    return asText ? (
+      displayable
+    ) : (
+      <span style={{ overflowWrap: "break-word", width: "100%" }}>{displayable.replaceAll(",", ",\n")}</span>
+    );
   }
+  return JSON.stringify(displayContent);
 };
+
+const tryToDisplayAsText = (displayContent: displayContentType) => tryToDisplay(displayContent, true);
 
 interface IUtilityButton {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
