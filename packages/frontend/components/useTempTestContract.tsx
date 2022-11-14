@@ -1,13 +1,14 @@
 import { useEffect } from "react";
-import { useContractWrite, useContractRead, chain } from "wagmi";
+import { useContractRead, useContractWrite } from "wagmi";
 import { tempContract } from "~~/generated/tempContract";
 import { useAppStore } from "~~/services/store/store";
+import hardhatContracts from "../contracts/hardhat_contracts.json";
 
 // todo remove this, this is until we have contract element
 
-const testChainId = chain.hardhat.id;
+export const useTempTestContract = (currentChainId: number) => {
+  const isContractDeployed = currentChainId in hardhatContracts;
 
-export const useTempTestContract = () => {
   const tempState = useAppStore(state => state.tempSlice.tempState);
   const setTempState = useAppStore(state => state.tempSlice.setTempState);
 
@@ -19,7 +20,7 @@ export const useTempTestContract = () => {
     addressOrName: tempContract.address,
     contractInterface: tempContract.abi,
     functionName: "purpose",
-    chainId: testChainId,
+    chainId: isContractDeployed ? currentChainId : 0,
     watch: true,
     cacheOnBlock: false,
   });
@@ -30,7 +31,7 @@ export const useTempTestContract = () => {
     contractInterface: tempContract.abi,
     functionName: "setPurpose",
     args: "new purpose",
-    chainId: testChainId,
+    chainId: isContractDeployed ? currentChainId : 0,
   });
 
   useEffect(() => {

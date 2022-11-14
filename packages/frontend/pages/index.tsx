@@ -4,9 +4,11 @@ import { useTempTestContract } from "~~/components/useTempTestContract";
 import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
+import { useNetwork } from "wagmi";
 
 const Home: NextPage = () => {
-  const tempTest = useTempTestContract();
+  const { chain } = useNetwork();
+  const tempTest = useTempTestContract(chain?.id as number);
 
   const tempState = useAppStore(state => state.tempSlice.tempState);
 
