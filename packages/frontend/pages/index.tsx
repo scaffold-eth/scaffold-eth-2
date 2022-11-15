@@ -4,6 +4,7 @@ import { useTempTestContract } from "~~/components/useTempTestContract";
 import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
+import { FarmCard } from "~~/components/FarmCard";
 
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
@@ -30,6 +31,7 @@ const Home: NextPage = () => {
           <div>a developer kit to build with EthereansOs</div>
         </h1>
       </main>
+      <FarmCard />
     </div>
   );
 };

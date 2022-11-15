@@ -8,12 +8,17 @@ import { useAppStore } from "~~/services/store/store";
 const testChainId = chain.mainnet.id;
 // uses app store to create a slice of the contract state
 export const useTempTestContract = () => {
+
+  
   const tempState = useAppStore(state => state.tempSlice.tempState);
   //const setTempState = useAppStore(state => state.tempSlice.setTempState);
 
   useEffect(() => {
     console.log("test state, in useTempTestContract: " + tempState.tempStuff);
   }, [tempState?.tempStuff]);
+
+
+  
   // reads contract state
   const cRead = useContractRead({
     addressOrName: FarmMainRegularMinStakeABI.address,
@@ -22,6 +27,7 @@ export const useTempTestContract = () => {
     chainId: testChainId,
     watch: true,
     cacheOnBlock: false,
+    args: [],
   });
   /*//writes contract state
   const cWrite = useContractWrite({
@@ -36,7 +42,7 @@ export const useTempTestContract = () => {
   //when loading... read state
   useEffect(() => {
     if (cRead.isSuccess) {
-      console.log("read contract:  ", cRead.data);
+      console.log("Contract Data:  ", cRead.data);
     }
   }, [cRead.data, cRead.isSuccess]);
   /*// on click -> write state
