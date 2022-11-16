@@ -32,7 +32,7 @@ export const appChains = configureChains(
     publicProvider({ priority: 1 }),
   ],
   {
-    stallTimeout: 1_000,
+    stallTimeout: 3_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
     ...(process.env.NEXT_PUBLIC_NETWORK_LOCALHOST !== "true"
       ? {
