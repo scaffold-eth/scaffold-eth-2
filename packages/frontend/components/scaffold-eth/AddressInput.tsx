@@ -39,7 +39,8 @@ const AddressInput = ({ placeholder, onSuccess }: IAddressInput) => {
   return (
     <>
       <div className="form-control">
-        <label className="input-group input-group-sm">
+        <label className="input-group input-group-sm" >
+          {/* write inline css that will display input in the center of the screen */}
           <input
             type="text"
             placeholder={placeholder}
@@ -47,6 +48,11 @@ const AddressInput = ({ placeholder, onSuccess }: IAddressInput) => {
             value={address || ""}
             onChange={onChangeAddress}
             disabled={isLoading}
+            style={{
+              textAlign: "center",
+              display: "block",
+              margin: "0 auto",
+              }} 
           />
           <span className="p-0 rounded-md bg-base-100 h-10">
             <Blockies seed={address?.toLowerCase() as string} size={8} scale={5} />
