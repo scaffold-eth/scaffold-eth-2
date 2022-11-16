@@ -1,6 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import Address from "../Address";
 import AddressInput from "../AddressInput";
 import { ConvertStringToBytes, ConvertStringToBytes32, ConvertUintToEther } from "./utilsDisplay";
 
@@ -21,27 +20,19 @@ type TInputUIProps = {
  * Generic Input component to handle input's based on their function param type
  */
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) => {
-  let buttons: ReactElement = <></>;
+  let inputSuffix: ReactElement = <></>;
 
   switch (paramType.type) {
     case "bytes32":
-      buttons = <ConvertStringToBytes32 setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
+      inputSuffix = <ConvertStringToBytes32 setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
       break;
 
     case "bytes":
-      buttons = <ConvertStringToBytes setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
+      inputSuffix = <ConvertStringToBytes setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
       break;
 
     case "uint256":
-      buttons = <ConvertUintToEther setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
-      break;
-
-    case "address":
-      const possibleAddress =
-        form[stateObjectKey] && form[stateObjectKey].toLowerCase && form[stateObjectKey].toLowerCase().trim();
-      if (possibleAddress && possibleAddress.length === 42) {
-        buttons = <Address address={possibleAddress} />;
-      }
+      inputSuffix = <ConvertUintToEther setForm={setForm} form={form} stateObjectKey={stateObjectKey} />;
       break;
   }
 
@@ -73,7 +64,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
         />
       )}
 
-      {buttons}
+      {inputSuffix}
     </div>
   );
 };
