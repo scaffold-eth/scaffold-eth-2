@@ -57,6 +57,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWr
 
     if (writeAsync) {
       try {
+        // ToDo. Use a transactor component.
         await reactHotToast.promise(
           writeAsync(),
           {
@@ -92,7 +93,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWr
     );
   });
 
-  // TODO Handle Error with nice toast, prettify json result
+  // TODO prettify json result
   return (
     <div className="flex flex-col items-start space-y-2 border-b-2 border-black pb-2">
       <p className="text-black my-0">{functionFragment.name}</p>
