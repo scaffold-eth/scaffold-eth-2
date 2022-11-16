@@ -2,13 +2,11 @@ import { TAppSliceCreator, TAppStore } from "~~/services/store/storeTypes";
 
 export type TExampleStuff = {
   tempStuff: string;
-  state: Array<number>;
 };
 
 export const defaultExampleStuff = (): TExampleStuff => {
   return {
     tempStuff: "i am temporary",
-    state: [1, 2, 3],
   };
 };
 

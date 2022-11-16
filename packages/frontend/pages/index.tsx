@@ -4,7 +4,7 @@ import { useTempTestContract } from "~~/components/useTempTestContract";
 import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
-import { FarmCard } from "~~/components/FarmCard";
+import { BigNumber } from "ethers";
 
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
@@ -14,24 +14,30 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log("test state, in index.tsx:  " + tempState?.tempStuff);
   }, [tempState?.tempStuff]);
-
   return (
     <div className="px-8">
       <Head>
-        <title>Scaffold-EthOs Starter Kit</title>
-        <meta name="description" content="Created with 🏗 scaffold-eth" />
+        <title>Wagmi</title>
+        <meta name="description" content="Wagmi" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex items-center flex-col py-16">
-        <h1 className="text-center my-12 text-4xl">
-          Welcome to the{" "}
-          <a className="text-blue-600 hover:underline" href="https://ethOs.eth.limo" target="_blank" rel="noreferrer">
-            Scaffold-EthOs Starter Kit
-          </a>
-          <div>a developer kit to build with EthereansOs</div>
-        </h1>
-      </main>
-      <FarmCard />
+      <div>
+        {" "}
+        display tempstate as array
+        {tempState?.tempStuff?.map(
+          (setup, index) => (
+            console.log("setup", setup),
+            (
+              <div key={index}>
+                <div>setup {index}</div>
+                <div>RewardsPerBlock: {setup.rewardPerBlock?.toString()}</div>
+                <div>Endblock: {setup.endBlock?.toNumber()}</div>
+                <div>Supply: {setup.totalSupply?.toString()}</div>
+              </div>
+            )
+          ),
+        )}
+      </div>
     </div>
   );
 };
