@@ -27,10 +27,12 @@ export const appChains = configureChains(
       // This is ours Alchemy's default API key.
       // You can get your own at https://dashboard.alchemyapi.io
       apiKey: "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
+      priority: 0,
     }),
-    publicProvider(),
+    publicProvider({ priority: 1 }),
   ],
   {
+    stallTimeout: 1_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
     ...(process.env.NEXT_PUBLIC_NETWORK_LOCALHOST !== "true"
       ? {
