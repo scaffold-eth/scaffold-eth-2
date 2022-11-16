@@ -102,7 +102,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWr
       <button className={`btn btn-primary btn-sm ${isLoading && "loading"}`} onClick={handleWrite}>
         Send 💸
       </button>
-      <span className="break-all  block">{tryToDisplay(result)}</span>
+      <span className="break-all block">{tryToDisplay(result)}</span>
     </div>
   );
 };
