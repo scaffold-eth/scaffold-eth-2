@@ -5,12 +5,12 @@ import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { toast } from "~~/components/scaffold-eth";
 
-type DisplayVariableProps = {
+type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
 };
 
-const DisplayVariable = ({ contractAddress, functionFragment }: DisplayVariableProps) => {
+const DisplayVariable = ({ contractAddress, functionFragment }: TDisplayVariableProps) => {
   const {
     data: result,
     isFetching,

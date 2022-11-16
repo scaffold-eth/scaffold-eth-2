@@ -2,12 +2,12 @@ import { ChangeEvent, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { useEnsAddress } from "wagmi";
 
-interface IAddressInput {
+type TAddressInputProps = {
   onChange?: (arg: string) => void;
   placeholder?: string;
   name?: string;
   value?: string;
-}
+};
 
 // ToDo:  move this function to an utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
@@ -15,7 +15,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-const AddressInput = ({ value, name, placeholder, onChange }: IAddressInput) => {
+const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps) => {
   const [address, setAddress] = useState("");
 
   const isControlledInput = value !== undefined;

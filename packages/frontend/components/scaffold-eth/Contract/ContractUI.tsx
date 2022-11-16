@@ -8,7 +8,7 @@ import {
   getDeployedContract,
 } from "./utilsContract";
 
-type ContractProps = {
+type TContractUIProps = {
   contractName: string;
 };
 
@@ -17,7 +17,7 @@ type ContractProps = {
  *
  * ToDo. Handle loading state
  **/
-const ContractUI = ({ contractName }: ContractProps) => {
+const ContractUI = ({ contractName }: TContractUIProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
 

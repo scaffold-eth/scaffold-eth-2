@@ -15,12 +15,12 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
   return initialForm;
 };
 
-interface IFunctionForm {
+type TReadOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
-}
+};
 
-export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: IFunctionForm) => {
+export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const keys = Object.keys(form);
 

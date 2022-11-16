@@ -7,7 +7,7 @@ import { useEnsName } from "wagmi";
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
 
-type AddressProps = {
+type TAddressProps = {
   address: string;
   blockExplorer?: string;
   disableAddressLink?: boolean;
@@ -26,7 +26,7 @@ export default function Address({
   fontSize,
   format,
   minimized,
-}: AddressProps) {
+}: TAddressProps) {
   const [ens, setEns] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 

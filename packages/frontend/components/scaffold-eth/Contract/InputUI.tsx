@@ -9,18 +9,18 @@ type ParamType = {
   type: string;
 };
 
-interface IInputUI {
+type TInputUIProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
   form: Record<string, any>;
   stateObjectKey: string;
   paramType: ParamType;
   functionFragment: FunctionFragment;
-}
+};
 
 /**
  * Generic Input component to handle input's based on their function param type
  */
-const InputUI = ({ setForm, form, stateObjectKey, paramType }: IInputUI) => {
+const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) => {
   let buttons: ReactElement = <></>;
 
   switch (paramType.type) {

@@ -18,12 +18,12 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
   return initialForm;
 };
 
-interface IFunctionForm {
+type TWriteOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
-}
+};
 
-export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: IFunctionForm) => {
+export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
 
