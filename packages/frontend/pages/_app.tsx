@@ -3,6 +3,7 @@ import "~~/styles/globals.css";
 import type { AppProps } from "next/app";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiConfig } from "wagmi";
+import { Toaster } from "react-hot-toast";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { appChains } from "~~/services/web3/wagmiConnectors";
@@ -15,6 +16,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
       <RainbowKitProvider chains={appChains.chains}>
         <Header />
         <Component {...pageProps} />
+        <Toaster />
       </RainbowKitProvider>
     </WagmiConfig>
   );
