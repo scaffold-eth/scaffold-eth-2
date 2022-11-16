@@ -3,13 +3,11 @@ import { useContractRead, chain } from "wagmi";
 import { FarmMainRegularMinStakeABI } from "~~/contracts/farmingContract";
 import { useAppStore } from "~~/services/store/store";
 
-// todo remove this, this is until we have contract element
-
 const testChainId = chain.mainnet.id;
 // uses app store to create a slice of the contract state
 export const useTempTestContract = () => {
   const tempState = useAppStore(state => state.tempSlice.tempState);
-  //const setTempState = useAppStore(state => state.tempSlice.setTempState);
+  const setTempState = useAppStore(state => state.tempSlice.setTempState);
 
   useEffect(() => {
     console.log("test state, in useTempTestContract: " + tempState.tempStuff);
@@ -23,7 +21,17 @@ export const useTempTestContract = () => {
     watch: true,
     cacheOnBlock: false,
   });
-  /*//writes contract state
+  // sets contract state to app store
+  useEffect(() => {
+    if (cRead) {
+      console.log("cRead", cRead);
+      setTempState({ tempStuff: cRead?.data });
+    }
+  }, [cRead, setTempState]);
+  return { tempState };
+};
+
+/*//writes contract state
   const cWrite = useContractWrite({
     mode: "recklesslyUnprepared",
     addressOrName: tempContract.address,
@@ -32,14 +40,14 @@ export const useTempTestContract = () => {
     args: "new purpose",
     chainId: testChainId,
   });
-  //*/
+  ///
   //when loading... read state
   useEffect(() => {
     if (cRead.isSuccess) {
       console.log("read contract:  ", cRead.data);
     }
   }, [cRead.data, cRead.isSuccess]);
-  /*// on click -> write state
+  /// on click -> write state
   const onClick = () => {
     console.log("...attempting to write");
     cWrite.write?.();
@@ -47,4 +55,3 @@ export const useTempTestContract = () => {
   };
   return { onClick };
     //*/
-};

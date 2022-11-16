@@ -13,23 +13,23 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log("test state, in index.tsx:  " + tempState?.tempStuff);
   }, [tempState?.tempStuff]);
-
   return (
     <div className="px-8">
       <Head>
-        <title>Scaffold-EthOs Starter Kit</title>
-        <meta name="description" content="Created with 🏗 scaffold-eth" />
+        <title>Wagmi</title>
+        <meta name="description" content="Wagmi" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="flex items-center flex-col py-16">
-        <h1 className="text-center my-12 text-4xl">
-          Welcome to the{" "}
-          <a className="text-blue-600 hover:underline" href="https://ethOs.eth.limo" target="_blank" rel="noreferrer">
-            Scaffold-EthOs Starter Kit
-          </a>
-          <div>a developer kit to build with EthereansOs</div>
-        </h1>
-      </main>
+      <div>
+        {" "}
+        display tempstate as array
+        {tempState?.tempStuff?.map((setup, index) => (
+          <div key={index}>
+            <div>setup {index}</div>
+            <div>setupId: {setup?.setupId}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
