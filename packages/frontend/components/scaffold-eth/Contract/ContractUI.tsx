@@ -13,11 +13,9 @@ type ContractProps = {
 };
 
 /**
- * TODO
- * handle error
- * handle types correctly
- * handle loading state
- * handle payable, public, functions
+ * UI component to interface with deployed contracts.
+ *
+ * ToDo. Handle loading state
  **/
 const ContractUI = ({ contractName }: ContractProps) => {
   const { chain } = useNetwork();
