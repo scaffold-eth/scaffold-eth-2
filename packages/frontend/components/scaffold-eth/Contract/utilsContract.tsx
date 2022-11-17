@@ -1,6 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
 // ToDo. Handle when this doesn't exist?
-import ContractData from "~~/generated/hardhat_contracts.json";
+import ContractData from "~~/contracts/hardhat_contracts.json";
 import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";

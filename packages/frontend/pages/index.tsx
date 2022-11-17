@@ -4,6 +4,8 @@ import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
 import Link from "next/link";
+import { ReadOnlyFunctionForm } from "../components/scaffold-eth/Contract/ReadOnlyFunctionForm";
+import { FunctionFragment } from "ethers/lib/utils";
 
 const Home: NextPage = () => {
   const tempState = useAppStore(state => state.tempSlice.tempState);
@@ -48,6 +50,11 @@ const Home: NextPage = () => {
 
         <h3 className="font-bold mt-8">Address Input Component</h3>
         <AddressInput placeholder="Enter address" />
+        <h3 className="font-bold mt-8">Read Only Function Form</h3>
+        <ReadOnlyFunctionForm
+          functionFragment={FunctionFragment["setups"]}
+          contractAddress="0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        />
       </main>
     </div>
   );
