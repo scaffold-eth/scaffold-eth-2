@@ -41,10 +41,17 @@ const Home: NextPage = () => {
                 backgroundColor: 'rgba(0, 255, 0, 0.1)'
                 }}>
                 <div>setup {index}</div>
-                <div>RewardsPerBlock: {setup.rewardPerBlock?.toString()}</div>
-                <div>Endblock: {setup.endBlock?.toNumber()}</div>
-                <div>Supply: {setup.totalSupply?.toString()}</div>
-                <button style={{borderRadius: '25px', border:'1px solid white', padding: '5px', backgroundColor: 'rgba(155, 55, 55)', marginTop:'16px'}}>Start Farming</button>
+                <div style={{border:'1px solid white', padding: '10px', backgroundColor:'lightgreen', borderRadius: '10px', marginBottom: '5px'}}>RewardsPerBlock: {setup.rewardPerBlock?.toString()}</div>
+                <div style={{border:'1px solid white', padding: '20px 20px', display:'inline-block', backgroundColor:'orange', borderRadius: '10px', marginRight: '5px'}}>Endblock: {setup.endBlock?.toNumber()}</div>
+                <div style={{border:'1px solid white', padding: '35px', display:'inline-block', backgroundColor:'lightblue', borderRadius: '10px'}}>Supply: {setup.totalSupply?.toString()}</div>
+                <br></br>
+                <button style={{
+                  borderRadius: '25px', 
+                  border:'1px solid white', 
+                  padding: '5px', 
+                  backgroundColor: 'rgba(155, 35, 0)', 
+                  marginTop:'16px',
+                  }}>Start Farming</button>
               </div>
               </div>
             )
