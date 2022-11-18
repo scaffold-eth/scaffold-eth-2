@@ -42,6 +42,7 @@ const Home: NextPage = () => {
   console.log("Contract: ", contract);
   console.log("Contract contractABI: ", contractABI);
 
+
   // reads contract state
   const cRead = useContractRead({
     addressOrName: contractAddress,
@@ -120,7 +121,7 @@ const Home: NextPage = () => {
                         margin: "2vh",
                         }}>
 
-                        <Link href={`./setups/setups_${index}.jsx`}>
+                        <Link href={`./setups/${index}`}>
                           <a>View Setup {index}</a>
                         </Link>
                       </button>
