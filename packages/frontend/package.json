@@ -10,6 +10,9 @@
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'"
   },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --fix"
+  },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
     "@ethersproject/web": "^5.7.1",
