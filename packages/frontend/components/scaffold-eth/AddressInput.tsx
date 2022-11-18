@@ -50,7 +50,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
       <div className="form-control">
         <label className="input-group">
 
-      <div className="form-control" >
+        <div className="form-control" >
         <label className="input-group input-group-sm" style={{
               width:'auto',
               marginLeft: 'auto',
@@ -78,5 +78,4 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     </>
   );
 };
-
 export default AddressInput;

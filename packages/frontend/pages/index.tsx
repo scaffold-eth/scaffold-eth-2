@@ -137,7 +137,7 @@ const Home: NextPage = () => {
                       borderRadius: "25px",
                       border: "1px solid white",
                       padding: "5px",
-                      backgroundColor: "rgba(155, 35, 0)",
+                      backgroundColor: "rgba(155, 35, 1)",
                       marginTop: "16px",
                     }}
                   >
