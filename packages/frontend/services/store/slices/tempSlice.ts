@@ -1,12 +1,12 @@
 import { TAppSliceCreator, TAppStore } from "~~/services/store/storeTypes";
 
 export type TExampleStuff = {
-  tempStuff: string;
+  tempStuff: Array<string>;
 };
 
 export const defaultExampleStuff = (): TExampleStuff => {
   return {
-    tempStuff: "i am temporary",
+    tempStuff: [],
   };
 };
 
