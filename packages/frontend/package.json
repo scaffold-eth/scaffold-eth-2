@@ -26,6 +26,7 @@
     "react-blockies": "^1.4.1",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.1.0",
+    "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
     "wagmi": "^0.6.0",
