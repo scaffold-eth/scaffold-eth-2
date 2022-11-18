@@ -4,6 +4,7 @@ import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReadOnlyFunctionForm } from "../components/scaffold-eth/Contract/ReadOnlyFunctionForm";
 import { Contract } from "ethers";
 import { useContract, useNetwork, useProvider, useContractRead } from "wagmi";
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
   const contractName = "FarmMainRegularMinStakeABI";
   const { chain } = useNetwork();
   const provider = useProvider();
+
 
   let contractAddress = "";
   let contractABI = [];
@@ -59,6 +61,8 @@ const Home: NextPage = () => {
     }
   }, [cRead, setTempState]);
 
+ 
+  
   return (
     <div className="px-8">
       <Head>
@@ -74,11 +78,11 @@ const Home: NextPage = () => {
         {" "}
         <AddressInput />
         <br></br>
+          
         {tempState?.tempStuff?.map(
           (setup, index) => (
             console.log("setup", setup),
             (
-              //write a shadow box for this div
               <div
                 style={{
                   borderRadius: "25px",
@@ -91,9 +95,40 @@ const Home: NextPage = () => {
               >
                 <div
                   key={index}
-                  style={{ display: "inline-block", padding: "2vw", margin: "8px", borderRadius: "8px" }}
-                >
-                  <div>Setup {index}</div>
+                  style={{ 
+                    display: "inline-block", 
+                    padding: "2vw", 
+                    margin: "8px", 
+                    borderRadius: "8px" 
+                    }}>
+                  
+                  <div>
+                    Setup {index}
+                  </div>
+
+                  <div>
+
+
+
+  {/* This is the spot to be working on for the routing */}
+                    <button
+                      style={{
+                        borderRadius: "25px",
+                        boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.5)",
+                        padding: "5px",
+                        backgroundColor: "#F02419",
+                        margin: "2vh",
+                        }}>
+
+                        <Link href={`./setups/setups_${index}.jsx`}>
+                          <a>View Setup {index}</a>
+                        </Link>
+                      </button>
+
+
+
+
+                  </div>
 
                   <div
                     style={{
@@ -134,17 +169,7 @@ const Home: NextPage = () => {
 
                   <br></br>
 
-                  <button
-                    style={{
-                      borderRadius: "25px",
-                      boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.5)",
-                      padding: "5px",
-                      backgroundColor: "#F02419",
-                      marginTop: "4vh",
-                    }}
-                  >
-                    Start Farming
-                  </button>
+                  
                 </div>
               </div>
             )
