@@ -12,8 +12,6 @@ import {
   getAllContractFunctions,
   getDeployedContract,
 } from "../components/scaffold-eth/Contract/utilsContract";
-import { BigNumber } from "ethers";
-
 
 const Home: NextPage = () => {
   const tempState = useAppStore(state => state.tempSlice.tempState);
@@ -55,27 +53,31 @@ const Home: NextPage = () => {
 
   // sets contract state to app store
   useEffect(() => {
-
     if (cRead) {
       console.log("cRead", cRead);
       setTempState({ tempStuff: cRead?.data });
     }
   }, [cRead, setTempState]);
 
-
-    console.log("test state, in index.tsx:  " + tempState?.tempStuff);
-  }, [tempState?.tempStuff]);
-
+  return (
+    <div className="px-8">
+      <Head>
+        <title>Scaffold-eth App</title>
+        <meta name="description" content="Created with 🏗 scaffold-eth" />
+      </Head>
       <div
         style={{
           textAlign: "center",
           display: "block",
         }}
       >
-      <div style={{
-        textAlign: 'center',
-        display: 'block',
-      }}>
+        {" "}
+        <AddressInput />
+        <br></br>
+        {tempState?.tempStuff?.map(
+          (setup, index) => (
+            console.log("setup", setup),
+            (
               <div
                 style={{
                   backgroundColor: "rgba(100,100,100,0.2)",
@@ -137,19 +139,19 @@ const Home: NextPage = () => {
                       borderRadius: "25px",
                       border: "1px solid white",
                       padding: "5px",
-                      backgroundColor: "rgba(155, 35, 1)",
+                      backgroundColor: "rgba(155, 35, 0)",
                       marginTop: "16px",
                     }}
                   >
                     Start Farming
                   </button>
                 </div>
-
               </div>
             )
           ),
         )}
       </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl items-start">
         <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
           <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">

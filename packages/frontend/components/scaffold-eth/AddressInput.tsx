@@ -46,19 +46,8 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
 
   return (
     <>
-
       <div className="form-control">
         <label className="input-group">
-
-        <div className="form-control" >
-        <label className="input-group input-group-sm" style={{
-              width:'auto',
-              marginLeft: 'auto',
-              marginRight:'auto',
-              marginTop:'5vh'
-              }}>
-          {/* write inline css that will display input in the center of the screen */}
-
           <input
             name={name}
             type="text"
@@ -67,15 +56,14 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             value={isControlledInput ? value : address || ""}
             onChange={onChangeAddress}
             disabled={isLoading}
-            style={{backgroundColor:'white', color:'black'}}
           />
           <span className="p-0 rounded-md bg-base-100">
             <Blockies seed={address?.toLowerCase() as string} size={9.5} scale={5} />
-
           </span>
         </label>
       </div>
     </>
   );
 };
+
 export default AddressInput;
