@@ -5,7 +5,7 @@
       "chainId": "1",
       "contracts": {
         "FarmMainRegularMinStakeABI": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "address": "0x3889ABE350A054701e8ea55055CcD960cB4cB91a",
           "abi": [
             {
               "anonymous": false,
@@ -253,8 +253,7 @@
                     { "internalType": "uint256", "name": "infoIndex", "type": "uint256" },
                     { "internalType": "bool", "name": "active", "type": "bool" },
                     { "internalType": "uint256", "name": "startBlock", "type": "uint256" },
-                    { "internalType": "uint256", "name": "endBlock", "type": "uint256" },
-                    { "internalType": "uint256", "name": "lastUpdateBlock", "type": "uint256" },
+                    { "internalType": "uint256", "name": "engeneratedastUpdateBlock", "type": "uint256" },
                     { "internalType": "uint256", "name": "deprecatedObjectId", "type": "uint256" },
                     { "internalType": "uint256", "name": "rewardPerBlock", "type": "uint256" },
                     { "internalType": "uint128", "name": "totalSupply", "type": "uint128" }
