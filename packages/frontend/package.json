@@ -30,6 +30,7 @@
     "usehooks-ts": "^2.7.2",
     "wagmi": "^0.6.0",
     "zustand": "^4.1.2"
+    
   },
   "devDependencies": {
     "@types/node": "^17.0.35",

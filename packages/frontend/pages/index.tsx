@@ -5,6 +5,7 @@ import { useAppStore } from "~~/services/store/store";
 import { Address, AddressInput, Balance } from "../components/scaffold-eth";
 import { useEffect } from "react";
 import { BigNumber } from "ethers";
+import { getFarming } from "../logic/farming";
 
 const Home: NextPage = () => {
   const tempTest = useTempTestContract();
@@ -73,7 +74,8 @@ const Home: NextPage = () => {
                   display:'inline-block', 
                   backgroundColor:'#2E86AB', 
                   borderRadius: '10px',
-                  }}>Supply: {setup.totalSupply?.toString()}</div>
+                  }}>Supply: {setup.totalSupply?.toString()}
+                  </div>
 
                 <br></br>
 
