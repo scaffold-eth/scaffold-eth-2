@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useEthPrice } from "~~/hooks/scaffold-eth";
 
-type BalanceProps = {
+type TBalanceProps = {
   address: string;
 };
 
 /**
  * Display (ETH & USD) balance of an ETH address.
  */
-export default function Balance({ address }: BalanceProps) {
+export default function Balance({ address }: TBalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
 

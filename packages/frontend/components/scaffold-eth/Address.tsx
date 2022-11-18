@@ -7,7 +7,7 @@ import { useEnsName } from "wagmi";
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
 
-type AddressProps = {
+type TAddressProps = {
   address: string;
   blockExplorer?: string;
   disableAddressLink?: boolean;
@@ -26,7 +26,7 @@ export default function Address({
   fontSize,
   format,
   minimized,
-}: AddressProps) {
+}: TAddressProps) {
   const [ens, setEns] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 
@@ -77,10 +77,10 @@ export default function Address({
         />
       </div>
       {disableAddressLink ? (
-        <span className="ml-1.5 text-lg font-normal text-gray-900 dark:text-white">{displayAddress}</span>
+        <span className="ml-1.5 text-lg font-normal text-gray-900 dark:text-gray-400">{displayAddress}</span>
       ) : (
         <a
-          className="ml-1.5 text-lg font-normal text-gray-900 dark:text-white"
+          className="ml-1.5 text-lg font-normal text-gray-900 dark:text-gray-400"
           target="_blank"
           href={explorerLink}
           rel="noopener noreferrer"
