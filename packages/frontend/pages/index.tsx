@@ -120,10 +120,13 @@ const Home: NextPage = () => {
                         margin: "2vh",
                         }}>
 
-                        <Link href={`./setups/setup_${index}`}>
+                        <Link href={`./setups/setups_${index}.jsx`}>
                           <a>View Setup {index}</a>
                         </Link>
                       </button>
+
+
+
 
                   </div>
 
