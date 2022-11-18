@@ -31,6 +31,7 @@
     "lint-staged": "^13.0.3"
   },
   "dependencies": {
-    "@uniswap/v3-sdk": "^3.9.0"
+    "@uniswap/v3-sdk": "^3.9.0",
+    "react-hot-toast": "^2.4.0"
   }
 }
