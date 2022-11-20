@@ -8,25 +8,40 @@ function AddLiquidity() {
     <div>
       <button onClick={() => setIsOpen(true)}>Remove Liquidity</button>
 
-      {isOpen && (
-        <div>
-          <button
+      {
+        //cover the pop-up with a div that covers the whole screen
+        isOpen && (
+          <div
             style={{
-              boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",
-              padding: "20px 20px",
-              display: "inline-block",
-              backgroundColor: "#2E86AB",
-              borderRadius: "10px",
-              marginRight: "15px",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <Link href={`/debug`}>
-              <a>View Fuctions</a>
-            </Link>
-          </button>
-          <button onClick={() => setIsOpen(false)}>Close Pop-up</button>
-        </div>
-      )}
+            <button
+              style={{
+                boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",
+                padding: "20px 20px",
+                display: "inline-block",
+                backgroundColor: "#2E86AB",
+                borderRadius: "10px",
+                marginRight: "15px",
+              }}
+            >
+              <Link href={`/debug`}>
+                <a>View Fuctions</a>
+              </Link>
+            </button>
+            <button onClick={() => setIsOpen(false)}>Close Pop-up</button>
+          </div>
+        )
+      }
     </div>
   );
 }

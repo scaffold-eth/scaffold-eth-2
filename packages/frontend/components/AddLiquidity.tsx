@@ -9,7 +9,19 @@ function AddLiquidity() {
       <button onClick={() => setIsOpen(true)}>Add Liquidity</button>
 
       {isOpen && (
-        <div>
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <button
             style={{
               boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",
