@@ -1,12 +1,9 @@
 import { useRouter } from "next/router";
-import Home from "../index";
 import { useEffect } from "react";
-import type { NextPage } from "next";
 import Head from "next/head";
 import { useAppStore } from "~~/services/store/store";
-import { Address, AddressInput, Balance } from "../../components/scaffold-eth";
+import { AddressInput } from "../../components/scaffold-eth";
 import Link from "next/link";
-import { ReadOnlyFunctionForm } from "../../components/scaffold-eth/Contract/ReadOnlyFunctionForm";
 import { Contract } from "ethers";
 import { useContract, useNetwork, useProvider, useContractRead } from "wagmi";
 import {
@@ -64,13 +61,6 @@ const Setup = () => {
     }
   }, [cRead, setTempState]);
 
-  // //make this useEffect querry for cRead limit the data to one entry on the
-  // useEffect(() => {
-  //   if (cRead) {
-  //     console.log("cRead", cRead);
-  //     setTempState({ tempStuff: cRead?.data});
-  //   }
-  // }, [cRead, setTempState]);
   return (
     <div className="px-8">
       <Head>
@@ -109,23 +99,15 @@ const Setup = () => {
                     borderRadius: "8px",
                   }}
                 >
-                  <div>Setup {index}</div>
-
-                  <div>
-                    {/* This is the spot to be working on for the routing */}
-                    <button
-                      style={{
-                        borderRadius: "25px",
-                        boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.5)",
-                        padding: "5px",
-                        backgroundColor: "#F02419",
-                        margin: "2vh",
-                      }}
-                    >
-                      <Link href={`./setups/setups_${index}.jsx`}>
-                        <a>View Setup {index}</a>
-                      </Link>
-                    </button>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      padding: "2vw",
+                      margin: "8px",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    Setup {index}
                   </div>
 
                   <div
@@ -164,7 +146,22 @@ const Setup = () => {
                   >
                     Supply: {setup.totalSupply?.toString()}
                   </div>
-
+                  <div>
+                  <button
+                    style={{
+                      boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",
+                      padding: "20px 20px",
+                      display: "inline-block",
+                      backgroundColor: "#2E86AB",
+                      borderRadius: "10px",
+                      marginRight: "15px",
+                    }}
+                  >
+                    <Link href={`/debug`}>
+                      <a>View Fuctions</a>
+                    </Link>
+                  </button>
+                  </div>
                   <br></br>
                 </div>
               </div>
