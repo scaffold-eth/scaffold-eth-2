@@ -1,12 +1,29 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import InputUI from "../components/scaffold-eth/Contract/InputUI";
 
 function AddLiquidity() {
   const [isOpen, setIsOpen] = useState(false);
+  // create form and setForm function
+  const [form, setForm] = useState([]);
 
   return (
     <div>
-      <button onClick={() => setIsOpen(true)}>Add Liquidity</button>
+      <button onClick={() => setIsOpen(true)}>
+        <div
+          style={{
+            // format as button
+            boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",
+            padding: "20px 20px",
+            display: "inline-block",
+            backgroundColor: "#2E86AB",
+            borderRadius: "10px",
+            marginRight: "15px",
+          }}
+        >
+          Add Liquidity
+        </div>
+      </button>
 
       {isOpen && (
         <div
@@ -22,6 +39,7 @@ function AddLiquidity() {
             alignItems: "center",
           }}
         >
+          <div>{/*<InputUI paramType="uint256" functionFragment={displayedContractFunctions[0]} />*/}</div>
           <button
             style={{
               boxShadow: "0 16px 32px 0 rgba(0, 0, 0, 0.7)",

@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { useAppStore } from "~~/services/store/store";
 import { AddressInput } from "../../components/scaffold-eth";
-import Link from "next/link";
 import { Contract } from "ethers";
 import { useContract, useNetwork, useProvider, useContractRead } from "wagmi";
 import AddLiquidity from "~~/components/AddLiquidity";
@@ -14,8 +13,11 @@ import {
   getDeployedContract,
 } from "../../components/scaffold-eth/Contract/utilsContract";
 import { BigNumber } from "ethers";
+import Covenant from "~~/components/Covenant";
 
 const Setup = () => {
+  const cov = Covenant();
+  console.log("cov: ", cov);
   const router = useRouter();
   const { pid } = router.query;
 
