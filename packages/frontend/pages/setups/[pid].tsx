@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import  Home  from "../index";
+import Home from "../index";
 import { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -14,9 +14,7 @@ import {
   getAllContractFunctions,
   getDeployedContract,
 } from "../../components/scaffold-eth/Contract/utilsContract";
-import {BigNumber} from "ethers";
-
-
+import { BigNumber } from "ethers";
 
 const Setup = () => {
   const router = useRouter();
@@ -28,7 +26,6 @@ const Setup = () => {
   const contractName = "FarmMainRegularMinStakeABI";
   const { chain } = useNetwork();
   const provider = useProvider();
-
 
   let contractAddress = "";
   let contractABI = [];
@@ -49,7 +46,6 @@ const Setup = () => {
   console.log("Contract: ", contract);
   console.log("Contract contractABI: ", contractABI);
 
-
   const cRead = useContractRead({
     addressOrName: contractAddress,
     contractInterface: contractABI,
@@ -57,7 +53,7 @@ const Setup = () => {
     chainId: 1,
     watch: true,
     cacheOnBlock: false,
-    args: [BigNumber.from(pid)]
+    args: [BigNumber.from(pid)],
   });
 
   // sets contract state to app store
@@ -75,13 +71,26 @@ const Setup = () => {
   //     setTempState({ tempStuff: cRead?.data});
   //   }
   // }, [cRead, setTempState]);
-  
-  return <div>
-          <p>Post: {pid}</p>
-          {tempState?.tempStuff?.map(
+  return (
+    <div className="px-8">
+      <Head>
+        <title>Scaffold-eth App</title>
+        <meta name="description" content="Created with 🏗 scaffold-eth" />
+      </Head>
+      <div
+        style={{
+          textAlign: "center",
+          display: "block",
+        }}
+      >
+        {" "}
+        <AddressInput />
+        <br></br>
+        {tempState?.tempStuff?.map(
           (setup, index) => (
             console.log("setup", setup),
-          <div
+            (
+              <div
                 style={{
                   borderRadius: "25px",
                   display: "inline-grid",
@@ -93,22 +102,17 @@ const Setup = () => {
               >
                 <div
                   key={index}
-                  style={{ 
-                    display: "inline-block", 
-                    padding: "2vw", 
-                    margin: "8px", 
-                    borderRadius: "8px" 
-                    }}>
-                  
-                  <div>
-                    Setup {index}
-                  </div>
+                  style={{
+                    display: "inline-block",
+                    padding: "2vw",
+                    margin: "8px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <div>Setup {index}</div>
 
                   <div>
-
-
-
-  {/* This is the spot to be working on for the routing */}
+                    {/* This is the spot to be working on for the routing */}
                     <button
                       style={{
                         borderRadius: "25px",
@@ -116,16 +120,12 @@ const Setup = () => {
                         padding: "5px",
                         backgroundColor: "#F02419",
                         margin: "2vh",
-                        }}>
-
-                        <Link href={`./setups/${index}`}>
-                          <a>View Setup {index}</a>
-                        </Link>
-                      </button>
-
-
-
-
+                      }}
+                    >
+                      <Link href={`./setups/setups_${index}.jsx`}>
+                        <a>View Setup {index}</a>
+                      </Link>
+                    </button>
                   </div>
 
                   <div
@@ -137,7 +137,7 @@ const Setup = () => {
                       backgroundColor: "#2E86AB",
                     }}
                   >
-                    RewardsPerBlock: {setup.[0].[0].rewardPerBlock?.toString()}
+                    RewardsPerBlock: {setup.rewardPerBlock?.toString()}
                   </div>
 
                   <div
@@ -164,10 +164,25 @@ const Setup = () => {
                   >
                     Supply: {setup.totalSupply?.toString()}
                   </div>
-                  </div>
-                  </div>
-          ))}
+
+                  <br></br>
+                </div>
+              </div>
+            )
+          ),
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl items-start">
+        <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
+          <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
+            Read Functions
+          </p>
+          {contractMethodsDisplay.length ? contractMethodsDisplay : "Loading read methods..."}
         </div>
-}
+      </div>
+    </div>
+  );
+};
 
 export default Setup;
