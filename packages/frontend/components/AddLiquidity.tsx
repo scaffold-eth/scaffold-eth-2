@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import InputUI from "../components/scaffold-eth/Contract/InputUI";
+import { WriteOnlyFunctionForm } from "../components/scaffold-eth/Contract/WriteOnlyFunctionForm";
 import { Contract, BigNumber } from "ethers";
 import { useRouter } from "next/router";
 import { useContract, useNetwork, useProvider, useContractRead } from "wagmi";
@@ -17,10 +18,9 @@ function AddLiquidity() {
   const router = useRouter();
   const { pid } = router.query;
 
-  const tempState = useAppStore(state => state.tempSlice.tempState);
   const setTempState = useAppStore(state => state.tempSlice.setTempState);
+  const setExampleData = useAppStore(state => state.anotherExampleSlice.exampleData);
   // Add state for form
-  const [form, setForm] = useState({["..." + pid]: ""});
   const contractName = "FarmMainRegularMinStakeABI";
   const { chain } = useNetwork();
   const provider = useProvider();
@@ -60,6 +60,16 @@ function AddLiquidity() {
       setTempState({ tempStuff: cRead?.data });
     }
   }, [cRead, setTempState]);
+
+  const cWrite = useContractRead({
+    addressOrName: contractAddress,
+    contractInterface: contractABI,
+    functionName: "setup",
+    chainId: 1,
+    watch: true,
+    cacheOnBlock: false,
+    args: [BigNumber.from(pid)],
+  });
 
   return (
     <div>
@@ -109,18 +119,14 @@ function AddLiquidity() {
             <h1>Add Liquidity</h1>
             <h2>Enter the amount of tokens you want to add</h2>
             {/* add input fields */}
-            <InputUI
-              paramType="uint256"
-              functionFragment={displayedContractFunctions[8]}
-              form={form}
-              setForm={setForm}
-            />
+            <WriteOnlyFunctionForm functionFragment={displayedContractFunctions[8]} contract={contract} />
 
             <button
               onClick={() => {
                 // send transaction
                 //contract?.addLiquidity(BigNumber.from(pid), tempState.tempStuff);
                 //setIsOpen(false);
+
                 console.log("form", form);
               }}
             >
