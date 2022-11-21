@@ -150,8 +150,18 @@ const Setup = () => {
                   >
                     Supply: {setup.totalSupply?.toString()}
                   </div>
-                  <div>
+                  <div
+                    style={{
+                      // style as side by side buttons
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "10px",
+                    }}
+                  >
                     <AddLiquidity />
+
                     <RemoveLiquidity />
                   </div>
                   <br></br>

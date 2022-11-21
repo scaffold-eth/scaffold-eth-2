@@ -54,6 +54,8 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
           autoComplete="off"
           className="input input-bordered"
+          // change letters to black
+          style={{ color: "black" }}
           name={stateObjectKey}
           value={form[stateObjectKey]}
           onChange={(event): void => {
