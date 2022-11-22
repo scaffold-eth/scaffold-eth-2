@@ -37,7 +37,7 @@ const Home: NextPage = () => {
         </p>
 
         <Link href={"/debug"}>
-          <button className="mt-4 btn btn-primary">Got to contract component</button>
+          <button className="mt-4 btn btn-primary">Go to contract component</button>
         </Link>
 
         <h3 className="font-bold mt-8">Address Component</h3>
