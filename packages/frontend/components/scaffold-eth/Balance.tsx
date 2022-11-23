@@ -57,23 +57,23 @@ export default function Balance({ address }: TBalanceProps) {
   }
 
   return (
-    <div
-      className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}
+    <button
+      className={`border-gray-400 rounded--xl p-2 flex flex-col items-center max-w-fit cursor-pointer  shadow-inner`}
       onClick={onToggleBalance}
     >
       <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
-            <span>{balance?.toFixed(2)}</span>
-            <span className="text-xs font-bold m-1">ETH</span>
+            <span className="font-bold">{balance?.toFixed(2)}</span>
+            <span className="text-md font-bold m-1">ETH</span>
           </>
         ) : (
           <>
-            <span className="text-xs font-bold m-1">$</span>
-            <span>{(balance * price).toFixed(2)}</span>
+            <span className="text-md font-bold m-1">$</span>
+            <span className="font-bold">{(balance * price).toFixed(2)}</span>
           </>
         )}
       </div>
-    </div>
+    </button>
   );
 }

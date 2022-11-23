@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
-import { useBalance } from "wagmi";
+import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
+
+import Balance from "./scaffold-eth/Balance";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
   enableBurnerWallet: true,
   autoConnect: true,
-};
-
-const HeaderBalance = ({ address, balanceSymbol }: { address: string; balanceSymbol: string }) => {
-  const [balance, setBalance] = useState<number | null>(null);
-  const {
-    data: fetchedBalanceData,
-    // isError,
-    // isLoading,
-  } = useBalance({
-    addressOrName: address,
-    watch: true,
-    cacheTime: 30_000,
-  });
-
-  useEffect(() => {
-    if (fetchedBalanceData?.formatted) {
-      setBalance(Number(fetchedBalanceData.formatted));
-    }
-  }, [fetchedBalanceData]);
-
-  return (
-    <span className="m-2">
-      {balance?.toFixed(2)} {balanceSymbol}
-    </span>
-  );
 };
 
 /**
@@ -42,38 +19,18 @@ export default function Header() {
   useAutoConnect(tempAutoConnectConfig);
 
   return (
-    <div className="mt-5 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 items-center justify-center">
-      {/* <ConnectButton
-        accountStatus={{
-          smallScreen: "avatar",
-          largeScreen: "full",
-        }}
-        showBalance={true}
-        chainStatus={{
-          smallScreen: "icon",
-          largeScreen: "icon",
-        }}
-      /> */}
-
-      {/* custom connect button */}
+    <div className="mt-5 flex justify-center items-center">
       <ConnectButton.Custom>
-        {({ account, chain, openAccountModal, openChainModal, openConnectModal, authenticationStatus, mounted }) => {
-          // Note: If your app doesn't use authentication, you
-          // can remove all 'authenticationStatus' checks
-          const ready = mounted && authenticationStatus !== "loading";
-          const connected =
-            ready && account && chain && (!authenticationStatus || authenticationStatus === "authenticated");
+        {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
+          const ready = mounted;
+          const connected = ready && account && chain;
 
           return (
             <div
               {...(!ready && {
                 "aria-hidden": true,
-                style: {
-                  opacity: 0,
-                  pointerEvents: "none",
-                  userSelect: "none",
-                },
               })}
+              className="w-1/3"
             >
               {(() => {
                 if (!connected) {
@@ -93,35 +50,43 @@ export default function Header() {
                 }
 
                 return (
-                  <div style={{ display: "flex", gap: 12 }}>
-                    <button onClick={openChainModal} style={{ display: "flex", alignItems: "center" }} type="button">
+                  <div className="p-2 flex justify-end items-center">
+                    <button
+                      onClick={openChainModal}
+                      className="btn btn-outline border-0 shadow-lg p-1 mt-2 mr-2 flex justify-center items-center"
+                      type="button"
+                    >
                       {chain.hasIcon && (
-                        <div
-                          style={{
-                            background: chain.iconBackground,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 999,
-                            overflow: "hidden",
-                            marginRight: 4,
-                          }}
-                        >
+                        <div className="mt-1">
                           {chain.iconUrl && (
-                            <img
-                              alt={chain.name ?? "Chain icon"}
-                              src={chain.iconUrl}
-                              style={{ width: 12, height: 12 }}
-                            />
+                            <Image alt={chain.name ?? "Chain icon"} src={chain.iconUrl} width="25" height="25" />
                           )}
                         </div>
                       )}
-                      {chain.name}
+                      <div className="flex items-center">
+                        <span className="m-1 font-bold text-md">{chain.name}</span>
+                        <span>
+                          <ChevronDownIcon className="h-6 w-4" />
+                        </span>
+                      </div>
                     </button>
 
-                    <button onClick={openAccountModal} type="button">
-                      {account.displayName}
-                      <HeaderBalance address={account.address} balanceSymbol={account.balanceSymbol as string} />
-                    </button>
+                    <div className="flex justify-center items-center border-1 rounded-lg p-1 shadow-xl">
+                      <div className="m-1">
+                        <Balance address={account.address} />
+                      </div>
+                      <button
+                        onClick={openAccountModal}
+                        type="button"
+                        className="btn btn-outline border-0 p-2 flex justify-center items-center shadow-inner bg-gray-100"
+                      >
+                        <span className="m-1 font-bold text-md">{account.displayName}</span>
+
+                        <span>
+                          <ChevronDownIcon className="h-6 w-4" />
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 );
               })()}
@@ -129,7 +94,6 @@ export default function Header() {
           );
         }}
       </ConnectButton.Custom>
-
       <Faucet />
     </div>
   );
