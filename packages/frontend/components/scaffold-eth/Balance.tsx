@@ -57,10 +57,7 @@ export default function Balance({ address }: TBalanceProps) {
   }
 
   return (
-    <div
-      className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}
-      onClick={onToggleBalance}
-    >
+    <button className="p-2 flex flex-col items-center" onClick={onToggleBalance}>
       <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
@@ -74,6 +71,6 @@ export default function Balance({ address }: TBalanceProps) {
           </>
         )}
       </div>
-    </div>
+    </button>
   );
 }
