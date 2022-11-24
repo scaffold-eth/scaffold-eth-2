@@ -13,7 +13,7 @@ const tempAutoConnectConfig: TAutoConnect = {
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
-export default function WagmiCustomConnectButton() {
+export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
 
   return (
