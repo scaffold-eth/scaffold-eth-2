@@ -58,7 +58,7 @@ export default function Balance({ address }: TBalanceProps) {
 
   return (
     <button
-      className={`border-gray-400 rounded--xl p-2 flex flex-col items-center max-w-fit cursor-pointer  shadow-inner`}
+      className="border-gray-400 p-2 flex flex-col items-center max-w-fit cursor-pointer"
       onClick={onToggleBalance}
     >
       <div className="w-full flex items-center justify-center">
