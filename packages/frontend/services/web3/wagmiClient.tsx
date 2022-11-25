@@ -5,5 +5,4 @@ export const wagmiClient = createClient({
   autoConnect: false,
   connectors: wagmiConnectors,
   provider: appChains.provider,
-  webSocketProvider: appChains.webSocketProvider,
 });

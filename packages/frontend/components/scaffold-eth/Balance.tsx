@@ -23,8 +23,6 @@ export default function Balance({ address }: TBalanceProps) {
   } = useBalance({
     addressOrName: address,
     watch: true,
-    // ToDo: Read this value from config. Disabled for localhost.
-    cacheTime: 30_000,
   });
 
   const onToggleBalance = () => {
