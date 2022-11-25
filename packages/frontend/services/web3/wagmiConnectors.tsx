@@ -36,8 +36,8 @@ export const appChains = configureChains(
     // Sets pollingInterval if using chain's other than local hardhat chain
     ...(process.env.NEXT_PUBLIC_NETWORK !== "localhost"
       ? {
-          pollingInterval: process.env.NEXT_PUBLIC_POLLING_INTERVAL
-            ? parseInt(process.env.NEXT_PUBLIC_POLLING_INTERVAL, 10)
+          pollingInterval: process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL
+            ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL, 10)
             : 30_000,
         }
       : {}),
