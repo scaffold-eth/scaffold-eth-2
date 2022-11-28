@@ -42,12 +42,13 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
  * @dev used to filter all readOnly functions with zero params
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns {(JSX.Element | null)[]} - array of DisplayVariable component which has corresponding input field for param type and button to read
+ * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of DisplayVariable component
+ * which has corresponding input field for param type and button to read
  */
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-): (JSX.Element | null)[] => {
+): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
     methods: contractMethodsAndVariables
@@ -70,9 +71,13 @@ const getContractVariablesAndNoParamsReadMethods = (
  * @dev used to filter all readOnly functions with greater than or equal to 1 params
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns {(JSX.Element | null)[]} array of ReadOnlyFunctionForm component which has corresponding input field for param type and button to read
+ * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of ReadOnlyFunctionForm component
+ * which has corresponding input field for param type and button to read
  */
-const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
+const getContractReadOnlyMethodsWithParams = (
+  contract: Contract,
+  contractMethodsAndVariables: FunctionFragment[],
+): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
     methods: contractMethodsAndVariables
@@ -99,9 +104,13 @@ const getContractReadOnlyMethodsWithParams = (contract: Contract, contractMethod
  * @dev used to filter all write functions
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns {(JSX.Element | null)[]} array of WriteOnlyFunctionForm component which has corresponding input field for param type, txnValue input if required and button to send transaction
+ * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of WriteOnlyFunctionForm component
+ * which has corresponding input field for param type, txnValue input if required and button to send transaction
  */
-const getContractWriteMethods = (contract: Contract, contractMethodsAndVariables: FunctionFragment[]) => {
+const getContractWriteMethods = (
+  contract: Contract,
+  contractMethodsAndVariables: FunctionFragment[],
+): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
     methods: contractMethodsAndVariables
