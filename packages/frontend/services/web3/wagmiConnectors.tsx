@@ -37,7 +37,7 @@ export const appChains = configureChains(
     ...(process.env.NEXT_PUBLIC_NETWORK !== "localhost"
       ? {
           pollingInterval: process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL
-            ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL, 10)
+            ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL)
             : 30_000,
         }
       : {}),
