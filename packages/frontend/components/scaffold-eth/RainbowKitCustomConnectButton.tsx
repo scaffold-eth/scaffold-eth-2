@@ -20,17 +20,18 @@ export default function RainbowKitCustomConnectButton() {
 
   const publicNetworkName = process.env.NEXT_PUBLIC_NETWORK;
 
+  const definedChain = chains.find(data => {
+    return data.network === publicNetworkName?.toLowerCase();
+  });
+
   const onSwitchNetwork = () => {
-    const publicChainData = chains.find(data => {
-      return data.network === publicNetworkName?.toLowerCase();
-    });
-    if (publicChainData && switchNetwork) {
-      switchNetwork(publicChainData?.id);
+    if (definedChain && switchNetwork) {
+      switchNetwork(definedChain?.id);
       return;
     }
 
     // if no NEXT_PUBLIC_NETWORK detected by default switch to mainnet chainid 1
-    if (!publicChainData && switchNetwork) {
+    if (!definedChain && switchNetwork) {
       switchNetwork(1);
       return;
     }
@@ -58,7 +59,7 @@ export default function RainbowKitCustomConnectButton() {
                 );
               }
 
-              if (chain.unsupported) {
+              if (chain.unsupported || chain.id !== definedChain?.id) {
                 return (
                   <div className="rounded-xl shadow-lg p-2">
                     <span className="text-error mr-2">Wrong network selected !</span>
