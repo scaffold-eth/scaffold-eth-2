@@ -51,14 +51,26 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
         <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
           Read Functions
         </p>
-        {contractMethodsDisplay.length ? contractMethodsDisplay : "Loading read methods..."}
+        {contractMethodsDisplay?.loaded
+          ? contractMethodsDisplay.methods.length > 0
+            ? contractMethodsDisplay.methods
+            : "No read methods"
+          : "Loading read methods..."}
         <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
           Write Functions
         </p>
-        {contractWriteMethods.length ? contractWriteMethods : "Loading write methods..."}
+        {contractWriteMethods?.loaded
+          ? contractWriteMethods.methods.length > 0
+            ? contractWriteMethods.methods
+            : "No write methods"
+          : "Loading write methods..."}
       </div>
       <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">
-        {contractVariablesDisplay.length ? contractVariablesDisplay : "Loading contract variables..."}
+        {contractVariablesDisplay?.loaded
+          ? contractVariablesDisplay.methods.length > 0
+            ? contractVariablesDisplay.methods
+            : "No contract variables"
+          : "Loading contract variables..."}
       </div>
     </div>
   );
