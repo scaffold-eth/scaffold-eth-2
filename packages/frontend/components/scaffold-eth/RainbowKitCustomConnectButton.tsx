@@ -20,6 +20,9 @@ export default function RainbowKitCustomConnectButton() {
 
   const publicNetworkName = process.env.NEXT_PUBLIC_NETWORK;
 
+  // ToDo. Use "chain" from wagmi (as in wagmiConnectors)
+  // and get this by chain[publicNetworkName]
+  // - With this we could also use mainnet (instead of homestead)
   const definedChain = chains.find(data => {
     return data.network === publicNetworkName?.toLowerCase();
   });
