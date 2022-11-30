@@ -3,6 +3,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
+import { useSwitchNetwork } from "wagmi";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -15,6 +16,26 @@ const tempAutoConnectConfig: TAutoConnect = {
  */
 export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
+  const { chains, switchNetwork } = useSwitchNetwork();
+
+  const publicNetworkName = process.env.NEXT_PUBLIC_NETWORK;
+
+  const definedChain = chains.find(data => {
+    return data.network === publicNetworkName?.toLowerCase();
+  });
+
+  const onSwitchNetwork = () => {
+    if (definedChain && switchNetwork) {
+      switchNetwork(definedChain?.id);
+      return;
+    }
+
+    // if no NEXT_PUBLIC_NETWORK detected by default switch to mainnet chainid 1
+    if (!definedChain && switchNetwork) {
+      switchNetwork(1);
+      return;
+    }
+  };
 
   return (
     <ConnectButton.Custom>
@@ -38,11 +59,15 @@ export default function RainbowKitCustomConnectButton() {
                 );
               }
 
-              if (chain.unsupported) {
+              if (chain.unsupported || chain.id !== definedChain?.id) {
                 return (
-                  <button onClick={openChainModal} type="button">
-                    Wrong network
-                  </button>
+                  <div className="rounded-xl shadow-lg p-2">
+                    <span className="text-error mr-2">Wrong network selected! ({chain.name})</span>
+                    <span className="text-primary mr-2">You and should be on</span>
+                    <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
+                      {publicNetworkName}
+                    </button>
+                  </div>
                 );
               }
 

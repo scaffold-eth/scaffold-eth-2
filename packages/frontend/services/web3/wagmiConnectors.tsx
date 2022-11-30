@@ -34,7 +34,7 @@ export const appChains = configureChains(
   {
     stallTimeout: 3_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
-    ...(process.env.NEXT_PUBLIC_NETWORK !== "localhost"
+    ...(process.env.NEXT_PUBLIC_NETWORK !== "hardhat"
       ? {
           pollingInterval: process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL
             ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL)
