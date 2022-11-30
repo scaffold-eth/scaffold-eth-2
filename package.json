@@ -4,8 +4,8 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/frontend",
-      "packages/hardhat"
+      "packages/hardhat",
+      "packages/nextjs"
     ]
   },
   "scripts": {
@@ -16,9 +16,9 @@
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
-    "start": "yarn workspace @se-2/frontend dev",
-    "next:lint": "yarn workspace @se-2/frontend lint",
-    "next:format": "yarn workspace @se-2/frontend format",
+    "start": "yarn workspace @se-2/nextjs dev",
+    "next:lint": "yarn workspace @se-2/nextjs lint",
+    "next:format": "yarn workspace @se-2/nextjs format",
     "postinstall": "husky install",
     "precommit": "lint-staged"
   },

@@ -2,7 +2,7 @@ const path = require("path");
 
 const buildNextEslintCommand = (filenames) =>
   `yarn next:lint --fix --file ${filenames
-    .map((f) => path.relative(path.join("packages", "frontend"), f))
+    .map((f) => path.relative(path.join("packages", "nextjs"), f))
     .join(" --file ")}`;
 
 const buildHardhatEslintCommand = (filenames) =>
@@ -11,6 +11,6 @@ const buildHardhatEslintCommand = (filenames) =>
     .join(" ")}`;
 
 module.exports = {
-  "packages/frontend/**/*.{ts,tsx}": [buildNextEslintCommand],
+  "packages/nextjs/**/*.{ts,tsx}": [buildNextEslintCommand],
   "packages/hardhat/**/*.{ts,tsx}": [buildHardhatEslintCommand],
 };

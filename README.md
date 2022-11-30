@@ -22,7 +22,7 @@ cd se-2
 yarn install
 ```
 
-2. Start your frontend on the first terminal
+2. Start your NextJS app on the first terminal
 
 ```
 yarn start
@@ -45,7 +45,7 @@ Visit your app on: `http://localhost:3000`.
 Run smart contract test with `yarn hardhat:test`
 
 - Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
-- Edit your frontend in `packages/frontend/pages`
+- Edit your frontend in `packages/nextjs/pages`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
 ## Deploying Smart Contracts

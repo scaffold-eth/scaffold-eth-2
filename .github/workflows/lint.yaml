@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run frontend lint
+      - name: Run nextjs lint
         run: yarn next:lint --max-warnings=0
 
       - name: Run hardhat lint

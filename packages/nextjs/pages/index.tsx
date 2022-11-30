@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p className="text-center text-xl">
-          Get started by editing <code className="italic bg-gray-200">packages/frontend/pages/index.tsx</code>
+          Get started by editing <code className="italic bg-gray-200">packages/nextjs/pages/index.tsx</code>
         </p>
 
         <Link href={"/debug"}>
