@@ -62,8 +62,8 @@ export default function RainbowKitCustomConnectButton() {
               if (chain.unsupported || chain.id !== definedChain?.id) {
                 return (
                   <div className="rounded-xl shadow-lg p-2">
-                    <span className="text-error mr-2">Wrong network selected !</span>
-                    <span className="text-primary mr-2">you should be on</span>
+                    <span className="text-error mr-2">Wrong network selected! ({chain.name})</span>
+                    <span className="text-primary mr-2">You and should be on</span>
                     <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
                       {publicNetworkName}
                     </button>
