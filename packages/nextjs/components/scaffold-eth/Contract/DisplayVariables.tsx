@@ -26,7 +26,6 @@ const DisplayVariable = ({ contractAddress, functionFragment, displayVariablesRe
     },
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     (async () => {
       await refetch();
