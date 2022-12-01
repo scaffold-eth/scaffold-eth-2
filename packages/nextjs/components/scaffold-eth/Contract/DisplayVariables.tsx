@@ -1,5 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
@@ -8,9 +8,10 @@ import { toast } from "~~/components/scaffold-eth";
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
+  displayVariablesRefresh: boolean;
 };
 
-const DisplayVariable = ({ contractAddress, functionFragment }: TDisplayVariableProps) => {
+const DisplayVariable = ({ contractAddress, functionFragment, displayVariablesRefresh }: TDisplayVariableProps) => {
   const {
     data: result,
     isFetching,
@@ -24,6 +25,13 @@ const DisplayVariable = ({ contractAddress, functionFragment }: TDisplayVariable
       toast.error(error.message);
     },
   });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    (async () => {
+      await refetch();
+    })();
+  }, [refetch, displayVariablesRefresh]);
 
   return (
     <div className="border-b-2 border-black space-y-1 pb-2">

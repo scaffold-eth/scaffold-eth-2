@@ -5,6 +5,7 @@ import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
+import { Dispatch, SetStateAction } from "react";
 
 type GeneratedContractType = {
   address: string;
@@ -48,6 +49,7 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
+  displayVariablesRefresh: boolean,
 ): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
@@ -58,7 +60,12 @@ const getContractVariablesAndNoParamsReadMethods = (
         if (isQueryableWithNoParams) {
           return (
             // DV -> DisplayVariables
-            <DisplayVariable key={`DV_${fn.name}_${index}`} functionFragment={fn} contractAddress={contract.address} />
+            <DisplayVariable
+              key={`DV_${fn.name}_${index}`}
+              functionFragment={fn}
+              contractAddress={contract.address}
+              displayVariablesRefresh={displayVariablesRefresh}
+            />
           );
         }
         return null;
@@ -110,6 +117,7 @@ const getContractReadOnlyMethodsWithParams = (
 const getContractWriteMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
+  setDisplayVariablesRefresh: Dispatch<SetStateAction<boolean>>,
 ): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
@@ -123,6 +131,7 @@ const getContractWriteMethods = (
               key={`FFW_${fn.name}_${index}`}
               functionFragment={fn}
               contractAddress={contract.address}
+              setDisplayVariablesRefresh={setDisplayVariablesRefresh}
             />
           );
         }
