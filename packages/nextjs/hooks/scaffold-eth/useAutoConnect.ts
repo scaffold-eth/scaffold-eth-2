@@ -29,19 +29,23 @@ const getInitialConnector = (
   config: TAutoConnect,
   previousWalletId: string,
   connectors: Connector<any, any, any>[],
+  isConnected: boolean,
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
 
-  if (!previousWalletId) {
+  if (!previousWalletId && isConnected) {
     // The user was not connected to a wallet
     if (allowBurner && config.autoConnect) {
-      const connector = connectors.find(f => f.id === burnerWalletId);
+      const connector = connectors.find(data => {
+        return data.id === burnerWalletId;
+      });
+
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
     if (config.autoConnect) {
-      const connector = connectors.find(f => f.id === previousWalletId);
+      const connector = connectors.find(data => data.id === previousWalletId);
       return { connector };
     }
   }
@@ -70,7 +74,7 @@ export const useAutoConnect = (config: TAutoConnect): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
-    const initialConnector = getInitialConnector(config, walletId, connectState.connectors);
+    const initialConnector = getInitialConnector(config, walletId, connectState.connectors, accountState.isConnected);
 
     if (initialConnector?.connector) {
       connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
