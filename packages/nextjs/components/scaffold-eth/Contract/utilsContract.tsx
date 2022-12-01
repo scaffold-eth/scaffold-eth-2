@@ -49,7 +49,7 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-  displayVariablesRefresh: boolean,
+  refreshDisplayVariables: boolean,
 ): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
@@ -64,7 +64,7 @@ const getContractVariablesAndNoParamsReadMethods = (
               key={`DV_${fn.name}_${index}`}
               functionFragment={fn}
               contractAddress={contract.address}
-              displayVariablesRefresh={displayVariablesRefresh}
+              refreshDisplayVariables={refreshDisplayVariables}
             />
           );
         }
@@ -117,7 +117,7 @@ const getContractReadOnlyMethodsWithParams = (
 const getContractWriteMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-  setDisplayVariablesRefresh: Dispatch<SetStateAction<boolean>>,
+  setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>,
 ): { loaded: boolean; methods: (JSX.Element | null)[] } => {
   return {
     loaded: true,
@@ -131,7 +131,7 @@ const getContractWriteMethods = (
               key={`FFW_${fn.name}_${index}`}
               functionFragment={fn}
               contractAddress={contract.address}
-              setDisplayVariablesRefresh={setDisplayVariablesRefresh}
+              setRefreshDisplayVariables={setRefreshDisplayVariables}
             />
           );
         }

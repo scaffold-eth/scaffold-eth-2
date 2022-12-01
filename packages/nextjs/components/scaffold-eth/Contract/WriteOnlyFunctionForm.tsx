@@ -21,13 +21,13 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
 type TWriteOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
-  setDisplayVariablesRefresh: Dispatch<SetStateAction<boolean>>;
+  setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>;
 };
 
 export const WriteOnlyFunctionForm = ({
   functionFragment,
   contractAddress,
-  setDisplayVariablesRefresh,
+  setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
@@ -76,7 +76,7 @@ export const WriteOnlyFunctionForm = ({
             },
           },
         );
-        setDisplayVariablesRefresh(prevState => !prevState);
+        setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
         toast.error(message);

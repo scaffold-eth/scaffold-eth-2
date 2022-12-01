@@ -21,7 +21,7 @@ type TContractUIProps = {
 const ContractUI = ({ contractName }: TContractUIProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
-  const [displayVariablesRefresh, setDisplayVariablesRefresh] = useState(false);
+  const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
@@ -40,15 +40,15 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   const displayedContractFunctions = useMemo(() => getAllContractFunctions(contract), [contract]);
 
   const contractVariablesDisplay = useMemo(() => {
-    return getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions, displayVariablesRefresh);
-  }, [contract, displayedContractFunctions, displayVariablesRefresh]);
+    return getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions, refreshDisplayVariables);
+  }, [contract, displayedContractFunctions, refreshDisplayVariables]);
 
   const contractMethodsDisplay = useMemo(
     () => getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions),
     [contract, displayedContractFunctions],
   );
   const contractWriteMethods = useMemo(
-    () => getContractWriteMethods(contract, displayedContractFunctions, setDisplayVariablesRefresh),
+    () => getContractWriteMethods(contract, displayedContractFunctions, setRefreshDisplayVariables),
     [contract, displayedContractFunctions],
   );
 

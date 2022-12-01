@@ -8,10 +8,10 @@ import { toast } from "~~/components/scaffold-eth";
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
-  displayVariablesRefresh: boolean;
+  refreshDisplayVariables: boolean;
 };
 
-const DisplayVariable = ({ contractAddress, functionFragment, displayVariablesRefresh }: TDisplayVariableProps) => {
+const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
   const {
     data: result,
     isFetching,
@@ -30,7 +30,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, displayVariablesRe
     (async () => {
       await refetch();
     })();
-  }, [refetch, displayVariablesRefresh]);
+  }, [refetch, refreshDisplayVariables]);
 
   return (
     <div className="border-b-2 border-black space-y-1 pb-2">
