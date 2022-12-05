@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
-import { useEthPrice } from "~~/hooks/scaffold-eth";
+import { useAppStore } from "~~/services/store/store";
 
 type TBalanceProps = {
   address: string;
@@ -13,8 +13,7 @@ export default function Balance({ address }: TBalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
 
-  // ToDo. We could move this to zustand state.
-  const price = useEthPrice();
+  const price = useAppStore(state => state.priceSlice.priceData).price;
 
   const {
     data: fetchedBalanceData,
