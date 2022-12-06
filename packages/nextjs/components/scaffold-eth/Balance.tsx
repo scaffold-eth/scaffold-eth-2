@@ -13,7 +13,7 @@ export default function Balance({ address }: TBalanceProps) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
 
-  const price = useAppStore(state => state.priceSlice.priceData).price;
+  const price = useAppStore(state => state.ethPriceSlice.ethPrice);
 
   const {
     data: fetchedBalanceData,
