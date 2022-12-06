@@ -1,5 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
@@ -21,9 +21,14 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
 type TWriteOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
+  setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>;
 };
 
-export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWriteOnlyFunctionFormProps) => {
+export const WriteOnlyFunctionForm = ({
+  functionFragment,
+  contractAddress,
+  setRefreshDisplayVariables,
+}: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
   const writeTxn = useTransactor();
@@ -60,6 +65,7 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWr
       try {
         // ToDo. Use a transactor component.
         await writeTxn(writeAsync());
+        setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
         toast.error(message);
