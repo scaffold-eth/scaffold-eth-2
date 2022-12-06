@@ -22,7 +22,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
     if (price > 0) {
       setEthPrice(price);
     }
-  }, [price]);
+  }, [setEthPrice, price]);
 
   return (
     <WagmiConfig client={wagmiClient}>
