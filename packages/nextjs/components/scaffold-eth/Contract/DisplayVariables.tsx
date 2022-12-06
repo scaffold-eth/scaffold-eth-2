@@ -27,9 +27,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
   });
 
   useEffect(() => {
-    (async () => {
-      await refetch();
-    })();
+    refetch();
   }, [refetch, refreshDisplayVariables]);
 
   return (
