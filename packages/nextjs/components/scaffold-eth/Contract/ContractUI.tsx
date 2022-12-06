@@ -1,4 +1,5 @@
 import { Contract } from "ethers";
+import { useMemo, useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import {
   getAllContractFunctions,
@@ -20,6 +21,7 @@ type TContractUIProps = {
 const ContractUI = ({ contractName }: TContractUIProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
+  const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
@@ -35,11 +37,20 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     signerOrProvider: provider,
   });
 
-  const displayedContractFunctions = getAllContractFunctions(contract);
+  const displayedContractFunctions = useMemo(() => getAllContractFunctions(contract), [contract]);
 
-  const contractVariablesDisplay = getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions);
-  const contractMethodsDisplay = getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions);
-  const contractWriteMethods = getContractWriteMethods(contract, displayedContractFunctions);
+  const contractVariablesDisplay = useMemo(() => {
+    return getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions, refreshDisplayVariables);
+  }, [contract, displayedContractFunctions, refreshDisplayVariables]);
+
+  const contractMethodsDisplay = useMemo(
+    () => getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions),
+    [contract, displayedContractFunctions],
+  );
+  const contractWriteMethods = useMemo(
+    () => getContractWriteMethods(contract, displayedContractFunctions, setRefreshDisplayVariables),
+    [contract, displayedContractFunctions],
+  );
 
   if (!contractAddress) {
     return <p className="text-2xl">No Contract found !</p>;
