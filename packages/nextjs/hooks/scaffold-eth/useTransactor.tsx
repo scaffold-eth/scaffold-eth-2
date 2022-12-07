@@ -1,4 +1,4 @@
-import { TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
+import { TransactionRequest, TransactionResponse, TransactionReceipt } from "@ethersproject/abstract-provider";
 import { SendTransactionResult } from "@wagmi/core";
 import { BigNumber, ethers, Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
@@ -16,7 +16,7 @@ type TTransactionFunc = (
 export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc | undefined => {
   /**
    * ### Summary 
-    if signer is provided in params use it(this means dev wants to a raw transaction)
+    if signer is provided in params use it(this means dev wants to send a raw transaction)
     else use the signer from connect wallet (mostly its an wagmi writeTxn)
    */
   let signer = _signer;
@@ -26,7 +26,9 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
   }
 
   const result: TTransactionFunc = async (tx, callback) => {
-    let transactionResponse: TransactionResponse | SendTransactionResult | undefined;
+    let toastId = null;
+    let transactionReceipt: TransactionReceipt | undefined;
+    let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
     if (signer) {
       try {
         const chainId = await signer.getChainId();
@@ -47,19 +49,18 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
 
         if (tx instanceof Promise) {
           if (DEBUG) console.log("AWAITING TX", tx);
-          transactionResponse = await toast.promise(
-            tx,
-            {
-              loading: "Mining transaction, Hold tight!",
-              success: "Mined successfully !",
-              error: "Error while processing the transaction",
-            },
-            {
-              success: {
-                icon: "🔥",
-              },
-            },
-          );
+
+          toastId = toast.loading("Awaiting for user confirmation");
+          const transactionRes = await tx;
+          toast.remove(toastId);
+
+          toastId = toast.loading("Mining transaction, Hold tight!");
+          transactionReceipt = await transactionRes.wait();
+          toast.remove(toastId);
+
+          toastId = toast.success("Mined successfully !", {
+            icon: "🎉",
+          });
         } else if (tx != null) {
           if (!tx.gasPrice) {
             tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
@@ -69,39 +70,28 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
           }
           if (DEBUG) console.log("RUNNING TX", tx);
 
-          transactionResponse = await toast.promise(
-            signer.sendTransaction(tx),
-            {
-              loading: "Mining transaction, Hold tight!",
-              success: "Mined successfully !",
-              error: "Error while processing the transaction",
-            },
-            {
-              success: {
-                icon: "🔥",
-              },
-            },
-          );
+          toastId = toast.loading("Awaiting for user confirmation");
+          const transactionRes = await signer.sendTransaction(tx);
+          toast.remove(toastId);
+
+          toastId = toast.loading("Mining transaction, Hold tight!");
+          transactionReceipt = await transactionRes.wait();
+          toast.remove(toastId);
+
+          toastId = toast.success("Mined successfully !", {
+            icon: "🎉",
+          });
         }
 
-        if (transactionResponse) {
-          if (callback != null && transactionResponse?.hash != null) {
-            let listeningInterval: NodeJS.Timeout | undefined = undefined;
-            listeningInterval = setInterval(async (): Promise<void> => {
-              if (transactionResponse?.hash != null) {
-                console.log("CHECK IN ON THE TX", transactionResponse, provider);
-                const currentTransactionReceipt = await provider?.getTransactionReceipt(transactionResponse.hash);
-                if (currentTransactionReceipt && currentTransactionReceipt.confirmations) {
-                  callback({ ...transactionResponse, ...currentTransactionReceipt });
-                  if (listeningInterval) clearInterval(listeningInterval);
-                }
-              }
-            }, 500);
+        if (transactionReceipt) {
+          if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
+            callback({ ...transactionResponse, ...transactionReceipt });
           }
-
-          await transactionResponse.wait();
         }
       } catch (error: any) {
+        if (toastId) {
+          toast.remove(toastId);
+        }
         // TODO handle error properly
         console.log("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
         const message = getParsedEthersError(error);
