@@ -93,7 +93,11 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         // TODO handle error properly
         console.log("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
         const message = getParsedEthersError(error);
-        toast.error(message);
+        toast.error(message, {
+          style: {
+            wordBreak: "break-all",
+          },
+        });
       }
     }
 

@@ -68,7 +68,11 @@ export const WriteOnlyFunctionForm = ({
         setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message);
+        toast.error(message, {
+          style: {
+            wordBreak: "break-all",
+          },
+        });
       }
     }
   };
