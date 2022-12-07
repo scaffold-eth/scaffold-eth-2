@@ -5,6 +5,7 @@ import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
+import { toast as customToast } from "~~/components/scaffold-eth/index";
 
 const DEBUG = true;
 
@@ -40,7 +41,6 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
           etherscanNetwork = networkName + ".";
         }
 
-        // TODO add etherscan url in toast
         let etherscanTxUrl = "https://" + etherscanNetwork + "etherscan.io/tx/";
         if (chainId && chainId === 100) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,13 +54,12 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
           const transactionRes = await tx;
           toast.remove(toastId);
 
+          // TODO add etherscan url in loading toast
           toastId = toast.loading("Mining transaction, Hold tight!");
           transactionReceipt = await transactionRes.wait();
           toast.remove(toastId);
 
-          toastId = toast.success("Mined successfully !", {
-            icon: "🎉",
-          });
+          customToast.tx(`${etherscanTxUrl}${transactionRes.hash}`);
         } else if (tx != null) {
           if (!tx.gasPrice) {
             tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
@@ -74,13 +73,12 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
           const transactionRes = await signer.sendTransaction(tx);
           toast.remove(toastId);
 
+          // TODO add etherscan url in loading toast
           toastId = toast.loading("Mining transaction, Hold tight!");
           transactionReceipt = await transactionRes.wait();
           toast.remove(toastId);
 
-          toastId = toast.success("Mined successfully !", {
-            icon: "🎉",
-          });
+          customToast.tx(`${etherscanTxUrl}${transactionRes.hash}`);
         }
 
         if (transactionReceipt) {
