@@ -6,6 +6,7 @@ import { useSigner } from "wagmi";
 import toast from "react-hot-toast";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { toast as customToast } from "~~/components/scaffold-eth/index";
+import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
@@ -33,20 +34,10 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
     let transactionReceipt: TransactionReceipt | undefined;
     let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
     try {
-      const chainId = await signer.getChainId();
       const provider = signer.provider;
-      const networkName = (await provider?.getNetwork())?.name;
+      const network = await provider?.getNetwork();
 
-      let etherscanNetwork = "";
-      if (networkName && chainId && chainId > 1) {
-        etherscanNetwork = networkName + ".";
-      }
-
-      let etherscanTxUrl = "https://" + etherscanNetwork + "etherscan.io/tx/";
-      if (chainId && chainId === 100) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        etherscanTxUrl = "https://blockscout.com/poa/xdai/tx/";
-      }
+      const etherscanTxBaseUrl = network ? getBlockExplorerTxLink(network) : "";
 
       if (tx instanceof Promise) {
         toastId = toast.loading("Awaiting for user confirmation");
@@ -58,7 +49,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         transactionReceipt = await transactionRes.wait();
         toast.remove(toastId);
 
-        customToast.tx(`${etherscanTxUrl}${transactionRes.hash}`);
+        customToast.tx(`${etherscanTxBaseUrl}/${transactionRes.hash}`);
       } else if (tx != null) {
         if (!tx.gasPrice) {
           tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
@@ -76,7 +67,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         transactionReceipt = await transactionRes.wait();
         toast.remove(toastId);
 
-        customToast.tx(`${etherscanTxUrl}${transactionRes.hash}`);
+        customToast.tx(`${etherscanTxBaseUrl}/${transactionRes.hash}`);
       }
 
       if (transactionReceipt) {
