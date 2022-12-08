@@ -3,7 +3,7 @@ import { Network } from "@ethersproject/networks";
 export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   const { name, chainId } = network;
 
-  if (chainId === 31337 || chainId === 13337) {
+  if (chainId === 31337 || chainId === 1337) {
     // If its localChain then return empty sting
     return "";
   }
