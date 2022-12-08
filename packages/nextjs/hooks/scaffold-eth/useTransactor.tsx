@@ -40,17 +40,12 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       const etherscanTxBaseUrl = network ? getBlockExplorerTxLink(network) : "";
 
       if (tx instanceof Promise) {
+        // Tx is already prepared by the caller
         toastId = toast.loading("Awaiting for user confirmation");
-        const transactionRes = await tx;
+        transactionResponse = await tx;
         toast.remove(toastId);
-
-        // TODO add etherscan url in loading toast
-        toastId = toast.loading("Mining transaction, Hold tight!");
-        transactionReceipt = await transactionRes.wait();
-        toast.remove(toastId);
-
-        customToast.tx(`${etherscanTxBaseUrl}/${transactionRes.hash}`);
       } else if (tx != null) {
+        // Raw tx
         if (!tx.gasPrice) {
           tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
         }
@@ -59,16 +54,19 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         }
 
         toastId = toast.loading("Awaiting for user confirmation");
-        const transactionRes = await signer.sendTransaction(tx);
+        transactionResponse = await signer.sendTransaction(tx);
         toast.remove(toastId);
-
-        // TODO add etherscan url in loading toast
-        toastId = toast.loading("Mining transaction, Hold tight!");
-        transactionReceipt = await transactionRes.wait();
-        toast.remove(toastId);
-
-        customToast.tx(`${etherscanTxBaseUrl}/${transactionRes.hash}`);
+      } else {
+        console.error("incorrect transaction passed to transactor");
+        throw new Error("Incorrect Transaction passed to transactor");
       }
+
+      // TODO add etherscan url in loading toast
+      toastId = toast.loading("Mining transaction, Hold tight!");
+      transactionReceipt = await transactionResponse.wait();
+      toast.remove(toastId);
+
+      customToast.tx(`${etherscanTxBaseUrl}/${transactionResponse.hash}`);
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
