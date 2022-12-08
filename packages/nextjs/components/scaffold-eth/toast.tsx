@@ -68,7 +68,7 @@ function TxToast(message: string, blockExplorerLink?: string, options?: { icon: 
       </div>
     ),
     {
-      duration: 3000,
+      duration: loading ? Infinity : 3000,
     },
   );
 }
