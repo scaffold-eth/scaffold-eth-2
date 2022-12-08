@@ -37,13 +37,10 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       const provider = signer.provider;
       const network = await provider?.getNetwork();
 
-      const etherscanTxBaseUrl = network ? getBlockExplorerTxLink(network) : "";
-
+      toastId = customToast.txnLoading("Awaiting for user confirmation", "");
       if (tx instanceof Promise) {
         // Tx is already prepared by the caller
-        toastId = toast.loading("Awaiting for user confirmation");
         transactionResponse = await tx;
-        toast.remove(toastId);
       } else if (tx != null) {
         // Raw tx
         if (!tx.gasPrice) {
@@ -53,19 +50,19 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
           tx.gasLimit = BigNumber.from(ethers.utils.hexlify(120000));
         }
 
-        toastId = toast.loading("Awaiting for user confirmation");
         transactionResponse = await signer.sendTransaction(tx);
-        toast.remove(toastId);
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }
+      toast.remove(toastId);
 
-      // TODO add etherscan url in loading toast
-      toastId = toast.loading("Mining transaction, Hold tight!");
+      const etherscanTxnURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
+
+      toastId = customToast.txnLoading("Mining transaction, Hold tight!", etherscanTxnURL);
       transactionReceipt = await transactionResponse.wait();
       toast.remove(toastId);
 
-      customToast.tx(`${etherscanTxBaseUrl}/${transactionResponse.hash}`);
+      customToast.txnSuccess("Mined successfully !", etherscanTxnURL);
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
