@@ -7,8 +7,6 @@ import toast from "react-hot-toast";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { toast as customToast } from "~~/components/scaffold-eth/index";
 
-const DEBUG = true;
-
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
   callback?: ((_param: any) => void) | undefined,
@@ -51,8 +49,6 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       }
 
       if (tx instanceof Promise) {
-        if (DEBUG) console.log("AWAITING TX", tx);
-
         toastId = toast.loading("Awaiting for user confirmation");
         const transactionRes = await tx;
         toast.remove(toastId);
@@ -70,7 +66,6 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         if (!tx.gasLimit) {
           tx.gasLimit = BigNumber.from(ethers.utils.hexlify(120000));
         }
-        if (DEBUG) console.log("RUNNING TX", tx);
 
         toastId = toast.loading("Awaiting for user confirmation");
         const transactionRes = await signer.sendTransaction(tx);
@@ -94,7 +89,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         toast.remove(toastId);
       }
       // TODO handle error properly
-      console.log("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
+      console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
       const message = getParsedEthersError(error);
       toast.error(message, {
         style: {
