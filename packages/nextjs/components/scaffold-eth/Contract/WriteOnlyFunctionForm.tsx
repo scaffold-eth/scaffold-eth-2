@@ -63,16 +63,11 @@ export const WriteOnlyFunctionForm = ({
 
     if (writeAsync && writeTxn) {
       try {
-        // ToDo. Use a transactor component.
         await writeTxn(writeAsync());
         setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message, {
-          style: {
-            wordBreak: "break-all",
-          },
-        });
+        toast.error(message);
       }
     }
   };
