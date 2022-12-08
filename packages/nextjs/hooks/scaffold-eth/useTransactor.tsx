@@ -57,8 +57,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         transactionResponse = await signer.sendTransaction(tx);
         toast.remove(toastId);
       } else {
-        console.error("incorrect transaction passed to transactor");
-        throw new Error("Incorrect Transaction passed to transactor");
+        throw new Error("Incorrect transaction passed to transactor");
       }
 
       // TODO add etherscan url in loading toast
