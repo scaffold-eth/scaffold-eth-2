@@ -43,7 +43,7 @@ function TxToast(blockExplorerLink: string) {
       </div>
     ),
     {
-      duration: 10000000000,
+      duration: 3000,
     },
   );
 }
