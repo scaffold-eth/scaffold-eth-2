@@ -29,11 +29,11 @@ const getInitialConnector = (
   config: TAutoConnect,
   previousWalletId: string,
   connectors: Connector<any, any, any>[],
-  isConnected: boolean,
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
 
-  if (!previousWalletId && isConnected) {
+  // connect to burner wallet if no prevous wallet selected  or default public network is hardhat
+  if (!previousWalletId && process.env.NEXT_PUBLIC_NETWORK === "hardhat") {
     // The user was not connected to a wallet
     if (allowBurner && config.autoConnect) {
       const connector = connectors.find(data => {
@@ -74,7 +74,7 @@ export const useAutoConnect = (config: TAutoConnect): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
-    const initialConnector = getInitialConnector(config, walletId, connectState.connectors, accountState.isConnected);
+    const initialConnector = getInitialConnector(config, walletId, connectState.connectors);
 
     if (initialConnector?.connector) {
       connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
