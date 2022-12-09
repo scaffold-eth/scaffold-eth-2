@@ -56,13 +56,13 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       }
       toast.remove(toastId);
 
-      const etherscanTxnURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
+      const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
-      toastId = customToast.txnLoading("Mining transaction, Hold tight!", etherscanTxnURL);
+      toastId = customToast.txnLoading("Mining transaction, Hold tight!", blockExplorerTxURL);
       transactionReceipt = await transactionResponse.wait();
       toast.remove(toastId);
 
-      customToast.txnSuccess("Mined successfully !", etherscanTxnURL);
+      customToast.txnSuccess("Mined successfully !", blockExplorerTxURL);
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
