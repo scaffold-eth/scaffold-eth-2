@@ -9,12 +9,12 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   }
 
   let blockExplorerNetwork = "";
-  if (name && chainId && chainId > 1) {
+  if (name && chainId > 1) {
     blockExplorerNetwork = name + ".";
   }
 
   let blockExplorerBaseTxUrl = "https://" + blockExplorerNetwork + "etherscan.io/tx/";
-  if (chainId && chainId === 100) {
+  if (chainId === 100) {
     blockExplorerBaseTxUrl = "https://blockscout.com/poa/xdai/tx/";
   }
 
