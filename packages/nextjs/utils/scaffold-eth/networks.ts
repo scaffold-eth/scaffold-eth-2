@@ -8,17 +8,17 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
     return "";
   }
 
-  let etherscanNetwork = "";
+  let blockExplorerNetwork = "";
   if (name && chainId && chainId > 1) {
-    etherscanNetwork = name + ".";
+    blockExplorerNetwork = name + ".";
   }
 
-  let etherscanBaseTxUrl = "https://" + etherscanNetwork + "etherscan.io/tx/";
+  let blockExplorerBaseTxUrl = "https://" + blockExplorerNetwork + "etherscan.io/tx/";
   if (chainId && chainId === 100) {
-    etherscanBaseTxUrl = "https://blockscout.com/poa/xdai/tx/";
+    blockExplorerBaseTxUrl = "https://blockscout.com/poa/xdai/tx/";
   }
 
-  const etherscanTxnURL = etherscanBaseTxUrl + txnHash;
+  const blockExplorerTxURL = blockExplorerBaseTxUrl + txnHash;
 
-  return etherscanTxnURL;
+  return blockExplorerTxURL;
 }
