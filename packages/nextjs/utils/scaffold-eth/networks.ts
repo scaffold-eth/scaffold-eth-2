@@ -1,5 +1,11 @@
 import { Network } from "@ethersproject/networks";
 
+/**
+ * Gives the block explorer transaction URL.
+ * @param network
+ * @param txnHash
+ * @dev returns empty string if the network is localChain
+ */
 export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   const { name, chainId } = network;
 

@@ -13,12 +13,13 @@ type TTransactionFunc = (
   callback?: ((_param: any) => void) | undefined,
 ) => Promise<Record<string, any> | undefined>;
 
+/**
+ * Runs TXs showing UI feedback.
+ * @param _signer
+ * @param gasPrice
+ * @dev If signer is provided => dev wants to send a raw tx.
+ */
 export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc | undefined => {
-  /**
-   * ### Summary 
-    if signer is provided in params use it(this means dev wants to send a raw transaction)
-    else use the signer from connect wallet (mostly its an wagmi writeTxn)
-   */
   let signer = _signer;
   const { data } = useSigner();
   if (signer === undefined && data) {
