@@ -27,14 +27,20 @@ function TxToast(message: string, blockExplorerLink?: string, options?: { icon: 
   return hotToast.custom(
     t => (
       <div
-        className={`flex flex-row items-center justify-between max-w-sm bg-white p-4 text-black shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-xl relative transition-all duration-500 ease-in-out${
+        className={`flex flex-row items-center justify-between max-w-sm bg-white p-4 text-black shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-xl relative transition-all duration-500 ease-in-out ${
           t.visible ? "top-0" : "-top-96"
         }`}
       >
-        <p className="text-2xl self-start my-0">
+        <p
+          className={`text-2xl self-start mb-0 ${blockExplorerLink && blockExplorerLink.length > 0 ? "mt-2" : "mt-1"}`}
+        >
           {loading ? <Spinner fillColor="green-500" /> : options?.icon ? options.icon : ""}
         </p>
-        <div className="flex flex-col ml-4 cursor-default">
+        <div
+          className={`flex flex-col ml-4 cursor-default ${
+            blockExplorerLink && blockExplorerLink.length > 0 ? "mt-2" : "mt-1"
+          }`}
+        >
           <p className="my-0">{message}</p>
           {blockExplorerLink && blockExplorerLink.length > 0 ? (
             <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
@@ -42,7 +48,7 @@ function TxToast(message: string, blockExplorerLink?: string, options?: { icon: 
             </a>
           ) : null}
         </div>
-        <div className="absolute top-2 right-2 cursor-pointer text-lg" onClick={() => hotToast.dismiss(t.id)}>
+        <div className="absolute top-1 right-1 cursor-pointer text-lg" onClick={() => hotToast.dismiss(t.id)}>
           <XMarkIcon className="w-6 cursor-pointer" onClick={() => hotToast.remove(t.id)} />
         </div>
       </div>
