@@ -32,7 +32,7 @@ export default function Faucet() {
   };
 
   // Render only on local chain
-  if (ConnectedChain?.id !== chain.hardhat.id) {
+  if (!ConnectedChain || ConnectedChain.id !== chain.hardhat.id) {
     return null;
   }
 
