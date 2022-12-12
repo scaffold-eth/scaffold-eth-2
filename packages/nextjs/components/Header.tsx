@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
 import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
-import { BugAntIcon } from "@heroicons/react/24/outline";
+import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
@@ -12,7 +12,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link href={href} passHref>
       <a
-        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-5 gap-1`}
+        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-5 gap-2`}
       >
         {children}
       </a>
@@ -42,8 +42,14 @@ export default function Header() {
           </li>
           <li>
             <NavLink href="/debug">
-              <BugAntIcon className="text-black h-4 w-4" />
+              <BugAntIcon className="h-4 w-4" />
               Debug Contracts
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href="/example-ui">
+              <SparklesIcon className="h-4 w-4" />
+              Example UI
             </NavLink>
           </li>
         </ul>

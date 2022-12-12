@@ -61,7 +61,7 @@ export default function RainbowKitCustomConnectButton() {
 
               return (
                 <div className="px-2 flex justify-end items-center">
-                  <button onClick={openChainModal} className="btn btn-secondary btn-sm" type="button">
+                  <button onClick={openChainModal} className="btn btn-secondary btn-sm font-normal" type="button">
                     {chain.hasIcon && (
                       <div className="mt-1">
                         {chain.iconUrl && (
@@ -69,7 +69,7 @@ export default function RainbowKitCustomConnectButton() {
                         )}
                       </div>
                     )}
-                    <span className="m-2 font-bold text-md">{chain.name}</span>
+                    <span className="m-2">{chain.name}</span>
                     <span>
                       <ChevronDownIcon className="h-6 w-4" />
                     </span>
@@ -78,8 +78,7 @@ export default function RainbowKitCustomConnectButton() {
                   <div className="flex justify-center items-center border-1 rounded-lg px-1">
                     <Balance address={account.address} />
                     <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm">
-                      <span className="m-1 font-bold text-md">{account.displayName}</span>
-
+                      <span className="m-1">{account.displayName}</span>
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />
                       </span>
