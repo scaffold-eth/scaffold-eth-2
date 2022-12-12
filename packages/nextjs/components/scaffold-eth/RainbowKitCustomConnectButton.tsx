@@ -21,18 +21,11 @@ export default function RainbowKitCustomConnectButton() {
   const { switchNetwork } = useSwitchNetwork();
 
   const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as chainKeyTypes;
-
   const definedChain = chain[publicNetworkName];
 
   const onSwitchNetwork = () => {
     if (definedChain && switchNetwork) {
       switchNetwork(definedChain?.id);
-      return;
-    }
-
-    // if no NEXT_PUBLIC_NETWORK detected by default switch to mainnet chainid 1
-    if (!definedChain && switchNetwork) {
-      switchNetwork(1);
       return;
     }
   };
