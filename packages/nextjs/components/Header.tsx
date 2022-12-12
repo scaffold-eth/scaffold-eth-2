@@ -1,7 +1,24 @@
+import React from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
 import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
+import { BugAntIcon } from "@heroicons/react/24/outline";
+
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const router = useRouter();
+
+  return (
+    <Link href={href} passHref>
+      <a
+        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-5 gap-1`}
+      >
+        {children}
+      </a>
+    </Link>
+  );
+};
 
 /**
  * Site header
@@ -21,14 +38,13 @@ export default function Header() {
         </div>
         <ul className="menu menu-horizontal px-1">
           <li>
-            <Link href="/" passHref>
-              <a className="hover:bg-secondary focus:bg-secondary py-5">Home</a>
-            </Link>
+            <NavLink href="/">Home</NavLink>
           </li>
           <li>
-            <Link href="/debug" passHref>
-              <a className="hover:bg-secondary focus:bg-secondary">Debug Contracts</a>
-            </Link>
+            <NavLink href="/debug">
+              <BugAntIcon className="text-black h-4 w-4" />
+              Debug Contracts
+            </NavLink>
           </li>
         </ul>
       </div>
