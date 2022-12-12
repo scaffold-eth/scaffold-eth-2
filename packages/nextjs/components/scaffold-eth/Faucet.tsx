@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { chain, useAccount, useNetwork } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
+import { BanknotesIcon } from "@heroicons/react/24/outline";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -37,8 +38,12 @@ export default function Faucet() {
   }
 
   return (
-    <button className={`btn btn-warning ${loading && "loading"} text-gray-700`} onClick={sendETH} disabled={loading}>
-      💰 Get funds from faucet
+    <button
+      className={`btn btn-secondary btn-sm px-2 rounded-full ${loading && "loading"}`}
+      onClick={sendETH}
+      disabled={loading}
+    >
+      <BanknotesIcon className="text-black h-4 w-4" />
     </button>
   );
 }

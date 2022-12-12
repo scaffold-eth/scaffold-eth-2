@@ -37,16 +37,11 @@ export default function RainbowKitCustomConnectButton() {
         const connected = ready && account && chain;
 
         return (
-          <div
-            {...(!ready && {
-              "aria-hidden": true,
-            })}
-            className="text-center"
-          >
+          <>
             {(() => {
               if (!connected) {
                 return (
-                  <button className="btn btn-primary btn-outline" onClick={openConnectModal} type="button">
+                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
                     Connect Wallet
                   </button>
                 );
@@ -65,36 +60,24 @@ export default function RainbowKitCustomConnectButton() {
               }
 
               return (
-                <div className="p-2 flex justify-end items-center">
-                  <button
-                    onClick={openChainModal}
-                    className="btn btn-outline border-0 shadow-lg p-1 mt-2 mr-2 flex justify-center items-center"
-                    type="button"
-                  >
+                <div className="px-2 flex justify-end items-center">
+                  <button onClick={openChainModal} className="btn btn-secondary btn-sm" type="button">
                     {chain.hasIcon && (
                       <div className="mt-1">
                         {chain.iconUrl && (
-                          <Image alt={chain.name ?? "Chain icon"} src={chain.iconUrl} width="25" height="25" />
+                          <Image alt={chain.name ?? "Chain icon"} src={chain.iconUrl} width="20" height="20" />
                         )}
                       </div>
                     )}
-                    <div className="flex items-center">
-                      <span className="m-1 font-bold text-md">{chain.name}</span>
-                      <span>
-                        <ChevronDownIcon className="h-6 w-4" />
-                      </span>
-                    </div>
+                    <span className="m-2 font-bold text-md">{chain.name}</span>
+                    <span>
+                      <ChevronDownIcon className="h-6 w-4" />
+                    </span>
                   </button>
 
-                  <div className="flex justify-center items-center border-1 rounded-lg p-1 shadow-xl">
-                    <div className="m-1">
-                      <Balance address={account.address} />
-                    </div>
-                    <button
-                      onClick={openAccountModal}
-                      type="button"
-                      className="btn btn-outline border-0 p-2 flex justify-center items-center shadow-inner bg-gray-100"
-                    >
+                  <div className="flex justify-center items-center border-1 rounded-lg px-1">
+                    <Balance address={account.address} />
+                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm">
                       <span className="m-1 font-bold text-md">{account.displayName}</span>
 
                       <span>
@@ -105,7 +88,7 @@ export default function RainbowKitCustomConnectButton() {
                 </div>
               );
             })()}
-          </div>
+          </>
         );
       }}
     </ConnectButton.Custom>

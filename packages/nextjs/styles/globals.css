@@ -2,6 +2,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+body {
+  background: hsl(var(--b3));
+  min-height: 100vh;
+}
+
 h1,
 h2,
 h3,
