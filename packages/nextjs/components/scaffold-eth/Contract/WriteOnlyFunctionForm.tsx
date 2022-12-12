@@ -1,12 +1,12 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { toast } from "~~/components/scaffold-eth";
-import reactHotToast from "react-hot-toast";
+import { useTransactor } from "~~/hooks/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -21,11 +21,17 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
 type TWriteOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
+  setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>;
 };
 
-export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWriteOnlyFunctionFormProps) => {
+export const WriteOnlyFunctionForm = ({
+  functionFragment,
+  contractAddress,
+  setRefreshDisplayVariables,
+}: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
+  const writeTxn = useTransactor();
 
   const keys = Object.keys(form);
 
@@ -55,22 +61,10 @@ export const WriteOnlyFunctionForm = ({ functionFragment, contractAddress }: TWr
       toast.error(message);
     }
 
-    if (writeAsync) {
+    if (writeAsync && writeTxn) {
       try {
-        // ToDo. Use a transactor component.
-        await reactHotToast.promise(
-          writeAsync(),
-          {
-            loading: "Mining transaction, Hold tight!",
-            success: "Mined successfully !",
-            error: "Error while processing the transaction",
-          },
-          {
-            success: {
-              icon: "🔥",
-            },
-          },
-        );
+        await writeTxn(writeAsync());
+        setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
         toast.error(message);

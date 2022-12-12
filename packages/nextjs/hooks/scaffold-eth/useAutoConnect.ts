@@ -19,7 +19,7 @@ export type TAutoConnect = {
 const walletIdStorageKey = "scaffoldEth2.wallet";
 
 /**
- * This function will get the initial connector (if any), the app will connect to
+ * This function will get the initial wallet connector (if any), the app will connect to
  * @param config
  * @param previousWalletId
  * @param connectors
@@ -31,16 +31,21 @@ const getInitialConnector = (
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
+  const isLocalChainSelected = process.env.NEXT_PUBLIC_NETWORK === "hardhat";
 
   if (!previousWalletId) {
     // The user was not connected to a wallet
-    if (allowBurner && config.autoConnect) {
+    if (isLocalChainSelected && allowBurner && config.autoConnect) {
       const connector = connectors.find(f => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
     if (config.autoConnect) {
+      if (previousWalletId === burnerWalletId && !isLocalChainSelected) {
+        return;
+      }
+
       const connector = connectors.find(f => f.id === previousWalletId);
       return { connector };
     }

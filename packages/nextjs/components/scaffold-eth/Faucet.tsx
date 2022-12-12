@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import { chain, useAccount, useNetwork } from "wagmi";
+import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 // Number of ETH faucet sends to an address
@@ -13,13 +14,16 @@ export default function Faucet() {
   const { address } = useAccount();
   const { chain: ConnectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
+  const provider = getLocalProvider(chain.localhost);
+  const signer = provider?.getSigner();
+  const faucetTxn = useTransactor(signer);
 
   const sendETH = async () => {
     try {
       setLoading(true);
-      const provider = getLocalProvider(chain.localhost);
-      const signer = provider?.getSigner();
-      await signer?.sendTransaction({ to: address, value: ethers.utils.parseEther(NUM_OF_ETH) });
+      if (faucetTxn) {
+        await faucetTxn({ to: address, value: ethers.utils.parseEther(NUM_OF_ETH) });
+      }
       setLoading(false);
     } catch (error) {
       console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
@@ -28,7 +32,7 @@ export default function Faucet() {
   };
 
   // Render only on local chain
-  if (ConnectedChain?.id !== chain.hardhat.id) {
+  if (!ConnectedChain || ConnectedChain.id !== chain.hardhat.id) {
     return null;
   }
 
