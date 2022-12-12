@@ -34,7 +34,7 @@ function TxToast(message: string, blockExplorerLink?: string, options?: { icon: 
         <p
           className={`text-2xl self-start mb-0 ${blockExplorerLink && blockExplorerLink.length > 0 ? "mt-2" : "mt-1"}`}
         >
-          {loading ? <Spinner fillColor="green-500" /> : options?.icon ? options.icon : ""}
+          {loading ? <Spinner /> : options?.icon ? options.icon : ""}
         </p>
         <div
           className={`flex flex-col ml-4 cursor-default ${
