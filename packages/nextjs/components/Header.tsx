@@ -12,7 +12,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link href={href} passHref>
       <a
-        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-5 gap-2`}
+        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}
       >
         {children}
       </a>
@@ -25,11 +25,13 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
  */
 export default function Header() {
   return (
-    <div className="navbar bg-base-100 min-h-0">
+    <div className="navbar bg-base-100 min-h-0 flex-shrink-0">
       <div className="navbar-start">
         <div className="flex items-center	gap-2 mx-4">
-          <Link href="/">
-            <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
+          <Link href="/" passHref>
+            <a className="flex">
+              <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
+            </a>
           </Link>
           <div className="flex flex-col">
             <span className="font-bold">Scaffold-eth</span>

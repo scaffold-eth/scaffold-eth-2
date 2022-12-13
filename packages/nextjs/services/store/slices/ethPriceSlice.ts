@@ -12,8 +12,13 @@ export type TEthPriceSlice = {
 export const createEthPriceSlice: TAppSliceCreator<TEthPriceSlice> = set => ({
   ethPrice: defaultEthPriceState(),
   setEthPrice: (newValue: number): void =>
-    set((state): TAppStore => {
-      state.ethPriceSlice.ethPrice = newValue;
-      return state;
-    }),
+    set(
+      (state): TAppStore => ({
+        ...state,
+        ethPriceSlice: {
+          ...state.ethPriceSlice,
+          ethPrice: newValue,
+        },
+      }),
+    ),
 });
