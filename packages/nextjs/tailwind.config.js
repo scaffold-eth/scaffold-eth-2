@@ -20,7 +20,7 @@ module.exports = {
           "base-300": "#F5F7FB",
           "base-content": "#1f2937",
 
-          "--rounded-btn": "0",
+          "--rounded-btn": "0.25rem",
           "--navbar-padding": "0",
         },
       },

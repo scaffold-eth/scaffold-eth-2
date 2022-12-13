@@ -6,13 +6,13 @@ import React from "react";
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <Head>
         <title>Scaffold-eth App</title>
         <meta name="description" content="Created with 🏗 scaffold-eth" />
       </Head>
 
-      <main className="flex items-center flex-col pt-10">
+      <div className="flex items-center flex-col flex-grow pt-10">
         <h1 className="text-center mb-8">
           <span className="block text-2xl mb-2">Welcome to</span>
           <span className="block text-4xl font-bold">scaffold-eth 2</span>
@@ -26,32 +26,32 @@ const Home: NextPage = () => {
           <code className="italic bg-secondary text-base font-bold">packages/hardhat/contracts</code>
         </p>
 
-        <div className="bg-secondary w-full mt-16 px-8 py-16">
+        <div className="flex-grow bg-secondary w-full mt-16 px-8 py-12">
           <div className="flex justify-center gap-12">
-            <div className="flex flex-col bg-white px-16 py-10 text-center items-center max-w-sm">
-              <BugAntIcon className="h-10 w-10" />
+            <div className="flex flex-col bg-white px-10 py-10 text-center items-center max-w-xs">
+              <BugAntIcon className="h-8 w-8" />
               <p>
                 Tinker with your smart contract using the{" "}
                 <Link href="/debug" passHref>
-                  <a className="underline">Debug Contract</a>
+                  <a className="link">Debug Contract</a>
                 </Link>{" "}
                 tab.
               </p>
             </div>
-            <div className="flex flex-col bg-white px-16 py-10 text-center items-center max-w-sm">
-              <SparklesIcon className="h-10 w-10" />
+            <div className="flex flex-col bg-white px-10 py-10 text-center items-center max-w-xs">
+              <SparklesIcon className="h-8 w-8" />
               <p>
                 Experiment with{" "}
                 <Link href="/example-ui" passHref>
-                  <a className="underline">Example UI</a>
+                  <a className="link">Example UI</a>
                 </Link>{" "}
                 to build your own UI.
               </p>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 };
 

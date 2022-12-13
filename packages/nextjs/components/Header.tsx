@@ -25,7 +25,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
  */
 export default function Header() {
   return (
-    <div className="navbar bg-base-100 min-h-0">
+    <div className="navbar bg-base-100 min-h-0 flex-shrink-0">
       <div className="navbar-start">
         <div className="flex items-center	gap-2 mx-4">
           <Link href="/" passHref>

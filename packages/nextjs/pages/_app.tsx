@@ -9,6 +9,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import { wagmiClient } from "~~/services/web3/wagmiClient";
 import Header from "~~/components/Header";
+import Footer from "~~/components/Footer";
 
 import { useEffect } from "react";
 import { useAppStore } from "~~/services/store/store";
@@ -19,7 +20,9 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const setEthPrice = useAppStore(state => state.ethPriceSlice.setEthPrice);
 
   useEffect(() => {
+    console.log("Setting price?");
     if (price > 0) {
+      console.log("Setting price!!!", price);
       setEthPrice(price);
     }
   }, [setEthPrice, price]);
@@ -27,8 +30,13 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={appChains.chains}>
-        <Header />
-        <Component {...pageProps} />
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex flex-col flex-1">
+            <Component {...pageProps} />
+          </main>
+          <Footer />
+        </div>
         <Toaster />
       </RainbowKitProvider>
     </WagmiConfig>
