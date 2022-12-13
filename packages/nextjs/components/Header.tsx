@@ -12,7 +12,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link href={href} passHref>
       <a
-        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-5 gap-2`}
+        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}
       >
         {children}
       </a>
@@ -29,7 +29,7 @@ export default function Header() {
       <div className="navbar-start">
         <div className="flex items-center	gap-2 mx-4">
           <Link href="/" passHref>
-            <a>
+            <a className="flex">
               <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
             </a>
           </Link>
