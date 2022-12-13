@@ -20,9 +20,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const setEthPrice = useAppStore(state => state.ethPriceSlice.setEthPrice);
 
   useEffect(() => {
-    console.log("Setting price?");
     if (price > 0) {
-      console.log("Setting price!!!", price);
       setEthPrice(price);
     }
   }, [setEthPrice, price]);
