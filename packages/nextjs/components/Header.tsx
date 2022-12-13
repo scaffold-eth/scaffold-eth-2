@@ -28,8 +28,10 @@ export default function Header() {
     <div className="navbar bg-base-100 min-h-0">
       <div className="navbar-start">
         <div className="flex items-center	gap-2 mx-4">
-          <Link href="/">
-            <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
+          <Link href="/" passHref>
+            <a>
+              <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
+            </a>
           </Link>
           <div className="flex flex-col">
             <span className="font-bold">Scaffold-eth</span>
