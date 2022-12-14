@@ -60,7 +60,7 @@ export default function RainbowKitCustomConnectButton() {
               }
 
               return (
-                <div className="px-2 flex justify-end items-center">
+                <div className="hidden sm:flex px-2 flex justify-end items-center">
                   <button onClick={openChainModal} className="btn btn-secondary btn-sm font-normal" type="button">
                     {chain.hasIcon && (
                       <div className="mt-1">
