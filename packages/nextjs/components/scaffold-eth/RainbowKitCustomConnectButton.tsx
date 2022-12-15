@@ -60,7 +60,7 @@ export default function RainbowKitCustomConnectButton() {
               }
 
               return (
-                <div className="hidden sm:flex px-2 flex justify-end items-center">
+                <div className="px-2 flex justify-end items-center">
                   <button onClick={openChainModal} className="btn btn-secondary btn-sm font-normal" type="button">
                     {chain.hasIcon && (
                       <div className="mt-1">
@@ -69,9 +69,9 @@ export default function RainbowKitCustomConnectButton() {
                         )}
                       </div>
                     )}
-                    <span className="m-2">{chain.name}</span>
+                    <span className="m-2 hidden sm:flex">{chain.name}</span>
                     <span>
-                      <ChevronDownIcon className="h-6 w-4" />
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </span>
                   </button>
 

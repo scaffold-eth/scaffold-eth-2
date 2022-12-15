@@ -4,7 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
 import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
-import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { BugAntIcon, SparklesIcon, HomeModernIcon } from "@heroicons/react/24/outline";
+
+function checkAndCloseDropDown(e: { currentTarget: any }) {
+  const targetEl = e.currentTarget;
+  if (targetEl && targetEl.matches(":focus")) {
+    setTimeout(function () {
+      targetEl.blur();
+    }, 0);
+  }
+}
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
@@ -12,6 +21,11 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link href={href} passHref>
       <a
+        onClick={() => {
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
+        }}
         className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}
       >
         {children}
@@ -58,8 +72,14 @@ export default function Header() {
       </div>
       <div className="navbar bg-base-100">
         <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+          <div className="dropdown sm:hidden">
+            <label
+              tabIndex={0}
+              className="btn btn-ghost ml-1 hover:bg-secondary"
+              onMouseDown={e => {
+                checkAndCloseDropDown(e);
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -75,6 +95,10 @@ export default function Header() {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
+                <NavLink href="/">
+                  <HomeModernIcon className="h-4 w-4" />
+                  Home
+                </NavLink>
                 <NavLink href="/debug">
                   <BugAntIcon className="h-4 w-4" />
                   Debug Contracts
