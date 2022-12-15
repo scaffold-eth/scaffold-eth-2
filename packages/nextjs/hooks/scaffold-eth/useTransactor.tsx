@@ -3,10 +3,11 @@ import { SendTransactionResult } from "@wagmi/core";
 import { BigNumber, ethers, Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
-import toast from "react-hot-toast";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { toast as customToast } from "~~/components/scaffold-eth/index";
 import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth";
+import { toast } from "~~/utils";
+import { toast as hotToast } from "react-hot-toast";
+import { TxnToast } from "~~/components/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
@@ -38,7 +39,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       const provider = signer.provider;
       const network = await provider?.getNetwork();
 
-      toastId = customToast.txnLoading("Awaiting for user confirmation", "");
+      toastId = toast.loading(<TxnToast message="Awaiting for user confirmation" />);
       if (tx instanceof Promise) {
         // Tx is already prepared by the caller
         transactionResponse = await tx;
@@ -55,15 +56,17 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }
-      toast.remove(toastId);
+      hotToast.remove(toastId);
 
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
-      toastId = customToast.txnLoading("Mining transaction, Hold tight!", blockExplorerTxURL);
+      toastId = toast.loading(
+        <TxnToast message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
+      );
       transactionReceipt = await transactionResponse.wait();
-      toast.remove(toastId);
+      hotToast.remove(toastId);
 
-      customToast.txnSuccess("Mined successfully !", blockExplorerTxURL);
+      toast.success(<TxnToast message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, { icon: "🎉" });
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
@@ -72,16 +75,12 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       }
     } catch (error: any) {
       if (toastId) {
-        toast.remove(toastId);
+        hotToast.remove(toastId);
       }
       // TODO handle error properly
       console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
       const message = getParsedEthersError(error);
-      toast.error(message, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
+      toast.error(message);
     }
 
     return transactionResponse;

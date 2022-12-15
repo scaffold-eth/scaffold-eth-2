@@ -4,7 +4,7 @@ import { useContractRead } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utilsContract";
-import { toast } from "~~/components/scaffold-eth";
+import { toast } from "~~/utils";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -53,7 +53,6 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     );
   });
 
-  // TODO Handle Error with nice toast
   return (
     <div className="flex flex-col items-start space-y-2 border-b-2 border-black pb-2">
       <p className="text-black my-0">{functionFragment.name}</p>
