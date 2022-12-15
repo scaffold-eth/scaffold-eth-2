@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
 import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
-import { BugAntIcon, SparklesIcon, HomeModernIcon, BeakerIcon } from "@heroicons/react/24/outline";
+import { BugAntIcon, SparklesIcon, HomeModernIcon } from "@heroicons/react/24/outline";
 
 function checkAndCloseDropDown(e: { currentTarget: any }) {
   const targetEl = e.currentTarget;
@@ -68,12 +68,6 @@ export default function Header() {
               Example UI
             </NavLink>
           </li>
-          <li>
-            <NavLink href="/ninja">
-              <BeakerIcon className="h-4 w-4" />
-              Ninja
-            </NavLink>
-          </li>
         </ul>
       </div>
       <div className="navbar bg-base-100">
@@ -112,10 +106,6 @@ export default function Header() {
                 <NavLink href="/example-ui">
                   <SparklesIcon className="h-4 w-4" />
                   Example UI
-                </NavLink>
-                <NavLink href="/ninja">
-                  <BeakerIcon className="h-4 w-4" />
-                  Ninja
                 </NavLink>
               </li>
             </ul>

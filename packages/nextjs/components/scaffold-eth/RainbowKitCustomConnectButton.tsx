@@ -4,7 +4,6 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
 import { useSwitchNetwork, chain } from "wagmi";
-import { useRouter } from "next/router";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -20,7 +19,6 @@ type chainKeyTypes = keyof typeof chain;
 export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
   const { switchNetwork } = useSwitchNetwork();
-  const pathName = useRouter().pathname;
 
   const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as chainKeyTypes;
   const definedChain = chain[publicNetworkName];
@@ -49,7 +47,7 @@ export default function RainbowKitCustomConnectButton() {
                 );
               }
 
-              if (chain.unsupported || (chain.id !== definedChain?.id && pathName != "/ninja")) {
+              if (chain.unsupported || chain.id !== definedChain?.id) {
                 return (
                   <div className="rounded-xl shadow-lg p-2">
                     <span className="text-error mr-2">Wrong network selected! ({chain.name})</span>
