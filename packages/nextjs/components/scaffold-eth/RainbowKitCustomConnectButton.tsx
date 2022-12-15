@@ -4,6 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
 import { useSwitchNetwork, chain } from "wagmi";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -77,8 +78,9 @@ export default function RainbowKitCustomConnectButton() {
 
                   <div className="flex justify-center items-center border-1 rounded-lg px-1">
                     <Balance address={account.address} />
-                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm">
-                      <span className="m-1">{account.displayName}</span>
+                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm mr-2 sm:mr-0">
+                      <span className="hidden md:flex m-1">{account.displayName}</span>
+                      <UserCircleIcon className="md:hidden h-5 w-5 mr-2" />
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />
                       </span>
