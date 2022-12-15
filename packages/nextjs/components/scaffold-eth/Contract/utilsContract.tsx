@@ -7,7 +7,7 @@ import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 import { Dispatch, SetStateAction } from "react";
 
-type GeneratedContractType = {
+export type GeneratedContractType = {
   address: string;
   abi: any[];
 };
