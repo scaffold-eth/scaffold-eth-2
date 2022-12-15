@@ -6,7 +6,6 @@ import { useProvider } from "wagmi";
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
  * @returns ethPrice: number
  */
-// ToDo. Polling time?
 export const useEthPrice = () => {
   const provider = useProvider({ chainId: 1 });
   const [ethPrice, setEthPrice] = useState(0);
@@ -25,7 +24,11 @@ export const useEthPrice = () => {
       }
     };
 
-    fetchPriceFromUniswap();
+    // Schedule the fetchPriceFromUniswap function to run every 15 seconds
+    const intervalId = setInterval(fetchPriceFromUniswap, 15000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
   }, [provider]);
 
   return ethPrice;
