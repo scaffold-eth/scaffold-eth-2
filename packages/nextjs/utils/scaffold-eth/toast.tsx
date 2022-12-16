@@ -1,7 +1,12 @@
 import React from "react";
-import { CheckmarkIcon, ErrorIcon, toast as hotToast } from "react-hot-toast";
+import { toast as hotToast } from "react-hot-toast";
 import { XMarkIcon } from "@heroicons/react/20/solid";
-import { ExclamationTriangleIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/solid";
 import Spinner from "~~/components/Spinner";
 
 type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
@@ -20,17 +25,12 @@ type ToastOptions = {
   position?: TPositions;
 };
 
-const hotToastIconStyles: React.CSSProperties = {
-  backgroundColor: "#7eaaef",
-  marginTop: "0.25rem",
-};
-
 const ENUM_STATUSES = {
-  success: <CheckmarkIcon style={hotToastIconStyles} />,
+  success: <CheckCircleIcon className="w-7 text-success" />,
   loading: <Spinner />,
-  error: <ErrorIcon style={hotToastIconStyles} />,
-  info: <InformationCircleIcon className="w-7  text-primary-focus" />,
-  warning: <ExclamationTriangleIcon className="w-7 text-primary-focus" />,
+  error: <ExclamationCircleIcon className="w-7 text-error" />,
+  info: <InformationCircleIcon className="w-7 text-info" />,
+  warning: <ExclamationTriangleIcon className="w-7 text-warning" />,
 };
 
 const DEFAULT_DURATION = 3000;
