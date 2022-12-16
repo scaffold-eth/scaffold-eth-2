@@ -33,7 +33,7 @@ export default function Footer() {
               </a>
             </div>
             <div>
-              <a href="https://google.com/" target="_blank" rel="noreferrer">
+              <a href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA" target="_blank" rel="noreferrer">
                 Support
               </a>
             </div>
