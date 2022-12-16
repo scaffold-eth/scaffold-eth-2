@@ -78,6 +78,9 @@ const toast = {
   loading: (content: React.ReactNode, options?: ToastOptions) => {
     return Toast({ content, status: "loading", ...options });
   },
+  remove: (toastId: string) => {
+    hotToast.remove(toastId);
+  },
 };
 
 export default toast;

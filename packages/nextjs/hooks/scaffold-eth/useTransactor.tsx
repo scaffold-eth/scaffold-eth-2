@@ -5,13 +5,27 @@ import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { getBlockExplorerTxLink, toast } from "~~/utils/scaffold-eth";
-import { toast as hotToast } from "react-hot-toast";
-import { TxnToast } from "~~/components/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
   callback?: ((_param: any) => void) | undefined,
 ) => Promise<Record<string, any> | undefined>;
+
+/**
+ * Custom toast content for TXs.
+ */
+const TxnToast = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+  return (
+    <div className={`flex flex-col ml-1 cursor-default`}>
+      <p className="my-0">{message}</p>
+      {blockExplorerLink && blockExplorerLink.length > 0 ? (
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
+          checkout out transaction
+        </a>
+      ) : null}
+    </div>
+  );
+};
 
 /**
  * Runs TXs showing UI feedback.
@@ -55,7 +69,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }
-      hotToast.remove(toastId);
+      toast.remove(toastId);
 
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
@@ -63,7 +77,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         <TxnToast message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
       );
       transactionReceipt = await transactionResponse.wait();
-      hotToast.remove(toastId);
+      toast.remove(toastId);
 
       toast.success(<TxnToast message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, { icon: "🎉" });
 
@@ -74,7 +88,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       }
     } catch (error: any) {
       if (toastId) {
-        hotToast.remove(toastId);
+        toast.remove(toastId);
       }
       // TODO handle error properly
       console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
