@@ -45,6 +45,7 @@ const Home: NextPage = () => {
               </div>,
               {
                 icon: "🎉",
+                position: "top-left",
               },
             );
           }}

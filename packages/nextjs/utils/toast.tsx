@@ -4,16 +4,20 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
 import Spinner from "../components/Spinner";
 
+type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
+
 type TToastProps = {
   message: React.ReactNode;
   status: "success" | "info" | "loading" | "error" | "warning";
   duration?: number;
   icon?: string;
+  position?: TPositions;
 };
 
 type ToastOptions = {
   duration?: number;
   icon?: string;
+  position?: TPositions;
 };
 
 const hotToastIconStyles: React.CSSProperties = {
@@ -30,11 +34,12 @@ const ENUM_STATUSES = {
 };
 
 const DEFAULT_DURATION = 3000;
+const DEFAULT_POSITION: TPositions = "top-center";
 
 /**
  * Custom Toast
  */
-function Toast({ message, status, duration = DEFAULT_DURATION, icon }: TToastProps) {
+function Toast({ message, status, duration = DEFAULT_DURATION, icon, position = DEFAULT_POSITION }: TToastProps) {
   return hotToast.custom(
     t => (
       <div
@@ -52,6 +57,7 @@ function Toast({ message, status, duration = DEFAULT_DURATION, icon }: TToastPro
     ),
     {
       duration: status === "loading" ? Infinity : duration,
+      position,
     },
   );
 }
