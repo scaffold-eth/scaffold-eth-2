@@ -29,7 +29,7 @@ export default function Footer() {
                 rel="noreferrer"
                 className="underline underline-offset-2"
               >
-                Fork Me
+                Fork me
               </a>
             </div>
             <span>·</span>
