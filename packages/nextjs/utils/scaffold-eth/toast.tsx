@@ -7,7 +7,7 @@ import Spinner from "~~/components/Spinner";
 type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 
 type TToastProps = {
-  message: React.ReactNode;
+  content: React.ReactNode;
   status: "success" | "info" | "loading" | "error" | "warning";
   duration?: number;
   icon?: string;
@@ -39,7 +39,7 @@ const DEFAULT_POSITION: TPositions = "top-center";
 /**
  * Custom Toast
  */
-function Toast({ message, status, duration = DEFAULT_DURATION, icon, position = DEFAULT_POSITION }: TToastProps) {
+function Toast({ content, status, duration = DEFAULT_DURATION, icon, position = DEFAULT_POSITION }: TToastProps) {
   return hotToast.custom(
     t => (
       <div
@@ -48,7 +48,7 @@ function Toast({ message, status, duration = DEFAULT_DURATION, icon, position = 
         }`}
       >
         <div className="text-2xl self-start mb-0 mt-3">{icon ? icon : ENUM_STATUSES[status]}</div>
-        <div className="mt-3 break-all">{message}</div>
+        <div className="mt-3 break-all">{content}</div>
 
         <div className="absolute top-1 right-1 cursor-pointer text-lg" onClick={() => hotToast.dismiss(t.id)}>
           <XMarkIcon className="w-6 cursor-pointer" onClick={() => hotToast.remove(t.id)} />
@@ -63,20 +63,20 @@ function Toast({ message, status, duration = DEFAULT_DURATION, icon, position = 
 }
 
 const toast = {
-  success: (message: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ message, status: "success", ...options });
+  success: (content: React.ReactNode, options?: ToastOptions) => {
+    return Toast({ content, status: "success", ...options });
   },
-  info: (message: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ message, status: "info", ...options });
+  info: (content: React.ReactNode, options?: ToastOptions) => {
+    return Toast({ content, status: "info", ...options });
   },
-  warning: (message: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ message, status: "warning", ...options });
+  warning: (content: React.ReactNode, options?: ToastOptions) => {
+    return Toast({ content, status: "warning", ...options });
   },
-  error: (message: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ message, status: "error", ...options });
+  error: (content: React.ReactNode, options?: ToastOptions) => {
+    return Toast({ content, status: "error", ...options });
   },
-  loading: (message: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ message, status: "loading", ...options });
+  loading: (content: React.ReactNode, options?: ToastOptions) => {
+    return Toast({ content, status: "loading", ...options });
   },
 };
 
