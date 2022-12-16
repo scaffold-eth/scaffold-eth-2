@@ -33,8 +33,8 @@ export default function Footer() {
               </a>
             </div>
             <span>·</span>
-            <div className="flex">
-              Built with <HeartIcon className="h-4 w-4" /> at 🏰&nbsp;
+            <div>
+              Built with <HeartIcon className="inline-block h-4 w-4" /> at 🏰{" "}
               <a
                 href="https://buidlguidl.com/"
                 target="_blank"
