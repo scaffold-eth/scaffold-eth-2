@@ -3,15 +3,29 @@ import { SendTransactionResult } from "@wagmi/core";
 import { BigNumber, ethers, Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
-import toast from "react-hot-toast";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { toast as customToast } from "~~/components/scaffold-eth/index";
-import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth";
+import { getBlockExplorerTxLink, toast } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
   callback?: ((_param: any) => void) | undefined,
 ) => Promise<Record<string, any> | undefined>;
+
+/**
+ * Custom toast content for TXs.
+ */
+const TxnToast = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+  return (
+    <div className={`flex flex-col ml-1 cursor-default`}>
+      <p className="my-0">{message}</p>
+      {blockExplorerLink && blockExplorerLink.length > 0 ? (
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
+          checkout out transaction
+        </a>
+      ) : null}
+    </div>
+  );
+};
 
 /**
  * Runs TXs showing UI feedback.
@@ -38,7 +52,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       const provider = signer.provider;
       const network = await provider?.getNetwork();
 
-      toastId = customToast.txnLoading("Awaiting for user confirmation", "");
+      toastId = toast.loading(<TxnToast message="Awaiting for user confirmation" />);
       if (tx instanceof Promise) {
         // Tx is already prepared by the caller
         transactionResponse = await tx;
@@ -59,11 +73,13 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
 
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
-      toastId = customToast.txnLoading("Mining transaction, Hold tight!", blockExplorerTxURL);
+      toastId = toast.loading(
+        <TxnToast message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
+      );
       transactionReceipt = await transactionResponse.wait();
       toast.remove(toastId);
 
-      customToast.txnSuccess("Mined successfully !", blockExplorerTxURL);
+      toast.success(<TxnToast message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, { icon: "🎉" });
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
@@ -77,11 +93,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       // TODO handle error properly
       console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
       const message = getParsedEthersError(error);
-      toast.error(message, {
-        style: {
-          wordBreak: "break-all",
-        },
-      });
+      toast.error(message);
     }
 
     return transactionResponse;
