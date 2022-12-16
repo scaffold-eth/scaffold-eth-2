@@ -2,7 +2,7 @@ import React from "react";
 import { CheckmarkIcon, ErrorIcon, toast as hotToast } from "react-hot-toast";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { ExclamationTriangleIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
-import Spinner from "../components/Spinner";
+import Spinner from "~~/components/Spinner";
 
 type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 

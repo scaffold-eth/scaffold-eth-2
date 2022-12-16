@@ -4,8 +4,7 @@ import { BigNumber, ethers, Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth";
-import { toast } from "~~/utils";
+import { getBlockExplorerTxLink, toast } from "~~/utils/scaffold-eth";
 import { toast as hotToast } from "react-hot-toast";
 import { TxnToast } from "~~/components/scaffold-eth";
 

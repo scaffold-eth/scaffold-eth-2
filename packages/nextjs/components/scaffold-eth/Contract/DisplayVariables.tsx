@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { toast } from "~~/utils";
+import { toast } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;

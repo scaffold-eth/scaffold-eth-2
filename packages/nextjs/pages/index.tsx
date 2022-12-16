@@ -3,7 +3,7 @@ import Head from "next/head";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
-import { toast } from "~~/utils";
+import { toast } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {
   return (
