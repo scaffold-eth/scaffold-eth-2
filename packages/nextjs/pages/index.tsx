@@ -3,7 +3,6 @@ import Head from "next/head";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
-import { toast } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {
   return (
@@ -26,32 +25,7 @@ const Home: NextPage = () => {
           Edit your smart contract <code className="italic bg-secondary text-base font-bold">YourContract.sol</code> in{" "}
           <code className="italic bg-secondary text-base font-bold">packages/hardhat/contracts</code>
         </p>
-        {/* TODO REMOVE THIS BEFORE MERGING */}
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            toast.loading("Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi libero officiis.");
-            toast.info("Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi libero officiis.");
-            toast.warning("Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi libero officiis.");
-            toast.error("Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi libero officiis.");
-            toast.success("Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit excepturi libero officiis.");
-            toast.success(
-              <div className="flex flex-col">
-                <h1 className="font-bold text-2xl">This is heading</h1>
-                <p className="my-0 text-md text-primary-content">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur totam amet exercitationem.
-                </p>
-                <button className="btn btn-primary self-star">button</button>
-              </div>,
-              {
-                icon: "🎉",
-                position: "top-left",
-              },
-            );
-          }}
-        >
-          Example toasts
-        </button>
+
         <div className="flex-grow bg-secondary w-full mt-16 px-8 py-12">
           <div className="flex justify-center gap-12">
             <div className="flex flex-col bg-white px-10 py-10 text-center items-center max-w-xs">
