@@ -1,6 +1,7 @@
 import React from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "~~/services/store/store";
+import { HeartIcon } from "@heroicons/react/24/outline";
 
 /**
  * Site footer
@@ -9,13 +10,57 @@ export default function Footer() {
   const ethPrice = useAppStore(state => state.ethPriceSlice.ethPrice);
 
   return (
-    <div className="bg-secondary p-4 flex-shrink-0">
-      {ethPrice > 0 && (
-        <div className="btn btn-primary btn-sm font-normal cursor-auto">
-          <CurrencyDollarIcon className="text-black h-4 w-4 mr-0.5" />
-          <span>{ethPrice}</span>
-        </div>
-      )}
+    <div className="bg-secondary min-h-0 p-4 flex justify-between items-center">
+      <div>
+        {ethPrice > 0 && (
+          <div className="btn btn-primary btn-sm font-normal cursor-auto">
+            <CurrencyDollarIcon className="text-black h-4 w-4 mr-0.5" />
+            <span>{ethPrice}</span>
+          </div>
+        )}
+      </div>
+      <div>
+        <ul className="menu menu-horizontal px-1">
+          <div className="flex items-center gap-2 text-sm">
+            <div>
+              <a
+                href="https://github.com/scaffold-eth/se-2"
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                Fork me
+              </a>
+            </div>
+            <span>·</span>
+            <div>
+              Built with <HeartIcon className="inline-block h-4 w-4" /> at 🏰{" "}
+              <a
+                href="https://buidlguidl.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                BuidlGuidl
+              </a>
+            </div>
+            <span>·</span>
+            <div>
+              <a
+                href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA"
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2"
+              >
+                Support
+              </a>
+            </div>
+          </div>
+        </ul>
+      </div>
+      <div className="mr-4 text-sm">
+        <div>Color Switch Placeholder</div>
+      </div>
     </div>
   );
 }
