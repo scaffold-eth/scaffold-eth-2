@@ -9,6 +9,6 @@ export default async function fetchPriceFromUniswap(provider: Provider) {
     const price = parseFloat(route.midPrice.toSignificant(6));
     return price;
   } catch (error) {
-    console.log("useEthPrice - Error fetching ETH price from Uniswap: ", error);
+    console.error("useEthPrice - Error fetching ETH price from Uniswap: ", error);
   }
 }
