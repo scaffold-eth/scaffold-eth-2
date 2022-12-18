@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import fetchPriceFromUniswap from "~~/utils/scaffold-eth/fetchPriceFromUniswap";
+import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
 
 /**
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
