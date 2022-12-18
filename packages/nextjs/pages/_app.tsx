@@ -15,6 +15,8 @@ import { useEffect } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { useEthPrice } from "~~/hooks/scaffold-eth";
 
+import NextNProgress from "nextjs-progressbar";
+
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useEthPrice();
   const setEthPrice = useAppStore(state => state.ethPriceSlice.setEthPrice);
@@ -27,6 +29,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     <WagmiConfig client={wagmiClient}>
+      <NextNProgress />
       <RainbowKitProvider chains={appChains.chains}>
         <div className="flex flex-col min-h-screen">
           <Header />
