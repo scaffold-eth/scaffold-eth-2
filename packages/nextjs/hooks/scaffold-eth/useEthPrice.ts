@@ -1,32 +1,37 @@
-import { Fetcher, Route, Token, WETH } from "@uniswap/sdk";
 import { useEffect, useState } from "react";
+import { useInterval } from "usehooks-ts";
 import { useProvider } from "wagmi";
+import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
+
+const enablePolling = false;
+const pollingTime = process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL
+  ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL)
+  : 30_000;
 
 /**
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
  * @returns ethPrice: number
  */
-// ToDo. Polling time?
 export const useEthPrice = () => {
   const provider = useProvider({ chainId: 1 });
   const [ethPrice, setEthPrice] = useState(0);
 
+  // Get the price of ETH from Uniswap on mount
   useEffect(() => {
-    const fetchPriceFromUniswap = async () => {
-      try {
-        const DAI = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18);
-        const pair = await Fetcher.fetchPairData(DAI, WETH[DAI.chainId], provider);
-        const route = new Route([pair], WETH[DAI.chainId]);
-        const price = parseFloat(route.midPrice.toSignificant(6));
-
-        setEthPrice(price);
-      } catch (error) {
-        console.log("useEthPrice - Error fetching ETH price from Uniswap: ", error);
-      }
-    };
-
-    fetchPriceFromUniswap();
+    (async () => {
+      const price = await fetchPriceFromUniswap(provider);
+      setEthPrice(price);
+    })();
   }, [provider]);
+
+  // Get the price of ETH from Uniswap at a given interval
+  useInterval(
+    async () => {
+      const price = await fetchPriceFromUniswap(provider);
+      setEthPrice(price);
+    },
+    enablePolling ? pollingTime : null,
+  );
 
   return ethPrice;
 };
