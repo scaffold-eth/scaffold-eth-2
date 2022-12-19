@@ -16,7 +16,7 @@ export const useEthPrice = () => {
   const provider = useProvider({ chainId: 1 });
   const [ethPrice, setEthPrice] = useState(0);
 
-  //Get the price of ETH from Uniswap on mount
+  // Get the price of ETH from Uniswap on mount
   useEffect(() => {
     (async () => {
       const price = await fetchPriceFromUniswap(provider);
@@ -24,7 +24,7 @@ export const useEthPrice = () => {
     })();
   }, [provider]);
 
-  //Get the price of ETH from Uniswap at a given interval
+  // Get the price of ETH from Uniswap at a given interval
   useInterval(
     async () => {
       const price = await fetchPriceFromUniswap(provider);
