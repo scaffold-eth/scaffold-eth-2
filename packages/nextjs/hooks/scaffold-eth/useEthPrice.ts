@@ -20,7 +20,7 @@ export const useEthPrice = () => {
   useEffect(() => {
     (async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setEthPrice(price || 0);
+      setEthPrice(price);
     })();
   }, [provider]);
 
@@ -28,7 +28,7 @@ export const useEthPrice = () => {
   useInterval(
     async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setEthPrice(price || 0);
+      setEthPrice(price);
     },
     enablePolling ? pollingTime : null,
   );
