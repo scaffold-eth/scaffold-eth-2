@@ -18,17 +18,17 @@ export const useEthPrice = () => {
 
   //Get the price of ETH from Uniswap on mount
   useEffect(() => {
-    fetchPriceFromUniswap(provider).then(price => {
+    (async () => {
+      const price = await fetchPriceFromUniswap(provider);
       setEthPrice(price || 0);
-    });
+    })();
   }, [provider]);
 
   //Get the price of ETH from Uniswap at a given interval
   useInterval(
-    () => {
-      fetchPriceFromUniswap(provider).then(price => {
-        setEthPrice(price || 0);
-      });
+    async () => {
+      const price = await fetchPriceFromUniswap(provider);
+      setEthPrice(price || 0);
     },
     enablePolling ? pollingTime : null,
   );
