@@ -1,3 +1,4 @@
 export { default as getLocalProvider } from "./getLocalProvider";
-export { default as toast } from "./toast";
 export * from "./networks";
+export { default as toast } from "./toast";
+export { default as fetchPriceFromUniswap } from "./fetchPriceFromUniswap";
