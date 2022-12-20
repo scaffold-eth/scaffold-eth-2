@@ -70,7 +70,7 @@ const NavLinks = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateActio
  * Site header
  */
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(Boolean);
+  const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
