@@ -75,7 +75,7 @@ export default function Header() {
 
   useEffect(() => {
     function checkIfClickedOutsideDrawer(event: { target: any }) {
-      if (isOpen && !ref.current?.contains(event.target)) {
+      if (!ref.current?.contains(event.target)) {
         setIsOpen(false);
       }
     }
