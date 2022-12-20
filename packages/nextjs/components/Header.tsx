@@ -6,13 +6,6 @@ import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKit
 import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 
-/**
- * Defs for NavLinks
- ** @note Are we sure we don't want this in a separate component?
-
- ** @note I looked for a method to pull the routes from next useRouter, is it possible to auto-populate
-          this list?
- */
 const menuItems = [
   {
     label: "Home",
@@ -73,24 +66,21 @@ const NavLinks = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateActio
   );
 };
 
-/* End of possible Navlinks Components */
-
 /**
  * Site header
  */
 export default function Header() {
   const [isOpen, setIsOpen] = useState(Boolean);
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Is this considered accessing the DOM? Is this okay?
   useEffect(() => {
-    function handler(event: { target: any }) {
-      if (!ref.current?.contains(event.target)) {
+    function checkIfClickedOutsideDrawer(event: { target: any }) {
+      if (isOpen && !ref.current?.contains(event.target)) {
         setIsOpen(false);
       }
     }
-    window.addEventListener("click", handler);
-    return () => window.removeEventListener("click", handler);
+    document.addEventListener("click", checkIfClickedOutsideDrawer);
+    return () => document.removeEventListener("click", checkIfClickedOutsideDrawer);
   }, []);
 
   return (
@@ -98,7 +88,7 @@ export default function Header() {
       <div className="navbar-start">
         <div className="sm:hidden dropdown" ref={ref}>
           <button
-            className="btn btn-ghost hover:bg-secondary"
+            className="ml-1 btn btn-ghost hover:bg-secondary"
             onClick={() => {
               setIsOpen(!isOpen);
             }}
@@ -125,7 +115,7 @@ export default function Header() {
             <span className="text-xs">Forkable Ethereum dev stack</span>
           </div>
         </div>
-        <ul className="hidden sm:flex menu menu-horizontal px-1">
+        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1">
           <NavLinks setIsOpen={setIsOpen} />
         </ul>
       </div>
