@@ -88,9 +88,9 @@ export default function Header() {
       <div className="navbar-start">
         <div className="sm:hidden dropdown" ref={ref}>
           <button
-            className="ml-1 btn btn-ghost hover:bg-secondary"
+            className={`ml-1 btn btn-ghost ${isOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
-              setIsOpen(!isOpen);
+              setIsOpen(prevIsOpenState => !prevIsOpenState);
             }}
           >
             <Bars3Icon className="h-1/2" />
