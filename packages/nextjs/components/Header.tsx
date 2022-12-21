@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Faucet } from "~~/components/scaffold-eth";
 import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
 import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
+import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 const menuItems = [
   {
@@ -71,22 +72,16 @@ const NavLinks = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateActio
  */
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function checkIfClickedOutsideDrawer(event: { target: any }) {
-      if (!ref.current?.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("click", checkIfClickedOutsideDrawer);
-    return () => document.removeEventListener("click", checkIfClickedOutsideDrawer);
-  }, []);
+  const burgerMenuRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(
+    burgerMenuRef,
+    useCallback(() => setIsOpen(false), []),
+  );
 
   return (
     <div className="navbar bg-base-100 min-h-0 flex-shrink-0 justify-between">
       <div className="navbar-start w-auto sm:w-1/2 ">
-        <div className="sm:hidden dropdown" ref={ref}>
+        <div className="sm:hidden dropdown" ref={burgerMenuRef}>
           <button
             className={`ml-1 btn btn-ghost ${isOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
