@@ -73,7 +73,7 @@ export default function Header() {
             </ul>
           )}
         </div>
-        <div className="hidden sm:flex items-center	gap-2 mx-4">
+        <div className="hidden sm:flex items-center gap-2 mx-4">
           <Link href="/" passHref>
             <a className="flex">
               <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
