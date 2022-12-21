@@ -43,7 +43,7 @@ export default function Faucet() {
       onClick={sendETH}
       disabled={loading}
     >
-      <BanknotesIcon className="text-black h-4 w-4" />
+      <BanknotesIcon className="h-4 w-4" />
     </button>
   );
 }

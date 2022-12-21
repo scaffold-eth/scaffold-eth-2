@@ -14,7 +14,7 @@ export default function Footer() {
       <div>
         {ethPrice > 0 && (
           <div className="btn btn-primary btn-sm font-normal cursor-auto">
-            <CurrencyDollarIcon className="text-black h-4 w-4 mr-0.5" />
+            <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
             <span>{ethPrice}</span>
           </div>
         )}
