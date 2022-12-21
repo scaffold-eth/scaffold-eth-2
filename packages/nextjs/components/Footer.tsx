@@ -10,7 +10,7 @@ export default function Footer() {
   const ethPrice = useAppStore(state => state.ethPriceSlice.ethPrice);
 
   return (
-    <div className="bg-secondary min-h-0 p-4 flex justify-between items-center">
+    <div className="bg-secondary min-h-0 p-4 flex justify-between items-center flex-col sm:flex-row gap-4">
       <div>
         {ethPrice > 0 && (
           <div className="btn btn-primary btn-sm font-normal cursor-auto">
