@@ -69,13 +69,13 @@ export default function RainbowKitCustomConnectButton() {
                         )}
                       </div>
                     )}
-                    <span className="m-2">{chain.name}</span>
+                    <span className="m-2 hidden sm:inline">{chain.name}</span>
                     <span>
-                      <ChevronDownIcon className="h-6 w-4" />
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </span>
                   </button>
 
-                  <div className="flex justify-center items-center border-1 rounded-lg px-1">
+                  <div className="flex justify-center items-center border-1 rounded-lg">
                     <Balance address={account.address} />
                     <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm">
                       <span className="m-1">{account.displayName}</span>
