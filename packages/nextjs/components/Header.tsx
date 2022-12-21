@@ -7,63 +7,14 @@ import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline
 import { useRouter } from "next/router";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
-const menuItems = [
-  {
-    label: "Home",
-    link: "/",
-    icon: null,
-  },
-  {
-    label: "Debug Contracts",
-    link: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
-  },
-  {
-    label: "Example UI",
-    link: "/example-ui",
-    icon: <SparklesIcon className="h-4 w-4" />,
-  },
-];
-
-const NavLink = ({
-  href,
-  children,
-  setIsOpen,
-}: {
-  href: string;
-  children: React.ReactNode;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();
+  const isActive = router.pathname === href;
 
   return (
     <Link href={href} passHref>
-      <a
-        onClick={() => {
-          setIsOpen(false);
-        }}
-        className={`${router.pathname === href ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}
-      >
-        {children}
-      </a>
+      <a className={`${isActive ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}>{children}</a>
     </Link>
-  );
-};
-
-const NavLinks = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  return (
-    <>
-      {menuItems.map((item, index) => {
-        return (
-          <li key={index}>
-            <NavLink href={item.link} setIsOpen={setIsOpen}>
-              {item.icon}
-              {item.label}
-            </NavLink>
-          </li>
-        );
-      })}
-    </>
   );
 };
 
@@ -71,11 +22,31 @@ const NavLinks = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStateActio
  * Site header
  */
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
     burgerMenuRef,
-    useCallback(() => setIsOpen(false), []),
+    useCallback(() => setIsDrawerOpen(false), []),
+  );
+
+  const NavLinks = (
+    <>
+      <li>
+        <NavLink href="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink href="/debug">
+          <BugAntIcon className="h-4 w-4" />
+          Debug Contracts
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/example-ui">
+          <SparklesIcon className="h-4 w-4" />
+          Example UI
+        </NavLink>
+      </li>
+    </>
   );
 
   return (
@@ -83,21 +54,24 @@ export default function Header() {
       <div className="navbar-start w-auto sm:w-1/2 ">
         <div className="sm:hidden dropdown" ref={burgerMenuRef}>
           <button
-            className={`ml-1 btn btn-ghost ${isOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
-              setIsOpen(prevIsOpenState => !prevIsOpenState);
+              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
             }}
           >
             <Bars3Icon className="h-1/2" />
           </button>
-          {isOpen ? (
+          {isDrawerOpen && (
             <ul
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              onClick={() => {
+                setIsDrawerOpen(false);
+              }}
             >
-              <NavLinks setIsOpen={setIsOpen} />
+              {NavLinks}
             </ul>
-          ) : null}
+          )}
         </div>
         <div className="hidden sm:flex items-center	gap-2 mx-4">
           <Link href="/" passHref>
@@ -110,9 +84,7 @@ export default function Header() {
             <span className="text-xs">Forkable Ethereum dev stack</span>
           </div>
         </div>
-        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1">
-          <NavLinks setIsOpen={setIsOpen} />
-        </ul>
+        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1">{NavLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
