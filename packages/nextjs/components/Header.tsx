@@ -84,8 +84,8 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="navbar bg-base-100 min-h-0 flex-shrink-0">
-      <div className="navbar-start">
+    <div className="navbar bg-base-100 min-h-0 flex-shrink-0 justify-between">
+      <div className="navbar-start w-auto sm:w-1/2 ">
         <div className="sm:hidden dropdown" ref={ref}>
           <button
             className={`ml-1 btn btn-ghost ${isOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
@@ -119,7 +119,7 @@ export default function Header() {
           <NavLinks setIsOpen={setIsOpen} />
         </ul>
       </div>
-      <div className="navbar-end mr-4">
+      <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
         <Faucet />
       </div>
