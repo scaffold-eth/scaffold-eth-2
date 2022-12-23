@@ -57,24 +57,22 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl items-start">
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
-        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
-          Read Functions
-        </p>
-        {contractMethodsDisplay?.loaded
-          ? contractMethodsDisplay.methods.length > 0
-            ? contractMethodsDisplay.methods
-            : "No read methods"
-          : "Loading read methods..."}
-        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
-          Write Functions
-        </p>
-        {contractWriteMethods?.loaded
-          ? contractWriteMethods.methods.length > 0
-            ? contractWriteMethods.methods
-            : "No write methods"
-          : "Loading write methods..."}
+    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
+      <div className="col-span-2 flex flex-col gap-6">
+        <div className="bg-white rounded-xl border border-gray-200 px-2 shadow-md shadow-secondary">
+          {contractMethodsDisplay?.loaded
+            ? contractMethodsDisplay.methods.length > 0
+              ? contractMethodsDisplay.methods
+              : "No read methods"
+            : "Loading read methods..."}
+        </div>
+        <div className="bg-white rounded-xl px-2 shadow-md shadow-secondary">
+          {contractWriteMethods?.loaded
+            ? contractWriteMethods.methods.length > 0
+              ? contractWriteMethods.methods
+              : "No write methods"
+            : "Loading write methods..."}
+        </div>
       </div>
       <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">
         {contractVariablesDisplay?.loaded

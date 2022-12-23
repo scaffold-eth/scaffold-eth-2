@@ -37,7 +37,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
   }
 
   return (
-    <div className="flex space-x-2 items-end">
+    <div className="flex items-end border-2 border-gray-200 bg-base-200 rounded-xl text-primary justify-between pr-3">
       {paramType.type === "address" ? (
         <AddressInput
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
@@ -53,7 +53,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
         <input
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
           autoComplete="off"
-          className="input input-bordered"
+          className="input input-ghost w-ful focus:outline-none focus:bg-transparent h-[2.2rem] min-h-[2.2rem] placeholder:text-primary border w-full"
           name={stateObjectKey}
           value={form[stateObjectKey]}
           onChange={(event): void => {
