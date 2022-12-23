@@ -59,14 +59,14 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   return (
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 px-2 shadow-md shadow-secondary">
+        <div className="bg-white rounded-xl border border-gray-100 px-2 shadow-md shadow-secondary">
           {contractMethodsDisplay?.loaded
             ? contractMethodsDisplay.methods.length > 0
               ? contractMethodsDisplay.methods
               : "No read methods"
             : "Loading read methods..."}
         </div>
-        <div className="bg-white rounded-xl px-2 shadow-md shadow-secondary">
+        <div className="bg-white rounded-xl px-2 shadow-md shadow-secondary border border-gray-100">
           {contractWriteMethods?.loaded
             ? contractWriteMethods.methods.length > 0
               ? contractWriteMethods.methods
