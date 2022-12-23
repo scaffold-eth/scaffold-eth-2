@@ -1,6 +1,7 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -59,14 +60,20 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   return (
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
-        <div className="bg-white rounded-xl border border-gray-100 px-2 shadow-md shadow-secondary">
+        <div className="bg-white rounded-3xl border border-gray-100 px-4 shadow-md shadow-secondary py-2">
           {contractMethodsDisplay?.loaded
             ? contractMethodsDisplay.methods.length > 0
               ? contractMethodsDisplay.methods
               : "No read methods"
             : "Loading read methods..."}
         </div>
-        <div className="bg-white rounded-xl px-2 shadow-md shadow-secondary border border-gray-100">
+        <div className="bg-white rounded-3xl px-2 shadow-md shadow-secondary border border-gray-100 flex flex-col relative mt-14">
+          <div className="h-[5rem] px-6 bg-secondary self-start absolute -top-[38px] left-0 rounded-[22px] -z-10 py-2">
+            <div className="flex items-center space-x-2 ">
+              <p className="my-0 text-sm">Write</p>
+              <ChevronDownIcon className="h-4 w-4" />
+            </div>
+          </div>
           {contractWriteMethods?.loaded
             ? contractWriteMethods.methods.length > 0
               ? contractWriteMethods.methods
