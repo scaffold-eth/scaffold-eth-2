@@ -60,28 +60,40 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   return (
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
-        <div className="bg-white rounded-3xl border border-gray-100 px-4 shadow-md shadow-secondary py-2">
-          {contractMethodsDisplay?.loaded
-            ? contractMethodsDisplay.methods.length > 0
-              ? contractMethodsDisplay.methods
-              : "No read methods"
-            : "Loading read methods..."}
+        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 collapse overflow-visible flex flex-col  mt-10">
+          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[7rem] min-h-fit" />
+          <div className="h-[5rem] w-[7rem] px-6 bg-secondary absolute self-start rounded-[22px] -top-[38px] -z-10 py-2 collapse-title">
+            <div className="flex items-center space-x-2 ">
+              <p className="my-0 text-sm">Read</p>
+              <ChevronDownIcon className="h-4 w-4" />
+            </div>
+          </div>
+          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+            {contractMethodsDisplay?.loaded
+              ? contractMethodsDisplay.methods.length > 0
+                ? contractMethodsDisplay.methods
+                : "No read methods"
+              : "Loading read methods..."}
+          </div>
         </div>
-        <div className="bg-white rounded-3xl px-2 shadow-md shadow-secondary border border-gray-100 flex flex-col relative mt-14">
-          <div className="h-[5rem] px-6 bg-secondary self-start absolute -top-[38px] left-0 rounded-[22px] -z-10 py-2">
+        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 mt-14 collapse overflow-visible flex flex-col">
+          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[7rem] min-h-fit" />
+          <div className="h-[5rem] w-[7rem] px-6 bg-secondary absolute self-start rounded-[22px] -top-[38px] -z-10 py-2 collapse-title">
             <div className="flex items-center space-x-2 ">
               <p className="my-0 text-sm">Write</p>
               <ChevronDownIcon className="h-4 w-4" />
             </div>
           </div>
-          {contractWriteMethods?.loaded
-            ? contractWriteMethods.methods.length > 0
-              ? contractWriteMethods.methods
-              : "No write methods"
-            : "Loading write methods..."}
+          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+            {contractWriteMethods?.loaded
+              ? contractWriteMethods.methods.length > 0
+                ? contractWriteMethods.methods
+                : "No write methods"
+              : "Loading write methods..."}
+          </div>
         </div>
       </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">
+      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1 self-start">
         {contractVariablesDisplay?.loaded
           ? contractVariablesDisplay.methods.length > 0
             ? contractVariablesDisplay.methods
