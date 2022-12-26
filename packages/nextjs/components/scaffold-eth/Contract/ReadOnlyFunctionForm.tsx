@@ -54,18 +54,20 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   });
 
   return (
-    <div className="flex flex-col pt-4 pb-2 gap-3 px-3 text-gray-700">
-      <p className="font-medium my-0 pl-1">{functionFragment.name}</p>
+    <div className="flex flex-col gap-3 text-gray-700">
+      <p className="font-medium my-0">{functionFragment.name}</p>
       {inputs}
       <button
-        className={`btn btn-primary btn-sm ${isFetching && "loading"}`}
+        className={`btn-sm btn btn-secondary rounded-3xl font-medium shadow-md shadow-secondary h-[2.8rem min-h-[2.8rem] text-sm normal-case self-end border border-gray-200 ${
+          isFetching && "loading"
+        } `}
         onClick={async () => {
           await refetch();
         }}
       >
         Read 📡
       </button>
-      {tryToDisplay(Result)}
+      <span className="break-all block">{tryToDisplay(Result)}</span>
     </div>
   );
 };
