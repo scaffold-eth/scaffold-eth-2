@@ -61,8 +61,8 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
         <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 collapse overflow-visible flex flex-col  mt-10">
-          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[7rem] min-h-fit" />
-          <div className="h-[5rem] w-[7rem] px-6 bg-secondary absolute self-start rounded-[22px] -top-[38px] -z-10 py-2 collapse-title">
+          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit" />
+          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title shadow-lg shadow-secondary">
             <div className="flex items-center space-x-2 ">
               <p className="my-0 text-sm">Read</p>
               <ChevronDownIcon className="h-4 w-4" />
@@ -77,8 +77,8 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
         <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 mt-14 collapse overflow-visible flex flex-col">
-          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[7rem] min-h-fit" />
-          <div className="h-[5rem] w-[7rem] px-6 bg-secondary absolute self-start rounded-[22px] -top-[38px] -z-10 py-2 collapse-title">
+          <input type="checkbox" className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit" />
+          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title shadow-lg shadow-secondary">
             <div className="flex items-center space-x-2 ">
               <p className="my-0 text-sm">Write</p>
               <ChevronDownIcon className="h-4 w-4" />
