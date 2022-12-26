@@ -55,7 +55,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
 
   return (
     <div className="flex flex-col gap-3 text-gray-700">
-      <p className="font-medium my-0">{functionFragment.name}</p>
+      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       <button
         className={`btn-sm btn btn-secondary rounded-3xl font-medium shadow-md shadow-secondary h-[2.8rem min-h-[2.8rem] text-sm normal-case self-end border border-gray-200 ${

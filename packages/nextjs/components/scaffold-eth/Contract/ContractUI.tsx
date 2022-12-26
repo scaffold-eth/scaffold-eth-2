@@ -93,7 +93,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
       </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1 self-start">
+      <div className="bg-secondary rounded-3xl px-8 py-4 row-span-1 self-start shadow-lg shadow-secondary">
         {contractVariablesDisplay?.loaded
           ? contractVariablesDisplay.methods.length > 0
             ? contractVariablesDisplay.methods
