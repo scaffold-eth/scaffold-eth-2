@@ -13,6 +13,7 @@ import {
   getDeployedContract,
 } from "./utilsContract";
 import { getNetworkColor, truncateEthAddress } from "~~/utils/scaffold-eth";
+import Balance from "../Balance";
 
 type TContractUIProps = {
   contractName: string;
@@ -103,30 +104,33 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           {chain?.name && (
             <p className={`${getNetworkColor(chain.name)} font-medium my-0`}>{chain.name.toLowerCase()}</p>
           )}
-          <div className="flex items-baseline gap-1">
-            <Blockies seed={contractAddress.toLowerCase()} size={3} scale={5} />
-            <p className="my-0 text-gray-600 leading-none">{truncateEthAddress(contractAddress)}</p>
-            {addressCopied ? (
-              <ClipboardDocumentCheckIcon
-                className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
-                aria-hidden="true"
-              />
-            ) : (
-              <CopyToClipboard
-                text={contractAddress}
-                onCopy={() => {
-                  setAddressCopied(true);
-                  setTimeout(() => {
-                    setAddressCopied(false);
-                  }, 800);
-                }}
-              >
-                <ClipboardDocumentIcon
+          <div className="flex">
+            <div className="flex items-baseline gap-1">
+              <Blockies seed={contractAddress.toLowerCase()} size={3} scale={5} />
+              <p className="my-0 text-gray-600 leading-none">{truncateEthAddress(contractAddress)}</p>
+              {addressCopied ? (
+                <ClipboardDocumentCheckIcon
                   className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
                   aria-hidden="true"
                 />
-              </CopyToClipboard>
-            )}
+              ) : (
+                <CopyToClipboard
+                  text={contractAddress}
+                  onCopy={() => {
+                    setAddressCopied(true);
+                    setTimeout(() => {
+                      setAddressCopied(false);
+                    }, 800);
+                  }}
+                >
+                  <ClipboardDocumentIcon
+                    className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+                    aria-hidden="true"
+                  />
+                </CopyToClipboard>
+              )}
+              <Balance address={contractAddress} />
+            </div>
           </div>
         </div>
         <div className="bg-secondary rounded-3xl px-8 py-4 shadow-lg shadow-secondary">
