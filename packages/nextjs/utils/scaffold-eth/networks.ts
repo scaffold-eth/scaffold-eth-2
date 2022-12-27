@@ -28,3 +28,19 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 
   return blockExplorerTxURL;
 }
+
+export function getNetworkColor(chainName: string | undefined) {
+  switch (chainName?.toLowerCase()) {
+    case "hardhat":
+      return "text-yellow-600/70";
+    case "homestead":
+      return "text-red-600/70";
+    case "mumbai":
+      return "text-violet-600/70";
+    case "goerli":
+      return "text-blue-600/70";
+
+    default:
+      return "text-primary";
+  }
+}

@@ -2,6 +2,9 @@ import { Contract } from "ethers";
 import { useMemo, useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import Blockies from "react-blockies";
+import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from "@heroicons/react/24/outline";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -9,6 +12,7 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
+import { getNetworkColor, truncateEthAddress } from "~~/utils/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -23,6 +27,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
+  const [addressCopied, setAddressCopied] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
@@ -93,12 +98,44 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
       </div>
-      <div className="bg-secondary rounded-3xl px-8 py-4 row-span-1 self-start shadow-lg shadow-secondary">
-        {contractVariablesDisplay?.loaded
-          ? contractVariablesDisplay.methods.length > 0
-            ? contractVariablesDisplay.methods
-            : "No contract variables"
-          : "Loading contract variables..."}
+      <div className="row-span-1 self-start flex flex-col">
+        <div className="bg-white border-gray-100 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
+          {chain?.name && (
+            <p className={`${getNetworkColor(chain.name)} font-medium my-0`}>{chain.name.toLowerCase()}</p>
+          )}
+          <div className="flex items-baseline gap-1">
+            <Blockies seed={contractAddress.toLowerCase()} size={3} scale={5} />
+            <p className="my-0 text-gray-600 leading-none">{truncateEthAddress(contractAddress)}</p>
+            {addressCopied ? (
+              <ClipboardDocumentCheckIcon
+                className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+                aria-hidden="true"
+              />
+            ) : (
+              <CopyToClipboard
+                text={contractAddress}
+                onCopy={() => {
+                  setAddressCopied(true);
+                  setTimeout(() => {
+                    setAddressCopied(false);
+                  }, 800);
+                }}
+              >
+                <ClipboardDocumentIcon
+                  className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+                  aria-hidden="true"
+                />
+              </CopyToClipboard>
+            )}
+          </div>
+        </div>
+        <div className="bg-secondary rounded-3xl px-8 py-4 shadow-lg shadow-secondary">
+          {contractVariablesDisplay?.loaded
+            ? contractVariablesDisplay.methods.length > 0
+              ? contractVariablesDisplay.methods
+              : "No contract variables"
+            : "Loading contract variables..."}
+        </div>
       </div>
     </div>
   );
