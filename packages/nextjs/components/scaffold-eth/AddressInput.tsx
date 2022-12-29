@@ -46,19 +46,21 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
 
   return (
     <>
-      <div className="form-control">
+      <div className="form-control grow">
         <label className="input-group">
           <input
             name={name}
             type="text"
             placeholder={placeholder}
-            className={`input input-bordered ${ensData === null && "input-error"}`}
+            className={`input input-ghost focus:outline-none focus:bg-transparent h-[2.2rem] min-h-[2.2rem] placeholder:text-primary/90 border w-full font-medium grow ${
+              ensData === null && "input-error"
+            }`}
             value={isControlledInput ? value : address || ""}
             onChange={onChangeAddress}
             disabled={isLoading}
           />
           <span className="p-0 rounded-md bg-base-100">
-            <Blockies seed={address?.toLowerCase() as string} size={9.5} scale={5} />
+            <Blockies seed={address?.toLowerCase() as string} size={6.5} scale={5} />
           </span>
         </label>
       </div>

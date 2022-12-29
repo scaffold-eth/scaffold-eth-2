@@ -37,7 +37,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
   }
 
   return (
-    <div className="flex items-end border-2 border-gray-100 bg-base-200 rounded-xl text-primary/90 justify-between pr-3">
+    <div className="flex items-end border-2 border-gray-100 bg-base-200 rounded-xl text-primary/90 justify-between">
       {paramType.type === "address" ? (
         <AddressInput
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
