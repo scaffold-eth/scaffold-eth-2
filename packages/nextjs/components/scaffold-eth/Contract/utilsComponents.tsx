@@ -10,7 +10,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
       <input
         placeholder="Value"
         autoComplete="off"
-        className="input input-ghost focus:outline-none focus:bg-transparent h-[2.2rem] min-h-[2.2rem] placeholder:text-primary/90 border w-full font-medium"
+        className="input input-ghost focus:outline-none focus:bg-transparent focus:text-primary h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-gray-400/60"
         value={txValue}
         onChange={e => setTxValue(e.target.value)}
       />

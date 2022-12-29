@@ -53,7 +53,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
         <input
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
           autoComplete="off"
-          className="input input-ghost focus:outline-none focus:bg-transparent h-[2.2rem] min-h-[2.2rem] placeholder:text-primary/90 border w-full font-medium"
+          className="input input-ghost focus:outline-none focus:bg-transparent focus:text-primary h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-gray-400/60"
           name={stateObjectKey}
           value={form[stateObjectKey]}
           onChange={(event): void => {
