@@ -1,9 +1,6 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
 import { useContract, useNetwork, useProvider } from "wagmi";
-import Blockies from "react-blockies";
-import { ClipboardDocumentIcon, ClipboardDocumentCheckIcon } from "@heroicons/react/24/outline";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -11,8 +8,9 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkColor, truncateEthAddress } from "~~/utils/scaffold-eth";
+import { getNetworkColor } from "~~/utils/scaffold-eth";
 import Balance from "../Balance";
+import Address from "../Address";
 
 type TContractUIProps = {
   contractName: string;
@@ -27,7 +25,6 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   const { chain } = useNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
-  const [addressCopied, setAddressCopied] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
@@ -111,29 +108,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           )}
           <div className="flex">
             <div className="flex items-baseline gap-1">
-              <Blockies seed={contractAddress.toLowerCase()} size={3} scale={5} />
-              <p className="my-0 text-gray-600 leading-none">{truncateEthAddress(contractAddress)}</p>
-              {addressCopied ? (
-                <ClipboardDocumentCheckIcon
-                  className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
-                  aria-hidden="true"
-                />
-              ) : (
-                <CopyToClipboard
-                  text={contractAddress}
-                  onCopy={() => {
-                    setAddressCopied(true);
-                    setTimeout(() => {
-                      setAddressCopied(false);
-                    }, 800);
-                  }}
-                >
-                  <ClipboardDocumentIcon
-                    className="text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
-                    aria-hidden="true"
-                  />
-                </CopyToClipboard>
-              )}
+              <Address address={contractAddress} />
               <Balance address={contractAddress} />
             </div>
           </div>
