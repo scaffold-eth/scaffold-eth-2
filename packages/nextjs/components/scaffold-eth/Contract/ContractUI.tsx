@@ -8,7 +8,7 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkColor } from "~~/utils/scaffold-eth";
+import { getNetworkDetails } from "~~/utils/scaffold-eth";
 import Balance from "../Balance";
 import Address from "../Address";
 
@@ -103,8 +103,10 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
       </div>
       <div className="row-span-1 self-start flex flex-col">
         <div className="bg-white border-gray-100 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
-          {chain?.name && (
-            <p className={`${getNetworkColor(chain.name)} font-medium my-0`}>{chain.name.toLowerCase()}</p>
+          {chain && (
+            <p className="font-medium my-0" style={{ color: getNetworkDetails(chain.id)?.color }}>
+              {chain.name}
+            </p>
           )}
           <div className="flex">
             <div className="flex items-baseline gap-1">
