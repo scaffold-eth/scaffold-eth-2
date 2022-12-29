@@ -93,11 +93,7 @@ export const WriteOnlyFunctionForm = ({
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-      <button
-        className={`btn btn-secondary rounded-3xl font-medium shadow-md shadow-secondary h-[2.8rem] min-h-[2.8rem]
-        text-sm normal-case self-end border border-gray-200 ${isLoading && "loading"}`}
-        onClick={handleWrite}
-      >
+      <button className={`btn btn-secondary self-end ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
         Send 💸
       </button>
       <span className="break-all block">{tryToDisplay(result)}</span>
