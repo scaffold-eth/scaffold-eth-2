@@ -6,34 +6,35 @@ import { Dispatch, SetStateAction } from "react";
  */
 const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
   return (
-    <div className="flex space-x-2 items-center">
+    <div className="flex items-end border-2 border-gray-100 bg-base-200 rounded-xl text-primary/90 justify-between pr-3">
       <input
         placeholder="Value"
         autoComplete="off"
-        className="input input-bordered"
+        className="input input-ghost focus:outline-none focus:bg-transparent focus:text-primary h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-gray-400/60"
         value={txValue}
         onChange={e => setTxValue(e.target.value)}
       />
-      <button
-        style={{ cursor: "pointer" }}
-        onClick={async () => {
-          if (!txValue) return;
-
-          const floatValue = parseFloat(txValue);
-          if (floatValue) setTxValue("" + floatValue * 10 ** 18);
-        }}
-      >
-        ✴️
-      </button>
-      <button
-        style={{ cursor: "pointer" }}
-        onClick={async () => {
-          if (!txValue) return;
-          setTxValue(BigNumber.from(txValue).toHexString());
-        }}
-      >
-        #️⃣
-      </button>
+      <div className="space-x-4 flex">
+        <button
+          className="cursor-pointer text-xl font-semibold pt-1"
+          onClick={async () => {
+            if (!txValue) return;
+            const floatValue = parseFloat(txValue);
+            if (floatValue) setTxValue("" + floatValue * 10 ** 18);
+          }}
+        >
+          *
+        </button>
+        <button
+          className="cursor-pointer text-xl font-semibold"
+          onClick={async () => {
+            if (!txValue) return;
+            setTxValue(BigNumber.from(txValue).toHexString());
+          }}
+        >
+          #
+        </button>
+      </div>
     </div>
   );
 };

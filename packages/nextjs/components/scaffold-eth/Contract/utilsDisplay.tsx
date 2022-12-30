@@ -2,7 +2,7 @@ import { TransactionResponse } from "@ethersproject/providers";
 import { formatUnits } from "@ethersproject/units";
 import { BigNumber, ethers } from "ethers";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import Address from "../Address";
+import { Address } from "~~/components/scaffold-eth";
 
 type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
 
@@ -46,7 +46,7 @@ interface IUtilityButton {
 export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      style={{ cursor: "pointer" }}
+      className="cursor-pointer text-xl font-semibold mr-3"
       onClick={(): void => {
         if (ethers.utils.isHexString(form[stateObjectKey])) {
           const formUpdate = { ...form };
@@ -59,7 +59,7 @@ export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtili
         }
       }}
     >
-      #️⃣
+      #
     </div>
   );
 };
@@ -67,7 +67,7 @@ export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtili
 export const ConvertStringToBytes = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      style={{ cursor: "pointer" }}
+      className="cursor-pointer text-xl font-semibold mr-3"
       onClick={(): void => {
         if (ethers.utils.isHexString(form[stateObjectKey])) {
           const formUpdate = { ...form };
@@ -80,14 +80,14 @@ export const ConvertStringToBytes = ({ form, setForm, stateObjectKey }: IUtility
         }
       }}
     >
-      #️⃣
+      #
     </div>
   );
 };
 export const ConvertUintToEther = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      style={{ cursor: "pointer" }}
+      className="cursor-pointer text-xl font-semibold mr-3"
       onClick={(): void => {
         if (form[stateObjectKey]) {
           const formUpdate = { ...form };
@@ -96,7 +96,7 @@ export const ConvertUintToEther = ({ form, setForm, stateObjectKey }: IUtilityBu
         }
       }}
     >
-      ✴️
+      *
     </div>
   );
 };
