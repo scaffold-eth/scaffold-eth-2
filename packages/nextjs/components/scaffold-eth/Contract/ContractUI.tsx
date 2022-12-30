@@ -108,7 +108,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
             </p>
           )}
           <div className="flex">
-            <div className="flex items-baseline gap-1">
+            <div className="flex gap-1">
               <Address address={contractAddress} />
               <Balance address={contractAddress} />
             </div>
