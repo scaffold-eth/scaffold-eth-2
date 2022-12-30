@@ -53,7 +53,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             type="text"
             placeholder={placeholder}
             className={`input input-ghost focus:outline-none focus:bg-transparent focus:text-primary h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-gray-400/60 grow ${
-              ensData === null && "input-error"
+              ensData === null ? "input-error" : ""
             }`}
             value={isControlledInput ? value : address || ""}
             onChange={onChangeAddress}
