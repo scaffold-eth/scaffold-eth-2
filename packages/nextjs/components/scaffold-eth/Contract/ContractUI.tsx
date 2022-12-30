@@ -8,7 +8,7 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkDetails } from "~~/utils/scaffold-eth";
+import { getNetworkDetailsByChainId } from "~~/utils/scaffold-eth";
 import { Balance, Address } from "~~/components/scaffold-eth";
 
 type TContractUIProps = {
@@ -103,7 +103,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
       <div className="row-span-1 self-start flex flex-col">
         <div className="bg-white border-gray-100 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           {chain && (
-            <p className="font-medium my-0" style={{ color: getNetworkDetails(chain.id)?.color }}>
+            <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
               {chain.name}
             </p>
           )}

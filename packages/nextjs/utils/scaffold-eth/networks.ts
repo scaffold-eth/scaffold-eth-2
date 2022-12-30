@@ -4,10 +4,6 @@ type TChainAttributes = {
   name: string;
   color: string;
   chainId: number;
-  faucet?: string;
-  gasPrice?: number;
-  number?: number;
-  price?: number;
 };
 
 export const NETWORKS: Record<string, TChainAttributes> = {
@@ -25,30 +21,21 @@ export const NETWORKS: Record<string, TChainAttributes> = {
     name: "goerli",
     color: "#0975F6",
     chainId: 5,
-    faucet: "https://goerli-faucet.slock.it/",
   },
-  xdai: {
-    name: "xdai",
+  gnosis: {
+    name: "gnosis",
     color: "#48a9a6",
     chainId: 100,
-    price: 1,
-    gasPrice: 1000000000,
-    faucet: "https://xdai-faucet.top/",
   },
   polygon: {
     name: "polygon",
     color: "#2bbdf7",
     chainId: 137,
-    price: 1,
-    gasPrice: 1000000000,
   },
   mumbai: {
     name: "mumbai",
     color: "#92D9FA",
     chainId: 80001,
-    price: 1,
-    gasPrice: 1000000000,
-    faucet: "https://faucet.polygon.technology/",
   },
   localOptimismL1: {
     name: "localOptimismL1",
@@ -59,13 +46,11 @@ export const NETWORKS: Record<string, TChainAttributes> = {
     name: "localOptimism",
     color: "#f01a37",
     chainId: 420,
-    gasPrice: 0,
   },
   goerliOptimism: {
     name: "goerliOptimism",
     color: "#f01a37",
     chainId: 420,
-    gasPrice: 0,
   },
   optimism: {
     name: "optimism",
@@ -91,44 +76,36 @@ export const NETWORKS: Record<string, TChainAttributes> = {
     name: "localAvalanche",
     color: "#666666",
     chainId: 43112,
-    gasPrice: 225000000000,
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
     color: "#666666",
     chainId: 43113,
-    gasPrice: 225000000000,
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
     color: "#666666",
     chainId: 43114,
-    gasPrice: 225000000000,
   },
   testnetHarmony: {
     name: "testnetHarmony",
     color: "#00b0ef",
     chainId: 1666700000,
-    gasPrice: 1000000000,
   },
   mainnetHarmony: {
     name: "mainnetHarmony",
     color: "#00b0ef",
     chainId: 1666600000,
-    gasPrice: 1000000000,
   },
   fantom: {
     name: "fantom",
     color: "#1969ff",
     chainId: 250,
-    gasPrice: 1000000000,
   },
   testnetFantom: {
     name: "testnetFantom",
     color: "#1969ff",
     chainId: 4002,
-    gasPrice: 1000000000,
-    faucet: "https://faucet.fantom.network/",
   },
   moonbeam: {
     name: "moonbeam",
@@ -144,7 +121,6 @@ export const NETWORKS: Record<string, TChainAttributes> = {
     name: "moonbaseAlpha",
     color: "#53CBC9",
     chainId: 1287,
-    faucet: "https://discord.gg/SZNP8bWHZq",
   },
   moonbeamDevNode: {
     name: "moonbeamDevNode",
@@ -182,10 +158,9 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   return blockExplorerTxURL;
 }
 
-export const getNetworkDetails = (chainId: number) => {
-  for (const n in NETWORKS) {
-    if (NETWORKS[n].chainId === chainId) {
-      return NETWORKS[n];
-    }
-  }
+export const getNetworkDetailsByChainId = (chainId: number) => {
+  const networkName = Object.keys(NETWORKS).find(network => NETWORKS[network]?.chainId === chainId);
+
+  if (!networkName) return;
+  return NETWORKS[networkName];
 };
