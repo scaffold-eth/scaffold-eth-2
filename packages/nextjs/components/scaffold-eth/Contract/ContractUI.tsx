@@ -9,8 +9,7 @@ import {
   getDeployedContract,
 } from "./utilsContract";
 import { getNetworkDetails } from "~~/utils/scaffold-eth";
-import Balance from "../Balance";
-import Address from "../Address";
+import { Balance, Address } from "~~/components/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;

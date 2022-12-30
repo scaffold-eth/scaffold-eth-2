@@ -1,6 +1,7 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
-import AddressInput from "../AddressInput";
+import { AddressInput } from "~~/components/scaffold-eth";
+
 import { ConvertStringToBytes, ConvertStringToBytes32, ConvertUintToEther } from "./utilsDisplay";
 
 type ParamType = {
