@@ -10,11 +10,11 @@ export default function Footer() {
   const ethPrice = useAppStore(state => state.ethPriceSlice.ethPrice);
 
   return (
-    <div className="bg-secondary min-h-0 p-4 flex justify-between items-center">
+    <div className="bg-secondary min-h-0 p-4 flex justify-between items-center flex-col sm:flex-row gap-4">
       <div>
         {ethPrice > 0 && (
           <div className="btn btn-primary btn-sm font-normal cursor-auto">
-            <CurrencyDollarIcon className="text-black h-4 w-4 mr-0.5" />
+            <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
             <span>{ethPrice}</span>
           </div>
         )}

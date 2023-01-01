@@ -8,6 +8,8 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
+import { getNetworkDetailsByChainId } from "~~/utils/scaffold-eth";
+import { Balance, Address } from "~~/components/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -57,31 +59,68 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-5xl items-start">
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2">
-        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
-          Read Functions
-        </p>
-        {contractMethodsDisplay?.loaded
-          ? contractMethodsDisplay.methods.length > 0
-            ? contractMethodsDisplay.methods
-            : "No read methods"
-          : "Loading read methods..."}
-        <p className="font-semibold text-black text-2xl my-4 underline decoration-wavy underline-offset-2 decoration-violet-700 ">
-          Write Functions
-        </p>
-        {contractWriteMethods?.loaded
-          ? contractWriteMethods.methods.length > 0
-            ? contractWriteMethods.methods
-            : "No write methods"
-          : "Loading write methods..."}
+    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
+      <div className="col-span-2 flex flex-col gap-6">
+        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
+          <input
+            type="checkbox"
+            className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
+            defaultChecked
+          />
+          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-secondary ">
+            <div className="flex items-center space-x-2">
+              <p className="my-0 text-sm">Read</p>
+            </div>
+          </div>
+          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+            {contractMethodsDisplay?.loaded
+              ? contractMethodsDisplay.methods.length > 0
+                ? contractMethodsDisplay.methods
+                : "No read methods"
+              : "Loading read methods..."}
+          </div>
+        </div>
+        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 mt-14 collapse collapse-arrow overflow-visible flex flex-col">
+          <input
+            type="checkbox"
+            className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
+            defaultChecked
+          />
+          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-secondary ">
+            <div className="flex items-center space-x-2 ">
+              <p className="my-0 text-sm">Write</p>
+            </div>
+          </div>
+          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+            {contractWriteMethods?.loaded
+              ? contractWriteMethods.methods.length > 0
+                ? contractWriteMethods.methods
+                : "No write methods"
+              : "Loading write methods..."}
+          </div>
+        </div>
       </div>
-      <div className="bg-white rounded-sm px-4 py-2 border-solid border-2 row-span-1">
-        {contractVariablesDisplay?.loaded
-          ? contractVariablesDisplay.methods.length > 0
-            ? contractVariablesDisplay.methods
-            : "No contract variables"
-          : "Loading contract variables..."}
+      <div className="row-span-1 self-start flex flex-col">
+        <div className="bg-white border-gray-100 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
+          {chain && (
+            <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
+              {chain.name}
+            </p>
+          )}
+          <div className="flex">
+            <div className="flex gap-1">
+              <Address address={contractAddress} />
+              <Balance address={contractAddress} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-secondary rounded-3xl px-8 py-4 shadow-lg shadow-secondary">
+          {contractVariablesDisplay?.loaded
+            ? contractVariablesDisplay.methods.length > 0
+              ? contractVariablesDisplay.methods
+              : "No contract variables"
+            : "Loading contract variables..."}
+        </div>
       </div>
     </div>
   );

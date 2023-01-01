@@ -1,5 +1,134 @@
 import { Network } from "@ethersproject/networks";
 
+type TChainAttributes = {
+  name: string;
+  color: string;
+  chainId: number;
+};
+
+export const NETWORKS: Record<string, TChainAttributes> = {
+  localhost: {
+    name: "localhost",
+    color: "#6666",
+    chainId: 31337,
+  },
+  mainnet: {
+    name: "mainnet",
+    color: "#ff8b9e",
+    chainId: 1,
+  },
+  goerli: {
+    name: "goerli",
+    color: "#0975F6",
+    chainId: 5,
+  },
+  gnosis: {
+    name: "gnosis",
+    color: "#48a9a6",
+    chainId: 100,
+  },
+  polygon: {
+    name: "polygon",
+    color: "#2bbdf7",
+    chainId: 137,
+  },
+  mumbai: {
+    name: "mumbai",
+    color: "#92D9FA",
+    chainId: 80001,
+  },
+  localOptimismL1: {
+    name: "localOptimismL1",
+    color: "#f01a37",
+    chainId: 31337,
+  },
+  localOptimism: {
+    name: "localOptimism",
+    color: "#f01a37",
+    chainId: 420,
+  },
+  goerliOptimism: {
+    name: "goerliOptimism",
+    color: "#f01a37",
+    chainId: 420,
+  },
+  optimism: {
+    name: "optimism",
+    color: "#f01a37",
+    chainId: 10,
+  },
+  goerliArbitrum: {
+    name: "goerliArbitrum",
+    color: "#28a0f0",
+    chainId: 421613,
+  },
+  arbitrum: {
+    name: "arbitrum",
+    color: "#28a0f0",
+    chainId: 42161,
+  },
+  devnetArbitrum: {
+    name: "devnetArbitrum",
+    color: "#28a0f0",
+    chainId: 421612,
+  },
+  localAvalanche: {
+    name: "localAvalanche",
+    color: "#666666",
+    chainId: 43112,
+  },
+  fujiAvalanche: {
+    name: "fujiAvalanche",
+    color: "#666666",
+    chainId: 43113,
+  },
+  mainnetAvalanche: {
+    name: "mainnetAvalanche",
+    color: "#666666",
+    chainId: 43114,
+  },
+  testnetHarmony: {
+    name: "testnetHarmony",
+    color: "#00b0ef",
+    chainId: 1666700000,
+  },
+  mainnetHarmony: {
+    name: "mainnetHarmony",
+    color: "#00b0ef",
+    chainId: 1666600000,
+  },
+  fantom: {
+    name: "fantom",
+    color: "#1969ff",
+    chainId: 250,
+  },
+  testnetFantom: {
+    name: "testnetFantom",
+    color: "#1969ff",
+    chainId: 4002,
+  },
+  moonbeam: {
+    name: "moonbeam",
+    color: "#53CBC9",
+    chainId: 1284,
+  },
+  moonriver: {
+    name: "moonriver",
+    color: "#53CBC9",
+    chainId: 1285,
+  },
+  moonbaseAlpha: {
+    name: "moonbaseAlpha",
+    color: "#53CBC9",
+    chainId: 1287,
+  },
+  moonbeamDevNode: {
+    name: "moonbeamDevNode",
+    color: "#53CBC9",
+    chainId: 1281,
+  },
+};
+
 /**
  * Gives the block explorer transaction URL.
  * @param network
@@ -28,3 +157,10 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 
   return blockExplorerTxURL;
 }
+
+export const getNetworkDetailsByChainId = (chainId: number) => {
+  const networkName = Object.keys(NETWORKS).find(network => NETWORKS[network]?.chainId === chainId);
+
+  if (!networkName) return;
+  return NETWORKS[networkName];
+};
