@@ -33,7 +33,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="text-gray-800 font-medium text-lg mb-0 break-words">{functionFragment.name}</h3>
+        <h3 className="text-base-content/90 font-medium text-lg mb-0 break-words">{functionFragment.name}</h3>
         <button className={`btn btn-ghost btn-xs ${isFetching && "loading"}`} onClick={async () => await refetch()}>
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
