@@ -2,6 +2,7 @@ import React from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "~~/services/store/store";
 import { HeartIcon } from "@heroicons/react/24/outline";
+import SwitchTheme from "./SwitchTheme";
 
 /**
  * Site footer
@@ -59,7 +60,7 @@ export default function Footer() {
         </ul>
       </div>
       <div className="mr-4 text-sm">
-        <div>Color Switch Placeholder</div>
+        <SwitchTheme />
       </div>
     </div>
   );
