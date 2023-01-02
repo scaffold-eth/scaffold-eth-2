@@ -22,22 +22,22 @@ cd se-2
 yarn install
 ```
 
-2. Start your NextJS app on the first terminal
-
-```
-yarn start
-```
-
-3. On a second terminal, run a local network
+2. Run a local network in the first terminal:
 
 ```
 yarn chain
 ```
 
-4. On a third terminal, deploy the test contract
+3. On a second terminal, deploy the test contract:
 
 ```
 yarn deploy
+```
+
+4. On a third terminal, start your NextJS app:
+
+```
+yarn start
 ```
 
 Visit your app on: `http://localhost:3000`.
