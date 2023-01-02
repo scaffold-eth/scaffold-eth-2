@@ -1,7 +1,7 @@
-//SwitchTheme.tsx
 import React, { useEffect } from "react";
 import { useDarkMode, useIsMounted } from "usehooks-ts";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+
 const SwitchTheme = () => {
   const { isDarkMode, toggle } = useDarkMode(false);
   const isMounted = useIsMounted();
