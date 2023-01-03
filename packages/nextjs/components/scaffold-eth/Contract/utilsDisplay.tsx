@@ -46,7 +46,7 @@ interface IUtilityButton {
 export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      className="cursor-pointer text-xl font-semibold mr-3"
+      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
       onClick={(): void => {
         if (ethers.utils.isHexString(form[stateObjectKey])) {
           const formUpdate = { ...form };
@@ -67,7 +67,7 @@ export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtili
 export const ConvertStringToBytes = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      className="cursor-pointer text-xl font-semibold mr-3"
+      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
       onClick={(): void => {
         if (ethers.utils.isHexString(form[stateObjectKey])) {
           const formUpdate = { ...form };
@@ -87,7 +87,7 @@ export const ConvertStringToBytes = ({ form, setForm, stateObjectKey }: IUtility
 export const ConvertUintToEther = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   return (
     <div
-      className="cursor-pointer text-xl font-semibold mr-3"
+      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
       onClick={(): void => {
         if (form[stateObjectKey]) {
           const formUpdate = { ...form };

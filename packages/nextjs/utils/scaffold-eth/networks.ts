@@ -9,7 +9,7 @@ type TChainAttributes = {
 export const NETWORKS: Record<string, TChainAttributes> = {
   localhost: {
     name: "localhost",
-    color: "#6666",
+    color: "#666",
     chainId: 31337,
   },
   mainnet: {

@@ -61,47 +61,51 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   return (
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
-        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
-          <input
-            type="checkbox"
-            className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
-            defaultChecked
-          />
-          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-secondary ">
-            <div className="flex items-center space-x-2">
-              <p className="my-0 text-sm">Read</p>
+        <div className="z-10">
+          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
+            <input
+              type="checkbox"
+              className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
+              defaultChecked
+            />
+            <div className="h-[5rem] w-[5.5rem] px-4 bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-base-300">
+              <div className="flex items-center space-x-2">
+                <p className="my-0 text-sm">Read</p>
+              </div>
             </div>
-          </div>
-          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-            {contractMethodsDisplay?.loaded
-              ? contractMethodsDisplay.methods.length > 0
-                ? contractMethodsDisplay.methods
-                : "No read methods"
-              : "Loading read methods..."}
+            <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+              {contractMethodsDisplay?.loaded
+                ? contractMethodsDisplay.methods.length > 0
+                  ? contractMethodsDisplay.methods
+                  : "No read methods"
+                : "Loading read methods..."}
+            </div>
           </div>
         </div>
-        <div className="bg-white rounded-3xl shadow-md shadow-secondary border border-gray-100 mt-14 collapse collapse-arrow overflow-visible flex flex-col">
-          <input
-            type="checkbox"
-            className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
-            defaultChecked
-          />
-          <div className="h-[5rem] w-[5.5rem] px-4 bg-secondary absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-secondary ">
-            <div className="flex items-center space-x-2 ">
-              <p className="my-0 text-sm">Write</p>
+        <div className="z-10">
+          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 mt-14 collapse collapse-arrow overflow-visible flex flex-col">
+            <input
+              type="checkbox"
+              className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
+              defaultChecked
+            />
+            <div className="h-[5rem] w-[5.5rem] px-4 bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-base-300">
+              <div className="flex items-center space-x-2 ">
+                <p className="my-0 text-sm">Write</p>
+              </div>
             </div>
-          </div>
-          <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-            {contractWriteMethods?.loaded
-              ? contractWriteMethods.methods.length > 0
-                ? contractWriteMethods.methods
-                : "No write methods"
-              : "Loading write methods..."}
+            <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+              {contractWriteMethods?.loaded
+                ? contractWriteMethods.methods.length > 0
+                  ? contractWriteMethods.methods
+                  : "No write methods"
+                : "Loading write methods..."}
+            </div>
           </div>
         </div>
       </div>
       <div className="row-span-1 self-start flex flex-col">
-        <div className="bg-white border-gray-100 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
+        <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           {chain && (
             <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
               {chain.name}
@@ -114,7 +118,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
             </div>
           </div>
         </div>
-        <div className="bg-secondary rounded-3xl px-8 py-4 shadow-lg shadow-secondary">
+        <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
           {contractVariablesDisplay?.loaded
             ? contractVariablesDisplay.methods.length > 0
               ? contractVariablesDisplay.methods

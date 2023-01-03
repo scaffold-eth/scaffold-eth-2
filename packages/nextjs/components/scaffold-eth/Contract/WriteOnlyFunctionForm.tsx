@@ -89,11 +89,11 @@ export const WriteOnlyFunctionForm = ({
 
   // TODO prettify json result
   return (
-    <div className="flex flex-col gap-3 text-gray-700">
+    <div className="flex flex-col gap-3">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-      <button className={`btn btn-secondary self-end ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
+      <button className={`btn btn-secondary btn-sm self-end ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
         Send 💸
       </button>
       <span className="break-all block">{tryToDisplay(result)}</span>
