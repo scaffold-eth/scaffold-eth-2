@@ -62,7 +62,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
         <div className="z-10">
-          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-200/50 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
+          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
             <input
               type="checkbox"
               className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
@@ -83,7 +83,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
         <div className="z-10">
-          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-200/50 mt-14 collapse collapse-arrow overflow-visible flex flex-col">
+          <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 mt-14 collapse collapse-arrow overflow-visible flex flex-col">
             <input
               type="checkbox"
               className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
@@ -105,7 +105,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
         </div>
       </div>
       <div className="row-span-1 self-start flex flex-col">
-        <div className="bg-base-100 border-base-200/50 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
+        <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           {chain && (
             <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
               {chain.name}

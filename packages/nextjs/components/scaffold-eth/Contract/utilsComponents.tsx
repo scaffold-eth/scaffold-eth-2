@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction } from "react";
  */
 const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
   return (
-    <div className="flex items-end border-2 border-base-300/25 bg-base-200 rounded-xl text-primary/90 justify-between pr-3">
+    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-md text-primary justify-between pr-3">
       <input
         placeholder="Value"
         autoComplete="off"

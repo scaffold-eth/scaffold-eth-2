@@ -47,7 +47,7 @@ export default function Balance({ address }: TBalanceProps) {
 
   if (isError) {
     return (
-      <div className={`border-2 border-gray-400 rounded-xl p-2 flex flex-col items-center max-w-fit cursor-pointer`}>
+      <div className={`border-2 border-gray-400 rounded-md p-2 flex flex-col items-center max-w-fit cursor-pointer`}>
         <div className="text-warning text-xs">Error</div>
       </div>
     );

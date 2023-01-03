@@ -43,7 +43,7 @@ function Toast({ content, status, duration = DEFAULT_DURATION, icon, position = 
   return hotToast.custom(
     t => (
       <div
-        className={`flex flex-row items-center justify-between max-w-sm bg-white p-4 text-black shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-xl relative transition-all duration-500 ease-in-out space-x-2 ${
+        className={`flex flex-row items-center justify-between max-w-sm bg-white p-4 text-black shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-md relative transition-all duration-500 ease-in-out space-x-2 ${
           t.visible ? "top-0" : "-top-96"
         }`}
       >
