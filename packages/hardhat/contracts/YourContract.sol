@@ -1,42 +1,48 @@
-pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0 <0.9.0;
 
 import "hardhat/console.sol";
 
 contract YourContract {
-  event SetPurpose(address sender, string purpose);
+  /* ========== TYPE DECLARATIONS ========== */
 
-  string public purpose = "Building Unstoppable Apps!!!";
-  uint256 public totalSupply = 2.5 ether;
-  mapping(address => uint256) public counter;
-  bytes32 public myBytes;
+  /* ========== STATE VARIABLES ========== */
+  uint256 public immutable i_changePurposePrice;
+  string public purpose;
+  mapping(address => string) public addressToPurpose;
 
-  constructor() payable {
-    // what should we do on deploy?
+  /* ========== EVENTS ========== */
+  event PurposeChange(address purposeSetter, string newPurpose, uint256 value);
+
+  /* ========== CONTRUCTOR & MODIFIERS ========== */
+  constructor(string memory _purpose, uint256 _changePurposePrice) {
+    purpose = _purpose;
+    i_changePurposePrice = _changePurposePrice;
   }
 
-  function setPurpose(string memory newPurpose) public {
+  modifier costs() {
+    require(msg.value >= i_changePurposePrice, "Not enough ETH provided");
+    _;
+  }
+
+  receive() external payable {
+    // ...
+  }
+
+  fallback() external {
+    // ...
+  }
+
+  /* ========== EXTERNAL FUNCTIONS ========== */
+
+  /* ========== PUBLIC FUNCTIONS ========== */
+  function changePurpose(string memory newPurpose) public payable costs {
+    addressToPurpose[msg.sender] = newPurpose;
     purpose = newPurpose;
-    console.log(msg.sender, "set purpose to", purpose);
-    emit SetPurpose(msg.sender, purpose);
+    emit PursposeChange(msg.sender, newPurpose, msg.value);
   }
 
-  function withAddressAndAndValueIncrementCounter(address _add) public payable {
-    require(msg.value > 0.0001 ether, "Not enough");
-    counter[_add] += 1;
-  }
+  /* ========== INTERNAL FUNCTIONS ========== */
 
-  function withUint8AndBytes(uint8 _u, bytes32 _b) public {
-    counter[msg.sender] = _u;
-    myBytes = _b;
-  }
-
-  function counterPlusX(address _add, uint256 _x) public view returns (uint256) {
-    return counter[_add] + _x;
-  }
-
-  // to support receiving ETH by default
-  receive() external payable {}
-
-  fallback() external payable {}
+  /* ========== PRIVATE FUNCTIONS ========== */
 }
