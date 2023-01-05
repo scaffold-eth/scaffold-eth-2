@@ -4,45 +4,61 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 
 contract YourContract {
-  /* ========== TYPE DECLARATIONS ========== */
 
-  /* ========== STATE VARIABLES ========== */
-  uint256 public immutable i_changePurposePrice;
-  string public purpose;
-  mapping(address => string) public addressToPurpose;
+    // State Variables
+    address public immutable owner;
+    string public purpose = "Building Unstoppable Apps!!!";
+    bool public premium = false;
+    uint256 public price = 0.001 ether;
+    uint256 public totalCounter = 0;
+    mapping(address => string) public addressToPurpose;
 
-  /* ========== EVENTS ========== */
-  event PurposeChange(address purposeSetter, string newPurpose, uint256 value);
+    // Events
+    event PurposeChange(address purposeSetter, string newPurpose, bool premium, uint256 value);
 
-  /* ========== CONTRUCTOR & MODIFIERS ========== */
-  constructor(string memory _purpose, uint256 _changePurposePrice) {
-    purpose = _purpose;
-    i_changePurposePrice = _changePurposePrice;
-  }
+    // Constructor: Called once on contract deployment
+    // Check packages/hardhat/deploy/00_deploy_your_contract.ts
+    constructor(address _owner) {
+        owner = _owner;
+    }
 
-  modifier costs() {
-    require(msg.value >= i_changePurposePrice, "Not enough ETH provided");
-    _;
-  }
+    // Modifier: Can be applied to functions.
+    // Check the withdraw() function
+    modifier isOwner() {
+        require(msg.sender == owner, "Not the Owner");
+        _;
+    }
 
-  receive() external payable {
-    // ...
-  }
+    function setPurpose(string memory _newPurpose) public {
+        // Change state variables
+        purpose = _newPurpose;
+        addressToPurpose[msg.sender] = _newPurpose;
+        totalCounter += 1;
+        premium = false;
 
-  fallback() external {
-    // ...
-  }
+        emit PurposeChange(msg.sender, _newPurpose, false, 0);
+    }
 
-  /* ========== EXTERNAL FUNCTIONS ========== */
+    function setPurposePremium(string memory _newPurpose) public payable {
+        require(msg.value >= price, "Not enough ETH provided");
 
-  /* ========== PUBLIC FUNCTIONS ========== */
-  function changePurpose(string memory newPurpose) public payable costs {
-    addressToPurpose[msg.sender] = newPurpose;
-    purpose = newPurpose;
-    emit PurposeChange(msg.sender, newPurpose, msg.value);
-  }
+        // Change state variables
+        addressToPurpose[msg.sender] = _newPurpose;
+        purpose = _newPurpose;
+        totalCounter += 1;
+        premium = true;
 
-  /* ========== INTERNAL FUNCTIONS ========== */
+        // Increment price 1%
+        price = price * 101 / 100;
 
-  /* ========== PRIVATE FUNCTIONS ========== */
+        emit PurposeChange(msg.sender, _newPurpose, true, msg.value);
+    }
+
+    function withdraw() isOwner public {
+        (bool success,) = owner.call{value: address(this).balance}("");
+        require(success, "Failed to send Ether");
+    }
+
+    // Allow directly receiving ETH by default.
+    receive() external payable {}
 }
