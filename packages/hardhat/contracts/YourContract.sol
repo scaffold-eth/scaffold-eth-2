@@ -9,9 +9,8 @@ contract YourContract {
     address public immutable owner;
     string public purpose = "Building Unstoppable Apps!!!";
     bool public premium = false;
-    uint256 public price = 0.001 ether;
     uint256 public totalCounter = 0;
-    mapping(address => string) public addressToPurpose;
+    mapping(address => uint) public userPurposeCounter;
 
     // Events
     event PurposeChange(address purposeSetter, string newPurpose, bool premium, uint256 value);
@@ -29,32 +28,22 @@ contract YourContract {
         _;
     }
 
-    function setPurpose(string memory _newPurpose) public {
+    function setPurpose(string memory _newPurpose) public payable {
         // Change state variables
         purpose = _newPurpose;
-        addressToPurpose[msg.sender] = _newPurpose;
         totalCounter += 1;
-        premium = false;
+        userPurposeCounter[msg.sender] += 1;
 
-        emit PurposeChange(msg.sender, _newPurpose, false, 0);
+        if (msg.value > 0) {
+            premium = true;
+        } else {
+            premium = false;
+        }
+
+        emit PurposeChange(msg.sender, _newPurpose, msg.value > 0, 0);
     }
 
-    function setPurposePremium(string memory _newPurpose) public payable {
-        require(msg.value >= price, "Not enough ETH provided");
-
-        // Change state variables
-        addressToPurpose[msg.sender] = _newPurpose;
-        purpose = _newPurpose;
-        totalCounter += 1;
-        premium = true;
-
-        // Increment price 1%
-        price = price * 101 / 100;
-
-        emit PurposeChange(msg.sender, _newPurpose, true, msg.value);
-    }
-
-    function withdraw() isOwner public {
+     function withdraw() isOwner public {
         (bool success,) = owner.call{value: address(this).balance}("");
         require(success, "Failed to send Ether");
     }
