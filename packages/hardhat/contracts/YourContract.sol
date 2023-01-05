@@ -39,7 +39,7 @@ contract YourContract {
   function changePurpose(string memory newPurpose) public payable costs {
     addressToPurpose[msg.sender] = newPurpose;
     purpose = newPurpose;
-    emit PursposeChange(msg.sender, newPurpose, msg.value);
+    emit PurposeChange(msg.sender, newPurpose, msg.value);
   }
 
   /* ========== INTERNAL FUNCTIONS ========== */
