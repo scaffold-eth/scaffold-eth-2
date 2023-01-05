@@ -9,7 +9,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     from: deployer,
     // Constructor args.
     // Use your frontend address
-    args: ["0x15f6228130de8ddD0F25710cc122d066dC6f3C5d"],
+    args: [deployer],
     log: true,
     // Speed up deployment on local network, no effect on live networks
     autoMine: true,
