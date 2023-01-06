@@ -24,8 +24,7 @@ module.exports = {
           warning: "#FFCF72",
           error: "#FF8863",
 
-          "--rounded-btn": "0.25rem",
-          "--navbar-padding": "0",
+          "--rounded-btn": "9999rem",
         },
       },
       {
@@ -47,8 +46,7 @@ module.exports = {
           warning: "#FFCF72",
           error: "#FF8863",
 
-          "--rounded-btn": "0.25rem",
-          "--navbar-padding": "0",
+          "--rounded-btn": "9999rem",
         },
       },
     ],
