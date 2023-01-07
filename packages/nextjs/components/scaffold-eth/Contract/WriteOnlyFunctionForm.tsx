@@ -1,6 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
@@ -54,6 +54,10 @@ export const WriteOnlyFunctionForm = ({
     ...config,
   });
 
+  const { data: txResult } = useWaitForTransaction({
+    hash: result?.hash,
+  });
+
   const handleWrite = async () => {
     // TODO Show more descriptive error message
     if (inputError) {
@@ -89,14 +93,24 @@ export const WriteOnlyFunctionForm = ({
 
   // TODO prettify json result
   return (
-    <div className="flex flex-col gap-3">
-      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
-      {inputs}
-      {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-      <button className={`btn btn-secondary btn-sm self-end ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-        Send 💸
-      </button>
-      <span className="break-all block">{tryToDisplay(result)}</span>
-    </div>
+    <>
+      <div className="flex flex-col gap-3">
+        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+        {inputs}
+        {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+        <button className={`btn btn-secondary btn-sm self-end ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
+          Send 💸
+        </button>
+      </div>
+      {txResult ? (
+        <div className="flex-wrap collapse mb-2">
+          <input type="checkbox" />
+          <div className="collapse-title text-sm sm:text-base rounded-lg bg-gray-200 my-2">Transaction Receipt</div>
+          <div className="collapse-content overflow-auto bg-gray-100 rounded-lg">
+            <pre className="text-xs p-2">{tryToDisplay(txResult)}</pre>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 };

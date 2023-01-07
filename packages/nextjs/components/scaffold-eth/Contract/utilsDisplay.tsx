@@ -32,7 +32,7 @@ export const tryToDisplay = (
       <span style={{ overflowWrap: "break-word", width: "100%" }}>{displayable.replaceAll(",", ",\n")}</span>
     );
   }
-  return JSON.stringify(displayContent);
+  return JSON.stringify(displayContent, null, 2);
 };
 
 const tryToDisplayAsText = (displayContent: displayContentType) => tryToDisplay(displayContent, true);
