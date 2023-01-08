@@ -1,6 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
@@ -35,32 +35,22 @@ export const WriteOnlyFunctionForm = ({
 
   const keys = Object.keys(form);
 
-  // TODO handle gasPrice
-  const { config, error: inputError } = usePrepareContractWrite({
-    addressOrName: contractAddress,
-    functionName: functionFragment.name,
-    contractInterface: [functionFragment],
-    args: keys.map(key => form[key]),
-    overrides: {
-      value: txValue,
-    },
-  });
-
   const {
     data: result,
     isLoading,
     writeAsync,
   } = useContractWrite({
-    ...config,
+    addressOrName: contractAddress,
+    functionName: functionFragment.name,
+    contractInterface: [functionFragment],
+    args: keys.map(key => form[key]),
+    mode: "recklesslyUnprepared",
+    overrides: {
+      value: txValue,
+    },
   });
 
   const handleWrite = async () => {
-    // TODO Show more descriptive error message
-    if (inputError) {
-      const message = getParsedEthersError(inputError);
-      toast.error(message);
-    }
-
     if (writeAsync && writeTxn) {
       try {
         await writeTxn(writeAsync());
