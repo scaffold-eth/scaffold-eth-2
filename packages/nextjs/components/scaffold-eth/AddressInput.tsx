@@ -65,8 +65,8 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-          <span className="p-0 rounded-md bg-base-100">
-            <Blockies seed={address?.toLowerCase() as string} size={7} scale={5} />
+          <span className="p-0 bg-base-100">
+            <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />
           </span>
         </label>
       </div>

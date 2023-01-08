@@ -6,9 +6,9 @@ import { Dispatch, SetStateAction } from "react";
  */
 const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
   return (
-    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-md text-primary justify-between pr-3">
+    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-primary justify-between pr-3">
       <input
-        placeholder="Value"
+        placeholder="value (wei)"
         autoComplete="off"
         className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400"
         value={txValue}

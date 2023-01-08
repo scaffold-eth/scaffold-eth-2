@@ -13,7 +13,13 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 
   return (
     <Link href={href} passHref>
-      <a className={`${isActive ? "bg-secondary" : ""} hover:bg-secondary focus:bg-secondary py-4 gap-2`}>{children}</a>
+      <a
+        className={`${
+          isActive ? "bg-secondary" : ""
+        } hover:bg-secondary focus:bg-secondary py-2 px-3 text-sm rounded-full gap-2`}
+      >
+        {children}
+      </a>
     </Link>
   );
 };
@@ -84,7 +90,7 @@ export default function Header() {
             <span className="text-xs">Forkable Ethereum dev stack</span>
           </div>
         </div>
-        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1">{NavLinks}</ul>
+        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1 gap-2">{NavLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
