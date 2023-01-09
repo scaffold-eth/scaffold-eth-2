@@ -35,6 +35,10 @@ export const WriteOnlyFunctionForm = ({
 
   const keys = Object.keys(form);
 
+  // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
+  // See:
+  //   - https://github.com/scaffold-eth/se-2/issues/59
+  //   - https://github.com/scaffold-eth/se-2/pull/86#issuecomment-1374902738
   const {
     data: result,
     isLoading,
