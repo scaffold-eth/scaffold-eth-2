@@ -1,8 +1,8 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, useWaitForTransaction } from "wagmi";
-import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
+import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -96,15 +96,7 @@ export const WriteOnlyFunctionForm = ({
           Send 💸
         </button>
       </div>
-      {txResult ? (
-        <div className="flex-wrap collapse mb-2">
-          <input type="checkbox" />
-          <div className="collapse-title text-sm sm:text-base rounded-lg bg-gray-200 my-2">Transaction Receipt</div>
-          <div className="collapse-content overflow-auto bg-gray-100 rounded-lg">
-            <pre className="text-xs p-2">{tryToDisplay(txResult)}</pre>
-          </div>
-        </div>
-      ) : null}
+      {txResult ? <TxReceipt txResult={txResult} /> : null}
     </>
   );
 };
