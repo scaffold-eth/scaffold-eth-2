@@ -1,6 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { useContractWrite, useWaitForTransaction } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
@@ -35,36 +35,26 @@ export const WriteOnlyFunctionForm = ({
 
   const keys = Object.keys(form);
 
-  // TODO handle gasPrice
-  const { config, error: inputError } = usePrepareContractWrite({
-    addressOrName: contractAddress,
-    functionName: functionFragment.name,
-    contractInterface: [functionFragment],
-    args: keys.map(key => form[key]),
-    overrides: {
-      value: txValue,
-    },
-  });
-
+  // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
+  // See:
+  //   - https://github.com/scaffold-eth/se-2/issues/59
+  //   - https://github.com/scaffold-eth/se-2/pull/86#issuecomment-1374902738
   const {
     data: result,
     isLoading,
     writeAsync,
   } = useContractWrite({
-    ...config,
-  });
-
-  const { data: txResult } = useWaitForTransaction({
-    hash: result?.hash,
+    addressOrName: contractAddress,
+    functionName: functionFragment.name,
+    contractInterface: [functionFragment],
+    args: keys.map(key => form[key]),
+    mode: "recklesslyUnprepared",
+    overrides: {
+      value: txValue,
+    },
   });
 
   const handleWrite = async () => {
-    // TODO Show more descriptive error message
-    if (inputError) {
-      const message = getParsedEthersError(inputError);
-      toast.error(message);
-    }
-
     if (writeAsync && writeTxn) {
       try {
         await writeTxn(writeAsync());
@@ -75,6 +65,10 @@ export const WriteOnlyFunctionForm = ({
       }
     }
   };
+
+  const { data: txResult } = useWaitForTransaction({
+    hash: result?.hash,
+  });
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const inputs = functionFragment.inputs.map((input, inputIndex) => {

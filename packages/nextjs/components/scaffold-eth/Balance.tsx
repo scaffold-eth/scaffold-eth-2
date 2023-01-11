@@ -61,7 +61,7 @@ export default function Balance({ address }: TBalanceProps) {
       <div className="w-full flex items-center justify-center">
         {isEthBalance ? (
           <>
-            <span>{balance?.toFixed(2)}</span>
+            <span>{balance?.toFixed(4)}</span>
             <span className="text-xs font-bold m-1">ETH</span>
           </>
         ) : (
