@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useContractRead } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import InputUI from "./InputUI";
-import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey } from "./utilsContract";
 import { toast } from "~~/utils/scaffold-eth";
 
@@ -68,8 +67,9 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
       </button>
       {result ? (
         <>
-          <span className="bg-secondary rounded-lg p-4">Read Result: {tryToDisplay(result)}</span>
-          <TxReceipt txResult={result} />
+          <span className="bg-secondary rounded-3xl text-sm px-4 py-2">
+            <strong>Result</strong>: {tryToDisplay(result)}
+          </span>
         </>
       ) : null}
     </div>
