@@ -26,7 +26,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   const keys = Object.keys(form);
 
   const {
-    data: Result,
+    data: result,
     isFetching,
     refetch,
   } = useContractRead({
@@ -66,10 +66,10 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
       >
         Read 📡
       </button>
-      {Result ? (
+      {result ? (
         <>
-          <span className="bg-secondary rounded-lg p-4">Read Result: {tryToDisplay(Result)}</span>
-          <TxReceipt txResult={Result} />
+          <span className="bg-secondary rounded-lg p-4">Read Result: {tryToDisplay(result)}</span>
+          <TxReceipt txResult={result} />
         </>
       ) : null}
     </div>
