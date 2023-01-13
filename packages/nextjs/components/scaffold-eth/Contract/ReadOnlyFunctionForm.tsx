@@ -25,7 +25,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   const keys = Object.keys(form);
 
   const {
-    data: Result,
+    data: result,
     isFetching,
     refetch,
   } = useContractRead({
@@ -57,15 +57,23 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     <div className="flex flex-col gap-3">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
-      <button
-        className={`btn btn-secondary btn-sm self-end ${isFetching ? "loading" : ""}`}
-        onClick={async () => {
-          await refetch();
-        }}
-      >
-        Read 📡
-      </button>
-      <span className="break-all block">{tryToDisplay(Result)}</span>
+      <div className="flex justify-between gap-2">
+        <div className="flex-grow">
+          {result ? (
+            <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
+              <strong>Result</strong>: {tryToDisplay(result)}
+            </span>
+          ) : null}
+        </div>
+        <button
+          className={`btn btn-secondary btn-sm ${isFetching ? "loading" : ""}`}
+          onClick={async () => {
+            await refetch();
+          }}
+        >
+          Read 📡
+        </button>
+      </div>
     </div>
   );
 };
