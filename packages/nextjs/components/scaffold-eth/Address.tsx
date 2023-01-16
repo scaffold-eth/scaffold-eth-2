@@ -3,6 +3,7 @@ import Blockies from "react-blockies";
 import { DocumentDuplicateIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEnsName } from "wagmi";
+import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
@@ -30,7 +31,7 @@ export default function Address({
   const [ens, setEns] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 
-  const { data: fetchedEns } = useEnsName({ address, chainId: 1 });
+  const { data: fetchedEns } = useEnsName({ address: parseAddressTo0x(address), chainId: 1 });
 
   // We need to apply this pattern to avoid Hydration errors.
   useEffect(() => {

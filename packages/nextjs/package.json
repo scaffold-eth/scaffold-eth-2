@@ -27,7 +27,7 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
-    "wagmi": "^0.6.0",
+    "wagmi": "^0.10.10",
     "zustand": "^4.1.2"
   },
   "devDependencies": {
