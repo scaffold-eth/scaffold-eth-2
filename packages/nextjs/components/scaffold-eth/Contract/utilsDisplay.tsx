@@ -1,7 +1,7 @@
 import { TransactionResponse } from "@ethersproject/providers";
 import { formatUnits } from "@ethersproject/units";
 import { BigNumber, ethers } from "ethers";
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, ReactElement, SetStateAction, useCallback } from "react";
 import { Address } from "~~/components/scaffold-eth";
 
 type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
@@ -43,59 +43,47 @@ interface IUtilityButton {
   stateObjectKey: string;
 }
 
-export const ConvertStringToBytes32 = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+export const StringToBytes32Converter = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+  const convertStringToBytes32 = useCallback((): void => {
+    const formUpdate = {
+      ...form,
+      [stateObjectKey]: ethers.utils.isHexString(form[stateObjectKey])
+        ? ethers.utils.parseBytes32String(form[stateObjectKey])
+        : ethers.utils.formatBytes32String(form[stateObjectKey]),
+    };
+    setForm(formUpdate);
+  }, [form, setForm, stateObjectKey]);
   return (
-    <div
-      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
-      onClick={(): void => {
-        if (ethers.utils.isHexString(form[stateObjectKey])) {
-          const formUpdate = { ...form };
-          formUpdate[stateObjectKey] = ethers.utils.parseBytes32String(form[stateObjectKey]);
-          setForm(formUpdate);
-        } else {
-          const formUpdate = { ...form };
-          setForm(formUpdate);
-          formUpdate[stateObjectKey] = ethers.utils.formatBytes32String(form[stateObjectKey]);
-        }
-      }}
-    >
+    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertStringToBytes32}>
       #
     </div>
   );
 };
 
-export const ConvertStringToBytes = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+export const StringToBytesConverter = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+  const convertStringToBytes = useCallback(() => {
+    const formUpdate = {
+      ...form,
+      [stateObjectKey]: ethers.utils.isHexString(form[stateObjectKey])
+        ? ethers.utils.toUtf8String(form[stateObjectKey])
+        : ethers.utils.hexlify(ethers.utils.toUtf8Bytes(form[stateObjectKey])),
+    };
+    setForm(formUpdate);
+  }, [form, setForm, stateObjectKey]);
+
   return (
-    <div
-      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
-      onClick={(): void => {
-        if (ethers.utils.isHexString(form[stateObjectKey])) {
-          const formUpdate = { ...form };
-          formUpdate[stateObjectKey] = ethers.utils.toUtf8String(form[stateObjectKey]);
-          setForm(formUpdate);
-        } else {
-          const formUpdate = { ...form };
-          formUpdate[stateObjectKey] = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(form[stateObjectKey]));
-          setForm(formUpdate);
-        }
-      }}
-    >
+    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertStringToBytes}>
       #
     </div>
   );
 };
-export const ConvertUintToEther = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+export const UintToEtherConverter = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
+  const convertEtherToUint = useCallback(() => {
+    setForm({ ...form, [stateObjectKey]: ethers.utils.parseEther(form[stateObjectKey]) });
+  }, [form, setForm, stateObjectKey]);
+
   return (
-    <div
-      className="cursor-pointer text-xl font-semibold mr-3 text-accent"
-      onClick={(): void => {
-        if (form[stateObjectKey]) {
-          const formUpdate = { ...form };
-          formUpdate[stateObjectKey] = ethers.utils.parseEther(form[stateObjectKey]);
-          setForm(formUpdate);
-        }
-      }}
-    >
+    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertEtherToUint}>
       *
     </div>
   );
