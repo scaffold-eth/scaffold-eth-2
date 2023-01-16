@@ -55,7 +55,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   );
 
   if (!contractAddress) {
-    return <p className="text-2xl">No Contract found !</p>;
+    return <p className="text-2xl">No Contract found!</p>;
   }
 
   return (

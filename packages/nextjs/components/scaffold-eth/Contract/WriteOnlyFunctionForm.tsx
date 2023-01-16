@@ -86,18 +86,16 @@ export const WriteOnlyFunctionForm = ({
   });
 
   return (
-    <>
-      <div className="flex flex-col gap-3">
-        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
-        {inputs}
-        {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-        <div className="flex justify-between gap-2">
-          <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-          <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-            Send 💸
-          </button>
-        </div>
+    <div className="flex flex-col gap-3">
+      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+      {inputs}
+      {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+      <div className="flex justify-between gap-2">
+        <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+        <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
+          Send 💸
+        </button>
       </div>
-    </>
+    </div>
   );
 };

@@ -11,7 +11,7 @@ const tempAutoConnectConfig: TAutoConnect = {
   autoConnect: true,
 };
 
-type chainKeyTypes = keyof typeof chain;
+type ChainName = keyof typeof chain;
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -20,7 +20,7 @@ export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
   const { switchNetwork } = useSwitchNetwork();
 
-  const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as chainKeyTypes;
+  const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as ChainName;
   const definedChain = chain[publicNetworkName];
 
   const onSwitchNetwork = () => {
