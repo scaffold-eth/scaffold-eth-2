@@ -39,7 +39,7 @@ export default function Faucet() {
 
   return (
     <button
-      className={`btn btn-secondary btn-sm px-2 rounded-full ${loading && "loading"}`}
+      className={`btn btn-secondary btn-sm px-2 rounded-full ${loading ? "loading" : ""}`}
       onClick={sendETH}
       disabled={loading}
     >

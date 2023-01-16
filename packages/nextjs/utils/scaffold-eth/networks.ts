@@ -158,9 +158,5 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   return blockExplorerTxURL;
 }
 
-export const getNetworkDetailsByChainId = (chainId: number) => {
-  const networkName = Object.keys(NETWORKS).find(network => NETWORKS[network]?.chainId === chainId);
-
-  if (!networkName) return;
-  return NETWORKS[networkName];
-};
+export const getNetworkDetailsByChainId = (chainId: number) =>
+  Object.values(NETWORKS).find(val => val.chainId === chainId);
