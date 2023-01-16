@@ -8,7 +8,7 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkDetailsByChainId } from "~~/utils/scaffold-eth";
+import { getNetworkDetailsByChainId, parseAddressTo0x } from "~~/utils/scaffold-eth";
 import { Balance, Address } from "~~/components/scaffold-eth";
 
 type TContractUIProps = {
@@ -33,9 +33,9 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
 
-  const contract: Contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: contractABI,
+  const contract: Contract | null = useContract({
+    address: parseAddressTo0x(contractAddress),
+    abi: contractABI,
     signerOrProvider: provider,
   });
 
