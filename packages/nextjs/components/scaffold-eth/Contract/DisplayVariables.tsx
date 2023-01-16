@@ -1,7 +1,7 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
-import { tryToDisplay } from "./utilsDisplay";
+import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { toast } from "~~/utils/scaffold-eth";
 
@@ -39,7 +39,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
         </button>
       </div>
       <div className="text-gray-500 font-medium">
-        <span className="break-words block">{tryToDisplay(result)}</span>
+        <span className="break-words block">{displayTxResult(result)}</span>
       </div>
     </div>
   );

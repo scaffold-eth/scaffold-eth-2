@@ -4,10 +4,10 @@ import { BigNumber, ethers } from "ethers";
 import React, { Dispatch, ReactElement, SetStateAction, useCallback } from "react";
 import { Address } from "~~/components/scaffold-eth";
 
-type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
+type DisplayContent = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
 
-export const tryToDisplay = (
-  displayContent: displayContentType | displayContentType[],
+export const displayTxResult = (
+  displayContent: DisplayContent | DisplayContent[],
   asText = false,
 ): string | ReactElement | number => {
   if (displayContent == null) {
@@ -20,22 +20,28 @@ export const tryToDisplay = (
     } catch (e) {
       return "Ξ" + formatUnits(displayContent, "ether");
     }
-  } else if (typeof displayContent === "string" && displayContent.indexOf("0x") === 0 && displayContent.length === 42) {
+  }
+
+  if (typeof displayContent === "string" && displayContent.indexOf("0x") === 0 && displayContent.length === 42) {
     return asText ? displayContent : <Address address={displayContent} />;
-  } else if (displayContent && Array.isArray(displayContent)) {
-    const mostReadable = (v: displayContentType) =>
-      ["number", "boolean"].includes(typeof v) ? v : tryToDisplayAsText(v);
+  }
+
+  if (displayContent && Array.isArray(displayContent)) {
+    const mostReadable = (v: DisplayContent) =>
+      ["number", "boolean"].includes(typeof v) ? v : displayTxResultAsText(v);
     const displayable = JSON.stringify(displayContent.map(mostReadable));
+
     return asText ? (
       displayable
     ) : (
       <span style={{ overflowWrap: "break-word", width: "100%" }}>{displayable.replaceAll(",", ",\n")}</span>
     );
   }
+
   return JSON.stringify(displayContent, null, 2);
 };
 
-const tryToDisplayAsText = (displayContent: displayContentType) => tryToDisplay(displayContent, true);
+const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);
 
 interface IUtilityButton {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
