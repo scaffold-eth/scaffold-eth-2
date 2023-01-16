@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { useBalance } from "wagmi";
-import { useAppStore } from "~~/services/store/store";
+import { useWalletBalance } from "~~/hooks/scaffold-eth/useWalletBalance";
 
 type TBalanceProps = {
   address: string;
@@ -10,29 +8,7 @@ type TBalanceProps = {
  * Display (ETH & USD) balance of an ETH address.
  */
 export default function Balance({ address }: TBalanceProps) {
-  const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<number | null>(null);
-
-  const price = useAppStore(state => state.ethPriceSlice.ethPrice);
-
-  const {
-    data: fetchedBalanceData,
-    isError,
-    isLoading,
-  } = useBalance({
-    addressOrName: address,
-    watch: true,
-  });
-
-  const onToggleBalance = () => {
-    setIsEthBalance(!isEthBalance);
-  };
-
-  useEffect(() => {
-    if (fetchedBalanceData?.formatted) {
-      setBalance(Number(fetchedBalanceData.formatted));
-    }
-  }, [fetchedBalanceData]);
+  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useWalletBalance(address);
 
   if (!address || isLoading || balance === null) {
     return (

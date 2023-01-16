@@ -4,6 +4,7 @@ import { chain, useAccount, useNetwork } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { useWalletBalance } from "~~/hooks/scaffold-eth/useWalletBalance";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -18,6 +19,8 @@ export default function Faucet() {
   const provider = getLocalProvider(chain.localhost);
   const signer = provider?.getSigner();
   const faucetTxn = useTransactor(signer);
+
+  const { balance } = useWalletBalance(address);
 
   const sendETH = async () => {
     try {
@@ -38,12 +41,17 @@ export default function Faucet() {
   }
 
   return (
-    <button
-      className={`btn btn-secondary btn-sm px-2 rounded-full ${loading && "loading"}`}
-      onClick={sendETH}
-      disabled={loading}
+    <div
+      className={!balance ? "tooltip tooltip-left tooltip-secondary font-bold" : ""}
+      data-tip="Grab funds from faucet"
     >
-      <BanknotesIcon className="h-4 w-4" />
-    </button>
+      <button
+        className={`btn btn-secondary btn-sm px-2 rounded-full ${loading ? "loading" : ""}`}
+        onClick={sendETH}
+        disabled={loading}
+      >
+        <BanknotesIcon className="h-4 w-4" />
+      </button>
+    </div>
   );
 }
