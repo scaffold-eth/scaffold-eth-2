@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useAppStore } from "~~/services/store/store";
+import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 
 type TBalanceProps = {
   address: string;
@@ -20,7 +21,7 @@ export default function Balance({ address }: TBalanceProps) {
     isError,
     isLoading,
   } = useBalance({
-    addressOrName: address,
+    address: parseAddressTo0x(address),
     watch: true,
   });
 

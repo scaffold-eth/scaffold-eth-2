@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import React, { useState } from "react";
-import { chain, useAccount, useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
+import chain from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
