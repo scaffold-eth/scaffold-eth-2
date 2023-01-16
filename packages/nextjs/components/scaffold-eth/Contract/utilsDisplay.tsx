@@ -4,7 +4,7 @@ import { BigNumber, ethers } from "ethers";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { Address } from "~~/components/scaffold-eth";
 
-type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined;
+type displayContentType = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined | unknown;
 
 export const tryToDisplay = (
   displayContent: displayContentType | displayContentType[],

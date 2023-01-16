@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { tryToDisplay } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { toast } from "~~/utils/scaffold-eth";
+import { parseAddressTo0x, toast } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -17,8 +17,8 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     isFetching,
     refetch,
   } = useContractRead({
-    addressOrName: contractAddress,
-    contractInterface: [functionFragment],
+    address: parseAddressTo0x(contractAddress),
+    abi: [functionFragment],
     functionName: functionFragment.name,
     args: [],
     onError: error => {
