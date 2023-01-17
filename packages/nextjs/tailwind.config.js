@@ -25,6 +25,10 @@ module.exports = {
           error: "#FF8863",
 
           "--rounded-btn": "9999rem",
+
+          ".tooltip": {
+            "--tooltip-tail": "6px",
+          },
         },
       },
       {
@@ -47,6 +51,10 @@ module.exports = {
           error: "#FF8863",
 
           "--rounded-btn": "9999rem",
+
+          ".tooltip": {
+            "--tooltip-tail": "6px",
+          },
         },
       },
     ],

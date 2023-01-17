@@ -44,7 +44,7 @@ export default function Faucet() {
       className={
         balance
           ? ""
-          : "tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto after:border-[6px] before:transform-none before:content-[attr(data-tip)] before:right-0 before:top-[42px]"
+          : "tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
       }
       data-tip="Grab funds from faucet"
     >
