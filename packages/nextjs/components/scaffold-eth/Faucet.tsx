@@ -4,7 +4,7 @@ import { chain, useAccount, useNetwork } from "wagmi";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { useWalletBalance } from "~~/hooks/scaffold-eth/useWalletBalance";
+import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -14,13 +14,12 @@ const NUM_OF_ETH = "1";
  */
 export default function Faucet() {
   const { address } = useAccount();
+  const { balance } = useAccountBalance(address);
   const { chain: ConnectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
   const provider = getLocalProvider(chain.localhost);
   const signer = provider?.getSigner();
   const faucetTxn = useTransactor(signer);
-
-  const { balance } = useWalletBalance(address);
 
   const sendETH = async () => {
     try {

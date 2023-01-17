@@ -1,4 +1,4 @@
-import { useWalletBalance } from "~~/hooks/scaffold-eth/useWalletBalance";
+import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 
 type TBalanceProps = {
   address: string;
@@ -8,7 +8,7 @@ type TBalanceProps = {
  * Display (ETH & USD) balance of an ETH address.
  */
 export default function Balance({ address }: TBalanceProps) {
-  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useWalletBalance(address);
+  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useAccountBalance(address);
 
   if (!address || isLoading || balance === null) {
     return (

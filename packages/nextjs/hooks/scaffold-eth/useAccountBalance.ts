@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useAppStore } from "~~/services/store/store";
 
-export function useWalletBalance(address?: string) {
+export function useAccountBalance(address?: string) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
   const price = useAppStore(state => state.ethPriceSlice.ethPrice);
