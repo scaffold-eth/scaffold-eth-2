@@ -1,4 +1,12 @@
-import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import {
+  rainbowWallet,
+  metaMaskWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  braveWallet,
+  ledgerWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import { configureChains } from "wagmi";
 import chain from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -66,12 +74,12 @@ export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Supported Wallets",
     wallets: [
-      wallet.metaMask({ chains: appChains.chains, shimDisconnect: true }),
-      wallet.walletConnect({ chains: appChains.chains }),
-      wallet.ledger({ chains: appChains.chains }),
-      wallet.brave({ chains: appChains.chains }),
-      wallet.coinbase({ appName: "scaffold-eth", chains: appChains.chains }),
-      wallet.rainbow({ chains: appChains.chains }),
+      metaMaskWallet({ chains: appChains.chains, shimDisconnect: true }),
+      walletConnectWallet({ chains: appChains.chains }),
+      ledgerWallet({ chains: appChains.chains }),
+      braveWallet({ chains: appChains.chains }),
+      coinbaseWallet({ appName: "scaffold-eth", chains: appChains.chains }),
+      rainbowWallet({ chains: appChains.chains }),
       burnerWalletConfig({ chains: burnerChains.chains }),
     ],
   },
