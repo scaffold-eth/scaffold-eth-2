@@ -6,7 +6,8 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast } from "~~/utils/scaffold-eth";
+import { parseAddressTo0x, toast } from "~~/utils/scaffold-eth";
+import { BigNumber } from "ethers";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -44,13 +45,13 @@ export const WriteOnlyFunctionForm = ({
     isLoading,
     writeAsync,
   } = useContractWrite({
-    addressOrName: contractAddress,
+    address: parseAddressTo0x(contractAddress),
     functionName: functionFragment.name,
-    contractInterface: [functionFragment],
+    abi: [functionFragment],
     args: keys.map(key => form[key]),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: txValue,
+      value: BigNumber.from(txValue),
     },
   });
 

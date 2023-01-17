@@ -1,5 +1,6 @@
 import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
-import { configureChains, chain } from "wagmi";
+import { configureChains } from "wagmi";
+import chain from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
@@ -17,9 +18,7 @@ export const appChains = configureChains(
     chain.localhost,
     chain.polygon,
     // todo replace with config instead of env
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten, chain.polygonMumbai]
-      : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [chain.goerli, chain.polygonMumbai] : []),
   ],
   [
     alchemyProvider({
