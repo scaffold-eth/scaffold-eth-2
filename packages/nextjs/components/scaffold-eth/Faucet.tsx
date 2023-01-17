@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import chain from "wagmi/chains";
+import { hardhat, localhost } from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
@@ -16,7 +16,7 @@ export default function Faucet() {
   const { address } = useAccount();
   const { chain: ConnectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
-  const provider = getLocalProvider(chain.localhost);
+  const provider = getLocalProvider(localhost);
   const signer = provider?.getSigner();
   const faucetTxn = useTransactor(signer);
 
@@ -34,7 +34,7 @@ export default function Faucet() {
   };
 
   // Render only on local chain
-  if (!ConnectedChain || ConnectedChain.id !== chain.hardhat.id) {
+  if (!ConnectedChain || ConnectedChain.id !== hardhat.id) {
     return null;
   }
 

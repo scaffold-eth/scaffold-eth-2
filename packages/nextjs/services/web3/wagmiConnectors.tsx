@@ -8,7 +8,7 @@ import {
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains } from "wagmi";
-import chain from "wagmi/chains";
+import { mainnet, polygon, optimism, arbitrum, hardhat, localhost, goerli, polygonMumbai } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
@@ -18,15 +18,15 @@ import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletCo
  */
 export const appChains = configureChains(
   [
-    chain.mainnet,
-    chain.polygon,
-    chain.optimism,
-    chain.arbitrum,
-    chain.hardhat,
-    chain.localhost,
-    chain.polygon,
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    hardhat,
+    localhost,
+    polygon,
     // todo replace with config instead of env
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [chain.goerli, chain.polygonMumbai] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, polygonMumbai] : []),
   ],
   [
     alchemyProvider({
@@ -55,7 +55,7 @@ export const appChains = configureChains(
  * list of burner wallet compatable chains
  */
 export const burnerChains = configureChains(
-  [chain.localhost, chain.hardhat],
+  [localhost, hardhat],
   [
     alchemyProvider({
       // ToDo. Move to .env || scaffold config

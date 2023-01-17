@@ -1,7 +1,7 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
 import { Connector, Chain } from "wagmi";
-import chain from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
 import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
 import { BurnerConnectorOptions, BurnerConnectorData } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
@@ -9,7 +9,7 @@ import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 
 export const burnerWalletId = "burner-wallet";
 export const burnerWalletName = "Burner Wallet";
-export const defaultBurnerChainId = chain.hardhat.id;
+export const defaultBurnerChainId = hardhat.id;
 
 /**
  * This class is a wagmi connector for BurnerWallet.  Its used by {@link burnerWalletConfig}
