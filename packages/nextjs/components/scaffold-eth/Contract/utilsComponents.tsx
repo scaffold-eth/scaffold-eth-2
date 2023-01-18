@@ -1,5 +1,6 @@
 import { BigNumber } from "ethers";
 import { Dispatch, SetStateAction } from "react";
+import { toast } from "~~/utils/scaffold-eth";
 
 /**
  * Input component which comes with utility buttons to handle conversion of ETH
@@ -18,9 +19,16 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
         <button
           className="cursor-pointer text-xl font-semibold pt-1 text-accent"
           onClick={async () => {
-            if (!txValue) return;
-            const floatValue = parseFloat(txValue);
-            if (floatValue) setTxValue("" + floatValue * 10 ** 18);
+            try {
+              const floatValue = parseFloat(txValue);
+              if (floatValue) {
+                setTxValue("" + floatValue * 10 ** 18);
+              } else {
+                throw new Error("Invalid number");
+              }
+            } catch (error: any) {
+              toast.error(error.message);
+            }
           }}
         >
           *
@@ -28,8 +36,12 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
         <button
           className="cursor-pointer text-xl font-semibold text-accent"
           onClick={async () => {
-            if (!txValue) return;
-            setTxValue(BigNumber.from(txValue).toHexString());
+            try {
+              if (!txValue) return;
+              setTxValue(BigNumber.from(txValue).toHexString());
+            } catch (error: any) {
+              toast.error(error.message);
+            }
           }}
         >
           #
