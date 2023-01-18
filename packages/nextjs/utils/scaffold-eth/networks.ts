@@ -2,14 +2,15 @@ import { Network } from "@ethersproject/networks";
 
 type TChainAttributes = {
   name: string;
-  color: string;
+  // color | [lightThemeColor, darkThemeColor]
+  color: string | [string, string];
   chainId: number;
 };
 
 export const NETWORKS: Record<string, TChainAttributes> = {
   localhost: {
     name: "localhost",
-    color: "#666",
+    color: ["#666666", "#bbbbbb"],
     chainId: 31337,
   },
   mainnet: {
@@ -74,17 +75,17 @@ export const NETWORKS: Record<string, TChainAttributes> = {
   },
   localAvalanche: {
     name: "localAvalanche",
-    color: "#666666",
+    color: ["#666666", "#bbbbbb"],
     chainId: 43112,
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
-    color: "#666666",
+    color: ["#666666", "#bbbbbb"],
     chainId: 43113,
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
-    color: "#666666",
+    color: ["#666666", "#bbbbbb"],
     chainId: 43114,
   },
   testnetHarmony: {
