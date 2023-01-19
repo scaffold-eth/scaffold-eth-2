@@ -8,8 +8,8 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkDetailsByChainId } from "~~/utils/scaffold-eth";
 import { Balance, Address } from "~~/components/scaffold-eth";
+import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 
 type TContractUIProps = {
   contractName: string;
@@ -28,7 +28,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   let contractAddress = "";
   let contractABI = [];
   const deployedContractData = getDeployedContract(chain?.id.toString(), contractName);
-
+  const networkColor = useNetworkColor(chain?.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -107,7 +107,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
       <div className="row-span-1 self-start flex flex-col">
         <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           {chain && (
-            <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
+            <p className="font-medium my-0" style={{ color: networkColor }}>
               {chain.name}
             </p>
           )}
