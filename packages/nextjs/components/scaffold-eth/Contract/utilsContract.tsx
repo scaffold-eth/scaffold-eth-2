@@ -43,16 +43,15 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
  * @dev used to filter all readOnly functions with zero params
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of DisplayVariable component
+ * @returns { methods: (JSX.Element | null)[] } array of DisplayVariable component
  * which has corresponding input field for param type and button to read
  */
 const getContractVariablesAndNoParamsReadMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
   refreshDisplayVariables: boolean,
-): { loaded: boolean; methods: (JSX.Element | null)[] } => {
+): { methods: (JSX.Element | null)[] } => {
   return {
-    loaded: true,
     methods: contractMethodsAndVariables
       .map(fn => {
         const isQueryableWithNoParams =
@@ -77,15 +76,14 @@ const getContractVariablesAndNoParamsReadMethods = (
  * @dev used to filter all readOnly functions with greater than or equal to 1 params
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of ReadOnlyFunctionForm component
+ * @returns { methods: (JSX.Element | null)[] } array of ReadOnlyFunctionForm component
  * which has corresponding input field for param type and button to read
  */
 const getContractReadOnlyMethodsWithParams = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
-): { loaded: boolean; methods: (JSX.Element | null)[] } => {
+): { methods: (JSX.Element | null)[] } => {
   return {
-    loaded: true,
     methods: contractMethodsAndVariables
       .map(fn => {
         const isQueryableWithParams =
@@ -103,16 +101,15 @@ const getContractReadOnlyMethodsWithParams = (
  * @dev used to filter all write functions
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @returns { loaded: boolean; methods: (JSX.Element | null)[] } array of WriteOnlyFunctionForm component
+ * @returns {  methods: (JSX.Element | null)[] } array of WriteOnlyFunctionForm component
  * which has corresponding input field for param type, txnValue input if required and button to send transaction
  */
 const getContractWriteMethods = (
   contract: Contract,
   contractMethodsAndVariables: FunctionFragment[],
   setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>,
-): { loaded: boolean; methods: (JSX.Element | null)[] } => {
+): { methods: (JSX.Element | null)[] } => {
   return {
-    loaded: true,
     methods: contractMethodsAndVariables
       .map(fn => {
         const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
