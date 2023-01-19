@@ -55,7 +55,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   );
 
   if (!contractAddress) {
-    return <p className="text-2xl">No Contract found !</p>;
+    return <p className="text-2xl">No Contract found!</p>;
   }
 
   return (
@@ -74,11 +74,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               </div>
             </div>
             <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-              {contractMethodsDisplay?.loaded
-                ? contractMethodsDisplay.methods.length > 0
-                  ? contractMethodsDisplay.methods
-                  : "No read methods"
-                : "Loading read methods..."}
+              {contractMethodsDisplay.methods.length > 0 ? contractMethodsDisplay.methods : "No read methods"}
             </div>
           </div>
         </div>
@@ -95,11 +91,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               </div>
             </div>
             <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-              {contractWriteMethods?.loaded
-                ? contractWriteMethods.methods.length > 0
-                  ? contractWriteMethods.methods
-                  : "No write methods"
-                : "Loading write methods..."}
+              {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
             </div>
           </div>
         </div>
@@ -119,11 +111,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
         <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
-          {contractVariablesDisplay?.loaded
-            ? contractVariablesDisplay.methods.length > 0
-              ? contractVariablesDisplay.methods
-              : "No contract variables"
-            : "Loading contract variables..."}
+          {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
         </div>
       </div>
     </div>
