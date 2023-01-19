@@ -7,8 +7,9 @@ describe("YourContract", function () {
 
   let yourContract: YourContract;
   before(async () => {
+    const [owner] = await ethers.getSigners();
     const yourContractFactory = await ethers.getContractFactory("YourContract");
-    yourContract = (await yourContractFactory.deploy()) as YourContract;
+    yourContract = (await yourContractFactory.deploy(owner.address)) as YourContract;
     await yourContract.deployed();
   });
 
