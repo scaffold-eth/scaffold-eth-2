@@ -13,7 +13,7 @@ export function useAccountBalance(address?: string) {
     isError,
     isLoading,
   } = useBalance({
-    address: parseAddressTo0x(address),
+    address: address ? parseAddressTo0x(address) : undefined,
     watch: true,
   });
 

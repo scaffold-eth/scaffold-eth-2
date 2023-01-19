@@ -3,8 +3,7 @@
  * @param {string} address - address to be parsed
  * @return string of the form `0x${string}`
  */
-export default function parseAddressTo0x(address: string | undefined): `0x${string}` | undefined {
-  if (!address) return undefined;
+export default function parseAddressTo0x(address: string): `0x${string}` {
   if (address.startsWith("0x")) {
     return `0x${address.substring(2)}`;
   }
