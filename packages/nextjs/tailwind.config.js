@@ -54,7 +54,7 @@ module.exports = {
 
           ".tooltip": {
             "--tooltip-tail": "6px",
-            "--tooltip-color": "#212638",
+            "--tooltip-color": "hsl(var(--p))",
           },
         },
       },
