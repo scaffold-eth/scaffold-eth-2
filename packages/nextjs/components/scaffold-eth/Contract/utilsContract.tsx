@@ -54,14 +54,13 @@ const getContractVariablesAndNoParamsReadMethods = (
   return {
     loaded: true,
     methods: contractMethodsAndVariables
-      .map((fn, index) => {
+      .map(fn => {
         const isQueryableWithNoParams =
           (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
         if (isQueryableWithNoParams) {
           return (
-            // DV -> DisplayVariables
             <DisplayVariable
-              key={`DV_${fn.name}_${index}`}
+              key={fn.name}
               functionFragment={fn}
               contractAddress={contract.address}
               refreshDisplayVariables={refreshDisplayVariables}
@@ -88,18 +87,11 @@ const getContractReadOnlyMethodsWithParams = (
   return {
     loaded: true,
     methods: contractMethodsAndVariables
-      .map((fn, index) => {
+      .map(fn => {
         const isQueryableWithParams =
           (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
         if (isQueryableWithParams) {
-          return (
-            // FFR -> FunctionFormRead
-            <ReadOnlyFunctionForm
-              key={`FFR_${fn.name}_${index}`}
-              functionFragment={fn}
-              contractAddress={contract.address}
-            />
-          );
+          return <ReadOnlyFunctionForm key={fn.name} functionFragment={fn} contractAddress={contract.address} />;
         }
         return null;
       })
@@ -122,13 +114,12 @@ const getContractWriteMethods = (
   return {
     loaded: true,
     methods: contractMethodsAndVariables
-      .map((fn, index) => {
+      .map(fn => {
         const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
         if (isWriteableFunction) {
-          // FFW -> FunctionFormWrite
           return (
             <WriteOnlyFunctionForm
-              key={`FFW_${fn.name}_${index}`}
+              key={fn.name}
               functionFragment={fn}
               contractAddress={contract.address}
               setRefreshDisplayVariables={setRefreshDisplayVariables}
