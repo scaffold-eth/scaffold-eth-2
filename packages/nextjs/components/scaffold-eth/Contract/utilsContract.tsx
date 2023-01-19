@@ -102,6 +102,7 @@ const getContractReadOnlyMethodsWithParams = (
  * @dev used to filter all write functions
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
+ * @param {Dispatch<SetStateAction<boolean>>} setRefreshDisplayVariables - trigger variable refresh
  * @returns {  methods: (JSX.Element | null)[] } array of WriteOnlyFunctionForm component
  * which has corresponding input field for param type, txnValue input if required and button to send transaction
  */
