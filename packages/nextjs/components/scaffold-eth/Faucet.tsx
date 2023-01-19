@@ -49,11 +49,13 @@ export default function Faucet() {
       data-tip="Grab funds from faucet"
     >
       <button
-        className={`btn btn-secondary btn-sm px-2 rounded-full ${loading ? "loading" : ""}`}
+        className={`btn btn-secondary btn-sm px-2 rounded-full ${
+          loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
+        }`}
         onClick={sendETH}
         disabled={loading}
       >
-        <BanknotesIcon className="h-4 w-4" />
+        {!loading && <BanknotesIcon className="h-4 w-4" />}
       </button>
     </div>
   );
