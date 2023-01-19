@@ -8,8 +8,9 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { getNetworkDetailsByChainId, parseAddressTo0x } from "~~/utils/scaffold-eth";
+import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 import { Balance, Address } from "~~/components/scaffold-eth";
+import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 
 type TContractUIProps = {
   contractName: string;
@@ -28,7 +29,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   let contractAddress = "";
   let contractABI = [];
   const deployedContractData = getDeployedContract(chain?.id.toString(), contractName);
-
+  const networkColor = useNetworkColor(chain?.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -55,7 +56,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   );
 
   if (!contractAddress) {
-    return <p className="text-2xl">No Contract found !</p>;
+    return <p className="text-2xl">No Contract found!</p>;
   }
 
   return (
@@ -74,11 +75,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               </div>
             </div>
             <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-              {contractMethodsDisplay?.loaded
-                ? contractMethodsDisplay.methods.length > 0
-                  ? contractMethodsDisplay.methods
-                  : "No read methods"
-                : "Loading read methods..."}
+              {contractMethodsDisplay.methods.length > 0 ? contractMethodsDisplay.methods : "No read methods"}
             </div>
           </div>
         </div>
@@ -95,11 +92,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               </div>
             </div>
             <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
-              {contractWriteMethods?.loaded
-                ? contractWriteMethods.methods.length > 0
-                  ? contractWriteMethods.methods
-                  : "No write methods"
-                : "Loading write methods..."}
+              {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
             </div>
           </div>
         </div>
@@ -107,7 +100,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
       <div className="row-span-1 self-start flex flex-col">
         <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           {chain && (
-            <p className="font-medium my-0" style={{ color: getNetworkDetailsByChainId(chain.id)?.color }}>
+            <p className="font-medium my-0" style={{ color: networkColor }}>
               {chain.name}
             </p>
           )}
@@ -119,11 +112,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
           </div>
         </div>
         <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
-          {contractVariablesDisplay?.loaded
-            ? contractVariablesDisplay.methods.length > 0
-              ? contractVariablesDisplay.methods
-              : "No contract variables"
-            : "Loading contract variables..."}
+          {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
         </div>
       </div>
     </div>

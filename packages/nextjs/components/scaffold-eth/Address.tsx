@@ -78,14 +78,9 @@ export default function Address({
         />
       </div>
       {disableAddressLink ? (
-        <span className="ml-1.5 text-lg font-normal text-gray-900 dark:text-gray-400">{displayAddress}</span>
+        <span className="ml-1.5 text-lg font-normal">{displayAddress}</span>
       ) : (
-        <a
-          className="ml-1.5 text-lg font-normal text-gray-900 dark:text-gray-400"
-          target="_blank"
-          href={explorerLink}
-          rel="noopener noreferrer"
-        >
+        <a className="ml-1.5 text-lg font-normal" target="_blank" href={explorerLink} rel="noopener noreferrer">
           {displayAddress}
         </a>
       )}

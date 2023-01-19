@@ -6,7 +6,8 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { parseTxnValue, parseAddressTo0x, toast } from "~~/utils/scaffold-eth";
+import { parseAddressTo0x, toast } from "~~/utils/scaffold-eth";
+import { BigNumber } from "ethers";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -30,7 +31,7 @@ export const WriteOnlyFunctionForm = ({
   setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [txValue, setTxValue] = useState("");
+  const [txValue, setTxValue] = useState<BigNumber>();
   const writeTxn = useTransactor();
 
   const keys = Object.keys(form);
@@ -50,7 +51,7 @@ export const WriteOnlyFunctionForm = ({
     args: keys.map(key => form[key]),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: parseTxnValue(txValue),
+      value: txValue,
     },
   });
 
@@ -86,18 +87,16 @@ export const WriteOnlyFunctionForm = ({
   });
 
   return (
-    <>
-      <div className="flex flex-col gap-3">
-        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
-        {inputs}
-        {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-        <div className="flex justify-between gap-2">
-          <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-          <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-            Send 💸
-          </button>
-        </div>
+    <div className="flex flex-col gap-3">
+      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+      {inputs}
+      {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+      <div className="flex justify-between gap-2">
+        <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+        <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
+          Send 💸
+        </button>
       </div>
-    </>
+    </div>
   );
 };
