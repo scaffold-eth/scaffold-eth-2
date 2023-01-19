@@ -43,6 +43,7 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
  * @dev used to filter all readOnly functions with zero params
  * @param {Contract} contract
  * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
+ * @param {boolean} refreshDisplayVariables refetch values
  * @returns { methods: (JSX.Element | null)[] } array of DisplayVariable component
  * which has corresponding input field for param type and button to read
  */
