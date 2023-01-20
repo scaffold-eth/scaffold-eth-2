@@ -45,7 +45,7 @@ contract YourContract {
         totalCounter += 1;
         userPurposeCounter[msg.sender] += 1;
 
-        // msg.value: predefined variable that represents the amount of ether sent with the transaction
+        // msg.value: built-in global variable that represents the amount of ether sent with the transaction
         if (msg.value > 0) {
             premium = true;
         } else {
