@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "~~/utils/scaffold-eth";
 
 /**
@@ -12,20 +12,13 @@ const TxValueInput = ({
   setTxValue: Dispatch<SetStateAction<BigNumber | undefined>>;
   txValue: BigNumber | undefined;
 }) => {
-  const [isHex, setIsHex] = useState(false);
-  const inputValue = txValue
-    ? isHex
-      ? BigNumber.from(txValue).toHexString()
-      : BigNumber.from(txValue).toString()
-    : "";
-
   return (
     <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-primary justify-between pr-3">
       <input
         placeholder="value (wei)"
         autoComplete="off"
         className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400"
-        value={inputValue}
+        value={txValue ? BigNumber.from(txValue).toString() : ""}
         onChange={e => {
           try {
             if (!e.target.value) {
@@ -47,14 +40,6 @@ const TxValueInput = ({
           }}
         >
           *
-        </button>
-        <button
-          className="cursor-pointer text-xl font-semibold text-accent"
-          onClick={() => {
-            setIsHex(!isHex);
-          }}
-        >
-          #
         </button>
       </div>
     </div>
