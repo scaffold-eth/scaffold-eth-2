@@ -35,7 +35,7 @@ export default function Header() {
     useCallback(() => setIsDrawerOpen(false), []),
   );
 
-  const NavLinks = (
+  const navLinks = (
     <>
       <li>
         <NavLink href="/">Home</NavLink>
@@ -75,7 +75,7 @@ export default function Header() {
                 setIsDrawerOpen(false);
               }}
             >
-              {NavLinks}
+              {navLinks}
             </ul>
           )}
         </div>
@@ -90,7 +90,7 @@ export default function Header() {
             <span className="text-xs">Forkable Ethereum dev stack</span>
           </div>
         </div>
-        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1 gap-2">{NavLinks}</ul>
+        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
