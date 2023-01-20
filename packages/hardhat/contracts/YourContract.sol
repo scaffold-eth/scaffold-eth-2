@@ -40,6 +40,7 @@ contract YourContract {
      * @param _newPurpose (string memory) - new purpose of the contract
      */
     function setPurpose(string memory _newPurpose) public payable {
+        // Change state variables
         purpose = _newPurpose;
         totalCounter += 1;
         userPurposeCounter[msg.sender] += 1;
