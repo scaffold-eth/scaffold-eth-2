@@ -66,7 +66,7 @@ contract YourContract {
     }
 
     /**
-     * Function that allows for receiving of ETH
+     * Function that allows the contract to receive ETH
      */
     receive() external payable {}
 }
