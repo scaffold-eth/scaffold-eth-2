@@ -8,7 +8,6 @@ import {
   getContractWriteMethods,
   getDeployedContract,
 } from "./utilsContract";
-import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 import { Balance, Address } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 
@@ -35,7 +34,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   }
 
   const contract: Contract | null = useContract({
-    address: parseAddressTo0x(contractAddress),
+    address: contractAddress,
     abi: contractABI,
     signerOrProvider: provider,
   });
