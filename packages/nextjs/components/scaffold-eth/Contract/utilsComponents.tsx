@@ -23,7 +23,7 @@ const removeRedundantZeroes = (num: string) => {
  * @param powerOf10 positive power of 10
  * @returns {string} result of multiplying
  */
-const multiplyNumStringTo10power = (num: string, powerOf10: number): string => {
+const multiplyStringifiedNumberToPowerOf10 = (num: string, powerOf10: number): string => {
   if (!num || !NUMBER_REGEX.test(num)) {
     return "";
   }
@@ -71,7 +71,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
         <button
           className="cursor-pointer text-xl font-semibold pt-1 text-accent"
           onClick={() => {
-            const multiplied = multiplyNumStringTo10power(txValue, 18);
+            const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
             setTxValue(multiplied);
           }}
         >
