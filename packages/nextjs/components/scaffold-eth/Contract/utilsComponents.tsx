@@ -64,7 +64,10 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
           toast.error("Invalid number");
         }}
       />
-      <div className="space-x-4 flex">
+      <div
+        className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)]"
+        data-tip="multiply by 10^18"
+      >
         <button
           className="cursor-pointer text-xl font-semibold pt-1 text-accent"
           onClick={() => {
