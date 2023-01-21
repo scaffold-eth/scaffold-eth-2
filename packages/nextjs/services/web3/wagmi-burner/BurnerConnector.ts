@@ -5,7 +5,6 @@ import { hardhat } from "wagmi/chains";
 import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
 import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
 import { BurnerConnectorOptions, BurnerConnectorData } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
-import { parseAddressTo0x } from "~~/utils/scaffold-eth";
 
 export const burnerWalletId = "burner-wallet";
 export const burnerWalletName = "Burner Wallet";
@@ -56,7 +55,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     }
 
     const data: Required<BurnerConnectorData> = {
-      account: parseAddressTo0x(account),
+      account,
       chain: {
         id: chainId,
         unsupported: false,
@@ -80,7 +79,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     return Promise.resolve();
   }
 
-  async getAccount(): Promise<`0x${string}`> {
+  async getAccount(): Promise<string> {
     const accounts = await this.provider?.listAccounts();
     if (accounts == null || accounts[0] == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
@@ -88,7 +87,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
     const wallet = this.getWallet();
     const account = wallet.address;
-    return parseAddressTo0x(account);
+    return account;
   }
 
   async getChainId(): Promise<number> {
