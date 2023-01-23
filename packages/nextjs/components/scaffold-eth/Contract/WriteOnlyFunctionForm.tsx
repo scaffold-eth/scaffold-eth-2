@@ -7,7 +7,6 @@ import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { toast } from "~~/utils/scaffold-eth";
-import { BigNumber } from "ethers";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -31,7 +30,7 @@ export const WriteOnlyFunctionForm = ({
   setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [txValue, setTxValue] = useState<BigNumber>();
+  const [txValue, setTxValue] = useState("");
   const writeTxn = useTransactor();
 
   const keys = Object.keys(form);
