@@ -6,7 +6,6 @@ import { DeployFunction } from "hardhat-deploy/types";
  * constructor arguments set to the deployer address.
  *
  * @param hre HardhatRuntimeEnvironment object.
- * @author BuidlGuidl
  */
 const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
