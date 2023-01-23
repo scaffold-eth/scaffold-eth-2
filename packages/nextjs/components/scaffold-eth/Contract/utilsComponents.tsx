@@ -1,62 +1,99 @@
-import { BigNumber } from "ethers";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "~~/utils/scaffold-eth";
+
+const NUMBER_REGEX = /^\d+\.?\d*$/;
 
 /**
- * Input component which comes with utility buttons to handle conversion of ETH
+ * Removes redundant leading and trailing zeros from stringified number
+ * @param num stringified number
  */
-const TxValueInput = ({
-  setTxValue,
-  txValue,
-}: {
-  setTxValue: Dispatch<SetStateAction<BigNumber | undefined>>;
-  txValue: BigNumber | undefined;
-}) => {
-  const [isHex, setIsHex] = useState(false);
-  const inputValue = txValue
-    ? isHex
-      ? BigNumber.from(txValue).toHexString()
-      : BigNumber.from(txValue).toString()
-    : "";
+const removeRedundantZeroes = (num: string) => {
+  return (
+    num
+      // leading
+      .replace(/^0+(0\.|[1-9]+)/, "$1")
+      // trailing
+      .replace(/(\.[0-9]*[1-9])0+$|\.0*$/, "$1")
+  );
+};
+
+/**
+ * Multiplies stringified number to positive power of 10
+ * @param numberValue stringified number
+ * @param powerOf10 positive power of 10
+ * @returns {string} result of multiplying
+ */
+const multiplyStringifiedNumberToPowerOf10 = (numberValue: string, powerOf10: number): string => {
+  if (!numberValue || !NUMBER_REGEX.test(numberValue)) {
+    return "";
+  }
+
+  const numberParts = numberValue.split(".");
+  let result = "";
+  if (numberParts.length === 1) {
+    // numberValue is an integer number.
+    result = `${numberValue}${"0".repeat(powerOf10)}`;
+  } else if (numberParts[1] && powerOf10 < numberParts[1].length) {
+    // numberValue is a decimal number AND the result is also a decimal.
+    result = `${numberParts[0]}${numberParts[1].slice(0, powerOf10)}.${numberParts[1].slice(powerOf10)}`;
+  } else {
+    // numberValue is a decimal number AND the result is an integer.
+    result = `${numberParts[0]}${numberParts[1]}${"0".repeat(powerOf10 - numberParts[1].length)}`;
+  }
+
+  return removeRedundantZeroes(result);
+};
+
+/**
+ * Input TX value component with wei conversion util.
+ */
+const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
+  const [inputError, setInputError] = useState(false);
 
   return (
-    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-primary justify-between pr-3">
+    <div
+      className={`flex items-end border-2 bg-base-200 rounded-full text-primary justify-between pr-3 ${
+        inputError ? "border-error" : "border-base-300"
+      }`}
+    >
       <input
         placeholder="value (wei)"
         autoComplete="off"
         className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400"
-        value={inputValue}
+        value={txValue}
         onChange={e => {
-          try {
-            if (!e.target.value) {
-              setTxValue(undefined);
-              return;
-            }
-            setTxValue(BigNumber.from(e.target.value));
-          } catch (err) {
-            toast.error("Invalid number");
+          if (!e.target.value) {
+            setInputError(false);
+            setTxValue("");
+            return;
           }
+
+          setTxValue(e.target.value);
+
+          if (!NUMBER_REGEX.test(e.target.value)) {
+            setInputError(true);
+            return;
+          }
+
+          setInputError(false);
         }}
       />
-      <div className="space-x-4 flex">
-        <button
-          className="cursor-pointer text-xl font-semibold pt-1 text-accent"
-          onClick={async () => {
-            if (!txValue) return;
-            setTxValue(txValue.mul(String(10 ** 18)));
-          }}
+      {!inputError && (
+        <div
+          className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)]"
+          data-tip="Multiply by 10^18 (wei)"
         >
-          *
-        </button>
-        <button
-          className="cursor-pointer text-xl font-semibold text-accent"
-          onClick={() => {
-            setIsHex(!isHex);
-          }}
-        >
-          #
-        </button>
-      </div>
+          <button
+            className="cursor-pointer text-xl font-semibold pt-1 text-accent"
+            disabled={inputError}
+            onClick={() => {
+              const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
+              setTxValue(multiplied);
+            }}
+          >
+            *
+          </button>
+        </div>
+      )}
     </div>
   );
 };
