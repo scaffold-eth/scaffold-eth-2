@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-import { toast } from "~~/utils/scaffold-eth";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const NUMBER_REGEX = /^\d+\.?\d*$/;
 
@@ -19,21 +18,25 @@ const removeRedundantZeroes = (num: string) => {
 
 /**
  * Multiplies stringified number to positive power of 10
- * @param num stringified number
+ * @param numberValue stringified number
  * @param powerOf10 positive power of 10
  * @returns {string} result of multiplying
  */
-const multiplyStringifiedNumberToPowerOf10 = (num: string, powerOf10: number): string => {
-  if (!num || !NUMBER_REGEX.test(num)) {
+const multiplyStringifiedNumberToPowerOf10 = (numberValue: string, powerOf10: number): string => {
+  if (!numberValue || !NUMBER_REGEX.test(numberValue)) {
     return "";
   }
-  const numberParts = num.split(".");
+
+  const numberParts = numberValue.split(".");
   let result = "";
   if (numberParts.length === 1) {
-    result = `${num}${"0".repeat(powerOf10)}`;
+    // numberValue is an integer number.
+    result = `${numberValue}${"0".repeat(powerOf10)}`;
   } else if (numberParts[1] && powerOf10 < numberParts[1].length) {
+    // numberValue is a decimal number AND the result is also a decimal.
     result = `${numberParts[0]}${numberParts[1].slice(0, powerOf10)}.${numberParts[1].slice(powerOf10)}`;
   } else {
+    // numberValue is a decimal number AND the result is an integer.
     result = `${numberParts[0]}${numberParts[1]}${"0".repeat(powerOf10 - numberParts[1].length)}`;
   }
 
@@ -41,11 +44,17 @@ const multiplyStringifiedNumberToPowerOf10 = (num: string, powerOf10: number): s
 };
 
 /**
- * Input component which comes with utility buttons to handle conversion of ETH
+ * Input TX value component with wei conversion util.
  */
 const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAction<string>>; txValue: string }) => {
+  const [inputError, setInputError] = useState(false);
+
   return (
-    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-primary justify-between pr-3">
+    <div
+      className={`flex items-end border-2 bg-base-200 rounded-full text-primary justify-between pr-3 ${
+        inputError ? "border-error" : "border-base-300"
+      }`}
+    >
       <input
         placeholder="value (wei)"
         autoComplete="off"
@@ -53,31 +62,38 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
         value={txValue}
         onChange={e => {
           if (!e.target.value) {
+            setInputError(false);
             setTxValue("");
             return;
           }
-          if (NUMBER_REGEX.test(e.target.value)) {
-            setTxValue(e.target.value);
+
+          setTxValue(e.target.value);
+
+          if (!NUMBER_REGEX.test(e.target.value)) {
+            setInputError(true);
             return;
           }
-          // @todo: change to the error message below the input?
-          toast.error("Invalid number");
+
+          setInputError(false);
         }}
       />
-      <div
-        className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)]"
-        data-tip="multiply by 10^18"
-      >
-        <button
-          className="cursor-pointer text-xl font-semibold pt-1 text-accent"
-          onClick={() => {
-            const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
-            setTxValue(multiplied);
-          }}
+      {!inputError && (
+        <div
+          className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)]"
+          data-tip="Multiply by 10^18 (wei)"
         >
-          *
-        </button>
-      </div>
+          <button
+            className="cursor-pointer text-xl font-semibold pt-1 text-accent"
+            disabled={inputError}
+            onClick={() => {
+              const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
+              setTxValue(multiplied);
+            }}
+          >
+            *
+          </button>
+        </div>
+      )}
     </div>
   );
 };
