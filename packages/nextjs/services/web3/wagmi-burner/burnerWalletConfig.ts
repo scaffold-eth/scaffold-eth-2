@@ -21,6 +21,9 @@ export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => (
   iconBackground: "#0c2f78",
   //todo add conditions to hide burner wallet
   hidden: () => process.env.NEXT_PUBLIC_NETWORK !== "hardhat",
+  // @ts-expect-error :  Some problem with wagmi inferring wrong `Address` type even after configuring it in global.d.ts
+  // checkout - https://github.com/wagmi-dev/wagmi/issues/1712
+  //  https://github.com/scaffold-eth/se-2/pull/96#issuecomment-1399269480
   createConnector: () => {
     const connector = new BurnerConnector({ chains, options: { defaultChainId: defaultBurnerChainId } });
 

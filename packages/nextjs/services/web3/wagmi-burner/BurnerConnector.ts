@@ -55,6 +55,9 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     }
 
     const data: Required<BurnerConnectorData> = {
+      // @ts-expect-error :  Some problem with wagmi inferring wrong `Address` type even after configuring it in global.d.ts
+      // checkout - https://github.com/wagmi-dev/wagmi/issues/1712
+      //  https://github.com/scaffold-eth/se-2/pull/96#issuecomment-1399269480
       account,
       chain: {
         id: chainId,
@@ -79,6 +82,9 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     return Promise.resolve();
   }
 
+  // @ts-expect-error :  Some problem with wagmi inferring wrong `Address` type even after configuring it in global.d.ts
+  // checkout - https://github.com/wagmi-dev/wagmi/issues/1712
+  //  https://github.com/scaffold-eth/se-2/pull/96#issuecomment-1399269480
   async getAccount(): Promise<string> {
     const accounts = await this.provider?.listAccounts();
     if (accounts == null || accounts[0] == null) {
