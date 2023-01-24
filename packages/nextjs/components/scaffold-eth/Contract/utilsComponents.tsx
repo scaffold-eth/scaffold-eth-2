@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-const NUMBER_REGEX = /^\d+\.?\d*$/;
+const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
 
 /**
  * Removes redundant leading and trailing zeros from stringified number
@@ -30,7 +30,7 @@ const multiplyStringifiedNumberToPowerOf10 = (numberValue: string, powerOf10: nu
   const numberParts = numberValue.split(".");
   let result = "";
   if (numberParts.length === 1) {
-    // numberValue is an integer number.
+    // numberValue is an integer number or a decimal number starting with "." (no leading 0)
     result = `${numberValue}${"0".repeat(powerOf10)}`;
   } else if (numberParts[1] && powerOf10 < numberParts[1].length) {
     // numberValue is a decimal number AND the result is also a decimal.
