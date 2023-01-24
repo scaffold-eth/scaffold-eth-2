@@ -79,7 +79,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
       />
       {!inputError && (
         <div
-          className="z-20 space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:left-[-50px]"
+          className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:left-[-50px]"
           data-tip="Multiply by 10^18 (wei)"
         >
           <button
