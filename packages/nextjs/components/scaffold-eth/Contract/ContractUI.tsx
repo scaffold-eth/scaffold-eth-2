@@ -90,7 +90,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
                 <p className="my-0 text-sm">Write</p>
               </div>
             </div>
-            <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+            <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200 overflow-visible">
               {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
             </div>
           </div>
