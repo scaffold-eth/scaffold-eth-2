@@ -15,11 +15,13 @@ const config: HardhatUserConfig = {
   defaultNetwork: "localhost",
   namedAccounts: {
     deployer: {
-      // By default, it will take the first account as deployer
+      // By default, it will take the first Hardhat account as the deployer
       default: 0,
     },
   },
   networks: {
+    // View the networks that are pre-configured.
+    // If the network you are looking for is not here you can add new network settings
     arbitrum: {
       url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
