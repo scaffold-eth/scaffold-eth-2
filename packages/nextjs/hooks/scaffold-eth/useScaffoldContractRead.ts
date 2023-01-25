@@ -1,7 +1,7 @@
 import { useContractRead, useNetwork } from "wagmi";
 import { getDeployedContract } from "~~/components/scaffold-eth/Contract/utilsContract";
 
-const useScaffoldRead = (
+const useScaffoldContractRead = (
   contractName: string,
   functionName: string,
   readConfig?: Omit<Parameters<typeof useContractRead>[0], "functionName">,
@@ -17,9 +17,9 @@ const useScaffoldRead = (
   return useContractRead({
     ...readConfig,
     functionName,
-    addressOrName: contractAddress,
-    contractInterface: contractABI,
+    address: contractAddress,
+    abi: contractABI,
   });
 };
 
-export default useScaffoldRead;
+export default useScaffoldContractRead;

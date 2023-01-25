@@ -1,12 +1,13 @@
 import type { NextPage } from "next";
 import Spinner from "~~/components/Spinner";
-import useScaffoldRead from "~~/hooks/scaffold-eth/useScaffoldRead";
+import useScaffoldContractRead from "~~/hooks/scaffold-eth/useScaffoldContractRead";
 
 const DemoExample: NextPage = () => {
-  const { data, isLoading, refetch } = useScaffoldRead("YourContract", "purpose");
+  const { data, isLoading, refetch } = useScaffoldContractRead("YourContract", "purpose");
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-2xl my-5">Example UI</h1>
+      {/* @ts-expect-error data is unknown is for and will get proper type once the is typed correctly */}
       {isLoading ? <Spinner /> : <p>{data}</p>}
       <button
         disabled={isLoading}
