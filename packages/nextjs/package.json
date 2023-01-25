@@ -8,7 +8,8 @@
     "build": "next build",
     "serve": "next start",
     "lint": "next lint",
-    "format": "prettier --write . '!(node_module|.next|contracts)/**/*'"
+    "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
