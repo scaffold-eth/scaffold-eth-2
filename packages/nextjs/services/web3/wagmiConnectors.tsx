@@ -1,5 +1,14 @@
-import { connectorsForWallets, wallet } from "@rainbow-me/rainbowkit";
-import { configureChains, chain } from "wagmi";
+import { connectorsForWallets } from "@rainbow-me/rainbowkit";
+import {
+  rainbowWallet,
+  metaMaskWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  braveWallet,
+  ledgerWallet,
+} from "@rainbow-me/rainbowkit/wallets";
+import { configureChains } from "wagmi";
+import { mainnet, polygon, optimism, arbitrum, hardhat, localhost, goerli, polygonMumbai } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
@@ -9,17 +18,14 @@ import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletCo
  */
 export const appChains = configureChains(
   [
-    chain.mainnet,
-    chain.polygon,
-    chain.optimism,
-    chain.arbitrum,
-    chain.hardhat,
-    chain.localhost,
-    chain.polygon,
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    hardhat,
+    polygon,
     // todo replace with config instead of env
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-      ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten, chain.polygonMumbai]
-      : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, polygonMumbai] : []),
   ],
   [
     alchemyProvider({
@@ -48,7 +54,7 @@ export const appChains = configureChains(
  * list of burner wallet compatable chains
  */
 export const burnerChains = configureChains(
-  [chain.localhost, chain.hardhat],
+  [localhost, hardhat],
   [
     alchemyProvider({
       // ToDo. Move to .env || scaffold config
@@ -67,12 +73,12 @@ export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Supported Wallets",
     wallets: [
-      wallet.metaMask({ chains: appChains.chains, shimDisconnect: true }),
-      wallet.walletConnect({ chains: appChains.chains }),
-      wallet.ledger({ chains: appChains.chains }),
-      wallet.brave({ chains: appChains.chains }),
-      wallet.coinbase({ appName: "scaffold-eth", chains: appChains.chains }),
-      wallet.rainbow({ chains: appChains.chains }),
+      metaMaskWallet({ chains: appChains.chains, shimDisconnect: true }),
+      walletConnectWallet({ chains: appChains.chains }),
+      ledgerWallet({ chains: appChains.chains }),
+      braveWallet({ chains: appChains.chains }),
+      coinbaseWallet({ appName: "scaffold-eth", chains: appChains.chains }),
+      rainbowWallet({ chains: appChains.chains }),
       burnerWalletConfig({ chains: burnerChains.chains }),
     ],
   },

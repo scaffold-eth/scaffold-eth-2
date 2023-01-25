@@ -6,7 +6,7 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast } from "~~/utils/scaffold-eth";
+import { toast, parseTxnValue } from "~~/utils/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -44,13 +44,13 @@ export const WriteOnlyFunctionForm = ({
     isLoading,
     writeAsync,
   } = useContractWrite({
-    addressOrName: contractAddress,
+    address: contractAddress,
     functionName: functionFragment.name,
-    contractInterface: [functionFragment],
+    abi: [functionFragment],
     args: keys.map(key => form[key]),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: txValue,
+      value: parseTxnValue(txValue),
     },
   });
 
@@ -86,18 +86,16 @@ export const WriteOnlyFunctionForm = ({
   });
 
   return (
-    <>
-      <div className="flex flex-col gap-3">
-        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
-        {inputs}
-        {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
-        <div className="flex justify-between gap-2">
-          <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-          <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-            Send 💸
-          </button>
-        </div>
+    <div className="flex flex-col gap-3">
+      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+      {inputs}
+      {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+      <div className="flex justify-between gap-2">
+        <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+        <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
+          Send 💸
+        </button>
       </div>
-    </>
+    </div>
   );
 };
