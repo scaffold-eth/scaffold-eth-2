@@ -12,10 +12,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deploy } = hre.deployments;
 
   await deploy("YourContract", {
-    from: deployer,
-    // By default the deployer account will be one that comes with Hardhat, which anyone can access.
+    // By default, the deployer account will be one that comes with Hardhat, which anyone can access.
     // You can use your frontend address as the deployer account to run the deploy script.
-    // The deployer account should have sufficient balance to pay for the gas fee for contract creation.
+    // When deploying to live networks, the deployer account should have sufficient balance to pay for the gas fee for contract creation.
+    // You can generate a random account with `yarn genearte` which will create a random account and add the DEPLOYER_PRIVATE_KEY to the .env file.
+    // You can run the `yarn account` command to check your balance.
+    from: deployer,
     args: [deployer],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
