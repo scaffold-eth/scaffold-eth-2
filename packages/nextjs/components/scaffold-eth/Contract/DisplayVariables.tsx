@@ -17,8 +17,8 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     isFetching,
     refetch,
   } = useContractRead({
-    addressOrName: contractAddress,
-    contractInterface: [functionFragment],
+    address: contractAddress,
+    abi: [functionFragment],
     functionName: functionFragment.name,
     args: [],
     onError: error => {

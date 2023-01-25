@@ -12,7 +12,7 @@ export function useAccountBalance(address?: string) {
     isError,
     isLoading,
   } = useBalance({
-    addressOrName: address,
+    address,
     watch: true,
   });
 

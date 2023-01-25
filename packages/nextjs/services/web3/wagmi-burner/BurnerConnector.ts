@@ -1,13 +1,14 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
-import { Connector, Chain, chain } from "wagmi";
+import { Connector, Chain } from "wagmi";
+import { hardhat } from "wagmi/chains";
 import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
 import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
 import { BurnerConnectorOptions, BurnerConnectorData } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
 
 export const burnerWalletId = "burner-wallet";
 export const burnerWalletName = "Burner Wallet";
-export const defaultBurnerChainId = chain.hardhat.id;
+export const defaultBurnerChainId = hardhat.id;
 
 /**
  * This class is a wagmi connector for BurnerWallet.  Its used by {@link burnerWalletConfig}
@@ -31,7 +32,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   async getProvider() {
     if (!this.provider) {
       const chain = this.getChainFromId();
-      this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
+      this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default.http[0]);
     }
     return this.provider;
   }
@@ -39,7 +40,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   async connect(config?: { chainId?: number | undefined } | undefined): Promise<Required<BurnerConnectorData>> {
     const chain = this.getChainFromId(config?.chainId);
 
-    this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default);
+    this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default.http[0]);
     const account = await this.getAccount();
     const chainId = await this.getChainId();
 

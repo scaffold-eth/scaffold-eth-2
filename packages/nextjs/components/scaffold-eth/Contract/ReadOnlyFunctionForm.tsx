@@ -29,8 +29,8 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     isFetching,
     refetch,
   } = useContractRead({
-    addressOrName: contractAddress,
-    contractInterface: [functionFragment],
+    address: contractAddress,
+    abi: [functionFragment],
     functionName: functionFragment.name,
     args: keys.map(key => form[key]),
     enabled: false,
