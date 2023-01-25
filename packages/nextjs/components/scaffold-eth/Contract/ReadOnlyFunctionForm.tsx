@@ -1,7 +1,7 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
-import { tryToDisplay } from "./utilsDisplay";
+import { displayTxResult } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utilsContract";
 import { toast } from "~~/utils/scaffold-eth";
@@ -29,8 +29,8 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     isFetching,
     refetch,
   } = useContractRead({
-    addressOrName: contractAddress,
-    contractInterface: [functionFragment],
+    address: contractAddress,
+    abi: [functionFragment],
     functionName: functionFragment.name,
     args: keys.map(key => form[key]),
     enabled: false,
@@ -61,7 +61,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
         <div className="flex-grow">
           {result ? (
             <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
-              <strong>Result</strong>: {tryToDisplay(result)}
+              <strong>Result</strong>: {displayTxResult(result)}
             </span>
           ) : null}
         </div>

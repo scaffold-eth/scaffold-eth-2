@@ -3,7 +3,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
-import { useSwitchNetwork, chain } from "wagmi";
+import { useSwitchNetwork } from "wagmi";
+import * as chain from "wagmi/chains";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -11,7 +12,7 @@ const tempAutoConnectConfig: TAutoConnect = {
   autoConnect: true,
 };
 
-type chainKeyTypes = keyof typeof chain;
+type ChainName = keyof typeof chain;
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -20,7 +21,7 @@ export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
   const { switchNetwork } = useSwitchNetwork();
 
-  const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as chainKeyTypes;
+  const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as ChainName;
   const definedChain = chain[publicNetworkName];
 
   const onSwitchNetwork = () => {

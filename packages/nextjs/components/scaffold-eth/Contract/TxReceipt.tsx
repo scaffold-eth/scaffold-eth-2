@@ -1,6 +1,6 @@
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import { BigNumber } from "ethers";
-import { tryToDisplay } from "./utilsDisplay";
+import { displayTxResult } from "./utilsDisplay";
 
 const TxReceipt = (txResult: string | number | BigNumber | Record<string, any> | TransactionReceipt | undefined) => {
   return (
@@ -10,7 +10,7 @@ const TxReceipt = (txResult: string | number | BigNumber | Record<string, any> |
         <strong>Transaction Receipt</strong>
       </div>
       <div className="collapse-content overflow-auto bg-secondary rounded-t-none rounded-3xl">
-        <pre className="text-xs pt-4">{tryToDisplay(txResult)}</pre>
+        <pre className="text-xs pt-4">{displayTxResult(txResult)}</pre>
       </div>
     </div>
   );
