@@ -23,7 +23,6 @@ export const appChains = configureChains(
     optimism,
     arbitrum,
     hardhat,
-    localhost,
     polygon,
     // todo replace with config instead of env
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, polygonMumbai] : []),
