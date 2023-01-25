@@ -35,7 +35,7 @@ const getDeployedContract = (
  * @param {Contract} contract
  * @returns {FunctionFragment[]} array of function fragments
  */
-const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
+const getAllContractFunctions = (contract: Contract | null): FunctionFragment[] => {
   return contract ? Object.values(contract.interface.functions).filter(fn => fn.type === "function") : [];
 };
 
@@ -48,28 +48,30 @@ const getAllContractFunctions = (contract: Contract): FunctionFragment[] => {
  * which has corresponding input field for param type and button to read
  */
 const getContractVariablesAndNoParamsReadMethods = (
-  contract: Contract,
+  contract: Contract | null,
   contractMethodsAndVariables: FunctionFragment[],
   refreshDisplayVariables: boolean,
 ): { methods: (JSX.Element | null)[] } => {
   return {
-    methods: contractMethodsAndVariables
-      .map(fn => {
-        const isQueryableWithNoParams =
-          (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-        if (isQueryableWithNoParams) {
-          return (
-            <DisplayVariable
-              key={fn.name}
-              functionFragment={fn}
-              contractAddress={contract.address}
-              refreshDisplayVariables={refreshDisplayVariables}
-            />
-          );
-        }
-        return null;
-      })
-      .filter(n => n),
+    methods: contract
+      ? contractMethodsAndVariables
+          .map(fn => {
+            const isQueryableWithNoParams =
+              (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
+            if (isQueryableWithNoParams) {
+              return (
+                <DisplayVariable
+                  key={fn.name}
+                  functionFragment={fn}
+                  contractAddress={contract.address}
+                  refreshDisplayVariables={refreshDisplayVariables}
+                />
+              );
+            }
+            return null;
+          })
+          .filter(n => n)
+      : [],
   };
 };
 
@@ -81,20 +83,22 @@ const getContractVariablesAndNoParamsReadMethods = (
  * which has corresponding input field for param type and button to read
  */
 const getContractReadOnlyMethodsWithParams = (
-  contract: Contract,
+  contract: Contract | null,
   contractMethodsAndVariables: FunctionFragment[],
 ): { methods: (JSX.Element | null)[] } => {
   return {
-    methods: contractMethodsAndVariables
-      .map(fn => {
-        const isQueryableWithParams =
-          (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
-        if (isQueryableWithParams) {
-          return <ReadOnlyFunctionForm key={fn.name} functionFragment={fn} contractAddress={contract.address} />;
-        }
-        return null;
-      })
-      .filter(n => n),
+    methods: contract
+      ? contractMethodsAndVariables
+          .map(fn => {
+            const isQueryableWithParams =
+              (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
+            if (isQueryableWithParams) {
+              return <ReadOnlyFunctionForm key={fn.name} functionFragment={fn} contractAddress={contract.address} />;
+            }
+            return null;
+          })
+          .filter(n => n)
+      : [],
   };
 };
 
@@ -107,27 +111,29 @@ const getContractReadOnlyMethodsWithParams = (
  * which has corresponding input field for param type, txnValue input if required and button to send transaction
  */
 const getContractWriteMethods = (
-  contract: Contract,
+  contract: Contract | null,
   contractMethodsAndVariables: FunctionFragment[],
   setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>,
 ): { methods: (JSX.Element | null)[] } => {
   return {
-    methods: contractMethodsAndVariables
-      .map(fn => {
-        const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
-        if (isWriteableFunction) {
-          return (
-            <WriteOnlyFunctionForm
-              key={fn.name}
-              functionFragment={fn}
-              contractAddress={contract.address}
-              setRefreshDisplayVariables={setRefreshDisplayVariables}
-            />
-          );
-        }
-        return null;
-      })
-      .filter(n => n),
+    methods: contract
+      ? contractMethodsAndVariables
+          .map(fn => {
+            const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
+            if (isWriteableFunction) {
+              return (
+                <WriteOnlyFunctionForm
+                  key={fn.name}
+                  functionFragment={fn}
+                  contractAddress={contract.address}
+                  setRefreshDisplayVariables={setRefreshDisplayVariables}
+                />
+              );
+            }
+            return null;
+          })
+          .filter(n => n)
+      : [],
   };
 };
 

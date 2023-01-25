@@ -33,9 +33,9 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
 
-  const contract: Contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: contractABI,
+  const contract: Contract | null = useContract({
+    address: contractAddress,
+    abi: contractABI,
     signerOrProvider: provider,
   });
 
