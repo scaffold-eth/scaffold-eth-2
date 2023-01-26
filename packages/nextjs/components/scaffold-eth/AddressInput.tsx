@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Blockies from "react-blockies";
-import { useEnsAddress } from "wagmi";
+import { useEnsAddress, useEnsAvatar } from "wagmi";
+import { isAddress } from "ethers/lib/utils";
 
 type TAddressInputProps = {
   onChange?: (arg: string) => void;
@@ -24,6 +25,13 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   const { data: ensData, isLoading } = useEnsAddress({
     name: address,
     enabled: isENS(address),
+    chainId: 1,
+    cacheTime: 30_000,
+  });
+
+  const { data: ensAvatarData } = useEnsAvatar({
+    address,
+    enabled: isAddress(address),
     chainId: 1,
     cacheTime: 30_000,
   });
@@ -52,8 +60,17 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   return (
     <>
       <div className="form-control grow">
-        <label className="input-group">
-          {resolvedEns && <span className="text-accent">{resolvedEns}</span>}
+        <div className="flex w-full">
+          {resolvedEns && (
+            <div className="flex bg-secondary rounded-l-full items-center">
+              <span className={ensAvatarData ? "w-[35px]" : ""}>
+                {/* Don't want to use nextJS Image here (and adding remote patterns for the URL) */}
+                {/* eslint-disable-next-line  */}
+                {ensAvatarData && <img className="w-full rounded-full" src={ensAvatarData} alt={`${ensData} avatar`} />}
+              </span>
+              <span className="text-accent px-2">{resolvedEns}</span>
+            </div>
+          )}
           <input
             name={name}
             type="text"
@@ -65,10 +82,12 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-          <span className="p-0 bg-base-100">
-            <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />
-          </span>
-        </label>
+          {address && (
+            <span className="p-0 bg-base-100">
+              <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />
+            </span>
+          )}
+        </div>
       </div>
     </>
   );
