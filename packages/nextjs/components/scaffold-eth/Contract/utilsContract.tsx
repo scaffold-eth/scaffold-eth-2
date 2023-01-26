@@ -1,6 +1,4 @@
 import { FunctionFragment } from "ethers/lib/utils";
-// ToDo. Handle when this doesn't exist?
-import ContractData from "~~/generated/hardhat_contracts.json";
 import { Contract, utils } from "ethers";
 import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
@@ -22,6 +20,13 @@ const getDeployedContract = (
   contractName: string | undefined | null,
 ): GeneratedContractType | undefined => {
   if (!chainId || !contractName) {
+    return;
+  }
+
+  let ContractData;
+  try {
+    ContractData = require("~~/generated/hardhat_contracts.json");
+  } catch (e) {
     return;
   }
 
