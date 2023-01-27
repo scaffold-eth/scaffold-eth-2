@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { displayTxResult } from "~~/components/scaffold-eth/Contract/utilsDisplay";
 import Spinner from "~~/components/Spinner";
 import useScaffoldContractRead from "~~/hooks/scaffold-eth/useScaffoldContractRead";
 
@@ -7,8 +8,7 @@ const DemoExample: NextPage = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-2xl my-5">Example UI</h1>
-      {/* @ts-expect-error data is unknown is for and will get proper type once the is typed correctly */}
-      {isLoading ? <Spinner /> : <p>{data}</p>}
+      {isLoading ? <Spinner /> : <p>{displayTxResult(data)}</p>}
       <button
         disabled={isLoading}
         className="btn btn-primary"
