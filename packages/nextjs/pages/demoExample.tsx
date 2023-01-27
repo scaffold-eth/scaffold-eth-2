@@ -4,9 +4,7 @@ import { TxValueInput } from "~~/components/scaffold-eth/Contract/utilsComponent
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { displayTxResult } from "~~/components/scaffold-eth/Contract/utilsDisplay";
 import Spinner from "~~/components/Spinner";
-import { useTransactor } from "~~/hooks/scaffold-eth";
-import useScaffoldContractRead from "~~/hooks/scaffold-eth/useScaffoldContractRead";
-import useScaffoldContractWrite from "~~/hooks/scaffold-eth/useScaffoldContractWrite";
+import { useScaffoldContractRead, useScaffoldContractWrite, useTransactor } from "~~/hooks/scaffold-eth";
 import { toast } from "~~/utils/scaffold-eth";
 
 const DemoExample: NextPage = () => {
