@@ -3,6 +3,14 @@ module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
+  theme: {
+    extend: {
+      backgroundImage: {
+        gradient: "url('../assets/gradient-bg.png')",
+      },
+    },
+  },
+
   daisyui: {
     themes: [
       {
@@ -60,8 +68,8 @@ module.exports = {
       },
       {
         exampleUi: {
-          primary: "#93BBFB",
-          "primary-content": "#212638",
+          primary: "#000000",
+          "primary-content": "#ffffff",
           secondary: "#DAE8FF",
           "secondary-content": "#212638",
           accent: "#93BBFB",

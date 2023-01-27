@@ -4,7 +4,7 @@ import { useState } from "react";
 export const UiDescription = () => {
   const [visible, setVisible] = useState(true);
   return (
-    <div className={`mt-7 flex gap-2 ${visible ? "" : "invisible"}`}>
+    <div className={`mt-7 flex gap-2 ${visible ? "" : "invisible"} max-w-xl`}>
       <div className="flex gap-5 bg-base-200 opacity-80 p-7 rounded-2xl shadow-lg">
         <span className="text-3xl">👋🏻</span>
         <span>

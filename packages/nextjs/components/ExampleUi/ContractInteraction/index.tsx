@@ -1,6 +1,7 @@
 import { CopyIcon } from "./CopyIcon";
 import { DiamondIcon } from "./DiamondIcon";
 import { HareIcon } from "./HareIcon";
+import { PurposeSetter } from "./PurposeSetter";
 import { UiDescription } from "./UiDescription";
 
 export const ContractInteraction = () => {
@@ -11,6 +12,7 @@ export const ContractInteraction = () => {
       <HareIcon className="absolute right-0 bottom-24" />
       <div className="flex flex-col w-full mx-20">
         <UiDescription />
+        <PurposeSetter />
       </div>
     </div>
   );
