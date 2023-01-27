@@ -7,7 +7,7 @@ const DemoExample: NextPage = () => {
   const { data, isLoading, refetch } = useScaffoldContractRead("YourContract", "purpose");
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl my-5">Example UI</h1>
+      <h1 className="text-2xl my-5">Demo Example UI</h1>
       {isLoading ? <Spinner /> : <p>{displayTxResult(data)}</p>}
       <button
         disabled={isLoading}
