@@ -1,8 +1,9 @@
 {
   "name": "@se-2/graph-client",
+  "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@3.2.3",
-  "main": ".graphclient/index.ts",
+  "main": "./.graphclient/index.ts",
   "devDependencies": {
     "@graphprotocol/client-cli": "^2.2.16"
   },
