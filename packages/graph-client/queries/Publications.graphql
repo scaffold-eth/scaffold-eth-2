@@ -1,0 +1,18 @@
+query Publications {
+  publications(request: { publicationTypes: [POST], profileId: "0x2b79" }) {
+    items {
+      ... on Post {
+        id
+        createdAt
+        metadata {
+          name
+          description
+          content
+        }
+      }
+    }
+    pageInfo {
+      totalCount
+    }
+  }
+}

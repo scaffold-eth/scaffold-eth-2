@@ -1,0 +1,8 @@
+sources:
+  - name: lens
+    handler:
+      graphql:
+        endpoint: https://api.lens.dev/
+
+documents:
+  - "./queries/**/*.graphql"

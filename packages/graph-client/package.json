@@ -1,0 +1,16 @@
+{
+  "name": "@se-2/graph-client",
+  "private": true,
+  "packageManager": "yarn@3.2.3",
+  "main": ".graphclient/index.ts",
+  "devDependencies": {
+    "@graphprotocol/client-cli": "^2.2.16"
+  },
+  "scripts": {
+    "build": "graphclient build",
+    "dev": "graphclient serve-dev"
+  },
+  "dependencies": {
+    "graphql": "^16.6.0"
+  }
+}
