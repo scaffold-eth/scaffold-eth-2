@@ -58,6 +58,32 @@ module.exports = {
           },
         },
       },
+      {
+        exampleUi: {
+          primary: "#93BBFB",
+          "primary-content": "#212638",
+          secondary: "#DAE8FF",
+          "secondary-content": "#212638",
+          accent: "#93BBFB",
+          "accent-content": "#212638",
+          neutral: "#212638",
+          "neutral-content": "#ffffff",
+          "base-100": "#ffffff",
+          "base-200": "#f1f1f1",
+          "base-300": "#d0d0d0",
+          "base-content": "#212638",
+          info: "#93BBFB",
+          success: "#34EEB6",
+          warning: "#FFCF72",
+          error: "#FF8863",
+
+          "--rounded-btn": "9999rem",
+
+          ".tooltip": {
+            "--tooltip-tail": "6px",
+          },
+        },
+      },
     ],
   },
 };

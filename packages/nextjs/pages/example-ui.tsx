@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 
 const ExampleUI: NextPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl my-5">Example UI</h1>
+    <div className="grid grid-cols-2 flex-grow" data-theme="exampleUi">
+      <div className="flex bg-base-300">Left block</div>
+      <div className="">Right block</div>
     </div>
   );
 };
