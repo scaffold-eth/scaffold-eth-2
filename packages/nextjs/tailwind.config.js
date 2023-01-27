@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        gradient: "url('../assets/gradient-bg.png')",
+        gradient: "url('/assets/gradient-bg.png')",
       },
     },
   },
@@ -70,7 +70,7 @@ module.exports = {
         exampleUi: {
           primary: "#000000",
           "primary-content": "#ffffff",
-          secondary: "#DAE8FF",
+          secondary: "#FF6644",
           "secondary-content": "#212638",
           accent: "#93BBFB",
           "accent-content": "#212638",
