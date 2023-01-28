@@ -53,10 +53,8 @@ export const ContractData = () => {
           <div ref={containerRef} key="purpose-1" className="relative h-24">
             <div
               ref={purposeRef}
-              className={`absolute top-0 bottom-0 ease-linear transition-all ${
-                transitionEnabled ? "duration-2000" : ""
-              }`}
-              style={{ left: isRightDirection ? "0" : `-${purposeRelativeWidth * 100}%` }}
+              className="absolute top-0 bottom-0 ease-linear transition-all duration-2000"
+              style={{ left: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
             >
               {currentPurpose}
             </div>
@@ -64,7 +62,7 @@ export const ContractData = () => {
           <div key="purpose-2" className="relative h-24">
             <div
               className="absolute top-0 bottom-0 transition-all ease-linear duration-2000"
-              style={{ right: isRightDirection ? "0" : `-${purposeRelativeWidth * 100}%` }}
+              style={{ right: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
             >
               {currentPurpose}
             </div>
@@ -72,7 +70,7 @@ export const ContractData = () => {
           <div key="purpose-3" className="relative h-24">
             <div
               className="absolute top-0 bottom-0 transition-all ease-linear duration-2000"
-              style={{ left: isRightDirection ? "0" : `-${purposeRelativeWidth * 100}%` }}
+              style={{ left: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
             >
               {currentPurpose}
             </div>
