@@ -3,10 +3,11 @@ import { getDeployedContract } from "~~/components/scaffold-eth/Contract/utilsCo
 import { parseTxnValue } from "~~/utils/scaffold-eth";
 
 /**
+ * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
  * @param contractName - deployed contract name
  * @param functionName - name of the function to be called
  * @param args - arguments for the function
- * @param value - value that will be send with transaction
+ * @param value - value that will be sent with transaction
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
   const { chain } = useNetwork();
