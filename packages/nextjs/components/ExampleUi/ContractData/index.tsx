@@ -22,7 +22,7 @@ export const ContractData = () => {
 
   return (
     <div className="flex justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] px-32">
-      <div className="flex flex-col bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full">
+      <div className="flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full">
         <div className="flex justify-between w-full">
           <button
             className="btn btn-circle btn-ghost relative bg-center bg-[url('/assets/switch-button-on.png')] bg-no-repeat"
@@ -38,15 +38,15 @@ export const ContractData = () => {
           </button>
           <div className="bg-secondary border border-black rounded-xl flex">
             <div className="p-2 py-1 border-r border-black flex items-end">Total count</div>
-            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end">3</div>
+            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">3</div>
           </div>
         </div>
 
-        <div className="mt-3 border border-black bg-neutral rounded-3xl py-8 px-4 text-secondary  overflow-hidden text-8xl whitespace-nowrap w-full leading-tight">
-          <div className="relative" ref={containerRef}>
+        <div className="mt-3 border border-black bg-neutral rounded-3xl px-4 text-secondary  overflow-hidden text-[116px] whitespace-nowrap w-full uppercase tracking-tighter font-bai-jamjuree leading-tight">
+          <div className="relative overflow-x-hidden" ref={containerRef}>
             {/* for speed calculating purposes */}
             <div className="absolute -left-[9999rem]" ref={purposeRef}>
-              {currentPurpose}
+              <div className="px-4">{currentPurpose}</div>
             </div>
             <Marquee
               key="1"
@@ -55,7 +55,7 @@ export const ContractData = () => {
               play={transitionEnabled}
               speed={marqueeSpeed}
             >
-              {currentPurpose}
+              <div className="px-4">{currentPurpose}</div>
             </Marquee>
             <Marquee
               key="2"
@@ -63,8 +63,9 @@ export const ContractData = () => {
               gradient={false}
               play={transitionEnabled}
               speed={marqueeSpeed}
+              className="-my-10"
             >
-              {currentPurpose}
+              <div className="px-4">{currentPurpose}</div>
             </Marquee>
             <Marquee
               key="3"
@@ -73,7 +74,7 @@ export const ContractData = () => {
               play={transitionEnabled}
               speed={marqueeSpeed}
             >
-              {currentPurpose}
+              <div className="px-4">{currentPurpose}</div>
             </Marquee>
           </div>
         </div>
@@ -91,11 +92,7 @@ export const ContractData = () => {
           >
             <div className="border border-black rounded-full bg-secondary w-2 h-2" />
           </button>
-          <div
-            className={`w-44 p-0.5 flex items-center bg-neutral border border-black rounded-full ${
-              transitionEnabled && isRightDirection ? "rotate-180" : ""
-            }`}
-          >
+          <div className="w-44 p-0.5 flex items-center bg-neutral border border-black rounded-full">
             <div
               className="h-1.5 border border-black rounded-full bg-secondary animate-grow"
               style={{ animationPlayState: transitionEnabled ? "running" : "paused" }}

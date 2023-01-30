@@ -9,7 +9,7 @@ export const PurposeSetter = () => {
         <input
           type="text"
           placeholder="Write your purpose here"
-          className="input w-full px-5 bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] border border-black text-2xl placeholder-white"
+          className="input font-bai-jamjuree w-full px-5 bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] border border-black text-2xl placeholder-white uppercase"
         />
         <div className="flex rounded-full border border-black p-1 flex-shrink-0">
           <div className="flex rounded-full border-2 border-black p-1">

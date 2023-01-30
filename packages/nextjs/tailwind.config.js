@@ -5,10 +5,14 @@ module.exports = {
   darkTheme: "scaffoldEthDark",
   theme: {
     extend: {
+      fontFamily: {
+        "bai-jamjuree": ["Bai Jamjuree", "sans-serif"],
+      },
+
       keyframes: {
         grow: {
           "0%": {
-            width: "10%",
+            width: "0%",
           },
           "100%": {
             width: "100%",
