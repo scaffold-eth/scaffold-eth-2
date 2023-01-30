@@ -20,6 +20,7 @@ export const useScaffoldContractRead = (
     functionName,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
+    watch: true,
     ...readConfig,
   });
 };
