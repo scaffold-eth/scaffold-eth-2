@@ -3,7 +3,23 @@ module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
-
+  theme: {
+    extend: {
+      keyframes: {
+        grow: {
+          "0%": {
+            width: "10%",
+          },
+          "100%": {
+            width: "100%",
+          },
+        },
+      },
+      animation: {
+        grow: "grow 5s linear infinite",
+      },
+    },
+  },
   daisyui: {
     themes: [
       {

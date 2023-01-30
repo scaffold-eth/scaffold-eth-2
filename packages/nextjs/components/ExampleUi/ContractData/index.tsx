@@ -1,37 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { useInterval } from "usehooks-ts";
+import Marquee from "react-fast-marquee";
+
+const MARQUEE_PERIOD_IN_SEC = 5;
 
 export const ContractData = () => {
   const [currentPurpose] = useState("This is your purpose");
   const [transitionEnabled, setTransitionEnabled] = useState(true);
-  const [isRightDirection, setIsRightDirection] = useState(true);
-  const [directionChangedManually, setDirectionChangedManually] = useState(false);
-  const [purposeRelativeWidth, setPurposeRelativeWidth] = useState(100);
+  const [isRightDirection, setIsRightDirection] = useState(false);
+  const [marqueeSpeed, setMarqueeSpeed] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const purposeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (transitionEnabled && containerRef.current && purposeRef.current) {
-      setPurposeRelativeWidth(
-        (purposeRef.current.clientWidth - containerRef.current.clientWidth) / containerRef.current.clientWidth,
+      setMarqueeSpeed(
+        Math.max(purposeRef.current.clientWidth, containerRef.current.clientWidth) / MARQUEE_PERIOD_IN_SEC,
       );
     }
   }, [transitionEnabled, containerRef, purposeRef]);
-
-  useEffect(() => {
-    if (transitionEnabled) {
-      setIsRightDirection(!isRightDirection);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transitionEnabled]);
-
-  useInterval(
-    () => {
-      setIsRightDirection(!isRightDirection);
-    },
-    transitionEnabled && !directionChangedManually ? 3000 : null,
-  );
 
   return (
     <div className="flex justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] px-32">
@@ -49,31 +36,21 @@ export const ContractData = () => {
           </div>
         </div>
 
-        <div className="mt-3 border border-black bg-neutral rounded-3xl py-8 px-4 text-secondary text-8xl overflow-hidden whitespace-nowrap w-full">
-          <div ref={containerRef} key="purpose-1" className="relative h-24">
-            <div
-              ref={purposeRef}
-              className="absolute top-0 bottom-0 ease-linear transition-all duration-[3000ms]"
-              style={{ left: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
-            >
+        <div className="mt-3 border border-black bg-neutral rounded-3xl py-8 px-4 text-secondary  overflow-hidden text-8xl whitespace-nowrap w-full leading-tight">
+          <div className="relative" ref={containerRef}>
+            {/* for speed calculating purposes */}
+            <div className="absolute -left-[9999rem]" ref={purposeRef}>
               {currentPurpose}
             </div>
-          </div>
-          <div key="purpose-2" className="relative h-24">
-            <div
-              className="absolute top-0 bottom-0 transition-all ease-linear duration-[3000ms]"
-              style={{ right: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
-            >
+            <Marquee key="1" direction={isRightDirection ? "right" : "left"} gradient={false} speed={marqueeSpeed}>
               {currentPurpose}
-            </div>
-          </div>
-          <div key="purpose-3" className="relative h-24">
-            <div
-              className="absolute top-0 bottom-0 transition-all ease-linear duration-[3000ms]"
-              style={{ left: isRightDirection ? "0" : `${-purposeRelativeWidth * 100}%` }}
-            >
+            </Marquee>
+            <Marquee key="2" direction={isRightDirection ? "left" : "right"} gradient={false} speed={marqueeSpeed}>
               {currentPurpose}
-            </div>
+            </Marquee>
+            <Marquee key="3" direction={isRightDirection ? "right" : "left"} gradient={false} speed={marqueeSpeed}>
+              {currentPurpose}
+            </Marquee>
           </div>
         </div>
 
@@ -86,17 +63,16 @@ export const ContractData = () => {
               if (transitionEnabled) {
                 setIsRightDirection(!isRightDirection);
               }
-              setDirectionChangedManually(true);
             }}
           >
             <div className="border border-black rounded-full bg-secondary w-2 h-2" />
           </button>
-          <div className="w-44 p-0.5 flex items-center bg-neutral border border-black rounded-full">
-            <div
-              className={`h-1.5 border border-black rounded-full bg-secondary transition-all ease-linear duration-[3000ms] ${
-                isRightDirection ? "w-4" : "w-full"
-              }`}
-            />
+          <div
+            className={`w-44 p-0.5 flex items-center bg-neutral border border-black rounded-full ${
+              isRightDirection ? "rotate-180" : ""
+            }`}
+          >
+            <div className="h-1.5 border border-black rounded-full bg-secondary animate-grow" />
           </div>
         </div>
       </div>
