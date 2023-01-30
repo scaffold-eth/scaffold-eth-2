@@ -1,8 +1,4 @@
-type CopyIconProps = {
-  className: string;
-};
-
-export const CopyIcon = ({ className }: CopyIconProps) => {
+export const CopyIcon = ({ className }: { className: string }) => {
   return (
     <svg
       className={className}

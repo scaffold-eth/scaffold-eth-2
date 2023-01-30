@@ -1,8 +1,4 @@
-type HareIconProps = {
-  className: string;
-};
-
-export const HareIcon = ({ className }: HareIconProps) => {
+export const HareIcon = ({ className }: { className: string }) => {
   return (
     <svg
       className={className}

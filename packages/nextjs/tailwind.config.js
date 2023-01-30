@@ -3,17 +3,6 @@ module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
-  theme: {
-    extend: {
-      backgroundImage: {
-        gradient: "url('/assets/gradient-bg.png')",
-      },
-      transitionDuration: {
-        2000: "2000ms",
-        3000: "3000ms",
-      },
-    },
-  },
 
   daisyui: {
     themes: [
@@ -78,8 +67,8 @@ module.exports = {
           "secondary-content": "#212638",
           accent: "#93BBFB",
           "accent-content": "#212638",
-          neutral: "#212638",
-          "neutral-content": "#ffffff",
+          neutral: "#f3f3f3",
+          "neutral-content": "#212638",
           "base-100": "#ffffff",
           "base-200": "#f1f1f1",
           "base-300": "#d0d0d0",

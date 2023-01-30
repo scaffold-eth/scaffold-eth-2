@@ -1,6 +1,6 @@
-import { CopyIcon } from "./CopyIcon";
-import { DiamondIcon } from "./DiamondIcon";
-import { HareIcon } from "./HareIcon";
+import { CopyIcon } from "./assets/CopyIcon";
+import { DiamondIcon } from "./assets/DiamondIcon";
+import { HareIcon } from "./assets/HareIcon";
 import { PurposeSetter } from "./PurposeSetter";
 import { UiDescription } from "./UiDescription";
 

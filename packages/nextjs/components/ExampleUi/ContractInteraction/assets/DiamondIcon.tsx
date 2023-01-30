@@ -1,8 +1,4 @@
-type DiamondIconProps = {
-  className: string;
-};
-
-export const DiamondIcon = ({ className }: DiamondIconProps) => {
+export const DiamondIcon = ({ className }: { className: string }) => {
   return (
     <svg
       className={className}
