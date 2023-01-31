@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 export const UiDescription = () => {
   const [visible, setVisible] = useState(true);
   return (
-    <div className={`mt-7 flex gap-2 ${visible ? "" : "invisible"} max-w-2xl`}>
+    <div className={`mt-10 flex gap-2 ${visible ? "" : "invisible"} max-w-2xl`}>
       <div className="flex gap-5 bg-base-200 bg-opacity-80 z-0 p-7 rounded-2xl shadow-lg">
         <span className="text-3xl">👋🏻</span>
         <div>

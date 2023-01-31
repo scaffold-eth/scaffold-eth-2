@@ -21,7 +21,7 @@ export const ContractData = () => {
   }, [transitionEnabled, containerRef, purposeRef]);
 
   return (
-    <div className="flex justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] px-32">
+    <div className="flex justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 lg:py-auto">
       <div className="flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full">
         <div className="flex justify-between w-full">
           <button
