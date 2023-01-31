@@ -2,11 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@font-face {
-  font-family: "Bai Jamjuree";
-  src: url("/fonts/BaiJamjuree-Regular.ttf");
-}
-
 :root,
 [data-theme] {
   background: hsl(var(--b2));
