@@ -36,13 +36,13 @@ export const ContractData = () => {
               }`}
             />
           </button>
-          <div className="bg-secondary border border-black rounded-xl flex">
-            <div className="p-2 py-1 border-r border-black flex items-end">Total count</div>
+          <div className="bg-secondary border border-primary rounded-xl flex">
+            <div className="p-2 py-1 border-r border-primary flex items-end">Total count</div>
             <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">3</div>
           </div>
         </div>
 
-        <div className="mt-3 border border-black bg-neutral rounded-3xl px-4 text-secondary  overflow-hidden text-[116px] whitespace-nowrap w-full uppercase tracking-tighter font-bai-jamjuree leading-tight">
+        <div className="mt-3 border border-primary bg-neutral rounded-3xl px-4 text-secondary  overflow-hidden text-[116px] whitespace-nowrap w-full uppercase tracking-tighter font-bai-jamjuree leading-tight">
           <div className="relative overflow-x-hidden" ref={containerRef}>
             {/* for speed calculating purposes */}
             <div className="absolute -left-[9999rem]" ref={purposeRef}>
@@ -81,7 +81,7 @@ export const ContractData = () => {
 
         <div className="mt-3 flex items-end justify-between">
           <button
-            className={`btn btn-circle btn-ghost border border-black hover:border-black w-12 h-12 p-1 bg-neutral flex items-center ${
+            className={`btn btn-circle btn-ghost border border-primary hover:border-primary w-12 h-12 p-1 bg-neutral flex items-center ${
               isRightDirection ? "justify-start" : "justify-end"
             }`}
             onClick={() => {
@@ -90,11 +90,11 @@ export const ContractData = () => {
               }
             }}
           >
-            <div className="border border-black rounded-full bg-secondary w-2 h-2" />
+            <div className="border border-primary rounded-full bg-secondary w-2 h-2" />
           </button>
-          <div className="w-44 p-0.5 flex items-center bg-neutral border border-black rounded-full">
+          <div className="w-44 p-0.5 flex items-center bg-neutral border border-primary rounded-full">
             <div
-              className="h-1.5 border border-black rounded-full bg-secondary animate-grow"
+              className="h-1.5 border border-primary rounded-full bg-secondary animate-grow"
               style={{ animationPlayState: transitionEnabled ? "running" : "paused" }}
             />
           </div>
