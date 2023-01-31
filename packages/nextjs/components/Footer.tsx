@@ -20,7 +20,7 @@ export default function Footer() {
           </div>
         )}
         <div className="sm:hidden text-sm">
-          <SwitchTheme />
+          <SwitchTheme key="xs" />
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export default function Footer() {
       </div>
 
       <div className="hidden sm:block mx-4 text-sm">
-        <SwitchTheme />
+        <SwitchTheme key="sm" />
       </div>
     </div>
   );
