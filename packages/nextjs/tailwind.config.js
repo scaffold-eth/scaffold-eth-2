@@ -3,27 +3,7 @@ module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
-  theme: {
-    extend: {
-      fontFamily: {
-        "bai-jamjuree": ["Bai Jamjuree", "sans-serif"],
-      },
-
-      keyframes: {
-        grow: {
-          "0%": {
-            width: "0%",
-          },
-          "100%": {
-            width: "100%",
-          },
-        },
-      },
-      animation: {
-        grow: "grow 5s linear infinite",
-      },
-    },
-  },
+  // DaisyUI theme colors
   daisyui: {
     themes: [
       {
@@ -106,5 +86,26 @@ module.exports = {
         },
       },
     ],
+  },
+  theme: {
+    // Extend Tailwind classes (e.g. font-bai-jamjuree, animate-grow)
+    extend: {
+      fontFamily: {
+        "bai-jamjuree": ["Bai Jamjuree", "sans-serif"],
+      },
+      keyframes: {
+        grow: {
+          "0%": {
+            width: "0%",
+          },
+          "100%": {
+            width: "100%",
+          },
+        },
+      },
+      animation: {
+        grow: "grow 5s linear infinite",
+      },
+    },
   },
 };
