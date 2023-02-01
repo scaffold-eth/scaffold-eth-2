@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <div className="min-h-0 p-5 flex justify-between items-center flex-col sm:flex-row gap-4">
       <div>
-        <div className="fixed m-4 bottom-0 left-0">
+        <div className="fixed z-10 m-4 bottom-0 left-0">
           {ethPrice > 0 && (
             <div className="btn btn-primary btn-sm font-normal cursor-auto">
               <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
@@ -62,7 +62,7 @@ export default function Footer() {
         </ul>
       </div>
       <div className="mr-4 text-sm">
-        <div className="fixed m-4 bottom-0 right-0">
+        <div className="fixed z-10 m-4 bottom-0 right-0">
           <SwitchTheme />
         </div>
       </div>

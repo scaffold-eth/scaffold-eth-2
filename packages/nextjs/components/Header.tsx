@@ -56,9 +56,9 @@ export default function Header() {
   );
 
   return (
-    <div className="navbar bg-base-100 min-h-0 flex-shrink-0 justify-between">
-      <div className="navbar-start w-auto sm:w-1/2 ">
-        <div className="sm:hidden dropdown" ref={burgerMenuRef}>
+    <div className="navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-10">
+      <div className="navbar-start w-auto lg:w-1/2 ">
+        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <button
             className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
@@ -79,7 +79,7 @@ export default function Header() {
             </ul>
           )}
         </div>
-        <div className="hidden sm:flex items-center gap-2 mx-4">
+        <div className="hidden lg:flex items-center gap-2 mx-4">
           <Link href="/" passHref>
             <a className="flex">
               <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
@@ -90,7 +90,7 @@ export default function Header() {
             <span className="text-xs">Forkable Ethereum dev stack</span>
           </div>
         </div>
-        <ul className="hidden sm:flex sm:flex-wrap lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
