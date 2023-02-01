@@ -12,18 +12,16 @@ export default function Footer() {
 
   return (
     <div className="min-h-0 p-5 flex justify-between items-center flex-col sm:flex-row gap-4">
-      <div className="flex w-full sm:w-auto items-center justify-between mx-4">
-        {ethPrice > 0 && (
-          <div className="btn btn-primary btn-sm font-normal cursor-auto">
-            <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
-            <span>{ethPrice}</span>
-          </div>
-        )}
-        <div className="sm:hidden text-sm">
-          <SwitchTheme />
+      <div>
+        <div className="fixed m-4 bottom-0 left-0">
+          {ethPrice > 0 && (
+            <div className="btn btn-primary btn-sm font-normal cursor-auto">
+              <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
+              <span>{ethPrice}</span>
+            </div>
+          )}
         </div>
       </div>
-
       <div>
         <ul className="menu menu-horizontal px-1">
           <div className="flex items-center gap-2 text-sm">
@@ -63,9 +61,10 @@ export default function Footer() {
           </div>
         </ul>
       </div>
-
-      <div className="hidden sm:block mx-4 text-sm">
-        <SwitchTheme />
+      <div className="mr-4 text-sm">
+        <div className="fixed m-4 bottom-0 right-0">
+          <SwitchTheme />
+        </div>
       </div>
     </div>
   );
