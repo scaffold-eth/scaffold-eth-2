@@ -12,14 +12,14 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   const isActive = router.pathname === href;
 
   return (
-    <Link href={href} passHref>
-      <a
-        className={`${
-          isActive ? "bg-secondary" : ""
-        } hover:bg-secondary focus:bg-secondary py-2 px-3 text-sm rounded-full gap-2`}
-      >
-        {children}
-      </a>
+    <Link
+      href={href}
+      passHref
+      className={`${
+        isActive ? "bg-secondary" : ""
+      } hover:bg-secondary focus:bg-secondary py-2 px-3 text-sm rounded-full gap-2`}
+    >
+      {children}
     </Link>
   );
 };
@@ -80,10 +80,8 @@ export default function Header() {
           )}
         </div>
         <div className="hidden lg:flex items-center gap-2 mx-4">
-          <Link href="/" passHref>
-            <a className="flex">
-              <Image alt="scaffold-eth logo" className="cursor-pointer" width="40px" height="40px" src="/logo.svg" />
-            </a>
+          <Link href="/" passHref className="flex">
+            <Image alt="scaffold-eth logo" className="cursor-pointer" width="40" height="40" src="/logo.svg" />
           </Link>
           <div className="flex flex-col">
             <span className="font-bold">Scaffold-eth</span>

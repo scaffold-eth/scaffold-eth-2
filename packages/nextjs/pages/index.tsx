@@ -34,8 +34,8 @@ const Home: NextPage = () => {
               <BugAntIcon className="h-8 w-8 fill-secondary" />
               <p>
                 Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref>
-                  <a className="link">Debug Contract</a>
+                <Link href="/debug" passHref className="link">
+                  Debug Contract
                 </Link>{" "}
                 tab.
               </p>
@@ -44,8 +44,8 @@ const Home: NextPage = () => {
               <SparklesIcon className="h-8 w-8 fill-secondary" />
               <p>
                 Experiment with{" "}
-                <Link href="/example-ui" passHref>
-                  <a className="link">Example UI</a>
+                <Link href="/example-ui" passHref className="link">
+                  Example UI
                 </Link>{" "}
                 to build your own UI.
               </p>
