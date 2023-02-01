@@ -14,7 +14,9 @@ export const UiDescription = () => {
           </div>
           <div className="mt-2">
             Check out{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages / nextjs / pages / example-ui.tsx</code>{" "}
+            <code className="italic bg-base-300 text-base font-bold [word-spacing:-0.5rem]">
+              packages / nextjs/pages / example-ui.tsx
+            </code>{" "}
             and its underlying components.
           </div>
         </div>
