@@ -1,16 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
+import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { BigNumber } from "ethers";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
 export const ContractData = () => {
-  const [currentPurpose] = useState("This is your purpose");
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isRightDirection, setIsRightDirection] = useState(false);
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const purposeRef = useRef<HTMLDivElement>(null);
+
+  // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
+  // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
+  // @ts-expect-error
+  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
+  // @ts-expect-error
+  const { data: currentPurpose }: { data: string } = useScaffoldContractRead("YourContract", "purpose");
 
   useEffect(() => {
     if (transitionEnabled && containerRef.current && purposeRef.current) {
@@ -38,7 +46,9 @@ export const ContractData = () => {
           </button>
           <div className="bg-secondary border border-primary rounded-xl flex">
             <div className="p-2 py-1 border-r border-primary flex items-end">Total count</div>
-            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">3</div>
+            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">
+              {totalCounter?.toString() || "0"}
+            </div>
           </div>
         </div>
 
