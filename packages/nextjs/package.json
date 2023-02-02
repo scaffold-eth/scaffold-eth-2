@@ -15,6 +15,7 @@
     "@ethersproject/networks": "^5.7.1",
     "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
+    "@next/font": "^13.1.6",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@uniswap/sdk": "^3.0.3",
     "daisyui": "^2.31.0",

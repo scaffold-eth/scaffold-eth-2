@@ -3,16 +3,22 @@ import Head from "next/head";
 import { ContractData } from "~~/components/ExampleUi/ContractData";
 import { ContractInteraction } from "~~/components/ExampleUi/ContractInteraction";
 
+import { Bai_Jamjuree } from "@next/font/google";
+
+const baiJamjuree = Bai_Jamjuree({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bai-jamjuree",
+});
+
 const ExampleUI: NextPage = () => {
   return (
     <>
       <Head>
         <title>Scaffold-eth Example Ui</title>
         <meta name="description" content="Created with 🏗 scaffold-eth" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet" />
       </Head>
-      <div className="grid lg:grid-cols-2 flex-grow" data-theme="exampleUi">
+      <div className={`grid lg:grid-cols-2 flex-grow ${baiJamjuree.variable}`} data-theme="exampleUi">
         <ContractInteraction />
         <ContractData />
       </div>
