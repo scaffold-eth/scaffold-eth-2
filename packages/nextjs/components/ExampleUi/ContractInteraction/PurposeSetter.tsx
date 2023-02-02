@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { ArrowSmallRightIcon } from "@heroicons/react/24/outline";
-import { useScaffoldContractWrite, useTransactor } from "~~/hooks/scaffold-eth";
-import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { toast } from "~~/utils/scaffold-eth";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export const PurposeSetter = () => {
   const [newPurpose, setNewPurpose] = useState("");
 
-  // Could we move useTransactor inside useScaffoldContractWrite?
-  const writeTxn = useTransactor();
   const { writeAsync, isLoading } = useScaffoldContractWrite(
     "YourContract",
     "setPurpose",
@@ -35,17 +31,7 @@ export const PurposeSetter = () => {
               className={`btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest ${
                 isLoading ? "loading" : ""
               }`}
-              onClick={async () => {
-                if (writeAsync && writeTxn) {
-                  try {
-                    // If the contract is not deployed this "works". I get a "mined successfully" msg.
-                    await writeTxn(writeAsync());
-                  } catch (e: any) {
-                    const message = getParsedEthersError(e);
-                    toast.error(message);
-                  }
-                }
-              }}
+              onClick={writeAsync}
             >
               {!isLoading && (
                 <>
