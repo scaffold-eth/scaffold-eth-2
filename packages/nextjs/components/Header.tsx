@@ -80,8 +80,8 @@ export default function Header() {
           )}
         </div>
         <div className="hidden lg:flex items-center gap-2 mx-4">
-          <Link href="/" passHref className="flex">
-            <Image alt="scaffold-eth logo" className="cursor-pointer" width="40" height="40" src="/logo.svg" />
+          <Link href="/" passHref className="flex relative w-10 h-10">
+            <Image alt="scaffold-eth logo" className="cursor-pointer" fill src="/logo.svg" />
           </Link>
           <div className="flex flex-col">
             <span className="font-bold">Scaffold-eth</span>
