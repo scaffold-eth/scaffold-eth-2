@@ -28,6 +28,11 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
   const wagmiContractWrite = useContractWrite(config);
 
   const sendContractWriteTx = async () => {
+    if (!deployedContractData) {
+      toast.error("Target Contract is not defined");
+      return;
+    }
+
     if (wagmiContractWrite.writeAsync && writeTx) {
       try {
         // If the contract is not deployed this "works". I get a "mined successfully" msg.
@@ -36,6 +41,9 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
         const message = getParsedEthersError(e);
         toast.error(message);
       }
+    } else {
+      toast.error("Contract writer TX still not ready. Try again.");
+      return;
     }
   };
 
