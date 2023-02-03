@@ -1,7 +1,6 @@
 import { utils } from "ethers";
 import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getDeployedContract } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { parseTxnValue } from "~~/utils/scaffold-eth";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -19,7 +18,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
     args,
     functionName,
     overrides: {
-      value: value ? utils.parseEther("1").mul(parseTxnValue(value)) : undefined,
+      value: value ? utils.parseEther(value) : undefined,
     },
   });
 
