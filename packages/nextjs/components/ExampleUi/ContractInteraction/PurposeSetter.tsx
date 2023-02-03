@@ -5,14 +5,7 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 export const PurposeSetter = () => {
   const [newPurpose, setNewPurpose] = useState("");
 
-  const { writeAsync, isLoading } = useScaffoldContractWrite(
-    "YourContract",
-    "setPurpose",
-    [newPurpose],
-    // Since this hook is going to be "high-level" maybe we should accept the value in ETH (not wei)?
-    // Passing "0.01" seems more high-level-dx-friendly.
-    "10000000000000000",
-  );
+  const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setPurpose", [newPurpose], "0.01");
 
   return (
     <div className="flex flex-col mt-6 px-7 py-8 bg-base-200 opacity-80 rounded-2xl shadow-lg border-2 border-primary">
