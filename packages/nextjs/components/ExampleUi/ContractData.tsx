@@ -5,7 +5,7 @@ import { BigNumber } from "ethers";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
-export const ContractData = () => {
+export default function ContractData() {
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isRightDirection, setIsRightDirection] = useState(false);
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
@@ -112,4 +112,4 @@ export const ContractData = () => {
       </div>
     </div>
   );
-};
+}
