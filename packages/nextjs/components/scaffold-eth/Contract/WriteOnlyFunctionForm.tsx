@@ -50,7 +50,7 @@ export const WriteOnlyFunctionForm = ({
     args: keys.map(key => form[key]),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: parseTxnValue(txValue),
+      value: txValue ? parseTxnValue(txValue) : undefined,
     },
   });
 
