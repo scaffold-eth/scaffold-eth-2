@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "start": "next dev",
-    "build": "next build",
+    "build": "next build && next export" ,
     "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
-    "check-types": "tsc --noEmit --incremental"
+    "check-types": "tsc --noEmit --incremental",
+    "surge" : "surge out"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
@@ -45,6 +46,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
+    "surge": "^0.23.1",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.7.4"
   }
