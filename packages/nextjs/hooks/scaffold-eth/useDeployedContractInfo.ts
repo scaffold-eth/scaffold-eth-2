@@ -25,7 +25,7 @@ export const useDeployedContractInfo = ({ contractName }: { contractName: string
         const contractsAtChain = ContractData[chain?.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
 
-        // Looking at blockchain to see whats stored at `deployedContractData.address`, if its `0x0` then high possibility that its not a contract
+        // Looking at blockchain to see whats stored at `deployedContractData.address`, if its `0x` then high possibility that its not a contract
         const code = await provider.getCode(contractsData.address);
         if (code === "0x") {
           setDeployedContractData(undefined);
