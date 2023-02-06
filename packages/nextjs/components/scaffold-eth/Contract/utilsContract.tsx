@@ -5,44 +5,6 @@ import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 import { Dispatch, SetStateAction } from "react";
 
-type GeneratedContractType = {
-  address: string;
-  abi: any[];
-};
-
-/**
- * @param chainId - deployed contract chainId
- * @param contractName - name of deployed contract
- * @returns {GeneratedContractType} object containing contract address and abi
- */
-const getDeployedContract = (
-  chainId: string | undefined,
-  contractName: string | undefined | null,
-): GeneratedContractType | undefined => {
-  if (!chainId || !contractName) {
-    return;
-  }
-
-  let ContractData;
-  try {
-    ContractData = require("~~/generated/hardhat_contracts.json");
-  } catch (e) {
-    return;
-  }
-
-  const contractsAtChain = ContractData[chainId as keyof typeof ContractData];
-  const contractsData = contractsAtChain?.[0]?.contracts;
-
-  // ToDo. We should check if the contract is deployed.
-  // If not, we are only checking if the contract config is in hardhat_contracts.json.
-  // This is a common scenario on the localhost:
-  // (forgot to yarn deploy, but the "hardhat_contracts.json" exist from the previous run)
-  //
-  // Once fixed, we can change the "Target Contract is not defined" to "not deployed"
-  // on useScaffoldContractWrite.
-  return contractsData?.[contractName as keyof typeof contractsData];
-};
-
 /**
  * @param {Contract} contract
  * @returns {FunctionFragment[]} array of function fragments
@@ -196,7 +158,6 @@ const getParsedEthersError = (e: any): string => {
 };
 
 export {
-  getDeployedContract,
   getContractReadOnlyMethodsWithParams,
   getAllContractFunctions,
   getContractVariablesAndNoParamsReadMethods,

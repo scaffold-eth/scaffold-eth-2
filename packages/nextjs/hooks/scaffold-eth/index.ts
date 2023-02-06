@@ -5,3 +5,4 @@ export * from "./useTransactor";
 export * from "./useOutsideClick";
 export * from "./useScaffoldContractRead";
 export * from "./useScaffoldContractWrite";
+export * from "./useDeployedContractInfo";
