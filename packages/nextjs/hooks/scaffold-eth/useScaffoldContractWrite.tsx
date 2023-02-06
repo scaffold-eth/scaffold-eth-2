@@ -1,9 +1,9 @@
 import { utils } from "ethers";
-import { useContractWrite, useNetwork, usePrepareContractWrite, useProvider } from "wagmi";
-import { getDeployedContract, getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
+import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
+import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { toast } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
-import { NoContractAddressError } from "~~/components/scaffold-eth";
+import { useDeployedContractInfo } from "./useDeployedContractInfo";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -14,9 +14,8 @@ import { NoContractAddressError } from "~~/components/scaffold-eth";
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
   const { chain } = useNetwork();
-  const deployedContractData = getDeployedContract(chain?.id.toString(), contractName);
+  const deployedContractData = useDeployedContractInfo({ chainId: chain?.id.toString(), contractName });
   const writeTx = useTransactor();
-  const provider = useProvider();
 
   const { config } = usePrepareContractWrite({
     address: deployedContractData?.address,
@@ -32,14 +31,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      toast.error("Target Contract is not defined");
-      return;
-    }
-
-    // Looking at blockchain to see whats stored at `deployedContractData.address`, if its `0x0` then high possibility that its not a contract
-    const code = await provider.getCode(deployedContractData.address);
-    if (code === "0x") {
-      toast.error(<NoContractAddressError address={deployedContractData.address} />);
+      toast.error("Target Contract is not defined, did you forgot `yarn deploy` ? ");
       return;
     }
 

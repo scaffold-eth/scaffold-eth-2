@@ -6,10 +6,10 @@ import {
   getContractReadOnlyMethodsWithParams,
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
-  getDeployedContract,
 } from "./utilsContract";
 import { Balance, Address } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -27,7 +27,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
 
   let contractAddress = "";
   let contractABI = [];
-  const deployedContractData = getDeployedContract(chain?.id.toString(), contractName);
+  const deployedContractData = useDeployedContractInfo({ chainId: chain?.id.toString(), contractName });
   const networkColor = useNetworkColor(chain?.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
