@@ -1,5 +1,5 @@
 import { utils } from "ethers";
-import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { toast } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
@@ -13,8 +13,7 @@ import { useDeployedContractInfo } from "./useDeployedContractInfo";
  * @param value - value in ETH that will be sent with transaction
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
-  const { chain } = useNetwork();
-  const deployedContractData = useDeployedContractInfo({ chainId: chain?.id.toString(), contractName });
+  const deployedContractData = useDeployedContractInfo({ contractName });
   const writeTx = useTransactor();
 
   const { config } = usePrepareContractWrite({

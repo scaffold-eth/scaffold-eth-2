@@ -1,4 +1,4 @@
-import { useContractRead, useNetwork } from "wagmi";
+import { useContractRead } from "wagmi";
 import type { Abi } from "abitype";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 
@@ -13,8 +13,7 @@ export const useScaffoldContractRead = (
   functionName: string,
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
-  const { chain } = useNetwork();
-  const deployedContractData = useDeployedContractInfo({ chainId: chain?.id.toString(), contractName });
+  const deployedContractData = useDeployedContractInfo({ contractName });
 
   return useContractRead({
     functionName,

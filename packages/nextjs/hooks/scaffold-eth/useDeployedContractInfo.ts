@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useProvider } from "wagmi";
+import { useNetwork, useProvider } from "wagmi";
 import { toast } from "~~/utils/scaffold-eth";
 
 type GeneratedContractType = {
@@ -8,18 +8,12 @@ type GeneratedContractType = {
 };
 
 /**
- * use this hook to get deployed contract from generated files of `yarn deploy`
- * @param chainId - deployed contract chainId
+ * @dev use this hook to get deployed contract from generated files of `yarn deploy`
  * @param contractName - name of deployed contract
  * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
-export const useDeployedContractInfo = ({
-  chainId,
-  contractName,
-}: {
-  chainId: string | undefined;
-  contractName: string | undefined | null;
-}) => {
+export const useDeployedContractInfo = ({ contractName }: { contractName: string | undefined | null }) => {
+  const { chain } = useNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
   const provider = useProvider();
 
@@ -28,7 +22,7 @@ export const useDeployedContractInfo = ({
       let ContractData;
       try {
         ContractData = require("~~/generated/hardhat_contracts.json");
-        const contractsAtChain = ContractData[chainId as keyof typeof ContractData];
+        const contractsAtChain = ContractData[chain?.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
 
         // Looking at blockchain to see whats stored at `deployedContractData.address`, if its `0x0` then high possibility that its not a contract
@@ -44,7 +38,7 @@ export const useDeployedContractInfo = ({
         return;
       }
     })();
-  }, [chainId, contractName, provider]);
+  }, [chain, contractName, provider]);
 
   return deployedContractData;
 };
