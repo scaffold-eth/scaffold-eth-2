@@ -30,7 +30,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      toast.error("Target Contract is not defined, did you forgot `yarn deploy` ? ");
+      toast.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
       return;
     }
 
