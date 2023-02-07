@@ -22,7 +22,8 @@
     "next:format": "yarn workspace @se-2/nextjs format",
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "postinstall": "husky install",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "next:deploy" : "yarn workspace @se-2/nextjs deploy"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
