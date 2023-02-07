@@ -23,7 +23,7 @@
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "postinstall": "husky install",
     "precommit": "lint-staged",
-    "next:deploy" : "yarn workspace @se-2/nextjs deploy"
+    "vercel" : "yarn workspace @se-2/nextjs vercel"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
