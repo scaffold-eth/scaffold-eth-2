@@ -76,6 +76,16 @@ Run the command below to deploy the smart contract to the target network. Make s
 yarn deploy --network network_name
 ```
 
+## Deploying your NextJS App
+
+Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
+
+If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
+
+**Make sure your `.env.production` file has the values you need.**
+
+**Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
+
 ## Contributing to Scaffold-Eth 2
 
 We welcome contributions to Scaffold-Eth 2!
