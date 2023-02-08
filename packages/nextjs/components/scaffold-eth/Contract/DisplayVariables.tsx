@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { toast } from "~~/utils/scaffold-eth";
+import { NETWORKS, TChainAttributes, toast } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -12,11 +12,13 @@ type TDisplayVariableProps = {
 };
 
 const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
+  const chain = NETWORKS[process.env.NEXT_PUBLIC_NETWORK as string] as TChainAttributes;
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
+    chainId: chain.chainId,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,

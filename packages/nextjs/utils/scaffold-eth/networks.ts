@@ -1,6 +1,6 @@
 import { Network } from "@ethersproject/networks";
 
-type TChainAttributes = {
+export type TChainAttributes = {
   name: string;
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
