@@ -169,7 +169,7 @@ export const getNetworkDetailsByChainId = (chainId: number) =>
 export const getConfiguredChainFromENV = () => {
   const network = process.env.NEXT_PUBLIC_NETWORK;
   const { chains } = appChains;
-  const configuredChain = chains.find(chain => chain.name === network);
+  const configuredChain = chains.find(chain => chain.network === network);
 
   if (!network || !configuredChain) {
     console.error("Network name misspelled or unsupported network used in process.env");
