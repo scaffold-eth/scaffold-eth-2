@@ -7,9 +7,9 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 export default function ContractInteraction() {
   const [visible, setVisible] = useState(true);
-  const [newPurpose, setNewPurpose] = useState("");
+  const [newGreeting, setNewGreeting] = useState("");
 
-  const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setPurpose", [newPurpose], "0.01");
+  const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setGreeting", [newGreeting], "0.01");
 
   return (
     <div className="flex bg-base-300 relative pb-10">
@@ -43,14 +43,14 @@ export default function ContractInteraction() {
         </div>
 
         <div className="flex flex-col mt-6 px-7 py-8 bg-base-200 opacity-80 rounded-2xl shadow-lg border-2 border-primary">
-          <span className="text-4xl sm:text-6xl text-black">Set a Purpose_</span>
+          <span className="text-4xl sm:text-6xl text-black">Set a Greeting_</span>
 
           <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-5">
             <input
               type="text"
-              placeholder="Write your purpose here"
+              placeholder="Write your greeting here"
               className="input font-bai-jamjuree w-full px-5 bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] border border-primary text-lg sm:text-2xl placeholder-white uppercase"
-              onChange={e => setNewPurpose(e.target.value)}
+              onChange={e => setNewGreeting(e.target.value)}
             />
             <div className="flex rounded-full border border-primary p-1 flex-shrink-0">
               <div className="flex rounded-full border-2 border-primary p-1">
