@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import { BigNumber } from "ethers";
-
+import YourContractAbi from "../../generated/abi/YourContract";
 const MARQUEE_PERIOD_IN_SEC = 5;
 
 export default function ContractData() {
@@ -13,12 +12,9 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
-  // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
-  // @ts-expect-error
-  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
-  // @ts-expect-error
-  const { data: currentGreeting }: { data: string } = useScaffoldContractRead("YourContract", "greeting");
+  const { data: totalCounter } = useScaffoldContractRead(YourContractAbi, "totalCounter");
+
+  const { data: currentGreeting } = useScaffoldContractRead(YourContractAbi, "greeting") as { data: string };
 
   useEffect(() => {
     if (transitionEnabled && containerRef.current && greetingRef.current) {

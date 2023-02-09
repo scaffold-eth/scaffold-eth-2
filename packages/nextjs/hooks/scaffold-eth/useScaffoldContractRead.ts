@@ -1,24 +1,26 @@
 import { useContractRead } from "wagmi";
-import type { Abi } from "abitype";
-import { useDeployedContractInfo } from "./useDeployedContractInfo";
+import { Abi, ExtractAbiFunctionNames } from "abitype";
+
+type GeneratedContract<TAbi> = {
+  readonly address: string;
+  readonly abi: TAbi;
+};
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
- * @param contractName - deployed contract name
+ * @param contractData - generated contract data
  * @param functionName - name of the function to be called
  * @param readConfig   - wagmi configurations
  */
-export const useScaffoldContractRead = (
-  contractName: string,
-  functionName: string,
+export const useScaffoldContractRead = <TAbi extends Abi>(
+  contractData: GeneratedContract<TAbi>,
+  functionName: ExtractAbiFunctionNames<TAbi>,
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
-  const deployedContractData = useDeployedContractInfo({ contractName });
-
   return useContractRead({
     functionName,
-    address: deployedContractData?.address,
-    abi: deployedContractData?.abi as Abi,
+    address: contractData.address,
+    abi: contractData.abi,
     watch: true,
     ...readConfig,
   });
