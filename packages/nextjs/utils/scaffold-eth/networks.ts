@@ -173,7 +173,8 @@ export const getConfiguredChainFromENV = () => {
 
   if (!network || !configuredChain) {
     console.error("Network name misspelled or unsupported network used in process.env");
-    return chains[0];
+    const hardhatChain = chains[0];
+    return hardhatChain;
   }
 
   return configuredChain;
