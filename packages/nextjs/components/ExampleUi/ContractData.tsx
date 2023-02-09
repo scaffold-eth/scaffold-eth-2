@@ -11,22 +11,22 @@ export default function ContractData() {
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const purposeRef = useRef<HTMLDivElement>(null);
+  const greetingRef = useRef<HTMLDivElement>(null);
 
   // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
   // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
   // @ts-expect-error
-  const { data: currentPurpose }: { data: string } = useScaffoldContractRead("YourContract", "purpose");
+  const { data: currentGreeting }: { data: string } = useScaffoldContractRead("YourContract", "greeting");
 
   useEffect(() => {
-    if (transitionEnabled && containerRef.current && purposeRef.current) {
+    if (transitionEnabled && containerRef.current && greetingRef.current) {
       setMarqueeSpeed(
-        Math.max(purposeRef.current.clientWidth, containerRef.current.clientWidth) / MARQUEE_PERIOD_IN_SEC,
+        Math.max(greetingRef.current.clientWidth, containerRef.current.clientWidth) / MARQUEE_PERIOD_IN_SEC,
       );
     }
-  }, [transitionEnabled, containerRef, purposeRef]);
+  }, [transitionEnabled, containerRef, greetingRef]);
 
   return (
     <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw]">
@@ -55,8 +55,8 @@ export default function ContractData() {
         <div className="mt-3 border border-primary bg-neutral rounded-3xl text-secondary  overflow-hidden text-[116px] whitespace-nowrap w-full uppercase tracking-tighter font-bai-jamjuree leading-tight">
           <div className="relative overflow-x-hidden" ref={containerRef}>
             {/* for speed calculating purposes */}
-            <div className="absolute -left-[9999rem]" ref={purposeRef}>
-              <div className="px-4">{currentPurpose}</div>
+            <div className="absolute -left-[9999rem]" ref={greetingRef}>
+              <div className="px-4">{currentGreeting}</div>
             </div>
             <Marquee
               key="1"
@@ -65,7 +65,7 @@ export default function ContractData() {
               play={transitionEnabled}
               speed={marqueeSpeed}
             >
-              <div className="px-4">{currentPurpose}</div>
+              <div className="px-4">{currentGreeting}</div>
             </Marquee>
             <Marquee
               key="2"
@@ -75,7 +75,7 @@ export default function ContractData() {
               speed={marqueeSpeed}
               className="-my-10"
             >
-              <div className="px-4">{currentPurpose}</div>
+              <div className="px-4">{currentGreeting}</div>
             </Marquee>
             <Marquee
               key="3"
@@ -84,7 +84,7 @@ export default function ContractData() {
               play={transitionEnabled}
               speed={marqueeSpeed}
             >
-              <div className="px-4">{currentPurpose}</div>
+              <div className="px-4">{currentGreeting}</div>
             </Marquee>
           </div>
         </div>
