@@ -1,12 +1,13 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useContractWrite, useWaitForTransaction } from "wagmi";
+import { useAccount, useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast, parseTxnValue } from "~~/utils/scaffold-eth";
+import { toast, parseTxnValue, getConfiguredChainFromENV } from "~~/utils/scaffold-eth";
+import RainbowKitCustomConnectButton from "../RainbowKitCustomConnectButton";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -31,6 +32,9 @@ export const WriteOnlyFunctionForm = ({
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
+  const { isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const configuredChain = getConfiguredChainFromENV();
   const writeTxn = useTransactor();
 
   const keys = Object.keys(form);
@@ -92,9 +96,22 @@ export const WriteOnlyFunctionForm = ({
       {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
       <div className="flex justify-between gap-2">
         <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-        <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-          Send 💸
-        </button>
+        {isConnected ? (
+          <button
+            className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
+            onClick={() => {
+              if (chain?.id !== configuredChain.id) {
+                toast.error(`Wrong network selected, please switch to ${configuredChain.name}`);
+                return;
+              }
+              handleWrite();
+            }}
+          >
+            Send 💸
+          </button>
+        ) : (
+          <RainbowKitCustomConnectButton />
+        )}
       </div>
     </div>
   );

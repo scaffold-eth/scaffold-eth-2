@@ -1,4 +1,5 @@
 import { Network } from "@ethersproject/networks";
+import { appChains } from "~~/services/web3/wagmiConnectors";
 
 export type TChainAttributes = {
   name: string;
@@ -161,3 +162,19 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 
 export const getNetworkDetailsByChainId = (chainId: number) =>
   Object.values(NETWORKS).find(val => val.chainId === chainId);
+
+/**
+ * @dev returns the metadata of the chain like id, nativeCurrency etc specified in .env file or logs an error in console if chain mentioned in .env is unsupported
+ */
+export const getConfiguredChainFromENV = () => {
+  const network = process.env.NEXT_PUBLIC_NETWORK;
+  const { chains } = appChains;
+  const configuredChain = chains.find(chain => chain.name === network);
+
+  if (!network || !configuredChain) {
+    console.error("Network name misspelled or unsupported network used in process.env");
+    return chains[0];
+  }
+
+  return configuredChain;
+};
