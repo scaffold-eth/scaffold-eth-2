@@ -19,7 +19,7 @@ import NextNProgress from "nextjs-progressbar";
 
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useEthPrice();
-  const setEthPrice = useAppStore(state => state.ethPriceSlice.setEthPrice);
+  const setEthPrice = useAppStore(state => state.setEthPrice);
 
   useEffect(() => {
     if (price > 0) {
