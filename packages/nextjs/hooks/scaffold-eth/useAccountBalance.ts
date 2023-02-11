@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useAppStore } from "~~/services/store/store";
-import { getConfiguredChainFromENV } from "~~/utils/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 export function useAccountBalance(address?: string) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
   const price = useAppStore(state => state.ethPrice);
-  const configuredChain = getConfiguredChainFromENV();
+  const configuredChain = getTargetNetwork();
 
   const {
     data: fetchedBalanceData,

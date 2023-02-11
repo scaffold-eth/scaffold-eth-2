@@ -6,7 +6,7 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast, parseTxnValue, getConfiguredChainFromENV } from "~~/utils/scaffold-eth";
+import { toast, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
 import RainbowKitCustomConnectButton from "../RainbowKitCustomConnectButton";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
@@ -34,7 +34,7 @@ export const WriteOnlyFunctionForm = ({
   const [txValue, setTxValue] = useState("");
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
-  const configuredChain = getConfiguredChainFromENV();
+  const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
 
   const keys = Object.keys(form);

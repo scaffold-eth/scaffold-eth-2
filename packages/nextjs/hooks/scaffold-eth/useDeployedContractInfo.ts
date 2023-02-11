@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProvider } from "wagmi";
-import { getConfiguredChainFromENV } from "~~/utils/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 type GeneratedContractType = {
   address: string;
   abi: any[];
@@ -12,7 +12,7 @@ type GeneratedContractType = {
  * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
 export const useDeployedContractInfo = ({ contractName }: { contractName: string | undefined | null }) => {
-  const configuredChain = getConfiguredChainFromENV();
+  const configuredChain = getTargetNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
   const provider = useProvider({ chainId: configuredChain.id });
 

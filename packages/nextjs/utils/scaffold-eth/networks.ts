@@ -164,14 +164,15 @@ export const getNetworkDetailsByChainId = (chainId: number) =>
   Object.values(NETWORKS).find(val => val.chainId === chainId);
 
 /**
- * @dev returns the metadata of the chain like id, nativeCurrency etc specified in .env file or logs an error in console if chain mentioned in .env is unsupported
+ * @dev Returns the target network metadata or defaults to hardhat if the network is unsupported/undefined
  */
-export const getConfiguredChainFromENV = () => {
+export const getTargetNetwork = () => {
   const network = process.env.NEXT_PUBLIC_NETWORK;
   const { chains } = appChains;
   const configuredChain = chains.find(chain => chain.network === network);
 
   if (!network || !configuredChain) {
+    // If error defaults to hardhat local network
     console.error("Network name misspelled or unsupported network used in process.env");
     const hardhatChain = chains[0];
     return hardhatChain;
