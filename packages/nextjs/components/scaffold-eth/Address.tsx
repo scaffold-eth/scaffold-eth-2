@@ -3,12 +3,13 @@ import Blockies from "react-blockies";
 import { DocumentDuplicateIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEnsName } from "wagmi";
+import { ethers } from "ethers";
 
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
 
 type TAddressProps = {
-  address: string;
+  address?: string;
   blockExplorer?: string;
   disableAddressLink?: boolean;
   fontSize?: number;
@@ -37,15 +38,6 @@ export default function Address({
     setEns(fetchedEns);
   }, [fetchedEns]);
 
-  const explorerLink = blockExplorerLink(address, blockExplorer);
-  let displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
-
-  if (ens) {
-    displayAddress = ens;
-  } else if (format === "long") {
-    displayAddress = address;
-  }
-
   // Skeleton UI
   if (!address) {
     return (
@@ -56,6 +48,19 @@ export default function Address({
         </div>
       </div>
     );
+  }
+
+  if (!ethers.utils.isAddress(address)) {
+    return <span className="text-error">Wrong address</span>;
+  }
+
+  const explorerLink = blockExplorerLink(address, blockExplorer);
+  let displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+
+  if (ens) {
+    displayAddress = ens;
+  } else if (format === "long") {
+    displayAddress = address;
   }
 
   if (minimized) {
