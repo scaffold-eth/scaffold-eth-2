@@ -11,7 +11,7 @@ type GeneratedContractType = {
  * @param contractName - name of deployed contract
  * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
-export const useDeployedContractInfo = ({ contractName }: { contractName: string | undefined | null }) => {
+export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const configuredChain = getTargetNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
   const provider = useProvider({ chainId: configuredChain.id });

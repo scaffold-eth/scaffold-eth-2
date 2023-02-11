@@ -15,7 +15,7 @@ export const useScaffoldContractRead = (
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
   const configuredChain = getTargetNetwork();
-  const deployedContractData = useDeployedContractInfo({ contractName });
+  const deployedContractData = useDeployedContractInfo(contractName);
 
   return useContractRead({
     chainId: configuredChain.id,
