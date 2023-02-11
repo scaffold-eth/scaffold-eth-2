@@ -3,13 +3,26 @@ import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { utils } from "ethers";
+import { toast } from "~~/utils/scaffold-eth";
+import { getParsedEthersError } from "../scaffold-eth/Contract/utilsContract";
+import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
+import { useYourContractSetGreeting } from "~~/generated/contractHooks";
 
 export default function ContractInteraction() {
   const [visible, setVisible] = useState(true);
   const [newGreeting, setNewGreeting] = useState("");
 
-  const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setGreeting", [newGreeting], "0.01");
+  const writeTx = useTransactor();
+  const contractInfo = useDeployedContractInfo({ contractName: "YourContract" });
+  const { writeAsync, isLoading } = useYourContractSetGreeting({
+    address: contractInfo?.address,
+    args: [newGreeting],
+    mode: "recklesslyUnprepared",
+    overrides: {
+      value: utils.parseEther("0.01"),
+    },
+  });
 
   return (
     <div className="flex bg-base-300 relative pb-10">
@@ -58,7 +71,19 @@ export default function ContractInteraction() {
                   className={`btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest ${
                     isLoading ? "loading" : ""
                   }`}
-                  onClick={writeAsync}
+                  onClick={async () => {
+                    if (writeAsync && writeTx) {
+                      try {
+                        await writeTx(writeAsync());
+                      } catch (e: any) {
+                        const message = getParsedEthersError(e);
+                        toast.error(message);
+                      }
+                    } else {
+                      toast.error("Contract writer error. Try again.");
+                      return;
+                    }
+                  }}
                 >
                   {!isLoading && (
                     <>

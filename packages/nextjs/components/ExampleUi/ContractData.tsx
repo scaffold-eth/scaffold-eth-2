@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
-import { BigNumber } from "ethers";
+import { useYourContractGreeting, useYourContractTotalCounter } from "~~/generated/contractHooks";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -13,13 +13,13 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
-  // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
-  // @ts-expect-error
-  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
-  // @ts-expect-error
-  const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
-    useScaffoldContractRead("YourContract", "greeting");
+  const contractInfo = useDeployedContractInfo({ contractName: "YourContract" });
+  const { data: totalCounter } = useYourContractTotalCounter({ address: contractInfo?.address });
+
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useYourContractGreeting({
+    address: contractInfo?.address,
+    watch: true,
+  });
 
   const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
