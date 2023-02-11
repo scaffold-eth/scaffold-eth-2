@@ -38,7 +38,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
   }
 
   return (
-    <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-accent justify-between">
+    <>
       {paramType.type === "address" ? (
         <AddressInput
           placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
@@ -51,22 +51,23 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
           }}
         />
       ) : (
-        <input
-          placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
-          autoComplete="off"
-          className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400"
-          name={stateObjectKey}
-          value={form[stateObjectKey]}
-          onChange={(event): void => {
-            const formUpdate = { ...form };
-            formUpdate[event.target.name] = event.target.value;
-            setForm(formUpdate);
-          }}
-        />
+        <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-accent justify-between">
+          <input
+            placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
+            autoComplete="off"
+            className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400"
+            name={stateObjectKey}
+            value={form[stateObjectKey]}
+            onChange={(event): void => {
+              const formUpdate = { ...form };
+              formUpdate[event.target.name] = event.target.value;
+              setForm(formUpdate);
+            }}
+          />
+          {inputSuffix}
+        </div>
       )}
-
-      {inputSuffix}
-    </div>
+    </>
   );
 };
 
