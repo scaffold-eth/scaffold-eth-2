@@ -1,6 +1,7 @@
 import { Network } from "@ethersproject/networks";
+import { appChains } from "~~/services/web3/wagmiConnectors";
 
-type TChainAttributes = {
+export type TChainAttributes = {
   name: string;
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
@@ -161,3 +162,21 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 
 export const getNetworkDetailsByChainId = (chainId: number) =>
   Object.values(NETWORKS).find(val => val.chainId === chainId);
+
+/**
+ * @dev Returns the target network metadata or defaults to hardhat if the network is unsupported/undefined
+ */
+export const getTargetNetwork = () => {
+  const network = process.env.NEXT_PUBLIC_NETWORK;
+  const { chains } = appChains;
+  const configuredChain = chains.find(chain => chain.network === network);
+
+  if (!network || !configuredChain) {
+    // If error defaults to hardhat local network
+    console.error("Network name misspelled or unsupported network used in process.env");
+    const hardhatChain = chains[0];
+    return hardhatChain;
+  }
+
+  return configuredChain;
+};

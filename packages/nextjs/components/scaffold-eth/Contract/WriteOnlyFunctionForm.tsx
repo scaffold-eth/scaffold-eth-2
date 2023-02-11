@@ -1,12 +1,12 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useContractWrite, useWaitForTransaction } from "wagmi";
+import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast, parseTxnValue } from "~~/utils/scaffold-eth";
+import { toast, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -31,7 +31,10 @@ export const WriteOnlyFunctionForm = ({
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
+  const { chain } = useNetwork();
+  const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
+  const writeDisabled = !chain || chain?.id !== configuredChain.id;
 
   const keys = Object.keys(form);
 
@@ -91,10 +94,22 @@ export const WriteOnlyFunctionForm = ({
       {inputs}
       {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
       <div className="flex justify-between gap-2">
-        <div className="flex-grow">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-        <button className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`} onClick={handleWrite}>
-          Send 💸
-        </button>
+        <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+        <div
+          className={`flex ${
+            writeDisabled &&
+            "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+          }`}
+          data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
+        >
+          <button
+            className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
+            disabled={writeDisabled}
+            onClick={handleWrite}
+          >
+            Send 💸
+          </button>
+        </div>
       </div>
     </div>
   );

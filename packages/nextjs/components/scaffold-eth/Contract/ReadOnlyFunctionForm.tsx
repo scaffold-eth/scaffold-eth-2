@@ -4,7 +4,7 @@ import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utilsContract";
-import { toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, toast } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -23,12 +23,13 @@ type TReadOnlyFunctionFormProps = {
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const keys = Object.keys(form);
-
+  const configuredChain = getTargetNetwork();
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
+    chainId: configuredChain.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
