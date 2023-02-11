@@ -18,7 +18,10 @@ export default function ContractData() {
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
   // @ts-expect-error
-  const { data: currentGreeting }: { data: string } = useScaffoldContractRead("YourContract", "greeting");
+  const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
+    useScaffoldContractRead("YourContract", "greeting");
+
+  const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
   useEffect(() => {
     if (transitionEnabled && containerRef.current && greetingRef.current) {
@@ -58,34 +61,21 @@ export default function ContractData() {
             <div className="absolute -left-[9999rem]" ref={greetingRef}>
               <div className="px-4">{currentGreeting}</div>
             </div>
-            <Marquee
-              key="1"
-              direction={isRightDirection ? "right" : "left"}
-              gradient={false}
-              play={transitionEnabled}
-              speed={marqueeSpeed}
-            >
-              <div className="px-4">{currentGreeting}</div>
-            </Marquee>
-            <Marquee
-              key="2"
-              direction={isRightDirection ? "left" : "right"}
-              gradient={false}
-              play={transitionEnabled}
-              speed={marqueeSpeed}
-              className="-my-10"
-            >
-              <div className="px-4">{currentGreeting}</div>
-            </Marquee>
-            <Marquee
-              key="3"
-              direction={isRightDirection ? "right" : "left"}
-              gradient={false}
-              play={transitionEnabled}
-              speed={marqueeSpeed}
-            >
-              <div className="px-4">{currentGreeting}</div>
-            </Marquee>
+            {new Array(3).fill("").map((_, i) => {
+              const isLineRightDirection = i % 2 ? isRightDirection : !isRightDirection;
+              return (
+                <Marquee
+                  key={i}
+                  direction={isLineRightDirection ? "right" : "left"}
+                  gradient={false}
+                  play={showTransition}
+                  speed={marqueeSpeed}
+                  className={i % 2 ? "-my-10" : ""}
+                >
+                  <div className="px-4">{currentGreeting || " "}</div>
+                </Marquee>
+              );
+            })}
           </div>
         </div>
 
@@ -105,7 +95,7 @@ export default function ContractData() {
           <div className="w-44 p-0.5 flex items-center bg-neutral border border-primary rounded-full">
             <div
               className="h-1.5 border border-primary rounded-full bg-secondary animate-grow"
-              style={{ animationPlayState: transitionEnabled ? "running" : "paused" }}
+              style={{ animationPlayState: showTransition ? "running" : "paused" }}
             />
           </div>
         </div>
