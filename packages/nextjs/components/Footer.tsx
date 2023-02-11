@@ -8,7 +8,7 @@ import SwitchTheme from "./SwitchTheme";
  * Site footer
  */
 export default function Footer() {
-  const ethPrice = useAppStore(state => state.ethPriceSlice.ethPrice);
+  const ethPrice = useAppStore(state => state.ethPrice);
 
   return (
     <div className="min-h-0 p-5 flex justify-between items-center flex-col sm:flex-row gap-4">
