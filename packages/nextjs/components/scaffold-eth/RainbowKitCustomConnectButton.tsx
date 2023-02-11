@@ -85,7 +85,7 @@ export default function RainbowKitCustomConnectButton() {
                     <div className="hidden sm:inline-block">
                       <Balance address={account.address} />
                     </div>
-                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm pl-2">
+                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm pl-2 shadow-md">
                       <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
                       <span className="m-1">{account.displayName}</span>
                       <span>
