@@ -8,6 +8,8 @@ import { Toaster } from "react-hot-toast";
 import "@rainbow-me/rainbowkit/styles.css";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import { wagmiClient } from "~~/services/web3/wagmiClient";
+import { BlockieAvatar } from "~~/components/scaffold-eth";
+
 import Header from "~~/components/Header";
 import Footer from "~~/components/Footer";
 
@@ -30,7 +32,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   return (
     <WagmiConfig client={wagmiClient}>
       <NextNProgress />
-      <RainbowKitProvider chains={appChains.chains}>
+      <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex flex-col flex-1">
