@@ -16,8 +16,8 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
       href={href}
       passHref
       className={`${
-        isActive ? "bg-secondary" : ""
-      } hover:bg-secondary focus:bg-secondary py-2 px-3 text-sm rounded-full gap-2`}
+        isActive ? "bg-secondary shadow-md" : ""
+      } hover:bg-secondary hover:shadow-md focus:bg-secondary py-2 px-3 text-sm rounded-full gap-2`}
     >
       {children}
     </Link>
@@ -81,7 +81,7 @@ export default function Header() {
         </div>
         <div className="hidden lg:flex items-center gap-2 mx-4">
           <Link href="/" passHref className="flex relative w-10 h-10">
-            <Image alt="scaffold-eth logo" className="cursor-pointer" fill src="/logo.svg" />
+            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </Link>
           <div className="flex flex-col">
             <span className="font-bold">Scaffold-eth</span>
