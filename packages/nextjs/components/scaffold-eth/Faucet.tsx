@@ -47,7 +47,10 @@ export default function Faucet() {
 
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full space-x-2">
+      <label
+        htmlFor="faucet-modal"
+        className="btn btn-primary btn-sm px-2 rounded-full font-normal space-x-2 normal-case"
+      >
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
@@ -57,13 +60,19 @@ export default function Faucet() {
           {/* dummy input to capture event onclick on modal box */}
           <input className="h-0 w-0 absolute top-0 left-0" />
           <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
-          <label htmlFor="faucet-modal" className="btn btn-secondary btn-sm btn-circle absolute right-3 top-3">
+          <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
             ✕
           </label>
           <div className="space-y-3">
             <div className="flex space-x-4">
-              <Address address={FAUCET_ADDRESS} />
-              <Balance address={FAUCET_ADDRESS} />
+              <div>
+                <span className="text-sm font-bold">From:</span>
+                <Address address={FAUCET_ADDRESS} />
+              </div>
+              <div>
+                <span className="text-sm font-bold pl-3">Available:</span>
+                <Balance address={FAUCET_ADDRESS} />
+              </div>
             </div>
             <div className="flex flex-col space-y-3">
               <AddressInput placeholder="address" value={inputAddress} onChange={value => setInputAddress(value)} />
