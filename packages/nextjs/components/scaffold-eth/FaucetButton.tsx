@@ -11,9 +11,9 @@ import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 const NUM_OF_ETH = "1";
 
 /**
- * Faucet button which lets you grab eth.
+ * FaucetButton button which lets you grab eth.
  */
-export default function Faucet() {
+export default function FaucetButton() {
   const { address } = useAccount();
   const { balance } = useAccountBalance(address);
   const { chain: ConnectedChain } = useNetwork();
@@ -30,7 +30,7 @@ export default function Faucet() {
       }
       setLoading(false);
     } catch (error) {
-      console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
+      console.error("⚡️ ~ file: FaucetButton.tsx ~ line 26 ~ sendETH ~ error", error);
       setLoading(false);
     }
   };
