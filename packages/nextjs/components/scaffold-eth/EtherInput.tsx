@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 
@@ -21,7 +21,16 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
 
   const ethPrice = useAppStore(state => state.ethPrice);
 
-  const activeValue = value !== undefined ? value : ethValue;
+  // Controlled vs Uncontrolled input.
+  const currentValue = value !== undefined ? value : ethValue;
+
+  useEffect(() => {
+    // Reset when clearing controlled input
+    if (!currentValue) {
+      setDisplayValue("");
+      setEthValue("");
+    }
+  }, [currentValue]);
 
   const onChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     let ethNewValue;
@@ -60,12 +69,12 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
       }
     } else {
       // Toggling to USD mode
-      const parsedCurrentEthValue = parseFloat(activeValue);
+      const parsedCurrentEthValue = parseFloat(currentValue);
 
       if (Number.isNaN(parsedCurrentEthValue)) {
-        setDisplayValue(activeValue);
+        setDisplayValue(currentValue);
       } else {
-        setDisplayValue((parseFloat(activeValue) * ethPrice).toFixed(2).toString());
+        setDisplayValue((parseFloat(currentValue) * ethPrice).toFixed(2).toString());
       }
     }
     setUSDMode(!usdMode);

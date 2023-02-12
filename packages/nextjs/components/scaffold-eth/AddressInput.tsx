@@ -20,7 +20,8 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   const [address, setAddress] = useState("");
   const [resolvedEns, setResolvedEns] = useState("");
 
-  const isControlledInput = value !== undefined;
+  // Controlled vs Uncontrolled input.
+  const currentValue = value !== undefined ? value : address || "";
 
   const { data: ensData, isLoading } = useEnsAddress({
     name: address,
@@ -36,13 +37,13 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     cacheTime: 30_000,
   });
 
-  const onChangeAddress = async (event: ChangeEvent<HTMLInputElement>) => {
-    setResolvedEns("");
-    setAddress(event.target.value);
-    if (onChange) {
-      onChange(event.target.value);
+  useEffect(() => {
+    // Reset when clearing controlled input
+    if (!currentValue) {
+      setResolvedEns("");
+      setAddress("");
     }
-  };
+  }, [currentValue]);
 
   useEffect(() => {
     if (!ensData) return;
@@ -56,6 +57,14 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     // We don't want to run it on address change
     // eslint-disable-next-line
   }, [ensData, onChange]);
+
+  const onChangeAddress = async (event: ChangeEvent<HTMLInputElement>) => {
+    setResolvedEns("");
+    setAddress(event.target.value);
+    if (onChange) {
+      onChange(event.target.value);
+    }
+  };
 
   return (
     <div className="rounded-full border-2 border-base-300">
@@ -78,7 +87,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             className={`input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow ${
               ensData === null ? "input-error" : ""
             }`}
-            value={isControlledInput ? value : address || ""}
+            value={currentValue}
             onChange={onChangeAddress}
             disabled={isLoading}
           />
