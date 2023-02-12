@@ -14,7 +14,7 @@ import { useDeployedContractInfo } from "./useDeployedContractInfo";
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
   const configuredChain = getTargetNetwork();
-  const deployedContractData = useDeployedContractInfo({ contractName });
+  const deployedContractData = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
 
