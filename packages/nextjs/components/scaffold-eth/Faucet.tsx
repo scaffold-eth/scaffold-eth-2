@@ -61,17 +61,10 @@ export default function Faucet() {
             ✕
           </label>
           <div className="space-y-3">
-            <div className="grid grid-cols-2">
-              <div>
-                <p className="my-0 text-lg">Faucet address : </p>
-                <Address address={FAUCET_ADDRESS} />
-              </div>
-              <div>
-                <p className="my-0 text-lg ml-3">Faucet balance : </p>
-                <Balance address={FAUCET_ADDRESS} />
-              </div>
+            <div className="flex space-x-4">
+              <Address address={FAUCET_ADDRESS} />
+              <Balance address={FAUCET_ADDRESS} />
             </div>
-
             <div className="flex flex-col space-y-3">
               <AddressInput placeholder="address" value={inputAddress} onChange={value => setInputAddress(value)} />
               <EtherInput onChange={value => setSendValue(value)} />
