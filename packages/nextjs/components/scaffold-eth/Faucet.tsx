@@ -48,7 +48,7 @@ export default function Faucet() {
   return (
     <div>
       <label htmlFor="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full space-x-2">
-        {!loading && <BanknotesIcon className="h-4 w-4" />}
+        <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
       <input type="checkbox" id="faucet-modal" className="modal-toggle" />
