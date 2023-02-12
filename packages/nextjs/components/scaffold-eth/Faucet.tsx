@@ -8,6 +8,10 @@ import { BanknotesIcon } from "@heroicons/react/24/outline";
 import AddressInput from "./AddressInput";
 import EtherInput from "./EtherInput";
 import { getParsedEthersError } from "./Contract/utilsContract";
+import Address from "./Address";
+import Balance from "./Balance";
+
+const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
 /**
  * Faucet button which lets you grab eth.
@@ -49,21 +53,39 @@ export default function Faucet() {
       </label>
       <input type="checkbox" id="faucet-modal" className="modal-toggle" />
       <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative space-y-3">
-          <h3 className="text-lg font-bold">Local Faucet</h3>
-          <div className="flex flex-col space-y-3">
-            <AddressInput placeholder="address" value={inputAddress} onChange={value => setInputAddress(value)} />
-            <EtherInput onChange={value => setSendValue(value)} />
-            <button
-              className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
-                loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
-              }`}
-              onClick={sendETH}
-              disabled={loading}
-            >
-              {!loading && <BanknotesIcon className="h-6 w-6" />}
-              <span>Send</span>
-            </button>
+        <label className="modal-box relative">
+          {/* dummy input to capture event onclick on modal box */}
+          <input className="h-0 w-0 absolute top-0 left-0" />
+          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
+          <label htmlFor="faucet-modal" className="btn btn-secondary btn-sm btn-circle absolute right-3 top-3">
+            ✕
+          </label>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2">
+              <div>
+                <p className="my-0 text-lg">Faucet address : </p>
+                <Address address={FAUCET_ADDRESS} />
+              </div>
+              <div>
+                <p className="my-0 text-lg ml-3">Faucet balance : </p>
+                <Balance address={FAUCET_ADDRESS} />
+              </div>
+            </div>
+
+            <div className="flex flex-col space-y-3">
+              <AddressInput placeholder="address" value={inputAddress} onChange={value => setInputAddress(value)} />
+              <EtherInput onChange={value => setSendValue(value)} />
+              <button
+                className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
+                  loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
+                }`}
+                onClick={sendETH}
+                disabled={loading}
+              >
+                {!loading && <BanknotesIcon className="h-6 w-6" />}
+                <span>Send</span>
+              </button>
+            </div>
           </div>
         </label>
       </label>
