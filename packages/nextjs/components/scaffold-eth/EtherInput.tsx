@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 
 type TEtherInputProps = {
   onChange?: (arg: string) => void;
@@ -90,7 +90,8 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
               onClick={toggleMode}
               disabled={!usdMode && !ethPrice}
             >
-              {usdMode ? "ETH" : "USD"} <ArrowPathIcon className="h-3 w-3 cursor-pointer ml-1" aria-hidden="true" />
+              {usdMode ? "ETH" : "USD"}{" "}
+              <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer ml-1" aria-hidden="true" />
             </button>
           </div>
         </div>
