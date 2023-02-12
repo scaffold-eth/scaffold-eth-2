@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -11,19 +11,32 @@ import { getParsedEthersError } from "./Contract/utilsContract";
 import Address from "./Address";
 import Balance from "./Balance";
 
-const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+// Account index to use from generated hardhat accounts.
+const FAUCET_ACCOUNT_INDEX = 0;
 
 /**
- * Faucet button which lets you grab eth.
+ * Faucet modal which lets you send ETH to any address.
  */
 export default function Faucet() {
-  const { chain: ConnectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState("");
+  const [faucetAddress, setFaucetAddress] = useState("");
+
+  const { chain: ConnectedChain } = useNetwork();
   const [sendValue, setSendValue] = useState("");
   const provider = getLocalProvider(localhost);
-  const signer = provider?.getSigner();
+  const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
   const faucetTxn = useTransactor(signer);
+
+  useEffect(() => {
+    const getFaucetAddress = async () => {
+      if (provider) {
+        const accounts = await provider.listAccounts();
+        setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
+      }
+    };
+    getFaucetAddress();
+  }, [provider]);
 
   const sendETH = async () => {
     try {
@@ -67,11 +80,11 @@ export default function Faucet() {
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
-                <Address address={FAUCET_ADDRESS} />
+                <Address address={faucetAddress} />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={FAUCET_ADDRESS} />
+                <Balance address={faucetAddress} />
               </div>
             </div>
             <div className="flex flex-col space-y-3">
