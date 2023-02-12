@@ -21,9 +21,9 @@ export default function Faucet() {
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState("");
   const [faucetAddress, setFaucetAddress] = useState("");
+  const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
-  const [sendValue, setSendValue] = useState("");
   const provider = getLocalProvider(localhost);
   const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
   const faucetTxn = useTransactor(signer);
@@ -45,6 +45,8 @@ export default function Faucet() {
         await faucetTxn({ to: inputAddress, value: ethers.utils.parseEther(sendValue) });
       }
       setLoading(false);
+      setInputAddress("");
+      setSendValue("");
     } catch (error) {
       const parsedError = getParsedEthersError(error);
       console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
@@ -88,8 +90,12 @@ export default function Faucet() {
               </div>
             </div>
             <div className="flex flex-col space-y-3">
-              <AddressInput placeholder="address" value={inputAddress} onChange={value => setInputAddress(value)} />
-              <EtherInput onChange={value => setSendValue(value)} />
+              <AddressInput
+                placeholder="Destination Address"
+                value={inputAddress}
+                onChange={value => setInputAddress(value)}
+              />
+              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
               <button
                 className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
                   loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
