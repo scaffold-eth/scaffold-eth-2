@@ -3,7 +3,7 @@ import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "~~/services/store/store";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import SwitchTheme from "./SwitchTheme";
-import { Faucet } from "./scaffold-eth";
+import { Faucet } from "~~/components/scaffold-eth";
 
 /**
  * Site footer
