@@ -67,7 +67,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   };
 
   return (
-    <div className="rounded-full border-2 border-base-300">
+    <div className="rounded-full border-2 border-base-300 bg-base-200">
       <div className="form-control grow">
         <div className="flex w-full">
           {resolvedEns && (
