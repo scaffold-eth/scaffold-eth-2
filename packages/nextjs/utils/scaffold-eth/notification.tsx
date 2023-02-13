@@ -1,5 +1,5 @@
 import React from "react";
-import { toast as hotToast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import {
   CheckCircleIcon,
@@ -11,7 +11,7 @@ import Spinner from "~~/components/Spinner";
 
 type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 
-type TToastProps = {
+type TNotificationProps = {
   content: React.ReactNode;
   status: "success" | "info" | "loading" | "error" | "warning";
   duration?: number;
@@ -19,7 +19,7 @@ type TToastProps = {
   position?: TPositions;
 };
 
-type ToastOptions = {
+type NotificationOptions = {
   duration?: number;
   icon?: string;
   position?: TPositions;
@@ -37,10 +37,16 @@ const DEFAULT_DURATION = 3000;
 const DEFAULT_POSITION: TPositions = "top-center";
 
 /**
- * Custom Toast
+ * Custom Notification
  */
-function Toast({ content, status, duration = DEFAULT_DURATION, icon, position = DEFAULT_POSITION }: TToastProps) {
-  return hotToast.custom(
+function Notification({
+  content,
+  status,
+  duration = DEFAULT_DURATION,
+  icon,
+  position = DEFAULT_POSITION,
+}: TNotificationProps) {
+  return toast.custom(
     t => (
       <div
         className={`flex flex-row items-center justify-between max-w-sm bg-white p-4 text-black shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-md relative transition-all duration-500 ease-in-out space-x-2 ${
@@ -50,8 +56,8 @@ function Toast({ content, status, duration = DEFAULT_DURATION, icon, position = 
         <div className="text-2xl self-start mb-0 mt-3">{icon ? icon : ENUM_STATUSES[status]}</div>
         <div className="mt-3 break-all">{content}</div>
 
-        <div className="absolute top-1 right-1 cursor-pointer text-lg" onClick={() => hotToast.dismiss(t.id)}>
-          <XMarkIcon className="w-6 cursor-pointer" onClick={() => hotToast.remove(t.id)} />
+        <div className="absolute top-1 right-1 cursor-pointer text-lg" onClick={() => toast.dismiss(t.id)}>
+          <XMarkIcon className="w-6 cursor-pointer" onClick={() => toast.remove(t.id)} />
         </div>
       </div>
     ),
@@ -62,25 +68,25 @@ function Toast({ content, status, duration = DEFAULT_DURATION, icon, position = 
   );
 }
 
-const toast = {
-  success: (content: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ content, status: "success", ...options });
+const notification = {
+  success: (content: React.ReactNode, options?: NotificationOptions) => {
+    return Notification({ content, status: "success", ...options });
   },
-  info: (content: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ content, status: "info", ...options });
+  info: (content: React.ReactNode, options?: NotificationOptions) => {
+    return Notification({ content, status: "info", ...options });
   },
-  warning: (content: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ content, status: "warning", ...options });
+  warning: (content: React.ReactNode, options?: NotificationOptions) => {
+    return Notification({ content, status: "warning", ...options });
   },
-  error: (content: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ content, status: "error", ...options });
+  error: (content: React.ReactNode, options?: NotificationOptions) => {
+    return Notification({ content, status: "error", ...options });
   },
-  loading: (content: React.ReactNode, options?: ToastOptions) => {
-    return Toast({ content, status: "loading", ...options });
+  loading: (content: React.ReactNode, options?: NotificationOptions) => {
+    return Notification({ content, status: "loading", ...options });
   },
   remove: (toastId: string) => {
-    hotToast.remove(toastId);
+    toast.remove(toastId);
   },
 };
 
-export default toast;
+export default notification;

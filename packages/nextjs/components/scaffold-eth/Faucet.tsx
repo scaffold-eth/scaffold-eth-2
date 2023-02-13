@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getLocalProvider, toast } from "~~/utils/scaffold-eth";
+import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import AddressInput from "./AddressInput";
 import EtherInput from "./EtherInput";
@@ -50,7 +50,7 @@ export default function Faucet() {
     } catch (error) {
       const parsedError = getParsedEthersError(error);
       console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
-      toast.error(parsedError);
+      notification.error(parsedError);
       setLoading(false);
     }
   };

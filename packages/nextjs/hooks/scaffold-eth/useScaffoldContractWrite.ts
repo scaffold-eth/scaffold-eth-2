@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { getTargetNetwork, toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 
@@ -33,15 +33,15 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      toast.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
       return;
     }
     if (!chain?.id) {
-      toast.error("Please connect your wallet");
+      notification.error("Please connect your wallet");
       return;
     }
     if (chain?.id !== configuredChain.id) {
-      toast.error("You on the wrong network");
+      notification.error("You on the wrong network");
       return;
     }
 
@@ -50,10 +50,10 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
         await writeTx(wagmiContractWrite.writeAsync());
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message);
+        notification.error(message);
       }
     } else {
-      toast.error("Contract writer error. Try again.");
+      notification.error("Contract writer error. Try again.");
       return;
     }
   };
