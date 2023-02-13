@@ -83,7 +83,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             }`}
             value={ensAddress || currentValue}
             onChange={onChangeAddress}
-            disabled={isEnsAddressLoading}
+            disabled={isLoading}
           />
           {currentAddress && (
             <span className="p-0 bg-base-100">
