@@ -37,8 +37,10 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     cacheTime: 30_000,
   });
 
+  const currentAddress = ensAddress || currentValue;
+
   const { data: ensAvatar } = useEnsAvatar({
-    address: ensAddress || currentValue,
+    address: currentAddress,
     enabled: !!ensAddress || isAddress(currentValue),
     chainId: 1,
     cacheTime: 30_000,
@@ -51,7 +53,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   // since it could be lots of ENSs for one address, we show ENS entered by user
   const visibleEnsAddress = isEns ? currentValue : ensName;
 
-  const onChangeAddress = async (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeAddress = (event: ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
     if (onChange) {
       onChange(event.target.value);
@@ -83,9 +85,9 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             onChange={onChangeAddress}
             disabled={isEnsAddressLoading}
           />
-          {currentValue && (
+          {currentAddress && (
             <span className="p-0 bg-base-100">
-              <Blockies className="!rounded-full" seed={currentValue?.toLowerCase() as string} size={7} scale={5} />
+              <Blockies className="!rounded-full" seed={currentAddress?.toLowerCase()} size={7} scale={5} />
             </span>
           )}
         </div>
