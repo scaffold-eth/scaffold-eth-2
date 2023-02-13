@@ -120,7 +120,7 @@ const getContractWriteMethods = (
  */
 const getFunctionInputKey = (functionInfo: FunctionFragment, input: utils.ParamType, inputIndex: number): string => {
   const name = input?.name || `input_${inputIndex}_`;
-  return functionInfo.name + "_" + name + "_" + input.type;
+  return functionInfo.name + "_" + name + "_" + input.type + "_" + input.baseType;
 };
 
 /**

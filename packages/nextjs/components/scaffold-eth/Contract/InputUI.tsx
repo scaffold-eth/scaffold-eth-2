@@ -1,19 +1,15 @@
+import { utils } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { AddressInput } from "~~/components/scaffold-eth";
 
 import { StringToBytesConverter, StringToBytes32Converter, UintToEtherConverter } from "./utilsDisplay";
 
-type ParamType = {
-  name: string | null;
-  type: string;
-};
-
 type TInputUIProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
   form: Record<string, any>;
   stateObjectKey: string;
-  paramType: ParamType;
+  paramType: utils.ParamType;
   functionFragment: FunctionFragment;
 };
 
@@ -60,7 +56,8 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
             value={form[stateObjectKey]}
             onChange={(event): void => {
               const formUpdate = { ...form };
-              formUpdate[event.target.name] = event.target.value;
+              const contractFunctionArgument: string | number = event.target.value;
+              formUpdate[event.target.name] = contractFunctionArgument;
               setForm(formUpdate);
             }}
           />

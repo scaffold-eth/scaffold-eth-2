@@ -8,6 +8,34 @@ import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { toast, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
 
+const getParsedContractFunctionArgs = (form: Record<string, any>) => {
+  const keys = Object.keys(form);
+  const parsedArguments = keys.map(key => {
+    try {
+      const keySplitArray = key.split("_");
+      const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
+      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:17 ~ parsedArguments ~ baseTypeOfArg", baseTypeOfArg);
+      let valueOfArg = form[key];
+
+      if (["array", "tuple"].includes(baseTypeOfArg)) {
+        valueOfArg = JSON.parse(valueOfArg);
+      } else if (baseTypeOfArg === "bool") {
+        if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
+          valueOfArg = 1;
+        } else {
+          valueOfArg = 0;
+        }
+      }
+
+      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:18 ~ parsedArguments ~ valueOfArg", valueOfArg);
+      return valueOfArg;
+    } catch (error: any) {
+      // ignore error, it will be handled when sending transaction by useContractWrite
+    }
+  });
+  return parsedArguments;
+};
+
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -36,8 +64,6 @@ export const WriteOnlyFunctionForm = ({
   const writeTxn = useTransactor();
   const writeDisabled = !chain || chain?.id !== configuredChain.id;
 
-  const keys = Object.keys(form);
-
   // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
   // See:
   //   - https://github.com/scaffold-eth/se-2/issues/59
@@ -50,7 +76,7 @@ export const WriteOnlyFunctionForm = ({
     address: contractAddress,
     functionName: functionFragment.name,
     abi: [functionFragment],
-    args: keys.map(key => form[key]),
+    args: getParsedContractFunctionArgs(form),
     mode: "recklesslyUnprepared",
     overrides: {
       value: txValue ? parseTxnValue(txValue) : undefined,
