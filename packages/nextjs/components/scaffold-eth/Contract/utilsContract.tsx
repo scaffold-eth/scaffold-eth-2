@@ -168,7 +168,6 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
     try {
       const keySplitArray = key.split("_");
       const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
-      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:17 ~ parsedArguments ~ baseTypeOfArg", baseTypeOfArg);
       let valueOfArg = form[key];
 
       if (["array", "tuple"].includes(baseTypeOfArg)) {
@@ -180,8 +179,6 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
           valueOfArg = 0;
         }
       }
-
-      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:18 ~ parsedArguments ~ valueOfArg", valueOfArg);
       return valueOfArg;
     } catch (error: any) {
       // ignore error, it will be handled when sending/reading from a function
