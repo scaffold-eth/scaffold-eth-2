@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { getTargetNetwork, toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -24,7 +24,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     functionName: functionFragment.name,
     args: [],
     onError: error => {
-      toast.error(error.message);
+      notification.error(error.message);
     },
   });
 

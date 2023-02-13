@@ -4,7 +4,7 @@ import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import InputUI from "./InputUI";
 import { getFunctionInputKey } from "./utilsContract";
-import { getTargetNetwork, toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -36,7 +36,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     args: keys.map(key => form[key]),
     enabled: false,
     onError: error => {
-      toast.error(error.message);
+      notification.error(error.message);
     },
   });
 

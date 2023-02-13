@@ -6,7 +6,7 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const getParsedContractFunctionArgs = (form: Record<string, any>) => {
   const keys = Object.keys(form);
@@ -90,7 +90,7 @@ export const WriteOnlyFunctionForm = ({
         setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message);
+        notification.error(message);
       }
     }
   };
