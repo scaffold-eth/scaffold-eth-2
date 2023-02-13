@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import InputUI from "./InputUI";
-import { getFunctionInputKey } from "./utilsContract";
+import { getFunctionInputKey, getParsedContractFunctionArgs } from "./utilsContract";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -22,7 +22,6 @@ type TReadOnlyFunctionFormProps = {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const keys = Object.keys(form);
   const configuredChain = getTargetNetwork();
   const {
     data: result,
@@ -33,7 +32,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
-    args: keys.map(key => form[key]),
+    args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: error => {
       notification.error(error.message);

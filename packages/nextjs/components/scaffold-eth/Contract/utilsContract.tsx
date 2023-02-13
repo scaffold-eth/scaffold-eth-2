@@ -157,7 +157,41 @@ const getParsedEthersError = (e: any): string => {
   return message;
 };
 
+/**
+ * @dev utility function to parse form input also supports array
+ * @param {Record<string,any>} form - form object containing key value pairs
+ * @returns  parsed error string
+ */
+const getParsedContractFunctionArgs = (form: Record<string, any>) => {
+  const keys = Object.keys(form);
+  const parsedArguments = keys.map(key => {
+    try {
+      const keySplitArray = key.split("_");
+      const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
+      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:17 ~ parsedArguments ~ baseTypeOfArg", baseTypeOfArg);
+      let valueOfArg = form[key];
+
+      if (["array", "tuple"].includes(baseTypeOfArg)) {
+        valueOfArg = JSON.parse(valueOfArg);
+      } else if (baseTypeOfArg === "bool") {
+        if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
+          valueOfArg = 1;
+        } else {
+          valueOfArg = 0;
+        }
+      }
+
+      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:18 ~ parsedArguments ~ valueOfArg", valueOfArg);
+      return valueOfArg;
+    } catch (error: any) {
+      // ignore error, it will be handled when sending/reading from a function
+    }
+  });
+  return parsedArguments;
+};
+
 export {
+  getParsedContractFunctionArgs,
   getContractReadOnlyMethodsWithParams,
   getAllContractFunctions,
   getContractVariablesAndNoParamsReadMethods,

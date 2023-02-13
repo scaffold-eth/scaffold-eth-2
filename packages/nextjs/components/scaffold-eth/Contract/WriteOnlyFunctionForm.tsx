@@ -3,38 +3,10 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
-import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
+import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
-
-const getParsedContractFunctionArgs = (form: Record<string, any>) => {
-  const keys = Object.keys(form);
-  const parsedArguments = keys.map(key => {
-    try {
-      const keySplitArray = key.split("_");
-      const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
-      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:17 ~ parsedArguments ~ baseTypeOfArg", baseTypeOfArg);
-      let valueOfArg = form[key];
-
-      if (["array", "tuple"].includes(baseTypeOfArg)) {
-        valueOfArg = JSON.parse(valueOfArg);
-      } else if (baseTypeOfArg === "bool") {
-        if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
-          valueOfArg = 1;
-        } else {
-          valueOfArg = 0;
-        }
-      }
-
-      console.log("⚡️ ~ file: WriteOnlyFunctionForm.tsx:18 ~ parsedArguments ~ valueOfArg", valueOfArg);
-      return valueOfArg;
-    } catch (error: any) {
-      // ignore error, it will be handled when sending transaction by useContractWrite
-    }
-  });
-  return parsedArguments;
-};
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
