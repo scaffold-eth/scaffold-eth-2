@@ -64,6 +64,11 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
             <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
               <strong>Result</strong>: {displayTxResult(result)}
             </span>
+          ) : result === false ? (
+            // checking if the value returned is literal `false` by contract function
+            <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
+              <strong>Result</strong>: false
+            </span>
           ) : null}
         </div>
         <button
