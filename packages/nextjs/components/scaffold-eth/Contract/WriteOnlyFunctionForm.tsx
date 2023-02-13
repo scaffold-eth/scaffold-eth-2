@@ -6,7 +6,7 @@ import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { toast, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -64,7 +64,7 @@ export const WriteOnlyFunctionForm = ({
         setRefreshDisplayVariables(prevState => !prevState);
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message);
+        notification.error(message);
       }
     }
   };
