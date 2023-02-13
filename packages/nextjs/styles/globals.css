@@ -30,3 +30,7 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
+}

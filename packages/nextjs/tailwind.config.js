@@ -30,6 +30,19 @@ module.exports = {
           ".tooltip": {
             "--tooltip-tail": "6px",
           },
+
+          [`input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            textarea:-webkit-autofill,
+            textarea:-webkit-autofill:hover,
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill,
+            select:-webkit-autofill:hover,
+            select:-webkit-autofill:focus`]: {
+            // text-gray-400
+            "-webkit-text-fill-color": "rgb(156 163 175)",
+          },
         },
       },
       {
@@ -56,6 +69,19 @@ module.exports = {
           ".tooltip": {
             "--tooltip-tail": "6px",
             "--tooltip-color": "hsl(var(--p))",
+          },
+
+          [`input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            textarea:-webkit-autofill,
+            textarea:-webkit-autofill:hover,
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill,
+            select:-webkit-autofill:hover,
+            select:-webkit-autofill:focus`]: {
+            // text-gray-400
+            "-webkit-text-fill-color": "rgb(156 163 175)",
           },
         },
       },
