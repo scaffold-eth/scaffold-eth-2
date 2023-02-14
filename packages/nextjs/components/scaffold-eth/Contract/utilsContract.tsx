@@ -158,7 +158,7 @@ const getParsedEthersError = (e: any): string => {
 };
 
 /**
- * @dev utility function to parse form input also supports array
+ * @dev Parse form input with array support
  * @param {Record<string,any>} form - form object containing key value pairs
  * @returns  parsed error string
  */
