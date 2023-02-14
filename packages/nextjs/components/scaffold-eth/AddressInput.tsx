@@ -67,11 +67,11 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   };
 
   return (
-    <div className="rounded-full border-2 border-base-300">
+    <div className="rounded-full border-2 border-base-300 bg-base-200">
       <div className="form-control grow">
         <div className="flex w-full">
           {resolvedEns && (
-            <div className="flex bg-secondary rounded-l-full items-center">
+            <div className="flex bg-base-300 rounded-l-full items-center">
               <span className={ensAvatarData ? "w-[35px]" : ""}>
                 {/* Don't want to use nextJS Image here (and adding remote patterns for the URL) */}
                 {/* eslint-disable-next-line  */}
@@ -91,11 +91,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             onChange={onChangeAddress}
             disabled={isLoading}
           />
-          {address && (
-            <span className="p-0 bg-base-100">
-              <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />
-            </span>
-          )}
+          {address && <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />}
         </div>
       </div>
     </div>
