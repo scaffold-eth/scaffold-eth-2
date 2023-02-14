@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -13,13 +14,22 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
+  const { showAnimation: showTotalCounterAnimation, config: totalCounterConfig } = useAnimationConfig();
+
+  const { showAnimation: showCurrentGreetingAnimation, config: currentGreeterConfig } = useAnimationConfig();
+
   // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
   // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
   // @ts-expect-error
-  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
+  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead(
+    "YourContract",
+    "totalCounter",
+    totalCounterConfig,
+  );
+
   // @ts-expect-error
   const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
-    useScaffoldContractRead("YourContract", "greeting");
+    useScaffoldContractRead("YourContract", "greeting", currentGreeterConfig);
 
   const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
@@ -49,7 +59,11 @@ export default function ContractData() {
           </button>
           <div className="bg-secondary border border-primary rounded-xl flex">
             <div className="p-2 py-1 border-r border-primary flex items-end">Total count</div>
-            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">
+            <div
+              className={`text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree transition opactity-100 ${
+                showTotalCounterAnimation ? "animate-pulse-fast" : ""
+              }`}
+            >
               {totalCounter?.toString() || "0"}
             </div>
           </div>
@@ -70,7 +84,7 @@ export default function ContractData() {
                   gradient={false}
                   play={showTransition}
                   speed={marqueeSpeed}
-                  className={i % 2 ? "-my-10" : ""}
+                  className={`${i % 2 ? "-my-10" : ""} ${showCurrentGreetingAnimation ? "animate-pulse-fast" : ""}`}
                 >
                   <div className="px-4">{currentGreeting || " "}</div>
                 </Marquee>
