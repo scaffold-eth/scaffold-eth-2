@@ -1,9 +1,10 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { useEffect, useState } from "react";
-import { useContractRead, deepEqual } from "wagmi";
+import React, { useEffect } from "react";
+import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -11,10 +12,8 @@ type TDisplayVariableProps = {
   refreshDisplayVariables: boolean;
 };
 
-const ANIMATION_TIME = 2000;
-
 const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
-  const [showAnimation, setShowAnimation] = useState(false);
+  const { showAnimation, config } = useAnimationConfig();
   const configuredChain = getTargetNetwork();
   const {
     data: result,
@@ -29,16 +28,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     onError: error => {
       notification.error(error.message);
     },
-    structuralSharing: (prev, next) => {
-      if (deepEqual(prev, next)) {
-        return prev;
-      }
-
-      setShowAnimation(true);
-
-      setTimeout(() => setShowAnimation(false), ANIMATION_TIME);
-      return next;
-    },
+    ...config,
   });
 
   useEffect(() => {
