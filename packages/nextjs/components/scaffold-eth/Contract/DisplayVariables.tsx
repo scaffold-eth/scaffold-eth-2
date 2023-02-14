@@ -1,6 +1,6 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { useEffect } from "react";
-import { useContractRead } from "wagmi";
+import React, { useEffect, useState } from "react";
+import { useContractRead, deepEqual } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
@@ -11,7 +11,10 @@ type TDisplayVariableProps = {
   refreshDisplayVariables: boolean;
 };
 
+const ANIMATION_TIME = 2000;
+
 const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
+  const [showAnimation, setShowAnimation] = useState(false);
   const configuredChain = getTargetNetwork();
   const {
     data: result,
@@ -25,6 +28,16 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     args: [],
     onError: error => {
       notification.error(error.message);
+    },
+    structuralSharing: (prev, next) => {
+      if (deepEqual(prev, next)) {
+        return prev;
+      }
+
+      setShowAnimation(true);
+
+      setTimeout(() => setShowAnimation(false), ANIMATION_TIME);
+      return next;
     },
   });
 
@@ -40,8 +53,15 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
       </div>
-      <div className="text-gray-500 font-medium">
-        <span className="break-words block">{displayTxResult(result)}</span>
+      <div className="text-gray-500 font-medium flex flex-col items-start">
+        <div>
+          <span className="break-words block">{displayTxResult(result)}</span>
+          <div
+            className={`mt-0.25 h-1 bg-primary transition opacity-0 ${
+              showAnimation ? "opacity-100 animate-pulse-fast" : ""
+            }`}
+          />
+        </div>
       </div>
     </div>
   );
