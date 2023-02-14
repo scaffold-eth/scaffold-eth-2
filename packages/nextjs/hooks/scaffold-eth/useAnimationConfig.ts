@@ -1,24 +1,20 @@
-import { useState } from "react";
-import { deepEqual } from "wagmi";
+import { useEffect, useState } from "react";
 
-export function useAnimationConfig() {
+const ANIMATION_TIME = 2000;
+
+export function useAnimationConfig(data: any) {
   const [showAnimation, setShowAnimation] = useState(false);
+  const [prevData, setPrevData] = useState();
+
+  useEffect(() => {
+    if (prevData !== undefined && prevData !== data) {
+      setShowAnimation(true);
+      setTimeout(() => setShowAnimation(false), ANIMATION_TIME);
+    }
+    setPrevData(data);
+  }, [data, prevData]);
 
   return {
     showAnimation,
-    config: {
-      structuralSharing: (prev: any, next: any) => {
-        if (deepEqual(prev, next)) {
-          return prev;
-        }
-
-        if (!showAnimation) {
-          setShowAnimation(true);
-          setTimeout(() => setShowAnimation(false), 2000);
-        }
-
-        return next;
-      },
-    },
   };
 }

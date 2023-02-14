@@ -13,7 +13,6 @@ type TDisplayVariableProps = {
 };
 
 const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
-  const { showAnimation, config } = useAnimationConfig();
   const configuredChain = getTargetNetwork();
   const {
     data: result,
@@ -28,8 +27,9 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     onError: error => {
       notification.error(error.message);
     },
-    ...config,
   });
+
+  const { showAnimation } = useAnimationConfig(result);
 
   useEffect(() => {
     refetch();
