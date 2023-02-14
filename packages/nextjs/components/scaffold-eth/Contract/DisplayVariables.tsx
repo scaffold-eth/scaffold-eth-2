@@ -45,12 +45,13 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
       </div>
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
-          <span className="break-words block">{displayTxResult(result)}</span>
           <div
-            className={`mt-0.25 h-1 bg-accent transition opacity-0 ${
-              showAnimation ? "opacity-100 animate-pulse-fast" : ""
+            className={`break-words block transition bg-transparent ${
+              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
             }`}
-          />
+          >
+            {displayTxResult(result)}
+          </div>
         </div>
       </div>
     </div>
