@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
-import { getFunctionInputKey, getParsedEthersError } from "./utilsContract";
+import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
 import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -36,8 +36,6 @@ export const WriteOnlyFunctionForm = ({
   const writeTxn = useTransactor();
   const writeDisabled = !chain || chain?.id !== configuredChain.id;
 
-  const keys = Object.keys(form);
-
   // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
   // See:
   //   - https://github.com/scaffold-eth/se-2/issues/59
@@ -50,7 +48,7 @@ export const WriteOnlyFunctionForm = ({
     address: contractAddress,
     functionName: functionFragment.name,
     abi: [functionFragment],
-    args: keys.map(key => form[key]),
+    args: getParsedContractFunctionArgs(form),
     mode: "recklesslyUnprepared",
     overrides: {
       value: txValue ? parseTxnValue(txValue) : undefined,

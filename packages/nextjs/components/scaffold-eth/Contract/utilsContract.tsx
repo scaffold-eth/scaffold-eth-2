@@ -120,7 +120,7 @@ const getContractWriteMethods = (
  */
 const getFunctionInputKey = (functionInfo: FunctionFragment, input: utils.ParamType, inputIndex: number): string => {
   const name = input?.name || `input_${inputIndex}_`;
-  return functionInfo.name + "_" + name + "_" + input.type;
+  return functionInfo.name + "_" + name + "_" + input.type + "_" + input.baseType;
 };
 
 /**
@@ -157,7 +157,38 @@ const getParsedEthersError = (e: any): string => {
   return message;
 };
 
+/**
+ * @dev Parse form input with array support
+ * @param {Record<string,any>} form - form object containing key value pairs
+ * @returns  parsed error string
+ */
+const getParsedContractFunctionArgs = (form: Record<string, any>) => {
+  const keys = Object.keys(form);
+  const parsedArguments = keys.map(key => {
+    try {
+      const keySplitArray = key.split("_");
+      const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
+      let valueOfArg = form[key];
+
+      if (["array", "tuple"].includes(baseTypeOfArg)) {
+        valueOfArg = JSON.parse(valueOfArg);
+      } else if (baseTypeOfArg === "bool") {
+        if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
+          valueOfArg = 1;
+        } else {
+          valueOfArg = 0;
+        }
+      }
+      return valueOfArg;
+    } catch (error: any) {
+      // ignore error, it will be handled when sending/reading from a function
+    }
+  });
+  return parsedArguments;
+};
+
 export {
+  getParsedContractFunctionArgs,
   getContractReadOnlyMethodsWithParams,
   getAllContractFunctions,
   getContractVariablesAndNoParamsReadMethods,
