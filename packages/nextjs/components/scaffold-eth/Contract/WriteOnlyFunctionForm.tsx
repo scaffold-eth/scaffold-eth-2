@@ -56,7 +56,7 @@ export const WriteOnlyFunctionForm = ({
   });
 
   const handleWrite = async () => {
-    if (writeAsync && writeTxn) {
+    if (writeAsync) {
       try {
         await writeTxn(writeAsync());
         setRefreshDisplayVariables(prevState => !prevState);
