@@ -41,9 +41,7 @@ export default function Faucet() {
   const sendETH = async () => {
     try {
       setLoading(true);
-      if (faucetTxn) {
-        await faucetTxn({ to: inputAddress, value: ethers.utils.parseEther(sendValue) });
-      }
+      await faucetTxn({ to: inputAddress, value: ethers.utils.parseEther(sendValue) });
       setLoading(false);
       setInputAddress("");
       setSendValue("");
