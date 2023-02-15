@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -17,6 +18,9 @@ export default function ContractData() {
   // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
+
+  const { showAnimation } = useAnimationConfig(totalCounter);
+
   // @ts-expect-error
   const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
     useScaffoldContractRead("YourContract", "greeting");
@@ -32,8 +36,12 @@ export default function ContractData() {
   }, [transitionEnabled, containerRef, greetingRef]);
 
   return (
-    <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw]">
-      <div className="flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full">
+    <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw] ">
+      <div
+        className={`flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full ${
+          showAnimation ? "animate-zoom" : ""
+        }`}
+      >
         <div className="flex justify-between w-full">
           <button
             className="btn btn-circle btn-ghost relative bg-center bg-[url('/assets/switch-button-on.png')] bg-no-repeat"
