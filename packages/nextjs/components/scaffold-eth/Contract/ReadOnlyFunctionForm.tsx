@@ -59,7 +59,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
       {inputs}
       <div className="flex justify-between gap-2">
         <div className="flex-grow">
-          {displayTxResult(result) ? (
+          {result ? (
             <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
               <strong>Result</strong>: {displayTxResult(result)}
             </span>
