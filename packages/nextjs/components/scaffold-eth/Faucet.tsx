@@ -30,9 +30,14 @@ export default function Faucet() {
 
   useEffect(() => {
     const getFaucetAddress = async () => {
-      if (provider) {
-        const accounts = await provider.listAccounts();
-        setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
+      try {
+        if (provider) {
+          const accounts = await provider.listAccounts();
+          setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
+        }
+      } catch (error) {
+        notification.error("Cannot connect to local provider");
+        console.log("⚡️ ~ file: Faucet.tsx:39 ~ getFaucetAddress ~ error", error);
       }
     };
     getFaucetAddress();
