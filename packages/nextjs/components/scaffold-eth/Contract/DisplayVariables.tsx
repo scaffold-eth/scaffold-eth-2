@@ -4,6 +4,7 @@ import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -28,6 +29,8 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     },
   });
 
+  const { showAnimation } = useAnimationConfig(result);
+
   useEffect(() => {
     refetch();
   }, [refetch, refreshDisplayVariables]);
@@ -40,8 +43,16 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
       </div>
-      <div className="text-gray-500 font-medium">
-        <span className="break-words block">{displayTxResult(result)}</span>
+      <div className="text-gray-500 font-medium flex flex-col items-start">
+        <div>
+          <div
+            className={`break-words block transition bg-transparent ${
+              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
+            }`}
+          >
+            {displayTxResult(result)}
+          </div>
+        </div>
       </div>
     </div>
   );
