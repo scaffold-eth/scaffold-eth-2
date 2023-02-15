@@ -19,13 +19,11 @@ export default function ContractData() {
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
 
-  const { showAnimation: showTotalCounterAnimation } = useAnimationConfig(totalCounter);
+  const { showAnimation } = useAnimationConfig(totalCounter);
 
   // @ts-expect-error
   const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
     useScaffoldContractRead("YourContract", "greeting");
-
-  const { showAnimation: showCurrentGreetingAnimation } = useAnimationConfig(currentGreeting);
 
   const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
@@ -38,8 +36,12 @@ export default function ContractData() {
   }, [transitionEnabled, containerRef, greetingRef]);
 
   return (
-    <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw]">
-      <div className="flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full">
+    <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw] ">
+      <div
+        className={`flex flex-col max-w-md bg-base-200 bg-opacity-70 rounded-2xl shadow-lg px-5 py-4 w-full ${
+          showAnimation ? "animate-zoom" : ""
+        }`}
+      >
         <div className="flex justify-between w-full">
           <button
             className="btn btn-circle btn-ghost relative bg-center bg-[url('/assets/switch-button-on.png')] bg-no-repeat"
@@ -55,11 +57,7 @@ export default function ContractData() {
           </button>
           <div className="bg-secondary border border-primary rounded-xl flex">
             <div className="p-2 py-1 border-r border-primary flex items-end">Total count</div>
-            <div
-              className={`text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree transition opactity-100 ${
-                showTotalCounterAnimation ? "animate-pulse-fast" : ""
-              }`}
-            >
+            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree transition opactity-100">
               {totalCounter?.toString() || "0"}
             </div>
           </div>
@@ -80,7 +78,7 @@ export default function ContractData() {
                   gradient={false}
                   play={showTransition}
                   speed={marqueeSpeed}
-                  className={`${i % 2 ? "-my-10" : ""} ${showCurrentGreetingAnimation ? "animate-pulse-fast" : ""}`}
+                  className={`${i % 2 ? "-my-10" : ""}`}
                 >
                   <div className="px-4">{currentGreeting || " "}</div>
                 </Marquee>
