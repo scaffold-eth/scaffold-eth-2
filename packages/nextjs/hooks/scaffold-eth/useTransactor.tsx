@@ -33,7 +33,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
  * @param gasPrice
  * @dev If signer is provided => dev wants to send a raw tx.
  */
-export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc | undefined => {
+export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc => {
   let signer = _signer;
   const { data } = useSigner();
   if (signer === undefined && data) {

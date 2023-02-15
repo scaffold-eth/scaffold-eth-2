@@ -45,7 +45,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       return;
     }
 
-    if (wagmiContractWrite.writeAsync && writeTx) {
+    if (wagmiContractWrite.writeAsync) {
       try {
         await writeTx(wagmiContractWrite.writeAsync());
       } catch (e: any) {
