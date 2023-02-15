@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Blockies from "react-blockies";
-import { useEnsAddress, useEnsAvatar } from "wagmi";
+import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { isAddress } from "ethers/lib/utils";
 
 type TAddressInputProps = {
@@ -23,19 +23,28 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
   // Controlled vs Uncontrolled input.
   const currentValue = value !== undefined ? value : address || "";
 
-  const { data: ensData, isLoading } = useEnsAddress({
+  const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
     name: address,
     enabled: isENS(address),
     chainId: 1,
     cacheTime: 30_000,
   });
 
-  const { data: ensAvatarData } = useEnsAvatar({
+  const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address,
     enabled: isAddress(address),
     chainId: 1,
     cacheTime: 30_000,
   });
+
+  const { data: ensAvatar } = useEnsAvatar({
+    address,
+    enabled: isAddress(address),
+    chainId: 1,
+    cacheTime: 30_000,
+  });
+
+  const isLoading = isEnsAddressLoading || isEnsNameLoading;
 
   useEffect(() => {
     // Reset when clearing controlled input
@@ -45,18 +54,26 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     }
   }, [currentValue]);
 
+  // ens => address
   useEffect(() => {
-    if (!ensData) return;
+    if (!ensAddress) return;
 
     // ENS resolved successfully
     setResolvedEns(address);
-    setAddress(ensData);
+    setAddress(ensAddress);
     if (onChange) {
-      onChange(ensData);
+      onChange(ensAddress);
     }
     // We don't want to run it on address change
     // eslint-disable-next-line
-  }, [ensData, onChange]);
+  }, [ensAddress, onChange]);
+
+  // address => ens
+  useEffect(() => {
+    if (!ensName || resolvedEns) return;
+
+    setResolvedEns(ensName);
+  }, [ensName, resolvedEns]);
 
   const onChangeAddress = async (event: ChangeEvent<HTMLInputElement>) => {
     setResolvedEns("");
@@ -72,10 +89,12 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
         <div className="flex w-full">
           {resolvedEns && (
             <div className="flex bg-base-300 rounded-l-full items-center">
-              <span className={ensAvatarData ? "w-[35px]" : ""}>
-                {/* Don't want to use nextJS Image here (and adding remote patterns for the URL) */}
-                {/* eslint-disable-next-line  */}
-                {ensAvatarData && <img className="w-full rounded-full" src={ensAvatarData} alt={`${ensData} avatar`} />}
+              <span className={ensAvatar ? "w-[35px]" : ""}>
+                {ensAvatar && (
+                  // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+                  // eslint-disable-next-line
+                  <img className="w-full rounded-full" src={ensAvatar} alt={`${ensAddress} avatar`} />
+                )}
               </span>
               <span className="text-accent px-2">{resolvedEns}</span>
             </div>
@@ -85,7 +104,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             type="text"
             placeholder={placeholder}
             className={`input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow ${
-              ensData === null ? "input-error" : ""
+              ensAddress === null ? "input-error" : ""
             }`}
             value={currentValue}
             onChange={onChangeAddress}
