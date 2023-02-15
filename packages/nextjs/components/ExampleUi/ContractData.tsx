@@ -57,7 +57,7 @@ export default function ContractData() {
           </button>
           <div className="bg-secondary border border-primary rounded-xl flex">
             <div className="p-2 py-1 border-r border-primary flex items-end">Total count</div>
-            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree transition opactity-100">
+            <div className="text-4xl text-right min-w-[3rem] px-2 py-1 flex justify-end font-bai-jamjuree">
               {totalCounter?.toString() || "0"}
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function ContractData() {
                   gradient={false}
                   play={showTransition}
                   speed={marqueeSpeed}
-                  className={`${i % 2 ? "-my-10" : ""}`}
+                  className={i % 2 ? "-my-10" : ""}
                 >
                   <div className="px-4">{currentGreeting || " "}</div>
                 </Marquee>
