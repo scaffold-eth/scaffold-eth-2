@@ -109,6 +109,7 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
             value={currentValue}
             onChange={onChangeAddress}
             disabled={isLoading}
+            autoComplete="off"
           />
           {address && <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />}
         </div>
