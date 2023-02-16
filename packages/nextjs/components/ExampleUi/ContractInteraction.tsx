@@ -3,7 +3,7 @@ import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useScaffoldContractWrite, useScaffoldEventsRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractWrite, useScaffoldContractEvent } from "~~/hooks/scaffold-eth";
 
 export default function ContractInteraction() {
   const [visible, setVisible] = useState(true);
@@ -11,10 +11,9 @@ export default function ContractInteraction() {
 
   const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setGreeting", [newGreeting], "0.01");
 
-  const eventContract = useScaffoldEventsRead("YourContract", "GreetingChange", (...args) => {
-    console.log(args);
+  useScaffoldContractEvent("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
+    console.log(greetingSetter, newGreeting, premium, value);
   });
-  console.log(eventContract);
 
   return (
     <div className="flex bg-base-300 relative pb-10">
