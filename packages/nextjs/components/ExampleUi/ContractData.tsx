@@ -19,15 +19,15 @@ export default function ContractData() {
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
 
+  // @ts-expect-error
+  const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
+    useScaffoldContractRead("YourContract", "greeting");
+
   useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
     console.log(greetingSetter, newGreeting, premium, value);
   });
 
   const { showAnimation } = useAnimationConfig(totalCounter);
-
-  // @ts-expect-error
-  const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
-    useScaffoldContractRead("YourContract", "greeting");
 
   const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
