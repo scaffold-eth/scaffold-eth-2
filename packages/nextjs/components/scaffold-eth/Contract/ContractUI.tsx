@@ -59,7 +59,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   }
 
   return (
-    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
+    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-y-10 lg:gap-10 justify-between">
       <div className="col-span-2 flex flex-col gap-6">
         <div className="z-10">
           <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
