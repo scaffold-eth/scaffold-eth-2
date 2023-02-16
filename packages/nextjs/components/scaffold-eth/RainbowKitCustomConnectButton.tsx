@@ -3,7 +3,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
-import { useSwitchNetwork } from "wagmi";
+
 import * as chain from "wagmi/chains";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 
@@ -20,17 +20,9 @@ type ChainName = keyof typeof chain;
  */
 export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
-  const { switchNetwork } = useSwitchNetwork();
 
   const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as ChainName;
   const definedChain = chain[publicNetworkName];
-
-  const onSwitchNetwork = () => {
-    if (definedChain && switchNetwork) {
-      switchNetwork(definedChain?.id);
-      return;
-    }
-  };
 
   return (
     <ConnectButton.Custom>
@@ -52,10 +44,13 @@ export default function RainbowKitCustomConnectButton() {
               if (chain.unsupported || chain.id !== definedChain?.id) {
                 return (
                   <div className="rounded-md shadow-lg p-2">
-                    <span className="text-error mr-2">Wrong network selected - ({chain.name})</span>
-                    <span className="text-primary mr-2">Switch network to</span>
-                    <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
-                      {publicNetworkName}
+                    <button
+                      className="text-white flex items-center gap-1 rounded-[50px] bg-red-500 px-3 py-1"
+                      onClick={openChainModal}
+                      type="button"
+                    >
+                      <span>Wrong network</span>
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </button>
                   </div>
                 );
