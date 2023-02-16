@@ -28,7 +28,7 @@ export default function FaucetButton() {
       await faucetTxn({ to: address, value: ethers.utils.parseEther(NUM_OF_ETH) });
       setLoading(false);
     } catch (error) {
-      console.error("⚡️ ~ file: FaucetButton.tsx ~ line 26 ~ sendETH ~ error", error);
+      console.error("⚡️ ~ file: FaucetButton.tsx:sendETH ~ error", error);
       setLoading(false);
     }
   };

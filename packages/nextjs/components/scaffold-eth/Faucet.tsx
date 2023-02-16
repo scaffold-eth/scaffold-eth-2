@@ -36,8 +36,13 @@ export default function Faucet() {
           setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
         }
       } catch (error) {
-        notification.error("Cannot connect to local provider");
-        console.log("⚡️ ~ file: Faucet.tsx:39 ~ getFaucetAddress ~ error", error);
+        notification.error(
+          <>
+            <p className="font-bold mt-0 mb-1gi">Cannot connect to local provider</p>
+            <p className="m-0">Did you forget to run `yarn chain`?</p>
+          </>,
+        );
+        console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
       }
     };
     getFaucetAddress();
@@ -52,7 +57,7 @@ export default function Faucet() {
       setSendValue("");
     } catch (error) {
       const parsedError = getParsedEthersError(error);
-      console.error("⚡️ ~ file: Faucet.tsx ~ line 26 ~ sendETH ~ error", error);
+      console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
       notification.error(parsedError);
       setLoading(false);
     }
