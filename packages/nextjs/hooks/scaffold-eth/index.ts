@@ -6,4 +6,4 @@ export * from "./useOutsideClick";
 export * from "./useScaffoldContractRead";
 export * from "./useScaffoldContractWrite";
 export * from "./useDeployedContractInfo";
-export * from "./useScaffoldContractEvent";
+export * from "./useScaffoldEventSubscriber";

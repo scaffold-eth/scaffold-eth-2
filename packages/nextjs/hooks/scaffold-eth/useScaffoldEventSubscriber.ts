@@ -10,7 +10,7 @@ import { useDeployedContractInfo } from "./useDeployedContractInfo";
  * @param callbackListener - the callback that receives event
  * @param once - if set to true it will receive only a single event, then stop listening for the event. Defaults to false
  */
-export const useScaffoldContractEvent = (
+export const useScaffoldEventSubscriber = (
   contractName: string,
   eventName: string,
   callbackListener: (...args: unknown[]) => void,
