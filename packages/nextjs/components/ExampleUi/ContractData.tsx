@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
@@ -18,6 +18,10 @@ export default function ContractData() {
   // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
+
+  useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
+    console.log(greetingSetter, newGreeting, premium, value);
+  });
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 
