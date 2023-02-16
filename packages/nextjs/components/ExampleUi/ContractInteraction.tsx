@@ -11,7 +11,7 @@ export default function ContractInteraction() {
 
   const { writeAsync, isLoading } = useScaffoldContractWrite("YourContract", "setGreeting", [newGreeting], "0.01");
 
-  const eventContract = useScaffoldEventsRead("YourContract", "GreetingChange", (...args: any) => {
+  const eventContract = useScaffoldEventsRead("YourContract", "GreetingChange", (...args) => {
     console.log(args);
   });
   console.log(eventContract);
