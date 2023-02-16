@@ -42,6 +42,8 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
 
   const result: TTransactionFunc = async (tx, callback) => {
     if (!signer) {
+      notification.error("Wallet/Signer not connected");
+      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
       return;
     }
 
@@ -93,7 +95,7 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         notification.remove(notificationId);
       }
       // TODO handle error properly
-      console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
+      console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
       const message = getParsedEthersError(error);
       notification.error(message);
     }
