@@ -51,7 +51,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
 
   return (
     <div
-      className={`flex items-end border-2 bg-base-200 rounded-full text-primary justify-between pr-3 ${
+      className={`flex items-end border-2 bg-base-200 rounded-full text-primary justify-between ${
         inputError ? "border-error" : "border-base-300"
       }`}
     >
@@ -83,7 +83,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
           data-tip="Multiply by 10^18 (wei)"
         >
           <button
-            className="cursor-pointer text-xl font-semibold pt-1 text-accent"
+            className="cursor-pointer text-xl font-semibold pt-1 px-4 text-accent"
             disabled={inputError}
             onClick={() => {
               const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
