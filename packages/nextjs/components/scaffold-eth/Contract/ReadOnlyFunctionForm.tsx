@@ -42,7 +42,10 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
     return (
       <InputUI
         key={key}
-        setForm={setForm}
+        setForm={updatedFormValue => {
+          setResult(null);
+          setForm(updatedFormValue);
+        }}
         form={form}
         stateObjectKey={key}
         paramType={input}
