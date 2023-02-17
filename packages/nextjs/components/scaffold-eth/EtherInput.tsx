@@ -99,8 +99,7 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
               onClick={toggleMode}
               disabled={!usdMode && !ethPrice}
             >
-              {usdMode ? "ETH" : "USD"}{" "}
-              <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer ml-1" aria-hidden="true" />
+              <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
             </button>
           </div>
         </div>
