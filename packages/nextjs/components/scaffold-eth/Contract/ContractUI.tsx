@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
-import { useContract, useProvider } from "wagmi";
+import { useContract, useNetwork, useProvider } from "wagmi";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -9,6 +9,7 @@ import {
 } from "./utilsContract";
 import { Balance, Address } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 
 type TContractUIProps = {
   contractName: string;
@@ -20,13 +21,14 @@ type TContractUIProps = {
  * ToDo. Handle loading state
  **/
 const ContractUI = ({ contractName }: TContractUIProps) => {
-  //const { chain } = useNetwork();
+  const { chain } = useNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
   const deployedContractData = useDeployedContractInfo(contractName);
+  const networkColor = useNetworkColor(chain?.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -66,6 +68,11 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               <Balance address={contractAddress} />
             </div>
           </div>
+          {chain && (
+            <p className="my-0 text-sm" style={{ color: networkColor }}>
+              <span className="font-bold">Network</span> : {chain.name}
+            </p>
+          )}
         </div>
         <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
           {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
