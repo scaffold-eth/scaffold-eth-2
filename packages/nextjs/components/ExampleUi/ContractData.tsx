@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
@@ -19,11 +19,15 @@ export default function ContractData() {
   // @ts-expect-error
   const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
 
-  const { showAnimation } = useAnimationConfig(totalCounter);
-
   // @ts-expect-error
   const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
     useScaffoldContractRead("YourContract", "greeting");
+
+  useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
+    console.log(greetingSetter, newGreeting, premium, value);
+  });
+
+  const { showAnimation } = useAnimationConfig(totalCounter);
 
   const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
