@@ -22,12 +22,10 @@ type TReadOnlyFunctionFormProps = {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
+  const [result, setResult] = useState<unknown>();
   const configuredChain = getTargetNetwork();
-  const {
-    data: result,
-    isFetching,
-    refetch,
-  } = useContractRead({
+
+  const { isFetching, refetch } = useContractRead({
     chainId: configuredChain.id,
     address: contractAddress,
     abi: [functionFragment],
@@ -68,7 +66,8 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
         <button
           className={`btn btn-secondary btn-sm ${isFetching ? "loading" : ""}`}
           onClick={async () => {
-            await refetch();
+            const { data } = await refetch();
+            setResult(data);
           }}
         >
           Read 📡
