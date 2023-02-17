@@ -63,14 +63,17 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
       <div className="col-span-1 flex flex-col">
         <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
           <div className="flex">
-            <div className="flex gap-1">
+            <div className="flex flex-col gap-1">
               <Address address={contractAddress} />
-              <Balance address={contractAddress} />
+              <div className="flex gap-1 items-center">
+                <span className="font-bold text-sm">Balance:</span>
+                <Balance address={contractAddress} className="px-0 h-1.5 min-h-[0.375rem]" />
+              </div>
             </div>
           </div>
           {chain && (
-            <p className="my-0 text-sm" style={{ color: networkColor }}>
-              <span className="font-bold">Network</span> : {chain.name}
+            <p className="my-0 text-sm">
+              <span className="font-bold">Network</span>: <span style={{ color: networkColor }}>{chain.name}</span>
             </p>
           )}
         </div>
