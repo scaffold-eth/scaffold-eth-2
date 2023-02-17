@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
-import { useContract, useNetwork, useProvider } from "wagmi";
+import { useContract, useProvider } from "wagmi";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -10,6 +10,7 @@ import {
 import { Balance, Address } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -21,14 +22,14 @@ type TContractUIProps = {
  * ToDo. Handle loading state
  **/
 const ContractUI = ({ contractName }: TContractUIProps) => {
-  const { chain } = useNetwork();
+  const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
   const deployedContractData = useDeployedContractInfo(contractName);
-  const networkColor = useNetworkColor(chain?.id);
+  const networkColor = useNetworkColor(configuredChain.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -71,9 +72,10 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               </div>
             </div>
           </div>
-          {chain && (
+          {configuredChain && (
             <p className="my-0 text-sm">
-              <span className="font-bold">Network</span>: <span style={{ color: networkColor }}>{chain.name}</span>
+              <span className="font-bold">Network</span>:{" "}
+              <span style={{ color: networkColor }}>{configuredChain.name}</span>
             </p>
           )}
         </div>
