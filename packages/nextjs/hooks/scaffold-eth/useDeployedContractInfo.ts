@@ -28,23 +28,20 @@ export const useDeployedContractInfo = (contractName: string | undefined | null)
         const deployedContract = contractsData?.[contractName as keyof typeof contractsData];
 
         if (!deployedContract || !contractName || !provider) {
-          setLoading(false);
           return;
         }
 
         const code = await provider.getCode(deployedContract.address);
         // If contract code is `0x` => no contract deployed on that address
         if (code === "0x" || !contractsData || !(contractName in contractsData)) {
-          setLoading(false);
           return;
         }
-        setLoading(false);
         setDeployedContractData(contractsData[contractName]);
       } catch (e) {
         // Contract not deployed or file doesn't exist.
-        setLoading(false);
         setDeployedContractData(undefined);
-        return;
+      } finally {
+        setLoading(false);
       }
     };
 

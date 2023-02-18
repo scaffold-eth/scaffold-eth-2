@@ -1,16 +1,16 @@
-const SkeletonP = ({ style }: { style?: string }) => {
-  return <p className={`my-0 mt-2 w-24 h-3 bg-gray-500 animate-pulse rounded-md ${style}`}></p>;
+const SkeletonP = ({ className = "" }: { className?: string }) => {
+  return <p className={`my-0 mt-2 w-24 h-3 bg-gray-500 animate-pulse rounded-md ${className}`}></p>;
 };
 
-const SkeletonDiv = ({ style }: { style?: string }) => {
-  return <div className={`h-6 w-6 bg-gray-400 animate-pulse rounded-md ${style}`}></div>;
+const SkeletonDiv = ({ className = "" }: { className?: string }) => {
+  return <div className={`h-6 w-6 bg-gray-400 animate-pulse rounded-md ${className}`}></div>;
 };
 
 const SkeletonInputButton = () => {
   return (
     <div className="flex flex-col">
-      <SkeletonDiv style="!w-full !rounded-2xl !h-7 mb-2" />
-      <SkeletonDiv style="self-end !w-20 !h-6 !rounded-xl" />
+      <SkeletonDiv className="!w-full !rounded-2xl !h-7 mb-2" />
+      <SkeletonDiv className="self-end !w-20 !h-6 !rounded-xl" />
     </div>
   );
 };
@@ -29,12 +29,12 @@ const SkeletonContractUI = () => {
             <div className="flex">
               <div className="flex flex-col gap-1">
                 <div className="flex space-x-2 items-center">
-                  <SkeletonDiv style="!rounded-full" />
-                  <SkeletonP style="w-24" />
+                  <SkeletonDiv className="!rounded-full" />
+                  <SkeletonP className="w-24" />
                 </div>
                 <div className="flex flex-col">
-                  <SkeletonP style="w-28" />
-                  <SkeletonP style="w-28" />
+                  <SkeletonP className="w-28" />
+                  <SkeletonP className="w-28" />
                 </div>
               </div>
             </div>
@@ -43,8 +43,8 @@ const SkeletonContractUI = () => {
             {[1, 2, 3].map(id => {
               return (
                 <div key={id} className="flex flex-col">
-                  <SkeletonP style="w-24" />
-                  <SkeletonP style="w-36" />
+                  <SkeletonP className="w-24" />
+                  <SkeletonP className="w-36" />
                 </div>
               );
             })}
@@ -65,7 +65,7 @@ const SkeletonContractUI = () => {
               </div>
               <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
                 <div className="space-y-5">
-                  <SkeletonP style="mt-0 !h-4 w-28" />
+                  <SkeletonP className="mt-0 !h-4 w-28" />
                   <SkeletonInputButton />
                 </div>
               </div>
@@ -85,11 +85,11 @@ const SkeletonContractUI = () => {
               </div>
               <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200 space-y-4">
                 <div className="space-y-5">
-                  <SkeletonP style="mt-0 !h-4 w-28" />
+                  <SkeletonP className="mt-0 !h-4 w-28" />
                   <SkeletonInputButton />
                 </div>
                 <div className="space-y-5">
-                  <SkeletonP style="mt-0 !h-4 w-28" />
+                  <SkeletonP className="mt-0 !h-4 w-28" />
                   <SkeletonInputButton />
                 </div>
               </div>
