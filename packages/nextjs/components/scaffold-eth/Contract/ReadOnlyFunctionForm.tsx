@@ -22,7 +22,7 @@ type TReadOnlyFunctionFormProps = {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [result, setResult] = useState<unknown>();
+  const [result, setResult] = useState<unknown>(undefined);
   const configuredChain = getTargetNetwork();
 
   const { isFetching, refetch } = useContractRead({
@@ -43,7 +43,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
       <InputUI
         key={key}
         setForm={updatedFormValue => {
-          setResult(null);
+          setResult(undefined);
           setForm(updatedFormValue);
         }}
         form={form}
