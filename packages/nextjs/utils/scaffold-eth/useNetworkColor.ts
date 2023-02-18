@@ -1,10 +1,9 @@
-import { getNetworkDetailsByChainId } from "./networks";
+import { getTargetNetwork } from "./networks";
 import { useDarkMode } from "usehooks-ts";
 
-export function useNetworkColor(chainId?: number) {
+export function useNetworkColor() {
   const { isDarkMode } = useDarkMode();
-  const networkDetails = chainId && getNetworkDetailsByChainId(chainId);
-  if (!networkDetails) return "#666666";
+  const networkDetails = getTargetNetwork();
 
   return Array.isArray(networkDetails.color)
     ? isDarkMode
