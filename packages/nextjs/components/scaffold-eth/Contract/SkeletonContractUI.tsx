@@ -15,11 +15,6 @@ const SkeletonInputButton = () => {
   );
 };
 
-/**
- * UI component to interface with deployed contracts.
- *
- * ToDo. Handle loading state
- **/
 const SkeletonContractUI = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-6 py-12 px-10 lg:gap-12 w-full max-w-7xl my-0">
