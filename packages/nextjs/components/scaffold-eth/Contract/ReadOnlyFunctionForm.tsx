@@ -22,7 +22,7 @@ type TReadOnlyFunctionFormProps = {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [result, setResult] = useState<unknown>(undefined);
+  const [result, setResult] = useState<unknown>();
   const configuredChain = getTargetNetwork();
 
   const { isFetching, refetch } = useContractRead({
