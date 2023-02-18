@@ -4,16 +4,14 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
 import { useSwitchNetwork } from "wagmi";
-import * as chain from "wagmi/chains";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
   enableBurnerWallet: true,
   autoConnect: true,
 };
-
-type ChainName = keyof typeof chain;
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -22,14 +20,10 @@ export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
   const { switchNetwork } = useSwitchNetwork();
 
-  const publicNetworkName = String(process.env.NEXT_PUBLIC_NETWORK).toLowerCase() as ChainName;
-  const definedChain = chain[publicNetworkName];
+  const configuredChain = getTargetNetwork();
 
   const onSwitchNetwork = () => {
-    if (definedChain && switchNetwork) {
-      switchNetwork(definedChain?.id);
-      return;
-    }
+    switchNetwork?.(configuredChain.id);
   };
 
   return (
@@ -49,13 +43,13 @@ export default function RainbowKitCustomConnectButton() {
                 );
               }
 
-              if (chain.unsupported || chain.id !== definedChain?.id) {
+              if (chain.unsupported || chain.id !== configuredChain.id) {
                 return (
                   <div className="rounded-md shadow-lg p-2">
                     <span className="text-error mr-2">Wrong network selected - ({chain.name})</span>
                     <span className="text-primary mr-2">Switch network to</span>
                     <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
-                      {publicNetworkName}
+                      {configuredChain.name}
                     </button>
                   </div>
                 );
