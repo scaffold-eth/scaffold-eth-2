@@ -14,37 +14,42 @@ type GeneratedContractType = {
 export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const configuredChain = getTargetNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
+  const [loading, setLoading] = useState(true);
   const provider = useProvider({ chainId: configuredChain.id });
 
   useEffect(() => {
     const getDeployedContractInfo = async () => {
+      setLoading(true);
       let ContractData;
       try {
         ContractData = require("~~/generated/hardhat_contracts.json");
         const contractsAtChain = ContractData[configuredChain.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
-        const deployedContractData = contractsData?.[contractName as keyof typeof contractsData];
+        const deployedContract = contractsData?.[contractName as keyof typeof contractsData];
 
-        if (!deployedContractData) return;
-
-        const code = await provider.getCode(deployedContractData.address);
-        // If contract code is `0x` => no contract deployed on that address
-        if (code === "0x") {
-          setDeployedContractData(undefined);
+        if (!deployedContract || !contractName || !provider) {
+          setLoading(false);
           return;
         }
-        setDeployedContractData(contractsData?.[contractName as keyof typeof contractsData]);
+
+        const code = await provider.getCode(deployedContract.address);
+        // If contract code is `0x` => no contract deployed on that address
+        if (code === "0x" || !contractsData || !(contractName in contractsData)) {
+          setLoading(false);
+          return;
+        }
+        setLoading(false);
+        setDeployedContractData(contractsData[contractName]);
       } catch (e) {
         // Contract not deployed or file doesn't exist.
+        setLoading(false);
         setDeployedContractData(undefined);
         return;
       }
     };
 
-    if (contractName && provider) {
-      getDeployedContractInfo();
-    }
+    getDeployedContractInfo();
   }, [configuredChain.id, contractName, provider]);
 
-  return deployedContractData;
+  return { data: deployedContractData, loading };
 };

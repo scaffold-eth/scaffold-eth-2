@@ -11,6 +11,7 @@ import { Balance, Address } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import SkeletonContractUI from "./SkeletonContractUI";
 
 type TContractUIProps = {
   contractName: string;
@@ -28,7 +29,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
 
   let contractAddress = "";
   let contractABI = [];
-  const deployedContractData = useDeployedContractInfo(contractName);
+  const { data: deployedContractData, loading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor(configuredChain.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
@@ -54,6 +55,10 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
     () => getContractWriteMethods(contract, displayedContractFunctions, setRefreshDisplayVariables),
     [contract, displayedContractFunctions],
   );
+
+  if (deployedContractLoading) {
+    return <SkeletonContractUI />;
+  }
 
   if (!contractAddress) {
     return <p className="text-3xl mt-14">No Contract found!</p>;
