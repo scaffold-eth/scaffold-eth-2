@@ -166,14 +166,13 @@ export const getNetworkDetailsByChainId = (id: number) => Object.values(NETWORKS
  */
 export const getTargetNetwork = () => {
   const network = process.env.NEXT_PUBLIC_NETWORK;
-  const configuredChain = NETWORKS[network ?? "hardhat"];
 
-  if (!configuredChain) {
+  if (!network || !NETWORKS[network]) {
     // If error defaults to hardhat local network
     console.error("Network name misspelled or unsupported network used in process.env");
     const hardhatChain = NETWORKS["hardhat"];
     return hardhatChain;
   }
 
-  return configuredChain;
+  return NETWORKS[network];
 };
