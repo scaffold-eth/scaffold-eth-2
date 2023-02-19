@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import InputUI from "./InputUI";
-import { getFunctionInputKey } from "./utilsContract";
-import { toast } from "~~/utils/scaffold-eth";
+import { getFunctionInputKey, getParsedContractFunctionArgs } from "./utilsContract";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -22,20 +22,20 @@ type TReadOnlyFunctionFormProps = {
 
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const keys = Object.keys(form);
-
+  const configuredChain = getTargetNetwork();
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
+    chainId: configuredChain.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
-    args: keys.map(key => form[key]),
+    args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: error => {
-      toast.error(error.message);
+      notification.error(error.message);
     },
   });
 
@@ -59,11 +59,11 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
       {inputs}
       <div className="flex justify-between gap-2">
         <div className="flex-grow">
-          {result ? (
+          {result !== null && result !== undefined && (
             <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
               <strong>Result</strong>: {displayTxResult(result)}
             </span>
-          ) : null}
+          )}
         </div>
         <button
           className={`btn btn-secondary btn-sm ${isFetching ? "loading" : ""}`}

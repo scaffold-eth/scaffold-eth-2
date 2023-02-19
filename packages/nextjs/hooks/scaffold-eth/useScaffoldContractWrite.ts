@@ -1,7 +1,7 @@
 import { utils } from "ethers";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 
@@ -13,10 +13,13 @@ import { useDeployedContractInfo } from "./useDeployedContractInfo";
  * @param value - value in ETH that will be sent with transaction
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
-  const deployedContractData = useDeployedContractInfo({ contractName });
+  const configuredChain = getTargetNetwork();
+  const deployedContractData = useDeployedContractInfo(contractName);
+  const { chain } = useNetwork();
   const writeTx = useTransactor();
 
   const { config } = usePrepareContractWrite({
+    chainId: configuredChain.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
     args,
@@ -30,19 +33,27 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      toast.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      return;
+    }
+    if (!chain?.id) {
+      notification.error("Please connect your wallet");
+      return;
+    }
+    if (chain?.id !== configuredChain.id) {
+      notification.error("You on the wrong network");
       return;
     }
 
-    if (wagmiContractWrite.writeAsync && writeTx) {
+    if (wagmiContractWrite.writeAsync) {
       try {
         await writeTx(wagmiContractWrite.writeAsync());
       } catch (e: any) {
         const message = getParsedEthersError(e);
-        toast.error(message);
+        notification.error(message);
       }
     } else {
-      toast.error("Contract writer TX still not ready. Try again.");
+      notification.error("Contract writer error. Try again.");
       return;
     }
   };

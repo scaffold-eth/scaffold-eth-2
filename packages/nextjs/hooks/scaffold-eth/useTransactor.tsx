@@ -4,7 +4,7 @@ import { BigNumber, ethers, Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
-import { getBlockExplorerTxLink, toast } from "~~/utils/scaffold-eth";
+import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
@@ -12,9 +12,9 @@ type TTransactionFunc = (
 ) => Promise<Record<string, any> | undefined>;
 
 /**
- * Custom toast content for TXs.
+ * Custom notification content for TXs.
  */
-const TxnToast = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
+const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
   return (
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
@@ -33,7 +33,7 @@ const TxnToast = ({ message, blockExplorerLink }: { message: string; blockExplor
  * @param gasPrice
  * @dev If signer is provided => dev wants to send a raw tx.
  */
-export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc | undefined => {
+export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc => {
   let signer = _signer;
   const { data } = useSigner();
   if (signer === undefined && data) {
@@ -42,17 +42,19 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
 
   const result: TTransactionFunc = async (tx, callback) => {
     if (!signer) {
+      notification.error("Wallet/Signer not connected");
+      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
       return;
     }
 
-    let toastId = null;
+    let notificationId = null;
     let transactionReceipt: TransactionReceipt | undefined;
     let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
     try {
       const provider = signer.provider;
       const network = await provider?.getNetwork();
 
-      toastId = toast.loading(<TxnToast message="Awaiting for user confirmation" />);
+      notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
       if (tx instanceof Promise) {
         // Tx is already prepared by the caller
         transactionResponse = await tx;
@@ -69,17 +71,19 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }
-      toast.remove(toastId);
+      notification.remove(notificationId);
 
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
-      toastId = toast.loading(
-        <TxnToast message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
+      notificationId = notification.loading(
+        <TxnNotification message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
       );
       transactionReceipt = await transactionResponse.wait();
-      toast.remove(toastId);
+      notification.remove(notificationId);
 
-      toast.success(<TxnToast message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, { icon: "🎉" });
+      notification.success(<TxnNotification message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, {
+        icon: "🎉",
+      });
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
@@ -87,13 +91,13 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         }
       }
     } catch (error: any) {
-      if (toastId) {
-        toast.remove(toastId);
+      if (notificationId) {
+        notification.remove(notificationId);
       }
       // TODO handle error properly
-      console.error("⚡️ ~ file: useTransactor.ts ~ line 98 ~ constresult:TTransactionFunc= ~ error", error);
+      console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
       const message = getParsedEthersError(error);
-      toast.error(message);
+      notification.error(message);
     }
 
     return transactionResponse;

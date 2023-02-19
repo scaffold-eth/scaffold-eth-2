@@ -1,132 +1,132 @@
 import { Network } from "@ethersproject/networks";
 
-type TChainAttributes = {
+export type TChainAttributes = {
   name: string;
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
-  chainId: number;
+  id: number;
 };
 
 export const NETWORKS: Record<string, TChainAttributes> = {
-  localhost: {
-    name: "localhost",
+  hardhat: {
+    name: "hardhat",
     color: ["#666666", "#bbbbbb"],
-    chainId: 31337,
+    id: 31337,
   },
   mainnet: {
     name: "mainnet",
     color: "#ff8b9e",
-    chainId: 1,
+    id: 1,
   },
   goerli: {
     name: "goerli",
     color: "#0975F6",
-    chainId: 5,
+    id: 5,
   },
   gnosis: {
     name: "gnosis",
     color: "#48a9a6",
-    chainId: 100,
+    id: 100,
   },
   polygon: {
     name: "polygon",
     color: "#2bbdf7",
-    chainId: 137,
+    id: 137,
   },
   mumbai: {
     name: "mumbai",
     color: "#92D9FA",
-    chainId: 80001,
+    id: 80001,
   },
   localOptimismL1: {
     name: "localOptimismL1",
     color: "#f01a37",
-    chainId: 31337,
+    id: 31337,
   },
   localOptimism: {
     name: "localOptimism",
     color: "#f01a37",
-    chainId: 420,
+    id: 420,
   },
   goerliOptimism: {
     name: "goerliOptimism",
     color: "#f01a37",
-    chainId: 420,
+    id: 420,
   },
   optimism: {
     name: "optimism",
     color: "#f01a37",
-    chainId: 10,
+    id: 10,
   },
   goerliArbitrum: {
     name: "goerliArbitrum",
     color: "#28a0f0",
-    chainId: 421613,
+    id: 421613,
   },
   arbitrum: {
     name: "arbitrum",
     color: "#28a0f0",
-    chainId: 42161,
+    id: 42161,
   },
   devnetArbitrum: {
     name: "devnetArbitrum",
     color: "#28a0f0",
-    chainId: 421612,
+    id: 421612,
   },
   localAvalanche: {
     name: "localAvalanche",
     color: ["#666666", "#bbbbbb"],
-    chainId: 43112,
+    id: 43112,
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
     color: ["#666666", "#bbbbbb"],
-    chainId: 43113,
+    id: 43113,
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
     color: ["#666666", "#bbbbbb"],
-    chainId: 43114,
+    id: 43114,
   },
   testnetHarmony: {
     name: "testnetHarmony",
     color: "#00b0ef",
-    chainId: 1666700000,
+    id: 1666700000,
   },
   mainnetHarmony: {
     name: "mainnetHarmony",
     color: "#00b0ef",
-    chainId: 1666600000,
+    id: 1666600000,
   },
   fantom: {
     name: "fantom",
     color: "#1969ff",
-    chainId: 250,
+    id: 250,
   },
   testnetFantom: {
     name: "testnetFantom",
     color: "#1969ff",
-    chainId: 4002,
+    id: 4002,
   },
   moonbeam: {
     name: "moonbeam",
     color: "#53CBC9",
-    chainId: 1284,
+    id: 1284,
   },
   moonriver: {
     name: "moonriver",
     color: "#53CBC9",
-    chainId: 1285,
+    id: 1285,
   },
   moonbaseAlpha: {
     name: "moonbaseAlpha",
     color: "#53CBC9",
-    chainId: 1287,
+    id: 1287,
   },
   moonbeamDevNode: {
     name: "moonbeamDevNode",
     color: "#53CBC9",
-    chainId: 1281,
+    id: 1281,
   },
 };
 
@@ -159,5 +159,21 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   return blockExplorerTxURL;
 }
 
-export const getNetworkDetailsByChainId = (chainId: number) =>
-  Object.values(NETWORKS).find(val => val.chainId === chainId);
+export const getNetworkDetailsByChainId = (id: number) => Object.values(NETWORKS).find(val => val.id === id);
+
+/**
+ * @dev Returns the target network metadata or defaults to hardhat if the network is unsupported/undefined
+ */
+export const getTargetNetwork = () => {
+  const network = process.env.NEXT_PUBLIC_NETWORK;
+  const configuredChain = NETWORKS[network ?? "hardhat"];
+
+  if (!configuredChain) {
+    // If error defaults to hardhat local network
+    console.error("Network name misspelled or unsupported network used in process.env");
+    const hardhatChain = NETWORKS["hardhat"];
+    return hardhatChain;
+  }
+
+  return configuredChain;
+};

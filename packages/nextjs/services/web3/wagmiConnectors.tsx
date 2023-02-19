@@ -18,11 +18,11 @@ import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletCo
  */
 export const appChains = configureChains(
   [
+    hardhat,
     mainnet,
     polygon,
     optimism,
     arbitrum,
-    hardhat,
     polygon,
     // todo replace with config instead of env
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, polygonMumbai] : []),

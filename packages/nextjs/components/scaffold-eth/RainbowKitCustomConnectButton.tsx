@@ -5,6 +5,7 @@ import { TAutoConnect, useAutoConnect } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
 import { useSwitchNetwork } from "wagmi";
 import * as chain from "wagmi/chains";
+import { BlockieAvatar } from "~~/components/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -84,7 +85,8 @@ export default function RainbowKitCustomConnectButton() {
                     <div className="hidden sm:inline-block">
                       <Balance address={account.address} />
                     </div>
-                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm">
+                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm pl-2 shadow-md">
+                      <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
                       <span className="m-1">{account.displayName}</span>
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />

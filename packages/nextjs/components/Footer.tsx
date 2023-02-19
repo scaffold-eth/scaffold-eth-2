@@ -3,23 +3,28 @@ import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "~~/services/store/store";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import SwitchTheme from "./SwitchTheme";
+import { Faucet } from "~~/components/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { hardhat } from "wagmi/chains";
 
 /**
  * Site footer
  */
 export default function Footer() {
-  const ethPrice = useAppStore(state => state.ethPriceSlice.ethPrice);
+  const ethPrice = useAppStore(state => state.ethPrice);
+  const configuredNetwork = getTargetNetwork();
 
   return (
     <div className="min-h-0 p-5 flex justify-between items-center flex-col sm:flex-row gap-4">
       <div>
-        <div className="fixed z-10 m-4 bottom-0 left-0">
+        <div className="flex space-x-2 fixed z-10 m-4 bottom-0 left-0">
           {ethPrice > 0 && (
             <div className="btn btn-primary btn-sm font-normal cursor-auto">
               <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
               <span>{ethPrice}</span>
             </div>
           )}
+          {configuredNetwork.id === hardhat.id && <Faucet />}
         </div>
       </div>
       <div>

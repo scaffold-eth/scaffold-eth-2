@@ -1,5 +1,6 @@
 import { useContractRead } from "wagmi";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type GeneratedContract<TAbi> = {
   readonly address: string;
@@ -17,7 +18,10 @@ export const useScaffoldContractRead = <TAbi extends Abi>(
   functionName: ExtractAbiFunctionNames<TAbi>,
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
+  const configuredChain = getTargetNetwork();
+
   return useContractRead({
+    chainId: configuredChain.id,
     functionName,
     address: contractData.address,
     abi: contractData.abi,

@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
-import { useContract, useNetwork, useProvider } from "wagmi";
+import { useContract, useProvider } from "wagmi";
 import {
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
@@ -8,8 +8,9 @@ import {
   getContractWriteMethods,
 } from "./utilsContract";
 import { Balance, Address } from "~~/components/scaffold-eth";
-import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { useNetworkColor } from "~~/utils/scaffold-eth/useNetworkColor";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -21,14 +22,14 @@ type TContractUIProps = {
  * ToDo. Handle loading state
  **/
 const ContractUI = ({ contractName }: TContractUIProps) => {
-  const { chain } = useNetwork();
+  const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
 
   let contractAddress = "";
   let contractABI = [];
-  const deployedContractData = useDeployedContractInfo({ contractName });
-  const networkColor = useNetworkColor(chain?.id);
+  const deployedContractData = useDeployedContractInfo(contractName);
+  const networkColor = useNetworkColor(configuredChain.id);
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);
   }
@@ -59,8 +60,30 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   }
 
   return (
-    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10 justify-between">
-      <div className="col-span-2 flex flex-col gap-6">
+    <div className="col-span-5 grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="col-span-1 flex flex-col">
+        <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
+          <div className="flex">
+            <div className="flex flex-col gap-1">
+              <Address address={contractAddress} />
+              <div className="flex gap-1 items-center">
+                <span className="font-bold text-sm">Balance:</span>
+                <Balance address={contractAddress} className="px-0 h-1.5 min-h-[0.375rem]" />
+              </div>
+            </div>
+          </div>
+          {configuredChain && (
+            <p className="my-0 text-sm">
+              <span className="font-bold">Network</span>:{" "}
+              <span style={{ color: networkColor }}>{configuredChain.name}</span>
+            </p>
+          )}
+        </div>
+        <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
+          {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
+        </div>
+      </div>
+      <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
         <div className="z-10">
           <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
             <input
@@ -94,24 +117,6 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
               {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
             </div>
           </div>
-        </div>
-      </div>
-      <div className="row-span-1 self-start flex flex-col">
-        <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-8 mb-6 space-y-1 py-4">
-          {chain && (
-            <p className="font-medium my-0" style={{ color: networkColor }}>
-              {chain.name}
-            </p>
-          )}
-          <div className="flex">
-            <div className="flex gap-1">
-              <Address address={contractAddress} />
-              <Balance address={contractAddress} />
-            </div>
-          </div>
-        </div>
-        <div className="bg-base-300 rounded-3xl px-8 py-4 shadow-lg shadow-base-300">
-          {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
         </div>
       </div>
     </div>

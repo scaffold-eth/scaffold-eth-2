@@ -3,7 +3,8 @@ import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { toast } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -12,19 +13,23 @@ type TDisplayVariableProps = {
 };
 
 const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
+  const configuredChain = getTargetNetwork();
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
+    chainId: configuredChain.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
     args: [],
     onError: error => {
-      toast.error(error.message);
+      notification.error(error.message);
     },
   });
+
+  const { showAnimation } = useAnimationConfig(result);
 
   useEffect(() => {
     refetch();
@@ -38,8 +43,16 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
       </div>
-      <div className="text-gray-500 font-medium">
-        <span className="break-words block">{displayTxResult(result)}</span>
+      <div className="text-gray-500 font-medium flex flex-col items-start">
+        <div>
+          <div
+            className={`break-words block transition bg-transparent ${
+              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
+            }`}
+          >
+            {displayTxResult(result)}
+          </div>
+        </div>
       </div>
     </div>
   );
