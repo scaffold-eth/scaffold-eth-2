@@ -1,11 +1,11 @@
 import * as fs from "fs";
-//@ts-expect-error - This script runs after `hardhat deploy --export` therefore its deterministic that it will preset
+//@ts-expect-error  This script runs after `hardhat deploy --export` therefore its deterministic that it will present
 import allGeneratedContracts from "../../nextjs/generated/hardhat_contracts.json";
 
 async function main() {
   const GENERATED_PATH = "../nextjs/generated/hardhat_contracts";
   fs.writeFileSync(
-    `${GENERATED_PATH}.json`,
+    `${GENERATED_PATH}.ts`,
     `export default ${JSON.stringify(allGeneratedContracts, null, 2)} as const;`,
   );
   // remove json file due to ambiguity

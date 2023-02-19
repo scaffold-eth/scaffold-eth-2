@@ -18,9 +18,9 @@ export const useDeployedContractInfo = (contractName: string | undefined | null)
 
   useEffect(() => {
     const getDeployedContractInfo = async () => {
-      let ContractData;
       try {
-        ContractData = require("~~/generated/hardhat_contracts.json");
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { default: ContractData } = require("~~/generated/hardhat_contracts.ts");
         const contractsAtChain = ContractData[configuredChain.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
         const deployedContractData = contractsData?.[contractName as keyof typeof contractsData];
