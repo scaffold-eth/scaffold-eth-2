@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import YourContractAbi from "../../generated/abi/YourContract";
-import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
-
+import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 const MARQUEE_PERIOD_IN_SEC = 5;
 
 export default function ContractData() {
@@ -14,9 +12,9 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  const { data: totalCounter, isLoading: isGreetingLoading } = useScaffoldContractRead(YourContractAbi, "totalCounter");
+  const { data: totalCounter } = useScaffoldContractRead("YourContract", "totalCounter");
 
-  const { data: currentGreeting } = useScaffoldContractRead(YourContractAbi, "greeting") as { data: string };
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead("YourContract", "greeting");
 
   useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
     console.log(greetingSetter, newGreeting, premium, value);

@@ -1,11 +1,21 @@
 import { useContractRead } from "wagmi";
-import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiFunctionNames, ExtractAbiFunction } from "abitype";
+import contracts from "../../generated/hardhat_contracts";
 
-type GeneratedContract<TAbi> = {
-  readonly address: string;
-  readonly abi: TAbi;
-};
+const TARGET_NETWORK: keyof typeof contracts = "31337";
+
+type AbiReturnParameters<TAbi extends Abi, TFunctionName extends string> = ExtractAbiFunction<
+  TAbi,
+  TFunctionName
+>["outputs"];
+
+type AbiReturnType<TAbi extends Abi, TFunctionName extends string> = AbiParametersToPrimitiveTypes<
+  AbiReturnParameters<TAbi, TFunctionName>
+>[0];
+
+type TContractAbi<TContractName extends keyof typeof contracts[typeof TARGET_NETWORK][0]["contracts"]> =
+  typeof contracts[typeof TARGET_NETWORK][0]["contracts"][TContractName]["abi"];
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
@@ -13,9 +23,12 @@ type GeneratedContract<TAbi> = {
  * @param functionName - name of the function to be called
  * @param readConfig   - wagmi configurations
  */
-export const useScaffoldContractRead = <TAbi extends Abi>(
-  contractData: GeneratedContract<TAbi>,
-  functionName: ExtractAbiFunctionNames<TAbi>,
+export const useScaffoldContractRead = <
+  TContractName extends keyof typeof contracts[typeof TARGET_NETWORK][0]["contracts"],
+  TFunctionName extends ExtractAbiFunctionNames<TContractAbi<TContractName>>,
+>(
+  contractName: TContractName,
+  functionName: TFunctionName,
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
   const configuredChain = getTargetNetwork();
@@ -23,9 +36,15 @@ export const useScaffoldContractRead = <TAbi extends Abi>(
   return useContractRead({
     chainId: configuredChain.id,
     functionName,
-    address: contractData.address,
-    abi: contractData.abi,
+    address: contracts[TARGET_NETWORK][0].contracts[contractName].address,
+    abi: contracts[TARGET_NETWORK][0].contracts[contractName].abi,
     watch: true,
     ...readConfig,
-  });
+  }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
+    data: AbiReturnType<TContractAbi<TContractName>, TFunctionName>;
+    refetch: (options?: {
+      throwOnError: boolean;
+      cancelRefetch: boolean;
+    }) => Promise<AbiReturnType<TContractAbi<TContractName>, TFunctionName>>;
+  };
 };
