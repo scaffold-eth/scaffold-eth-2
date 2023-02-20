@@ -41,7 +41,7 @@ export const displayTxResult = (
   return JSON.stringify(displayContent, null, 2);
 };
 
-const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);
+export const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);
 
 interface IUtilityButton {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
