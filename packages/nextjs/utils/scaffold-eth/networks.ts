@@ -10,7 +10,7 @@ export type TChainAttributes = {
 
 export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
 
-export const NETWORKS: Record<string, TChainAttributes> = {
+export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   hardhat: {
     name: "hardhat",
     color: DEFAULT_NETWORK_COLOR,
@@ -161,8 +161,6 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 
   return blockExplorerTxURL;
 }
-
-export const getNetworkDetailsByChainId = (id: number) => Object.values(NETWORKS).find(val => val.id === id);
 
 /**
  * Get the wagmi's Chain target network configured in the app.

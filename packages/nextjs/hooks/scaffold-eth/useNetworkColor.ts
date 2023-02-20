@@ -1,4 +1,4 @@
-import { getTargetNetwork, NETWORKS } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, NETWORKS_EXTRA_DATA } from "~~/utils/scaffold-eth";
 import { useDarkMode } from "usehooks-ts";
 
 /**
@@ -7,7 +7,7 @@ import { useDarkMode } from "usehooks-ts";
 export const useNetworkColor = () => {
   const { isDarkMode } = useDarkMode();
   const configuredChain = getTargetNetwork();
-  const networkDetails = NETWORKS[configuredChain.name];
+  const networkDetails = NETWORKS_EXTRA_DATA[configuredChain.name];
 
   return Array.isArray(networkDetails.color)
     ? isDarkMode
