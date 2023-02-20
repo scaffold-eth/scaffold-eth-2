@@ -8,12 +8,10 @@ export type TChainAttributes = {
   id: number;
 };
 
-export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
-
 export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   [chains.hardhat.id]: {
     name: "hardhat",
-    color: DEFAULT_NETWORK_COLOR,
+    color: "#b8af0c",
     id: 31337,
   },
   [chains.mainnet.id]: {
@@ -60,16 +58,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
     name: "arbitrum",
     color: "#28a0f0",
     id: 42161,
-  },
-  [chains.avalancheFuji.id]: {
-    name: "fujiAvalanche",
-    color: DEFAULT_NETWORK_COLOR,
-    id: 43113,
-  },
-  [chains.avalanche.id]: {
-    name: "mainnetAvalanche",
-    color: DEFAULT_NETWORK_COLOR,
-    id: 43114,
   },
   [chains.fantom.id]: {
     name: "fantom",
