@@ -56,8 +56,8 @@ export default function Header() {
   );
 
   return (
-    <div className="navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-10">
-      <div className="navbar-start w-auto lg:w-1/2 ">
+    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md lg:shadow-none shadow-secondary">
+      <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <button
             className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
