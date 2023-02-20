@@ -18,8 +18,9 @@ type TContractAbi<TContractName extends keyof typeof contracts[typeof TARGET_NET
   typeof contracts[typeof TARGET_NETWORK][0]["contracts"][TContractName]["abi"];
 
 /**
- * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
- * @param contractData - generated contract data
+ * Wrapper for wagmi's useContractRead hook which loads a deployed contract ABI & Address automatically
+ *
+ * @param contractName - generated contract data
  * @param functionName - name of the function to be called
  * @param readConfig   - wagmi configurations
  */
