@@ -1,3 +1,4 @@
+import * as chains from "wagmi/chains";
 import { Network } from "@ethersproject/networks";
 
 export type TChainAttributes = {
@@ -164,17 +165,16 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 export const getNetworkDetailsByChainId = (id: number) => Object.values(NETWORKS).find(val => val.id === id);
 
 /**
- * @dev Returns the target network metadata or defaults to hardhat if the network is unsupported/undefined
+ * Get the wagmi's Chain target network configured in the app.
  */
 export const getTargetNetwork = () => {
-  const network = process.env.NEXT_PUBLIC_NETWORK;
+  const network = process.env.NEXT_PUBLIC_NETWORK as keyof typeof chains;
 
-  if (!network || !NETWORKS[network]) {
+  if (!network || !chains[network]) {
     // If error defaults to hardhat local network
     console.error("Network name is not set, misspelled or unsupported network used in .env.*");
-    const hardhatChain = NETWORKS["hardhat"];
-    return hardhatChain;
+    return chains.hardhat;
   }
 
-  return NETWORKS[network];
+  return chains[network];
 };
