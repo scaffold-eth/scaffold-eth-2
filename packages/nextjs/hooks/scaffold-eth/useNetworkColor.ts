@@ -1,14 +1,16 @@
-import { getNetworkDetailsByChainId } from "./networks";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { useDarkMode } from "usehooks-ts";
 
-export function useNetworkColor(chainId?: number) {
+/**
+ * Gets the color of the target network
+ */
+export const useNetworkColor = () => {
   const { isDarkMode } = useDarkMode();
-  const networkDetails = chainId && getNetworkDetailsByChainId(chainId);
-  if (!networkDetails) return "#666666";
+  const networkDetails = getTargetNetwork();
 
   return Array.isArray(networkDetails.color)
     ? isDarkMode
       ? networkDetails.color[1]
       : networkDetails.color[0]
     : networkDetails.color;
-}
+};

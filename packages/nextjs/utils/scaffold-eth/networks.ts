@@ -7,10 +7,12 @@ export type TChainAttributes = {
   id: number;
 };
 
+export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
+
 export const NETWORKS: Record<string, TChainAttributes> = {
   hardhat: {
     name: "hardhat",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 31337,
   },
   mainnet: {
@@ -75,17 +77,17 @@ export const NETWORKS: Record<string, TChainAttributes> = {
   },
   localAvalanche: {
     name: "localAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43112,
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43113,
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43114,
   },
   testnetHarmony: {
@@ -166,14 +168,13 @@ export const getNetworkDetailsByChainId = (id: number) => Object.values(NETWORKS
  */
 export const getTargetNetwork = () => {
   const network = process.env.NEXT_PUBLIC_NETWORK;
-  const configuredChain = NETWORKS[network ?? "hardhat"];
 
-  if (!configuredChain) {
+  if (!network || !NETWORKS[network]) {
     // If error defaults to hardhat local network
-    console.error("Network name misspelled or unsupported network used in process.env");
+    console.error("Network name is not set, misspelled or unsupported network used in .env.*");
     const hardhatChain = NETWORKS["hardhat"];
     return hardhatChain;
   }
 
-  return configuredChain;
+  return NETWORKS[network];
 };
