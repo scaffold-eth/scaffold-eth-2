@@ -7,7 +7,7 @@ import { useDarkMode } from "usehooks-ts";
 export const useNetworkColor = () => {
   const { isDarkMode } = useDarkMode();
   const configuredChain = getTargetNetwork();
-  const networkDetails = NETWORKS_EXTRA_DATA[configuredChain.name];
+  const networkDetails = NETWORKS_EXTRA_DATA[configuredChain.id];
 
   return Array.isArray(networkDetails.color)
     ? isDarkMode
