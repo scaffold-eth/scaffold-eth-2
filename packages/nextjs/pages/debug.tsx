@@ -5,9 +5,7 @@ const Debug: NextPage = () => {
   return (
     <>
       <div className="flex justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-6 py-12 px-10 lg:gap-12 w-full max-w-7xl my-0">
-          <ContractUI contractName="YourContract" />
-        </div>
+        <ContractUI contractName="YourContract" />
       </div>
       <div className="text-center mt-8 bg-secondary p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>

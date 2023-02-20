@@ -14,37 +14,39 @@ type GeneratedContractType = {
 export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const configuredChain = getTargetNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
   const provider = useProvider({ chainId: configuredChain.id });
 
   useEffect(() => {
     const getDeployedContractInfo = async () => {
+      setIsLoading(true);
       let ContractData;
       try {
         ContractData = require("~~/generated/hardhat_contracts.json");
         const contractsAtChain = ContractData[configuredChain.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
-        const deployedContractData = contractsData?.[contractName as keyof typeof contractsData];
+        const deployedContract = contractsData?.[contractName as keyof typeof contractsData];
 
-        if (!deployedContractData) return;
-
-        const code = await provider.getCode(deployedContractData.address);
-        // If contract code is `0x` => no contract deployed on that address
-        if (code === "0x") {
-          setDeployedContractData(undefined);
+        if (!deployedContract || !contractName || !provider) {
           return;
         }
-        setDeployedContractData(contractsData?.[contractName as keyof typeof contractsData]);
+
+        const code = await provider.getCode(deployedContract.address);
+        // If contract code is `0x` => no contract deployed on that address
+        if (code === "0x" || !contractsData || !(contractName in contractsData)) {
+          return;
+        }
+        setDeployedContractData(contractsData[contractName]);
       } catch (e) {
         // Contract not deployed or file doesn't exist.
         setDeployedContractData(undefined);
-        return;
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (contractName && provider) {
-      getDeployedContractInfo();
-    }
+    getDeployedContractInfo();
   }, [configuredChain.id, contractName, provider]);
 
-  return deployedContractData;
+  return { data: deployedContractData, isLoading };
 };

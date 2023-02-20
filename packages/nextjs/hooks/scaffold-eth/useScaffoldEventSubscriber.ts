@@ -17,7 +17,7 @@ export const useScaffoldEventSubscriber = (
   once = false,
 ) => {
   const configuredChain = getTargetNetwork();
-  const deployedContractData = useDeployedContractInfo(contractName);
+  const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
   return useContractEvent({
     address: deployedContractData?.address,
