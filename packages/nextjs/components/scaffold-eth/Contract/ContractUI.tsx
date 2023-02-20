@@ -28,7 +28,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
 
   let contractAddress = "";
   let contractABI = [];
-  const { data: deployedContractData, loading: deployedContractLoading } = useDeployedContractInfo(contractName);
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
   if (deployedContractData) {
     ({ address: contractAddress, abi: contractABI } = deployedContractData);

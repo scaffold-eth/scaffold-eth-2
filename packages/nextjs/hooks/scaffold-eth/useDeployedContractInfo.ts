@@ -14,12 +14,12 @@ type GeneratedContractType = {
 export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const configuredChain = getTargetNetwork();
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const provider = useProvider({ chainId: configuredChain.id });
 
   useEffect(() => {
     const getDeployedContractInfo = async () => {
-      setLoading(true);
+      setIsLoading(true);
       let ContractData;
       try {
         ContractData = require("~~/generated/hardhat_contracts.json");
@@ -41,12 +41,12 @@ export const useDeployedContractInfo = (contractName: string | undefined | null)
         // Contract not deployed or file doesn't exist.
         setDeployedContractData(undefined);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     getDeployedContractInfo();
   }, [configuredChain.id, contractName, provider]);
 
-  return { data: deployedContractData, loading };
+  return { data: deployedContractData, isLoading };
 };
