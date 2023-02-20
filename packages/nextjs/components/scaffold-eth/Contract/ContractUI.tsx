@@ -56,7 +56,11 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   );
 
   if (deployedContractLoading) {
-    return <Spinner />;
+    return (
+      <div className="mt-14">
+        <Spinner width="50px" height="50px" />
+      </div>
+    );
   }
 
   if (!contractAddress) {
