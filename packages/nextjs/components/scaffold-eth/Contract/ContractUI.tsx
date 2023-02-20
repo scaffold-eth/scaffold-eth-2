@@ -10,7 +10,7 @@ import {
 import { Balance, Address } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import SkeletonContractUI from "./SkeletonContractUI";
+import Spinner from "~~/components/Spinner";
 
 type TContractUIProps = {
   contractName: string;
@@ -56,7 +56,7 @@ const ContractUI = ({ contractName }: TContractUIProps) => {
   );
 
   if (deployedContractLoading) {
-    return <SkeletonContractUI />;
+    return <Spinner />;
   }
 
   if (!contractAddress) {
