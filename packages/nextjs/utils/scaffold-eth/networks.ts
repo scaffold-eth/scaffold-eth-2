@@ -7,10 +7,12 @@ export type TChainAttributes = {
   id: number;
 };
 
+export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
+
 export const NETWORKS: Record<string, TChainAttributes> = {
   hardhat: {
     name: "hardhat",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 31337,
   },
   mainnet: {
@@ -75,17 +77,17 @@ export const NETWORKS: Record<string, TChainAttributes> = {
   },
   localAvalanche: {
     name: "localAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43112,
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43113,
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
-    color: ["#666666", "#bbbbbb"],
+    color: DEFAULT_NETWORK_COLOR,
     id: 43114,
   },
   testnetHarmony: {
