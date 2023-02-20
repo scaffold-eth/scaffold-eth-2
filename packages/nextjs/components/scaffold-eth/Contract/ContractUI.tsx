@@ -18,8 +18,6 @@ type TContractUIProps = {
 
 /**
  * UI component to interface with deployed contracts.
- *
- * ToDo. Handle loading state
  **/
 const ContractUI = ({ contractName }: TContractUIProps) => {
   const configuredChain = getTargetNetwork();
