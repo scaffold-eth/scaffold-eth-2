@@ -76,6 +76,14 @@ Run the command below to deploy the smart contract to the target network. Make s
 yarn deploy --network network_name
 ```
 
+4. Verify your smart contract
+
+You can verify your smart contract on Etherscan by running:
+
+```
+yarn verify --network network_name
+```
+
 ## Deploying your NextJS App
 
 Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
