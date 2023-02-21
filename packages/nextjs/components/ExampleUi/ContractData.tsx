@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
-import { BigNumber } from "ethers";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
+import {
+  useYourContractGreeting,
+  useYourContractGreetingChangeEvent,
+  useYourContractTotalCounter,
+} from "~~/generated/contractHooks";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -14,15 +18,21 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  const { data: totalCounter } = useScaffoldContractRead<BigNumber>("YourContract", "totalCounter");
+  const { data: deployedContract } = useDeployedContractInfo("YourContract");
 
-  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead<string>(
-    "YourContract",
-    "greeting",
-  );
+  const { data: totalCounter } = useYourContractTotalCounter({
+    address: deployedContract?.address,
+  });
 
-  useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
-    console.log(greetingSetter, newGreeting, premium, value);
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useYourContractGreeting({
+    address: deployedContract?.address,
+  });
+
+  useYourContractGreetingChangeEvent({
+    address: deployedContract?.address,
+    listener(greetingSetter, newGreeting, premium, value) {
+      console.log(greetingSetter, newGreeting, premium, value);
+    },
   });
 
   const { showAnimation } = useAnimationConfig(totalCounter);
