@@ -14,14 +14,12 @@ export default function ContractData() {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  // I guess this is related to: https://github.com/scaffold-eth/se-2/issues/116
-  // Ideally I'd like data to be the right type based on the function name / variable name we are calling.
-  // @ts-expect-error
-  const { data: totalCounter }: { data: BigNumber } = useScaffoldContractRead("YourContract", "totalCounter");
+  const { data: totalCounter } = useScaffoldContractRead<BigNumber>("YourContract", "totalCounter");
 
-  // @ts-expect-error
-  const { data: currentGreeting, isLoading: isGreetingLoading }: { data: string; isLoading: true } =
-    useScaffoldContractRead("YourContract", "greeting");
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead<string>(
+    "YourContract",
+    "greeting",
+  );
 
   useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
     console.log(greetingSetter, newGreeting, premium, value);
