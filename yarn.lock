@@ -1492,9 +1492,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "@rainbow-me/rainbowkit@npm:0.8.1"
+"@rainbow-me/rainbowkit@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "@rainbow-me/rainbowkit@npm:0.11.0"
   dependencies:
     "@vanilla-extract/css": 1.9.1
     "@vanilla-extract/dynamic": 2.0.2
@@ -1506,8 +1506,8 @@ __metadata:
     ethers: ">=5.5.1"
     react: ">=17"
     react-dom: ">=17"
-    wagmi: 0.9.x
-  checksum: dfc0898094815c0f3517076354b7b32a70dd1bb82973bc024c63710bb79cd84b49da1dd5f7623caa09c03944b9cf5792ed3f20941408cd07895a75279ec62d50
+    wagmi: 0.11.x
+  checksum: 696d8a9458d869bd13097f75d5c10694bb40f4353fc6b59f2e78549f2879ace3dee1add8d3c655131f5f1fabc93141f80b2c419315725bc2d1d6ca7492d25326
   languageName: node
   linkType: hard
 
@@ -1641,7 +1641,7 @@ __metadata:
     "@ethersproject/networks": ^5.7.1
     "@ethersproject/web": ^5.7.1
     "@heroicons/react": ^2.0.11
-    "@rainbow-me/rainbowkit": ^0.8.1
+    "@rainbow-me/rainbowkit": ^0.11.0
     "@types/node": ^17.0.35
     "@types/react": ^18.0.9
     "@types/react-blockies": ^1.4.1
