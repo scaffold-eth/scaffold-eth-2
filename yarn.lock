@@ -1619,7 +1619,7 @@ __metadata:
     "@types/qrcode": ^1
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
-    "@wagmi/cli": ^0.1.8
+    "@wagmi/cli": ^0.1.9
     chai: ^4.3.6
     dotenv: ^16.0.3
     envfile: ^6.18.0
@@ -2957,9 +2957,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/cli@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "@wagmi/cli@npm:0.1.8"
+"@wagmi/cli@npm:^0.1.9":
+  version: 0.1.9
+  resolution: "@wagmi/cli@npm:0.1.9"
   dependencies:
     "@ethersproject/address": ^5.7.0
     "@wagmi/chains": 0.2.8
@@ -2997,7 +2997,7 @@ __metadata:
       optional: true
   bin:
     wagmi: dist/cli.js
-  checksum: 0f949363f10ba8100ebe432b5aae1da8222a181aa41d5daf287cd340171b0571cf72f09407da622997a0ca073ebd7588697b75daf5da0cbfbbab63231d7f42c4
+  checksum: 28bb6b78503ecd25651e11dabedff7178a87a29f058fd2a05fbd150a437a6e4b0c2c7e30c88240bfb3b522e5a2b4f61ddfe9b6cc21c95f724ed294089f7b6ad5
   languageName: node
   linkType: hard
 
