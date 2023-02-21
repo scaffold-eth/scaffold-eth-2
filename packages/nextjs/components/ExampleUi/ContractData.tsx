@@ -22,10 +22,12 @@ export default function ContractData() {
 
   const { data: totalCounter } = useYourContractTotalCounter({
     address: deployedContract?.address,
+    watch: true,
   });
 
   const { data: currentGreeting, isLoading: isGreetingLoading } = useYourContractGreeting({
     address: deployedContract?.address,
+    watch: true,
   });
 
   useYourContractGreetingChangeEvent({
