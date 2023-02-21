@@ -10,7 +10,8 @@
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
-    "vercel": "vercel"
+    "vercel": "vercel",
+    "vercel:yolo" : "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
