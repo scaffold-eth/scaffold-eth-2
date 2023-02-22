@@ -4,6 +4,7 @@ coverage
 coverage.json
 typechain
 typechain-types
+wagmi.config.ts
 
 #Hardhat files
 cache
