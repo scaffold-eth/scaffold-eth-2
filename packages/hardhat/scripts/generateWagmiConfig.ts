@@ -1,73 +1,61 @@
 import * as fs from "fs";
 import * as path from "path";
-// const wagmiCongig = `
-// import { defineConfig } from "@wagmi/cli";
-// import { hardhat, react } from "@wagmi/cli/plugins";
-
-// export default defineConfig({
-//   out: "../nextjs/generated/contractHooks.ts",
-//   contracts: [],
-//   plugins: [
-//     hardhat({
-//       project: "./",
-//     }),
-//     react(),
-//   ],
-// });
-// `;
+import * as util from "util";
 const DEPLOYMENTS_PATH = "deployments";
 
-async function getAllContractsPathAndChain() {
-  // getting all directories inside deployments
-  const allChainDirectories = await fs.promises.readdir(DEPLOYMENTS_PATH);
-  // return Promise.all(
-  //   allChainDirectories.map(async dir => {
-  //     const dirPath = path.join(DEPLOYMENTS_PATH, dir);
-  //     const filesInChainsDir = await fs.promises.readdir(dirPath);
-  //     const deployedContractNameArr = filesInChainsDir.filter(value => value.includes(".json"));
-  //     console.log(
-  //       "⚡️ ~ file: generateWagmiConfig.ts:33 ~ getAllContractsPathAndChain ~ deployedContractNameArr:",
-  //       deployedContractNameArr,
-  //     );
-  //   }),
+function getParsedDeploymentsForWagmiConfig() {
+  // getting all directories inside deployments directory
+  const allChainDirectories = fs.readdirSync(DEPLOYMENTS_PATH);
+  // final constructed deployments object
   const finalObj: Record<string, Record<string | number, any>> = {};
+
   for (const dir of allChainDirectories) {
     const dirPath = path.join(DEPLOYMENTS_PATH, dir);
-    const filesInChainsDir = await fs.promises.readdir(dirPath);
+    const filesInChainsDir = fs.readdirSync(dirPath);
     const deployedContractNameArr = filesInChainsDir.filter(value => value.includes(".json"));
-    for await (const contractFileName of deployedContractNameArr) {
+    for (const contractFileName of deployedContractNameArr) {
       const filePath = path.join(dirPath, contractFileName);
-      fs.readFile(filePath, "utf8", (err, data) => {
-        if (err) {
-          console.log("Error while reading", filePath, err);
-        }
-        const parsedData = JSON.parse(data);
-        const chainId = fs.readFileSync(path.join(dirPath, ".chainId"), "utf8");
-        const buildData = {
-          [parseInt(chainId, 10)]: {
-            address: parsedData.address,
-          },
-        };
-        const contractName = contractFileName.split(".")[0];
-        finalObj[contractName] = { ...finalObj[contractName], ...buildData };
-        console.log("⚡️ ~ file: generateWagmiConfig.ts:54 ~ fs.readFile ~ finalObj:", finalObj);
-      });
+      const data = fs.readFileSync(filePath, "utf8");
+      const parsedData = JSON.parse(data);
+      const chainId = fs.readFileSync(path.join(dirPath, ".chainId"), "utf8");
+      const chainToAddress = {
+        [chainId]: parsedData.address,
+      };
+      const contractName = contractFileName.split(".")[0];
+      finalObj[contractName] = { ...finalObj[contractName], ...chainToAddress };
     }
   }
 
   return finalObj;
 }
-
-// Loop on deployments file
-// for each dir find all json file and put their name as key.
-// read number from .chainId file it will key and address will inside that json file
+/**
+ * Generates wagmi.config.ts file with deployments address mapped with contract
+ */
 async function main() {
   if (!fs.existsSync(DEPLOYMENTS_PATH)) {
     console.log("No deployments found!");
     return;
   }
-  const result = await getAllContractsPathAndChain();
-  console.log("⚡️ ~ file: generateWagmiConfig.ts:70 ~ main ~ result:", result);
+  const result = getParsedDeploymentsForWagmiConfig();
+  fs.writeFileSync(
+    "./wagmi.config.ts",
+    `import { defineConfig } from "@wagmi/cli";
+      import { hardhat, react } from "@wagmi/cli/plugins";
+      
+      export default defineConfig({
+        out: "../nextjs/generated/contractHooks.ts",
+        contracts: [],
+        plugins: [
+          hardhat({
+            project: "./",
+            deployments: ${util.inspect(result)} 
+          }),
+          react(),
+        ],
+      });`,
+    "utf-8",
+  );
+  console.log("✅ wagmi.config.ts file generated");
 }
 
 main().catch(error => {
