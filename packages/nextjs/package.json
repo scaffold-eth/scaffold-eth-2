@@ -10,13 +10,14 @@
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
-    "vercel": "vercel"
+    "vercel": "vercel",
+    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
     "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
-    "@rainbow-me/rainbowkit": "^0.8.1",
+    "@rainbow-me/rainbowkit": "^0.11.0",
     "@uniswap/sdk": "^3.0.3",
     "daisyui": "^2.31.0",
     "ethers": "^5.0.0",
@@ -30,7 +31,7 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
-    "wagmi": "^0.10.15",
+    "wagmi": "^0.11.6",
     "zustand": "^4.1.2"
   },
   "devDependencies": {
@@ -47,7 +48,7 @@
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.1.8",
-    "typescript": "^4.7.4",
+    "typescript": "^4.9.5",
     "vercel": "^28.15.1"
   }
 }

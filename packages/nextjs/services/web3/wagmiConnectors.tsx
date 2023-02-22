@@ -8,25 +8,21 @@ import {
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, hardhat, localhost, goerli, polygonMumbai } from "wagmi/chains";
+import * as chains from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
+
+const configuredChain = getTargetNetwork();
+// We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
+const enabledChains = configuredChain.id === 1 ? [configuredChain] : [configuredChain, chains.mainnet];
 
 /**
- * chains for the app
+ * Chains for the app
  */
 export const appChains = configureChains(
-  [
-    hardhat,
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    polygon,
-    // todo replace with config instead of env
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, polygonMumbai] : []),
-  ],
+  enabledChains,
   [
     alchemyProvider({
       // ToDo. Move to .env || scaffold config
@@ -54,7 +50,7 @@ export const appChains = configureChains(
  * list of burner wallet compatable chains
  */
 export const burnerChains = configureChains(
-  [localhost, hardhat],
+  [chains.hardhat],
   [
     alchemyProvider({
       // ToDo. Move to .env || scaffold config
