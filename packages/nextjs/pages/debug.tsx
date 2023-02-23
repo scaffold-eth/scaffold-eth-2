@@ -10,19 +10,21 @@ const Debug: NextPage = () => {
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <div className="flex flex-row gap-2 w-full max-w-7xl py-8 lg:py-12 px-6 lg:px-10 pb-0 lg:pb-0 overflow-x-scroll hide-scrollbar lg:flex-wrap lg:overflow-x-auto">
-          {contractNames.map(contractName => (
-            <button
-              className={`btn btn-secondary normal-case font-thin ${
-                contractName === selectedContract ? "bg-base-300" : "bg-base-100"
-              }`}
-              key={contractName}
-              onClick={() => setSelectedContract(contractName)}
-            >
-              {contractName}
-            </button>
-          ))}
-        </div>
+        {contractNames.length > 1 && (
+          <div className="flex flex-row gap-2 w-full max-w-7xl py-8 lg:py-12 px-6 lg:px-10 pb-0 lg:pb-0 overflow-x-scroll hide-scrollbar lg:flex-wrap lg:overflow-x-auto">
+            {contractNames.map(contractName => (
+              <button
+                className={`btn btn-secondary normal-case font-thin ${
+                  contractName === selectedContract ? "bg-base-300" : "bg-base-100"
+                }`}
+                key={contractName}
+                onClick={() => setSelectedContract(contractName)}
+              >
+                {contractName}
+              </button>
+            ))}
+          </div>
+        )}
         {contractNames.map(contractName => (
           <ContractUI
             key={contractName}
