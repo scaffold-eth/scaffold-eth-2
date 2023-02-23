@@ -1,7 +1,29 @@
 /** @type {import('tailwindcss').Config} */
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
-  plugins: [require("daisyui")],
+  plugins: [
+    require("daisyui"),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          /* IE and Edge */
+          "-ms-overflow-style": "none",
+
+          /* Firefox */
+          "scrollbar-width": "none",
+
+          /* Safari and Chrome */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+      });
+    }),
+  ],
   darkTheme: "scaffoldEthDark",
   // DaisyUI theme colors
   daisyui: {
