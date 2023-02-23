@@ -1,6 +1,6 @@
 import { TransactionRequest, TransactionResponse, TransactionReceipt } from "@ethersproject/abstract-provider";
 import { SendTransactionResult } from "@wagmi/core";
-import { BigNumber, ethers, Signer } from "ethers";
+import { Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
@@ -30,10 +30,9 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
 /**
  * Runs TXs showing UI feedback.
  * @param _signer
- * @param gasPrice
  * @dev If signer is provided => dev wants to send a raw tx.
  */
-export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransactionFunc => {
+export const useTransactor = (_signer?: Signer): TTransactionFunc => {
   let signer = _signer;
   const { data } = useSigner();
   if (signer === undefined && data) {
@@ -59,14 +58,6 @@ export const useTransactor = (_signer?: Signer, gasPrice?: number): TTransaction
         // Tx is already prepared by the caller
         transactionResponse = await tx;
       } else if (tx != null) {
-        // Raw tx
-        if (!tx.gasPrice) {
-          tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
-        }
-        if (!tx.gasLimit) {
-          tx.gasLimit = BigNumber.from(ethers.utils.hexlify(120000));
-        }
-
         transactionResponse = await signer.sendTransaction(tx);
       } else {
         throw new Error("Incorrect transaction passed to transactor");
