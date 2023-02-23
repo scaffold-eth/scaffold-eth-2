@@ -12,7 +12,7 @@
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
     "verify": "hardhat etherscan-verify",
-    "wagmi" : "hardhat run scripts/generateWagmiConfig.ts && wagmi"
+    "wagmi-generate": "hardhat run scripts/generateWagmiConfig.ts && wagmi generate && prettier --write wagmi.config.ts"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
