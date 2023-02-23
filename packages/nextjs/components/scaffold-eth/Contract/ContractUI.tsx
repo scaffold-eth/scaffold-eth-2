@@ -20,7 +20,7 @@ type TContractUIProps = {
 /**
  * UI component to interface with deployed contracts.
  **/
-const ContractUI = ({ contractName, className }: TContractUIProps) => {
+const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
   const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
