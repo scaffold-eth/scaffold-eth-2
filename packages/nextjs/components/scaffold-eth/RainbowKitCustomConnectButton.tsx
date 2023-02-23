@@ -2,7 +2,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { TAutoConnect, useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
 import Balance from "~~/components/scaffold-eth/Balance";
-import { useSwitchNetwork } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -17,18 +16,13 @@ const tempAutoConnectConfig: TAutoConnect = {
  */
 export default function RainbowKitCustomConnectButton() {
   useAutoConnect(tempAutoConnectConfig);
-  const { switchNetwork } = useSwitchNetwork();
 
   const configuredChain = getTargetNetwork();
   const networkColor = useNetworkColor();
 
-  const onSwitchNetwork = () => {
-    switchNetwork?.(configuredChain.id);
-  };
-
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
+      {({ account, chain, openAccountModal, openConnectModal, openChainModal, mounted }) => {
         const connected = mounted && account && chain;
 
         return (
@@ -44,13 +38,15 @@ export default function RainbowKitCustomConnectButton() {
 
               if (chain.unsupported || chain.id !== configuredChain.id) {
                 return (
-                  <div className="rounded-md shadow-lg p-2">
-                    <span className="text-error mr-2">Wrong network selected - ({chain.name})</span>
-                    <span className="text-primary mr-2">Switch network to</span>
-                    <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
+                  <>
+                    <span className="text-xs" style={{ color: networkColor }}>
                       {configuredChain.name}
+                    </span>
+                    <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
+                      <span>Wrong network</span>
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </button>
-                  </div>
+                  </>
                 );
               }
 
