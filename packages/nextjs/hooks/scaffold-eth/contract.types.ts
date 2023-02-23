@@ -11,7 +11,7 @@ export type ContractName = keyof Contracts;
 
 export type Contract<TContractName extends ContractName> = Contracts[TContractName];
 
-type InferContractAbi<TContract> = TContract extends { abi: infer O } ? O : never;
+type InferContractAbi<TContract> = TContract extends { abi: infer TAbi } ? TAbi : never;
 
 export type ContractAbi<TContractName extends ContractName = ContractName> = InferContractAbi<Contract<TContractName>>;
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useProvider } from "wagmi";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import contracts from "../../generated/hardhat_contracts";
@@ -11,13 +11,9 @@ import { Contract, ContractName, ContractCodeStatus, DefaultChain } from "./cont
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
   const configuredChain = getTargetNetwork();
-  const deployedContract = useMemo(
-    () =>
-      contracts[`${configuredChain.id}` as DefaultChain]?.[0]?.contracts?.[
-        contractName as ContractName
-      ] as Contract<TContractName>,
-    [configuredChain.id, contractName],
-  );
+  const deployedContract = contracts[`${configuredChain.id}` as DefaultChain]?.[0]?.contracts?.[
+    contractName as ContractName
+  ] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const provider = useProvider({ chainId: configuredChain.id });
 
