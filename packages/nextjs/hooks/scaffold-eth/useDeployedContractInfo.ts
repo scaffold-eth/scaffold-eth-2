@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import contracts from "../../generated/hardhat_contracts";
@@ -10,6 +11,7 @@ import { Contract, ContractName, ContractCodeStatus, DefaultChain } from "./cont
  * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
+  const isMounted = useIsMounted();
   const configuredChain = getTargetNetwork();
   const deployedContract = contracts[`${configuredChain.id}` as DefaultChain]?.[0]?.contracts?.[
     contractName as ContractName
@@ -18,16 +20,18 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
   const provider = useProvider({ chainId: configuredChain.id });
 
   useEffect(() => {
-    let mounted = true;
-
     const checkContractDeployment = async () => {
+      if (!deployedContract) {
+        setStatus(ContractCodeStatus.NOT_FOUND);
+        return;
+      }
       const code = await provider.getCode((deployedContract as Contract<TContractName>).address);
 
-      if (!mounted) {
+      if (!isMounted()) {
         return;
       }
       // If contract code is `0x` => no contract deployed on that address
-      if (code === "0x" || !deployedContract) {
+      if (code === "0x") {
         setStatus(ContractCodeStatus.NOT_FOUND);
         return;
       }
@@ -35,11 +39,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
     };
 
     checkContractDeployment();
-
-    return () => {
-      mounted = false;
-    };
-  }, [configuredChain.id, contractName, deployedContract, provider]);
+  }, [isMounted, configuredChain.id, contractName, deployedContract, provider]);
 
   return {
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
