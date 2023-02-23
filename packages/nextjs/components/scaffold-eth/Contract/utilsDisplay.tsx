@@ -60,7 +60,7 @@ export const StringToBytes32Converter = ({ form, setForm, stateObjectKey }: IUti
     setForm(formUpdate);
   }, [form, setForm, stateObjectKey]);
   return (
-    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertStringToBytes32}>
+    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertStringToBytes32}>
       #
     </div>
   );
@@ -78,18 +78,27 @@ export const StringToBytesConverter = ({ form, setForm, stateObjectKey }: IUtili
   }, [form, setForm, stateObjectKey]);
 
   return (
-    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertStringToBytes}>
+    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertStringToBytes}>
       #
     </div>
   );
 };
 export const UintToEtherConverter = ({ form, setForm, stateObjectKey }: IUtilityButton) => {
   const convertEtherToUint = useCallback(() => {
-    setForm({ ...form, [stateObjectKey]: ethers.utils.parseEther(form[stateObjectKey]) });
+    if (!form[stateObjectKey]) {
+      return;
+    }
+    setForm({
+      ...form,
+      [stateObjectKey]:
+        form[stateObjectKey] instanceof BigNumber
+          ? ethers.utils.formatEther(form[stateObjectKey])
+          : ethers.utils.parseEther(form[stateObjectKey]),
+    });
   }, [form, setForm, stateObjectKey]);
 
   return (
-    <div className="cursor-pointer text-xl font-semibold mr-3 text-accent" onClick={convertEtherToUint}>
+    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertEtherToUint}>
       *
     </div>
   );
