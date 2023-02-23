@@ -94,6 +94,27 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
+---
+## ⚠️ Disabling type/error checks 
+> **Warning**
+> We don't encourage to use the below options
+### Disabling commit checks
+Move to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
+```diff
+- yarn lint-staged --verbose 
++ # yarn lint-staged --verbose
+```
+
+### Deploying to Vercel without any checks 
+To ignore all types / error checks while deploying, use : 
+```shell
+yarn vercel:yolo
+```
+
+### Disabling Github Workflow
+Delete `.github` directory 
+
+---
 ## Contributing to Scaffold-Eth 2
 
 We welcome contributions to Scaffold-Eth 2!
