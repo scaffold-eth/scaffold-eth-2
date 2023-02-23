@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as util from "util";
 const DEPLOYMENTS_PATH = "deployments";
 
 function getParsedDeploymentsForWagmiConfig() {
@@ -48,7 +47,7 @@ async function main() {
         plugins: [
           hardhat({
             project: "./",
-            deployments: ${util.inspect(result)} 
+            deployments: ${JSON.stringify(result, null, 2)} 
           }),
           react(),
         ],
