@@ -95,24 +95,31 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
 ---
-## ⚠️ Disabling type/error checks 
-> **Warning**
-> We don't encourage to use the below options
+## ⚠️ Disabling type & linting error checks 
+> **Hint**
+> Typescript helps you catch errors at compile time, which can save time and improve code quality, but can be challenging for those who are new to the language or who are used to the more dynamic nature of JavaScript. Below are the steps to disable type & lint check at different levels  
 ### Disabling commit checks
-Move to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
+We run `pre-commit` [git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) which lints the staged files and don't let you commit if there is an linting error. 
+
+To disable this, got to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
+
 ```diff
 - yarn lint-staged --verbose 
 + # yarn lint-staged --verbose
 ```
 
 ### Deploying to Vercel without any checks 
-To ignore all types / error checks while deploying, use : 
+Vercel by default runs types and lint checks while developing `build` and deployment fails if there is an types or lint error. 
+
+To ignore types and lint error checks while deploying, use : 
 ```shell
 yarn vercel:yolo
 ```
 
 ### Disabling Github Workflow
-Delete `.github` directory 
+We have github workflow setup checkout `.github/workflows/lint.yaml` which runs types and lint error checks every time code is __pushed__ to `main` branch or __pull request__ is made to `main` branch 
+
+To disable it, **delete `.github` directory** 
 
 ---
 ## Contributing to Scaffold-Eth 2
