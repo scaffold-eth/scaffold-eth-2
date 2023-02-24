@@ -1,11 +1,49 @@
 import type { NextPage } from "next";
+import { useEffect, useState } from "react";
 import { ContractUI } from "~~/components/scaffold-eth";
+import { useDeployedContractNames } from "~~/hooks/scaffold-eth/useDeployedContractNames";
 
 const Debug: NextPage = () => {
+  const contractNames = useDeployedContractNames();
+  const [selectedContract, setSelectedContract] = useState<string>();
+
+  useEffect(() => {
+    if (!selectedContract && contractNames.length) {
+      setSelectedContract(contractNames[0]);
+    }
+  }, [contractNames, selectedContract]);
+
   return (
     <>
-      <div className="flex justify-center">
-        <ContractUI contractName="YourContract" />
+      <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
+        {contractNames.length === 0 ? (
+          <p className="text-3xl mt-14">No contracts found!</p>
+        ) : (
+          <>
+            {contractNames.length > 1 && (
+              <div className="flex flex-row gap-2 w-full max-w-7xl pb-1 px-6 lg:px-10 flex-wrap">
+                {contractNames.map(contractName => (
+                  <button
+                    className={`btn btn-secondary btn-sm normal-case font-thin ${
+                      contractName === selectedContract ? "bg-base-300" : "bg-base-100"
+                    }`}
+                    key={contractName}
+                    onClick={() => setSelectedContract(contractName)}
+                  >
+                    {contractName}
+                  </button>
+                ))}
+              </div>
+            )}
+            {contractNames.map(contractName => (
+              <ContractUI
+                key={contractName}
+                contractName={contractName}
+                className={contractName === selectedContract ? "" : "hidden"}
+              />
+            ))}
+          </>
+        )}
       </div>
       <div className="text-center mt-8 bg-secondary p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>
