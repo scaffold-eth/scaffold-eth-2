@@ -77,7 +77,7 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
           <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4">
             <div className="flex">
               <div className="flex flex-col gap-1">
-                {contractName}
+                <span className="font-bold">{contractName}</span>
                 <Address address={contractAddress} />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
