@@ -65,7 +65,7 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
   if (!contractAddress) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${configuredChain}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${configuredChain.name}"!`}
       </p>
     );
   }
