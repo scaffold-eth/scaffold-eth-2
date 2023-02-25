@@ -34,7 +34,7 @@ yarn chain
 yarn deploy
 ```
 
-5. Once contract is deployed run the below command to generate hooks: 
+4. Once contract is deployed run the below command to generate hooks: 
 
 ```
 yarn wagmi-generate
@@ -51,7 +51,7 @@ yarn wagmi-generate
 
 > Hint 4: The generated hooks are just wrappers over wagmi's [`useContractRead`](https://wagmi.sh/react/hooks/useContractRead) and [`useContractWrite`](https://wagmi.sh/react/hooks/useContractWrite) you can always inspect generated hooks inside `packages/nextjs/generated/contractHooks.ts` file after you run `yarn wagmi-generate`
 
-4. On a third terminal, start your NextJS app:
+5. On a third terminal, start your NextJS app:
 
 ```
 yarn start
