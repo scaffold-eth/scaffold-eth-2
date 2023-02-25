@@ -23,13 +23,11 @@ export default function ContractInteraction() {
   });
 
   const handleWrite = async () => {
-    if (writeAsync) {
-      try {
-        await writeTxn(writeAsync());
-      } catch (e: any) {
-        const message = getParsedEthersError(e);
-        notification.error(message);
-      }
+    try {
+      await writeTxn(writeAsync());
+    } catch (e: any) {
+      const message = getParsedEthersError(e);
+      notification.error(message);
     }
   };
 
