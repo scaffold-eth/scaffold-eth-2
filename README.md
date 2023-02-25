@@ -34,6 +34,20 @@ yarn chain
 yarn deploy
 ```
 
+5. Once contract is deployed run the below command to generate hooks: 
+
+```
+yarn wagmi-generate
+```
+
+> Hint 1: Checkout `packages/nextjs/components/ExampleUi/ContractData.tsx` and `packages/nextjs/components/ExampleUi/ContractInteraction.tsx` for use of the generated hooks(Expected that you have ran `yarn wagmi-generate` already).Also checkout `Hint 3` & `Hint 4` for pattern they follow and internally works 
+
+> Hint 2: `yarn wagmi-generate` command generates `wagmi.config.ts` inside `packages/hardhat` and then generate hooks inline with contract functions inside `packages/nextjs/generated/contractHooks.ts`
+
+> Hint 3: Generated hooks are of the form `use{ContractName}{functionName}` example suppose we have `YourContract.sol` inside `packages/hardhat/contracts` dir, which contains `string public greetings` since its a public variable an getter function is set by solidity and the way to read this function from frontend will be by using `useYourContractGreeetings` hook. 
+
+> Hint 4: The generated hooks are just wrappers over wagmi's [`useContractRead`](https://wagmi.sh/react/hooks/useContractRead) and [`useContractWrite`](https://wagmi.sh/react/hooks/useContractWrite) you can always inspect generated hooks inside `packages/nextjs/generated/contractHooks.ts` file after you run `yarn wagmi-generate`
+
 4. On a third terminal, start your NextJS app:
 
 ```
