@@ -44,7 +44,7 @@ yarn wagmi-generate
 
 > Hint 2: `yarn wagmi-generate` command generates `wagmi.config.ts` inside `packages/hardhat` and then generate hooks inline with contract functions inside `packages/nextjs/generated/contractHooks.ts`
 
-> Hint 3: Generated hooks are of the form `use{ContractName}{functionName}` example suppose we have `YourContract.sol` inside `packages/hardhat/contracts` dir, which contains `string public greetings` since its a public variable an getter function is set by solidity and the way to read this function from frontend will be by using `useYourContractGreeetings` hook. 
+> Hint 3: Generated hooks are of the form `use{ContractName}{functionName}` example suppose we have `YourContract.sol` inside `packages/hardhat/contracts` dir, which contains `string public greeting` since its a public variable an getter function is set by solidity and the way to read this function from frontend will be by using `useYourContractGreeeting` hook. 
 
 > Hint 4: The generated hooks are just wrappers over wagmi's [`useContractRead`](https://wagmi.sh/react/hooks/useContractRead) and [`useContractWrite`](https://wagmi.sh/react/hooks/useContractWrite) you can always inspect generated hooks inside `packages/nextjs/generated/contractHooks.ts` file after you run `yarn wagmi-generate`
 
