@@ -39,6 +39,9 @@ yarn deploy
 ```
 yarn wagmi-generate
 ```
+> **Note**
+> Evertime you do `yarn deploy` make sure you run `yarn wagmi-generate` so that hooks stays in sync. 
+
 
 > Hint 1: Checkout `packages/nextjs/components/ExampleUi/ContractData.tsx` and `packages/nextjs/components/ExampleUi/ContractInteraction.tsx` for use of the generated hooks(Expected that you have ran `yarn wagmi-generate` already).Also checkout `Hint 3` & `Hint 4` for pattern they follow and internally works 
 
