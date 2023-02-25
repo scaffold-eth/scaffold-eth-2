@@ -60,6 +60,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
               formUpdate[event.target.name] = contractFunctionArgument;
               setForm(formUpdate);
             }}
+            type={paramType.type === "uint256" ? "number" : undefined}
           />
           {inputSuffix}
         </div>
