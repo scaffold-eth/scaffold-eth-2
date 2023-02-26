@@ -47,7 +47,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
           }}
         />
       ) : (
-        <div className="flex items-end border-2 border-base-300 bg-base-200 rounded-full text-accent justify-between items-center">
+        <div className="flex items-center justify-between border-2 border-base-300 bg-base-200 rounded-full text-accent">
           <input
             placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
             autoComplete="off"

@@ -98,8 +98,8 @@ export const UintToEtherConverter = ({ form, setForm, stateObjectKey }: IUtility
   }, [form, setForm, stateObjectKey]);
 
   return (
-    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertEtherToUint}>
-      *
+    <div className="cursor-pointer text-l font-semibold px-4 text-accent" onClick={convertEtherToUint}>
+      ∗
     </div>
   );
 };
