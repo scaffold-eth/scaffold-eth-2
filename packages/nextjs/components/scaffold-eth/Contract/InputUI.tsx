@@ -1,7 +1,8 @@
 import { utils } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
 import { AddressInput } from "~~/components/scaffold-eth";
+import { NUMBER_REGEX } from "./utilsComponents";
 
 import { StringToBytesConverter, StringToBytes32Converter, UintToEtherConverter } from "./utilsDisplay";
 
@@ -17,6 +18,8 @@ type TInputUIProps = {
  * Generic Input component to handle input's based on their function param type
  */
 const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) => {
+  const [inputError, setInputError] = useState(false);
+
   let inputSuffix: ReactElement = <></>;
 
   switch (paramType.type) {
@@ -47,7 +50,11 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
           }}
         />
       ) : (
-        <div className="flex items-center justify-between border-2 border-base-300 bg-base-200 rounded-full text-accent">
+        <div
+          className={`flex items-center justify-between border-2 border-base-300 bg-base-200 rounded-full text-accent ${
+            inputError ? "border-error" : "border-base-300"
+          }`}
+        >
           <input
             placeholder={paramType.name ? paramType.type + " " + paramType.name : paramType.type}
             autoComplete="off"
@@ -55,14 +62,21 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
             name={stateObjectKey}
             value={form[stateObjectKey]}
             onChange={(event): void => {
+              if (paramType.type === "uint256") {
+                if (event.target.value && !NUMBER_REGEX.test(event.target.value)) {
+                  setInputError(true);
+                } else {
+                  setInputError(false);
+                }
+              }
+
               const formUpdate = { ...form };
               const contractFunctionArgument: string | number = event.target.value;
               formUpdate[event.target.name] = contractFunctionArgument;
               setForm(formUpdate);
             }}
-            type={paramType.type === "uint256" ? "number" : undefined}
           />
-          {inputSuffix}
+          {!inputError && inputSuffix}
         </div>
       )}
     </>

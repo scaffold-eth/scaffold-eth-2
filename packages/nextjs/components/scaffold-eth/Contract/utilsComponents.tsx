@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
+export const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
 
 /**
  * Removes redundant leading and trailing zeros from stringified number
