@@ -46,7 +46,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
           <div
-            className={`break-words block transition bg-transparent ${
+            className={`break-all block transition bg-transparent ${
               showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
             }`}
           >

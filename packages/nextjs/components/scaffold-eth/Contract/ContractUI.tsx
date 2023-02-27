@@ -92,7 +92,7 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
               </p>
             )}
           </div>
-          <div className="bg-base-300 rounded-3xl break-all px-6 lg:px-8 py-4 shadow-lg shadow-base-300">
+          <div className="bg-base-300 rounded-3xl px-6 lg:px-8 py-4 shadow-lg shadow-base-300">
             {contractVariablesDisplay.methods.length > 0 ? contractVariablesDisplay.methods : "No contract variables"}
           </div>
         </div>
