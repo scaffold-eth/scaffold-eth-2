@@ -1,5 +1,5 @@
 import { utils } from "ethers";
-import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
@@ -18,7 +18,8 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
   const { chain } = useNetwork();
   const writeTx = useTransactor();
 
-  const { config } = usePrepareContractWrite({
+  const wagmiContractWrite = useContractWrite({
+    mode: "recklesslyUnprepared",
     chainId: configuredChain.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
@@ -28,8 +29,6 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       value: value ? utils.parseEther(value) : undefined,
     },
   });
-
-  const wagmiContractWrite = useContractWrite(config);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
