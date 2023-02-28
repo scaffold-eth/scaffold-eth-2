@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "../Input/InputBase";
 
 const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
@@ -19,6 +19,18 @@ export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256Inpu
     }
     onChange(value instanceof BigNumber ? ethers.utils.formatEther(value) : ethers.utils.parseEther(value));
   }, [onChange, value]);
+
+  useEffect(() => {
+    if (!value || (typeof value === "string" && !NUMBER_REGEX.test(value))) {
+      return;
+    }
+    const hexString = BigNumber.from(value).toHexString();
+    if (hexString.substring(2).length > 256) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
+  }, [value, setInputError]);
 
   return (
     <InputBase
