@@ -30,7 +30,7 @@
     "@types/qrcode": "^1",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
-    "@wagmi/cli": "^0.1.9",
+    "@wagmi/cli": "^0.1.11",
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",

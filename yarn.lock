@@ -1629,7 +1629,7 @@ __metadata:
     "@types/qrcode": ^1
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
-    "@wagmi/cli": ^0.1.9
+    "@wagmi/cli": ^0.1.11
     chai: ^4.3.6
     dotenv: ^16.0.3
     envfile: ^6.18.0
@@ -2955,12 +2955,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/cli@npm:^0.1.9":
-  version: 0.1.9
-  resolution: "@wagmi/cli@npm:0.1.9"
+"@wagmi/chains@npm:0.2.9":
+  version: 0.2.9
+  resolution: "@wagmi/chains@npm:0.2.9"
+  peerDependencies:
+    typescript: ">=4.9.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: b63112bd7403801ee3d7e2245dbda829163457939aa469041756d8bc175777f350449f857269fb18f42f8007a03ceb13df0b940de28a4fe5e72480b17de800d2
+  languageName: node
+  linkType: hard
+
+"@wagmi/cli@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "@wagmi/cli@npm:0.1.11"
   dependencies:
     "@ethersproject/address": ^5.7.0
-    "@wagmi/chains": 0.2.8
+    "@wagmi/chains": 0.2.9
     abitype: ^0.3.0
     abort-controller: ^3.0.0
     bundle-require: ^3.1.2
@@ -2995,7 +3007,7 @@ __metadata:
       optional: true
   bin:
     wagmi: dist/cli.js
-  checksum: 28bb6b78503ecd25651e11dabedff7178a87a29f058fd2a05fbd150a437a6e4b0c2c7e30c88240bfb3b522e5a2b4f61ddfe9b6cc21c95f724ed294089f7b6ad5
+  checksum: 655806948ee4d5c5abebc75c6c568006fad59bb5ec65a2416f78dde44529b7ac9a290d158f5d4df6ff1b1dee35bbb119685457ec01349a73304da2a859f8aafc
   languageName: node
   linkType: hard
 
