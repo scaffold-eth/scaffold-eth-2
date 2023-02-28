@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-export const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
+export const UNSIGNED_NUMBER_REGEX = /^\.?\d+\.?\d*$/;
+export const SIGNED_NUMBER_REGEX = /^-?\d+\.?\d*$/;
 
 /**
  * Removes redundant leading and trailing zeros from stringified number
@@ -23,7 +24,7 @@ const removeRedundantZeroes = (num: string) => {
  * @returns {string} result of multiplying
  */
 const multiplyStringifiedNumberToPowerOf10 = (numberValue: string, powerOf10: number): string => {
-  if (!numberValue || !NUMBER_REGEX.test(numberValue)) {
+  if (!numberValue || !UNSIGNED_NUMBER_REGEX.test(numberValue)) {
     return "";
   }
 
@@ -69,7 +70,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
 
           setTxValue(e.target.value);
 
-          if (!NUMBER_REGEX.test(e.target.value)) {
+          if (!UNSIGNED_NUMBER_REGEX.test(e.target.value)) {
             setInputError(true);
             return;
           }

@@ -2,9 +2,21 @@ import { utils } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
 import { AddressInput } from "~~/components/scaffold-eth";
-import { NUMBER_REGEX } from "./utilsComponents";
+import { SIGNED_NUMBER_REGEX, UNSIGNED_NUMBER_REGEX } from "./utilsComponents";
 
 import { StringToBytesConverter, StringToBytes32Converter, UintToEtherConverter } from "./utilsDisplay";
+
+function isInvalidNumberParam(paramType: utils.ParamType, value: string) {
+  if (paramType.type.startsWith("uint") && !UNSIGNED_NUMBER_REGEX.test(value)) {
+    return true;
+  }
+
+  if (paramType.type.startsWith("int") && !SIGNED_NUMBER_REGEX.test(value)) {
+    return true;
+  }
+
+  return false;
+}
 
 type TInputUIProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
@@ -62,8 +74,8 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
             name={stateObjectKey}
             value={form[stateObjectKey]}
             onChange={(event): void => {
-              if (paramType.type === "uint256") {
-                if (event.target.value && !NUMBER_REGEX.test(event.target.value)) {
+              if (String(paramType.type.match(/$u?int./))) {
+                if (isInvalidNumberParam(paramType, event.target.value)) {
                   setInputError(true);
                 } else {
                   setInputError(false);
@@ -71,7 +83,7 @@ const InputUI = ({ setForm, form, stateObjectKey, paramType }: TInputUIProps) =>
               }
 
               const formUpdate = { ...form };
-              const contractFunctionArgument: string | number = event.target.value;
+              const contractFunctionArgument = event.target.value;
               formUpdate[event.target.name] = contractFunctionArgument;
               setForm(formUpdate);
             }}

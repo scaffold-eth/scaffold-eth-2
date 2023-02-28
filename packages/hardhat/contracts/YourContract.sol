@@ -18,6 +18,8 @@ contract YourContract {
     string public greeting = "Building Unstoppable Apps!!!";
     bool public premium = false;
     uint256 public totalCounter = 0;
+    uint8 public u8 = 0;
+    int16 public i16 = 0;
     mapping(address => uint) public userGreetingCounter;
 
     // Events: a way to emit log statements from smart contract that can be listened to by external parties
@@ -60,6 +62,15 @@ contract YourContract {
 
         // emit: keyword used to trigger an event
         emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, 0);
+    }
+
+    // TODO: remove
+    function setU8(uint8 newU8) public {
+        u8 = newU8;
+    }
+
+    function setI16(int16 newI16) public {
+        i16 = newI16;
     }
 
     /**
