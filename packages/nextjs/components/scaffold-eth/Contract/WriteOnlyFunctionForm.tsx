@@ -1,12 +1,14 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
-import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
-import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ContractInput } from "./ContractInput";
+import { Uint256Input } from "../Input";
+import { BigNumber } from "ethers";
+import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -30,7 +32,7 @@ export const WriteOnlyFunctionForm = ({
   setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [txValue, setTxValue] = useState("");
+  const [txValue, setTxValue] = useState<string | BigNumber>("");
   const { chain } = useNetwork();
   const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
@@ -51,7 +53,7 @@ export const WriteOnlyFunctionForm = ({
     args: getParsedContractFunctionArgs(form),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: txValue ? parseTxnValue(txValue) : undefined,
+      value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
     },
   });
 
@@ -74,23 +76,16 @@ export const WriteOnlyFunctionForm = ({
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
-    return (
-      <InputUI
-        key={key}
-        setForm={setForm}
-        form={form}
-        stateObjectKey={key}
-        paramType={input}
-        functionFragment={functionFragment}
-      />
-    );
+    return <ContractInput key={key} setForm={setForm} form={form} stateObjectKey={key} paramType={input} />;
   });
 
   return (
     <div className="flex flex-col gap-3">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
-      {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+      {functionFragment.payable ? (
+        <Uint256Input value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
+      ) : null}
       <div className="flex justify-between gap-2">
         <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
         <div

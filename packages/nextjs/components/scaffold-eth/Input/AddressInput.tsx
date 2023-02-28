@@ -1,13 +1,14 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { isAddress } from "ethers/lib/utils";
+import { InputBase } from "./InputBase";
 
-type TAddressInputProps = {
-  onChange?: (arg: string) => void;
-  placeholder?: string;
+type AddressInputProps = {
+  value: string;
+  onChange: (newValue: string) => void;
   name?: string;
-  value?: string;
+  placeholder?: string;
 };
 
 // ToDo:  move this function to an utility file
@@ -16,7 +17,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps) => {
+export const AddressInput = ({ value, name, placeholder, onChange }: AddressInputProps) => {
   const [address, setAddress] = useState("");
   const [resolvedEns, setResolvedEns] = useState("");
 
@@ -75,47 +76,40 @@ const AddressInput = ({ value, name, placeholder, onChange }: TAddressInputProps
     setResolvedEns(ensName);
   }, [ensName, resolvedEns]);
 
-  const onChangeAddress = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (newValue: string) => {
     setResolvedEns("");
-    setAddress(event.target.value);
+    setAddress(newValue);
     if (onChange) {
-      onChange(event.target.value);
+      onChange(newValue);
     }
   };
 
   return (
-    <div className="rounded-full border-2 border-base-300 bg-base-200">
-      <div className="form-control grow">
-        <div className="flex w-full">
-          {resolvedEns && (
-            <div className="flex bg-base-300 rounded-l-full items-center">
-              <span className={ensAvatar ? "w-[35px]" : ""}>
-                {ensAvatar && (
-                  // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+    <InputBase
+      name={name}
+      placeholder={placeholder}
+      error={ensAddress === null}
+      value={currentValue}
+      onChange={handleChange}
+      disabled={isLoading}
+      prefix={
+        resolvedEns && (
+          <div className="flex bg-base-300 rounded-l-full items-center">
+            {ensAvatar ? (
+              <span className="w-[35px]">
+                {
                   // eslint-disable-next-line
                   <img className="w-full rounded-full" src={ensAvatar} alt={`${ensAddress} avatar`} />
-                )}
+                }
               </span>
-              <span className="text-accent px-2">{resolvedEns}</span>
-            </div>
-          )}
-          <input
-            name={name}
-            type="text"
-            placeholder={placeholder}
-            className={`input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow ${
-              ensAddress === null ? "input-error" : ""
-            }`}
-            value={currentValue}
-            onChange={onChangeAddress}
-            disabled={isLoading}
-            autoComplete="off"
-          />
-          {address && <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />}
-        </div>
-      </div>
-    </div>
+            ) : null}
+            <span className="text-accent px-2">{resolvedEns}</span>
+          </div>
+        )
+      }
+      suffix={
+        address && <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={5} />
+      }
+    />
   );
 };
-
-export default AddressInput;

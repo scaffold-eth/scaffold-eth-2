@@ -5,11 +5,11 @@ import { hardhat, localhost } from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import AddressInput from "./AddressInput";
-import EtherInput from "./EtherInput";
 import { getParsedEthersError } from "./Contract/utilsContract";
 import Address from "./Address";
 import Balance from "./Balance";
+import { AddressInput } from "./Input";
+import { EtherInput } from "./Input";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;

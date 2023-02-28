@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
+import { InputBase } from "./InputBase";
 
-type TEtherInputProps = {
+type EtherInputProps = {
   onChange?: (arg: string) => void;
   placeholder?: string;
   name?: string;
@@ -14,7 +15,7 @@ type TEtherInputProps = {
  *
  * onChange will always be called with the value in ETH
  */
-export default function EtherInput({ value, name, placeholder, onChange }: TEtherInputProps) {
+export function EtherInput({ value, name, placeholder, onChange }: EtherInputProps) {
   const [ethValue, setEthValue] = useState("");
   const [displayValue, setDisplayValue] = useState("");
   const [usdMode, setUSDMode] = useState(false);
@@ -32,9 +33,8 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
     }
   }, [currentValue]);
 
-  const onChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeNumber = (newValue: string) => {
     let ethNewValue;
-    const newValue = event.target.value;
 
     if (usdMode) {
       const parsedNewValue = parseFloat(newValue);
@@ -81,29 +81,21 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
   };
 
   return (
-    <>
-      <div className="rounded-full border-2 border-base-300">
-        <div className="form-control grow">
-          <div className="flex w-full items-center">
-            <span className="pl-4 text-primary">{usdMode ? "$" : "Ξ"}</span>
-            <input
-              name={name}
-              type="text"
-              placeholder={placeholder}
-              className="input input-ghost pl-1 focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow"
-              value={displayValue}
-              onChange={onChangeNumber}
-            />
-            <button
-              className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
-              onClick={toggleMode}
-              disabled={!usdMode && !ethPrice}
-            >
-              <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    <InputBase
+      name={name}
+      value={displayValue}
+      placeholder={placeholder}
+      onChange={onChangeNumber}
+      prefix={<span className="pl-4 -mr-2 text-primary self-center">{usdMode ? "$" : "Ξ"}</span>}
+      suffix={
+        <button
+          className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
+          onClick={toggleMode}
+          disabled={!usdMode && !ethPrice}
+        >
+          <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
+        </button>
+      }
+    />
   );
 }
