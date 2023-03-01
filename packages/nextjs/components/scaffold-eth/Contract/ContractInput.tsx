@@ -2,7 +2,8 @@ import { utils } from "ethers";
 import React, { Dispatch, SetStateAction, useMemo } from "react";
 
 import { AddressInput, Bytes32Input, BytesInput, InputBase, MissingTypeInput, UintInput } from "../Input";
-import { UintVariant } from "../Input/utils";
+import { IntInput } from "../Input/IntInput";
+import { IntVariant, UintVariant } from "../Input/utils";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
@@ -39,6 +40,8 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     return <InputBase {...inputProps} />;
   } else if (paramType.type.startsWith("uint")) {
     return <UintInput {...inputProps} variant={paramType.type as UintVariant} />;
+  } else if (paramType.type.startsWith("int")) {
+    return <IntInput {...inputProps} variant={paramType.type as IntVariant} />;
   }
 
   // TODO: implement missing input types such as `bytes[]`

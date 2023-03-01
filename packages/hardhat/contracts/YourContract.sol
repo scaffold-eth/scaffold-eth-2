@@ -19,6 +19,7 @@ contract YourContract {
   bool public premium = false;
   uint256 public totalCounter = 0;
   uint8 public lowBitCounter = 0;
+  int8 public sLowBitCounter = 0;
   mapping(address => uint) public userGreetingCounter;
 
   // Events: a way to emit log statements from smart contract that can be listened to by external parties
@@ -69,6 +70,10 @@ contract YourContract {
 
   function setLowBitCounter(uint8 _newCounter) public payable {
     lowBitCounter = _newCounter;
+  }
+
+  function setSLowBitCounter(int8 _newCounter) public payable {
+    sLowBitCounter = _newCounter;
   }
 
   /**

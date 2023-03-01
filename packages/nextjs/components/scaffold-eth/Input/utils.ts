@@ -1,3 +1,5 @@
+import { BigNumber, BigNumberish } from "ethers";
+
 export interface CommonInputProps<T = string> {
   value: T;
   onChange: (newValue: T) => void;
@@ -40,4 +42,62 @@ export enum UintVariant {
   UINT256 = "uint256",
 }
 
-export const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
+export enum IntVariant {
+  INT8 = "int8",
+  INT16 = "int16",
+  INT24 = "int24",
+  INT32 = "int32",
+  INT40 = "int40",
+  INT48 = "int48",
+  INT56 = "int56",
+  INT64 = "int64",
+  INT72 = "int72",
+  INT80 = "int80",
+  INT88 = "int88",
+  INT96 = "int96",
+  INT104 = "int104",
+  INT112 = "int112",
+  INT120 = "int120",
+  INT128 = "int128",
+  INT136 = "int136",
+  INT144 = "int144",
+  INT152 = "int152",
+  INT160 = "int160",
+  INT168 = "int168",
+  INT176 = "int176",
+  INT184 = "int184",
+  INT192 = "int192",
+  INT200 = "int200",
+  INT208 = "int208",
+  INT216 = "int216",
+  INT224 = "int224",
+  INT232 = "int232",
+  INT240 = "int240",
+  INT248 = "int248",
+  INT256 = "int256",
+}
+
+export const SIGNED_NUMBER_REGEX = /^-?\d+\.?\d*$/;
+export const UNSIGNED_NUMBER_REGEX = /^\.?\d+\.?\d*$/;
+
+export const isValid = (dataType: UintVariant | IntVariant, value: BigNumberish) => {
+  const isSigned = dataType.startsWith("i");
+  const bitcount = Number(dataType.substring(isSigned ? 3 : 4));
+
+  let valueAsBigNumber;
+  try {
+    valueAsBigNumber = BigNumber.from(value);
+  } catch (e) {}
+  if (!BigNumber.isBigNumber(valueAsBigNumber)) {
+    return true;
+  }
+  const hexString = valueAsBigNumber.toHexString();
+  const significantHexDigits = hexString.match(/.*x0*(.*)$/)?.[1] ?? "";
+  if (
+    significantHexDigits.length * 4 > bitcount ||
+    (isSigned && significantHexDigits.length * 4 === bitcount && parseInt(significantHexDigits.slice(-1)?.[0], 16) < 8)
+  ) {
+    return false;
+  }
+  return true;
+};
