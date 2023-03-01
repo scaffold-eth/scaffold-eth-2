@@ -25,7 +25,7 @@ export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256Inpu
       return;
     }
     const hexString = BigNumber.from(value).toHexString();
-    if (hexString.substring(2).length > 256) {
+    if (hexString.substring(2).length * 4 > 256) {
       setInputError(true);
     } else {
       setInputError(false);
