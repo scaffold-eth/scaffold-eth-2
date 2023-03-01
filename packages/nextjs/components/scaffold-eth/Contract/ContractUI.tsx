@@ -109,7 +109,7 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
                   <p className="my-0 text-sm">Read</p>
                 </div>
               </div>
-              <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+              <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200 divide-y divide-base-300">
                 {contractMethodsDisplay.methods.length > 0 ? contractMethodsDisplay.methods : "No read methods"}
               </div>
             </div>
@@ -126,7 +126,7 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
                   <p className="my-0 text-sm">Write</p>
                 </div>
               </div>
-              <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200">
+              <div className="collapse-content px-4 min-h-12 transition-all duration-200 divide-y divide-base-300">
                 {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
               </div>
             </div>
