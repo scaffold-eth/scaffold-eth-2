@@ -1,15 +1,9 @@
 import { ethers } from "ethers";
 import { useCallback } from "react";
 import { InputBase } from "../Input/InputBase";
+import { CommonInputProps } from "./utils";
 
-type BytesInputProps = {
-  value: string;
-  onChange: (newValue: string) => void;
-  name?: string;
-  placeholder?: string;
-};
-
-export const BytesInput = ({ value, onChange, name, placeholder }: BytesInputProps) => {
+export const BytesInput = ({ value, onChange, name, placeholder }: CommonInputProps) => {
   const convertStringToBytes = useCallback(() => {
     onChange(
       ethers.utils.isHexString(value)

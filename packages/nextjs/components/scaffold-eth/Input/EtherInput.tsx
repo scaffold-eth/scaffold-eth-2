@@ -2,20 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "./InputBase";
-
-type EtherInputProps = {
-  onChange?: (arg: string) => void;
-  placeholder?: string;
-  name?: string;
-  value?: string;
-};
+import { CommonInputProps } from "./utils";
 
 /**
  * Input for ETH amount with USD conversion.
  *
  * onChange will always be called with the value in ETH
  */
-export function EtherInput({ value, name, placeholder, onChange }: EtherInputProps) {
+export function EtherInput({ value, name, placeholder, onChange }: CommonInputProps) {
   const [ethValue, setEthValue] = useState("");
   const [displayValue, setDisplayValue] = useState("");
   const [usdMode, setUSDMode] = useState(false);

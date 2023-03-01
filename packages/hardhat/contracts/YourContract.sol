@@ -18,6 +18,7 @@ contract YourContract {
   string public greeting = "Building Unstoppable Apps!!!";
   bool public premium = false;
   uint256 public totalCounter = 0;
+  uint8 public lowBitCounter = 0;
   mapping(address => uint) public userGreetingCounter;
 
   // Events: a way to emit log statements from smart contract that can be listened to by external parties
@@ -64,6 +65,10 @@ contract YourContract {
 
   function setTotalCounter(uint256 _newTotal) public payable {
     totalCounter = _newTotal;
+  }
+
+  function setLowBitCounter(uint8 _newCounter) public payable {
+    lowBitCounter = _newCounter;
   }
 
   /**

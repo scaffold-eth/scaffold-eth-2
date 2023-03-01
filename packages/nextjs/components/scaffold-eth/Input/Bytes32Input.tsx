@@ -1,15 +1,9 @@
 import { ethers } from "ethers";
 import { useCallback } from "react";
 import { InputBase } from "../Input/InputBase";
+import { CommonInputProps } from "./utils";
 
-type Bytes32InputProps = {
-  value: string;
-  onChange: (newValue: string) => void;
-  name?: string;
-  placeholder?: string;
-};
-
-export const Bytes32Input = ({ value, onChange, name, placeholder }: Bytes32InputProps) => {
+export const Bytes32Input = ({ value, onChange, name, placeholder }: CommonInputProps) => {
   const convertStringToBytes32 = useCallback(() => {
     if (!value) {
       return;

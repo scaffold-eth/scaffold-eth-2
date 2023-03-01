@@ -1,16 +1,10 @@
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "./InputBase";
-import { UintVariant } from "./utils";
+import { CommonInputProps, NUMBER_REGEX, UintVariant } from "./utils";
 
-const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
-
-type UintInputProps = {
-  value?: string | BigNumber;
-  onChange: (newValue: string | BigNumber) => void;
+type UintInputProps = CommonInputProps<string | BigNumber> & {
   variant?: UintVariant;
-  name?: string;
-  placeholder?: string;
 };
 
 export const UintInput = ({ value, onChange, name, placeholder, variant = UintVariant.UINT256 }: UintInputProps) => {
@@ -45,7 +39,7 @@ export const UintInput = ({ value, onChange, name, placeholder, variant = UintVa
       placeholder={placeholder}
       error={inputError}
       onChange={value => {
-        if (value && !NUMBER_REGEX.test(value)) {
+        if (typeof value === "string" && !NUMBER_REGEX.test(value)) {
           setInputError(true);
         } else {
           setInputError(false);

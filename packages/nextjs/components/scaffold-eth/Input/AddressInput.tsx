@@ -3,13 +3,7 @@ import Blockies from "react-blockies";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { isAddress } from "ethers/lib/utils";
 import { InputBase } from "./InputBase";
-
-type AddressInputProps = {
-  value: string;
-  onChange: (newValue: string) => void;
-  name?: string;
-  placeholder?: string;
-};
+import { CommonInputProps } from "./utils";
 
 // ToDo:  move this function to an utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
@@ -17,7 +11,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-export const AddressInput = ({ value, name, placeholder, onChange }: AddressInputProps) => {
+export const AddressInput = ({ value, name, placeholder, onChange }: CommonInputProps) => {
   const [address, setAddress] = useState("");
   const [resolvedEns, setResolvedEns] = useState("");
 

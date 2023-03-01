@@ -14,7 +14,7 @@ export const MissingTypeInput = ({ paramType }: MissingTypeInputProps) => {
 
   return (
     <InputBase
-      value={undefined}
+      value=""
       placeholder={`Param type ${paramType.type} is not implemented yet.`}
       onChange={() => undefined}
       disabled

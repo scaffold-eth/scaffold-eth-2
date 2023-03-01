@@ -1,3 +1,10 @@
+export interface CommonInputProps<T = string> {
+  value: T;
+  onChange: (newValue: T) => void;
+  name?: string;
+  placeholder?: string;
+}
+
 export enum UintVariant {
   UINT8 = "uint8",
   UINT16 = "uint16",
@@ -32,3 +39,5 @@ export enum UintVariant {
   UINT248 = "uint248",
   UINT256 = "uint256",
 }
+
+export const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
