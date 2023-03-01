@@ -83,7 +83,7 @@ const TxValueInput = ({ setTxValue, txValue }: { setTxValue: Dispatch<SetStateAc
           data-tip="Multiply by 10^18 (wei)"
         >
           <button
-            className="cursor-pointer text-xl font-semibold px-4 text-accent"
+            className="cursor-pointer text-lg font-semibold px-4 text-accent"
             disabled={inputError}
             onClick={() => {
               const multiplied = multiplyStringifiedNumberToPowerOf10(txValue, 18);
