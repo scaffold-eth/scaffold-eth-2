@@ -18,11 +18,11 @@ export const InputBase = <T extends { toString: () => string } = string>({
   prefix,
   suffix,
 }: InputBaseProps<T>) => {
-  const modifiers = [];
+  let modifier = "";
   if (error) {
-    modifiers.push("border-error");
+    modifier = "border-error";
   } else if (disabled) {
-    modifiers.push("border-disabled bg-base-300");
+    modifier = "border-disabled bg-base-300";
   }
 
   const handleChange = useCallback(
@@ -33,7 +33,7 @@ export const InputBase = <T extends { toString: () => string } = string>({
   );
 
   return (
-    <div className={`flex border-2 border-base-300 bg-base-200 rounded-full text-accent ${modifiers.join(" ")}`}>
+    <div className={`flex border-2 border-base-300 bg-base-200 rounded-full text-accent ${modifier}`}>
       {prefix}
       <input
         className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-gray-400"
