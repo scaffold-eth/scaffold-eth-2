@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "./InputBase";
 import { CommonInputProps, IntVariant, isValid, SIGNED_NUMBER_REGEX } from "./utils";
 
@@ -16,23 +16,24 @@ export const IntInput = ({ value, onChange, name, placeholder, variant = IntVari
     onChange(ethers.utils.parseEther(value.toString()));
   }, [onChange, value]);
 
+  useEffect(() => {
+    if (
+      (value && typeof value === "string" && !SIGNED_NUMBER_REGEX.test(value) && value !== "-") ||
+      !isValid(variant, value)
+    ) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
+  }, [value, variant]);
+
   return (
     <InputBase
       name={name}
       value={value}
       placeholder={placeholder}
       error={inputError}
-      onChange={value => {
-        if (
-          (value && typeof value === "string" && !SIGNED_NUMBER_REGEX.test(value) && value !== "-") ||
-          !isValid(variant, value)
-        ) {
-          setInputError(true);
-        } else {
-          setInputError(false);
-        }
-        onChange(value);
-      }}
+      onChange={onChange}
       suffix={
         !inputError && (
           <div

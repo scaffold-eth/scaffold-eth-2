@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "./InputBase";
 import { CommonInputProps, UNSIGNED_NUMBER_REGEX, UintVariant, isValid } from "./utils";
 
@@ -17,20 +17,21 @@ export const UintInput = ({ value, onChange, name, placeholder, variant = UintVa
     onChange(newValue);
   }, [onChange, value]);
 
+  useEffect(() => {
+    if ((value && typeof value === "string" && !UNSIGNED_NUMBER_REGEX.test(value)) || !isValid(variant, value)) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
+  }, [value, variant]);
+
   return (
     <InputBase
       name={name}
       value={value}
       placeholder={placeholder}
       error={inputError}
-      onChange={value => {
-        if ((value && typeof value === "string" && !UNSIGNED_NUMBER_REGEX.test(value)) || !isValid(variant, value)) {
-          setInputError(true);
-        } else {
-          setInputError(false);
-        }
-        onChange(value);
-      }}
+      onChange={onChange}
       suffix={
         !inputError && (
           <div
