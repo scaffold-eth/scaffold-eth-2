@@ -87,7 +87,11 @@ export const WriteOnlyFunctionForm = ({
   });
 
   return (
-    <div className={`flex gap-3 py-4 ${inputs.length === 0 ? "flex-row justify-between" : "flex-col"}`}>
+    <div
+      className={`flex gap-3 py-4 ${
+        inputs.length === 0 && !functionFragment.payable ? "flex-row justify-between" : "flex-col"
+      }`}
+    >
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
