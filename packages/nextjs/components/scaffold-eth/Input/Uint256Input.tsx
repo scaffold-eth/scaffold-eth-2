@@ -14,17 +14,21 @@ type Uint256InputProps = {
 export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256InputProps) => {
   const [inputError, setInputError] = useState(false);
   const convertEtherToUint = useCallback(() => {
-    if (!value) {
+    if (!value || value instanceof BigNumber) {
       return;
     }
-    onChange(value instanceof BigNumber ? ethers.utils.formatEther(value) : ethers.utils.parseEther(value));
+    onChange(ethers.utils.parseEther(value));
   }, [onChange, value]);
 
   useEffect(() => {
-    if (!value || (typeof value === "string" && !NUMBER_REGEX.test(value))) {
+    let valueAsBigNumber;
+    try {
+      valueAsBigNumber = BigNumber.from(value);
+    } catch (e) {}
+    if (!BigNumber.isBigNumber(valueAsBigNumber)) {
       return;
     }
-    const hexString = BigNumber.from(value).toHexString();
+    const hexString = valueAsBigNumber.toHexString();
     if (hexString.substring(2).length * 4 > 256) {
       setInputError(true);
     } else {
@@ -47,7 +51,8 @@ export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256Inpu
         onChange(value);
       }}
       suffix={
-        !inputError && (
+        !inputError &&
+        !(value instanceof BigNumber) && (
           <div
             className="self-center cursor-pointer text-l font-semibold px-4 text-accent"
             onClick={convertEtherToUint}
