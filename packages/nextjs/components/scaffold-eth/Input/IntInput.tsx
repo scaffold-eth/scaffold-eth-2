@@ -10,10 +10,10 @@ type IntInputProps = CommonInputProps<string | BigNumber> & {
 export const IntInput = ({ value, onChange, name, placeholder, variant = IntVariant.INT256 }: IntInputProps) => {
   const [inputError, setInputError] = useState(false);
   const convertEtherToUint = useCallback(() => {
-    if (!value || value instanceof BigNumber) {
+    if (!value) {
       return;
     }
-    onChange(ethers.utils.parseEther(value));
+    onChange(ethers.utils.parseEther(value.toString()));
   }, [onChange, value]);
 
   return (
@@ -34,8 +34,7 @@ export const IntInput = ({ value, onChange, name, placeholder, variant = IntVari
         onChange(value);
       }}
       suffix={
-        !inputError &&
-        !(value instanceof BigNumber) && (
+        !inputError && (
           <div
             className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
             data-tip="Multiply the value you entered by 10^18"
