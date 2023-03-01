@@ -54,10 +54,12 @@ export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256Inpu
         !inputError &&
         !(value instanceof BigNumber) && (
           <div
-            className="self-center cursor-pointer text-l font-semibold px-4 text-accent"
-            onClick={convertEtherToUint}
+            className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+            data-tip="Multiply the value you entered by 10^18"
           >
-            ∗
+            <button className="cursor-pointer font-semibold px-4 text-accent" onClick={convertEtherToUint}>
+              ∗
+            </button>
           </div>
         )
       }
