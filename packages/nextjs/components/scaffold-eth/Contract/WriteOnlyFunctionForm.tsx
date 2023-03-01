@@ -89,7 +89,7 @@ export const WriteOnlyFunctionForm = ({
   return (
     <div
       className={`flex gap-3 py-4 ${
-        inputs.length === 0 && !functionFragment.payable ? "flex-row justify-between" : "flex-col"
+        inputs.length === 0 && !functionFragment.payable ? "flex-row justify-between items-center" : "flex-col"
       }`}
     >
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
