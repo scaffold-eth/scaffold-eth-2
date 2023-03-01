@@ -1,8 +1,12 @@
 import { utils } from "ethers";
 import React, { Dispatch, SetStateAction } from "react";
-
-import { AddressInput, Bytes32Input, BytesInput, InputBase, MissingTypeInput, UintInput } from "../Input";
+import { AddressInput } from "../Input/AddressInput";
+import { Bytes32Input } from "../Input/Bytes32Input";
+import { BytesInput } from "../Input/BytesInput";
+import { InputBase } from "../Input/InputBase";
 import { IntInput } from "../Input/IntInput";
+import { MissingTypeInput } from "../Input/MissingTypeInput";
+import { UintInput } from "../Input/UintInput";
 import { IntVariant, UintVariant } from "../Input/utils";
 
 type ContractInputProps = {

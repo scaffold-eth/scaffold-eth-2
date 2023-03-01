@@ -6,9 +6,9 @@ import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersErro
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractInput } from "./ContractInput";
-import { UintInput } from "../Input";
 import { BigNumber } from "ethers";
 import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
+import { UintInput } from "../Input/UintInput";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
