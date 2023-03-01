@@ -1,17 +1,19 @@
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
-import { InputBase } from "../Input/InputBase";
+import { InputBase } from "./InputBase";
+import { UintVariant } from "./utils";
 
 const NUMBER_REGEX = /^\.?\d+\.?\d*$/;
 
-type Uint256InputProps = {
+type UintInputProps = {
   value?: string | BigNumber;
   onChange: (newValue: string | BigNumber) => void;
+  variant?: UintVariant;
   name?: string;
   placeholder?: string;
 };
 
-export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256InputProps) => {
+export const UintInput = ({ value, onChange, name, placeholder, variant = UintVariant.UINT256 }: UintInputProps) => {
   const [inputError, setInputError] = useState(false);
   const convertEtherToUint = useCallback(() => {
     if (!value || value instanceof BigNumber) {
@@ -29,12 +31,12 @@ export const Uint256Input = ({ value, onChange, name, placeholder }: Uint256Inpu
       return;
     }
     const hexString = valueAsBigNumber.toHexString();
-    if (hexString.substring(2).length * 4 > 256) {
+    if (hexString.substring(2).length * 4 > Number(variant.substring(4))) {
       setInputError(true);
     } else {
       setInputError(false);
     }
-  }, [value, setInputError]);
+  }, [value, setInputError, variant]);
 
   return (
     <InputBase

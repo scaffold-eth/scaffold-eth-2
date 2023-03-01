@@ -1,7 +1,8 @@
 import { utils } from "ethers";
 import React, { Dispatch, SetStateAction, useMemo } from "react";
 
-import { AddressInput, Bytes32Input, BytesInput, InputBase, MissingTypeInput, Uint256Input } from "../Input";
+import { AddressInput, Bytes32Input, BytesInput, InputBase, MissingTypeInput, UintInput } from "../Input";
+import { UintVariant } from "../Input/utils";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
@@ -28,19 +29,18 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     [form, paramType.name, paramType.type, setForm, stateObjectKey],
   );
 
-  switch (paramType.type) {
-    case "address":
-      return <AddressInput {...inputProps} />;
-    case "bytes32":
-      return <Bytes32Input {...inputProps} />;
-    case "bytes":
-      return <BytesInput {...inputProps} />;
-    case "string":
-      return <InputBase {...inputProps} />;
-    case "uint256":
-      return <Uint256Input {...inputProps} />;
-    default:
-      // TODO: implement missing input types such as `bytes[]`
-      return <MissingTypeInput paramType={paramType} />;
+  if (paramType.type === "address") {
+    return <AddressInput {...inputProps} />;
+  } else if (paramType.type === "bytes32") {
+    return <Bytes32Input {...inputProps} />;
+  } else if (paramType.type === "bytes") {
+    return <BytesInput {...inputProps} />;
+  } else if (paramType.type === "string") {
+    return <InputBase {...inputProps} />;
+  } else if (paramType.type.startsWith("uint")) {
+    return <UintInput {...inputProps} variant={paramType.type as UintVariant} />;
   }
+
+  // TODO: implement missing input types such as `bytes[]`
+  return <MissingTypeInput paramType={paramType} />;
 };

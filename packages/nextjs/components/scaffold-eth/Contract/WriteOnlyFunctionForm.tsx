@@ -6,7 +6,7 @@ import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersErro
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractInput } from "./ContractInput";
-import { Uint256Input } from "../Input";
+import { UintInput } from "../Input";
 import { BigNumber } from "ethers";
 import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
 
@@ -84,7 +84,7 @@ export const WriteOnlyFunctionForm = ({
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       {functionFragment.payable ? (
-        <Uint256Input value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
+        <UintInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
       ) : null}
       <div className="flex justify-between gap-2">
         <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
