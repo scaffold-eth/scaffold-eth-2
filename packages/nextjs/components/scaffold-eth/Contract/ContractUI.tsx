@@ -98,35 +98,25 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
         </div>
         <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
           <div className="z-10">
-            <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 collapse collapse-arrow overflow-visible flex flex-col mt-10 ">
-              <input
-                type="checkbox"
-                className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
-                defaultChecked
-              />
-              <div className="h-[5rem] w-[5.5rem] px-4 bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-base-300">
-                <div className="flex items-center space-x-2">
+            <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 flex flex-col mt-10 relative">
+              <div className="h-[5rem] w-[5.5rem] bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] shadow-lg shadow-base-300">
+                <div className="flex items-center justify-center space-x-2">
                   <p className="my-0 text-sm">Read</p>
                 </div>
               </div>
-              <div className="collapse-content py-3 px-4 min-h-12 transition-all duration-200 divide-y divide-base-300">
+              <div className="py-3 px-4 duration-200 divide-y divide-base-300">
                 {contractMethodsDisplay.methods.length > 0 ? contractMethodsDisplay.methods : "No read methods"}
               </div>
             </div>
           </div>
           <div className="z-10">
-            <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 mt-10 collapse collapse-arrow overflow-visible flex flex-col">
-              <input
-                type="checkbox"
-                className="absolute -top-[38px] left-0 z-50 h-[2.75rem] w-[5.5rem] min-h-fit"
-                defaultChecked
-              />
-              <div className="h-[5rem] w-[5.5rem] px-4 bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] collapse-title after:!top-[25%] shadow-lg shadow-base-300">
-                <div className="flex items-center space-x-2 ">
+            <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 flex flex-col mt-10 relative">
+              <div className="h-[5rem] w-[5.5rem] bg-base-300 absolute self-start rounded-[22px] -top-[38px] -left-[1px] -z-10 py-[0.65rem] shadow-lg shadow-base-300">
+                <div className="flex items-center justify-center space-x-2">
                   <p className="my-0 text-sm">Write</p>
                 </div>
               </div>
-              <div className="collapse-content px-4 min-h-12 transition-all duration-200 divide-y divide-base-300">
+              <div className="py-3 px-4 duration-200 divide-y divide-base-300">
                 {contractWriteMethods.methods.length > 0 ? contractWriteMethods.methods : "No write methods"}
               </div>
             </div>
