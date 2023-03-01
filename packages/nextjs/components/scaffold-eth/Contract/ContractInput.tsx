@@ -1,5 +1,5 @@
 import { utils } from "ethers";
-import React, { Dispatch, SetStateAction, useMemo } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 import { AddressInput, Bytes32Input, BytesInput, InputBase, MissingTypeInput, UintInput } from "../Input";
 import { IntInput } from "../Input/IntInput";
@@ -16,19 +16,16 @@ type ContractInputProps = {
  * Generic Input component to handle input's based on their function param type
  */
 export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: ContractInputProps) => {
-  const inputProps = useMemo(
-    () => ({
-      name: stateObjectKey,
-      value: form[stateObjectKey],
-      placeholder: paramType.name ? `${paramType.type} ${paramType.name}` : paramType.type,
-      onChange: (value: any) => {
-        const formUpdate = { ...form };
-        formUpdate[stateObjectKey] = value;
-        setForm(formUpdate);
-      },
-    }),
-    [form, paramType.name, paramType.type, setForm, stateObjectKey],
-  );
+  const inputProps = {
+    name: stateObjectKey,
+    value: form[stateObjectKey],
+    placeholder: paramType.name ? `${paramType.type} ${paramType.name}` : paramType.type,
+    onChange: (value: any) => {
+      const formUpdate = { ...form };
+      formUpdate[stateObjectKey] = value;
+      setForm(formUpdate);
+    },
+  };
 
   if (paramType.type === "address") {
     return <AddressInput {...inputProps} />;
