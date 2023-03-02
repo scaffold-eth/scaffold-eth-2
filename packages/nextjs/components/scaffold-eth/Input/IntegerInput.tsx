@@ -1,13 +1,19 @@
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "./InputBase";
-import { CommonInputProps, IntVariant, isValid, SIGNED_NUMBER_REGEX } from "./utils";
+import { CommonInputProps, IntegerVariant, isValid } from "./utils";
 
-type IntInputProps = CommonInputProps<string | BigNumber> & {
-  variant?: IntVariant;
+type IntegerInputProps = CommonInputProps<string | BigNumber> & {
+  variant?: IntegerVariant;
 };
 
-export const IntInput = ({ value, onChange, name, placeholder, variant = IntVariant.INT256 }: IntInputProps) => {
+export const IntegerInput = ({
+  value,
+  onChange,
+  name,
+  placeholder,
+  variant = IntegerVariant.UINT256,
+}: IntegerInputProps) => {
   const [inputError, setInputError] = useState(false);
   const convertEtherToUint = useCallback(() => {
     if (!value) {
@@ -17,13 +23,10 @@ export const IntInput = ({ value, onChange, name, placeholder, variant = IntVari
   }, [onChange, value]);
 
   useEffect(() => {
-    if (
-      (value && typeof value === "string" && !SIGNED_NUMBER_REGEX.test(value) && value !== "-") ||
-      !isValid(variant, value)
-    ) {
-      setInputError(true);
-    } else {
+    if (isValid(variant, value, false)) {
       setInputError(false);
+    } else {
+      setInputError(true);
     }
   }, [value, variant]);
 

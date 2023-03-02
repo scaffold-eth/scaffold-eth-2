@@ -4,10 +4,9 @@ import { AddressInput } from "../Input/AddressInput";
 import { Bytes32Input } from "../Input/Bytes32Input";
 import { BytesInput } from "../Input/BytesInput";
 import { InputBase } from "../Input/InputBase";
-import { IntInput } from "../Input/IntInput";
+import { IntegerInput } from "../Input/IntegerInput";
 import { MissingTypeInput } from "../Input/MissingTypeInput";
-import { UintInput } from "../Input/UintInput";
-import { IntVariant, UintVariant } from "../Input/utils";
+import { IntegerVariant } from "../Input/utils";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
@@ -39,10 +38,8 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     return <BytesInput {...inputProps} />;
   } else if (paramType.type === "string") {
     return <InputBase {...inputProps} />;
-  } else if (paramType.type.startsWith("uint")) {
-    return <UintInput {...inputProps} variant={paramType.type as UintVariant} />;
-  } else if (paramType.type.startsWith("int")) {
-    return <IntInput {...inputProps} variant={paramType.type as IntVariant} />;
+  } else if (paramType.type.includes("int")) {
+    return <IntegerInput {...inputProps} variant={paramType.type as IntegerVariant} />;
   }
 
   // TODO: implement missing input types such as `bytes[]`

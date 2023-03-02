@@ -7,7 +7,7 @@ export interface CommonInputProps<T = string> {
   placeholder?: string;
 }
 
-export enum UintVariant {
+export enum IntegerVariant {
   UINT8 = "uint8",
   UINT16 = "uint16",
   UINT24 = "uint24",
@@ -40,9 +40,6 @@ export enum UintVariant {
   UINT240 = "uint240",
   UINT248 = "uint248",
   UINT256 = "uint256",
-}
-
-export enum IntVariant {
   INT8 = "int8",
   INT16 = "int16",
   INT24 = "int24",
@@ -80,7 +77,7 @@ export enum IntVariant {
 export const SIGNED_NUMBER_REGEX = /^-?\d+\.?\d*$/;
 export const UNSIGNED_NUMBER_REGEX = /^\.?\d+\.?\d*$/;
 
-export const isValid = (dataType: UintVariant | IntVariant, value: BigNumberish) => {
+export const isValid = (dataType: IntegerVariant, value: BigNumberish, strict = true) => {
   const isSigned = dataType.startsWith("i");
   const bitcount = Number(dataType.substring(isSigned ? 3 : 4));
 
@@ -89,7 +86,13 @@ export const isValid = (dataType: UintVariant | IntVariant, value: BigNumberish)
     valueAsBigNumber = BigNumber.from(value);
   } catch (e) {}
   if (!BigNumber.isBigNumber(valueAsBigNumber)) {
-    return true;
+    if (strict) {
+      return false;
+    }
+    if (!value || typeof value !== "string") {
+      return true;
+    }
+    return isSigned ? SIGNED_NUMBER_REGEX.test(value) || value === "-" : UNSIGNED_NUMBER_REGEX.test(value);
   }
   const hexString = valueAsBigNumber.toHexString();
   const significantHexDigits = hexString.match(/.*x0*(.*)$/)?.[1] ?? "";

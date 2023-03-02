@@ -8,7 +8,7 @@ import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractInput } from "./ContractInput";
 import { BigNumber } from "ethers";
 import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
-import { UintInput } from "../Input/UintInput";
+import { IntegerInput } from "../Input/IntegerInput";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -84,7 +84,7 @@ export const WriteOnlyFunctionForm = ({
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       {functionFragment.payable ? (
-        <UintInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
+        <IntegerInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
       ) : null}
       <div className="flex justify-between gap-2">
         <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
