@@ -39,7 +39,7 @@ export const InputBase = <T extends { toString: () => string } = string>({
         className="input input-ghost focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-gray-400"
         placeholder={placeholder}
         name={name}
-        value={value.toString()}
+        value={value?.toString()}
         onChange={handleChange}
         disabled={disabled}
         autoComplete="off"
