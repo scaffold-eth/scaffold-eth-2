@@ -22,14 +22,12 @@ type TWriteOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
   setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>;
-  index: number;
 };
 
 export const WriteOnlyFunctionForm = ({
   functionFragment,
   contractAddress,
   setRefreshDisplayVariables,
-  index,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState("");
@@ -90,9 +88,9 @@ export const WriteOnlyFunctionForm = ({
 
   return (
     <div
-      className={`flex gap-3 ${
+      className={`flex gap-3 py-5 first:pt-1 ${
         inputs.length === 0 && !functionFragment.payable ? "flex-row justify-between items-center" : "flex-col"
-      } ${index === 0 ? "pt-1 pb-5" : "py-5"}`}
+      }`}
     >
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}

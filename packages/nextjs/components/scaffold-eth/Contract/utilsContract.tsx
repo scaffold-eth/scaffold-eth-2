@@ -60,7 +60,6 @@ const getContractReadOnlyMethodsWithParams = (
   contract: Contract | null,
   contractMethodsAndVariables: FunctionFragment[],
 ): { methods: (JSX.Element | null)[] } => {
-  let count = -1;
   return {
     methods: contract
       ? contractMethodsAndVariables
@@ -68,15 +67,7 @@ const getContractReadOnlyMethodsWithParams = (
             const isQueryableWithParams =
               (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
             if (isQueryableWithParams) {
-              count++;
-              return (
-                <ReadOnlyFunctionForm
-                  key={fn.name}
-                  functionFragment={fn}
-                  contractAddress={contract.address}
-                  index={count}
-                />
-              );
+              return <ReadOnlyFunctionForm key={fn.name} functionFragment={fn} contractAddress={contract.address} />;
             }
             return null;
           })
@@ -98,21 +89,18 @@ const getContractWriteMethods = (
   contractMethodsAndVariables: FunctionFragment[],
   setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>,
 ): { methods: (JSX.Element | null)[] } => {
-  let count = -1;
   return {
     methods: contract
       ? contractMethodsAndVariables
           .map(fn => {
             const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
             if (isWriteableFunction) {
-              count++;
               return (
                 <WriteOnlyFunctionForm
                   key={fn.name}
                   functionFragment={fn}
                   contractAddress={contract.address}
                   setRefreshDisplayVariables={setRefreshDisplayVariables}
-                  index={count}
                 />
               );
             }

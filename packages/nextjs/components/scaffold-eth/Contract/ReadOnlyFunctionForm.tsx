@@ -18,10 +18,9 @@ const getInitialFormState = (functionFragment: FunctionFragment) => {
 type TReadOnlyFunctionFormProps = {
   functionFragment: FunctionFragment;
   contractAddress: string;
-  index: number;
 };
 
-export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress, index }: TReadOnlyFunctionFormProps) => {
+export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [result, setResult] = useState<unknown>();
   const configuredChain = getTargetNetwork();
@@ -56,7 +55,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress, index 
   });
 
   return (
-    <div className={`flex flex-col gap-3 ${index === 0 ? "pt-1 pb-5" : "py-5"}`}>
+    <div className="flex flex-col gap-3 py-5 first:pt-1">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       <div className="flex justify-between gap-2">
