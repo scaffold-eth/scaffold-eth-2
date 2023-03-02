@@ -55,7 +55,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   });
 
   return (
-    <div className="flex flex-col gap-3 py-5 first:pt-1">
+    <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       <div className="flex justify-between gap-2">

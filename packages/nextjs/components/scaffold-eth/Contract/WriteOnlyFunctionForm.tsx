@@ -88,7 +88,7 @@ export const WriteOnlyFunctionForm = ({
   const zeroInputs = inputs.length === 0 && !functionFragment.payable;
 
   return (
-    <div className="py-5 space-y-3 first:pt-1 last:pb-1">
+    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
         <p className="font-medium my-0 break-words">{functionFragment.name}</p>
         {inputs}
@@ -114,7 +114,11 @@ export const WriteOnlyFunctionForm = ({
           </div>
         </div>
       </div>
-      {zeroInputs && <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>}
+      {zeroInputs && txResult ? (
+        <div className="flex-grow basis-0">
+          <TxReceipt txResult={txResult} />
+        </div>
+      ) : null}
     </div>
   );
 };
