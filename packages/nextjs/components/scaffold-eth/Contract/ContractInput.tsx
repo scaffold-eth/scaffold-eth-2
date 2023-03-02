@@ -5,7 +5,6 @@ import { Bytes32Input } from "../Input/Bytes32Input";
 import { BytesInput } from "../Input/BytesInput";
 import { InputBase } from "../Input/InputBase";
 import { IntegerInput } from "../Input/IntegerInput";
-import { MissingTypeInput } from "../Input/MissingTypeInput";
 import { IntegerVariant } from "../Input/utils";
 
 type ContractInputProps = {
@@ -36,12 +35,11 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     return <Bytes32Input {...inputProps} />;
   } else if (paramType.type === "bytes") {
     return <BytesInput {...inputProps} />;
-  } else if (paramType.type === "string" || paramType.type.includes("[]")) {
+  } else if (paramType.type === "string") {
     return <InputBase {...inputProps} />;
-  } else if (paramType.type.includes("int")) {
+  } else if (paramType.type.includes("int") && !paramType.type.includes("[]")) {
     return <IntegerInput {...inputProps} variant={paramType.type as IntegerVariant} />;
   }
 
-  // TODO: implement missing input types such as `bytes[]`
-  return <MissingTypeInput paramType={paramType} />;
+  return <InputBase {...inputProps} />;
 };
