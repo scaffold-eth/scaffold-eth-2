@@ -37,7 +37,7 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     return <BytesInput {...inputProps} />;
   } else if (paramType.type === "string") {
     return <InputBase {...inputProps} />;
-  } else if (paramType.type.includes("int") && !paramType.type.includes("[]")) {
+  } else if (paramType.type.includes("int") && !paramType.type.includes("[")) {
     return <IntegerInput {...inputProps} variant={paramType.type as IntegerVariant} />;
   }
 
