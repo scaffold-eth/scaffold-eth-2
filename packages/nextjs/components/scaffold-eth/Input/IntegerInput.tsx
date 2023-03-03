@@ -15,7 +15,7 @@ export const IntegerInput = ({
   variant = IntegerVariant.UINT256,
 }: IntegerInputProps) => {
   const [inputError, setInputError] = useState(false);
-  const convertEtherToUint = useCallback(() => {
+  const multiplyBy1e18 = useCallback(() => {
     if (!value) {
       return;
     }
@@ -43,7 +43,7 @@ export const IntegerInput = ({
             className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
             data-tip="Multiply the value you entered by 10^18"
           >
-            <button className="cursor-pointer font-semibold px-4 text-accent" onClick={convertEtherToUint}>
+            <button className="cursor-pointer font-semibold px-4 text-accent" onClick={multiplyBy1e18}>
               ∗
             </button>
           </div>

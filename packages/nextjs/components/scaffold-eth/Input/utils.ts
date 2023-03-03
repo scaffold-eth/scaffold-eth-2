@@ -93,6 +93,8 @@ export const isValid = (dataType: IntegerVariant, value: BigNumberish, strict = 
       return true;
     }
     return isSigned ? SIGNED_NUMBER_REGEX.test(value) || value === "-" : UNSIGNED_NUMBER_REGEX.test(value);
+  } else if (!isSigned && valueAsBigNumber.isNegative()) {
+    return false;
   }
   const hexString = valueAsBigNumber.toHexString();
   const significantHexDigits = hexString.match(/.*x0*(.*)$/)?.[1] ?? "";
