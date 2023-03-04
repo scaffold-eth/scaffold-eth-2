@@ -60,7 +60,7 @@ export const StringToBytes32Converter = ({ form, setForm, stateObjectKey }: IUti
     setForm(formUpdate);
   }, [form, setForm, stateObjectKey]);
   return (
-    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertStringToBytes32}>
+    <div className="cursor-pointer text-lg font-semibold px-4 text-accent" onClick={convertStringToBytes32}>
       #
     </div>
   );
@@ -78,7 +78,7 @@ export const StringToBytesConverter = ({ form, setForm, stateObjectKey }: IUtili
   }, [form, setForm, stateObjectKey]);
 
   return (
-    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertStringToBytes}>
+    <div className="cursor-pointer text-lg font-semibold px-4 text-accent" onClick={convertStringToBytes}>
       #
     </div>
   );
@@ -98,7 +98,7 @@ export const UintToEtherConverter = ({ form, setForm, stateObjectKey }: IUtility
   }, [form, setForm, stateObjectKey]);
 
   return (
-    <div className="cursor-pointer text-xl font-semibold px-4 text-accent" onClick={convertEtherToUint}>
+    <div className="cursor-pointer text-lg font-semibold px-4 text-accent" onClick={convertEtherToUint}>
       ∗
     </div>
   );
