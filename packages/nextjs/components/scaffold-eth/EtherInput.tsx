@@ -2,7 +2,35 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 
-type TEtherInputProps = {
+function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice: number) {
+  if (usdMode && ethPrice) {
+    const parsedEthValue = parseFloat(etherValue);
+    if (Number.isNaN(parsedEthValue)) {
+      return etherValue;
+    } else {
+      return (parsedEthValue * ethPrice).toString();
+    }
+  } else {
+    return etherValue;
+  }
+}
+
+function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPrice: number) {
+  if (usdMode && ethPrice) {
+    const parsedDisplayValue = parseFloat(displayValue);
+    if (Number.isNaN(parsedDisplayValue)) {
+      // Invalid number.
+      return displayValue;
+    } else {
+      // Compute the ETH value if a valid number.
+      return (parsedDisplayValue / ethPrice).toString();
+    }
+  } else {
+    return displayValue;
+  }
+}
+
+type EtherInputProps = {
   onChange?: (arg: string) => void;
   placeholder?: string;
   name?: string;
@@ -14,69 +42,26 @@ type TEtherInputProps = {
  *
  * onChange will always be called with the value in ETH
  */
-export default function EtherInput({ value, name, placeholder, onChange }: TEtherInputProps) {
-  const [ethValue, setEthValue] = useState("");
-  const [displayValue, setDisplayValue] = useState("");
+export default function EtherInput({ value = "", name, placeholder, onChange }: EtherInputProps) {
+  const [displayValue, setDisplayValue] = useState(value);
   const [usdMode, setUSDMode] = useState(false);
 
   const ethPrice = useAppStore(state => state.ethPrice);
 
-  // Controlled vs Uncontrolled input.
-  const currentValue = value !== undefined ? value : ethValue;
-
   useEffect(() => {
-    // Reset when clearing controlled input
-    if (!currentValue) {
-      setDisplayValue("");
-      setEthValue("");
-    }
-  }, [currentValue]);
+    // This useEffect makes it possible to use EtherInput as a controlled input by updating the internal displayValue when the value prop changes
+    setDisplayValue(etherValueToDisplayValue(usdMode, value, ethPrice));
+  }, [value, usdMode, ethPrice]);
 
-  const onChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
-    let ethNewValue;
+  const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-
-    if (usdMode) {
-      const parsedNewValue = parseFloat(newValue);
-      if (Number.isNaN(parsedNewValue)) {
-        // Invalid number.
-        ethNewValue = newValue;
-      } else {
-        // Compute the ETH value if a valid number.
-        ethNewValue = (parsedNewValue / ethPrice).toString();
-      }
-    } else {
-      ethNewValue = newValue;
-    }
-
-    setEthValue(ethNewValue);
     setDisplayValue(newValue);
     if (onChange) {
-      onChange(ethNewValue);
+      onChange(displayValueToEtherValue(usdMode, newValue, ethPrice));
     }
   };
 
-  const toggleMode = async () => {
-    if (usdMode) {
-      // Toggling to ETH mode
-      const parsedCurrentDisplayValue = parseFloat(displayValue);
-      if (Number.isNaN(parsedCurrentDisplayValue)) {
-        setDisplayValue(displayValue);
-      } else {
-        const ethValueConversion = (parsedCurrentDisplayValue / ethPrice).toString();
-        setDisplayValue(ethValueConversion);
-        setEthValue(ethValueConversion);
-      }
-    } else {
-      // Toggling to USD mode
-      const parsedCurrentEthValue = parseFloat(currentValue);
-
-      if (Number.isNaN(parsedCurrentEthValue)) {
-        setDisplayValue(currentValue);
-      } else {
-        setDisplayValue((parseFloat(currentValue) * ethPrice).toFixed(2).toString());
-      }
-    }
+  const toggleMode = () => {
     setUSDMode(!usdMode);
   };
 
@@ -92,7 +77,7 @@ export default function EtherInput({ value, name, placeholder, onChange }: TEthe
               placeholder={placeholder}
               className="input input-ghost pl-1 focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow"
               value={displayValue}
-              onChange={onChangeNumber}
+              onChange={handleChangeNumber}
             />
             <button
               className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
