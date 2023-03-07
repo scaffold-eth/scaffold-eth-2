@@ -59,9 +59,13 @@ export default function RainbowKitCustomConnectButton() {
                         {chain.name}
                       </span>
                     </div>
-                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm pl-2 shadow-md">
+                    <button
+                      onClick={openAccountModal}
+                      type="button"
+                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
+                    >
                       <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
-                      <span className="m-1">{account.displayName}</span>
+                      <span className="ml-2 mr-1">{account.displayName}</span>
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />
                       </span>

@@ -118,7 +118,7 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 ### Disabling commit checks
 We run `pre-commit` [git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) which lints the staged files and don't let you commit if there is an linting error. 
 
-To disable this, got to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
+To disable this, go to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
 
 ```diff
 - yarn lint-staged --verbose 
@@ -126,7 +126,7 @@ To disable this, got to `.husky/pre-commit` file and comment out `yarn lint-stag
 ```
 
 ### Deploying to Vercel without any checks 
-Vercel by default runs types and lint checks while developing `build` and deployment fails if there is an types or lint error. 
+Vercel by default runs types and lint checks while developing `build` and deployment fails if there is a types or lint error. 
 
 To ignore types and lint error checks while deploying, use : 
 ```shell
