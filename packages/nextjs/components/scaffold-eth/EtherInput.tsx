@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 
@@ -8,7 +8,7 @@ function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice
     if (Number.isNaN(parsedEthValue)) {
       return etherValue;
     } else {
-      return (parsedEthValue * ethPrice).toString();
+      return (parsedEthValue * ethPrice).toFixed(2);
     }
   } else {
     return etherValue;
@@ -43,6 +43,7 @@ type EtherInputProps = {
  * onChange will always be called with the value in ETH
  */
 export default function EtherInput({ value = "", name, placeholder, onChange }: EtherInputProps) {
+  const internalEthValue = useRef(value);
   const [displayValue, setDisplayValue] = useState(value);
   const [usdMode, setUSDMode] = useState(false);
 
@@ -50,19 +51,28 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
 
   useEffect(() => {
     // This useEffect makes it possible to use EtherInput as a controlled input by updating the internal displayValue when the value prop changes
-    setDisplayValue(etherValueToDisplayValue(usdMode, value, ethPrice));
+    // Only update the internal value and display value if it is differnt (i.e. it was changed outside this component)
+    if (value !== internalEthValue.current) {
+      internalEthValue.current = value;
+      setDisplayValue(etherValueToDisplayValue(usdMode, value, ethPrice));
+    }
   }, [value, usdMode, ethPrice]);
 
   const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setDisplayValue(newValue);
+
+    const newEthValue = displayValueToEtherValue(usdMode, newValue, ethPrice);
+    internalEthValue.current = newEthValue;
     if (onChange) {
-      onChange(displayValueToEtherValue(usdMode, newValue, ethPrice));
+      onChange(newEthValue);
     }
   };
 
   const toggleMode = () => {
-    setUSDMode(!usdMode);
+    const newUsdMode = !usdMode;
+    setDisplayValue(etherValueToDisplayValue(newUsdMode, internalEthValue.current, ethPrice));
+    setUSDMode(newUsdMode);
   };
 
   return (
