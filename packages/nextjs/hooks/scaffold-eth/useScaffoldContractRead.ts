@@ -10,6 +10,7 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  * @param args - args to be passed to the function call
  * @param readConfig - extra wagmi configuration
  */
+
 export const useScaffoldContractRead = <TReturn = any>(
   contractName: string,
   functionName: string,
