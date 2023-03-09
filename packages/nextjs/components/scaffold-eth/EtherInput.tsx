@@ -1,6 +1,8 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
+
+const MAX_DECIMALS_USD = 2;
 
 function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice: number) {
   if (usdMode && ethPrice) {
@@ -8,7 +10,9 @@ function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice
     if (Number.isNaN(parsedEthValue)) {
       return etherValue;
     } else {
-      return (parsedEthValue * ethPrice).toFixed(2);
+      // We need to round the value rather than use toFixed,
+      // since otherwise a user would not be able to modify the decimal value
+      return (Math.round(parsedEthValue * ethPrice * 10 ** MAX_DECIMALS_USD) / 10 ** MAX_DECIMALS_USD).toString();
     }
   } else {
     return etherValue;
@@ -31,7 +35,7 @@ function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPri
 }
 
 type EtherInputProps = {
-  onChange?: (arg: string) => void;
+  onChange: (arg: string) => void;
   placeholder?: string;
   name?: string;
   value?: string;
@@ -43,36 +47,45 @@ type EtherInputProps = {
  * onChange will always be called with the value in ETH
  */
 export default function EtherInput({ value = "", name, placeholder, onChange }: EtherInputProps) {
-  const internalEthValue = useRef(value);
-  const [displayValue, setDisplayValue] = useState(value);
+  const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
+  const ethPrice = useAppStore(state => state.ethPrice);
   const [usdMode, setUSDMode] = useState(false);
 
-  const ethPrice = useAppStore(state => state.ethPrice);
-
-  useEffect(() => {
-    // This useEffect makes it possible to use EtherInput as a controlled input by updating the internal displayValue when the value prop changes
-    // Only update the internal value and display value if it is differnt (i.e. it was changed outside this component)
-    if (value !== internalEthValue.current) {
-      internalEthValue.current = value;
-      setDisplayValue(etherValueToDisplayValue(usdMode, value, ethPrice));
-    }
-  }, [value, usdMode, ethPrice]);
+  // The displayValue is derived from the ether value that is controlled outside of the component
+  // In usdMode, it is converted to its usd value, in regular mode it is unaltered
+  const displayValue = useMemo(() => {
+    // Clear any transitory display values that might be set
+    setTransitoryDisplayValue(undefined);
+    return etherValueToDisplayValue(usdMode, value, ethPrice);
+  }, [ethPrice, usdMode, value]);
 
   const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    setDisplayValue(newValue);
+
+    // Following condition is a fix to prevent usdMode from experiencing different display values
+    // than what the user entered. This can happen due to floating point rounding errors that are introduced in the back and forth conversion
+    if (usdMode) {
+      const decimals = newValue.split(".")[1];
+      if (decimals && decimals.length > MAX_DECIMALS_USD) {
+        return;
+      }
+    }
+
+    // Since the display value is a derived state (calculated from the ether value), usdMode would not allow introducing a decimal point.
+    // This condition handles a transitory state for a display value with a trailing decimal sign
+    if (newValue.endsWith(".")) {
+      setTransitoryDisplayValue(newValue);
+      return;
+    } else {
+      setTransitoryDisplayValue(undefined);
+    }
 
     const newEthValue = displayValueToEtherValue(usdMode, newValue, ethPrice);
-    internalEthValue.current = newEthValue;
-    if (onChange) {
-      onChange(newEthValue);
-    }
+    onChange(newEthValue);
   };
 
   const toggleMode = () => {
-    const newUsdMode = !usdMode;
-    setDisplayValue(etherValueToDisplayValue(newUsdMode, internalEthValue.current, ethPrice));
-    setUSDMode(newUsdMode);
+    setUSDMode(!usdMode);
   };
 
   return (
@@ -86,7 +99,7 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
               type="text"
               placeholder={placeholder}
               className="input input-ghost pl-1 focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow"
-              value={displayValue}
+              value={transitoryDisplayValue ?? displayValue}
               onChange={handleChangeNumber}
             />
             <button
