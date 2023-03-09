@@ -73,7 +73,7 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
 
     // Since the display value is a derived state (calculated from the ether value), usdMode would not allow introducing a decimal point.
     // This condition handles a transitory state for a display value with a trailing decimal sign
-    if (newValue.endsWith(".")) {
+    if (newValue.endsWith(".") || newValue.endsWith(".0")) {
       setTransitoryDisplayValue(newValue);
       return;
     } else {
