@@ -1,13 +1,15 @@
 // @ts-check
 
+const ignoreBuildErrors = false;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   typescript: {
-    ignoreBuildErrors: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
+    ignoreBuildErrors: ignoreBuildErrors,
   },
   eslint: {
-    ignoreDuringBuilds: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
+    ignoreDuringBuilds: ignoreBuildErrors,
   },
 };
 

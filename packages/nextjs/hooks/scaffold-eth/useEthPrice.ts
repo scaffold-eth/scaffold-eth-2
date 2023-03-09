@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useProvider } from "wagmi";
+import ScaffoldConfig from "~~/scaffold.config";
 import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
 
 const enablePolling = false;
-const pollingTime = process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL
-  ? parseInt(process.env.NEXT_PUBLIC_RPC_POLLING_INTERVAL)
-  : 30_000;
+const pollingTime = ScaffoldConfig.pollingInterval;
 
 /**
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
