@@ -8,7 +8,7 @@ const BlockieAvatar: AvatarComponent = ({ address, ensImage, size }) =>
     // eslint-disable-next-line
     <img className="rounded-full" src={ensImage} width={size} height={size} alt={`${address} avatar`} />
   ) : (
-    <Blockies className="rounded-full" seed={address?.toLowerCase() as string} scale={size > 30 ? 10 : 3} />
+    <Blockies className="rounded-full" seed={address?.toLowerCase() as string} scale={size > 30 ? 10 : 3.75} />
   );
 
 export default BlockieAvatar;
