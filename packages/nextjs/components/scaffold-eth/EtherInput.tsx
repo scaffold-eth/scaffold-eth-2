@@ -54,10 +54,14 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
   // The displayValue is derived from the ether value that is controlled outside of the component
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
+    const newDisplayValue = etherValueToDisplayValue(usdMode, value, ethPrice);
+    if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
+      return transitoryDisplayValue;
+    }
     // Clear any transitory display values that might be set
     setTransitoryDisplayValue(undefined);
-    return etherValueToDisplayValue(usdMode, value, ethPrice);
-  }, [ethPrice, usdMode, value]);
+    return newDisplayValue;
+  }, [ethPrice, transitoryDisplayValue, usdMode, value]);
 
   const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -75,7 +79,6 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
     // This condition handles a transitory state for a display value with a trailing decimal sign
     if (newValue.endsWith(".") || newValue.endsWith(".0")) {
       setTransitoryDisplayValue(newValue);
-      return;
     } else {
       setTransitoryDisplayValue(undefined);
     }
@@ -99,7 +102,7 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
               type="text"
               placeholder={placeholder}
               className="input input-ghost pl-1 focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] border w-full font-medium placeholder:text-accent/50 text-gray-400 grow"
-              value={transitoryDisplayValue ?? displayValue}
+              value={displayValue}
               onChange={handleChangeNumber}
             />
             <button
