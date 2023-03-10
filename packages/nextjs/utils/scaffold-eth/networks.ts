@@ -56,26 +56,32 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
  * @dev returns empty string if the network is localChain
  */
 export function getBlockExplorerTxLink(network: Network, txnHash: string) {
-  const { name, chainId } = network;
+  let blockExplorerTxURL = "";
+  const { chainId } = network;
 
-  if (chainId === 31337 || chainId === 1337) {
-    // If its localChain then return empty sting
+  const chainNames = Object.keys(chains);
+
+  const targetChainArr = chainNames.filter(chainName => {
+    const wagmiChain = chains[chainName as keyof typeof chains];
+    return wagmiChain.id === chainId;
+  });
+
+  if (targetChainArr.length === 0) {
     return "";
   }
 
-  let blockExplorerNetwork = "";
-  if (name && chainId > 1) {
-    blockExplorerNetwork = name + ".";
+  const targetChain = targetChainArr[0] as keyof typeof chains;
+  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present and we are already checking in ternary
+  blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url
+    ? // @ts-expect-error
+      chains[targetChain].blockExplorers.default.url
+    : "";
+
+  if (!blockExplorerTxURL) {
+    return "";
   }
 
-  let blockExplorerBaseTxUrl = "https://" + blockExplorerNetwork + "etherscan.io/tx/";
-  if (chainId === 100) {
-    blockExplorerBaseTxUrl = "https://blockscout.com/poa/xdai/tx/";
-  }
-
-  const blockExplorerTxURL = blockExplorerBaseTxUrl + txnHash;
-
-  return blockExplorerTxURL;
+  return `${blockExplorerTxURL}/tx/${txnHash}`;
 }
 
 /**
