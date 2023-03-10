@@ -36,10 +36,10 @@ function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPri
 }
 
 type EtherInputProps = {
+  value: string | undefined;
   onChange: (arg: string) => void;
   placeholder?: string;
   name?: string;
-  value?: string;
 };
 
 /**
