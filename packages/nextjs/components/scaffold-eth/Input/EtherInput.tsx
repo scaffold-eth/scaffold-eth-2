@@ -41,7 +41,7 @@ function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPri
  *
  * onChange will always be called with the value in ETH
  */
-export const EtherInput = ({ value = "", name, placeholder, onChange }: CommonInputProps) => {
+export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputProps) => {
   const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
   const ethPrice = useAppStore(state => state.ethPrice);
   const [usdMode, setUSDMode] = useState(false);
