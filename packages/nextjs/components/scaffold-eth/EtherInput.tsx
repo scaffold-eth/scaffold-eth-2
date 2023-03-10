@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useMemo, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
+import { NUMBER_REGEX } from "./Contract/utilsComponents";
 
 const MAX_DECIMALS_USD = 2;
 
@@ -65,6 +66,10 @@ export default function EtherInput({ value = "", name, placeholder, onChange }: 
 
   const handleChangeNumber = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
+
+    if (newValue && !NUMBER_REGEX.test(newValue)) {
+      return;
+    }
 
     // Following condition is a fix to prevent usdMode from experiencing different display values
     // than what the user entered. This can happen due to floating point rounding errors that are introduced in the back and forth conversion
