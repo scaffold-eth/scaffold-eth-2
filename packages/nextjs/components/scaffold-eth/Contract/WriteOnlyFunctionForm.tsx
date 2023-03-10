@@ -78,32 +78,42 @@ export const WriteOnlyFunctionForm = ({
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
     return <ContractInput key={key} setForm={setForm} form={form} stateObjectKey={key} paramType={input} />;
   });
+  const zeroInputs = inputs.length === 0 && !functionFragment.payable;
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="font-medium my-0 break-words">{functionFragment.name}</p>
-      {inputs}
-      {functionFragment.payable ? (
-        <IntegerInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
-      ) : null}
-      <div className="flex justify-between gap-2">
-        <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
-        <div
-          className={`flex ${
-            writeDisabled &&
-            "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-          }`}
-          data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
-        >
-          <button
-            className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
-            disabled={writeDisabled}
-            onClick={handleWrite}
+    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
+      <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
+        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+        {inputs}
+        {functionFragment.payable ? (
+          <IntegerInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
+        ) : null}
+        <div className="flex justify-between gap-2">
+          {!zeroInputs && (
+            <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+          )}
+          <div
+            className={`flex ${
+              writeDisabled &&
+              "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+            }`}
+            data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
-            Send 💸
-          </button>
+            <button
+              className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
+              disabled={writeDisabled}
+              onClick={handleWrite}
+            >
+              Send 💸
+            </button>
+          </div>
         </div>
       </div>
+      {zeroInputs && txResult ? (
+        <div className="flex-grow basis-0">
+          <TxReceipt txResult={txResult} />
+        </div>
+      ) : null}
     </div>
   );
 };
