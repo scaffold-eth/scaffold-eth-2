@@ -1,5 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
@@ -9,6 +9,7 @@ import { ContractInput } from "./ContractInput";
 import { BigNumber } from "ethers";
 import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
 import { IntegerInput } from "../Input/IntegerInput";
+import { TransactionReceipt } from "@ethersproject/abstract-provider";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -69,14 +70,29 @@ export const WriteOnlyFunctionForm = ({
     }
   };
 
+  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
   const { data: txResult } = useWaitForTransaction({
     hash: result?.hash,
   });
+  useEffect(() => {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
-    return <ContractInput key={key} setForm={setForm} form={form} stateObjectKey={key} paramType={input} />;
+    return (
+      <ContractInput
+        key={key}
+        setForm={updatedFormValue => {
+          setDisplayedTxResult(undefined);
+          setForm(updatedFormValue);
+        }}
+        form={form}
+        stateObjectKey={key}
+        paramType={input}
+      />
+    );
   });
   const zeroInputs = inputs.length === 0 && !functionFragment.payable;
 
@@ -86,11 +102,20 @@ export const WriteOnlyFunctionForm = ({
         <p className="font-medium my-0 break-words">{functionFragment.name}</p>
         {inputs}
         {functionFragment.payable ? (
-          <IntegerInput value={txValue} onChange={value => setTxValue(value)} placeholder="value (wei)" />
+          <IntegerInput
+            value={txValue}
+            onChange={updatedTxValue => {
+              setDisplayedTxResult(undefined);
+              setTxValue(updatedTxValue);
+            }}
+            placeholder="value (wei)"
+          />
         ) : null}
         <div className="flex justify-between gap-2">
           {!zeroInputs && (
-            <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+            <div className="flex-grow basis-0">
+              {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
+            </div>
           )}
           <div
             className={`flex ${
