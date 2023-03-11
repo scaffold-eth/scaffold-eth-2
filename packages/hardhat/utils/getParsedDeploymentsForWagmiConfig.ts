@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
+
 const DEPLOYMENTS_PATH = "deployments";
 
-function getParsedDeploymentsForWagmiConfig() {
+export function getParsedDeploymentsForWagmiConfig() {
   // getting all directories inside deployments directory
   const allChainDirectories = fs.readdirSync(DEPLOYMENTS_PATH);
   // final constructed deployments object
@@ -27,37 +28,3 @@ function getParsedDeploymentsForWagmiConfig() {
 
   return finalObj;
 }
-/**
- * Generates wagmi.config.ts file with deployments address mapped with contract
- */
-async function main() {
-  if (!fs.existsSync(DEPLOYMENTS_PATH)) {
-    console.log("No deployments found!");
-    return;
-  }
-  const result = getParsedDeploymentsForWagmiConfig();
-  fs.writeFileSync(
-    "./wagmi.config.ts",
-    `import { defineConfig } from "@wagmi/cli";
-      import { hardhat, react } from "@wagmi/cli/plugins";
-      
-      export default defineConfig({
-        out: "../nextjs/generated/contractHooks.ts",
-        contracts: [],
-        plugins: [
-          hardhat({
-            project: "./",
-            deployments: ${JSON.stringify(result, null, 2)} 
-          }),
-          react(),
-        ],
-      });`,
-    "utf-8",
-  );
-  console.log("✅ wagmi.config.ts file generated");
-}
-
-main().catch(error => {
-  console.error(error);
-  process.exitCode = 1;
-});
