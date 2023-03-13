@@ -2940,6 +2940,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wagmi/chains@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "@wagmi/chains@npm:0.2.11"
+  peerDependencies:
+    typescript: ">=4.9.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 240d810fa254f15619a669be52cbb1839075cb2b77c89fb08d3409ccbbb0903fe817fec8ca0739bb1015335b608664ac8038026571b7bc3a43e70ea39dccc3a9
+  languageName: node
+  linkType: hard
+
 "@wagmi/connectors@npm:0.2.6":
   version: 0.2.6
   resolution: "@wagmi/connectors@npm:0.2.6"
@@ -11569,6 +11581,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@wagmi/chains": ^0.2.11
     husky: ^8.0.1
     lint-staged: ^13.0.3
   languageName: unknown

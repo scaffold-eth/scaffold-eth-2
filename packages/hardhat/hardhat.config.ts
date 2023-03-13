@@ -3,6 +3,13 @@ dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
+import { kebabToCamelCase } from "./utils";
+import scaffoldConfig from "../../scaffold.config";
+
+const defaultNetwork =
+  scaffoldConfig.targetNetwork.network === "hardhat"
+    ? "localhost"
+    : kebabToCamelCase(scaffoldConfig.targetNetwork.network);
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -15,7 +22,7 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 
 const config: HardhatUserConfig = {
   solidity: "0.8.17",
-  defaultNetwork: "localhost",
+  defaultNetwork,
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
