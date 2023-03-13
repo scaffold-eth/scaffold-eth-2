@@ -8,8 +8,7 @@ import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { getParsedEthersError } from "./Contract/utilsContract";
 import Address from "./Address";
 import Balance from "./Balance";
-import { AddressInput } from "./Input/AddressInput";
-import { EtherInput } from "./Input/EtherInput";
+import { AddressInput, EtherInput } from "./Input";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;

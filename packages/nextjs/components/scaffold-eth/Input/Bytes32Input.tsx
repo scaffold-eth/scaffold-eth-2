@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useCallback } from "react";
-import { InputBase } from "../Input/InputBase";
+import { InputBase } from "./InputBase";
 import { CommonInputProps } from "./utils";
 
 export const Bytes32Input = ({ value, onChange, name, placeholder }: CommonInputProps) => {

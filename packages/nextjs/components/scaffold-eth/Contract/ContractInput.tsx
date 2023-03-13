@@ -1,11 +1,6 @@
 import { utils } from "ethers";
 import React, { Dispatch, SetStateAction } from "react";
-import { AddressInput } from "../Input/AddressInput";
-import { Bytes32Input } from "../Input/Bytes32Input";
-import { BytesInput } from "../Input/BytesInput";
-import { InputBase } from "../Input/InputBase";
-import { IntegerInput } from "../Input/IntegerInput";
-import { IntegerVariant } from "../Input/utils";
+import { AddressInput, Bytes32Input, BytesInput, InputBase, IntegerInput, IntegerVariant } from "../Input";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
