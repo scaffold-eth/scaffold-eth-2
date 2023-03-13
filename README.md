@@ -2,9 +2,7 @@
 
 ⚠️ This project is currently under active development. Things might break. Feel free to check the open issues & create new ones.
 
-*The best way to get started building decentralized applications on Ethereum!*
-
-A new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Wagmi and Typescript.
+Scaffold-Eth 2 is a toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's a new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Wagmi and Typescript.
 
 - ✅ Contract component to easily edit the smart contracts and view & test the contract on your frontend
 - 🔥 Burner wallet & local faucet
@@ -24,10 +22,14 @@ A new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tre
 
 # Requirements
 
-Before you begin, you need to install [Node (v18 LTS)](https://nodejs.org/en/download/), [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
-
+Before you begin, you need to install the following tools:
+- [Node (v18 LTS)](https://nodejs.org/en/download/)
+- [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/)
+- [Git](https://git-scm.com/downloads)
 
 # Quickstart
+
+To get started with Scaffold-Eth 2, follow the steps below:
 
 1. Clone this repo & install dependencies
 
@@ -43,19 +45,21 @@ yarn install
 yarn chain
 ```
 
+This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.js`.
+
 3. On a second terminal, deploy the test contract:
 
 ```
 yarn deploy
 ```
+This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
 
 4. On a third terminal, start your NextJS app:
 
 ```
 yarn start
 ```
-
-Visit your app on: `http://localhost:3000`.
+Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend.
 
 Run smart contract test with `yarn hardhat:test`
 
@@ -72,6 +76,11 @@ By default, ```yarn deploy``` will deploy the contract to the local network. Y
 
 Check the `hardhat.config.js` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
+Example: To deploy the contract to the Rinkeby network, run the command below:
+```
+yarn deploy --network rinkeby
+```
+
 2. Generate a new account or add one to deploy the contract(s) from. Additionally you will need to add your Alchemy API key. Rename `.env.example` to `.env` and fill the required keys.
 
 ```
@@ -79,7 +88,7 @@ ALCHEMY_API_KEY="",
 DEPLOYER_PRIVATE_KEY=""
 ```
 
-The deployer account is the account that will deploy your contracts and execute calls you make in your deployment script.
+The deployer account is the account that will deploy your contracts. Additionally, the deployer account will be used to execute any function calls that are part of your deployment script.
 
 You can generate a random account / private key with ```yarn generate``` or add the private key of your crypto wallet. ```yarn generate``` will create a random account and add the DEPLOYER_PRIVATE_KEY to the .env file. You can check the generated account with ```yarn account```.
 
