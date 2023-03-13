@@ -6,7 +6,7 @@ type ScaffoldConfig = {
 };
 
 const scaffoldConfig: ScaffoldConfig = {
-	targetNetwork: chain.arbitrumGoerli,
+	targetNetwork: chain.hardhat,
 	pollingInterval: 30000,
 } as const;
 
