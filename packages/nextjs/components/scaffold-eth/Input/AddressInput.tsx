@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { isAddress } from "ethers/lib/utils";
@@ -19,6 +19,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
     cacheTime: 30_000,
   });
 
+  const [enteredEnsName, setEnteredEnsName] = useState<string>();
   const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address: value,
     enabled: isAddress(value),
@@ -38,8 +39,17 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
     if (!ensAddress) return;
 
     // ENS resolved successfully
+    setEnteredEnsName(value);
     onChange(ensAddress);
-  }, [ensAddress, onChange]);
+  }, [ensAddress, onChange, value]);
+
+  const handleChange = useCallback(
+    (newValue: string) => {
+      setEnteredEnsName(undefined);
+      onChange(newValue);
+    },
+    [onChange],
+  );
 
   return (
     <InputBase
@@ -47,7 +57,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
       placeholder={placeholder}
       error={ensAddress === null}
       value={value}
-      onChange={onChange}
+      onChange={handleChange}
       disabled={isEnsAddressLoading || isEnsNameLoading}
       prefix={
         ensName && (
@@ -60,7 +70,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
                 }
               </span>
             ) : null}
-            <span className="text-accent px-2">{ensName}</span>
+            <span className="text-accent px-2">{enteredEnsName ?? ensName}</span>
           </div>
         )
       }
