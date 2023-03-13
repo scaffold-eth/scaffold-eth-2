@@ -1,6 +1,6 @@
 import * as chains from "wagmi/chains";
 import { Network } from "@ethersproject/networks";
-import ScaffoldConfig from "~~/scaffold.config";
+import scaffoldConfig from "@root/scaffold.config";
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
@@ -88,7 +88,7 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
  * Get the wagmi's Chain target network configured in the app.
  */
 export const getTargetNetwork = () => {
-  const network = ScaffoldConfig.targetNetwork;
+  const network = scaffoldConfig.targetNetwork;
 
   if (!network) {
     // If error defaults to hardhat local network

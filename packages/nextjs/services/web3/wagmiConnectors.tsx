@@ -11,7 +11,7 @@ import { configureChains } from "wagmi";
 import * as chains from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import ScaffoldConfig from "~~/scaffold.config";
+import scaffoldConfig from "@root/scaffold.config";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -37,9 +37,9 @@ export const appChains = configureChains(
   {
     stallTimeout: 3_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
-    ...(ScaffoldConfig.targetNetwork !== chains.hardhat
+    ...(scaffoldConfig.targetNetwork !== chains.hardhat
       ? {
-          pollingInterval: ScaffoldConfig.pollingInterval,
+          pollingInterval: scaffoldConfig.pollingInterval,
         }
       : {}),
   },
