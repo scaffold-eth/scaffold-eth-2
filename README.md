@@ -10,9 +10,24 @@ A new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tre
 - 🔥 Burner wallet & local faucet
 - 🔐 Integration with the different wallet providers
 
----
+# Contents
 
-## Quickstart
+- [Requirements](#requirements)
+- [Quickstart](#Quickstart)
+- [Deploying your Smart Contracts](#Deploying-your-Smart-Contracts)
+- [Deploying your NextJS App](#Deploying-your-NextJS-App)
+- [Disabling Type & Linting Error Checks](#Disabling-type-and-linting-error-checks)
+  * [Disabling commit checks](#Disabling-commit-checks)
+  * [Deploying to Vercel without any checks](#Deploying-to-Vercel-without-any-checks)
+  * [Disabling Github Workflow](#Disabling-Github-Workflow)
+- [Contributing to Scaffold-Eth 2](#Contributing-to-Scaffold-Eth-2)
+
+# Requirements
+
+Before you begin, you need to install [Node (v18 LTS)](https://nodejs.org/en/download/), [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
+
+
+# Quickstart
 
 1. Clone this repo & install dependencies
 
@@ -48,7 +63,7 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your frontend in `packages/nextjs/pages`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
-## Deploying Smart Contracts
+# Deploying your Smart Contracts
 Once you are ready to deploy your smart contracts, there are a few things you need to adjust.
 
 1. Select the network
@@ -84,7 +99,7 @@ You can verify your smart contract on Etherscan by running:
 yarn verify --network network_name
 ```
 
-## Deploying your NextJS App
+# Deploying your NextJS App
 
 Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
 
@@ -94,35 +109,35 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
----
-## ⚠️ Disabling type & linting error checks 
+# Disabling type and linting error checks
 > **Hint**
-> Typescript helps you catch errors at compile time, which can save time and improve code quality, but can be challenging for those who are new to the language or who are used to the more dynamic nature of JavaScript. Below are the steps to disable type & lint check at different levels  
-### Disabling commit checks
-We run `pre-commit` [git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) which lints the staged files and don't let you commit if there is an linting error. 
+> Typescript helps you catch errors at compile time, which can save time and improve code quality, but can be challenging for those who are new to the language or who are used to the more dynamic nature of JavaScript. Below are the steps to disable type & lint check at different levels
+
+## Disabling commit checks
+We run `pre-commit` [git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) which lints the staged files and don't let you commit if there is an linting error.
 
 To disable this, go to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
 
 ```diff
-- yarn lint-staged --verbose 
+- yarn lint-staged --verbose
 + # yarn lint-staged --verbose
 ```
 
-### Deploying to Vercel without any checks 
-Vercel by default runs types and lint checks while developing `build` and deployment fails if there is a types or lint error. 
+## Deploying to Vercel without any checks
+Vercel by default runs types and lint checks while developing `build` and deployment fails if there is a types or lint error.
 
-To ignore types and lint error checks while deploying, use : 
+To ignore types and lint error checks while deploying, use :
 ```shell
 yarn vercel:yolo
 ```
 
-### Disabling Github Workflow
-We have github workflow setup checkout `.github/workflows/lint.yaml` which runs types and lint error checks every time code is __pushed__ to `main` branch or __pull request__ is made to `main` branch 
+## Disabling Github Workflow
+We have github workflow setup checkout `.github/workflows/lint.yaml` which runs types and lint error checks every time code is __pushed__ to `main` branch or __pull request__ is made to `main` branch
 
-To disable it, **delete `.github` directory** 
+To disable it, **delete `.github` directory**
 
 ---
-## Contributing to Scaffold-Eth 2
+# Contributing to Scaffold-Eth 2
 
 We welcome contributions to Scaffold-Eth 2!
 
