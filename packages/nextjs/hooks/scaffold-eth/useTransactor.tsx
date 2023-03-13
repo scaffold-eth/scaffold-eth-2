@@ -20,7 +20,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
         <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
-          checkout out transaction
+          check out transaction
         </a>
       ) : null}
     </div>
