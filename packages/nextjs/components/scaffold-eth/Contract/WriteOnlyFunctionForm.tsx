@@ -7,7 +7,7 @@ import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractInput } from "./ContractInput";
 import { BigNumber } from "ethers";
-import parseTxnValue from "~~/utils/scaffold-eth/parseTxnValue";
+import { parseTxnValue } from "~~/utils/scaffold-eth";
 import { IntegerInput } from "../Input/IntegerInput";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 
