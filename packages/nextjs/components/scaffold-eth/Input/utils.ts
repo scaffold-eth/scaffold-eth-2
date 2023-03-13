@@ -77,7 +77,7 @@ export enum IntegerVariant {
 export const SIGNED_NUMBER_REGEX = /^-?\d+\.?\d*$/;
 export const UNSIGNED_NUMBER_REGEX = /^\.?\d+\.?\d*$/;
 
-export const isValid = (dataType: IntegerVariant, value: BigNumberish, strict = true) => {
+export const isValidInteger = (dataType: IntegerVariant, value: BigNumberish, strict = true) => {
   const isSigned = dataType.startsWith("i");
   const bitcount = Number(dataType.substring(isSigned ? 3 : 4));
 

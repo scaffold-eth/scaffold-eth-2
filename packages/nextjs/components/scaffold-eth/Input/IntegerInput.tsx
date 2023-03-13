@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { InputBase } from "./InputBase";
-import { CommonInputProps, IntegerVariant, isValid } from "./utils";
+import { CommonInputProps, IntegerVariant, isValidInteger } from "./utils";
 
 type IntegerInputProps = CommonInputProps<string | BigNumber> & {
   variant?: IntegerVariant;
@@ -23,7 +23,7 @@ export const IntegerInput = ({
   }, [onChange, value]);
 
   useEffect(() => {
-    if (isValid(variant, value, false)) {
+    if (isValidInteger(variant, value, false)) {
       setInputError(false);
     } else {
       setInputError(true);
