@@ -39,13 +39,13 @@ const DEFAULT_POSITION: TPositions = "top-center";
 /**
  * Custom Notification
  */
-function Notification({
+const Notification = ({
   content,
   status,
   duration = DEFAULT_DURATION,
   icon,
   position = DEFAULT_POSITION,
-}: TNotificationProps) {
+}: TNotificationProps) => {
   return toast.custom(
     t => (
       <div
@@ -66,9 +66,9 @@ function Notification({
       position,
     },
   );
-}
+};
 
-const notification = {
+export const notification = {
   success: (content: React.ReactNode, options?: NotificationOptions) => {
     return Notification({ content, status: "success", ...options });
   },
@@ -88,5 +88,3 @@ const notification = {
     toast.remove(toastId);
   },
 };
-
-export default notification;
