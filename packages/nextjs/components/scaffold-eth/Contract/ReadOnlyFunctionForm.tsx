@@ -2,9 +2,9 @@ import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
 import { displayTxResult } from "./utilsDisplay";
-import InputUI from "./InputUI";
 import { getFunctionInputKey, getParsedContractFunctionArgs } from "./utilsContract";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { ContractInput } from "./ContractInput";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -40,7 +40,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
     return (
-      <InputUI
+      <ContractInput
         key={key}
         setForm={updatedFormValue => {
           setResult(undefined);
@@ -49,7 +49,6 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
         form={form}
         stateObjectKey={key}
         paramType={input}
-        functionFragment={functionFragment}
       />
     );
   });
