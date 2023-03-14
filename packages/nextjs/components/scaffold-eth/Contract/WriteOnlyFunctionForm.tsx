@@ -1,12 +1,15 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
-import InputUI from "./InputUI";
 import TxReceipt from "./TxReceipt";
 import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
-import { TxValueInput } from "./utilsComponents";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { notification, parseTxnValue, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ContractInput } from "./ContractInput";
+import { BigNumber } from "ethers";
+import { parseTxnValue } from "~~/utils/scaffold-eth";
+import { IntegerInput } from "../Input/IntegerInput";
+import { TransactionReceipt } from "@ethersproject/abstract-provider";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -30,7 +33,7 @@ export const WriteOnlyFunctionForm = ({
   setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [txValue, setTxValue] = useState("");
+  const [txValue, setTxValue] = useState<string | BigNumber>("");
   const { chain } = useNetwork();
   const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
@@ -51,7 +54,7 @@ export const WriteOnlyFunctionForm = ({
     args: getParsedContractFunctionArgs(form),
     mode: "recklesslyUnprepared",
     overrides: {
-      value: txValue ? parseTxnValue(txValue) : undefined,
+      value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
     },
   });
 
@@ -67,21 +70,27 @@ export const WriteOnlyFunctionForm = ({
     }
   };
 
+  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
   const { data: txResult } = useWaitForTransaction({
     hash: result?.hash,
   });
+  useEffect(() => {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
     return (
-      <InputUI
+      <ContractInput
         key={key}
-        setForm={setForm}
+        setForm={updatedFormValue => {
+          setDisplayedTxResult(undefined);
+          setForm(updatedFormValue);
+        }}
         form={form}
         stateObjectKey={key}
         paramType={input}
-        functionFragment={functionFragment}
       />
     );
   });
@@ -92,10 +101,21 @@ export const WriteOnlyFunctionForm = ({
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
         <p className="font-medium my-0 break-words">{functionFragment.name}</p>
         {inputs}
-        {functionFragment.payable ? <TxValueInput setTxValue={setTxValue} txValue={txValue} /> : null}
+        {functionFragment.payable ? (
+          <IntegerInput
+            value={txValue}
+            onChange={updatedTxValue => {
+              setDisplayedTxResult(undefined);
+              setTxValue(updatedTxValue);
+            }}
+            placeholder="value (wei)"
+          />
+        ) : null}
         <div className="flex justify-between gap-2">
           {!zeroInputs && (
-            <div className="flex-grow basis-0">{txResult ? <TxReceipt txResult={txResult} /> : null}</div>
+            <div className="flex-grow basis-0">
+              {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
+            </div>
           )}
           <div
             className={`flex ${

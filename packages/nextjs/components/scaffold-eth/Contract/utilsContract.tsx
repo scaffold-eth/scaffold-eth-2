@@ -63,11 +63,17 @@ const getContractReadOnlyMethodsWithParams = (
   return {
     methods: contract
       ? contractMethodsAndVariables
-          .map(fn => {
+          .map((fn, idx) => {
             const isQueryableWithParams =
               (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
             if (isQueryableWithParams) {
-              return <ReadOnlyFunctionForm key={fn.name} functionFragment={fn} contractAddress={contract.address} />;
+              return (
+                <ReadOnlyFunctionForm
+                  key={`${fn.name}-${idx}`}
+                  functionFragment={fn}
+                  contractAddress={contract.address}
+                />
+              );
             }
             return null;
           })
@@ -92,12 +98,12 @@ const getContractWriteMethods = (
   return {
     methods: contract
       ? contractMethodsAndVariables
-          .map(fn => {
+          .map((fn, idx) => {
             const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
             if (isWriteableFunction) {
               return (
                 <WriteOnlyFunctionForm
-                  key={fn.name}
+                  key={`${fn.name}-${idx}`}
                   functionFragment={fn}
                   contractAddress={contract.address}
                   setRefreshDisplayVariables={setRefreshDisplayVariables}
