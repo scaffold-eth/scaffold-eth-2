@@ -26,7 +26,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 /**
  * Site header
  */
-export default function Header() {
+export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
@@ -95,4 +95,4 @@ export default function Header() {
       </div>
     </div>
   );
-}
+};

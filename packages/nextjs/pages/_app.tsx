@@ -10,8 +10,8 @@ import { appChains } from "~~/services/web3/wagmiConnectors";
 import { wagmiClient } from "~~/services/web3/wagmiClient";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 
-import Header from "~~/components/Header";
-import Footer from "~~/components/Footer";
+import { Header } from "~~/components/Header";
+import { Footer } from "~~/components/Footer";
 
 import { useEffect } from "react";
 import { useAppStore } from "~~/services/store/store";

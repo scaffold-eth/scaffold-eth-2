@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Spinner({ width, height }: { width?: string; height?: string }) {
+export const Spinner = ({ width, height }: { width?: string; height?: string }) => {
   return (
     <svg
       aria-hidden="true"
@@ -22,4 +22,4 @@ export default function Spinner({ width, height }: { width?: string; height?: st
       />
     </svg>
   );
-}
+};

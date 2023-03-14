@@ -2,7 +2,7 @@ import React from "react";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "~~/services/store/store";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import SwitchTheme from "./SwitchTheme";
+import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { hardhat } from "wagmi/chains";
@@ -10,7 +10,7 @@ import { hardhat } from "wagmi/chains";
 /**
  * Site footer
  */
-export default function Footer() {
+export const Footer = () => {
   const ethPrice = useAppStore(state => state.ethPrice);
   const configuredNetwork = getTargetNetwork();
 
@@ -71,4 +71,4 @@ export default function Footer() {
       </div>
     </div>
   );
-}
+};

@@ -11,7 +11,7 @@ import {
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import Spinner from "~~/components/Spinner";
+import { Spinner } from "~~/components/Spinner";
 
 type TContractUIProps = {
   contractName: string;
