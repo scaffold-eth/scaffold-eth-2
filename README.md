@@ -2,17 +2,17 @@
 
 ⚠️ This project is currently under active development. Things might break. Feel free to check the open issues & create new ones.
 
-Scaffold-Eth 2 is a toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's a new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Wagmi and Typescript.
+Scaffold-Eth 2 is a toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's a new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Hardhat, Wagmi and Typescript.
 
 - ✅ Contract component to easily edit the smart contracts and view & test the contract on your frontend
 - 🔥 Burner wallet & local faucet
 - 🔐 Integration with the different wallet providers
 
-# Contents
+## Contents
 
 - [Requirements](#requirements)
 - [Quickstart](#Quickstart)
-- [Deploying your Smart Contracts](#Deploying-your-Smart-Contracts)
+- [Deploying your Smart Contracts to a Live Network](#Deploying-your-Smart-Contracts-to-a-live-network)
 - [Deploying your NextJS App](#Deploying-your-NextJS-App)
 - [Disabling Type & Linting Error Checks](#Disabling-type-and-linting-error-checks)
   * [Disabling commit checks](#Disabling-commit-checks)
@@ -20,14 +20,14 @@ Scaffold-Eth 2 is a toolkit for building decentralized applications (dapps) on t
   * [Disabling Github Workflow](#Disabling-Github-Workflow)
 - [Contributing to Scaffold-Eth 2](#Contributing-to-Scaffold-Eth-2)
 
-# Requirements
+## Requirements
 
 Before you begin, you need to install the following tools:
 - [Node (v18 LTS)](https://nodejs.org/en/download/)
 - [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/)
 - [Git](https://git-scm.com/downloads)
 
-# Quickstart
+## Quickstart
 
 To get started with Scaffold-Eth 2, follow the steps below:
 
@@ -67,7 +67,7 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your frontend in `packages/nextjs/pages`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
-# Deploying your Smart Contracts
+## Deploying your Smart Contracts to a Live Network
 Once you are ready to deploy your smart contracts, there are a few things you need to adjust.
 
 1. Select the network
@@ -76,9 +76,9 @@ By default, ```yarn deploy``` will deploy the contract to the local network. Y
 
 Check the `hardhat.config.js` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
-Example: To deploy the contract to the Rinkeby network, run the command below:
+Example: To deploy the contract to the Sepolia network, run the command below:
 ```
-yarn deploy --network rinkeby
+yarn deploy --network sepolia
 ```
 
 2. Generate a new account or add one to deploy the contract(s) from. Additionally you will need to add your Alchemy API key. Rename `.env.example` to `.env` and fill the required keys.
@@ -108,7 +108,7 @@ You can verify your smart contract on Etherscan by running:
 yarn verify --network network_name
 ```
 
-# Deploying your NextJS App
+## Deploying your NextJS App
 
 Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
 
@@ -118,11 +118,11 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
-# Disabling type and linting error checks
+## Disabling type and linting error checks
 > **Hint**
 > Typescript helps you catch errors at compile time, which can save time and improve code quality, but can be challenging for those who are new to the language or who are used to the more dynamic nature of JavaScript. Below are the steps to disable type & lint check at different levels
 
-## Disabling commit checks
+### Disabling commit checks
 We run `pre-commit` [git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) which lints the staged files and don't let you commit if there is an linting error.
 
 To disable this, go to `.husky/pre-commit` file and comment out `yarn lint-staged --verbose`
@@ -132,7 +132,7 @@ To disable this, go to `.husky/pre-commit` file and comment out `yarn lint-stage
 + # yarn lint-staged --verbose
 ```
 
-## Deploying to Vercel without any checks
+### Deploying to Vercel without any checks
 Vercel by default runs types and lint checks while developing `build` and deployment fails if there is a types or lint error.
 
 To ignore types and lint error checks while deploying, use :
@@ -140,12 +140,12 @@ To ignore types and lint error checks while deploying, use :
 yarn vercel:yolo
 ```
 
-## Disabling Github Workflow
+### Disabling Github Workflow
 We have github workflow setup checkout `.github/workflows/lint.yaml` which runs types and lint error checks every time code is __pushed__ to `main` branch or __pull request__ is made to `main` branch
 
 To disable it, **delete `.github` directory**
 
-# Contributing to Scaffold-Eth 2
+## Contributing to Scaffold-Eth 2
 
 We welcome contributions to Scaffold-Eth 2!
 
