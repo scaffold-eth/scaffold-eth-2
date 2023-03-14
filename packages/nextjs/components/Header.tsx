@@ -1,10 +1,11 @@
-import React, { useState, useRef, useCallback } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
-import { RainbowKitCustomConnectButton, FaucetButton } from "~~/components/scaffold-eth";
-import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import React, { useCallback, useRef, useState } from "react";
+
+import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
   const router = useRouter();

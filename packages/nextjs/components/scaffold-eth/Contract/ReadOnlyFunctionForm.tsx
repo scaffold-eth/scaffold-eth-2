@@ -1,11 +1,12 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
 import { useContractRead } from "wagmi";
+
 import {
+  ContractInput,
+  displayTxResult,
   getFunctionInputKey,
   getParsedContractFunctionArgs,
-  displayTxResult,
-  ContractInput,
 } from "~~/components/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 

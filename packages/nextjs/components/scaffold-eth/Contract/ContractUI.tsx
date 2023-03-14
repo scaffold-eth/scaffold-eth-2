@@ -1,17 +1,18 @@
 import { Contract } from "ethers";
 import { useMemo, useState } from "react";
 import { useContract, useProvider } from "wagmi";
+
 import {
-  Balance,
   Address,
+  Balance,
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
+import { Spinner } from "~~/components/Spinner";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import { Spinner } from "~~/components/Spinner";
 
 type TContractUIProps = {
   contractName: string;

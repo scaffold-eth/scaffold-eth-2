@@ -1,5 +1,6 @@
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import { BigNumber } from "ethers";
+
 import { displayTxResult } from "~~/components/scaffold-eth";
 
 export const TxReceipt = (

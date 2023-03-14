@@ -1,7 +1,8 @@
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { FunctionFragment } from "ethers/lib/utils";
 import { useEffect } from "react";
 import { useContractRead } from "wagmi";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+
 import { displayTxResult } from "~~/components/scaffold-eth";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";

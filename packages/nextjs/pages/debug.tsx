@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
+
 import { ContractUI } from "~~/components/scaffold-eth";
 import { useDeployedContractNames } from "~~/hooks/scaffold-eth";
 
