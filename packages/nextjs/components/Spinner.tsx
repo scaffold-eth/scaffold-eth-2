@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Spinner = ({ width, height }: { width?: string; height?: string }) => {
   return (
     <svg

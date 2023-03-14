@@ -1,5 +1,5 @@
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useContractRead } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { displayTxResult } from "~~/components/scaffold-eth";
