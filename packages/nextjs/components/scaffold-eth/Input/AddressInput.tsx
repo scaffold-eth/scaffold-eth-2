@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { isAddress } from "ethers/lib/utils";
-import { InputBase } from "./InputBase";
-import { CommonInputProps } from "./utils";
+import { InputBase, CommonInputProps } from "~~/components/scaffold-eth";
 
 // ToDo:  move this function to an utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");

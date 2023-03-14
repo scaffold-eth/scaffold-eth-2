@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useAppStore } from "~~/services/store/store";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
-import { CommonInputProps, SIGNED_NUMBER_REGEX } from "./utils";
-import { InputBase } from "./InputBase";
+import { InputBase, CommonInputProps, SIGNED_NUMBER_REGEX } from "~~/components/scaffold-eth";
 
 const MAX_DECIMALS_USD = 2;
 
