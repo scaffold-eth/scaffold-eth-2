@@ -6,9 +6,9 @@ Scaffold-Eth 2 is an open-source toolkit for building decentralized applications
 
 It's a new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Hardhat, Wagmi and Typescript.
 
-- ✅ **Contract Component**: Easily edit smart contracts and view and test them on your frontend. The contract component supports Solidity contracts and can be easily customized to match your application's needs.
-- 🔥 **Burner Wallet & Local Faucet**: A burner wallet is included in the toolkit, allowing you to quickly test your application without having to connect to any waller. The local faucet allows you to easily add test Ether to your burner wallet for testing purposes.
-- 🔐 **Integration with Wallet Providers**: The toolkit includes integrations with different wallet providers, making it easy for users to connect to your dapp and interact with the Ethereum network.
+- ✅ **Contract Component**: Edit and test Solidity smart contracts on your frontend.
+- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
+- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
 ## Contents
 
