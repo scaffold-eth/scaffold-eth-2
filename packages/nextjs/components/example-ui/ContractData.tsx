@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldEventSubscriber, useAnimationConfig } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
-import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 

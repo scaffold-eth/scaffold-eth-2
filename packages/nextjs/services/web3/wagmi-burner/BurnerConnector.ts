@@ -2,7 +2,7 @@ import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { Wallet } from "ethers";
 import { Connector, Chain } from "wagmi";
 import { hardhat } from "wagmi/chains";
-import { loadBurnerSK } from "~~/hooks/scaffold-eth/useBurnerWallet";
+import { loadBurnerSK } from "~~/hooks/scaffold-eth";
 import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
 import { BurnerConnectorOptions, BurnerConnectorData } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
 

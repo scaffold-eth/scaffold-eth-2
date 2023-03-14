@@ -1,4 +1,4 @@
-import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
+import { useAccountBalance } from "~~/hooks/scaffold-eth";
 
 type TBalanceProps = {
   address?: string;

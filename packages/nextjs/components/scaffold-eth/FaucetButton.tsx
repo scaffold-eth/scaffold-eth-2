@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
-import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
