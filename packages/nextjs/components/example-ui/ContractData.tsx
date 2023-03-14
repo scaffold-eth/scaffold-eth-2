@@ -6,7 +6,7 @@ import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
-export default function ContractData() {
+export const ContractData = () => {
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isRightDirection, setIsRightDirection] = useState(false);
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
@@ -112,4 +112,4 @@ export default function ContractData() {
       </div>
     </div>
   );
-}
+};
