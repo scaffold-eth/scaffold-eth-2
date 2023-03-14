@@ -3,7 +3,7 @@ import { SendTransactionResult } from "@wagmi/core";
 import { Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
-import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
+import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
