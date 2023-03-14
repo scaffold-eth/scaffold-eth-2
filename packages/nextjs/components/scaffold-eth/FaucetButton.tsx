@@ -2,9 +2,9 @@ import { ethers } from "ethers";
 import React, { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
+import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
-import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 
 // Number of ETH faucet sends to an address
@@ -13,7 +13,7 @@ const NUM_OF_ETH = "1";
 /**
  * FaucetButton button which lets you grab eth.
  */
-export default function FaucetButton() {
+export const FaucetButton = () => {
   const { address } = useAccount();
   const { balance } = useAccountBalance(address);
   const { chain: ConnectedChain } = useNetwork();
@@ -58,4 +58,4 @@ export default function FaucetButton() {
       </button>
     </div>
   );
-}
+};

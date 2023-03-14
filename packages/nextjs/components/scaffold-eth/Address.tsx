@@ -19,7 +19,7 @@ type TAddressProps = {
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
-export default function Address({ address, blockExplorer, disableAddressLink, format }: TAddressProps) {
+export const Address = ({ address, blockExplorer, disableAddressLink, format }: TAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
@@ -107,4 +107,4 @@ export default function Address({ address, blockExplorer, disableAddressLink, fo
       )}
     </div>
   );
-}
+};

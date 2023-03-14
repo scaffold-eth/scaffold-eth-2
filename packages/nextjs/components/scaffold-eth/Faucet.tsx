@@ -2,13 +2,10 @@ import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
+import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { Address, Balance, getParsedEthersError, AddressInput, EtherInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
-import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { getParsedEthersError } from "~~/components/scaffold-eth";
-import Address from "./Address";
-import Balance from "./Balance";
-import { AddressInput, EtherInput } from "./Input";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
@@ -16,7 +13,7 @@ const FAUCET_ACCOUNT_INDEX = 0;
 /**
  * Faucet modal which lets you send ETH to any address.
  */
-export default function Faucet() {
+export const Faucet = () => {
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState("");
   const [faucetAddress, setFaucetAddress] = useState("");
@@ -119,4 +116,4 @@ export default function Faucet() {
       </label>
     </div>
   );
-}
+};
