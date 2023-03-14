@@ -5,7 +5,7 @@ import { hardhat, localhost } from "wagmi/chains";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { getParsedEthersError } from "./Contract/utilsContract";
+import { getParsedEthersError } from "~~/components/scaffold-eth";
 import Address from "./Address";
 import Balance from "./Balance";
 import { AddressInput, EtherInput } from "./Input";

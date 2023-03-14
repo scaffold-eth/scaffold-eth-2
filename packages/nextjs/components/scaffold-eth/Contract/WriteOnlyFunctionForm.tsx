@@ -1,15 +1,18 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
-import TxReceipt from "./TxReceipt";
-import { getFunctionInputKey, getParsedContractFunctionArgs, getParsedEthersError } from "./utilsContract";
-import { useTransactor } from "~~/hooks/scaffold-eth";
-import { notification, getTargetNetwork } from "~~/utils/scaffold-eth";
-import { ContractInput } from "./ContractInput";
 import { BigNumber } from "ethers";
-import { parseTxnValue } from "~~/utils/scaffold-eth";
-import { IntegerInput } from "../Input/IntegerInput";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
+import {
+  TxReceipt,
+  getFunctionInputKey,
+  getParsedContractFunctionArgs,
+  getParsedEthersError,
+  ContractInput,
+  IntegerInput,
+} from "~~/components/scaffold-eth";
+import { useTransactor } from "~~/hooks/scaffold-eth";
+import { notification, getTargetNetwork, parseTxnValue } from "~~/utils/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {

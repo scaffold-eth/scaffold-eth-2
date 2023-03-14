@@ -1,9 +1,7 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import { Contract, utils } from "ethers";
-import DisplayVariable from "~~/components/scaffold-eth/Contract/DisplayVariables";
-import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
-import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 import { Dispatch, SetStateAction } from "react";
+import { DisplayVariable, ReadOnlyFunctionForm, WriteOnlyFunctionForm } from "~~/components/scaffold-eth";
 
 /**
  * @param {Contract} contract

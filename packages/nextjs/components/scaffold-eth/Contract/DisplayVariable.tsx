@@ -1,10 +1,10 @@
 import { FunctionFragment } from "ethers/lib/utils";
 import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
-import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { displayTxResult } from "~~/components/scaffold-eth";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
-import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -12,7 +12,11 @@ type TDisplayVariableProps = {
   refreshDisplayVariables: boolean;
 };
 
-const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
+export const DisplayVariable = ({
+  contractAddress,
+  functionFragment,
+  refreshDisplayVariables,
+}: TDisplayVariableProps) => {
   const configuredChain = getTargetNetwork();
   const {
     data: result,
@@ -57,5 +61,3 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     </div>
   );
 };
-
-export default DisplayVariable;
