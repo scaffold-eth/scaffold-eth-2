@@ -4,6 +4,7 @@ import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsC
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth/useTransactor";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
+import { useState } from "react";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -17,6 +18,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
+  const [isMining, setIsMining] = useState(false);
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
@@ -46,11 +48,14 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
     if (wagmiContractWrite.writeAsync) {
       try {
+        setIsMining(true);
         await writeTx(wagmiContractWrite.writeAsync());
         console.log("TX Finish! But it could be an error too (user canceled tx)");
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
+      } finally {
+        setIsMining(false);
       }
     } else {
       notification.error("Contract writer error. Try again.");
@@ -60,6 +65,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   return {
     ...wagmiContractWrite,
+    isMining,
     // Overwrite wagmi's write async
     writeAsync: sendContractWriteTx,
   };
