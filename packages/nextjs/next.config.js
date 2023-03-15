@@ -9,9 +9,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
   },
-  experimental: {
-    externalDir: true,
-  },
+  transpilePackages: ["se-2"],
 };
 
 module.exports = nextConfig;
