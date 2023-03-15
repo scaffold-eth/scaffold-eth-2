@@ -1,7 +1,6 @@
+import { Dispatch, SetStateAction } from "react";
 import { Contract, utils } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
-import { Dispatch, SetStateAction } from "react";
-
 import { DisplayVariable, ReadOnlyFunctionForm, WriteOnlyFunctionForm } from "~~/components/scaffold-eth";
 
 /**

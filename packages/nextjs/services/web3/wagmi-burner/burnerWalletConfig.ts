@@ -1,10 +1,11 @@
 import { Chain, Wallet } from "@rainbow-me/rainbowkit";
 import {
+  BurnerConnector,
   burnerWalletId,
   burnerWalletName,
-  BurnerConnector,
   defaultBurnerChainId,
 } from "~~/services/web3/wagmi-burner/BurnerConnector";
+
 export interface BurnerWalletOptions {
   chains: Chain[];
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Connector, useAccount, useConnect } from "wagmi";
 import { useEffectOnce, useLocalStorage } from "usehooks-ts";
+import { Connector, useAccount, useConnect } from "wagmi";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 
 export type TAutoConnect = {

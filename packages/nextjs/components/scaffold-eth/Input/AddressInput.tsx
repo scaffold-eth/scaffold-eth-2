@@ -1,8 +1,7 @@
-import { isAddress } from "ethers/lib/utils";
 import { useCallback, useEffect, useState } from "react";
+import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
-
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
 // ToDo:  move this function to an utility file

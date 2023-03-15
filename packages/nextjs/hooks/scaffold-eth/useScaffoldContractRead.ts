@@ -1,5 +1,5 @@
-import { useContractRead } from "wagmi";
 import type { Abi } from "abitype";
+import { useContractRead } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 

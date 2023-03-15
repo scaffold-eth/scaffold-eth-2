@@ -1,9 +1,8 @@
-import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
-
+import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput, getParsedEthersError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";

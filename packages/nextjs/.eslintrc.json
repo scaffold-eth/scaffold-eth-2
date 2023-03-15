@@ -1,7 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended", "plugin:@typescript-eslint/recommended"],
-  "plugins": ["simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-unused-vars": ["error"],
     "@typescript-eslint/no-explicit-any": ["off"],
@@ -12,8 +11,6 @@
         "endOfLine": "auto"
       }
     ],
-    "@next/next/no-page-custom-font": ["off"],
-    "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn"
+    "@next/next/no-page-custom-font": ["off"]
   }
 }

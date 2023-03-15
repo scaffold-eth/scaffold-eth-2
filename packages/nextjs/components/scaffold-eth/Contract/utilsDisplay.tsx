@@ -1,8 +1,7 @@
+import { ReactElement } from "react";
 import { TransactionResponse } from "@ethersproject/providers";
 import { formatUnits } from "@ethersproject/units";
 import { BigNumber } from "ethers";
-import { ReactElement } from "react";
-
 import { Address } from "~~/components/scaffold-eth";
 
 type DisplayContent = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined | unknown;

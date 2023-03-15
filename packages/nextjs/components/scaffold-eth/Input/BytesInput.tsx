@@ -1,6 +1,5 @@
-import { ethers } from "ethers";
 import { useCallback } from "react";
-
+import { ethers } from "ethers";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
 export const BytesInput = ({ value, onChange, name, placeholder }: CommonInputProps) => {

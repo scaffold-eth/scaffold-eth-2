@@ -1,7 +1,7 @@
-import { Contract } from "ethers";
 import { useMemo, useState } from "react";
+import { Contract } from "ethers";
 import { useContract, useProvider } from "wagmi";
-
+import { Spinner } from "~~/components/Spinner";
 import {
   Address,
   Balance,
@@ -10,7 +10,6 @@ import {
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
-import { Spinner } from "~~/components/Spinner";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
