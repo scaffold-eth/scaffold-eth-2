@@ -1795,7 +1795,7 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     ethers: ^5.7.1
     hardhat: ^2.11.2
-    hardhat-deploy: ^0.11.15
+    hardhat-deploy: ^0.11.25
     hardhat-gas-reporter: ^1.0.9
     prettier: 2.7.1
     qrcode: ^1.5.1
@@ -7945,9 +7945,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat-deploy@npm:^0.11.15":
-  version: 0.11.15
-  resolution: "hardhat-deploy@npm:0.11.15"
+"hardhat-deploy@npm:^0.11.25":
+  version: 0.11.25
+  resolution: "hardhat-deploy@npm:0.11.25"
   dependencies:
     "@types/qs": ^6.9.7
     axios: ^0.21.1
@@ -7962,7 +7962,7 @@ __metadata:
     murmur-128: ^0.2.1
     qs: ^6.9.4
     zksync-web3: ^0.8.1
-  checksum: 464fae9d998c3be2352afb588f1b0d8924844de90e3703c68e0d9cf6948587bed7e98c125f167182979acfdbbe941278659086f15b3e63d133578b48a85805b6
+  checksum: 47e7bd8c96bca85cf3f6ef5fc3a73724f8165094c5c8262a31c3890ef964f00a4e5e9dfa77c81e0ebeac8cf21fd2aeec1e1d4a1baa0f1b6f26b4c3dcae0b24af
   languageName: node
   linkType: hard
 
