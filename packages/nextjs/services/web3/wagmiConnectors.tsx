@@ -1,11 +1,11 @@
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
-  rainbowWallet,
-  metaMaskWallet,
-  coinbaseWallet,
-  walletConnectWallet,
   braveWallet,
+  coinbaseWallet,
   ledgerWallet,
+  metaMaskWallet,
+  rainbowWallet,
+  walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains } from "wagmi";
 import * as chains from "wagmi/chains";

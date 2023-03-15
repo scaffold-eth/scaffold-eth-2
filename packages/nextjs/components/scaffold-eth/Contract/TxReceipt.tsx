@@ -1,8 +1,10 @@
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import { BigNumber } from "ethers";
-import { displayTxResult } from "./utilsDisplay";
+import { displayTxResult } from "~~/components/scaffold-eth";
 
-const TxReceipt = (txResult: string | number | BigNumber | Record<string, any> | TransactionReceipt | undefined) => {
+export const TxReceipt = (
+  txResult: string | number | BigNumber | Record<string, any> | TransactionReceipt | undefined,
+) => {
   return (
     <div className="flex-wrap collapse collapse-arrow mb-2">
       <input type="checkbox" className="min-h-0 peer" />
@@ -15,5 +17,3 @@ const TxReceipt = (txResult: string | number | BigNumber | Record<string, any> |
     </div>
   );
 };
-
-export default TxReceipt;

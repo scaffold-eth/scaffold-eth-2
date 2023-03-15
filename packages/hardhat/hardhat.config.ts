@@ -37,7 +37,7 @@ const config: HardhatUserConfig = {
       accounts: [scaffoldConfig.deployerPrivateKey],
     },
     sepolia: {
-      url: "https://rpc.sepolia.org",
+      url: `https://eth-sepolia.g.alchemy.com/v2/${scaffoldConfig.providerApiKey}`,
       accounts: [scaffoldConfig.deployerPrivateKey],
     },
     goerli: {

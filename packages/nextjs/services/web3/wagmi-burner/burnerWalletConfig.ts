@@ -2,11 +2,12 @@ import { Chain, Wallet } from "@rainbow-me/rainbowkit";
 import { hardhat } from "wagmi/chains";
 import scaffoldConfig from "@root/scaffold.config";
 import {
+  BurnerConnector,
   burnerWalletId,
   burnerWalletName,
-  BurnerConnector,
   defaultBurnerChainId,
 } from "~~/services/web3/wagmi-burner/BurnerConnector";
+
 export interface BurnerWalletOptions {
   chains: Chain[];
 }

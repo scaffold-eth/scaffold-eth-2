@@ -1,6 +1,6 @@
-import * as chains from "wagmi/chains";
 import { Network } from "@ethersproject/networks";
 import scaffoldConfig from "@root/scaffold.config";
+import * as chains from "wagmi/chains";
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]

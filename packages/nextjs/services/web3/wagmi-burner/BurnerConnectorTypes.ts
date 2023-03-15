@@ -1,5 +1,5 @@
-import { ConnectorData } from "wagmi";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
+import { ConnectorData } from "wagmi";
 
 export type BurnerConnectorOptions = {
   defaultChainId: number;

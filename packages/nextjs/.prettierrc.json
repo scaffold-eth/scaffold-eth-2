@@ -2,5 +2,7 @@
   "arrowParens": "avoid",
   "printWidth": 120,
   "tabWidth": 2,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "importOrder": ["^react$", "^next/(.*)$", "<THIRD_PARTY_MODULES>", "^@heroicons/(.*)$", "^~~/(.*)$"],
+  "importOrderSortSpecifiers": true
 }

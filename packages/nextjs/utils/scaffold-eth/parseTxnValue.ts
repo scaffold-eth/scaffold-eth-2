@@ -5,7 +5,7 @@ import { BigNumber } from "ethers";
  * @param  str - any string
  * @return {BigNumber | number}
  */
-export default function parseTxnValue(str: string): BigNumber | number | undefined {
+export const parseTxnValue = (str: string): BigNumber | number | undefined => {
   if (!str) {
     return undefined;
   }
@@ -21,4 +21,4 @@ export default function parseTxnValue(str: string): BigNumber | number | undefin
       return -1;
     }
   }
-}
+};
