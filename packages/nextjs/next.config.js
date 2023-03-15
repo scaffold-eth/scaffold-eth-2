@@ -11,6 +11,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: ignoreBuildErrors,
   },
+  experimental: {
+    externalDir: true,
+  },
 };
 
 module.exports = nextConfig;

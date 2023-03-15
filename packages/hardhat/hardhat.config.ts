@@ -4,7 +4,7 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import { kebabToCamelCase } from "./utils";
-import scaffoldConfig from "@root/scaffold.config";
+import scaffoldConfig from "../../scaffold.config";
 
 const defaultNetwork =
   scaffoldConfig.targetNetwork.network === "hardhat"

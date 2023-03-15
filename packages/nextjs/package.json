@@ -11,6 +11,7 @@
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
+    "vercel:deploy": "vercel build --prod && vercel deploy --prebuilt --prod",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
   "dependencies": {
