@@ -1651,6 +1651,7 @@ __metadata:
     "@uniswap/sdk": ^3.0.3
     autoprefixer: ^10.4.12
     daisyui: ^2.31.0
+    dotenv: ^16.0.3
     eslint: ^8.15.0
     eslint-config-next: ^13.1.6
     eslint-config-prettier: ^8.5.0
