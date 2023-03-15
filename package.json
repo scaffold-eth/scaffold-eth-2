@@ -26,7 +26,9 @@
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
+    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
+    "vercel:dev": "yarn workspace @se-2/nextjs vercel:dev",
+    "vercel:prod": "yarn workspace @se-2/nextjs vercel:prod"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {

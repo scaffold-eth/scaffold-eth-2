@@ -11,8 +11,9 @@
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
-    "vercel:deploy": "vercel build --prod && vercel deploy --prebuilt --prod",
-    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
+    "vercel:dev": "vercel build && vercel deploy --prebuilt",
+    "vercel:prod": "vercel build --prod && vercel deploy --prebuilt --prod",
+    "vercel:yolo": "vercel build --prod --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true && vercel deploy --prebuilt --prod"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
@@ -21,7 +22,6 @@
     "@rainbow-me/rainbowkit": "^0.11.0",
     "@uniswap/sdk": "^3.0.3",
     "daisyui": "^2.31.0",
-    "dotenv": "^16.0.3",
     "ethers": "^5.0.0",
     "next": "^13.1.6",
     "nextjs-progressbar": "^0.0.16",
