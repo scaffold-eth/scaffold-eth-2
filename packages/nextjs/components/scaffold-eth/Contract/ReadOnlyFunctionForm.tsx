@@ -1,10 +1,13 @@
-import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
+import { FunctionFragment } from "ethers/lib/utils";
 import { useContractRead } from "wagmi";
-import { displayTxResult } from "./utilsDisplay";
-import { getFunctionInputKey, getParsedContractFunctionArgs } from "./utilsContract";
+import {
+  ContractInput,
+  displayTxResult,
+  getFunctionInputKey,
+  getParsedContractFunctionArgs,
+} from "~~/components/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
-import { ContractInput } from "./ContractInput";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};

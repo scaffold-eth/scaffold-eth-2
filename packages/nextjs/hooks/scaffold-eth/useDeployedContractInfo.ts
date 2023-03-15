@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useProvider } from "wagmi";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+
 type GeneratedContractType = {
   address: string;
   abi: any[];

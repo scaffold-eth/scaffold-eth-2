@@ -1,6 +1,13 @@
+import { Dispatch, SetStateAction } from "react";
 import { utils } from "ethers";
-import React, { Dispatch, SetStateAction } from "react";
-import { AddressInput, Bytes32Input, BytesInput, InputBase, IntegerInput, IntegerVariant } from "../Input";
+import {
+  AddressInput,
+  Bytes32Input,
+  BytesInput,
+  InputBase,
+  IntegerInput,
+  IntegerVariant,
+} from "~~/components/scaffold-eth";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;

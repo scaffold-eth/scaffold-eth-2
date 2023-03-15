@@ -1,5 +1,5 @@
-import { getTargetNetwork, NETWORKS_EXTRA_DATA } from "~~/utils/scaffold-eth";
 import { useDarkMode } from "usehooks-ts";
+import { NETWORKS_EXTRA_DATA, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
 

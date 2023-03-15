@@ -1,10 +1,9 @@
-import React, { useState, useRef, useCallback } from "react";
-import Link from "next/link";
+import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import { FaucetButton } from "~~/components/scaffold-eth";
-import RainbowKitCustomConnectButton from "~~/components/scaffold-eth/RainbowKitCustomConnectButton";
-import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
@@ -27,7 +26,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
 /**
  * Site header
  */
-export default function Header() {
+export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
   useOutsideClick(
@@ -96,4 +95,4 @@ export default function Header() {
       </div>
     </div>
   );
-}
+};

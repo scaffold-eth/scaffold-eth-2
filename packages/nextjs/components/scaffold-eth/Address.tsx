@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Blockies from "react-blockies";
-import { DocumentDuplicateIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useEnsAvatar, useEnsName } from "wagmi";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { isAddress } from "ethers/lib/utils";
+import Blockies from "react-blockies";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useEnsAvatar, useEnsName } from "wagmi";
+import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 const blockExplorerLink = (address: string, blockExplorer?: string) =>
   `${blockExplorer || "https://etherscan.io/"}address/${address}`;
@@ -19,7 +19,7 @@ type TAddressProps = {
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
-export default function Address({ address, blockExplorer, disableAddressLink, format }: TAddressProps) {
+export const Address = ({ address, blockExplorer, disableAddressLink, format }: TAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
@@ -107,4 +107,4 @@ export default function Address({ address, blockExplorer, disableAddressLink, fo
       )}
     </div>
   );
-}
+};

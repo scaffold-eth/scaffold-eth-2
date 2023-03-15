@@ -1,16 +1,17 @@
-import { Contract } from "ethers";
 import { useMemo, useState } from "react";
+import { Contract } from "ethers";
 import { useContract, useProvider } from "wagmi";
+import { Spinner } from "~~/components/Spinner";
 import {
+  Address,
+  Balance,
   getAllContractFunctions,
   getContractReadOnlyMethodsWithParams,
   getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
-} from "./utilsContract";
-import { Balance, Address } from "~~/components/scaffold-eth";
+} from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import Spinner from "~~/components/Spinner";
 
 type TContractUIProps = {
   contractName: string;
@@ -20,7 +21,7 @@ type TContractUIProps = {
 /**
  * UI component to interface with deployed contracts.
  **/
-const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
+export const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
   const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
@@ -126,5 +127,3 @@ const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
     </div>
   );
 };
-
-export default ContractUI;
