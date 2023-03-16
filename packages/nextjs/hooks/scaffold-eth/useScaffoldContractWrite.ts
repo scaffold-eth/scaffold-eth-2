@@ -3,6 +3,8 @@ import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { ContractAbi, ContractName } from "./contract.types";
+import { Abi, ExtractAbiFunctionNames } from "abitype";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -11,7 +13,12 @@ import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
  * @param args - arguments for the function
  * @param value - value in ETH that will be sent with transaction
  */
-export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
+export const useScaffoldContractWrite = <TContractName extends ContractName>(
+  contractName: TContractName,
+  functionName: ExtractAbiFunctionNames<ContractAbi<TContractName>, "payable" | "nonpayable">,
+  args?: [string],
+  value?: string,
+) => {
   const configuredChain = getTargetNetwork();
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
@@ -21,9 +28,9 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
     mode: "recklesslyUnprepared",
     chainId: configuredChain.id,
     address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
+    abi: deployedContractData?.abi as Abi,
     args,
-    functionName,
+    functionName: functionName as any,
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
     },

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { BigNumber } from "ethers";
 import Marquee from "react-fast-marquee";
 import { useAnimationConfig, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 
@@ -13,12 +12,9 @@ export const ContractData = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  const { data: totalCounter } = useScaffoldContractRead<BigNumber>("YourContract", "totalCounter");
+  const { data: totalCounter } = useScaffoldContractRead("YourContract", "totalCounter");
 
-  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead<string>(
-    "YourContract",
-    "greeting",
-  );
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead("YourContract", "greeting");
 
   useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
     console.log(greetingSetter, newGreeting, premium, value);

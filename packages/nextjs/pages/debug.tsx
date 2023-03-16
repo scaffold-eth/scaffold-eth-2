@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { useDeployedContractNames } from "~~/hooks/scaffold-eth";
+import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
 
 const Debug: NextPage = () => {
   const contractNames = useDeployedContractNames();
-  const [selectedContract, setSelectedContract] = useState<string>();
+  const [selectedContract, setSelectedContract] = useState<ContractName>();
 
   useEffect(() => {
     if (!selectedContract && contractNames.length) {

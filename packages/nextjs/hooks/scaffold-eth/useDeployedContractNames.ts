@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ContractName, DefaultChain } from "./contract.types";
+import contracts from "../../generated/hardhat_contracts";
 
 /**
  * @dev use this hook to get the list of contracts deployed by `yarn deploy`.
@@ -7,21 +9,9 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  */
 export const useDeployedContractNames = () => {
   const configuredChain = getTargetNetwork();
-  const [deployedContractNames, setDeployedContractNames] = useState<string[]>([]);
-
-  useEffect(() => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const contracts = require("~~/generated/hardhat_contracts.json");
-      const contractsAtChain = contracts[`${configuredChain.id}` as keyof typeof contracts];
-      const contractsData = contractsAtChain?.[0]?.contracts;
-      const contractNames = contractsData ? Object.keys(contractsData) : [];
-
-      setDeployedContractNames(contractNames);
-    } catch (e) {
-      // File doesn't exist.
-      setDeployedContractNames([]);
-    }
+  const deployedContractNames = useMemo(() => {
+    const contractsData = contracts[`${configuredChain.id}` as DefaultChain]?.[0]?.contracts;
+    return contractsData ? (Object.keys(contractsData) as ContractName[]) : [];
   }, [configuredChain.id]);
 
   return deployedContractNames;

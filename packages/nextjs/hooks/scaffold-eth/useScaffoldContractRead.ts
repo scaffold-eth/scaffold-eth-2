@@ -1,7 +1,8 @@
-import type { Abi } from "abitype";
 import { useContractRead } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import type { ExtractAbiFunctionNames } from "abitype";
+import { useDeployedContractInfo } from "./useDeployedContractInfo";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { AbiFunctionReturnType, ContractAbi, ContractName } from "./contract.types";
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
@@ -10,24 +11,31 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  * @param args - args to be passed to the function call
  * @param readConfig - extra wagmi configuration
  */
-export const useScaffoldContractRead = <TReturn = any>(
-  contractName: string,
-  functionName: string,
-  args?: any[],
+export const useScaffoldContractRead = <
+  TContractName extends ContractName,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
+>(
+  contractName: TContractName,
+  functionName: TFunctionName,
+  args?: [string],
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
   const configuredChain = getTargetNetwork();
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const { data: deployedContract } = useDeployedContractInfo(contractName);
 
   return useContractRead({
     chainId: configuredChain.id,
     functionName,
-    address: deployedContractData?.address,
-    abi: deployedContractData?.abi as Abi,
+    address: deployedContract?.address,
+    abi: deployedContract?.abi,
     watch: true,
     args,
     ...readConfig,
-  }) as Omit<ReturnType<typeof useContractRead>, "data"> & {
-    data: TReturn;
+  }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
+    data: AbiFunctionReturnType<ContractAbi, TFunctionName>;
+    refetch: (options?: {
+      throwOnError: boolean;
+      cancelRefetch: boolean;
+    }) => Promise<AbiFunctionReturnType<ContractAbi, TFunctionName>>;
   };
 };
