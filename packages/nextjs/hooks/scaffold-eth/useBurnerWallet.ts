@@ -1,8 +1,8 @@
-import { BytesLike, ethers, Signer, Wallet } from "ethers";
-import { useEffect, useCallback, useRef } from "react";
-import { useProvider } from "wagmi";
+import { useCallback, useEffect, useRef } from "react";
+import { BytesLike, Signer, Wallet, ethers } from "ethers";
 import { useDebounce } from "use-debounce";
 import { useLocalStorage } from "usehooks-ts";
+import { useProvider } from "wagmi";
 
 const burnerStorageKey = "scaffoldEth2.burnerWallet.sk";
 

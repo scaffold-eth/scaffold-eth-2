@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import Marquee from "react-fast-marquee";
-import { useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 import { BigNumber } from "ethers";
-import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
+import Marquee from "react-fast-marquee";
+import { useAnimationConfig, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
-export default function ContractData() {
+export const ContractData = () => {
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isRightDirection, setIsRightDirection] = useState(false);
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
@@ -112,4 +111,4 @@ export default function ContractData() {
       </div>
     </div>
   );
-}
+};

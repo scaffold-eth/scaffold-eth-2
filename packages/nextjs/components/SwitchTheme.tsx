@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDarkMode, useIsMounted } from "usehooks-ts";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
-const SwitchTheme = ({ className }: { className?: string }) => {
+export const SwitchTheme = ({ className }: { className?: string }) => {
   const { isDarkMode, toggle } = useDarkMode(false);
   const isMounted = useIsMounted();
 
@@ -29,4 +29,3 @@ const SwitchTheme = ({ className }: { className?: string }) => {
     </div>
   );
 };
-export default SwitchTheme;

@@ -1,5 +1,5 @@
-export { default as getLocalProvider } from "./getLocalProvider";
+export * from "./fetchPriceFromUniswap";
+export * from "./getLocalProvider";
 export * from "./networks";
-export { default as notification } from "./notification";
-export { default as fetchPriceFromUniswap } from "./fetchPriceFromUniswap";
-export { default as parseTxnValue } from "./parseTxnValue";
+export * from "./notification";
+export * from "./parseTxnValue";
