@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
@@ -16,6 +17,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
+  const [isMining, setIsMining] = useState(false);
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
@@ -45,10 +47,13 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
     if (wagmiContractWrite.writeAsync) {
       try {
+        setIsMining(true);
         await writeTx(wagmiContractWrite.writeAsync());
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
+      } finally {
+        setIsMining(false);
       }
     } else {
       notification.error("Contract writer error. Try again.");
@@ -58,6 +63,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   return {
     ...wagmiContractWrite,
+    isMining,
     // Overwrite wagmi's write async
     writeAsync: sendContractWriteTx,
   };
