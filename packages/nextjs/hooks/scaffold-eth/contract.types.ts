@@ -22,7 +22,7 @@ export type AbiFunctionInputs<TAbi extends Abi, TFunctionName extends string> = 
 
 export type AbiFunctionArguments<TAbi extends Abi, TFunctionName extends string> = AbiParametersToPrimitiveTypes<
   AbiFunctionInputs<TAbi, TFunctionName>
->[0];
+>;
 
 export type AbiFunctionOutputs<TAbi extends Abi, TFunctionName extends string> = ExtractAbiFunction<
   TAbi,
