@@ -50,7 +50,6 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       try {
         setIsMining(true);
         await writeTx(wagmiContractWrite.writeAsync());
-        console.log("TX Finish! But it could be an error too (user canceled tx)");
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
