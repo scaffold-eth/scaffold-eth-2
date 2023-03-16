@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { Connector, useAccount, useConnect } from "wagmi";
-import { hardhat } from "wagmi/dist/chains";
+import { hardhat } from "wagmi/chains";
 import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 
