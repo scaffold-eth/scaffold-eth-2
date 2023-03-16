@@ -1,14 +1,14 @@
-import * as chain from "wagmi/chains";
+import * as chains from "wagmi/chains";
 
 type ScaffoldConfig = {
-  targetNetwork: chain.Chain;
+  targetNetwork: chains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
 };
 
 const scaffoldConfig: ScaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chain.hardhat,
+  targetNetwork: chains.hardhat,
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
