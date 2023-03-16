@@ -25,9 +25,7 @@
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "postinstall": "husky install",
     "precommit": "lint-staged",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "vercel:dev": "yarn workspace @se-2/nextjs vercel:dev",
-    "vercel:prod": "yarn workspace @se-2/nextjs vercel:prod"
+    "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {

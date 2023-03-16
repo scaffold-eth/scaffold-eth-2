@@ -9,11 +9,7 @@
     "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
-    "check-types": "tsc --noEmit --incremental",
-    "vercel": "vercel",
-    "vercel:dev": "vercel build && vercel deploy --prebuilt",
-    "vercel:prod": "vercel build --prod && vercel deploy --prebuilt --prod",
-    "vercel:yolo": "vercel build --prod --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true && vercel deploy --prebuilt --prod"
+    "check-types": "tsc --noEmit --incremental"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",
