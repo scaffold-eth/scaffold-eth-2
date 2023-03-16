@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Abi } from "abitype";
 import { useContract, useProvider } from "wagmi";
 import { Spinner } from "~~/components/Spinner";
 import {
@@ -10,9 +11,8 @@ import {
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
-import { Abi } from "abitype";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type ContractUIProps = {
   contractName: ContractName;
