@@ -1,9 +1,9 @@
-import { TransactionRequest, TransactionResponse, TransactionReceipt } from "@ethersproject/abstract-provider";
+import { TransactionReceipt, TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
 import { SendTransactionResult } from "@wagmi/core";
 import { Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
-import { getParsedEthersError } from "~~/components/scaffold-eth/Contract/utilsContract";
+import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
@@ -20,7 +20,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
         <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
-          checkout out transaction
+          check out transaction
         </a>
       ) : null}
     </div>

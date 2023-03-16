@@ -1,5 +1,5 @@
-import * as chains from "wagmi/chains";
 import { Network } from "@ethersproject/networks";
+import * as chains from "wagmi/chains";
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
@@ -54,7 +54,7 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
  * @param txnHash
  * @dev returns empty string if the network is localChain
  */
-export function getBlockExplorerTxLink(network: Network, txnHash: string) {
+export const getBlockExplorerTxLink = (network: Network, txnHash: string) => {
   const { name, chainId } = network;
 
   if (chainId === 31337 || chainId === 1337) {
@@ -75,7 +75,7 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   const blockExplorerTxURL = blockExplorerBaseTxUrl + txnHash;
 
   return blockExplorerTxURL;
-}
+};
 
 /**
  * Get the wagmi's Chain target network configured in the app.

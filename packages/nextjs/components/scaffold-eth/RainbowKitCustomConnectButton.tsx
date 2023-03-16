@@ -1,8 +1,7 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { TAutoConnect, useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import Balance from "~~/components/scaffold-eth/Balance";
-import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
@@ -14,7 +13,7 @@ const tempAutoConnectConfig: TAutoConnect = {
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
-export default function RainbowKitCustomConnectButton() {
+export const RainbowKitCustomConnectButton = () => {
   useAutoConnect(tempAutoConnectConfig);
 
   const configuredChain = getTargetNetwork();
@@ -79,4 +78,4 @@ export default function RainbowKitCustomConnectButton() {
       }}
     </ConnectButton.Custom>
   );
-}
+};
