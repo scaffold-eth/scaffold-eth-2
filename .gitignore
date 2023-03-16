@@ -12,3 +12,4 @@ node_modules
 .eslintcache
 .vscode/**
 .DS_Store
+.vercel

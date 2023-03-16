@@ -25,7 +25,6 @@
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "postinstall": "husky install",
     "precommit": "lint-staged",
-    "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "vercel:dev": "yarn workspace @se-2/nextjs vercel:dev",
     "vercel:prod": "yarn workspace @se-2/nextjs vercel:prod"
@@ -34,7 +33,8 @@
   "devDependencies": {
     "@types/node": "^18.15.3",
     "husky": "^8.0.1",
-    "lint-staged": "^13.0.3"
+    "lint-staged": "^13.0.3",
+    "vercel": "^28.16.15"
   },
   "dependencies": {
     "@wagmi/chains": "^0.2.11"
