@@ -16,7 +16,7 @@ const scaffoldConfig: ScaffoldConfig = {
 
   // This is ours Alchemy's default API key.
   // You can get your own at https://dashboard.alchemyapi.io
-  alchemyApiKey: "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
+  alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
 } as const;
 
 export default scaffoldConfig;
