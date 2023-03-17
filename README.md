@@ -61,7 +61,7 @@ This command deploys a test smart contract to the local network. The contract is
 ```
 yarn start
 ```
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend.
+Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend. You can tweak app config in `packages/nextjs/scaffold.config.ts`.
 
 Run smart contract test with `yarn hardhat:test`
 
@@ -116,7 +116,7 @@ Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (ema
 
 If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
 
-**Make sure your `.env.production` file has the values you need.**
+**Make sure your `packages/nextjs/scaffold.config.ts` file has the values you need.**
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
