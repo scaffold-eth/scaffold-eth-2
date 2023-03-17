@@ -12,7 +12,8 @@ import {
   getParsedEthersError,
 } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification, parseTxnValue } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification, parseTxnValue } from "~~/utils/scaffold-eth";
 
 // TODO set sensible initial state values to avoid error on first render, also put it in utilsContract
 const getInitialFormState = (functionFragment: FunctionFragment) => {
@@ -38,9 +39,8 @@ export const WriteOnlyFunctionForm = ({
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState<string | BigNumber>("");
   const { chain } = useNetwork();
-  const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
-  const writeDisabled = !chain || chain?.id !== configuredChain.id;
+  const writeDisabled = !chain || chain?.id !== scaffoldConfig.targetNetwork.id;
 
   // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
   // See:

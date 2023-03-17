@@ -2,7 +2,8 @@ import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification } from "~~/utils/scaffold-eth";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -12,14 +13,13 @@ import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
  * @param value - value in ETH that will be sent with transaction
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
-  const configuredChain = getTargetNetwork();
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
     args,
@@ -38,7 +38,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== configuredChain.id) {
+    if (chain?.id !== scaffoldConfig.targetNetwork.id) {
       notification.error("You on the wrong network");
       return;
     }

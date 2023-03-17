@@ -7,7 +7,8 @@ import {
   getFunctionInputKey,
   getParsedContractFunctionArgs,
 } from "~~/components/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -26,10 +27,9 @@ type TReadOnlyFunctionFormProps = {
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [result, setResult] = useState<unknown>();
-  const configuredChain = getTargetNetwork();
 
   const { isFetching, refetch } = useContractRead({
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,

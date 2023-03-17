@@ -2,7 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { TAutoConnect, useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -16,7 +16,6 @@ const tempAutoConnectConfig: TAutoConnect = {
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect(tempAutoConnectConfig);
 
-  const configuredChain = getTargetNetwork();
   const networkColor = useNetworkColor();
 
   return (
@@ -35,11 +34,11 @@ export const RainbowKitCustomConnectButton = () => {
                 );
               }
 
-              if (chain.unsupported || chain.id !== configuredChain.id) {
+              if (chain.unsupported || chain.id !== scaffoldConfig.targetNetwork.id) {
                 return (
                   <>
                     <span className="text-xs" style={{ color: networkColor }}>
-                      {configuredChain.name}
+                      {scaffoldConfig.targetNetwork.name}
                     </span>
                     <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
                       <span>Wrong network</span>
