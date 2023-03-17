@@ -55,7 +55,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
  * @dev returns empty string if the network is localChain
  */
 export function getBlockExplorerTxLink(network: Network, txnHash: string) {
-  let blockExplorerTxURL = "";
   const { chainId } = network;
 
   const chainNames = Object.keys(chains);
@@ -70,11 +69,8 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   }
 
   const targetChain = targetChainArr[0] as keyof typeof chains;
-  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present and we are already checking in ternary
-  blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url
-    ? // @ts-expect-error
-      chains[targetChain].blockExplorers.default.url
-    : "";
+  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present on some chains
+  const blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url;
 
   if (!blockExplorerTxURL) {
     return "";
