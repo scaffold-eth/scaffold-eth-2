@@ -17,6 +17,7 @@ export const RainbowKitCustomConnectButton = () => {
   useAutoConnect(tempAutoConnectConfig);
 
   const networkColor = useNetworkColor();
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   return (
     <ConnectButton.Custom>
@@ -34,11 +35,11 @@ export const RainbowKitCustomConnectButton = () => {
                 );
               }
 
-              if (chain.unsupported || chain.id !== scaffoldConfig.targetNetwork.id) {
+              if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
                   <>
                     <span className="text-xs" style={{ color: networkColor }}>
-                      {scaffoldConfig.targetNetwork.name}
+                      {configuredNetwork.name}
                     </span>
                     <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
                       <span>Wrong network</span>

@@ -24,6 +24,7 @@ type TContractUIProps = {
 export const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   let contractAddress = "";
   let contractABI = [];
@@ -65,7 +66,7 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
   if (!contractAddress) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${scaffoldConfig.targetNetwork.name}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${configuredNetwork.name}"!`}
       </p>
     );
   }
@@ -85,10 +86,10 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
                 </div>
               </div>
             </div>
-            {scaffoldConfig.targetNetwork && (
+            {configuredNetwork && (
               <p className="my-0 text-sm">
                 <span className="font-bold">Network</span>:{" "}
-                <span style={{ color: networkColor }}>{scaffoldConfig.targetNetwork.name}</span>
+                <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
               </p>
             )}
           </div>

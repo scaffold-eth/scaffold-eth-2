@@ -18,10 +18,11 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
   const { chain } = useNetwork();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
-    chainId: scaffoldConfig.targetNetwork.id,
+    chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
     args,
@@ -40,7 +41,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== scaffoldConfig.targetNetwork.id) {
+    if (chain?.id !== configuredNetwork.id) {
       notification.error("You on the wrong network");
       return;
     }

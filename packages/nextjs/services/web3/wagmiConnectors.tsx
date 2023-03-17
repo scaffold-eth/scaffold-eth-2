@@ -14,11 +14,10 @@ import { publicProvider } from "wagmi/providers/public";
 import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
 
+const configuredNetwork = scaffoldConfig.targetNetwork;
+
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
-const enabledChains =
-  scaffoldConfig.targetNetwork.id === 1
-    ? [scaffoldConfig.targetNetwork]
-    : [scaffoldConfig.targetNetwork, chains.mainnet];
+const enabledChains = configuredNetwork.id === 1 ? [configuredNetwork] : [configuredNetwork, chains.mainnet];
 
 /**
  * Chains for the app
@@ -35,7 +34,7 @@ export const appChains = configureChains(
   {
     stallTimeout: 3_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
-    ...(scaffoldConfig.targetNetwork.id !== chains.hardhat.id
+    ...(configuredNetwork.id !== chains.hardhat.id
       ? {
           pollingInterval: scaffoldConfig.pollingInterval,
         }

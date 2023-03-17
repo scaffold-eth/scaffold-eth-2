@@ -15,7 +15,9 @@ type GeneratedContractType = {
 export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
+  const configuredNetwork = scaffoldConfig.targetNetwork;
+
+  const provider = useProvider({ chainId: configuredNetwork.id });
 
   useEffect(() => {
     const getDeployedContractInfo = async () => {
@@ -23,7 +25,7 @@ export const useDeployedContractInfo = (contractName: string | undefined | null)
       let ContractData;
       try {
         ContractData = require("~~/generated/hardhat_contracts.json");
-        const contractsAtChain = ContractData[scaffoldConfig.targetNetwork.id as keyof typeof ContractData];
+        const contractsAtChain = ContractData[configuredNetwork.id as keyof typeof ContractData];
         const contractsData = contractsAtChain?.[0]?.contracts;
         const deployedContract = contractsData?.[contractName as keyof typeof contractsData];
 
@@ -46,7 +48,7 @@ export const useDeployedContractInfo = (contractName: string | undefined | null)
     };
 
     getDeployedContractInfo();
-  }, [contractName, provider]);
+  }, [configuredNetwork.id, contractName, provider]);
 
   return { data: deployedContractData, isLoading };
 };
