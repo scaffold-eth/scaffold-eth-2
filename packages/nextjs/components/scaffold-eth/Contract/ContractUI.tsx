@@ -12,7 +12,7 @@ import {
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 type ContractUIProps = {
   contractName: ContractName;
@@ -23,9 +23,9 @@ type ContractUIProps = {
  * UI component to interface with deployed contracts.
  **/
 export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
-  const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
@@ -62,7 +62,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
   if (!deployedContractData) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${configuredChain.name}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${configuredNetwork.name}"!`}
       </p>
     );
   }
@@ -82,10 +82,10 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
                 </div>
               </div>
             </div>
-            {configuredChain && (
+            {configuredNetwork && (
               <p className="my-0 text-sm">
                 <span className="font-bold">Network</span>:{" "}
-                <span style={{ color: networkColor }}>{configuredChain.name}</span>
+                <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
               </p>
             )}
           </div>

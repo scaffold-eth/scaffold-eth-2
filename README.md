@@ -4,9 +4,9 @@
 
 Scaffold-Eth 2 is an open-source toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
-It's a new version of [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth/tree/master) with its core functionality. Built using NextJS, RainbowKit, Hardhat, Wagmi and Typescript.
+It's a new version of scaffold-eth with its core functionality. Built using NextJS, RainbowKit, Hardhat, Wagmi and Typescript.
 
-- ✅ **Contract Component**: Edit and test Solidity smart contracts on your frontend.
+- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
@@ -61,7 +61,7 @@ This command deploys a test smart contract to the local network. The contract is
 ```
 yarn start
 ```
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend.
+Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the contract component or the example ui in the frontend. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
 Run smart contract test with `yarn hardhat:test`
 
@@ -116,7 +116,7 @@ Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (ema
 
 If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
 
-**Make sure your `.env.production` file has the values you need.**
+**Make sure your `packages/nextjs/scaffold.config.ts` file has the values you need.**
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 

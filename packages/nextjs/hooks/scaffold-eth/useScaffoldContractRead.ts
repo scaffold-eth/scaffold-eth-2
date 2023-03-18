@@ -1,8 +1,8 @@
-import { useContractRead } from "wagmi";
-import type { ExtractAbiFunctionNames } from "abitype";
-import { useDeployedContractInfo } from "./useDeployedContractInfo";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { AbiFunctionArguments, AbiFunctionReturnType, ContractAbi, ContractName } from "./contract.types";
+import type { ExtractAbiFunctionNames } from "abitype";
+import { useContractRead } from "wagmi";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
@@ -20,11 +20,10 @@ export const useScaffoldContractRead = <
   args?: AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>,
   readConfig?: Parameters<typeof useContractRead>[0],
 ) => {
-  const configuredChain = getTargetNetwork();
   const { data: deployedContract } = useDeployedContractInfo(contractName);
 
   return useContractRead({
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     functionName,
     address: deployedContract?.address,
     abi: deployedContract?.abi,

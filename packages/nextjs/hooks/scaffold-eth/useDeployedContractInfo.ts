@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import contracts from "../../generated/hardhat_contracts";
+import { Contract, ContractCodeStatus, ContractName, DefaultChain } from "./contract.types";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import contracts from "../../generated/hardhat_contracts";
-import { Contract, ContractName, ContractCodeStatus, DefaultChain } from "./contract.types";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * @dev use this hook to get a deployed contract from `yarn deploy` generated files.
@@ -12,12 +12,11 @@ import { Contract, ContractName, ContractCodeStatus, DefaultChain } from "./cont
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
   const isMounted = useIsMounted();
-  const configuredChain = getTargetNetwork();
-  const deployedContract = contracts[`${configuredChain.id}` as DefaultChain]?.[0]?.contracts?.[
+  const deployedContract = contracts[`${scaffoldConfig.targetNetwork.id}` as DefaultChain]?.[0]?.contracts?.[
     contractName as ContractName
   ] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
-  const provider = useProvider({ chainId: configuredChain.id });
+  const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
 
   useEffect(() => {
     const checkContractDeployment = async () => {
@@ -39,7 +38,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
     };
 
     checkContractDeployment();
-  }, [isMounted, configuredChain.id, contractName, deployedContract, provider]);
+  }, [isMounted, contractName, deployedContract, provider]);
 
   return {
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
