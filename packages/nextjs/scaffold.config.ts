@@ -1,12 +1,6 @@
 import * as chains from "wagmi/chains";
 
-type ScaffoldConfig = {
-  targetNetwork: chains.Chain;
-  pollingInterval: number;
-  alchemyApiKey: string;
-};
-
-const scaffoldConfig: ScaffoldConfig = {
+const scaffoldConfig = {
   // The network where your DApp lives in
   targetNetwork: chains.hardhat,
 

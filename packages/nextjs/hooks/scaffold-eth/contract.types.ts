@@ -1,11 +1,12 @@
-import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
 import contracts from "../../generated/hardhat_contracts";
-
-export type DefaultChain = "31337";
+import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
+import scaffoldConfig from "~~/scaffold.config";
 
 export type Chain = keyof typeof contracts;
 
-type Contracts = typeof contracts[DefaultChain][0]["contracts"];
+type SelectedChainId = typeof scaffoldConfig["targetNetwork"]["id"];
+
+type Contracts = typeof contracts[SelectedChainId][0]["contracts"];
 
 export type ContractName = keyof Contracts;
 
