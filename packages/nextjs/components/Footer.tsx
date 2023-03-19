@@ -23,7 +23,7 @@ export const Footer = () => {
                 <span>{ethPrice}</span>
               </div>
             )}
-            {scaffoldConfig.targetNetwork.id === hardhat.id && <Faucet />}
+            {Number(scaffoldConfig.targetNetwork.id) === hardhat.id && <Faucet />}
           </div>
           <SwitchTheme className="pointer-events-auto" />
         </div>
