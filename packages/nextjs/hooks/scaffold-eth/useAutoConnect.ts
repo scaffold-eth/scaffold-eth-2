@@ -33,7 +33,7 @@ const getInitialConnector = (
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
-  const isLocalChainSelected = Number(scaffoldConfig.targetNetwork.id) === hardhat.id;
+  const isLocalChainSelected = (scaffoldConfig.targetNetwork.id as number) === hardhat.id;
 
   if (!previousWalletId) {
     // The user was not connected to a wallet
