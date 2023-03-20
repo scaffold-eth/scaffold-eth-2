@@ -1,6 +1,7 @@
-import type { NextPage } from "next";
 import Head from "next/head";
-import { ContractData, ContractInteraction } from "~~/components/ExampleUi";
+import type { NextPage } from "next";
+import { ContractData } from "~~/components/example-ui/ContractData";
+import { ContractInteraction } from "~~/components/example-ui/ContractInteraction";
 
 const ExampleUI: NextPage = () => {
   return (

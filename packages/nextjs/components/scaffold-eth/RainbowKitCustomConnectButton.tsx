@@ -1,10 +1,8 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { TAutoConnect, useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import Balance from "~~/components/scaffold-eth/Balance";
-import { useSwitchNetwork } from "wagmi";
-import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
@@ -15,20 +13,15 @@ const tempAutoConnectConfig: TAutoConnect = {
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
-export default function RainbowKitCustomConnectButton() {
+export const RainbowKitCustomConnectButton = () => {
   useAutoConnect(tempAutoConnectConfig);
-  const { switchNetwork } = useSwitchNetwork();
 
-  const configuredChain = getTargetNetwork();
   const networkColor = useNetworkColor();
-
-  const onSwitchNetwork = () => {
-    switchNetwork?.(configuredChain.id);
-  };
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
+      {({ account, chain, openAccountModal, openConnectModal, openChainModal, mounted }) => {
         const connected = mounted && account && chain;
 
         return (
@@ -42,15 +35,17 @@ export default function RainbowKitCustomConnectButton() {
                 );
               }
 
-              if (chain.unsupported || chain.id !== configuredChain.id) {
+              if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
-                  <div className="rounded-md shadow-lg p-2">
-                    <span className="text-error mr-2">Wrong network selected - ({chain.name})</span>
-                    <span className="text-primary mr-2">Switch network to</span>
-                    <button className="btn btn-xs btn-primary btn-outline" onClick={onSwitchNetwork}>
-                      {configuredChain.name}
+                  <>
+                    <span className="text-xs" style={{ color: networkColor }}>
+                      {configuredNetwork.name}
+                    </span>
+                    <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
+                      <span>Wrong network</span>
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </button>
-                  </div>
+                  </>
                 );
               }
 
@@ -63,9 +58,13 @@ export default function RainbowKitCustomConnectButton() {
                         {chain.name}
                       </span>
                     </div>
-                    <button onClick={openAccountModal} type="button" className="btn btn-primary btn-sm pl-2 shadow-md">
+                    <button
+                      onClick={openAccountModal}
+                      type="button"
+                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
+                    >
                       <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
-                      <span className="m-1">{account.displayName}</span>
+                      <span className="ml-2 mr-1">{account.displayName}</span>
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />
                       </span>
@@ -79,4 +78,4 @@ export default function RainbowKitCustomConnectButton() {
       }}
     </ConnectButton.Custom>
   );
-}
+};

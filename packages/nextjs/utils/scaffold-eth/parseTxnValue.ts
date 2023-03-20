@@ -5,7 +5,10 @@ import { BigNumber } from "ethers";
  * @param  str - any string
  * @return {BigNumber | number}
  */
-export default function parseTxnValue(str: string): BigNumber | number {
+export const parseTxnValue = (str: string): BigNumber | number | undefined => {
+  if (!str) {
+    return undefined;
+  }
   try {
     if (isNaN(parseFloat(str))) {
       return -1;
@@ -18,4 +21,4 @@ export default function parseTxnValue(str: string): BigNumber | number {
       return -1;
     }
   }
-}
+};

@@ -1,18 +1,16 @@
-import React from "react";
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-import { useAppStore } from "~~/services/store/store";
-import { HeartIcon } from "@heroicons/react/24/outline";
-import SwitchTheme from "./SwitchTheme";
-import { Faucet } from "~~/components/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { hardhat } from "wagmi/chains";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { HeartIcon } from "@heroicons/react/24/outline";
+import { SwitchTheme } from "~~/components/SwitchTheme";
+import { Faucet } from "~~/components/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { useAppStore } from "~~/services/store/store";
 
 /**
  * Site footer
  */
-export default function Footer() {
+export const Footer = () => {
   const ethPrice = useAppStore(state => state.ethPrice);
-  const configuredNetwork = getTargetNetwork();
 
   return (
     <div className="min-h-0 p-5 mb-11 lg:mb-0">
@@ -25,7 +23,7 @@ export default function Footer() {
                 <span>{ethPrice}</span>
               </div>
             )}
-            {configuredNetwork.id === hardhat.id && <Faucet />}
+            {scaffoldConfig.targetNetwork.id === hardhat.id && <Faucet />}
           </div>
           <SwitchTheme className="pointer-events-auto" />
         </div>
@@ -71,4 +69,4 @@ export default function Footer() {
       </div>
     </div>
   );
-}
+};

@@ -1,10 +1,14 @@
-import { FunctionFragment } from "ethers/lib/utils";
 import { useState } from "react";
+import { FunctionFragment } from "ethers/lib/utils";
 import { useContractRead } from "wagmi";
-import { displayTxResult } from "./utilsDisplay";
-import InputUI from "./InputUI";
-import { getFunctionInputKey, getParsedContractFunctionArgs } from "./utilsContract";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import {
+  ContractInput,
+  displayTxResult,
+  getFunctionInputKey,
+  getParsedContractFunctionArgs,
+} from "~~/components/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification } from "~~/utils/scaffold-eth";
 
 const getInitialFormState = (functionFragment: FunctionFragment) => {
   const initialForm: Record<string, any> = {};
@@ -23,10 +27,9 @@ type TReadOnlyFunctionFormProps = {
 export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [result, setResult] = useState<unknown>();
-  const configuredChain = getTargetNetwork();
 
   const { isFetching, refetch } = useContractRead({
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
@@ -40,7 +43,7 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
   const inputs = functionFragment.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionFragment, input, inputIndex);
     return (
-      <InputUI
+      <ContractInput
         key={key}
         setForm={updatedFormValue => {
           setResult(undefined);
@@ -49,13 +52,12 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
         form={form}
         stateObjectKey={key}
         paramType={input}
-        functionFragment={functionFragment}
       />
     );
   });
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
       <p className="font-medium my-0 break-words">{functionFragment.name}</p>
       {inputs}
       <div className="flex justify-between gap-2">

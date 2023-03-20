@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { FunctionFragment } from "ethers/lib/utils";
-import React, { useEffect } from "react";
 import { useContractRead } from "wagmi";
-import { displayTxResult } from "./utilsDisplay";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
-import { useAnimationConfig } from "~~/hooks/scaffold-eth/useAnimationConfig";
+import { displayTxResult } from "~~/components/scaffold-eth";
+import { useAnimationConfig } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -12,14 +13,17 @@ type TDisplayVariableProps = {
   refreshDisplayVariables: boolean;
 };
 
-const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVariables }: TDisplayVariableProps) => {
-  const configuredChain = getTargetNetwork();
+export const DisplayVariable = ({
+  contractAddress,
+  functionFragment,
+  refreshDisplayVariables,
+}: TDisplayVariableProps) => {
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
@@ -38,7 +42,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-words">{functionFragment.name}</h3>
+        <h3 className="font-medium text-lg mb-0 break-all">{functionFragment.name}</h3>
         <button className={`btn btn-ghost btn-xs ${isFetching ? "loading" : ""}`} onClick={async () => await refetch()}>
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
@@ -46,7 +50,7 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
           <div
-            className={`break-words block transition bg-transparent ${
+            className={`break-all block transition bg-transparent ${
               showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
             }`}
           >
@@ -57,5 +61,3 @@ const DisplayVariable = ({ contractAddress, functionFragment, refreshDisplayVari
     </div>
   );
 };
-
-export default DisplayVariable;

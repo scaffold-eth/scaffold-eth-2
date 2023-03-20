@@ -1,7 +1,6 @@
 import { useContractEvent } from "wagmi";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
-
-import { useDeployedContractInfo } from "./useDeployedContractInfo";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * @dev wrapper for wagmi's useContractEvent
@@ -16,13 +15,12 @@ export const useScaffoldEventSubscriber = (
   callbackListener: (...args: unknown[]) => void,
   once = false,
 ) => {
-  const configuredChain = getTargetNetwork();
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
   return useContractEvent({
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
-    chainId: configuredChain.id,
+    chainId: scaffoldConfig.targetNetwork.id,
     listener: callbackListener,
     eventName,
     once,
