@@ -92,13 +92,15 @@ type RestConfigParam<TAbiStateMutability extends AbiStateMutability> = Partial<
   >
 >;
 
+type OptionalTupple<T> = T extends readonly [infer H, ...infer R] ? readonly [H | undefined, ...OptionalTupple<R>] : T;
+
 type UseScaffoldArgsParam<
   TContractName extends ContractName,
   TAbiStateMutability extends AbiStateMutability,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, TAbiStateMutability>,
 > = TFunctionName extends FunctionNamesWithInputs<ContractAbi<TContractName>, TAbiStateMutability>
   ? {
-      args: AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>;
+      args: OptionalTupple<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>;
     }
   : {
       args?: never;
