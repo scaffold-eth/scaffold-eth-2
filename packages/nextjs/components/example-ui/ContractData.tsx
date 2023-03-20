@@ -12,12 +12,22 @@ export const ContractData = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  const { data: totalCounter } = useScaffoldContractRead("YourContract", "totalCounter");
+  const { data: totalCounter } = useScaffoldContractRead({
+    contractName: "YourContract",
+    functionName: "totalCounter",
+  });
 
-  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead("YourContract", "greeting");
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead({
+    contractName: "YourContract",
+    functionName: "greeting",
+  });
 
-  useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
-    console.log(greetingSetter, newGreeting, premium, value);
+  useScaffoldEventSubscriber({
+    contractName: "YourContract",
+    eventName: "GreetingChange",
+    listener: (greetingSetter, newGreeting, premium, value) => {
+      console.log(greetingSetter, newGreeting, premium, value);
+    },
   });
 
   const { showAnimation } = useAnimationConfig(totalCounter);

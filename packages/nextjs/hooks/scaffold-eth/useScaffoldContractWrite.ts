@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AbiFunctionArguments, ContractAbi, ContractName } from "./contract.types";
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "./contract.types";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
@@ -10,21 +10,22 @@ import { notification } from "~~/utils/scaffold-eth";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
- * @param contractName - deployed contract name
- * @param functionName - name of the function to be called
- * @param args - arguments for the function
- * @param value - value in ETH that will be sent with transaction
+ * @param config - The config settings, including extra wagmi configuration
+ * @param config.contractName - deployed contract name
+ * @param config.functionName - name of the function to be called
+ * @param config.args - arguments for the function
+ * @param config.value - value in ETH that will be sent with transaction
  */
 export const useScaffoldContractWrite = <
   TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "payable" | "nonpayable">,
->(
-  contractName: TContractName,
-  functionName: TFunctionName,
-  args?: AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>,
-
-  value?: string,
-) => {
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
+>({
+  contractName,
+  functionName,
+  args,
+  value,
+  ...writeConfig
+}: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
@@ -41,6 +42,7 @@ export const useScaffoldContractWrite = <
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
     },
+    ...writeConfig,
   });
 
   const sendContractWriteTx = async () => {

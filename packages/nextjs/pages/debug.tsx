@@ -1,13 +1,11 @@
 import { useState } from "react";
-import contracts from "../generated/hardhat_contracts";
 import type { NextPage } from "next";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
-import scaffoldConfig from "~~/scaffold.config";
+import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
 const Debug: NextPage = () => {
-  const contractsData = contracts[scaffoldConfig.targetNetwork.id as unknown as keyof typeof contracts]?.[0]?.contracts;
-  const contractNames = contractsData ? (Object.keys(contractsData) as ContractName[]) : [];
+  const contractNames = getContractNames();
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
 
   return (

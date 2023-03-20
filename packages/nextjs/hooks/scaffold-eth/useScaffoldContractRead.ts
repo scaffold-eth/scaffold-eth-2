@@ -1,4 +1,4 @@
-import { AbiFunctionArguments, AbiFunctionReturnType, ContractAbi, ContractName } from "./contract.types";
+import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from "./contract.types";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { useContractRead } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -6,20 +6,20 @@ import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
- * @param contractName - deployed contract name
- * @param functionName - name of the function to be called
- * @param args - args to be passed to the function call
- * @param readConfig - extra wagmi configuration
+ * @param config - The config settings, including extra wagmi configuration
+ * @param config.contractName - deployed contract name
+ * @param config.functionName - name of the function to be called
+ * @param config.args - args to be passed to the function call
  */
 export const useScaffoldContractRead = <
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
->(
-  contractName: TContractName,
-  functionName: TFunctionName,
-  args?: AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>,
-  readConfig?: Parameters<typeof useContractRead>[0],
-) => {
+>({
+  contractName,
+  functionName,
+  args,
+  ...readConfig
+}: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const { data: deployedContract } = useDeployedContractInfo(contractName);
 
   return useContractRead({
@@ -28,10 +28,10 @@ export const useScaffoldContractRead = <
     address: deployedContract?.address,
     abi: deployedContract?.abi,
     watch: true,
-    args: args as unknown[],
-    ...readConfig,
+    args,
+    ...(readConfig as any),
   }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
-    data: AbiFunctionReturnType<ContractAbi, TFunctionName>;
+    data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
     refetch: (options?: {
       throwOnError: boolean;
       cancelRefetch: boolean;
