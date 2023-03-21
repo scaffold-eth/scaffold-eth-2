@@ -11,7 +11,7 @@ import {
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type TContractUIProps = {
   contractName: string;
@@ -24,7 +24,7 @@ type TContractUIProps = {
 export const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
-  const configuredNetwork = scaffoldConfig.targetNetwork;
+  const configuredNetwork = getTargetNetwork();
 
   let contractAddress = "";
   let contractABI = [];

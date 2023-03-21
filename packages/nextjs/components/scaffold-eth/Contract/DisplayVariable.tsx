@@ -4,8 +4,7 @@ import { useContractRead } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { displayTxResult } from "~~/components/scaffold-eth";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { notification } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 type TDisplayVariableProps = {
   functionFragment: FunctionFragment;
@@ -23,7 +22,7 @@ export const DisplayVariable = ({
     isFetching,
     refetch,
   } = useContractRead({
-    chainId: scaffoldConfig.targetNetwork.id,
+    chainId: getTargetNetwork().id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,

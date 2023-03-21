@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProvider } from "wagmi";
-import scaffoldConfig from "~~/scaffold.config";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type GeneratedContractType = {
   address: string;
@@ -15,7 +15,7 @@ type GeneratedContractType = {
 export const useDeployedContractInfo = (contractName: string | undefined | null) => {
   const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const configuredNetwork = scaffoldConfig.targetNetwork;
+  const configuredNetwork = getTargetNetwork();
 
   const provider = useProvider({ chainId: configuredNetwork.id });
 

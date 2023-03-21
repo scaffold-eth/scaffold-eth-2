@@ -1797,7 +1797,7 @@ __metadata:
     hardhat: ^2.11.2
     hardhat-deploy: ^0.11.25
     hardhat-gas-reporter: ^1.0.9
-    prettier: 2.7.1
+    prettier: ^2.8.4
     qrcode: ^1.5.1
     solidity-coverage: ^0.8.2
     ts-node: ^10.9.1
@@ -1831,7 +1831,7 @@ __metadata:
     next: ^13.1.6
     nextjs-progressbar: ^0.0.16
     postcss: ^8.4.16
-    prettier: ^2.7.1
+    prettier: ^2.8.4
     react: ^18.2.0
     react-blockies: ^1.4.1
     react-copy-to-clipboard: ^5.1.0
@@ -10889,12 +10889,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.7.1, prettier@npm:^2.3.1, prettier@npm:^2.7.1":
+"prettier@npm:^2.3.1":
   version: 2.7.1
   resolution: "prettier@npm:2.7.1"
   bin:
     prettier: bin-prettier.js
   checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.8.4":
+  version: 2.8.4
+  resolution: "prettier@npm:2.8.4"
+  bin:
+    prettier: bin-prettier.js
+  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
   languageName: node
   linkType: hard
 
