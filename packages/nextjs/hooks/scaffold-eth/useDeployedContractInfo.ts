@@ -1,54 +1,46 @@
 import { useEffect, useState } from "react";
+import { Contract, ContractCodeStatus, ContractName } from "./contract.types";
+import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
-
-type GeneratedContractType = {
-  address: string;
-  abi: any[];
-};
+import contracts from "~~/generated/hardhat_contracts";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
- * @dev use this hook to get a deployed contract from `yarn deploy` generated files.
+ * Gets a deployed contract from `yarn deploy` generated files.
  * @param contractName - name of deployed contract
- * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
-export const useDeployedContractInfo = (contractName: string | undefined | null) => {
-  const [deployedContractData, setDeployedContractData] = useState<undefined | GeneratedContractType>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
-  const configuredNetwork = getTargetNetwork();
-
-  const provider = useProvider({ chainId: configuredNetwork.id });
+export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
+  const isMounted = useIsMounted();
+  const deployedContract = contracts[scaffoldConfig.targetNetwork.id]?.[0]?.contracts?.[
+    contractName as ContractName
+  ] as Contract<TContractName>;
+  const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
+  const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
 
   useEffect(() => {
-    const getDeployedContractInfo = async () => {
-      setIsLoading(true);
-      let ContractData;
-      try {
-        ContractData = require("~~/generated/hardhat_contracts.json");
-        const contractsAtChain = ContractData[configuredNetwork.id as keyof typeof ContractData];
-        const contractsData = contractsAtChain?.[0]?.contracts;
-        const deployedContract = contractsData?.[contractName as keyof typeof contractsData];
-
-        if (!deployedContract || !contractName || !provider) {
-          return;
-        }
-
-        const code = await provider.getCode(deployedContract.address);
-        // If contract code is `0x` => no contract deployed on that address
-        if (code === "0x" || !contractsData || !(contractName in contractsData)) {
-          return;
-        }
-        setDeployedContractData(contractsData[contractName]);
-      } catch (e) {
-        // Contract not deployed or file doesn't exist.
-        setDeployedContractData(undefined);
-      } finally {
-        setIsLoading(false);
+    const checkContractDeployment = async () => {
+      if (!deployedContract) {
+        setStatus(ContractCodeStatus.NOT_FOUND);
+        return;
       }
+      const code = await provider.getCode((deployedContract as Contract<TContractName>).address);
+
+      if (!isMounted()) {
+        return;
+      }
+      // If contract code is `0x` => no contract deployed on that address
+      if (code === "0x") {
+        setStatus(ContractCodeStatus.NOT_FOUND);
+        return;
+      }
+      setStatus(ContractCodeStatus.DEPLOYED);
     };
 
-    getDeployedContractInfo();
-  }, [configuredNetwork.id, contractName, provider]);
+    checkContractDeployment();
+  }, [isMounted, contractName, deployedContract, provider]);
 
-  return { data: deployedContractData, isLoading };
+  return {
+    data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
+    isLoading: status === ContractCodeStatus.LOADING,
+  };
 };
