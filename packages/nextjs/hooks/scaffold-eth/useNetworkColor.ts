@@ -8,8 +8,7 @@ const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
  */
 export const useNetworkColor = () => {
   const { isDarkMode } = useDarkMode();
-  const configuredNetwork = getTargetNetwork();
-  const colorConfig = configuredNetwork.color ?? DEFAULT_NETWORK_COLOR;
+  const colorConfig = getTargetNetwork().color ?? DEFAULT_NETWORK_COLOR;
 
   return Array.isArray(colorConfig) ? (isDarkMode ? colorConfig[1] : colorConfig[0]) : colorConfig;
 };

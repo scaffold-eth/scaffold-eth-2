@@ -12,7 +12,6 @@ export interface BurnerWalletOptions {
   chains: Chain[];
 }
 
-const configuredNetwork = getTargetNetwork();
 /**
  * Wagmi config for burner wallet
  * @param param0
@@ -24,7 +23,7 @@ export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => (
   iconUrl: "https://avatars.githubusercontent.com/u/56928858?s=200&v=4",
   iconBackground: "#0c2f78",
   //todo add conditions to hide burner wallet
-  hidden: () => configuredNetwork.id !== hardhat.id,
+  hidden: () => getTargetNetwork().id !== hardhat.id,
   createConnector: () => {
     const connector = new BurnerConnector({ chains, options: { defaultChainId: defaultBurnerChainId } });
 
