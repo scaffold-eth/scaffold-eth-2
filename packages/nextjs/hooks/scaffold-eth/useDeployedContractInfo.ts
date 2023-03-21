@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import contracts from "../../generated/hardhat_contracts";
 import { Contract, ContractCodeStatus, ContractName } from "./contract.types";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
+import contracts from "~~/generated/hardhat_contracts";
 import scaffoldConfig from "~~/scaffold.config";
 
 /**
- * @dev use this hook to get a deployed contract from `yarn deploy` generated files.
+ * Gets a deployed contract from `yarn deploy` generated files.
  * @param contractName - name of deployed contract
- * @returns {GeneratedContractType | undefined} object containing contract address and abi or undefined if contract is not found
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
   const isMounted = useIsMounted();
