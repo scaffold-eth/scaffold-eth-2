@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { notification } from "~~/utils/scaffold-eth";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -12,14 +14,15 @@ import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
  * @param value - value in ETH that will be sent with transaction
  */
 export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
-  const configuredChain = getTargetNetwork();
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
+  const [isMining, setIsMining] = useState(false);
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
-    chainId: configuredChain.id,
+    chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi,
     args,
@@ -38,17 +41,20 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== configuredChain.id) {
+    if (chain?.id !== configuredNetwork.id) {
       notification.error("You on the wrong network");
       return;
     }
 
     if (wagmiContractWrite.writeAsync) {
       try {
+        setIsMining(true);
         await writeTx(wagmiContractWrite.writeAsync());
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
+      } finally {
+        setIsMining(false);
       }
     } else {
       notification.error("Contract writer error. Try again.");
@@ -58,6 +64,7 @@ export const useScaffoldContractWrite = (contractName: string, functionName: str
 
   return {
     ...wagmiContractWrite,
+    isMining,
     // Overwrite wagmi's write async
     writeAsync: sendContractWriteTx,
   };

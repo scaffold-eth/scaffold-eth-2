@@ -11,7 +11,7 @@ import {
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 
 type TContractUIProps = {
   contractName: string;
@@ -22,9 +22,9 @@ type TContractUIProps = {
  * UI component to interface with deployed contracts.
  **/
 export const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
-  const configuredChain = getTargetNetwork();
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
+  const configuredNetwork = scaffoldConfig.targetNetwork;
 
   let contractAddress = "";
   let contractABI = [];
@@ -66,7 +66,7 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
   if (!contractAddress) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${configuredChain.name}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${configuredNetwork.name}"!`}
       </p>
     );
   }
@@ -86,10 +86,10 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
                 </div>
               </div>
             </div>
-            {configuredChain && (
+            {configuredNetwork && (
               <p className="my-0 text-sm">
                 <span className="font-bold">Network</span>:{" "}
-                <span style={{ color: networkColor }}>{configuredChain.name}</span>
+                <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
               </p>
             )}
           </div>

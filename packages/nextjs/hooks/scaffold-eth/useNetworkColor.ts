@@ -1,5 +1,6 @@
 import { useDarkMode } from "usehooks-ts";
-import { NETWORKS_EXTRA_DATA, getTargetNetwork } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { NETWORKS_EXTRA_DATA } from "~~/utils/scaffold-eth";
 
 const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
 
@@ -8,8 +9,7 @@ const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
  */
 export const useNetworkColor = () => {
   const { isDarkMode } = useDarkMode();
-  const configuredChain = getTargetNetwork();
-  const networkDetails = NETWORKS_EXTRA_DATA[configuredChain.id] ?? { color: DEFAULT_NETWORK_COLOR };
+  const networkDetails = NETWORKS_EXTRA_DATA[scaffoldConfig.targetNetwork.id] ?? { color: DEFAULT_NETWORK_COLOR };
 
   return Array.isArray(networkDetails.color)
     ? isDarkMode
