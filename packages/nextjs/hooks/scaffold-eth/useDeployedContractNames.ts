@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import scaffoldConfig from "~~/scaffold.config";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 /**
  * @dev use this hook to get the list of contracts deployed by `yarn deploy`.
@@ -12,7 +12,7 @@ export const useDeployedContractNames = () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const contracts = require("~~/generated/hardhat_contracts.json");
-      const contractsAtChain = contracts[`${scaffoldConfig.targetNetwork.id}` as keyof typeof contracts];
+      const contractsAtChain = contracts[`${getTargetNetwork().id}` as keyof typeof contracts];
       const contractsData = contractsAtChain?.[0]?.contracts;
       const contractNames = contractsData ? Object.keys(contractsData) : [];
 

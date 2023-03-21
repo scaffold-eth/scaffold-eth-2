@@ -81,7 +81,7 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 }
 
 /**
- * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network meta data
+ * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
  */
 
 export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
