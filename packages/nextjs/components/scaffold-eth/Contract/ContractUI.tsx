@@ -12,7 +12,7 @@ import {
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
-import scaffoldConfig from "~~/scaffold.config";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 type ContractUIProps = {
   contractName: ContractName;
@@ -25,7 +25,7 @@ type ContractUIProps = {
 export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
-  const configuredNetwork = scaffoldConfig.targetNetwork;
+  const configuredNetwork = getTargetNetwork();
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();

@@ -1,5 +1,11 @@
 import * as chains from "wagmi/chains";
 
+type ScaffoldConfig = {
+  targetNetwork: chains.Chain;
+  pollingInterval: number;
+  alchemyApiKey: string;
+};
+
 const scaffoldConfig = {
   // The network where your DApp lives in
   targetNetwork: chains.hardhat,
@@ -13,6 +19,6 @@ const scaffoldConfig = {
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
-} as const;
+} satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
