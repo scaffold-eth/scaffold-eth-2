@@ -1,5 +1,6 @@
 import { Network } from "@ethersproject/networks";
 import * as chains from "wagmi/chains";
+import scaffoldConfig from "~~/scaffold.config";
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
@@ -77,4 +78,17 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   }
 
   return `${blockExplorerTxURL}/tx/${txnHash}`;
+}
+
+/**
+ * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network meta data
+ */
+
+export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
+  const configuredNetwork = scaffoldConfig.targetNetwork;
+
+  return {
+    ...configuredNetwork,
+    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
+  };
 }
