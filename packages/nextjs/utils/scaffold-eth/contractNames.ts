@@ -1,4 +1,4 @@
-import contracts from "../../generated/hardhat_contracts";
+import contracts from "~~/generated/hardhat_contracts";
 import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
 import scaffoldConfig from "~~/scaffold.config";
 
