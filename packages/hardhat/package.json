@@ -5,7 +5,7 @@
     "account": "hardhat run scripts/listAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy --export-all ../nextjs/generated/hardhat_contracts.json && yarn generateTsAbis",
+    "deploy": "hardhat deploy --export-all ../nextjs/generated/hardhat_contracts.json \"$@\" && yarn generateTsAbis",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "generate": "hardhat run scripts/generateAccount.ts",
     "generateTsAbis": "hardhat run scripts/generateTsAbis.ts",
