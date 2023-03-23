@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Contract, ContractCodeStatus, ContractName } from "./contract.types";
+import { Contract, ContractCodeStatus, ContractName, GenericContractsDeclaration } from "./contract.types";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import contracts from "~~/generated/hardhat_contracts";
 import scaffoldConfig from "~~/scaffold.config";
 
 /**
@@ -11,9 +10,9 @@ import scaffoldConfig from "~~/scaffold.config";
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
   const isMounted = useIsMounted();
-  const deployedContract = contracts[scaffoldConfig.targetNetwork.id]?.[0]?.contracts?.[
-    contractName as ContractName
-  ] as Contract<TContractName>;
+  const deployedContract = (scaffoldConfig.contracts as unknown as GenericContractsDeclaration)?.[
+    scaffoldConfig.targetNetwork.id
+  ]?.[0]?.contracts?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
 
