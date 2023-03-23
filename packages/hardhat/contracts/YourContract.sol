@@ -13,6 +13,29 @@ import "hardhat/console.sol";
  */
 contract YourContract {
 
+
+    struct Todo {
+        string text;
+        bool completed;
+        address who;
+    }
+
+    Todo[] public todos;
+
+    function create(string calldata _text, address who) public  {
+        todos.push(Todo(
+            {text: _text, 
+            completed: false,
+            who: who
+        }));
+    }
+
+    function toggleCompleted(uint _index) public {
+        Todo storage todo = todos[_index];
+        require(todo.who == msg.sender, "Not the who");
+        todo.completed = !todo.completed;
+    }
+
     // State Variables
     address public immutable owner;
     string public greeting = "Building Unstoppable Apps!!!";
