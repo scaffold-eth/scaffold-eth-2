@@ -1,8 +1,10 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-import { HardhatUserConfig } from "hardhat/config";
+import "@matterlabs/hardhat-zksync-deploy";
+import "@matterlabs/hardhat-zksync-solc";
 import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
 import "hardhat-deploy";
+import { HardhatUserConfig } from "hardhat/config";
+dotenv.config();
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -15,12 +17,17 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 
 const config: HardhatUserConfig = {
   solidity: "0.8.17",
-  defaultNetwork: "localhost",
+  defaultNetwork: "zksync-testnet",
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
       default: 0,
     },
+  },
+  zksolc: {
+    version: "1.3.5",
+    compilerSource: "binary",
+    settings: {},
   },
   networks: {
     // View the networks that are pre-configured.
@@ -66,6 +73,17 @@ const config: HardhatUserConfig = {
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+    },
+    "zksync-testnet": {
+      url: "https://zksync2-testnet.zksync.dev",
+      accounts: [deployerPrivateKey],
+      zksync: true,
+      ethNetwork: "goerli",
+    },
+    "zksync-mainnet": {
+      url: "https://zksync2-mainnet.zksync.io",
+      accounts: [deployerPrivateKey],
+      zksync: true,
     },
   },
   verify: {

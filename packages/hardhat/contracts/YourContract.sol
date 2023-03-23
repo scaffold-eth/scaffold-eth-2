@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 // Useful for debugging. Remove when deploying to a live network.
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -44,7 +44,7 @@ contract YourContract {
      */
     function setGreeting(string memory _newGreeting) public payable {
         // Print data to the hardhat chain console. Remove when deploying to a live network.
-        console.log("Setting new greeting '%s' from %s",  _newGreeting, msg.sender);
+        // console.log("Setting new greeting '%s' from %s",  _newGreeting, msg.sender);
 
         // Change state variables
         greeting = _newGreeting;
