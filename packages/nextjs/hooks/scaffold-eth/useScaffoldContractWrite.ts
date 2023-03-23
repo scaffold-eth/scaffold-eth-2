@@ -1,35 +1,47 @@
 import { useState } from "react";
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "./contract.types";
+import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { notification } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
- * @param contractName - deployed contract name
- * @param functionName - name of the function to be called
- * @param args - arguments for the function
- * @param value - value in ETH that will be sent with transaction
+ * @param config - The config settings, including extra wagmi configuration
+ * @param config.contractName - deployed contract name
+ * @param config.functionName - name of the function to be called
+ * @param config.args - arguments for the function
+ * @param config.value - value in ETH that will be sent with transaction
  */
-export const useScaffoldContractWrite = (contractName: string, functionName: string, args?: any[], value?: string) => {
+export const useScaffoldContractWrite = <
+  TContractName extends ContractName,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
+>({
+  contractName,
+  functionName,
+  args,
+  value,
+  ...writeConfig
+}: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
-  const configuredNetwork = scaffoldConfig.targetNetwork;
+  const configuredNetwork = getTargetNetwork();
 
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
     chainId: configuredNetwork.id,
     address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
-    args,
-    functionName,
+    abi: deployedContractData?.abi as Abi,
+    args: args as unknown[],
+    functionName: functionName as any,
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
     },
+    ...writeConfig,
   });
 
   const sendContractWriteTx = async () => {

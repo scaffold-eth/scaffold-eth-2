@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run hardhat node & deploy contracts 
+      - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
         run: yarn chain & yarn deploy 
 
       - name: Run nextjs lint

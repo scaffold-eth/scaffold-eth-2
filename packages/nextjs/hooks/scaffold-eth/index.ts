@@ -3,7 +3,6 @@ export * from "./useAnimationConfig";
 export * from "./useAutoConnect";
 export * from "./useBurnerWallet";
 export * from "./useDeployedContractInfo";
-export * from "./useDeployedContractNames";
 export * from "./useEthPrice";
 export * from "./useNetworkColor";
 export * from "./useOutsideClick";
