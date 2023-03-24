@@ -4,14 +4,15 @@ import allGeneratedContracts from "../generated/hardhat_contracts.json";
 import prettier from "prettier";
 
 function main() {
-  const TARGET_PATH = "../nextjs/generated/hardhat_contracts";
+  const TARGET_DIR = "../nextjs/generated/";
 
   const fileContent = Object.entries(allGeneratedContracts).reduce((content, [chainId, chainConfig]) => {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
   }, "");
 
+  fs.mkdirSync(TARGET_DIR);
   fs.writeFileSync(
-    `${TARGET_PATH}.ts`,
+    `${TARGET_DIR}hardhat_contracts.ts`,
     prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
   );
 }
