@@ -1,5 +1,6 @@
 import { Chain, Wallet } from "@rainbow-me/rainbowkit";
 import { hardhat } from "wagmi/chains";
+import scaffoldConfig from "~~/scaffold.config";
 import {
   BurnerConnector,
   burnerWalletId,
@@ -8,6 +9,8 @@ import {
 } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
+const burnerConfig = scaffoldConfig.burnerWallet;
+const targetNetwork = getTargetNetwork();
 export interface BurnerWalletOptions {
   chains: Chain[];
 }
@@ -22,8 +25,17 @@ export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => (
   name: burnerWalletName,
   iconUrl: "https://avatars.githubusercontent.com/u/56928858?s=200&v=4",
   iconBackground: "#0c2f78",
-  //todo add conditions to hide burner wallet
-  hidden: () => getTargetNetwork().id !== hardhat.id,
+  hidden: () => {
+    if (!burnerConfig.enabled) {
+      return true;
+    }
+
+    if (burnerConfig.onlyLocal) {
+      return targetNetwork.id !== hardhat.id;
+    }
+
+    return false;
+  },
   createConnector: () => {
     const connector = new BurnerConnector({ chains, options: { defaultChainId: defaultBurnerChainId } });
 
