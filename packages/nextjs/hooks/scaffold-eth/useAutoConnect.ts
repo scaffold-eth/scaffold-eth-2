@@ -6,14 +6,6 @@ import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-export type TAutoConnect = {
-  /**
-   * Enable the burner wallet.  If this is disabled, burner wallet is entierly disabled
-   */
-  burnerEnabled: boolean;
-  walletAutoConnect: boolean;
-};
-
 const walletIdStorageKey = "scaffoldEth2.wallet";
 
 /**
@@ -54,7 +46,6 @@ const getInitialConnector = (
 
 /**
  * Automatically connect to a wallet/connector based on config and prior wallet
- * @param config
  */
 export const useAutoConnect = (): void => {
   const [walletId, setWalletId] = useLocalStorage<string>(walletIdStorageKey, "");
