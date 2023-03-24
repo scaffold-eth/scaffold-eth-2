@@ -10,7 +10,9 @@ function main() {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
   }, "");
 
-  fs.mkdirSync(TARGET_DIR);
+  if (!fs.existsSync(TARGET_DIR)) {
+    fs.mkdirSync(TARGET_DIR);
+  }
   fs.writeFileSync(
     `${TARGET_DIR}hardhat_contracts.ts`,
     prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
