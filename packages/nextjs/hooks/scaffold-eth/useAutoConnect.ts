@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { Connector, useAccount, useConnect } from "wagmi";
-import { hardhat } from "wagmi/chains";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 export type TAutoConnect = {
   /**
@@ -33,18 +31,17 @@ const getInitialConnector = (
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const allowBurner = config.enableBurnerWallet;
-  const isLocalChainSelected = getTargetNetwork().id === hardhat.id;
 
   if (!previousWalletId) {
     // The user was not connected to a wallet
-    if (isLocalChainSelected && allowBurner && config.autoConnect) {
+    if (allowBurner && config.autoConnect) {
       const connector = connectors.find(f => f.id === burnerWalletId);
       return { connector, chainId: defaultBurnerChainId };
     }
   } else {
     // the user was connected to wallet
     if (config.autoConnect) {
-      if (previousWalletId === burnerWalletId && !isLocalChainSelected) {
+      if (previousWalletId === burnerWalletId && !allowBurner) {
         return;
       }
 

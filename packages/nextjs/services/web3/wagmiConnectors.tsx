@@ -45,19 +45,6 @@ export const appChains = configureChains(
 );
 
 /**
- * list of burner wallet compatable chains
- */
-export const burnerChains = configureChains(
-  [chains.hardhat],
-  [
-    alchemyProvider({
-      apiKey: scaffoldConfig.alchemyApiKey,
-    }),
-    publicProvider(),
-  ],
-);
-
-/**
  * wagmi connectors for the wagmi context
  */
 export const wagmiConnectors = connectorsForWallets([
@@ -70,7 +57,7 @@ export const wagmiConnectors = connectorsForWallets([
       braveWallet({ chains: appChains.chains }),
       coinbaseWallet({ appName: "scaffold-eth", chains: appChains.chains }),
       rainbowWallet({ chains: appChains.chains }),
-      burnerWalletConfig({ chains: burnerChains.chains }),
+      burnerWalletConfig({ chains: [appChains.chains[0]] }),
     ],
   },
 ]);
