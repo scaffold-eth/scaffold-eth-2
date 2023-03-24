@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Contract, ContractCodeStatus, ContractName, GenericContractsDeclaration } from "./contract.types";
+import { Contract, ContractCodeStatus, ContractName, contracts } from "../../utils/scaffold-eth/contract";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
@@ -10,9 +10,9 @@ import scaffoldConfig from "~~/scaffold.config";
  */
 export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
   const isMounted = useIsMounted();
-  const deployedContract = (scaffoldConfig.contracts as unknown as GenericContractsDeclaration)?.[
-    scaffoldConfig.targetNetwork.id
-  ]?.[0]?.contracts?.[contractName as ContractName] as Contract<TContractName>;
+  const deployedContract = contracts?.[scaffoldConfig.targetNetwork.id]?.[0]?.contracts?.[
+    contractName as ContractName
+  ] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
 

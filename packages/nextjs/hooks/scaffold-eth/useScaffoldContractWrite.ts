@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "./contract.types";
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "../../utils/scaffold-eth/contract";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";

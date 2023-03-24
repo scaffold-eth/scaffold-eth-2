@@ -11,7 +11,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const nextJsDir = path.resolve(__dirname, "..");
 
 const contractsFilePath = path.join(nextJsDir, "generated", "hardhat_contracts.ts");
-const content = "export default {} as const;";
+const content = "export default {} as const;\n";
 
 if (!fs.existsSync(contractsFilePath)) {
   // Create the 'generated' directory if it doesn't exist

@@ -1,14 +1,29 @@
+import contractsData from "../../generated/hardhat_contracts";
 import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { UseContractReadConfig, UseContractWriteConfig } from "wagmi";
-import scaffoldConfig, { ScaffoldConfig } from "~~/scaffold.config";
+import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
+import scaffoldConfig from "~~/scaffold.config";
 
-export type GenericContractsDeclaration = Exclude<ScaffoldConfig["contracts"], null>;
+type ContractsData =
+  | Record<string, never>
+  | {
+      [key: number]: readonly {
+        name: string;
+        chainId: string;
+        contracts: {
+          [key: string]: {
+            address: string;
+            abi: Abi;
+          };
+        };
+      }[];
+    };
+export type GenericContractsDeclaration = Exclude<ContractsData, Record<string, never>>;
 
-const contracts = scaffoldConfig.contracts;
+export const contracts = contractsData as GenericContractsDeclaration;
 
-type IsContractsFileMissing<TYes, TNo> = typeof contracts extends null ? TYes : TNo;
-type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, typeof contracts>;
+type IsContractsFileMissing<TYes, TNo> = typeof contractsData extends Record<string, never> ? TYes : TNo;
+type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, typeof contractsData>;
 
 export type Chain = keyof ContractsDeclaration;
 
@@ -138,4 +153,19 @@ export type UseScaffoldWriteConfig<
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &
     RestConfigParam<WriteAbiStateMutability>
+>;
+
+export type UseScaffoldEventConfig<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
+> = {
+  contractName: TContractName;
+} & IsContractsFileMissing<
+  UseContractEventConfig,
+  {
+    eventName: TEventName;
+    listener: (...args: TEventInputs) => void;
+    once?: boolean;
+  }
 >;

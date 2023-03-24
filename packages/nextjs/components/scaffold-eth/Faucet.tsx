@@ -5,8 +5,8 @@ import { hardhat, localhost } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput, getParsedEthersError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
+import { contracts } from "~~/utils/scaffold-eth/contract";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
@@ -28,7 +28,7 @@ export const Faucet = () => {
   useEffect(() => {
     const getFaucetAddress = async () => {
       try {
-        if (provider && scaffoldConfig.contracts) {
+        if (provider && contracts) {
           const accounts = await provider.listAccounts();
           setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
         }
