@@ -73,6 +73,10 @@ export const useAutoConnect = (): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
+    if (!scaffoldConfig.contracts) {
+      return;
+    }
+
     const initialConnector = getInitialConnector(walletId, connectState.connectors);
 
     if (initialConnector?.connector) {
