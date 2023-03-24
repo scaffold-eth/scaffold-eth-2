@@ -1,6 +1,6 @@
 import * as fs from "fs";
 //@ts-expect-error  This script runs after `hardhat deploy --export` therefore its deterministic that it will present
-import allGeneratedContracts from "../generated/hardhat_contracts.json";
+import allGeneratedContracts from "../temp/hardhat_contracts.json";
 import prettier from "prettier";
 
 function main() {
@@ -17,6 +17,9 @@ function main() {
     `${TARGET_DIR}hardhat_contracts.ts`,
     prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
   );
+
+  // remove generted output temp folder
+  fs.rmSync("./temp", { recursive: true, force: true });
 }
 
 try {
