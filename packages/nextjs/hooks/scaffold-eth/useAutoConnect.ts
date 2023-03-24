@@ -7,7 +7,7 @@ export type TAutoConnect = {
   /**
    * Enable the burner wallet.  If this is disabled, burner wallet is entierly disabled
    */
-  enableBurnerWallet: boolean;
+  enableBurnerWalletOnLoad: boolean;
   /**
    * Auto connect:
    * 1. If the user was connected into a wallet before, on page reload reconnect automatically
@@ -30,7 +30,7 @@ const getInitialConnector = (
   previousWalletId: string,
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
-  const allowBurner = config.enableBurnerWallet;
+  const allowBurner = config.enableBurnerWalletOnLoad;
 
   if (!previousWalletId) {
     // The user was not connected to a wallet
