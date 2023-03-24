@@ -133,7 +133,7 @@ export type UseScaffoldWriteConfig<
   contractName: TContractName;
   value?: string;
 } & IsContractsFileMissing<
-  Partial<UseContractWriteConfig>,
+  Partial<UseContractWriteConfig> & { args?: unknown[] },
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &
