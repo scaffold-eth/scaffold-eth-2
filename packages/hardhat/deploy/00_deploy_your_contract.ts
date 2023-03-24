@@ -3,7 +3,10 @@ import * as ethers from "ethers";
 import { getChainId } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { utils, Wallet } from "zksync-web3";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { DeploymentType } from "zksync-web3/build/src/types";
 
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
@@ -34,7 +37,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     const wallet = new Wallet(deployerPrivateKey);
 
     /// Create deployer object and load the artifact of the contract you want to deploy
-    const deployer = new Deployer(hre, wallet);
+    const deployer = new Deployer(hre, wallet, "create");
     const YourContractArtifact = await deployer.loadArtifact("YourContract");
 
     /// Estimate the gas for the contract deployment
@@ -42,13 +45,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     // OPTIONAL: Deposit funds to L2
     // Comment this block if you already have funds on zkSync.
-    const depositHandle = await deployer.zkWallet.deposit({
-      to: deployer.zkWallet.address,
-      token: utils.ETH_ADDRESS,
-      amount: deploymentFee.mul(2),
-    });
-    // Wait until the deposit is processed on zkSync
-    await depositHandle.wait();
+    // const depositHandle = await deployer.zkWallet.deposit({
+    //   to: deployer.zkWallet.address,
+    //   token: utils.ETH_ADDRESS,
+    //   amount: deploymentFee.mul(2),
+    // });
+    // // Wait until the deposit is processed on zkSync
+    // await depositHandle.wait();
 
     /// Deploy the contract
     const parsedFee = ethers.utils.parseEther(deploymentFee.toString());
