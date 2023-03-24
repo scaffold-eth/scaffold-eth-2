@@ -1,5 +1,8 @@
 import { Abi } from "abitype";
 import * as chains from "wagmi/chains";
+// If you don't use custom contracts for this SE-2 app:
+// - Remove the import line below
+// - Set "contracts: null" in the scaffoldConfig below
 import contracts from "~~/generated/hardhat_contracts";
 
 export type ScaffoldConfig = {
