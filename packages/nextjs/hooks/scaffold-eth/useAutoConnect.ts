@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { Connector, useAccount, useConnect } from "wagmi";
 import { hardhat } from "wagmi/chains";
+import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -77,6 +78,10 @@ export const useAutoConnect = (config: TAutoConnect): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
+    if (!scaffoldConfig.contracts) {
+      return;
+    }
+
     const initialConnector = getInitialConnector(config, walletId, connectState.connectors);
 
     if (initialConnector?.connector) {
