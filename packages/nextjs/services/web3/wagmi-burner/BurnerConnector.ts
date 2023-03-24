@@ -42,13 +42,10 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
 
     this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default.http[0]);
     const account = await this.getAccount();
-    const chainId = await this.getChainId();
 
-    if (this.provider == null || account == null || chainId == null) {
+    if (this.provider == null || account == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.couldNotConnect);
     }
-
-    // todo unsported chains?? should i populate unsupported param
 
     if (!account) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.accountNotFound);
@@ -57,7 +54,7 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
     const data: Required<BurnerConnectorData> = {
       account,
       chain: {
-        id: chainId,
+        id: chain.id,
         unsupported: false,
       },
       provider: this.provider,
