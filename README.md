@@ -2,7 +2,7 @@
 
 🏗️🤝🪝 Construction crane, handshake, and hook to represent building smart contracts.
 
-🔺🔼🔻 Upward-pointing and downward-pointing triangles to represent the geometric shape of the Ethereum logo.
+🔺🔼🔻 Upward-pointing and downward-pointing triangles to represent the geometric shape of the Ethereum.
 
 🟪🟦🟩  Purple, blue, and green square to represent the Ξ Ethereum logo's color scheme.
 
