@@ -39,4 +39,5 @@ You can be customized in the rendering parameters. It is typically used as a sym
 ## 🧱 Designe
 
 [512](https://ipfs.io/ipfs/QmPpcaozyqWM5dDCRQ8NcPdfei136RPoBa2tTBEMUMDW1K?filename=3DIconScaffold-eth-512x512.png): Again make the websites look sharp.
+
 [1024](https://ipfs.io/ipfs/QmVkcyAPXYWY6dsHzuAYak5GDkuxEGYujNYJfnqgPET1Gf?filename=3DIconScaffold-eth-1024x1024.png): For high-resolution mobile screens.
