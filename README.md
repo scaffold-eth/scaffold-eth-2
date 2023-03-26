@@ -6,19 +6,19 @@
 
 🟪🟦🟩  Purple, blue, and green square to represent the Ξ Ethereum logo's color scheme.
 
+![image](3D-icon-scaffold-eth-256x256.png)
+
 
 ## 📝 The concept
 
 For displaying Scaffold-eth as construction workers building a blockchain-based structure with Scaffold-eth components as tools in their hands can effectively convey the idea of collaboration and efficiency in using Scaffold-eth to build complex systems in the blockchain industry. For displaying to showcase the benefits of both technologies, such as the speed and scalability of Scaffold-eth and the transparency and security of Ethereum.
-
-![image](geometric-shape-eth.jpg)
 
 
 ## 💡 The idea
 
 For creating a logo involves analyzing what already exists. The logo should feature a construction crane at the center of the composition, representing the construction of smart contracts, with the crane's arm holding a geometric shape of the Ethereum logo. Additionally, simple geometric shapes can be used to create certain parts of the crane, such as the mast, control arm, and lifting beam.
 
-![image](3D-icon-scaffold-eth-256x256.png)
+![image](geometric-shape-eth.jpg)
 
 
 ## 📏 The aspect
