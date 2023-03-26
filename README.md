@@ -76,7 +76,7 @@ Once you are ready to deploy your smart contracts, there are a few things you ne
 
 By default, ```yarn deploy``` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.ts.` You could also simply run ```yarn deploy --network target_network``` to deploy to another network.
 
-Check the `hardhat.config.ts` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+Check the `hardhat.config.ts` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.ts file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
 Example: To deploy the contract to the Sepolia network, run the command below:
 ```
