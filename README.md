@@ -26,7 +26,7 @@ It's a new version of scaffold-eth with its core functionality. Built using Next
 
 Before you begin, you need to install the following tools:
 - [Node (v18 LTS)](https://nodejs.org/en/download/)
-- [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/)
+- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 
 ## Quickstart
