@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Contract, ContractCodeStatus, ContractName, contracts } from "../../utils/scaffold-eth/contract";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
+import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
 
 /**
  * Gets a deployed contract from `yarn deploy` generated files.
