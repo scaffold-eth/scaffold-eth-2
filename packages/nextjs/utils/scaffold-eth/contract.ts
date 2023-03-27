@@ -4,25 +4,22 @@ import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig }
 import contractsData from "~~/generated/hardhat_contracts";
 import scaffoldConfig from "~~/scaffold.config";
 
-type ContractsData =
-  | Record<string, never>
-  | {
-      [key: number]: readonly {
-        name: string;
-        chainId: string;
-        contracts: {
-          [key: string]: {
-            address: string;
-            abi: Abi;
-          };
-        };
-      }[];
+export type GenericContractsDeclaration = {
+  [key: number]: readonly {
+    name: string;
+    chainId: string;
+    contracts: {
+      [key: string]: {
+        address: string;
+        abi: Abi;
+      };
     };
-export type GenericContractsDeclaration = Exclude<ContractsData, Record<string, never>>;
+  }[];
+};
 
-export const contracts = contractsData as GenericContractsDeclaration;
+export const contracts = contractsData as GenericContractsDeclaration | null;
 
-type IsContractsFileMissing<TYes, TNo> = typeof contractsData extends Record<string, never> ? TYes : TNo;
+type IsContractsFileMissing<TYes, TNo> = typeof contractsData extends null ? TYes : TNo;
 type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, typeof contractsData>;
 
 export type Chain = keyof ContractsDeclaration;
