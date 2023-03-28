@@ -28,7 +28,7 @@ export const Faucet = () => {
   useEffect(() => {
     const getFaucetAddress = async () => {
       try {
-        if (provider && Object.keys(contracts).length) {
+        if (provider && contracts) {
           const accounts = await provider.listAccounts();
           setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
         }
