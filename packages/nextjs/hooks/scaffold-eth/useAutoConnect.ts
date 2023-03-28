@@ -65,7 +65,7 @@ export const useAutoConnect = (): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
-    if (!Object.keys(contracts).length) {
+    if (!contracts) {
       return;
     }
 
