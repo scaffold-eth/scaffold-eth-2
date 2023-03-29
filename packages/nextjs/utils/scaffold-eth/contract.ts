@@ -1,6 +1,11 @@
 import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
+import {
+  UseContractEventConfig,
+  UseContractReadConfig,
+  UseContractWriteConfig,
+  UsePrepareContractWriteConfig,
+} from "wagmi";
 import contractsData from "~~/generated/hardhat_contracts";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -143,9 +148,10 @@ export type UseScaffoldWriteConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
   contractName: TContractName;
+  deps?: any[];
   value?: string;
 } & IsContractsFileMissing<
-  Partial<UseContractWriteConfig> & { args?: unknown[] },
+  Partial<UsePrepareContractWriteConfig> & { args?: unknown[] },
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &

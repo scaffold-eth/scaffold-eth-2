@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
-import { useContractWrite, useNetwork } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
@@ -23,6 +23,8 @@ export const useScaffoldContractWrite = <
   functionName,
   args,
   value,
+  // @ts-expect-error
+  deps,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
@@ -31,8 +33,8 @@ export const useScaffoldContractWrite = <
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
-  const wagmiContractWrite = useContractWrite({
-    mode: "recklesslyUnprepared",
+  // @ts-expect-error
+  const { config, refetch } = usePrepareContractWrite({
     chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
@@ -43,6 +45,14 @@ export const useScaffoldContractWrite = <
     },
     ...writeConfig,
   });
+
+  const wagmiContractWrite = useContractWrite({
+    ...config,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [deps]);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
