@@ -1,8 +1,13 @@
-import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from "./contract.types";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { useContractRead } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import {
+  AbiFunctionReturnType,
+  ContractAbi,
+  ContractName,
+  UseScaffoldReadConfig,
+} from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically

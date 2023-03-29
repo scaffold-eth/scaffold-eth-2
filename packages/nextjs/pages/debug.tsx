@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import { ContractUI } from "~~/components/scaffold-eth";
-import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
 const Debug: NextPage = () => {
