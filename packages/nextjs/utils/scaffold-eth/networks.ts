@@ -81,6 +81,21 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 }
 
 /**
+ * Gives the block explorer Address URL.
+ * @param network - wagmi chain object
+ * @param address
+ * @returns block explorer address URL and etherscan URL if block explorer URL is not present for wagmi network
+ */
+export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
+  const blockExplorerBaseURL = network.blockExplorers?.default?.url;
+  if (!blockExplorerBaseURL) {
+    return `https://etherscan.io/address/${address}`;
+  }
+
+  return `${blockExplorerBaseURL}/address/${address}`;
+}
+
+/**
  * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
  */
 
