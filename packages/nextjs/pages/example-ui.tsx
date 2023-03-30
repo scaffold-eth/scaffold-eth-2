@@ -12,6 +12,8 @@ const ExampleUI: NextPage = () => {
   const { writeAsync: checkoutFunc, isLoading: checkOutLoading } = useScaffoldContractWrite({
     contractName: "YourContract",
     functionName: "checkout",
+    // uncomment below to make it work
+    // deps: [data],
   });
   return (
     <>

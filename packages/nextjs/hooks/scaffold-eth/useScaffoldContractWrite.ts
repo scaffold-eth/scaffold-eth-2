@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEffect, useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
@@ -32,7 +33,7 @@ export const useScaffoldContractWrite = <
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
-  const { config, error } = usePrepareContractWrite({
+  const { config, error, refetch } = usePrepareContractWrite({
     chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
