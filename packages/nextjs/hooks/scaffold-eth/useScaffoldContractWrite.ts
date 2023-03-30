@@ -50,7 +50,8 @@ export const useScaffoldContractWrite = <
 
   useEffect(() => {
     refetch();
-  }, [...(deps || []), refetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...(deps || [])]);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
