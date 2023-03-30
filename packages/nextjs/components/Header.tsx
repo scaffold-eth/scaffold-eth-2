@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { ArrowPathRoundedSquareIcon, Bars3Icon, MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -40,14 +40,20 @@ export const Header = () => {
         <NavLink href="/">Home</NavLink>
       </li>
       <li>
-        <NavLink href="/debug">
-          <BugAntIcon className="h-4 w-4" />
-          Debug Contracts
+        <NavLink href="/browse">
+          <MagnifyingGlassCircleIcon className="h-4 w-4" />
+          Browse Equipment
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/addequipment">
+          <ArrowPathRoundedSquareIcon className="h-4 w-4" />
+          List Your Equipment
         </NavLink>
       </li>
       <li>
         <NavLink href="/example-ui">
-          <SparklesIcon className="h-4 w-4" />
+          <MagnifyingGlassCircleIcon className="h-4 w-4" />
           Example UI
         </NavLink>
       </li>
@@ -83,8 +89,8 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </Link>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Scaffold-eth</span>
-            <span className="text-xs">Ethereum dev stack</span>
+            <span className="font-bold leading-tight">EquipMeUp</span>
+            <span className="text-xs">Lending dApp</span>
           </div>
         </div>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
