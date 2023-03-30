@@ -3,18 +3,20 @@ import type { NextPage } from "next";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const ExampleUI: NextPage = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { writeAsync, isLoading, data } = useScaffoldContractWrite({
     contractName: "YourContract",
     functionName: "checkin",
     value: "0.001",
   });
+
+  console.log("⚡️ ~ file: example-ui.tsx:12 ~ data:", data);
+
   const { writeAsync: checkoutFunc, isLoading: checkOutLoading } = useScaffoldContractWrite({
     contractName: "YourContract",
     functionName: "checkout",
-    // uncomment below to make it work
-    // deps: [data],
+    deps: [data],
   });
+
   return (
     <>
       <Head>
@@ -29,9 +31,6 @@ const ExampleUI: NextPage = () => {
           className={`btn btn-primary ${isLoading ? "loading" : ""}`}
           onClick={async () => {
             await writeAsync();
-
-            // UnComment below to make it work
-            // await reConstructPrepare();
           }}
         >
           Checkin

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
@@ -23,7 +22,7 @@ export const useScaffoldContractWrite = <
   contractName,
   functionName,
   args,
-  // deps,
+  deps,
   value,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
@@ -42,8 +41,6 @@ export const useScaffoldContractWrite = <
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
     },
-    cacheTime: 0,
-    staleTime: 0,
     ...writeConfig,
   });
 
@@ -51,9 +48,9 @@ export const useScaffoldContractWrite = <
     ...config,
   });
 
-  // useEffect(() => {
-  //   refetch();
-  // }, [deps]);
+  useEffect(() => {
+    refetch();
+  }, [...(deps || []), refetch]);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
