@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useAnimationConfig, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import {
+  useAnimationConfig,
+  useScaffoldContractRead,
+  useScaffoldEventRead,
+  useScaffoldEventSubscriber,
+} from "~~/hooks/scaffold-eth";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -29,6 +34,15 @@ export const ContractData = () => {
       console.log(greetingSetter, newGreeting, premium, value);
     },
   });
+
+  const events = useScaffoldEventRead({
+    contractName: "YourContract",
+    eventName: "GreetingChange",
+    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+    blockData: true,
+  });
+
+  console.log("events", events);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 
