@@ -1,11 +1,6 @@
 import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import {
-  UseContractEventConfig,
-  UseContractReadConfig,
-  UseContractWriteConfig,
-  UsePrepareContractWriteConfig,
-} from "wagmi";
+import { UseContractEventConfig, UseContractReadConfig, UsePrepareContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/hardhat_contracts";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -29,7 +24,7 @@ type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, 
 
 export type Chain = keyof ContractsDeclaration;
 
-type SelectedChainId = IsContractsFileMissing<number, (typeof scaffoldConfig)["targetNetwork"]["id"]>;
+type SelectedChainId = IsContractsFileMissing<number, typeof scaffoldConfig["targetNetwork"]["id"]>;
 
 type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"];
 
@@ -111,7 +106,7 @@ type WriteAbiStateMutability = "nonpayable" | "payable";
 
 type RestConfigParam<TAbiStateMutability extends AbiStateMutability> = Partial<
   Omit<
-    TAbiStateMutability extends ReadAbiStateMutability ? UseContractReadConfig : UseContractWriteConfig,
+    TAbiStateMutability extends ReadAbiStateMutability ? UseContractReadConfig : UsePrepareContractWriteConfig,
     "chainId" | "abi" | "address" | "functionName" | "args"
   >
 >;
