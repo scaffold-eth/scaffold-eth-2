@@ -3,18 +3,15 @@ import type { NextPage } from "next";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 const ExampleUI: NextPage = () => {
-  const { writeAsync, isLoading, data } = useScaffoldContractWrite({
+  const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "YourContract",
     functionName: "checkin",
     value: "0.001",
   });
 
-  console.log("⚡️ ~ file: example-ui.tsx:12 ~ data:", data);
-
   const { writeAsync: checkoutFunc, isLoading: checkOutLoading } = useScaffoldContractWrite({
     contractName: "YourContract",
     functionName: "checkout",
-    deps: [data],
   });
 
   return (

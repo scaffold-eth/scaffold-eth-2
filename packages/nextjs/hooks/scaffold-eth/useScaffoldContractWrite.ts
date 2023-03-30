@@ -4,6 +4,7 @@ import { utils } from "ethers";
 import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
+import { useAppStore } from "~~/services/store/store";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
@@ -22,7 +23,6 @@ export const useScaffoldContractWrite = <
   contractName,
   functionName,
   args,
-  deps,
   value,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
@@ -31,6 +31,7 @@ export const useScaffoldContractWrite = <
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
+  const { toggleRefetchPrepareContractWrite, setToggleRefetchPrepareContractWrite } = useAppStore();
 
   const { config, error, refetch } = usePrepareContractWrite({
     chainId: configuredNetwork.id,
@@ -49,9 +50,10 @@ export const useScaffoldContractWrite = <
   });
 
   useEffect(() => {
+    console.log("REEEEEEEEEEEEEEEFEEEEEEEEEETTCH TRIGGERED");
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...(deps || [])]);
+  }, [toggleRefetchPrepareContractWrite]);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
@@ -76,6 +78,7 @@ export const useScaffoldContractWrite = <
         notification.error(message);
       } finally {
         setIsMining(false);
+        setToggleRefetchPrepareContractWrite(!toggleRefetchPrepareContractWrite);
       }
     } else {
       notification.error(getParsedEthersError(error));

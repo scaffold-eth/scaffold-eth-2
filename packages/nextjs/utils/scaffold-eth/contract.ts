@@ -24,7 +24,7 @@ type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, 
 
 export type Chain = keyof ContractsDeclaration;
 
-type SelectedChainId = IsContractsFileMissing<number, typeof scaffoldConfig["targetNetwork"]["id"]>;
+type SelectedChainId = IsContractsFileMissing<number, (typeof scaffoldConfig)["targetNetwork"]["id"]>;
 
 type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"];
 
@@ -143,7 +143,6 @@ export type UseScaffoldWriteConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
   contractName: TContractName;
-  deps?: any[];
   value?: string;
 } & IsContractsFileMissing<
   Partial<UsePrepareContractWriteConfig> & { args?: unknown[] },
