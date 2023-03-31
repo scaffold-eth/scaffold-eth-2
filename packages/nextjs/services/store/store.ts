@@ -12,14 +12,16 @@ import create from "zustand";
 type TAppStore = {
   ethPrice: number;
   setEthPrice: (newEthPriceState: number) => void;
-  toggleRefetchPrepareContractWrite: boolean;
-  setToggleRefetchPrepareContractWrite: (newToggleRefetchPrepareContractWriteState: boolean) => void;
+  refetchPrepareContractWriteCounter: number;
+  triggerRefetchPrepareContractWrite: () => void;
 };
 
 export const useAppStore = create<TAppStore>(set => ({
   ethPrice: 0,
   setEthPrice: (newValue: number): void => set(() => ({ ethPrice: newValue })),
-  toggleRefetchPrepareContractWrite: false,
-  setToggleRefetchPrepareContractWrite: (newValue: boolean): void =>
-    set(() => ({ toggleRefetchPrepareContractWrite: newValue })),
+  refetchPrepareContractWriteCounter: 0,
+  triggerRefetchPrepareContractWrite: (): void =>
+    set(({ refetchPrepareContractWriteCounter }) => ({
+      refetchPrepareContractWriteCounter: refetchPrepareContractWriteCounter + 1,
+    })),
 }));

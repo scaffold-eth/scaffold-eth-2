@@ -31,7 +31,7 @@ export const useScaffoldContractWrite = <
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
-  const { toggleRefetchPrepareContractWrite, setToggleRefetchPrepareContractWrite } = useAppStore();
+  const { refetchPrepareContractWriteCounter, triggerRefetchPrepareContractWrite } = useAppStore();
 
   const { config, error, refetch } = usePrepareContractWrite({
     chainId: configuredNetwork.id,
@@ -50,10 +50,10 @@ export const useScaffoldContractWrite = <
   });
 
   useEffect(() => {
-    console.log("REEEEEEEEEEEEEEEFEEEEEEEEEETTCH TRIGGERED");
+    console.log("⚡️ refetching contract write...");
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toggleRefetchPrepareContractWrite]);
+  }, [refetchPrepareContractWriteCounter]);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
@@ -78,7 +78,7 @@ export const useScaffoldContractWrite = <
         notification.error(message);
       } finally {
         setIsMining(false);
-        setToggleRefetchPrepareContractWrite(!toggleRefetchPrepareContractWrite);
+        triggerRefetchPrepareContractWrite();
       }
     } else {
       notification.error(getParsedEthersError(error));
