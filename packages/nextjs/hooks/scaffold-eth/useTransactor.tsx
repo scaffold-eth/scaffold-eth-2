@@ -67,14 +67,17 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
       notificationId = notification.loading(
-        <TxnNotification message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
+        <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
       );
       transactionReceipt = await transactionResponse.wait();
       notification.remove(notificationId);
 
-      notification.success(<TxnNotification message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, {
-        icon: "🎉",
-      });
+      notification.success(
+        <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
+        {
+          icon: "🎉",
+        },
+      );
 
       if (transactionReceipt) {
         if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
