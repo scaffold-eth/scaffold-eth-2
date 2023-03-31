@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
- * @param config.fromBlock - the block number to start reading events from (default: 1000 blocks before current block)
+ * @param config.fromBlock - the block number to start reading events from
  * @param config.filters - filters to be applied to the event (parameterName: value)
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
@@ -30,7 +30,7 @@ export const useScaffoldEventHistory = <
 }: {
   contractName: TContractName;
   eventName: TEventName;
-  fromBlock?: number;
+  fromBlock: number;
   filters?: any;
   blockData?: boolean;
   transactionData?: boolean;
@@ -54,10 +54,6 @@ export const useScaffoldEventHistory = <
         return;
       }
       try {
-        if (!fromBlock) {
-          fromBlock = await provider.getBlockNumber() - 1000;
-        }
-
         const fragment = contract.interface.getEvent(eventName);
         if (!fragment) {
           console.log("event not found");
