@@ -3,7 +3,7 @@ import Marquee from "react-fast-marquee";
 import {
   useAnimationConfig,
   useScaffoldContractRead,
-  useScaffoldEventRead,
+  useScaffoldEventHistory,
   useScaffoldEventSubscriber,
 } from "~~/hooks/scaffold-eth";
 
@@ -35,7 +35,7 @@ export const ContractData = () => {
     },
   });
 
-  const { data: events, isLoading: isLoadingEvents } = useScaffoldEventRead({
+  const { data: events, isLoading: isLoadingEvents } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
