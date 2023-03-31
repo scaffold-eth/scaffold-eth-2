@@ -35,14 +35,14 @@ export const ContractData = () => {
     },
   });
 
-  const events = useScaffoldEventRead({
+  const { data: events, isLoading: isLoadingEvents } = useScaffoldEventRead({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
     blockData: true,
   });
 
-  console.log("events", events);
+  console.log("events", isLoadingEvents, events);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 

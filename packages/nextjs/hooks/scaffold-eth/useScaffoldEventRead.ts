@@ -37,7 +37,8 @@ export const useScaffoldEventRead = <
   receiptData?: boolean;
 }) => {
   const [events, setEvents] = useState(<any>[]);
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const [isLoading, setIsLoading] = useState(true);
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const provider = useProvider();
 
   const contract = useContract({
@@ -112,13 +113,19 @@ export const useScaffoldEventRead = <
           newEvents.push(log);
         }
         setEvents(newEvents.reverse());
+        setIsLoading(false);
       }
       catch (e) {
         console.log(e);
       }
     }
-    readEvents();
+    if (!deployedContractLoading) {
+      readEvents();
+    }
   }, [provider, fromBlock, contractName, eventName, deployedContractData?.address, contract]);
 
-  return events;
+  return {
+    data: events,
+    isLoading: isLoading,
+  };
 };
