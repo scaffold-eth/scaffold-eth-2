@@ -55,11 +55,6 @@ export const useScaffoldEventHistory = <
       }
       try {
         const fragment = contract.interface.getEvent(eventName);
-        if (!fragment) {
-          console.log("event not found");
-          return;
-        }
-
         const emptyIface = new ethers.utils.Interface([])
         const topicHash = emptyIface.getEventTopic(fragment)
         const topics = <any>[topicHash];
