@@ -65,7 +65,7 @@ export const useScaffoldEventRead = <
 
         const emptyIface = new ethers.utils.Interface([])
         const topicHash = emptyIface.getEventTopic(fragment)
-        const topics = <any>[ topicHash ];
+        const topics = <any>[topicHash];
 
         const indexedParameters = fragment.inputs.filter((input) => input.indexed);
 
@@ -84,12 +84,12 @@ export const useScaffoldEventRead = <
         }
 
         const logs = await provider.getLogs({
-            address: deployedContractData?.address,
-            topics: topics,
-            fromBlock: fromBlock,
+          address: deployedContractData?.address,
+          topics: topics,
+          fromBlock: fromBlock,
         });
         const newEvents = [];
-        for (let i=0; i<logs.length; i++) {
+        for (let i = 0; i < logs.length; i++) {
           let block;
           if (blockData) {
             block = await provider.getBlock(logs[i].blockHash);
@@ -114,7 +114,7 @@ export const useScaffoldEventRead = <
         setEvents(newEvents.reverse());
       }
       catch (e) {
-          console.log(e);
+        console.log(e);
       }
     }
     readEvents();
