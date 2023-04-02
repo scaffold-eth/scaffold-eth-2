@@ -32,5 +32,9 @@
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
+  },
+  "dependencies": {
+    "@react-spring/three": "^9.7.1",
+    "three": "^0.151.2"
   }
 }

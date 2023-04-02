@@ -13,6 +13,7 @@ export default function Scene({ children, ...props }: any) {
         top: 0,
         left: 0,
       }}
+      camera={{ position: [0, 500, 0] }}
     >
       <directionalLight intensity={1} />
       <ambientLight intensity={0.75} />
