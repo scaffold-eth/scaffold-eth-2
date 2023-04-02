@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useGLTF, Clone } from "@react-three/drei";
 import { Object3D } from "three";
 import { Object3DProps, useFrame } from "@react-three/fiber";
@@ -14,7 +14,7 @@ interface ShipProps {
 function Ship({ x, y, z, rotation, rate }: ShipProps) {
   const model = useGLTF("/ship.glb");
   const ref = useRef<Object3D>(null);
-  let clicked = false;
+  const [clicked, setClicked] = useState(false);
 
   useFrame(() => {
     if (!ref.current) return;
@@ -31,7 +31,7 @@ function Ship({ x, y, z, rotation, rate }: ShipProps) {
   const onClick = () => {
     console.log("clicked a super epic ship");
     if (!ref.current) return;
-    clicked = true;
+    setClicked(true);
   };
 
   const onPointerOver = () => {
@@ -67,14 +67,16 @@ interface ShipsProps extends Object3DProps {
 }
 
 export function Ships({ count = 10, range = 10 }: ShipsProps) {
-  const ships = Array.from({ length: count }, () => {
-    const x = Math.random() * range;
-    const y = 0;
-    const z = Math.random() * range;
-    const rotation = Math.random() * Math.PI * 2;
-    const rate = Math.random() * 0.001;
-    return { x, y, z, rotation, rate };
-  });
+  const ships = useMemo(() => {
+    return Array.from({ length: count }, () => {
+      const x = Math.random() * range;
+      const y = 0;
+      const z = Math.random() * range;
+      const rotation = Math.random() * Math.PI * 2;
+      const rate = Math.random() * 0.001;
+      return { x, y, z, rotation, rate };
+    });
+  }, [count, range]);
 
   return <group>{ships.map(Ship)}</group>;
 }
