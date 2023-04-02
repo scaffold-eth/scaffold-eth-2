@@ -1,5 +1,4 @@
-import { Ships } from "../canvas/Ships";
-import { Oceans } from "../canvas/Oceans";
+import { Ships, Oceans } from "~~/canvas";
 
 export default function Three() {
   return (
