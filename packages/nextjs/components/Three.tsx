@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useGLTF, Clone } from "@react-three/drei";
 import { Object3D } from "three";
 import { Object3DProps, useFrame } from "@react-three/fiber";
@@ -46,7 +46,7 @@ interface ShipProps {
 function Ship({ x, y, z, rotation, rate }: ShipProps) {
   const model = useGLTF("/ship.glb");
   const ref = useRef<Object3D>(null);
-  const [clicked, setClicked] = useState(false);
+  let clicked = false;
 
   useFrame(() => {
     if (!ref.current) return;
@@ -55,16 +55,15 @@ function Ship({ x, y, z, rotation, rate }: ShipProps) {
     }
     ref.current.rotation.x += rate;
 
-    /* if (clicked) {
-     *     ref.current.position.set(ref.current.position.x, ref.current.position.y - 0.1, ref.current.position.z);
-     * } */
+    if (clicked) {
+      ref.current.position.set(ref.current.position.x, ref.current.position.y - 0.1, ref.current.position.z);
+    }
   });
 
   const onClick = () => {
     console.log("clicked a super epic ship");
     if (!ref.current) return;
-    ref.current.position.set(ref.current.position.x, ref.current.position.y - 10, ref.current.position.z);
-    setClicked(!clicked);
+    clicked = true;
   };
 
   const onPointerOver = () => {
