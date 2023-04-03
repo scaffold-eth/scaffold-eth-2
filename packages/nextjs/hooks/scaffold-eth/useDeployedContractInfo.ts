@@ -30,16 +30,22 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
       // If contract code is `0x` => no contract deployed on that address
       if (code === "0x") {
         setStatus(ContractCodeStatus.NOT_FOUND);
-        return;
+      } else {
+        setStatus(ContractCodeStatus.DEPLOYED);
       }
-      setStatus(ContractCodeStatus.DEPLOYED);
     };
 
     checkContractDeployment();
   }, [isMounted, contractName, deployedContract, provider]);
 
+  let isLoading = status === ContractCodeStatus.LOADING;
+
+  if (status === ContractCodeStatus.NOT_FOUND) {
+    isLoading = false;
+  }
+
   return {
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
-    isLoading: status === ContractCodeStatus.LOADING,
+    isLoading: isLoading,
   };
 };
