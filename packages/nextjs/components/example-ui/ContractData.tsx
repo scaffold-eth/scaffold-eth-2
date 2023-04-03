@@ -35,14 +35,18 @@ export const ContractData = () => {
     },
   });
 
-  const { data: events, isLoading: isLoadingEvents } = useScaffoldEventHistory({
+  const {
+    data: events,
+    isLoading: isLoadingEvents,
+    error: errorReadingEvents,
+  } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
     blockData: true,
   });
 
-  console.log("events", isLoadingEvents, events);
+  console.log("events", isLoadingEvents, errorReadingEvents, events);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 
