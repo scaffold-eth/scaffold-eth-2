@@ -21,10 +21,21 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  // Retrieve the deployment record for the previously deployed contract
+  const circleUSDCDeployment = await hre.deployments.getOrNull("CircleUSDC");
+
+  if (!circleUSDCDeployment) {
+    console.log("CircleUSDC contract has not been deployed yet");
+    return;
+  }
+
+  // Get the address of the previously deployed contract
+  const circleUSDCAddress = circleUSDCDeployment.address;
+
+  await deploy("AcccountabilityProtocol", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: ["0x7a188bc1B8C399e837C37A5C0F132989b9D26bDe", circleUSDCAddress],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
@@ -39,4 +50,4 @@ export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+deployYourContract.tags = ["AcccountabilityProtocol"];
