@@ -81,7 +81,7 @@ export const useScaffoldEventHistory = <
           fromBlock: fromBlock,
         });
         const newEvents = [];
-        for (let i = 0; i < logs.length; i++) {
+        for (let i = logs.length - 1; i >= 0; i--) {
           let block;
           if (blockData) {
             block = await provider.getBlock(logs[i].blockHash);
@@ -103,7 +103,7 @@ export const useScaffoldEventHistory = <
           }
           newEvents.push(log);
         }
-        setEvents(newEvents.reverse());
+        setEvents(newEvents);
         setIsLoading(false);
       }
       catch (e) {
