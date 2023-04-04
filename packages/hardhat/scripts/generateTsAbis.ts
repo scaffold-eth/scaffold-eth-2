@@ -14,11 +14,7 @@ function main() {
     fs.mkdirSync(TARGET_DIR);
   }
   fs.writeFileSync(
-    `${TARGET_DIR}deployed_contracts.ts`,
-    prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
-  );
-  fs.writeFileSync(
-    `${TARGET_DIR}deployed_contracts.ts`,
+    `${TARGET_DIR}deployedContracts.ts`,
     prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
       parser: "typescript",
     }),
