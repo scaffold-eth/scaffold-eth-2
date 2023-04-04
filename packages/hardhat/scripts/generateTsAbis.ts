@@ -17,6 +17,12 @@ function main() {
     `${TARGET_DIR}deployed_contracts.ts`,
     prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
   );
+  fs.writeFileSync(
+    `${TARGET_DIR}deployed_contracts.ts`,
+    prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
+      parser: "typescript",
+    }),
+  );
 
   // remove generted output temp folder
   fs.rmSync("./temp", { recursive: true, force: true });
