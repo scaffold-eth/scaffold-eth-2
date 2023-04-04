@@ -36,9 +36,9 @@ export const useScaffoldEventHistory = <
   transactionData?: boolean;
   receiptData?: boolean;
 }) => {
-  const [events, setEvents] = useState(<any>[]);
+  const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(<string>"");
+  const [error, setError] = useState<string>();
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const provider = useProvider();
 
