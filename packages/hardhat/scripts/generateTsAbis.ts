@@ -14,7 +14,7 @@ function main() {
     fs.mkdirSync(TARGET_DIR);
   }
   fs.writeFileSync(
-    `${TARGET_DIR}hardhat_contracts.ts`,
+    `${TARGET_DIR}deployed_contracts.ts`,
     prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
   );
 
