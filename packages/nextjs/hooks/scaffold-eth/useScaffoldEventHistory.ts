@@ -109,7 +109,7 @@ export const useScaffoldEventHistory = <
       }
       catch (e: any) {
         console.error(e);
-        setEvents([]);
+        setEvents(undefined);
         setError(e);
       } finally {
         setIsLoading(false);
