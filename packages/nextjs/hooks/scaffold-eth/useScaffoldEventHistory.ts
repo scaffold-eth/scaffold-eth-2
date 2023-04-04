@@ -52,70 +52,67 @@ export const useScaffoldEventHistory = <
     async function readEvents() {
       try {
         if (!deployedContractData || !contract) {
-          console.error("Contract not found");
-          setEvents([]);
-          setIsLoading(false);
-          setError("Contract not found");
-        } else {
-          const fragment = contract.interface.getEvent(eventName);
-          const emptyIface = new ethers.utils.Interface([])
-          const topicHash = emptyIface.getEventTopic(fragment)
-          const topics = <any>[topicHash];
-
-          const indexedParameters = fragment.inputs.filter((input) => input.indexed);
-
-          if (indexedParameters.length > 0 && filters) {
-            const indexedTopics = indexedParameters.map((input) => {
-              const value = filters[input.name];
-              if (value === undefined) {
-                return null;
-              }
-              if (Array.isArray(value)) {
-                return value.map((v) => ethers.utils.hexZeroPad(ethers.utils.hexlify(v), 32));
-              }
-              return ethers.utils.hexZeroPad(ethers.utils.hexlify(value), 32);
-            });
-            topics.push(...indexedTopics);
-          }
-
-          const logs = await provider.getLogs({
-            address: deployedContractData?.address,
-            topics: topics,
-            fromBlock: fromBlock,
-          });
-          const newEvents = [];
-          for (let i = logs.length - 1; i >= 0; i--) {
-            let block;
-            if (blockData) {
-              block = await provider.getBlock(logs[i].blockHash);
-            }
-            let transaction;
-            if (transactionData) {
-              transaction = await provider.getTransaction(logs[i].transactionHash);
-            }
-            let receipt;
-            if (receiptData) {
-              receipt = await provider.getTransactionReceipt(logs[i].transactionHash);
-            }
-            const log = {
-              log: logs[i],
-              args: contract.interface.parseLog(logs[i]).args,
-              block: block,
-              transaction: transaction,
-              receipt: receipt,
-            }
-            newEvents.push(log);
-          }
-          setEvents(newEvents);
-          setIsLoading(false);
-          setError("");
+          throw new Error("Contract not found")
         }
+
+        const fragment = contract.interface.getEvent(eventName);
+        const emptyIface = new ethers.utils.Interface([])
+        const topicHash = emptyIface.getEventTopic(fragment)
+        const topics = <any>[topicHash];
+
+        const indexedParameters = fragment.inputs.filter((input) => input.indexed);
+
+        if (indexedParameters.length > 0 && filters) {
+          const indexedTopics = indexedParameters.map((input) => {
+            const value = filters[input.name];
+            if (value === undefined) {
+              return null;
+            }
+            if (Array.isArray(value)) {
+              return value.map((v) => ethers.utils.hexZeroPad(ethers.utils.hexlify(v), 32));
+            }
+            return ethers.utils.hexZeroPad(ethers.utils.hexlify(value), 32);
+          });
+          topics.push(...indexedTopics);
+        }
+
+        const logs = await provider.getLogs({
+          address: deployedContractData?.address,
+          topics: topics,
+          fromBlock: fromBlock,
+        });
+        const newEvents = [];
+        for (let i = logs.length - 1; i >= 0; i--) {
+          let block;
+          if (blockData) {
+            block = await provider.getBlock(logs[i].blockHash);
+          }
+          let transaction;
+          if (transactionData) {
+            transaction = await provider.getTransaction(logs[i].transactionHash);
+          }
+          let receipt;
+          if (receiptData) {
+            receipt = await provider.getTransactionReceipt(logs[i].transactionHash);
+          }
+          const log = {
+            log: logs[i],
+            args: contract.interface.parseLog(logs[i]).args,
+            block: block,
+            transaction: transaction,
+            receipt: receipt,
+          }
+          newEvents.push(log);
+        }
+        setEvents(newEvents);
+        setError("");
       }
       catch (e: any) {
         console.error(e);
         setEvents([]);
-        setIsLoading(false);
         setError(e);
+      } finally {
+        setIsLoading(false);
       }
     }
     if (!deployedContractLoading) {
