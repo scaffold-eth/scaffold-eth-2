@@ -14,8 +14,10 @@ function main() {
     fs.mkdirSync(TARGET_DIR);
   }
   fs.writeFileSync(
-    `${TARGET_DIR}hardhat_contracts.ts`,
-    prettier.format(`export default {${fileContent}} as const;`, { parser: "typescript" }),
+    `${TARGET_DIR}deployedContracts.ts`,
+    prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
+      parser: "typescript",
+    }),
   );
 
   // remove generted output temp folder
