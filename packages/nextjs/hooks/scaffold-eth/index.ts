@@ -6,6 +6,7 @@ export * from "./useDeployedContractInfo";
 export * from "./useEthPrice";
 export * from "./useNetworkColor";
 export * from "./useOutsideClick";
+export * from "./useScaffoldContract";
 export * from "./useScaffoldContractRead";
 export * from "./useScaffoldContractWrite";
 export * from "./useScaffoldEventSubscriber";
