@@ -4,7 +4,7 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
- * @dev Gets a deployed contract from contractName and returns a contract instance
+ * Gets a deployed contract by contract name and returns a contract instance
  * @param config - The config settings
  * @param config.contractName - Deployed contract name
  * @param config.signerOrProvider - An ethers Provider or Signer (optional)
