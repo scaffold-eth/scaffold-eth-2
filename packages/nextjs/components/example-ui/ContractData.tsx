@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import {
   useAnimationConfig,
+  useScaffoldContract,
   useScaffoldContractRead,
   useScaffoldEventHistory,
   useScaffoldEventSubscriber,
@@ -47,6 +48,9 @@ export const ContractData = () => {
   });
 
   console.log("events", isLoadingEvents, errorReadingEvents, events);
+
+  const { data: yourContract } = useScaffoldContract({ contractName: "YourContract" });
+  console.log("yourContract: ", yourContract);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 
