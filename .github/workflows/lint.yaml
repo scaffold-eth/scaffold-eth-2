@@ -25,19 +25,19 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          cache : yarn
+          cache : pnpm
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --immutable
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-        run: yarn chain & yarn deploy 
+        run: pnpm chain & pnpm hardhat:deploy 
 
       - name: Run nextjs lint
-        run: yarn next:lint --max-warnings=0
+        run: pnpm next:lint --max-warnings=0
 
       - name: Check typings on nextjs
-        run: yarn next:check-types
+        run: pnpm next:check-types
 
       - name: Run hardhat lint
-        run: yarn hardhat:lint --max-warnings=0
+        run: pnpm hardhat:lint --max-warnings=0

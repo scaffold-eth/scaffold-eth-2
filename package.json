@@ -1,34 +1,35 @@
 {
   "name": "se-2",
   "version": "0.0.1",
+  "keywords": [
+    "ethereum",
+    "react",
+    "uniswap",
+    "workspaces",
+    "pnpm"
+  ],
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/hardhat",
-      "packages/nextjs"
-    ]
-  },
   "scripts": {
-    "account": "yarn workspace @se-2/hardhat account",
-    "chain": "yarn workspace @se-2/hardhat chain",
-    "fork": "yarn workspace @se-2/hardhat fork",
-    "deploy": "yarn workspace @se-2/hardhat deploy",
-    "verify": "yarn workspace @se-2/hardhat verify",
-    "compile": "yarn workspace @se-2/hardhat compile",
-    "generate": "yarn workspace @se-2/hardhat generate",
-    "hardhat:lint": "yarn workspace @se-2/hardhat lint",
-    "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
-    "hardhat:test": "yarn workspace @se-2/hardhat test",
-    "start": "yarn workspace @se-2/nextjs dev",
-    "next:lint": "yarn workspace @se-2/nextjs lint",
-    "next:format": "yarn workspace @se-2/nextjs format",
-    "next:check-types": "yarn workspace @se-2/nextjs check-types",
+    "account": "pnpm --filter @se-2/hardhat account",
+    "chain": "pnpm --filter @se-2/hardhat chain",
+    "fork": "pnpm --filter @se-2/hardhat fork",
+    "hardhat:deploy": "pnpm --filter @se-2/hardhat hardhat:deploy",
+    "verify": "pnpm --filter @se-2/hardhat verify",
+    "compile": "pnpm --filter @se-2/hardhat compile",
+    "generate": "pnpm --filter @se-2/hardhat generate",
+    "hardhat:lint": "pnpm --filter @se-2/hardhat lint",
+    "hardhat:lint-staged": "pnpm --filter @se-2/hardhat lint-staged",
+    "hardhat:test": "pnpm --filter @se-2/hardhat test",
+    "start": "pnpm --filter @se-2/nextjs dev",
+    "next:lint": "pnpm --filter @se-2/nextjs lint",
+    "next:format": "pnpm --filter @se-2/nextjs format",
+    "next:check-types": "pnpm --filter @se-2/nextjs check-types",
     "postinstall": "husky install && node packages/nextjs/scripts/generateEmptyContractFile.mjs",
     "precommit": "lint-staged",
-    "vercel": "yarn workspace @se-2/nextjs vercel",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
+    "vercel": "pnpm --filter @se-2/nextjs vercel",
+    "vercel:yolo": "pnpm --filter @se-2/nextjs vercel:yolo"
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "pnpm@7.15.0",
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"

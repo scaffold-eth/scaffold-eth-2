@@ -46,7 +46,7 @@ export const useScaffoldContractWrite = <
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      notification.error("Target Contract is not deployed, did you forgot to run `pnpm hardhat:deploy`?");
       return;
     }
     if (!chain?.id) {

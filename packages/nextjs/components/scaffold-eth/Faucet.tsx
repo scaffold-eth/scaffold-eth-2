@@ -36,7 +36,7 @@ export const Faucet = () => {
         notification.error(
           <>
             <p className="font-bold mt-0 mb-1gi">Cannot connect to local provider</p>
-            <p className="m-0">Did you forget to run `yarn chain`?</p>
+            <p className="m-0">Did you forget to run `pnpm chain`?</p>
           </>,
         );
         console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
