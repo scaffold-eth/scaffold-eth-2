@@ -112,6 +112,13 @@ module.exports = {
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         zoom: "zoom 1s ease infinite",
       },
+      screens: {
+        sm: "640px", // => @media (min-width: 640px) { ... }
+        md: "768px", // => @media (min-width: 768px) { ... }
+        lg: "1024px", // => @media (min-width: 1024px) { ... }
+        xl: "1280px", // => @media (min-width: 1280px) { ... }
+        "2xl": "1536px", // => @media (min-width: 1536px) { ... }
+      },
     },
   },
 };
