@@ -24,7 +24,7 @@
     "next:lint": "pnpm --filter @se-2/nextjs lint",
     "next:format": "pnpm --filter @se-2/nextjs format",
     "next:check-types": "pnpm --filter @se-2/nextjs check-types",
-    "postinstall": "husky install && node packages/nextjs/scripts/generateEmptyContractFile.mjs",
+    "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "pnpm --filter @se-2/nextjs vercel",
     "vercel:yolo": "pnpm --filter @se-2/nextjs vercel:yolo"
