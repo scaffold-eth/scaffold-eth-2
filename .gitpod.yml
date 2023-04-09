@@ -12,13 +12,11 @@ tasks:
 
   - name: Local Network
     init: gp sync-await install
-    command: >
-      pnpm chain &&
-      gp sync-done local-network
+    command: pnpm chain
 
   - name: Contract
     openMode: split-right
-    init: gp sync-await local-network
+    init: gp sync-await install
     command: >
       pnpm compile &&
       pnpm hardhat:deploy
