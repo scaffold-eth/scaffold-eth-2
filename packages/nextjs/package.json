@@ -12,7 +12,7 @@
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
-    "spheron": "next build && next export && spheron login && spheron publish"
+    "spheron": "next build && next export && spheron login --github && spheron publish"
   },
   "dependencies": {
     "@ethersproject/networks": "^5.7.1",

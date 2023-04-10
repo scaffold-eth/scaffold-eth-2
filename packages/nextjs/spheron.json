@@ -1,6 +1,6 @@
 {
   "configuration": {
-    "name": "nextjs",
+    "name": "se-2",
     "protocol": "ipfs",
     "rootPath": "./",
     "framework": {
