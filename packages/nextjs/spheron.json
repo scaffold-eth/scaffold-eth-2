@@ -1,0 +1,15 @@
+{
+  "configuration": {
+    "name": "nextjs",
+    "protocol": "ipfs",
+    "rootPath": "./",
+    "framework": {
+      "name": "next",
+      "configuration": {
+        "installCommand": "yarn install",
+        "buildCommand": "next build && next export",
+        "publishDirectory": "out"
+      }
+    }
+  }
+}
