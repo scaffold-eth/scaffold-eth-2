@@ -18,6 +18,7 @@ import "~~/styles/globals.css";
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useEthPrice();
   const setEthPrice = useAppStore(state => state.setEthPrice);
+  // This variable is required for initial client side rendering of correct theme for RainbowKit
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const { isDarkMode } = useDarkMode();
 
