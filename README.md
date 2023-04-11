@@ -117,11 +117,27 @@ yarn verify --network network_name
 
 ## Hook Example
 
+- useScaffoldContract
 - useScaffoldContractRead
 - useScaffoldContractWrite
 - useScaffoldEventSubscriber
 - useScaffoldEventHistory
 - useDeployedContractInfo
+
+  **useScaffoldContract**:
+  Use to gets a deployed contract by contract name and returns a contract instance
+  Can also be use to read and write to the deployed smart contract
+
+  ```ts
+  const { data: yourContract } = useScaffoldContract({
+    contractName: "YourContract",
+  });
+  // will return the greeting and can be call in any function unlike useScaffoldContractRead
+  await yourContract.greeting();
+
+  //will be use to write to a contract and can be called in any function
+  await yourContract.setGreeting("Hello");
+  ```
 
   **useScaffoldContractRead**:
   Use this hook to read a value from your deployed contracts.
@@ -130,7 +146,7 @@ yarn verify --network network_name
   const { data: totalCounter } = useScaffoldContractRead({
     contractName: "YourContract",
     functionName: "getGreeting",
-    // if it does not accept any args it should be args: []
+    // if it does not accept any args it can be optional
     args: ["ARGUMENTS IF THE FUNCTION ACCEPTS ANY"],
   });
   ```
