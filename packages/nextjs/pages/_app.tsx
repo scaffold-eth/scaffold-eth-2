@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { AppProps } from "next/app";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import NextNProgress from "nextjs-progressbar";
 import { Toaster } from "react-hot-toast";
-import { useDarkMode } from "usehooks-ts";
 import { WagmiConfig } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
@@ -18,9 +17,8 @@ import "~~/styles/globals.css";
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useEthPrice();
   const setEthPrice = useAppStore(state => state.setEthPrice);
-  // This variable is required for initial client side rendering of correct theme for RainbowKit
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const { isDarkMode } = useDarkMode();
+  // const isClient = useIsClient();
+  // const isDarkMode = useDarkMode();
 
   useEffect(() => {
     if (price > 0) {
@@ -28,17 +26,18 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
     }
   }, [setEthPrice, price]);
 
-  useEffect(() => {
-    setIsDarkTheme(isDarkMode);
-  }, [isDarkMode]);
-
   return (
     <WagmiConfig client={wagmiClient}>
       <NextNProgress />
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={isDarkTheme ? darkTheme() : lightTheme()}
+        // theme={isClient && isDarkMode ? darkTheme() : lightTheme()}
+        // renders rainbowkit theme based on OS default theme
+        theme={{
+          lightMode: lightTheme(),
+          darkMode: darkTheme(),
+        }}
       >
         <div className="flex flex-col min-h-screen">
           <Header />
