@@ -133,10 +133,21 @@ yarn verify --network network_name
     contractName: "YourContract",
   });
   // will return the greeting and can be call in any function unlike useScaffoldContractRead
-  await yourContract.greeting();
+  await yourContract?.greeting();
 
-  //will be use to write to a contract and can be called in any function
-  await yourContract.setGreeting("Hello");
+  //can be use to write to a contract and can be called in any function
+  import { Signer } from "ethers";
+  import { useSigner } from "wagmi";
+
+  const { data: signer, isError, isLoading } = useSigner();
+  const { data: yourContract } = useScaffoldContract({
+    contractName: "YourContract",
+    signerOrProvider: signer as Signer,
+  });
+  const setGreeting = async () => {
+    //call the method in any function
+    await yourContract?.setGreeting("the greeting here");
+  };
   ```
 
   **useScaffoldContractRead**:
@@ -190,8 +201,11 @@ yarn verify --network network_name
     } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    fromBlock: //block number here,
+    fromBlock: //the block number to start reading events from,
     blockData: true,
+    filters: //filters to be applied to the event (parameterName: value),
+    transactionData: //if set to true it will return the transaction data for each event (default: false),
+    receiptData: //if set to true it will return the receipt data for each event (default: false),
   });
   ```
 
