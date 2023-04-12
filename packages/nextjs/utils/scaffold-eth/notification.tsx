@@ -49,8 +49,11 @@ const Notification = ({
   return toast.custom(
     t => (
       <div
-        className={`flex flex-row items-start justify-between max-w-sm bg-base-200 p-4 shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-md relative transition-all duration-500 ease-in-out space-x-2 ${
-          t.visible ? "top-0" : "-top-96"
+        className={`flex flex-row items-start justify-between max-w-sm rounded-md shadow-2xl hover:shadow-none bg-base-200 p-4 transform-gpu relative transition-all duration-500 ease-in-out space-x-2
+        ${
+          position.substring(0, 3) == "top"
+            ? `hover:translate-y-1 ${t.visible ? "top-0" : "-top-96"}`
+            : `hover:-translate-y-1 ${t.visible ? "bottom-0" : "-bottom-96"}`
         }`}
       >
         <div className="text-2xl self-start">{icon ? icon : ENUM_STATUSES[status]}</div>
