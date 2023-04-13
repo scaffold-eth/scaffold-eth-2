@@ -160,6 +160,24 @@ const getParsedEthersError = (e: any): string => {
 
   return message;
 };
+const extractKeyValueErrorPairs = (errorMessage: any) => {
+  let keyValuePairs = {} as any;
+  const startIndex = errorMessage.indexOf("{");
+  const endIndex = errorMessage.lastIndexOf("}");
+  const json = errorMessage.substring(startIndex, endIndex + 1);
+  try {
+    keyValuePairs = JSON.parse(json);
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
+  if (keyValuePairs?.reason) {
+    return keyValuePairs.reason;
+  } else {
+    const errorMessage = keyValuePairs.message.slice("[ethjs-query] while formatting outputs from RPC".length).trim();
+    const parsedErrorMessage = JSON.parse(errorMessage.substring(1, errorMessage.length - 1)) as any;
+    return parsedErrorMessage?.value.data.message;
+  }
+};
 
 /**
  * @dev Parse form input with array support
@@ -199,4 +217,5 @@ export {
   getFunctionInputKey,
   getParsedContractFunctionArgs,
   getParsedEthersError,
+  extractKeyValueErrorPairs,
 };
