@@ -160,22 +160,23 @@ const getParsedEthersError = (e: any): string => {
 
   return message;
 };
-const extractKeyValueErrorPairs = (errorMessage: any) => {
-  let keyValuePairs = {} as any;
-  const startIndex = errorMessage.indexOf("{");
-  const endIndex = errorMessage.lastIndexOf("}");
-  const json = errorMessage.substring(startIndex, endIndex + 1);
+const extractErrorMessage = (errorMessage: string) => {
   try {
+    let keyValuePairs = {} as any;
+    const startIndex = errorMessage.indexOf("{");
+    const endIndex = errorMessage.lastIndexOf("}");
+    const json = errorMessage.substring(startIndex, endIndex + 1);
     keyValuePairs = JSON.parse(json);
+    if (keyValuePairs?.reason) {
+      console.log(keyValuePairs);
+      return keyValuePairs.body ? JSON.parse(keyValuePairs.body).error.message : keyValuePairs.reason;
+    } else {
+      const errorMessage = keyValuePairs.message.slice("[ethjs-query] while formatting outputs from RPC".length).trim();
+      const parsedErrorMessage = JSON.parse(errorMessage.substring(1, errorMessage.length - 1)) as any;
+      return parsedErrorMessage?.value.data.message;
+    }
   } catch (error) {
-    console.error("Error parsing JSON:", error);
-  }
-  if (keyValuePairs?.reason) {
-    return keyValuePairs.reason;
-  } else {
-    const errorMessage = keyValuePairs.message.slice("[ethjs-query] while formatting outputs from RPC".length).trim();
-    const parsedErrorMessage = JSON.parse(errorMessage.substring(1, errorMessage.length - 1)) as any;
-    return parsedErrorMessage?.value.data.message;
+    return getParsedEthersError(errorMessage);
   }
 };
 
@@ -217,5 +218,5 @@ export {
   getFunctionInputKey,
   getParsedContractFunctionArgs,
   getParsedEthersError,
-  extractKeyValueErrorPairs,
+  extractErrorMessage,
 };

@@ -3,7 +3,7 @@ import { SendTransactionResult } from "@wagmi/core";
 import { Signer } from "ethers";
 import { Deferrable } from "ethers/lib/utils";
 import { useSigner } from "wagmi";
-import { extractKeyValueErrorPairs } from "~~/components/scaffold-eth";
+import { extractErrorMessage } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
@@ -90,8 +90,7 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
       }
       // TODO handle error properly
       console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
-      const err = extractKeyValueErrorPairs(JSON.stringify(error)) as any;
-
+      const err = extractErrorMessage(JSON.stringify(error));
       console.log(err);
       notification.error(err);
     }
