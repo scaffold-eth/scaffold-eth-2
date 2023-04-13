@@ -162,17 +162,27 @@ const getParsedEthersError = (e: any): string => {
 };
 const extractErrorMessage = (errorMessage: string) => {
   try {
+    //declears an objects that will hold the key value pairs that is in the error message
     let keyValuePairs = {} as any;
+    //finds the index of the first opening curly brace
     const startIndex = errorMessage.indexOf("{");
+    //finds the index of the last closing curly brace
     const endIndex = errorMessage.lastIndexOf("}");
+    //extracts the json string
     const json = errorMessage.substring(startIndex, endIndex + 1);
+    //parses the json string
     keyValuePairs = JSON.parse(json);
+    //checks if the json string has a reason key
     if (keyValuePairs?.reason) {
       console.log(keyValuePairs);
+      //returns the value of the reason key ony if there is no body as a key
       return keyValuePairs.body ? JSON.parse(keyValuePairs.body).error.message : keyValuePairs.reason;
     } else {
+      // if there is no reason key, then the error is from ethjs-query then cut off the first part of the error message
       const errorMessage = keyValuePairs.message.slice("[ethjs-query] while formatting outputs from RPC".length).trim();
+      // parse the error message
       const parsedErrorMessage = JSON.parse(errorMessage.substring(1, errorMessage.length - 1)) as any;
+      // return the error message
       return parsedErrorMessage?.value.data.message;
     }
   } catch (error) {
