@@ -26,7 +26,7 @@ It's a new version of scaffold-eth with its core functionality. Built using Next
 
 Before you begin, you need to install the following tools:
 - [Node (v18 LTS)](https://nodejs.org/en/download/)
-- [Yarn (v1.x)](https://classic.yarnpkg.com/en/docs/install/)
+- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 
 ## Quickstart
@@ -47,7 +47,7 @@ yarn install
 yarn chain
 ```
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.js`.
+This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `hardhat.config.ts`.
 
 3. On a second terminal, deploy the test contract:
 
@@ -74,9 +74,9 @@ Once you are ready to deploy your smart contracts, there are a few things you ne
 
 1. Select the network
 
-By default, ```yarn deploy``` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.js.` You could also simply run ```yarn deploy --network target_network``` to deploy to another network.
+By default, ```yarn deploy``` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.ts.` You could also simply run ```yarn deploy --network target_network``` to deploy to another network.
 
-Check the `hardhat.config.js` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.js file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+Check the `hardhat.config.ts` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.ts file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
 Example: To deploy the contract to the Sepolia network, run the command below:
 ```
