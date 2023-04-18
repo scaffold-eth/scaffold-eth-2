@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useDisconnect, useSwitchNetwork } from "wagmi";
+import { ArrowLeftOnRectangleIcon, ArrowsRightLeftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -12,10 +13,12 @@ export const RainbowKitCustomConnectButton = () => {
 
   const networkColor = useNetworkColor();
   const configuredNetwork = getTargetNetwork();
+  const { disconnect } = useDisconnect();
+  const { switchNetwork } = useSwitchNetwork();
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openConnectModal, openChainModal, mounted }) => {
+      {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
 
         return (
@@ -31,15 +34,43 @@ export const RainbowKitCustomConnectButton = () => {
 
               if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
-                  <>
-                    <span className="text-xs" style={{ color: networkColor }}>
-                      {configuredNetwork.name}
-                    </span>
-                    <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
+                  <div className="dropdown dropdown-end">
+                    <button tabIndex={0} className="btn btn-error btn-sm dropdown-toggle">
                       <span>Wrong network</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </button>
-                  </>
+                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
+                      <li>
+                        <a
+                          className="menu-item"
+                          href="#"
+                          onClick={() => {
+                            if (switchNetwork) {
+                              switchNetwork(configuredNetwork.id);
+                            }
+                          }}
+                        >
+                          <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                          <span>
+                            Switch to <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="menu-item text-red-500" // Add the 'text-red-500' class
+                          href="#"
+                          onClick={() => {
+                            disconnect();
+                          }}
+                        >
+                          <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0 text-red-500" />{" "}
+                          {/* Add the 'text-red-500' class */}
+                          <span className="text-red-500">Disconnect</span> {/* Add the 'text-red-500' class */}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 );
               }
 
