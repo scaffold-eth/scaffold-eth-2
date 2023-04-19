@@ -41,9 +41,9 @@ export const RainbowKitCustomConnectButton = () => {
                     </button>
                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
                       <li>
-                        <a
+                        <button
                           className="menu-item"
-                          href="#"
+                          type="button"
                           onClick={() => {
                             if (switchNetwork) {
                               switchNetwork(configuredNetwork.id);
@@ -54,20 +54,18 @@ export const RainbowKitCustomConnectButton = () => {
                           <span>
                             Switch to <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
                           </span>
-                        </a>
+                        </button>
                       </li>
                       <li>
-                        <a
-                          className="menu-item text-red-500" // Add the 'text-red-500' class
-                          href="#"
+                        <button
+                          className="menu-item text-red-500"
+                          type="button"
                           onClick={() => {
                             disconnect();
                           }}
                         >
-                          <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0 text-red-500" />{" "}
-                          {/* Add the 'text-red-500' class */}
-                          <span className="text-red-500">Disconnect</span> {/* Add the 'text-red-500' class */}
-                        </a>
+                          <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+                        </button>
                       </li>
                     </ul>
                   </div>
