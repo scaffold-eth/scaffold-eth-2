@@ -1,4 +1,4 @@
-# 🏗 Scaffold-Eth 2
+# 🏗 Scaffold-ETH 2
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
@@ -30,13 +30,13 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-Eth 2, follow the steps below:
+To get started with Scaffold-ETH 2, follow the steps below:
 
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/scaffold-eth/se-2.git
-cd se-2
+git clone https://github.com/scaffold-eth/scaffold-eth-2.git
+cd scaffold-eth-2
 yarn install
 ```
 
