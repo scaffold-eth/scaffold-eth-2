@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
 import Marquee from "react-fast-marquee";
 import {
   useAnimationConfig,
@@ -63,6 +64,27 @@ export const ContractData = () => {
       );
     }
   }, [transitionEnabled, containerRef, greetingRef]);
+
+  const GREETINGS_GRAPHQL = `
+  {
+    greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+      id
+      greeting
+      premium
+      value
+      createdAt
+      sender {
+        address
+        greetingCount
+      }
+    }
+  }
+  `;
+
+  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
+  const greetingsData = useQuery(GREETINGS_GQL, { pollInterval: 1000 });
+
+  console.log("greetingsData: ", greetingsData);
 
   return (
     <div className="flex flex-col justify-center items-center bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] py-10 px-5 sm:px-0 lg:py-auto max-w-[100vw] ">
