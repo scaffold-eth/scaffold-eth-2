@@ -7,7 +7,6 @@ export function useAccountBalance(address?: string) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
   const price = useAppStore(state => state.ethPrice);
-  const configuredChain = getTargetNetwork();
 
   const {
     data: fetchedBalanceData,
@@ -16,7 +15,7 @@ export function useAccountBalance(address?: string) {
   } = useBalance({
     address,
     watch: true,
-    chainId: configuredChain.id,
+    chainId: getTargetNetwork().id,
   });
 
   const onToggleBalance = useCallback(() => {

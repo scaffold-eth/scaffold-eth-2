@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import scaffoldConfig from "@root/scaffold.config";
 import { useInterval } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import scaffoldConfig from "@root/scaffold.config";
 import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
 
 const enablePolling = false;
-const pollingTime = scaffoldConfig.pollingInterval;
 
 /**
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
@@ -29,7 +28,7 @@ export const useEthPrice = () => {
       const price = await fetchPriceFromUniswap(provider);
       setEthPrice(price);
     },
-    enablePolling ? pollingTime : null,
+    enablePolling ? scaffoldConfig.pollingInterval : null,
   );
 
   return ethPrice;

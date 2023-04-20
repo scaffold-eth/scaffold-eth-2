@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { BigNumber } from "ethers";
 import Marquee from "react-fast-marquee";
-import { useAnimationConfig, useScaffoldContractRead, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import {
+  useAnimationConfig,
+  useScaffoldContract,
+  useScaffoldContractRead,
+  useScaffoldEventHistory,
+  useScaffoldEventSubscriber,
+} from "~~/hooks/scaffold-eth";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
@@ -13,16 +18,39 @@ export const ContractData = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const greetingRef = useRef<HTMLDivElement>(null);
 
-  const { data: totalCounter } = useScaffoldContractRead<BigNumber>("YourContract", "totalCounter");
-
-  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead<string>(
-    "YourContract",
-    "greeting",
-  );
-
-  useScaffoldEventSubscriber("YourContract", "GreetingChange", (greetingSetter, newGreeting, premium, value) => {
-    console.log(greetingSetter, newGreeting, premium, value);
+  const { data: totalCounter } = useScaffoldContractRead({
+    contractName: "YourContract",
+    functionName: "totalCounter",
   });
+
+  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead({
+    contractName: "YourContract",
+    functionName: "greeting",
+  });
+
+  useScaffoldEventSubscriber({
+    contractName: "YourContract",
+    eventName: "GreetingChange",
+    listener: (greetingSetter, newGreeting, premium, value) => {
+      console.log(greetingSetter, newGreeting, premium, value);
+    },
+  });
+
+  const {
+    data: events,
+    isLoading: isLoadingEvents,
+    error: errorReadingEvents,
+  } = useScaffoldEventHistory({
+    contractName: "YourContract",
+    eventName: "GreetingChange",
+    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+    blockData: true,
+  });
+
+  console.log("events", isLoadingEvents, errorReadingEvents, events);
+
+  const { data: yourContract } = useScaffoldContract({ contractName: "YourContract" });
+  console.log("yourContract: ", yourContract);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 

@@ -38,9 +38,8 @@ export const WriteOnlyFunctionForm = ({
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
   const [txValue, setTxValue] = useState<string | BigNumber>("");
   const { chain } = useNetwork();
-  const configuredChain = getTargetNetwork();
   const writeTxn = useTransactor();
-  const writeDisabled = !chain || chain?.id !== configuredChain.id;
+  const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;
 
   // We are omitting usePrepareContractWrite here to avoid unnecessary RPC calls and wrong gas estimations.
   // See:

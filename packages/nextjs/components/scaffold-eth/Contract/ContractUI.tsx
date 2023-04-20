@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Contract } from "ethers";
+import { Abi } from "abitype";
 import { useContract, useProvider } from "wagmi";
 import { Spinner } from "~~/components/Spinner";
 import {
@@ -12,31 +12,27 @@ import {
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
 
-type TContractUIProps = {
-  contractName: string;
+type ContractUIProps = {
+  contractName: ContractName;
   className?: string;
 };
 
 /**
  * UI component to interface with deployed contracts.
  **/
-export const ContractUI = ({ contractName, className = "" }: TContractUIProps) => {
-  const configuredChain = getTargetNetwork();
+export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
   const provider = useProvider();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
+  const configuredNetwork = getTargetNetwork();
 
-  let contractAddress = "";
-  let contractABI = [];
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
-  if (deployedContractData) {
-    ({ address: contractAddress, abi: contractABI } = deployedContractData);
-  }
 
-  const contract: Contract | null = useContract({
-    address: contractAddress,
-    abi: contractABI,
+  const contract = useContract({
+    address: deployedContractData?.address,
+    abi: deployedContractData?.abi as Abi,
     signerOrProvider: provider,
   });
 
@@ -63,10 +59,10 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
     );
   }
 
-  if (!contractAddress) {
+  if (!deployedContractData) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${configuredChain.name}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${configuredNetwork.name}"!`}
       </p>
     );
   }
@@ -79,17 +75,17 @@ export const ContractUI = ({ contractName, className = "" }: TContractUIProps) =
             <div className="flex">
               <div className="flex flex-col gap-1">
                 <span className="font-bold">{contractName}</span>
-                <Address address={contractAddress} />
+                <Address address={deployedContractData.address} />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={contractAddress} className="px-0 h-1.5 min-h-[0.375rem]" />
+                  <Balance address={deployedContractData.address} className="px-0 h-1.5 min-h-[0.375rem]" />
                 </div>
               </div>
             </div>
-            {configuredChain && (
+            {configuredNetwork && (
               <p className="my-0 text-sm">
                 <span className="font-bold">Network</span>:{" "}
-                <span style={{ color: networkColor }}>{configuredChain.name}</span>
+                <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
               </p>
             )}
           </div>

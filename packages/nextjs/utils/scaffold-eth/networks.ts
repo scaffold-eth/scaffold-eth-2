@@ -56,7 +56,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
  * @dev returns empty string if the network is localChain
  */
 export function getBlockExplorerTxLink(network: Network, txnHash: string) {
-  let blockExplorerTxURL = "";
   const { chainId } = network;
 
   const chainNames = Object.keys(chains);
@@ -71,11 +70,8 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
   }
 
   const targetChain = targetChainArr[0] as keyof typeof chains;
-  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present and we are already checking in ternary
-  blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url
-    ? // @ts-expect-error
-      chains[targetChain].blockExplorers.default.url
-    : "";
+  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present on some chains
+  const blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url;
 
   if (!blockExplorerTxURL) {
     return "";
@@ -85,16 +81,29 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
 }
 
 /**
- * Get the wagmi's Chain target network configured in the app.
+ * Gives the block explorer Address URL.
+ * @param network - wagmi chain object
+ * @param address
+ * @returns block explorer address URL and etherscan URL if block explorer URL is not present for wagmi network
  */
-export const getTargetNetwork = () => {
-  const network = scaffoldConfig.targetNetwork;
-
-  if (!network) {
-    // If error defaults to hardhat local network
-    console.error("Network name is not set, misspelled or unsupported network used in .env.*");
-    return chains.hardhat;
+export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
+  const blockExplorerBaseURL = network.blockExplorers?.default?.url;
+  if (!blockExplorerBaseURL) {
+    return `https://etherscan.io/address/${address}`;
   }
 
-  return network;
-};
+  return `${blockExplorerBaseURL}/address/${address}`;
+}
+
+/**
+ * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
+ */
+
+export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
+  const configuredNetwork = scaffoldConfig.targetNetwork;
+
+  return {
+    ...configuredNetwork,
+    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
+  };
+}

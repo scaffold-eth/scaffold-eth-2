@@ -11,7 +11,6 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  */
 export const Footer = () => {
   const ethPrice = useAppStore(state => state.ethPrice);
-  const configuredNetwork = getTargetNetwork();
 
   return (
     <div className="min-h-0 p-5 mb-11 lg:mb-0">
@@ -24,7 +23,7 @@ export const Footer = () => {
                 <span>{ethPrice}</span>
               </div>
             )}
-            {configuredNetwork.id === hardhat.id && <Faucet />}
+            {getTargetNetwork().id === hardhat.id && <Faucet />}
           </div>
           <SwitchTheme className="pointer-events-auto" />
         </div>

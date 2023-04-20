@@ -17,13 +17,12 @@ export const DisplayVariable = ({
   functionFragment,
   refreshDisplayVariables,
 }: TDisplayVariableProps) => {
-  const configuredChain = getTargetNetwork();
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
-    chainId: configuredChain.id,
+    chainId: getTargetNetwork().id,
     address: contractAddress,
     abi: [functionFragment],
     functionName: functionFragment.name,
