@@ -24,7 +24,7 @@ type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, 
 
 export type Chain = keyof ContractsDeclaration;
 
-type SelectedChainId = IsContractsFileMissing<number, typeof scaffoldConfig["targetNetwork"]["id"]>;
+type SelectedChainId = IsContractsFileMissing<number, (typeof scaffoldConfig)["targetNetwork"]["id"]>;
 
 type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"];
 
