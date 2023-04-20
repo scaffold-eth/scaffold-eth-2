@@ -1,4 +1,4 @@
-import scaffoldConfig from "~~/scaffold.config";
+import scaffoldConfig from "@root/scaffold.config";
 import { ContractName, contracts } from "~~/utils/scaffold-eth/contract";
 
 export function getContractNames() {

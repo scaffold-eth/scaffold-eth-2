@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import scaffoldConfig from "@root/scaffold.config";
 import { useIsMounted } from "usehooks-ts";
 import { useProvider } from "wagmi";
-import scaffoldConfig from "~~/scaffold.config";
 import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
 
 /**
