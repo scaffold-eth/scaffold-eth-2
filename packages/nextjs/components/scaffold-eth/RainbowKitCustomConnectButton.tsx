@@ -53,7 +53,7 @@ export const RainbowKitCustomConnectButton = () => {
                         </button>
                       </li>
                       <li>
-                        <button className="menu-item text-red-500" type="button" onClick={() => disconnect()}>
+                        <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
                           <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
                         </button>
                       </li>
