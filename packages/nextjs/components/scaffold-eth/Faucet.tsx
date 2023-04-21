@@ -25,23 +25,18 @@ export const Faucet = () => {
   const faucetTxn = useTransactor(signer);
 
   useEffect(() => {
-    const getFaucetAddress = async () => {
-      try {
-        if (provider) {
-          const accounts = await provider.listAccounts();
-          setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
-        }
-      } catch (error) {
+    provider
+      ?.listAccounts()
+      .then(accounts => setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]))
+      .catch(error => {
         notification.error(
           <>
             <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
             <p className="m-0">Did you forget to run `yarn chain`?</p>
           </>,
         );
-        console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
-      }
-    };
-    getFaucetAddress();
+        console.error("⚡️ ~ file: Faucet.tsx:useEffect ~ error", error);
+      });
   }, [provider]);
 
   const sendETH = async () => {
