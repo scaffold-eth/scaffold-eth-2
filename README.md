@@ -123,8 +123,6 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
-**Hint**: If you don't have any contract deployed through SE-2 and plan to just deploy NextJS app maybe only with "connect wallet" functionality you can do so by just setting `targetNetwork : chains.mainnet` or your preferred network in `packages/nextjs/scaffold.config.ts`, rest all instruction remains same as [above](#deploying-your-nextjs-app)
-
 ## Hook Example
 
 - [useScaffoldContractRead](#usescaffoldcontractread)
