@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ethers } from "ethers";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
@@ -20,7 +20,7 @@ export const Faucet = () => {
   const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
-  const provider = getLocalProvider(localhost);
+  const provider = useMemo(() => getLocalProvider(localhost), []);
   const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
   const faucetTxn = useTransactor(signer);
 
@@ -34,7 +34,7 @@ export const Faucet = () => {
       } catch (error) {
         notification.error(
           <>
-            <p className="font-bold mt-0 mb-1gi">Cannot connect to local provider</p>
+            <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
             <p className="m-0">Did you forget to run `yarn chain`?</p>
           </>,
         );
@@ -42,8 +42,7 @@ export const Faucet = () => {
       }
     };
     getFaucetAddress();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(provider)]);
+  }, [provider]);
 
   const sendETH = async () => {
     try {
