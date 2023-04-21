@@ -25,10 +25,13 @@ export const Faucet = () => {
   const faucetTxn = useTransactor(signer);
 
   useEffect(() => {
-    provider
-      ?.listAccounts()
-      .then(accounts => setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]))
-      .catch(error => {
+    const getFaucetAddress = async () => {
+      try {
+        if (provider) {
+          const accounts = await provider.listAccounts();
+          setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
+        }
+      } catch (error) {
         notification.error(
           <>
             <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
@@ -41,8 +44,10 @@ export const Faucet = () => {
             </p>
           </>,
         );
-        console.error("⚡️ ~ file: Faucet.tsx:useEffect ~ error", error);
-      });
+        console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
+      }
+    };
+    getFaucetAddress();
   }, [provider]);
 
   const sendETH = async () => {
