@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { useNetwork } from "wagmi";
 import { hardhat, localhost } from "wagmi/chains";
@@ -10,6 +10,8 @@ import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
 
+const provider = getLocalProvider(localhost);
+
 /**
  * Faucet modal which lets you send ETH to any address.
  */
@@ -20,7 +22,6 @@ export const Faucet = () => {
   const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
-  const provider = useMemo(() => getLocalProvider(localhost), []);
   const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
   const faucetTxn = useTransactor(signer);
 
@@ -48,7 +49,7 @@ export const Faucet = () => {
       }
     };
     getFaucetAddress();
-  }, [provider]);
+  }, []);
 
   const sendETH = async () => {
     try {
