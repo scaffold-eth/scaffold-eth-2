@@ -19,7 +19,9 @@ export function useAccountBalance(address?: string) {
   });
 
   const onToggleBalance = useCallback(() => {
-    setIsEthBalance(!isEthBalance);
+    if (price > 0) {
+      setIsEthBalance(!isEthBalance);
+    }
   }, [isEthBalance]);
 
   useEffect(() => {
