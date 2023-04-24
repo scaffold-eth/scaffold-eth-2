@@ -42,7 +42,7 @@ export const IntegerInput = ({
             className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
             data-tip="Multiply by 10^18 (wei)"
           >
-            <button className="cursor-pointer font-semibold px-4 text-accent" onClick={multiplyBy1e18}>
+            <button className="cursor-pointer font-semibold px-4 text-gray-400" onClick={multiplyBy1e18}>
               ∗
             </button>
           </div>
