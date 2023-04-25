@@ -40,19 +40,15 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   },
   [chains.arbitrumGoerli.id]: {
     color: "#28a0f0",
-    tokenAddress: "0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1",
   },
   [chains.arbitrum.id]: {
     color: "#28a0f0",
-    tokenAddress: "0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1",
   },
   [chains.fantom.id]: {
     color: "#1969ff",
-    tokenAddress: "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
   },
   [chains.fantomTestnet.id]: {
     color: "#1969ff",
-    tokenAddress: "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
   },
 };
 
