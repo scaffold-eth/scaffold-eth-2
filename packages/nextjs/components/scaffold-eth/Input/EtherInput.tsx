@@ -93,7 +93,7 @@ export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputPr
       value={displayValue}
       placeholder={placeholder}
       onChange={handleChangeNumber}
-      prefix={<span className="pl-4 -mr-2 text-gray-400 self-center">{usdMode ? "$" : "Ξ"}</span>}
+      prefix={<span className="pl-4 -mr-2 text-primary self-center">{usdMode ? "$" : "Ξ"}</span>}
       suffix={
         <button
           className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
