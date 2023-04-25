@@ -22,7 +22,7 @@ export const Bytes32Input = ({ value, onChange, name, placeholder }: CommonInput
       onChange={onChange}
       suffix={
         <div
-          className="self-center cursor-pointer text-xl font-semibold px-4 text-primary"
+          className="self-center cursor-pointer text-xl font-semibold px-4 text-accent"
           onClick={convertStringToBytes32}
         >
           #
