@@ -11,23 +11,18 @@ export type TChainAttributes = {
 export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   [chains.hardhat.id]: {
     color: "#b8af0c",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.mainnet.id]: {
     color: "#ff8b9e",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.sepolia.id]: {
     color: ["#5f4bb6", "#87ff65"],
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.goerli.id]: {
     color: "#0975F6",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.gnosis.id]: {
     color: "#48a9a6",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.polygon.id]: {
     color: "#2bbdf7",
@@ -39,11 +34,9 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   },
   [chains.optimismGoerli.id]: {
     color: "#f01a37",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.optimism.id]: {
     color: "#f01a37",
-    tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   [chains.arbitrumGoerli.id]: {
     color: "#28a0f0",
