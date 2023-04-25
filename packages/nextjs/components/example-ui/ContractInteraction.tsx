@@ -4,12 +4,10 @@ import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 export const ContractInteraction = () => {
   const [visible, setVisible] = useState(true);
   const [newGreeting, setNewGreeting] = useState("");
-  const configuredNetwork = getTargetNetwork();
 
   const { writeAsync, isLoading } = useScaffoldContractWrite({
     contractName: "YourContract",
@@ -79,7 +77,7 @@ export const ContractInteraction = () => {
 
           <div className="mt-4 flex gap-2 items-start">
             <span className="text-sm leading-tight">Price:</span>
-            <div className="badge badge-warning">0.01 {configuredNetwork.nativeCurrency.symbol} + Gas</div>
+            <div className="badge badge-warning">0.01 ETH + Gas</div>
           </div>
         </div>
       </div>
