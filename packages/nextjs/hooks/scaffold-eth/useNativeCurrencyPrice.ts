@@ -8,17 +8,17 @@ const enablePolling = false;
 
 /**
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
- * @returns ethPrice: number
+ * @returns nativeCurrencyPrice: number
  */
-export const useEthPrice = () => {
+export const useNativeCurrency = () => {
   const provider = useProvider({ chainId: 1 });
-  const [ethPrice, setEthPrice] = useState(0);
+  const [nativeCurrencyPrice, setNativeCurrency] = useState(0);
 
   // Get the price of ETH from Uniswap on mount
   useEffect(() => {
     (async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setEthPrice(price);
+      setNativeCurrency(price);
     })();
   }, [provider]);
 
@@ -26,10 +26,10 @@ export const useEthPrice = () => {
   useInterval(
     async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setEthPrice(price);
+      setNativeCurrency(price);
     },
     enablePolling ? scaffoldConfig.pollingInterval : null,
   );
 
-  return ethPrice;
+  return nativeCurrencyPrice;
 };

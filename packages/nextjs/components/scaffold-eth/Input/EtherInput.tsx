@@ -5,30 +5,33 @@ import { useAppStore } from "~~/services/store/store";
 
 const MAX_DECIMALS_USD = 2;
 
-function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice: number) {
-  if (usdMode && ethPrice) {
+function etherValueToDisplayValue(usdMode: boolean, etherValue: string, nativeCurrencyPrice: number) {
+  if (usdMode && nativeCurrencyPrice) {
     const parsedEthValue = parseFloat(etherValue);
     if (Number.isNaN(parsedEthValue)) {
       return etherValue;
     } else {
       // We need to round the value rather than use toFixed,
       // since otherwise a user would not be able to modify the decimal value
-      return (Math.round(parsedEthValue * ethPrice * 10 ** MAX_DECIMALS_USD) / 10 ** MAX_DECIMALS_USD).toString();
+      return (
+        Math.round(parsedEthValue * nativeCurrencyPrice * 10 ** MAX_DECIMALS_USD) /
+        10 ** MAX_DECIMALS_USD
+      ).toString();
     }
   } else {
     return etherValue;
   }
 }
 
-function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPrice: number) {
-  if (usdMode && ethPrice) {
+function displayValueToEtherValue(usdMode: boolean, displayValue: string, nativeCurrencyPrice: number) {
+  if (usdMode && nativeCurrencyPrice) {
     const parsedDisplayValue = parseFloat(displayValue);
     if (Number.isNaN(parsedDisplayValue)) {
       // Invalid number.
       return displayValue;
     } else {
       // Compute the ETH value if a valid number.
-      return (parsedDisplayValue / ethPrice).toString();
+      return (parsedDisplayValue / nativeCurrencyPrice).toString();
     }
   } else {
     return displayValue;
@@ -42,20 +45,20 @@ function displayValueToEtherValue(usdMode: boolean, displayValue: string, ethPri
  */
 export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputProps) => {
   const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
-  const ethPrice = useAppStore(state => state.ethPrice);
+  const nativeCurrencyPrice = useAppStore(state => state.nativeCurrencyPrice);
   const [usdMode, setUSDMode] = useState(false);
 
   // The displayValue is derived from the ether value that is controlled outside of the component
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
-    const newDisplayValue = etherValueToDisplayValue(usdMode, value, ethPrice);
+    const newDisplayValue = etherValueToDisplayValue(usdMode, value, nativeCurrencyPrice);
     if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
       return transitoryDisplayValue;
     }
     // Clear any transitory display values that might be set
     setTransitoryDisplayValue(undefined);
     return newDisplayValue;
-  }, [ethPrice, transitoryDisplayValue, usdMode, value]);
+  }, [nativeCurrencyPrice, transitoryDisplayValue, usdMode, value]);
 
   const handleChangeNumber = (newValue: string) => {
     if (newValue && !SIGNED_NUMBER_REGEX.test(newValue)) {
@@ -79,7 +82,7 @@ export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputPr
       setTransitoryDisplayValue(undefined);
     }
 
-    const newEthValue = displayValueToEtherValue(usdMode, newValue, ethPrice);
+    const newEthValue = displayValueToEtherValue(usdMode, newValue, nativeCurrencyPrice);
     onChange(newEthValue);
   };
 
@@ -98,7 +101,7 @@ export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputPr
         <button
           className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
           onClick={toggleMode}
-          disabled={!usdMode && !ethPrice}
+          disabled={!usdMode && !nativeCurrencyPrice}
         >
           <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
         </button>

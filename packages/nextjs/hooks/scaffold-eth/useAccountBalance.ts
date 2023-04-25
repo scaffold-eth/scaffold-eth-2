@@ -6,7 +6,7 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 export function useAccountBalance(address?: string) {
   const [isEthBalance, setIsEthBalance] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
-  const price = useAppStore(state => state.ethPrice);
+  const price = useAppStore(state => state.nativeCurrencyPrice);
 
   const {
     data: fetchedBalanceData,
