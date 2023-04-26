@@ -1,12 +1,51 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
+const storage: { get: () => ContractName; set: (data: ContractName) => void } = {
+  get() {
+    try {
+      const hasOwnContract = window.localStorage.getItem("userSelectedContract");
+
+      if (hasOwnContract === null || hasOwnContract === "") {
+        return [];
+      }
+
+      return JSON.parse(hasOwnContract);
+    } catch (error) {
+      console.log(`Get data from LocalStorage isn't allowed. ${error}`);
+      return [];
+    }
+  },
+
+  set(data) {
+    try {
+      window.localStorage.setItem("userSelectedContract", JSON.stringify(data));
+    } catch (error) {
+      console.log(`Set data to LocalStorage isn't allowed. ${error}`);
+    }
+  },
+};
+
 const Debug: NextPage = () => {
   const contractNames = getContractNames();
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
+
+  useEffect(() => {
+    const userSelectedContract = storage.get();
+
+    if (typeof userSelectedContract === "string") {
+      setSelectedContract(userSelectedContract);
+    }
+  }, []);
+
+  const onSelectContract = useCallback((contractName: ContractName) => {
+    setSelectedContract(contractName);
+
+    storage.set(contractName);
+  }, []);
 
   return (
     <>
@@ -23,7 +62,7 @@ const Debug: NextPage = () => {
                       contractName === selectedContract ? "bg-base-300" : "bg-base-100"
                     }`}
                     key={contractName}
-                    onClick={() => setSelectedContract(contractName)}
+                    onClick={() => onSelectContract(contractName)}
                   >
                     {contractName}
                   </button>
