@@ -6,10 +6,11 @@ import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput, getParsedEthersError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
-import { contracts } from "~~/utils/scaffold-eth/contract";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
+
+const provider = getLocalProvider(localhost);
 
 /**
  * Faucet modal which lets you send ETH to any address.
@@ -21,29 +22,34 @@ export const Faucet = () => {
   const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
-  const provider = getLocalProvider(localhost);
   const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
   const faucetTxn = useTransactor(signer);
 
   useEffect(() => {
     const getFaucetAddress = async () => {
       try {
-        if (provider && contracts) {
+        if (provider) {
           const accounts = await provider.listAccounts();
           setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
         }
       } catch (error) {
         notification.error(
           <>
-            <p className="font-bold mt-0 mb-1gi">Cannot connect to local provider</p>
-            <p className="m-0">Did you forget to run `yarn chain`?</p>
+            <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
+            <p className="m-0">
+              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
+            </p>
+            <p className="mt-1 break-normal">
+              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
+              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
+            </p>
           </>,
         );
         console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
       }
     };
     getFaucetAddress();
-  }, [provider]);
+  }, []);
 
   const sendETH = async () => {
     try {

@@ -5,7 +5,6 @@ import { Connector, useAccount, useConnect } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import { contracts } from "~~/utils/scaffold-eth/contract";
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
 
@@ -65,10 +64,6 @@ export const useAutoConnect = (): void => {
   }, [accountState.isConnected, accountState.connector?.name]);
 
   useEffectOnce(() => {
-    if (!contracts) {
-      return;
-    }
-
     const initialConnector = getInitialConnector(walletId, connectState.connectors);
 
     if (initialConnector?.connector) {

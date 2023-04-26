@@ -50,7 +50,7 @@ const wallets = [
   walletConnectWallet({ chains: appChains.chains }),
   ledgerWallet({ chains: appChains.chains }),
   braveWallet({ chains: appChains.chains }),
-  coinbaseWallet({ appName: "scaffold-eth", chains: appChains.chains }),
+  coinbaseWallet({ appName: "scaffold-eth-2", chains: appChains.chains }),
   rainbowWallet({ chains: appChains.chains }),
 ];
 
