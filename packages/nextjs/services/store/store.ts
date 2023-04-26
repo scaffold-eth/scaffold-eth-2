@@ -11,10 +11,10 @@ import create from "zustand";
 
 type TAppStore = {
   nativeCurrencyPrice: number;
-  setNativeCurrency: (newNativeCurrencyState: number) => void;
+  setNativeCurrencyPrice: (newNativeCurrencyPriceState: number) => void;
 };
 
 export const useAppStore = create<TAppStore>(set => ({
   nativeCurrencyPrice: 0,
-  setNativeCurrency: (newValue: number): void => set(() => ({ nativeCurrencyPrice: newValue })),
+  setNativeCurrencyPrice: (newValue: number): void => set(() => ({ nativeCurrencyPrice: newValue })),
 }));

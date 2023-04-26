@@ -19,7 +19,7 @@ export const fetchPriceFromUniswap = async (provider: Provider): Promise<number>
     const price = parseFloat(route.midPrice.toSignificant(6));
     return price;
   } catch (error) {
-    console.error("useNativeCurrency - Error fetching ETH price from Uniswap: ", error);
+    console.error("useNativeCurrencyPrice - Error fetching ETH price from Uniswap: ", error);
     return 0;
   }
 };

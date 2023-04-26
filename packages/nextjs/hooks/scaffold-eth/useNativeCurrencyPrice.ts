@@ -10,15 +10,15 @@ const enablePolling = false;
  * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
  * @returns nativeCurrencyPrice: number
  */
-export const useNativeCurrency = () => {
+export const useNativeCurrencyPrice = () => {
   const provider = useProvider({ chainId: 1 });
-  const [nativeCurrencyPrice, setNativeCurrency] = useState(0);
+  const [nativeCurrencyPrice, setNativeCurrencyPrice] = useState(0);
 
   // Get the price of ETH from Uniswap on mount
   useEffect(() => {
     (async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setNativeCurrency(price);
+      setNativeCurrencyPrice(price);
     })();
   }, [provider]);
 
@@ -26,7 +26,7 @@ export const useNativeCurrency = () => {
   useInterval(
     async () => {
       const price = await fetchPriceFromUniswap(provider);
-      setNativeCurrency(price);
+      setNativeCurrencyPrice(price);
     },
     enablePolling ? scaffoldConfig.pollingInterval : null,
   );
