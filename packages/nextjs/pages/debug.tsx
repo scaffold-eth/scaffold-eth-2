@@ -1,32 +1,26 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import type { NextPage } from "next";
-import { useLocalStorage } from "usehooks-ts";
+import { useEffectOnce, useLocalStorage } from "usehooks-ts";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
-const selectedContactStorageKey = "scaffoldEth2.selectedContact";
+const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 
 const Debug: NextPage = () => {
   const contractNames = getContractNames();
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
-  const [selectedContactStorageValue, setSelectedContactStorageValue] = useLocalStorage<ContractName>(
-    selectedContactStorageKey,
+  const [selectedContractStorageValue, setSelectedContractStorageValue] = useLocalStorage<ContractName>(
+    selectedContractStorageKey,
     "",
   );
 
-  useEffect(() => {
-    if (selectedContactStorageValue !== "") {
-      setSelectedContract(selectedContactStorageValue);
-    }
-  }, [selectedContactStorageValue]);
+  useEffectOnce(() => setSelectedContract(selectedContractStorageValue));
 
-  const onSelectContract = useCallback(
-    (contractName: ContractName) => {
-      setSelectedContactStorageValue(contractName);
-    },
-    [setSelectedContactStorageValue],
-  );
+  const onSelectContract = (contractName: ContractName) => {
+    setSelectedContract(contractName);
+    setSelectedContractStorageValue(contractName);
+  };
 
   return (
     <>
