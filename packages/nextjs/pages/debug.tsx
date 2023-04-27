@@ -1,51 +1,30 @@
 import { useCallback, useEffect, useState } from "react";
 import type { NextPage } from "next";
+import { useLocalStorage } from "usehooks-ts";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 
-const storage: { get: () => ContractName; set: (data: ContractName) => void } = {
-  get() {
-    try {
-      const hasOwnContract = window.localStorage.getItem("userSelectedContract");
-
-      if (hasOwnContract === null || hasOwnContract === "") {
-        return [];
-      }
-
-      return JSON.parse(hasOwnContract);
-    } catch (error) {
-      console.log(`Get data from LocalStorage isn't allowed. ${error}`);
-      return [];
-    }
-  },
-
-  set(data) {
-    try {
-      window.localStorage.setItem("userSelectedContract", JSON.stringify(data));
-    } catch (error) {
-      console.log(`Set data to LocalStorage isn't allowed. ${error}`);
-    }
-  },
-};
+const selectedContactStorageKey = "scaffoldEth2.selectedContact";
 
 const Debug: NextPage = () => {
   const contractNames = getContractNames();
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
+  const [selectedContactStorageValue, setSelectedContactStorageValue] = useLocalStorage<ContractName>(
+    selectedContactStorageKey,
+    "",
+  );
 
   useEffect(() => {
-    const userSelectedContract = storage.get();
+    setSelectedContract(selectedContactStorageValue);
+  }, [selectedContactStorageValue, selectedContract]);
 
-    if (typeof userSelectedContract === "string") {
-      setSelectedContract(userSelectedContract);
-    }
-  }, []);
-
-  const onSelectContract = useCallback((contractName: ContractName) => {
-    setSelectedContract(contractName);
-
-    storage.set(contractName);
-  }, []);
+  const onSelectContract = useCallback(
+    (contractName: ContractName) => {
+      setSelectedContactStorageValue(contractName);
+    },
+    [setSelectedContactStorageValue],
+  );
 
   return (
     <>
