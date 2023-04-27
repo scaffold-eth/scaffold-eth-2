@@ -9,7 +9,7 @@ const selectedContactStorageKey = "scaffoldEth2.selectedContact";
 
 const Debug: NextPage = () => {
   const contractNames = getContractNames();
-  const [selectedContract, setSelectedContract] = useState<ContractName>("");
+  const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
   const [selectedContactStorageValue, setSelectedContactStorageValue] = useLocalStorage<ContractName>(
     selectedContactStorageKey,
     "",
@@ -19,12 +19,11 @@ const Debug: NextPage = () => {
     if (selectedContactStorageValue !== "") {
       setSelectedContract(selectedContactStorageValue);
     }
-  }, [selectedContactStorageValue, selectedContract]);
+  }, [selectedContactStorageValue]);
 
   const onSelectContract = useCallback(
     (contractName: ContractName) => {
       setSelectedContactStorageValue(contractName);
-      setSelectedContract(contractName);
     },
     [setSelectedContactStorageValue],
   );
