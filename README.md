@@ -14,7 +14,7 @@
 - [Quickstart](#quickstart)
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
-- [Smart Contract Interaction Hooks](#smart-contract-interaction-hooks)
+- [Interacting with Deployed Smart Contracts: Hooks](#interacting-with-deployed-smart-contracts-hooks)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
   - [Disabling commit checks](#disabling-commit-checks)
   - [Deploying to Vercel without any checks](#deploying-to-vercel-without-any-checks)
@@ -124,9 +124,10 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
-## Smart Contract Interaction Hooks
+## Interacting with Deployed Smart Contracts: Hooks
 
-"Smart Contract Interaction Hooks" are a collection of React hooks. They are wrappers on top of wagmi, and you can use wagmi directly for specific cases / external contracts. They simplify the process of interacting with Ethereum smart contracts. These hooks provide an easy-to-use interface for reading from and writing to a deployed smart contract, as well as listening to and retrieving event logs emitted by the contract.
+Scaffold-eth provides a collection of React hooks designed to simplify interactions with your deployed smart contracts. These hooks serve as wrappers around `wagmi`, automatically loading the necessary contract ABI and address. They offer an easy-to-use interface for reading from, writing to, and monitoring events emitted by your smart contracts.  
+If you need to interact with external contracts, you can use `wagmi` directly, or add external contract data to your `deployedContracts.ts` file.
 
 - [useScaffoldContractRead](#usescaffoldcontractread)
 - [useScaffoldContractWrite](#usescaffoldcontractwrite)
@@ -137,7 +138,7 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 ### useScaffoldContractRead:
 
-A hook for reading a value from a deployed smart contract.
+Facilitates reading data from a deployed contract by calling read-only functions.
 
 ```ts
 const { data: totalCounter } = useScaffoldContractRead({
@@ -149,7 +150,7 @@ const { data: totalCounter } = useScaffoldContractRead({
 
 ### useScaffoldContractWrite:
 
-A hook for writing to a deployed smart contract.
+Enables writing data to a deployed contract by sending transactions that modify its state.
 
 ```ts
 const { writeAsync, isLoading } = useScaffoldContractRead({
@@ -163,7 +164,7 @@ const { writeAsync, isLoading } = useScaffoldContractRead({
 
 ### useScaffoldEventSubscriber:
 
-A hook for listening to events emitted by a deployed smart contract.
+Allows you to subscribe to contract events, receiving real-time updates as events are emitted.
 
 ```ts
 useScaffoldEventSubscriber({
@@ -179,7 +180,7 @@ useScaffoldEventSubscriber({
 
 ### useScaffoldEventHistory:
 
-A hook for reading past events emitted by a deployed smart contract.
+Retrieves historical event logs for a specified contract, providing insight into past activity.
 
 ```ts
 const {
