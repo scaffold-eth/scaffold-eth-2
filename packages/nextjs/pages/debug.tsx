@@ -12,7 +12,7 @@ const Debug: NextPage = () => {
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
   const [selectedContractStorageValue, setSelectedContractStorageValue] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
-    "",
+    contractNames[0],
   );
 
   useEffectOnce(() => setSelectedContract(selectedContractStorageValue));
