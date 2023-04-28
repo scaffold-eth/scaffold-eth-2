@@ -178,8 +178,8 @@ Subscribe to your contract events, receiving real-time updates when events are e
 useScaffoldEventSubscriber({
   contractName: "YourContract",
   eventName: "GreetingChange",
-  //parameters that the event emits
-  //event GreetingChange(address greetingSetter, string newGreeting, bool premium, uint256 value);
+  // The listener function is called whenever a GreetingChange event is emitted by the contract.
+  // It receives the parameters emitted by the event, for this example: GreetingChange(address greetingSetter, string newGreeting, bool premium, uint256 value);
   listener: (greetingSetter, newGreeting, premium, value) => {
     console.log(greetingSetter, newGreeting, premium, value);
   },
@@ -198,11 +198,15 @@ const {
   } = useScaffoldEventHistory({
   contractName: "YourContract",
   eventName: "GreetingChange",
-  fromBlock: //the block number to start reading events from,
+  // Specify the starting block number from which to read events.
+  fromBlock: 31231,
   blockData: true,
-  filters: //filters to be applied to the event (parameterName: value),
-  transactionData: //if set to true it will return the transaction data for each event (default: false),
-  receiptData: //if set to true it will return the receipt data for each event (default: false),
+  // Apply filters to the event based on parameter names and values (parameterName: value),
+  filters: parameterName: value,
+  // If set to true it will return the transaction data for each event (default: false),
+  transactionData: true,
+  // If set to true it will return the receipt data for each event (default: false),
+  receiptData: true
 });
 ```
 
@@ -211,7 +215,7 @@ const {
 Fetches details from your contract, including ABI and address.
 
 ```ts
-//contractName: name of the deployed contract
+// ContractName: name of the deployed contract
 const { data: deployedContractData } = useDeployedContractInfo(contractName);
 ```
 
@@ -224,10 +228,10 @@ For reading data or sending transactions, it's recommended to use `useScaffoldCo
 const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
 });
-// will return the greeting and can be call in any function unlike useScaffoldContractRead
+// Returns the greeting and can be called in any function, unlike useScaffoldContractRead
 await yourContract?.greeting();
 
-//can be use to write to a contract and can be called in any function
+// Used to write to a contract and can be called in any function
 import { Signer } from "ethers";
 import { useSigner } from "wagmi";
 
@@ -237,7 +241,7 @@ const { data: yourContract } = useScaffoldContract({
   signerOrProvider: signer as Signer,
 });
 const setGreeting = async () => {
-  //call the method in any function
+  // Call the method in any function
   await yourContract?.setGreeting("the greeting here");
 };
 ```
