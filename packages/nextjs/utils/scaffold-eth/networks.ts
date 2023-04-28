@@ -5,7 +5,9 @@ import scaffoldConfig from "~~/scaffold.config";
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
-  tokenAddress?: string;
+  // Used to fetch price by providing mainnet token address
+  // for networks having native currency other than ETH
+  nativeCurrencyTokenAddress?: string;
 };
 
 export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
@@ -26,11 +28,11 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   },
   [chains.polygon.id]: {
     color: "#2bbdf7",
-    tokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+    nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
   [chains.polygonMumbai.id]: {
     color: "#92D9FA",
-    tokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+    nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
   [chains.optimismGoerli.id]: {
     color: "#f01a37",
