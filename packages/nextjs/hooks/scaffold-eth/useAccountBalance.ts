@@ -22,7 +22,7 @@ export function useAccountBalance(address?: string) {
     if (price > 0) {
       setIsEthBalance(!isEthBalance);
     }
-  }, [isEthBalance]);
+  }, [isEthBalance, price]);
 
   useEffect(() => {
     if (fetchedBalanceData?.formatted) {
