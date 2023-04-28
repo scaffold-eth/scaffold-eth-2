@@ -14,7 +14,7 @@
 - [Quickstart](#quickstart)
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
-- [Interacting with Deployed Smart Contracts: Hooks](#interacting-with-deployed-smart-contracts-hooks)
+- [Interacting with your Smart Contracts: SE-2 Custom Hooks](#interacting-with-your-smart-contracts-se-2-custom-hooks)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
   - [Disabling commit checks](#disabling-commit-checks)
   - [Deploying to Vercel without any checks](#deploying-to-vercel-without-any-checks)
@@ -124,9 +124,9 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
 
-## Interacting with Deployed Smart Contracts: Hooks
+## Interacting with your Smart Contracts: SE-2 Custom Hooks
 
-Scaffold-eth provides a collection of React hooks designed to simplify interactions with your deployed smart contracts. These hooks serve as wrappers around `wagmi`, automatically loading the necessary contract ABI and address. They offer an easy-to-use interface for reading from, writing to, and monitoring events emitted by your smart contracts.  
+Scaffold-ETH 2 provides a collection of custom React hooks designed to simplify interactions with your deployed smart contracts. These hooks are wrappers around `wagmi`, automatically loading the necessary contract ABI and address. They offer an easy-to-use interface for reading from, writing to, and monitoring events emitted by your smart contracts.  
 If you need to interact with external contracts, you can use `wagmi` directly, or add external contract data to your `deployedContracts.ts` file.
 
 - [useScaffoldContractRead](#usescaffoldcontractread)
@@ -138,7 +138,7 @@ If you need to interact with external contracts, you can use `wagmi` directly, o
 
 ### useScaffoldContractRead:
 
-Facilitates reading data from a deployed contract by calling read-only functions.
+Read public variables and get data from read-only functions of your contract.
 
 ```ts
 const { data: totalCounter } = useScaffoldContractRead({
@@ -150,21 +150,29 @@ const { data: totalCounter } = useScaffoldContractRead({
 
 ### useScaffoldContractWrite:
 
-Enables writing data to a deployed contract by sending transactions that modify its state.
+Send a transaction to your contract to write data or perform an action.
 
 ```ts
-const { writeAsync, isLoading } = useScaffoldContractRead({
+const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
   contractName: "YourContract",
   functionName: "setGreeting",
   args: ["The value to set"],
-  //value if the function is payable and sends eth to it
+  // For payable functions, expressed in ETH
   value: "0.01",
 });
 ```
 
+To make the actual call:
+
+```ts
+<button className="btn btn-primary" onClick={writeAsync}>
+  Send TX
+</button>
+```
+
 ### useScaffoldEventSubscriber:
 
-Allows you to subscribe to contract events, receiving real-time updates as events are emitted.
+Subscribe to your contract events, receiving real-time updates when events are emitted.
 
 ```ts
 useScaffoldEventSubscriber({
@@ -180,7 +188,7 @@ useScaffoldEventSubscriber({
 
 ### useScaffoldEventHistory:
 
-Retrieves historical event logs for a specified contract, providing insight into past activity.
+Retrieves historical event logs for your contract, providing past activity data.
 
 ```ts
 const {
@@ -200,7 +208,7 @@ const {
 
 ### useDeployedContractInfo:
 
-A hook for retrieving information about a deployed smart contract.
+Fetches details from your contract, including ABI and address.
 
 ```ts
 //contractName: name of the deployed contract
@@ -209,8 +217,8 @@ const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
 ### useScaffoldContract:
 
-A hook for getting a deployed smart contract instance by contract name and interacting with it.
-It can also be used to read from and write to the deployed smart contract.
+Get your contract instance by providing the contract name. Lets you interact with your contract methods.  
+For reading data or sending transactions, it's recommended to use `useScaffoldContractRead` and `useScaffoldContractWrite`.
 
 ```ts
 const { data: yourContract } = useScaffoldContract({
