@@ -7,7 +7,7 @@ import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
 const enablePolling = false;
 
 /**
- * Get the price of ETH based on ETH/DAI trading pair from Uniswap SDK
+ * Get the price of Native Currency based on Native Token/DAI trading pair from Uniswap SDK
  * @returns nativeCurrencyPrice: number
  */
 export const useNativeCurrencyPrice = () => {
