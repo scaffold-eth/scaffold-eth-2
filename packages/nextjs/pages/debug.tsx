@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
@@ -8,6 +8,19 @@ const Debug: NextPage = () => {
   const contractNames = getContractNames();
   const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
 
+  useEffect(() => {
+    const selectedContract = localStorage.getItem("selectedContract") as ContractName;
+    if (selectedContract && contractNames.includes(selectedContract)) {
+      setSelectedContract(selectedContract);
+    } else {
+      localStorage.setItem("selectedContract", contractNames[0] as string);
+      setSelectedContract(contractNames[0]);
+    }
+  }, [contractNames]);
+  const changeSelectedContact = (contractName: ContractName) => {
+    localStorage.setItem("selectedContract", contractName as string);
+    setSelectedContract(contractName);
+  };
   return (
     <>
       <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
@@ -23,7 +36,7 @@ const Debug: NextPage = () => {
                       contractName === selectedContract ? "bg-base-300" : "bg-base-100"
                     }`}
                     key={contractName}
-                    onClick={() => setSelectedContract(contractName)}
+                    onClick={() => changeSelectedContact(contractName)}
                   >
                     {contractName}
                   </button>
