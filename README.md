@@ -149,7 +149,7 @@ const { data: totalCounter } = useScaffoldContractRead({
 Use this hook to write to your deployed contracts.
 
 ```ts
-const { writeAsync, isLoading } = useScaffoldContractRead({
+const { writeAsync, isLoading } = useScaffoldContractWrite({
   contractName: "YourContract",
   functionName: "setGreeting",
   args: ["The value to set"],
