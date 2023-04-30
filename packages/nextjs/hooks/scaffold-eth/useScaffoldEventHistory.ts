@@ -1,4 +1,4 @@
-import { ContractAbi, ContractName, EventFilters } from "~~/utils/scaffold-eth/contract";
+import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
 import { ExtractAbiEventNames } from "abitype";
 import { useProvider, useContract } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -27,15 +27,7 @@ export const useScaffoldEventHistory = <
   blockData,
   transactionData,
   receiptData,
-}: {
-  contractName: TContractName;
-  eventName: TEventName;
-  fromBlock: number;
-  filters?: EventFilters<TContractName, TEventName>;
-  blockData?: boolean;
-  transactionData?: boolean;
-  receiptData?: boolean;
-}) => {
+}: UseScaffoldEventHistoryConfig<TContractName, TEventName>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();

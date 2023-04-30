@@ -174,21 +174,6 @@ export type UseScaffoldEventConfig<
   }
 >;
 
-export type UseScaffoldEventHistoryConfig<
-  TContractName extends ContractName,
-  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
-  TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
-> = {
-  contractName: TContractName;
-} & IsContractsFileMissing<
-  UseContractEventConfig,
-  {
-    eventName: TEventName;
-    listener: (...args: TEventInputs) => void;
-    once?: boolean;
-  }
->;
-
 type IndexedEventInputs<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
@@ -208,3 +193,16 @@ export type EventFilters<
         >]?: AbiParameterToPrimitiveType<Extract<IndexedEventInputs<TContractName, TEventName>, { name: Key }>>;
       }
 >;
+
+export type UseScaffoldEventHistoryConfig<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+> = {
+  contractName: TContractName;
+  eventName: IsContractsFileMissing<string, TEventName>;
+  fromBlock: number;
+  filters?: EventFilters<TContractName, TEventName>;
+  blockData?: boolean;
+  transactionData?: boolean;
+  receiptData?: boolean;
+};
