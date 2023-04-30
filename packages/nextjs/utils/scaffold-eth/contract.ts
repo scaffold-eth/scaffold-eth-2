@@ -1,4 +1,11 @@
-import { Abi, AbiParametersToPrimitiveTypes, ExtractAbiEvent, ExtractAbiEventNames, ExtractAbiFunction } from "abitype";
+import {
+  Abi,
+  AbiParameterToPrimitiveType,
+  AbiParametersToPrimitiveTypes,
+  ExtractAbiEvent,
+  ExtractAbiEventNames,
+  ExtractAbiFunction,
+} from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
@@ -165,4 +172,39 @@ export type UseScaffoldEventConfig<
     listener: (...args: TEventInputs) => void;
     once?: boolean;
   }
+>;
+
+export type UseScaffoldEventHistoryConfig<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
+> = {
+  contractName: TContractName;
+} & IsContractsFileMissing<
+  UseContractEventConfig,
+  {
+    eventName: TEventName;
+    listener: (...args: TEventInputs) => void;
+    once?: boolean;
+  }
+>;
+
+type IndexedEventInputs<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+> = Extract<AbiEventInputs<ContractAbi<TContractName>, TEventName>[number], { indexed: true }>;
+
+export type EventFilters<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+> = IsContractsFileMissing<
+  any,
+  IndexedEventInputs<TContractName, TEventName> extends never
+    ? never
+    : {
+        [Key in IsContractsFileMissing<
+          any,
+          IndexedEventInputs<TContractName, TEventName>["name"]
+        >]?: AbiParameterToPrimitiveType<Extract<IndexedEventInputs<TContractName, TEventName>, { name: Key }>>;
+      }
 >;
