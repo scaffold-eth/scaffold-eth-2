@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { utils } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
@@ -23,6 +23,7 @@ export const useScaffoldContractWrite = <
   functionName,
   args,
   value,
+  gasLimit,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
@@ -40,6 +41,7 @@ export const useScaffoldContractWrite = <
     functionName: functionName as any,
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
+      gasLimit: gasLimit ? BigNumber.from(gasLimit) : undefined // include gasLimit if provided
     },
     ...writeConfig,
   });

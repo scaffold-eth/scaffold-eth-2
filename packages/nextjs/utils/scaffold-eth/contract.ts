@@ -143,7 +143,8 @@ export type UseScaffoldWriteConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
   contractName: TContractName;
-  value?: string;
+    value?: string;
+    gasLimit?: string;
 } & IsContractsFileMissing<
   Partial<UseContractWriteConfig> & { args?: unknown[] },
   {
