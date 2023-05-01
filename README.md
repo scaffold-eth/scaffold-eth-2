@@ -124,8 +124,6 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Make sure your `packages/nextjs/scaffold.config.ts` file has the values you need.**
 
-**Hint**: We recommend connecting the project GitHub repo to Vercel so you the gets automatically deployed when pushing to `main`
-
 ## Interacting with your Smart Contracts: SE-2 Custom Hooks
 
 Scaffold-ETH 2 provides a collection of custom React hooks designed to simplify interactions with your deployed smart contracts. These hooks are wrappers around `wagmi`, automatically loading the necessary contract ABI and address. They offer an easy-to-use interface for reading from, writing to, and monitoring events emitted by your smart contracts.  
