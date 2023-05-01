@@ -116,7 +116,9 @@ yarn verify --network network_name
 
 ## Deploying your NextJS App
 
-Run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
+**Hint**: We recommend connecting your GitHub repo to Vercel (through the Vercel UI) so it gets automatically deployed when pushing to `main`.
+
+If you want to deploy directly from the CLI, run `yarn vercel` and follow the steps to deploy to Vercel. Once you log in (email, github, etc), the default options should work. It'll give you a public URL.
 
 If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
 
@@ -264,13 +266,15 @@ To disable this, go to `.husky/pre-commit` file and comment out `yarn lint-stage
 
 ### Deploying to Vercel without any checks
 
-Vercel by default runs types and lint checks while developing `build` and deployment fails if there is a types or lint error.
+By default, Vercel runs types and lint checks before building your app. The deployment will fail if there are any types or lint errors.
 
-To ignore types and lint error checks while deploying, use :
+To ignore these checks while deploying from the CLI, use:
 
 ```shell
 yarn vercel:yolo
 ```
+
+If your repo is connected to Vercel, you can set `NEXT_PUBLIC_IGNORE_BUILD_ERROR` to `true` in a [environment variable](https://vercel.com/docs/concepts/projects/environment-variables).
 
 ### Disabling Github Workflow
 
