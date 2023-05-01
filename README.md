@@ -159,6 +159,8 @@ const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
   args: ["The value to set"],
   // For payable functions, expressed in ETH
   value: "0.01",
+  // An Optional overide for setting custom gasLimit.
+  gasLimit: "500000",
 });
 ```
 
