@@ -14,7 +14,7 @@ type TAppStore = {
   setNativeCurrencyPrice: (newNativeCurrencyPriceState: number) => void;
 };
 
-export const useAppStore = create<TAppStore>(set => ({
+export const useAppState = create<TAppStore>(set => ({
   nativeCurrencyPrice: 0,
   setNativeCurrencyPrice: (newValue: number): void => set(() => ({ nativeCurrencyPrice: newValue })),
 }));
