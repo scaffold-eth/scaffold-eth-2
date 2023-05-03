@@ -65,7 +65,7 @@ export const RainbowKitCustomConnectButton = () => {
               return (
                 <div className="px-2 flex justify-end items-center">
                   <div className="flex justify-center items-center border-1 rounded-lg">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center mr-1">
                       <Balance address={account.address} className="min-h-0 h-auto" />
                       <span className="text-xs" style={{ color: networkColor }}>
                         {chain.name}
