@@ -56,7 +56,7 @@ export const useScaffoldEventHistory = <
 
         if (indexedParameters.length > 0 && filters) {
           const indexedTopics = indexedParameters.map(input => {
-            const value = filters[input.name];
+            const value = (filters as any)[input.name];
             if (value === undefined) {
               return null;
             }
