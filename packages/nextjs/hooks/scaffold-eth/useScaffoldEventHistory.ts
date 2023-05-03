@@ -1,9 +1,9 @@
-import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
+import { useEffect, useState } from "react";
 import { ExtractAbiEventNames } from "abitype";
-import { useProvider, useContract } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { ethers } from "ethers";
-import { useEffect, useState } from 'react';
+import { useContract, useProvider } from "wagmi";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev reads events from a deployed contract
@@ -44,24 +44,24 @@ export const useScaffoldEventHistory = <
     async function readEvents() {
       try {
         if (!deployedContractData || !contract) {
-          throw new Error("Contract not found")
+          throw new Error("Contract not found");
         }
 
         const fragment = contract.interface.getEvent(eventName);
-        const emptyIface = new ethers.utils.Interface([])
-        const topicHash = emptyIface.getEventTopic(fragment)
-        const topics = <any>[topicHash];
+        const emptyIface = new ethers.utils.Interface([]);
+        const topicHash = emptyIface.getEventTopic(fragment);
+        const topics = [topicHash] as any[];
 
-        const indexedParameters = fragment.inputs.filter((input) => input.indexed);
+        const indexedParameters = fragment.inputs.filter(input => input.indexed);
 
         if (indexedParameters.length > 0 && filters) {
-          const indexedTopics = indexedParameters.map((input) => {
+          const indexedTopics = indexedParameters.map(input => {
             const value = filters[input.name];
             if (value === undefined) {
               return null;
             }
             if (Array.isArray(value)) {
-              return value.map((v) => ethers.utils.hexZeroPad(ethers.utils.hexlify(v), 32));
+              return value.map(v => ethers.utils.hexZeroPad(ethers.utils.hexlify(v), 32));
             }
             return ethers.utils.hexZeroPad(ethers.utils.hexlify(value), 32);
           });
@@ -93,13 +93,12 @@ export const useScaffoldEventHistory = <
             block: block,
             transaction: transaction,
             receipt: receipt,
-          }
+          };
           newEvents.push(log);
         }
         setEvents(newEvents);
         setError(undefined);
-      }
-      catch (e: any) {
+      } catch (e: any) {
         console.error(e);
         setEvents(undefined);
         setError(e);
@@ -122,7 +121,7 @@ export const useScaffoldEventHistory = <
     filters,
     blockData,
     transactionData,
-    receiptData
+    receiptData,
   ]);
 
   return {
