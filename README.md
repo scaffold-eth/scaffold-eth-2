@@ -167,7 +167,7 @@ const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
 });
 ```
 
-To send the transaction, you can call the writeAsync function returned by the hook. Here's an example usage:
+To send the transaction, you can call the `writeAsync` function returned by the hook. Here's an example usage:
 
 ```ts
 <button className="btn btn-primary" onClick={writeAsync}>
@@ -175,7 +175,7 @@ To send the transaction, you can call the writeAsync function returned by the ho
 </button>
 ```
 
-This example sends a transaction to the `YourContract` smart contract to call the `setGreeting` function with the arguments passed in `args`. The writeAsync function sends the transaction to the smart contract, and the isLoading and isMining properties indicate whether the transaction is currently being processed by the network.
+This example sends a transaction to the `YourContract` smart contract to call the `setGreeting` function with the arguments passed in `args`. The `writeAsync` function sends the transaction to the smart contract, and the `isLoading` and `isMining` properties indicate whether the transaction is currently being processed by the network.
 
 ### useScaffoldEventSubscriber:
 
@@ -259,7 +259,7 @@ const setGreeting = async () => {
 };
 ```
 
-This example uses the  `useScaffoldContract ` hook to obtain a contract instance for the  `YourContract ` smart contract. The data property of the returned object contains the contract instance that can be used to call any of the smart contract methods.
+This example uses the `useScaffoldContract` hook to obtain a contract instance for the `YourContract` smart contract. The data property of the returned object contains the contract instance that can be used to call any of the smart contract methods.
 
 ## Disabling type and linting error checks
 
