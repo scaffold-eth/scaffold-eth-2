@@ -67,6 +67,20 @@ const config: HardhatUserConfig = {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
+    gnosis: {
+      url: `https://rpc.ap-southeast-1.gateway.fm/v4/gnosis/non-archival/mainnet`,
+      httpHeaders: {
+        authorization: `Bearer ${process.env.GATEWAY_API_KEY}`,
+      },
+      accounts: [deployerPrivateKey],
+    },
+    gnosisChiado: {
+      url: `https://rpc.eu-central-2.gateway.fm/v4/gnosis/archival/chiado`,
+      httpHeaders: {
+        authorization: `Bearer ${process.env.GATEWAY_API_KEY}`,
+      },
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
