@@ -31,6 +31,8 @@ export const useScaffoldContractWrite = <
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
+  const { overrides, ...restConfig } = writeConfig;
+
   const wagmiContractWrite = useContractWrite({
     mode: "recklesslyUnprepared",
     chainId: configuredNetwork.id,
@@ -40,9 +42,9 @@ export const useScaffoldContractWrite = <
     functionName: functionName as any,
     overrides: {
       value: value ? utils.parseEther(value) : undefined,
-      ...writeConfig.overrides,
+      ...overrides,
     },
-    ...writeConfig,
+    ...restConfig,
   });
 
   const sendContractWriteTx = async () => {
