@@ -7,6 +7,7 @@ import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-bur
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const walletIdStorageKey = "scaffoldEth2.wallet";
+const SAFE_ID = "safe";
 
 /**
  * This function will get the initial wallet connector (if any), the app will connect to
@@ -18,27 +19,30 @@ const getInitialConnector = (
   previousWalletId: string,
   connectors: Connector<any, any, any>[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
-  const burnerConfig = scaffoldConfig.burnerWallet;
-  const targetNetwork = getTargetNetwork();
+  const connectorMap = new Map<string, Connector>();
+  connectors.forEach(connector => connectorMap.set(connector.id, connector));
 
-  const allowBurner = burnerConfig.enabled && (burnerConfig.onlyLocal ? targetNetwork.id === hardhat.id : true);
+  // Look for the SAFE connector instance and connect to it instantly if loaded in SAFE frame
+  const safeConnectorInstance = connectorMap.get(SAFE_ID)?.ready ? connectorMap.get(SAFE_ID) : undefined;
+  if (safeConnectorInstance) {
+    return { connector: safeConnectorInstance };
+  }
 
-  if (!previousWalletId) {
-    // The user was not connected to a wallet
-    if (allowBurner && scaffoldConfig.walletAutoConnect) {
-      const connector = connectors.find(f => f.id === burnerWalletId);
-      return { connector, chainId: defaultBurnerChainId };
-    }
-  } else {
-    // the user was connected to wallet
+  const burnerWalletConfig = scaffoldConfig.burnerWallet;
+  const allowBurner =
+    burnerWalletConfig.enabled && (burnerWalletConfig.onlyLocal ? getTargetNetwork().id === hardhat.id : true);
+
+  // Check if the user was previously connected to a wallet
+  if (previousWalletId) {
     if (scaffoldConfig.walletAutoConnect) {
-      if (previousWalletId === burnerWalletId && !allowBurner) {
-        return;
-      }
+      // Don't connect if the user was previously connected to the burner wallet and burner is not allowed
+      if (previousWalletId === burnerWalletId && !allowBurner) return undefined;
 
-      const connector = connectors.find(f => f.id === previousWalletId);
-      return { connector };
+      return { connector: connectorMap.get(previousWalletId) };
     }
+  } else if (scaffoldConfig.walletAutoConnect && allowBurner) {
+    // If the user was not previously connected to a wallet, connect to the burner wallet if allowed
+    return { connector: connectorMap.get(burnerWalletId), chainId: defaultBurnerChainId };
   }
 
   return undefined;
