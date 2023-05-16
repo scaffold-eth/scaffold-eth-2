@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { useAccount } from "wagmi";
 import {
@@ -38,6 +38,10 @@ export const ContractData = () => {
     },
   });
 
+  const filters = useMemo(() => {
+    return { greetingSetter: address };
+  }, [address]);
+
   const {
     data: myGreetingChangeEvents,
     isLoading: isLoadingEvents,
@@ -46,7 +50,7 @@ export const ContractData = () => {
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
-    filters: { greetingSetter: address },
+    filters: filters,
     blockData: true,
   });
 
