@@ -50,6 +50,7 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
     }
 
     let notificationId = null;
+    let transactionReceipt: TransactionReceipt | undefined;
     let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
     try {
       const provider = signer.provider;
@@ -71,18 +72,19 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
       notificationId = notification.loading(
         <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
       );
-
-      const transactionReceipt = await transactionResponse.wait(options?.blockConfirmations);
+      transactionReceipt = await transactionResponse.wait();
       notification.remove(notificationId);
 
-      notification.success(
-        <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
-        {
-          icon: "🎉",
-        },
-      );
+      if (transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
+        notification.success(
+          <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
+          {
+            icon: "🎉",
+          },
+        );
 
-      if (options?.onBlockConfirmation) options.onBlockConfirmation(transactionReceipt);
+        if (options.callback != null) callback({ ...transactionResponse, ...transactionReceipt });
+      }
     } catch (error: any) {
       if (notificationId) {
         notification.remove(notificationId);
