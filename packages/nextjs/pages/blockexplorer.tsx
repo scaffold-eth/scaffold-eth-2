@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { BlockWithTransactions } from "@ethersproject/abstract-provider";
+import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 
@@ -62,8 +62,8 @@ const Blockexplorer: NextPage = () => {
             </tr>
           </thead>
           <tbody>
-            {blocks.map(block =>
-              block.transactions.map(tx => {
+            {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
+              block.transactions.map((tx: TransactionResponse) => {
                 const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
                 const shortFrom = `${tx.from.substring(0, 6)}...${tx.from.substring(tx.from.length - 4)}`;
                 const shortTo = tx.to ? `${tx.to.substring(0, 6)}...${tx.to.substring(tx.to.length - 4)}` : "";
@@ -83,7 +83,9 @@ const Blockexplorer: NextPage = () => {
                     {/* TODO: add clickable copy icon */}
                     <td className="border px-4 py-2">
                       {" "}
-                      <Link href={`/transaction/${tx.hash}`}>{shortTxHash}</Link>
+                      <Link className="text-blue-500 underline" href={`/transaction/${tx.hash}`}>
+                        {shortTxHash}
+                      </Link>
                     </td>
                     <td className="border px-4 py-2">{functionCalled === "0x" ? "" : functionCalled}</td>
                     <td className="border px-4 py-2 w-20">{block.number}</td>
