@@ -80,9 +80,7 @@ const Blockexplorer: NextPage = () => {
 
                 return (
                   <tr key={tx.hash}>
-                    {/* TODO: add clickable copy icon */}
                     <td className="border px-4 py-2">
-                      {" "}
                       <Link className="text-blue-500 underline" href={`/transaction/${tx.hash}`}>
                         {shortTxHash}
                       </Link>
@@ -90,8 +88,18 @@ const Blockexplorer: NextPage = () => {
                     <td className="border px-4 py-2">{functionCalled === "0x" ? "" : functionCalled}</td>
                     <td className="border px-4 py-2 w-20">{block.number}</td>
                     <td className="border px-4 py-2">{timeMined}</td>
-                    <td className="border px-4 py-2">{shortFrom}</td>
-                    <td className="border px-4 py-2">{shortTo}</td>
+                    <td className="border px-4 py-2">
+                      <Link className="text-blue-500 underline" href={`/address/${tx.from}`}>
+                        {shortFrom}
+                      </Link>
+                    </td>
+                    <td className="border px-4 py-2">
+                      {tx.to && (
+                        <Link className="text-blue-500 underline" href={`/address/${tx.to}`}>
+                          {shortTo}
+                        </Link>
+                      )}
+                    </td>
                     <td className="border px-4 py-2">{ethers.utils.formatEther(tx.value)} ETH</td>
                   </tr>
                 );
