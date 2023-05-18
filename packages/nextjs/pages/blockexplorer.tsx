@@ -6,6 +6,8 @@ import { ethers } from "ethers";
 import type { NextPage } from "next";
 
 // TODO: Use pages instead of showing the last 10 transactions
+// TODO: Add a search bar
+// TODO: Make the addresses copiable
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -130,7 +132,7 @@ const Blockexplorer: NextPage = () => {
                         )
                       ) : (
                         <Link className="text-blue-500 underline" href={`/address/${receipt.contractAddress}`}>
-                          {shortContract}
+                          Contract Creation: {shortContract}
                         </Link>
                       )}
                     </td>
