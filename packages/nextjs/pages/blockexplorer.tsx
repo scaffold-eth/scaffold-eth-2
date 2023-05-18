@@ -5,8 +5,13 @@ import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstr
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 
+// TODO: Use pages instead of showing the last 10 transactions
+
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
+  const [transactionReceipts, setTransactionReceipts] = useState<{
+    [key: string]: ethers.providers.TransactionReceipt;
+  }>({});
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
@@ -14,14 +19,20 @@ const Blockexplorer: NextPage = () => {
     const fetchBlocks = async () => {
       const blockNumber = await provider.getBlockNumber();
       const blocks: BlockWithTransactions[] = [];
+      const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
 
       for (let i = 0; i < 10; i++) {
         const block = await provider.getBlockWithTransactions(blockNumber - i);
         console.log("getting the most recent 10 blocks");
-
         blocks.push(block);
+        for (const tx of block.transactions) {
+          const receipt = await provider.getTransactionReceipt(tx.hash);
+          receipts[tx.hash] = receipt;
+        }
       }
+
       setBlocks(blocks);
+      setTransactionReceipts(receipts);
 
       console.log(blocks);
 
@@ -33,6 +44,14 @@ const Blockexplorer: NextPage = () => {
 
         if (!blocks.some(block => block.number === newBlock.number)) {
           setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, 9)]);
+
+          for (const tx of newBlock.transactions) {
+            const receipt = await provider.getTransactionReceipt(tx.hash);
+            setTransactionReceipts(prevReceipts => ({
+              ...prevReceipts,
+              [tx.hash]: receipt,
+            }));
+          }
         }
       });
     };
@@ -47,7 +66,6 @@ const Blockexplorer: NextPage = () => {
 
   return (
     <div className="m-10">
-      <h1 className="text-4xl mb-6 text-center">Block Explorer</h1>
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border-2 border-gray-200 shadow-md overflow-hidden rounded-lg">
           <thead className="text-left">
@@ -64,9 +82,19 @@ const Blockexplorer: NextPage = () => {
           <tbody>
             {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
               block.transactions.map((tx: TransactionResponse) => {
+                const receipt = transactionReceipts[tx.hash];
+
                 const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
                 const shortFrom = `${tx.from.substring(0, 6)}...${tx.from.substring(tx.from.length - 4)}`;
                 const shortTo = tx.to ? `${tx.to.substring(0, 6)}...${tx.to.substring(tx.to.length - 4)}` : "";
+
+                // Add the following line
+                const shortContract =
+                  receipt && receipt.contractAddress
+                    ? `${receipt.contractAddress.substring(0, 6)}...${receipt.contractAddress.substring(
+                        receipt.contractAddress.length - 4,
+                      )}`
+                    : "";
                 const date = new Date(block.timestamp * 1000);
                 const month = String(date.getMonth() + 1).padStart(2, "0");
                 const day = String(date.getDate()).padStart(2, "0");
@@ -94,9 +122,15 @@ const Blockexplorer: NextPage = () => {
                       </Link>
                     </td>
                     <td className="border px-4 py-2">
-                      {tx.to && (
-                        <Link className="text-blue-500 underline" href={`/address/${tx.to}`}>
-                          {shortTo}
+                      {!receipt?.contractAddress ? (
+                        tx.to && (
+                          <Link className="text-blue-500 underline" href={`/address/${tx.to}`}>
+                            {shortTo}
+                          </Link>
+                        )
+                      ) : (
+                        <Link className="text-blue-500 underline" href={`/address/${receipt.contractAddress}`}>
+                          {shortContract}
                         </Link>
                       )}
                     </td>
