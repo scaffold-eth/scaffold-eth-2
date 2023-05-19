@@ -50,12 +50,10 @@ const Blockexplorer: NextPage = () => {
   };
 
   const handleSearch = async () => {
-    // Clear previous search results
     setSearchedBlock(null);
     setSearchedTransaction(null);
     setSearchedAddress(null);
 
-    // Check if the input is a transaction hash
     if (ethers.utils.isHexString(searchInput)) {
       try {
         const tx = await provider.getTransaction(searchInput);
@@ -84,7 +82,6 @@ const Blockexplorer: NextPage = () => {
       const newBlock = await provider.getBlockWithTransactions(blockNumber);
 
       if (!blocks.some(block => block.number === newBlock.number)) {
-        // Only update if we're on the first page.
         if (currentPage === 0) {
           setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, blocksPerPage - 1)]);
 
@@ -96,8 +93,6 @@ const Blockexplorer: NextPage = () => {
             }));
           }
         }
-
-        // Update the total number of blocks.
         setTotalBlocks(blockNumber + 1);
       }
     });
@@ -115,7 +110,7 @@ const Blockexplorer: NextPage = () => {
           className="border border-gray-200 p-2 mr-2 w-full md:w-1/2 lg:w-1/2 rounded-md"
           placeholder="Search by hash or address"
           value={searchInput}
-          onChange={e => setSearchInput(e.target.value)}
+          onChange={e => setSearchInput(e.target.value.trim())}
         />
 
         <button className="btn btn-primary" onClick={handleSearch}>
