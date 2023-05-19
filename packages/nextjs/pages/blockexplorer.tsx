@@ -6,6 +6,10 @@ import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
 
+// TODO: Add OPCODES and maybe STORAGE for contracts
+// TODO: Better pagination(some pages have less than 10 blocks)
+// TODO: Show the function being called along with the method id
+
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
   const [transactionReceipts, setTransactionReceipts] = useState<{
