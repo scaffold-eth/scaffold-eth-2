@@ -1,54 +1,64 @@
 import React, { useEffect, useState } from "react";
-// import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
 
-// TODO: Use pages instead of showing the last 10 transactions
+// --DONE--: Use pages instead of showing the last 10 transactions
 // TODO: http://localhost:3000/blockexplorer/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 or http://localhost:3000/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 ?
 // TODO: Add a search bar
 // --DONE--: Make the addresses copiable
-// maybe use the built in address component? but it does not use next link?
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
   const [transactionReceipts, setTransactionReceipts] = useState<{
     [key: string]: ethers.providers.TransactionReceipt;
   }>({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalBlocks, setTotalBlocks] = useState(0);
+  const blocksPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-  useEffect(() => {
-    const fetchBlocks = async () => {
-      const blockNumber = await provider.getBlockNumber();
-      const blocks: BlockWithTransactions[] = [];
-      const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
+  const fetchBlocks = async () => {
+    const blockNumber = await provider.getBlockNumber();
+    setTotalBlocks(blockNumber);
+    const blocks: BlockWithTransactions[] = [];
+    const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
 
-      for (let i = 0; i < 10; i++) {
-        const block = await provider.getBlockWithTransactions(blockNumber - i);
-        console.log("getting the most recent 10 blocks");
-        blocks.push(block);
-        for (const tx of block.transactions) {
-          const receipt = await provider.getTransactionReceipt(tx.hash);
-          receipts[tx.hash] = receipt;
-        }
+    const startingBlock = blockNumber - currentPage * blocksPerPage;
+    for (let i = 0; i < blocksPerPage; i++) {
+      const blockNumberToFetch = startingBlock - i;
+      if (blockNumberToFetch < 0) {
+        break;
       }
 
-      setBlocks(blocks);
-      setTransactionReceipts(receipts);
+      const block = await provider.getBlockWithTransactions(blockNumberToFetch);
+      blocks.push(block);
 
-      console.log(blocks);
+      for (const tx of block.transactions) {
+        const receipt = await provider.getTransactionReceipt(tx.hash);
+        receipts[tx.hash] = receipt;
+      }
+    }
 
-      provider.removeAllListeners("block");
+    setBlocks(blocks);
+    setTransactionReceipts(receipts);
+  };
 
-      provider.on("block", async blockNumber => {
-        console.log("XXX New block event received", blockNumber);
-        const newBlock = await provider.getBlockWithTransactions(blockNumber);
+  useEffect(() => {
+    fetchBlocks();
+  }, [currentPage]);
 
-        if (!blocks.some(block => block.number === newBlock.number)) {
-          setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, 9)]);
+  useEffect(() => {
+    provider.on("block", async blockNumber => {
+      const newBlock = await provider.getBlockWithTransactions(blockNumber);
+
+      if (!blocks.some(block => block.number === newBlock.number)) {
+        // Only update if we're on the first page.
+        if (currentPage === 0) {
+          setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, blocksPerPage - 1)]);
 
           for (const tx of newBlock.transactions) {
             const receipt = await provider.getTransactionReceipt(tx.hash);
@@ -58,16 +68,16 @@ const Blockexplorer: NextPage = () => {
             }));
           }
         }
-      });
-    };
 
-    fetchBlocks();
+        // Update the total number of blocks.
+        setTotalBlocks(blockNumber + 1);
+      }
+    });
 
     return () => {
-      console.log("XXX Removing listener");
       provider.off("block");
     };
-  }, []);
+  }, [blocks, currentPage]);
 
   return (
     <div className="m-10">
@@ -131,6 +141,27 @@ const Blockexplorer: NextPage = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-end mt-5">
+        <button
+          className={`btn btn-secondary btn-sm  ${
+            currentPage === 0 ? "bg-gray-200 cursor-default" : "bg-blue-500 text-white"
+          }`}
+          disabled={currentPage === 0}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          {"<"}
+        </button>
+        <span className="mr-2 ml-2 self-center">Page {currentPage + 1}</span>
+        <button
+          className={`btn btn-secondary btn-sm  ${
+            (currentPage + 1) * blocksPerPage >= totalBlocks ? "bg-gray-200 cursor-default" : "bg-blue-500 text-white"
+          }`}
+          disabled={(currentPage + 1) * blocksPerPage >= totalBlocks}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          {">"}
+        </button>
       </div>
     </div>
   );
