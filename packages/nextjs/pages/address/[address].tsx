@@ -10,6 +10,9 @@ const AddressPage: NextPage = () => {
   const address = typeof router.query.address === "string" ? router.query.address : "";
   const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   const [balance, setBalance] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const transactionsPerPage = 10;
+
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
   useEffect(() => {
@@ -28,7 +31,7 @@ const AddressPage: NextPage = () => {
 
       const fetchedTransactions: TransactionResponse[] = [];
 
-      for (let i = currentBlockNumber; i >= 0 && fetchedTransactions.length < 10; i--) {
+      for (let i = currentBlockNumber; i >= 0; i--) {
         const block = await provider.getBlockWithTransactions(i);
 
         for (const tx of block.transactions) {
@@ -37,9 +40,6 @@ const AddressPage: NextPage = () => {
             (tx.to && tx.to.toLowerCase() === address.toLowerCase())
           ) {
             fetchedTransactions.push(tx);
-            if (fetchedTransactions.length >= 10) {
-              break;
-            }
           }
         }
       }
@@ -54,12 +54,19 @@ const AddressPage: NextPage = () => {
     router.back();
   };
 
+  const displayedTransactions = transactions.slice(
+    currentPage * transactionsPerPage,
+    (currentPage + 1) * transactionsPerPage,
+  );
+
+  const totalTransactions = transactions.length;
+
   return (
     <div className="flex flex-col items-center justify-center py-2 mt-8">
       <button className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={goBack}>
         Back
       </button>
-      <h1 className="text-4xl mb-6 text-center">Latest 10 Transactions for Address: {address}</h1>
+      <h1 className="text-4xl mb-6 text-center">Transactions for Address: {address}</h1>
       <p className="text-2xl text-center mb-6">Balance: {balance} ETH</p>
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border-2 border-gray-200 shadow-md overflow-hidden rounded-lg">
@@ -73,7 +80,7 @@ const AddressPage: NextPage = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map(tx => {
+            {displayedTransactions.map(tx => {
               const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
               const shortFrom = `${tx.from.substring(0, 6)}...${tx.from.substring(tx.from.length - 4)}`;
               const shortTo = tx.to ? `${tx.to.substring(0, 6)}...${tx.to.substring(tx.to.length - 4)}` : "";
@@ -104,6 +111,29 @@ const AddressPage: NextPage = () => {
             })}
           </tbody>
         </table>
+        <div className="flex justify-end mt-5">
+          <button
+            className={`px-4 py-2 mr-2 rounded-lg ${
+              currentPage === 0 ? "bg-gray-200 cursor-default" : "bg-blue-500 text-white"
+            }`}
+            disabled={currentPage === 0}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            {"<"}
+          </button>
+          <span className="mr-2">Page {currentPage + 1}</span>
+          <button
+            className={`px-4 py-2 rounded-lg ${
+              (currentPage + 1) * transactionsPerPage >= totalTransactions
+                ? "bg-gray-200 cursor-default"
+                : "bg-blue-500 text-white"
+            }`}
+            disabled={(currentPage + 1) * transactionsPerPage >= totalTransactions}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            {">"}
+          </button>
+        </div>
       </div>
     </div>
   );
