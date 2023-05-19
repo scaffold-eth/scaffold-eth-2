@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 import {
   useAnimationConfig,
   useScaffoldContract,
-  useScaffoldContractRead,
-  useScaffoldEventHistory,
+  useScaffoldContractRead, // useScaffoldEventHistory,
   useScaffoldEventSubscriber,
 } from "~~/hooks/scaffold-eth";
 
 const MARQUEE_PERIOD_IN_SEC = 5;
 
 export const ContractData = () => {
-  const { address } = useAccount();
+  // const { address } = useAccount();
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isRightDirection, setIsRightDirection] = useState(false);
   const [marqueeSpeed, setMarqueeSpeed] = useState(0);
@@ -38,19 +37,19 @@ export const ContractData = () => {
     },
   });
 
-  const {
-    data: myGreetingChangeEvents,
-    isLoading: isLoadingEvents,
-    error: errorReadingEvents,
-  } = useScaffoldEventHistory({
-    contractName: "YourContract",
-    eventName: "GreetingChange",
-    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
-    filters: { greetingSetter: address },
-    blockData: true,
-  });
+  // const {
+  //   data: myGreetingChangeEvents,
+  //   isLoading: isLoadingEvents,
+  //   error: errorReadingEvents,
+  // } = useScaffoldEventHistory({
+  //   contractName: "YourContract",
+  //   eventName: "GreetingChange",
+  //   fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+  //   filters: { greetingSetter: address },
+  //   blockData: true,
+  // });
 
-  console.log("Events:", isLoadingEvents, errorReadingEvents, myGreetingChangeEvents);
+  // console.log("Events:", isLoadingEvents, errorReadingEvents, myGreetingChangeEvents);
 
   const { data: yourContract } = useScaffoldContract({ contractName: "YourContract" });
   console.log("yourContract: ", yourContract);
