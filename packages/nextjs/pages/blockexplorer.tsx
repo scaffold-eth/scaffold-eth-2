@@ -215,7 +215,7 @@ const Blockexplorer: NextPage = () => {
           </tbody>
         </table>
       </div>
-      <div className="flex justify-end mt-5">
+      <div className="absolute right-0 bottom-0 mb-5 mr-5">
         <button
           className={`btn btn-primary btn-sm  ${currentPage === 0 ? "bg-gray-200 cursor-default" : "btn btn-primary"}`}
           disabled={currentPage === 0}
