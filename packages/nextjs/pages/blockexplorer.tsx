@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
-
-// --DONE--: Use pages instead of showing the last 10 transactions
-// TODO: http://localhost:3000/blockexplorer/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 or http://localhost:3000/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 ?
-// TODO: Add a search bar
-// --DONE--: Make the addresses copiable
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -17,6 +13,12 @@ const Blockexplorer: NextPage = () => {
   }>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchedBlock, setSearchedBlock] = useState<BlockWithTransactions | null>(null);
+  const [searchedTransaction, setSearchedTransaction] = useState<TransactionResponse | null>(null);
+  const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
+  const router = useRouter();
+
   const blocksPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -45,6 +47,32 @@ const Blockexplorer: NextPage = () => {
 
     setBlocks(blocks);
     setTransactionReceipts(receipts);
+  };
+
+  const handleSearch = async () => {
+    // Clear previous search results
+    setSearchedBlock(null);
+    setSearchedTransaction(null);
+    setSearchedAddress(null);
+
+    // Check if the input is a transaction hash
+    if (ethers.utils.isHexString(searchInput)) {
+      try {
+        const tx = await provider.getTransaction(searchInput);
+        if (tx) {
+          router.push(`/transaction/${searchInput}`);
+          return;
+        }
+      } catch (error) {
+        console.error("Failed to fetch transaction:", error);
+      }
+    }
+
+    // Check if the input is an address
+    if (ethers.utils.isAddress(searchInput)) {
+      router.push(`/address/${searchInput}`);
+      return;
+    }
   };
 
   useEffect(() => {
@@ -81,6 +109,51 @@ const Blockexplorer: NextPage = () => {
 
   return (
     <div className="m-10">
+      <div className="flex justify-end mb-5">
+        <input
+          type="text"
+          className="border border-gray-200 p-2 mr-2 w-full md:w-1/2 lg:w-1/2 rounded-md"
+          placeholder="Search by hash or address"
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
+        />
+
+        <button className="btn btn-primary" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+      {searchedBlock && (
+        <div className="mb-5">
+          <h2 className="mb-2">Searched Block: {searchedBlock.number}</h2>
+          <ul>
+            {searchedBlock.transactions.map((tx, index) => (
+              <li key={index}>{tx.hash}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {searchedTransaction && (
+        <div className="mb-5">
+          <h2 className="mb-2">Searched Transaction: {searchedTransaction.hash}</h2>
+          <p>From: {searchedTransaction.from}</p>
+          <p>To: {searchedTransaction.to}</p>
+          <p>Value: {ethers.utils.formatEther(searchedTransaction.value)} ETH</p>
+        </div>
+      )}
+      {searchedAddress && (
+        <div className="mb-5">
+          <h2 className="mb-2">Searched Address: {searchedAddress}</h2>
+          <p>Transactions related to this address:</p>
+          <ul>
+            {blocks
+              .flatMap(block => block.transactions)
+              .filter(tx => tx.from === searchedAddress || tx.to === searchedAddress)
+              .map((tx, index) => (
+                <li key={index}>{tx.hash}</li>
+              ))}
+          </ul>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border-2 border-gray-200 shadow-md overflow-hidden rounded-lg">
           <thead className="text-left">
@@ -144,9 +217,7 @@ const Blockexplorer: NextPage = () => {
       </div>
       <div className="flex justify-end mt-5">
         <button
-          className={`btn btn-secondary btn-sm  ${
-            currentPage === 0 ? "bg-gray-200 cursor-default" : "bg-blue-500 text-white"
-          }`}
+          className={`btn btn-primary btn-sm  ${currentPage === 0 ? "bg-gray-200 cursor-default" : "btn btn-primary"}`}
           disabled={currentPage === 0}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
@@ -154,8 +225,8 @@ const Blockexplorer: NextPage = () => {
         </button>
         <span className="mr-2 ml-2 self-center">Page {currentPage + 1}</span>
         <button
-          className={`btn btn-secondary btn-sm  ${
-            (currentPage + 1) * blocksPerPage >= totalBlocks ? "bg-gray-200 cursor-default" : "bg-blue-500 text-white"
+          className={`btn btn-primary btn-sm  ${
+            (currentPage + 1) * blocksPerPage >= totalBlocks ? "bg-gray-200 cursor-default" : "btn btn-primary"
           }`}
           disabled={(currentPage + 1) * blocksPerPage >= totalBlocks}
           onClick={() => setCurrentPage(currentPage + 1)}
