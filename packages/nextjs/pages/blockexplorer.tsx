@@ -4,10 +4,13 @@ import Link from "next/link";
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { Address } from "~~/components/scaffold-eth";
 
 // TODO: Use pages instead of showing the last 10 transactions
+// TODO: http://localhost:3000/blockexplorer/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 or http://localhost:3000/address/0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 ?
 // TODO: Add a search bar
-// TODO: Make the addresses copiable
+// --DONE--: Make the addresses copiable
+// maybe use the built in address component? but it does not use next link?
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -87,16 +90,6 @@ const Blockexplorer: NextPage = () => {
                 const receipt = transactionReceipts[tx.hash];
 
                 const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-                const shortFrom = `${tx.from.substring(0, 6)}...${tx.from.substring(tx.from.length - 4)}`;
-                const shortTo = tx.to ? `${tx.to.substring(0, 6)}...${tx.to.substring(tx.to.length - 4)}` : "";
-
-                // Add the following line
-                const shortContract =
-                  receipt && receipt.contractAddress
-                    ? `${receipt.contractAddress.substring(0, 6)}...${receipt.contractAddress.substring(
-                        receipt.contractAddress.length - 4,
-                      )}`
-                    : "";
                 const date = new Date(block.timestamp * 1000);
                 const month = String(date.getMonth() + 1).padStart(2, "0");
                 const day = String(date.getDate()).padStart(2, "0");
@@ -119,21 +112,16 @@ const Blockexplorer: NextPage = () => {
                     <td className="border px-4 py-2 w-20">{block.number}</td>
                     <td className="border px-4 py-2">{timeMined}</td>
                     <td className="border px-4 py-2">
-                      <Link className="text-blue-500 underline" href={`/address/${tx.from}`}>
-                        {shortFrom}
-                      </Link>
+                      <Address address={tx.from} />
                     </td>
                     <td className="border px-4 py-2">
                       {!receipt?.contractAddress ? (
-                        tx.to && (
-                          <Link className="text-blue-500 underline" href={`/address/${tx.to}`}>
-                            {shortTo}
-                          </Link>
-                        )
+                        tx.to && <Address address={tx.to} />
                       ) : (
-                        <Link className="text-blue-500 underline" href={`/address/${receipt.contractAddress}`}>
-                          Contract Creation: {shortContract}
-                        </Link>
+                        <span>
+                          Contract Creation:
+                          <Address address={receipt.contractAddress} />
+                        </span>
                       )}
                     </td>
                     <td className="border px-4 py-2">{ethers.utils.formatEther(tx.value)} ETH</td>
