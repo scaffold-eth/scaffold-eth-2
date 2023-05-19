@@ -5,7 +5,7 @@ const contracts = {
       chainId: "31337",
       contracts: {
         YourContract: {
-          address: "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf",
+          address: "0x2B0d36FACD61B71CC05ab8F3D2355ec3631C0dd5",
           abi: [
             {
               inputs: [

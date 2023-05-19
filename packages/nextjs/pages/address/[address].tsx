@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import type { TransactionResponse } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { Address } from "~~/components/scaffold-eth";
 
 const AddressPage: NextPage = () => {
   const router = useRouter();
@@ -11,6 +12,10 @@ const AddressPage: NextPage = () => {
   const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   const [balance, setBalance] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [transactionReceipts, setTransactionReceipts] = useState<{
+    [key: string]: ethers.providers.TransactionReceipt;
+  }>({});
+
   const transactionsPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -28,8 +33,8 @@ const AddressPage: NextPage = () => {
 
     const fetchTransactions = async () => {
       const currentBlockNumber = await provider.getBlockNumber();
-
       const fetchedTransactions: TransactionResponse[] = [];
+      const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
 
       for (let i = currentBlockNumber; i >= 0; i--) {
         const block = await provider.getBlockWithTransactions(i);
@@ -40,11 +45,14 @@ const AddressPage: NextPage = () => {
             (tx.to && tx.to.toLowerCase() === address.toLowerCase())
           ) {
             fetchedTransactions.push(tx);
+            const receipt = await provider.getTransactionReceipt(tx.hash);
+            receipts[tx.hash] = receipt;
           }
         }
       }
 
       setTransactions(fetchedTransactions);
+      setTransactionReceipts(receipts);
     };
 
     if (address) fetchTransactions();
@@ -82,8 +90,7 @@ const AddressPage: NextPage = () => {
           <tbody>
             {displayedTransactions.map(tx => {
               const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-              const shortFrom = `${tx.from.substring(0, 6)}...${tx.from.substring(tx.from.length - 4)}`;
-              const shortTo = tx.to ? `${tx.to.substring(0, 6)}...${tx.to.substring(tx.to.length - 4)}` : "";
+              const receipt = transactionReceipts[tx.hash];
 
               return (
                 <tr key={tx.hash}>
@@ -94,15 +101,16 @@ const AddressPage: NextPage = () => {
                   </td>
                   <td className="border px-4 py-2">{tx.blockNumber}</td>
                   <td className="border px-4 py-2">
-                    <Link className="text-blue-500 underline" href={`/address/${tx.from}`}>
-                      {shortFrom}
-                    </Link>
+                    <Address address={tx.from} />
                   </td>
                   <td className="border px-4 py-2">
-                    {tx.to && (
-                      <Link className="text-blue-500 underline" href={`/address/${tx.to}`}>
-                        {shortTo}
-                      </Link>
+                    {!receipt?.contractAddress ? (
+                      tx.to && <Address address={tx.to} />
+                    ) : (
+                      <span>
+                        Contract Creation:
+                        <Address address={receipt.contractAddress} />
+                      </span>
                     )}
                   </td>
                   <td className="border px-4 py-2">{ethers.utils.formatEther(tx.value)} ETH</td>
