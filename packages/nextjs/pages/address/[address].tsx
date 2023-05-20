@@ -5,6 +5,7 @@ import type { TransactionResponse } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const AddressPage: NextPage = () => {
   const router = useRouter();
@@ -15,22 +16,19 @@ const AddressPage: NextPage = () => {
   const [transactionReceipts, setTransactionReceipts] = useState<{
     [key: string]: ethers.providers.TransactionReceipt;
   }>({});
+  const configuredNetwork = getTargetNetwork();
 
   const transactionsPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
   useEffect(() => {
-    if (provider) {
-      provider.getBalance(address).then(balance => {
-        setBalance(ethers.utils.formatEther(balance));
-      });
-    }
+    provider.getBalance(address).then(balance => {
+      setBalance(ethers.utils.formatEther(balance));
+    });
   }, [address]);
 
   useEffect(() => {
-    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
-
     const fetchTransactions = async () => {
       const currentBlockNumber = await provider.getBlockNumber();
       const fetchedTransactions: TransactionResponse[] = [];
@@ -75,7 +73,9 @@ const AddressPage: NextPage = () => {
         Back
       </button>
       <h1 className="text-4xl mb-6 text-center">Transactions for Address: {address}</h1>
-      <p className="text-2xl text-center mb-6">Balance: {balance} ETH</p>
+      <p className="text-2xl text-center mb-6">
+        Balance: {balance} {configuredNetwork.nativeCurrency.symbol}
+      </p>
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border-2 border-gray-200 shadow-md overflow-hidden rounded-lg">
           <thead className="text-left">

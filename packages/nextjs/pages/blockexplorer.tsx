@@ -6,9 +6,12 @@ import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
+// TODO: Doing API calls to 4byte slows down showing the txs, maybe show a skeleton UI while fetching,
+// or since this is a block explorer for local hardhat network, we can just use the abi files from the contracts
 // TODO: Add OPCODES and maybe STORAGE for contracts
-// TODO: Better pagination(some pages have less than 10 blocks)
+// TODO: Better pagination(some pages have less than BLOCKS_PER_PAGE blocks)
 // TODO: Refactor
 // TODO: try useMemo to avoid unnecessary re-renders
 // TODO: Error handling for API calls
@@ -30,6 +33,8 @@ const Blockexplorer: NextPage = () => {
   const [searchedBlock, setSearchedBlock] = useState<BlockWithTransactions | null>(null);
   const [searchedTransaction, setSearchedTransaction] = useState<TransactionWithFunction | null>(null);
   const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
+  const configuredNetwork = getTargetNetwork();
+
   const router = useRouter();
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -169,7 +174,9 @@ const Blockexplorer: NextPage = () => {
           <h2 className="mb-2 text-primary">Searched Transaction: {searchedTransaction.hash}</h2>
           <p className="text-neutral-content">From: {searchedTransaction.from}</p>
           <p className="text-neutral-content">To: {searchedTransaction.to}</p>
-          <p className="text-neutral-content">Value: {ethers.utils.formatEther(searchedTransaction.value)} ETH</p>
+          <p className="text-neutral-content">
+            Value: {ethers.utils.formatEther(searchedTransaction.value)} {configuredNetwork.nativeCurrency.symbol}
+          </p>
         </div>
       )}
       {searchedAddress && (
@@ -180,8 +187,8 @@ const Blockexplorer: NextPage = () => {
             {blocks
               .flatMap(block => block.transactions)
               .filter(tx => tx.from === searchedAddress || tx.to === searchedAddress)
-              .map((tx, index) => (
-                <li key={index}>{tx.hash}</li>
+              .map(tx => (
+                <li key={tx.hash}>{tx.hash}</li>
               ))}
           </ul>
         </div>
@@ -230,7 +237,7 @@ const Blockexplorer: NextPage = () => {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
               >
-                Value (ETH)
+                Value ({configuredNetwork.nativeCurrency.symbol})
               </th>
             </tr>
           </thead>
@@ -240,15 +247,7 @@ const Blockexplorer: NextPage = () => {
                 const receipt = transactionReceipts[tx.hash];
 
                 const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-                const date = new Date(block.timestamp * 1000);
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const day = String(date.getDate()).padStart(2, "0");
-                const timeMined = `${month}/${day} ${date.toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                })}`;
+                const timeMined = new Date(block.timestamp * 1000).toLocaleString();
                 const functionCalled = tx.data.substring(0, 10);
 
                 return (
@@ -282,7 +281,9 @@ const Blockexplorer: NextPage = () => {
                         </span>
                       )}
                     </td>
-                    <td className="border px-4 py-2 text-base-content">{ethers.utils.formatEther(tx.value)} ETH</td>
+                    <td className="border px-4 py-2 text-base-content">
+                      {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
+                    </td>
                   </tr>
                 );
               }),
