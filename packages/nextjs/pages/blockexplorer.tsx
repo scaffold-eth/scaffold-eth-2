@@ -8,8 +8,15 @@ import { Address } from "~~/components/scaffold-eth";
 
 // TODO: Add OPCODES and maybe STORAGE for contracts
 // TODO: Better pagination(some pages have less than 10 blocks)
+// TODO: Refactor
+// TODO: try useMemo to avoid unnecessary re-renders
+// TODO: Error handling for API calls
+// TODO: Use react-query
+// TODO: Add tests
 
 type TransactionWithFunction = TransactionResponse & { functionName?: string };
+
+const BLOCKS_PER_PAGE = 10;
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -23,8 +30,6 @@ const Blockexplorer: NextPage = () => {
   const [searchedTransaction, setSearchedTransaction] = useState<TransactionWithFunction | null>(null);
   const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
   const router = useRouter();
-
-  const blocksPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
@@ -52,8 +57,8 @@ const Blockexplorer: NextPage = () => {
     const blocks: BlockWithTransactions[] = [];
     const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
 
-    const startingBlock = blockNumber - currentPage * blocksPerPage;
-    for (let i = 0; i < blocksPerPage; i++) {
+    const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
+    for (let i = 0; i < BLOCKS_PER_PAGE; i++) {
       const blockNumberToFetch = startingBlock - i;
       if (blockNumberToFetch < 0) {
         break;
@@ -112,7 +117,7 @@ const Blockexplorer: NextPage = () => {
 
       if (!blocks.some(block => block.number === newBlock.number)) {
         if (currentPage === 0) {
-          setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, blocksPerPage - 1)]);
+          setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
 
           for (const tx of newBlock.transactions) {
             const receipt = await provider.getTransactionReceipt(tx.hash);
@@ -136,20 +141,22 @@ const Blockexplorer: NextPage = () => {
       <div className="flex justify-end mb-5">
         <input
           type="text"
-          className="border border-gray-200 p-2 mr-2 w-full md:w-1/2 lg:w-1/2 rounded-md"
+          className="border-primary bg-base-100 text-base-content p-2 mr-2 w-full md:w-1/2 lg:w-1/3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
           placeholder="Search by hash or address"
           value={searchInput}
           onChange={e => setSearchInput(e.target.value.trim())}
         />
-
-        <button className="btn btn-primary" onClick={handleSearch}>
+        <button
+          className="btn bg-primary text-primary-content hover:bg-accent hover:text-accent-content shadow-md transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+          onClick={handleSearch}
+        >
           Search
         </button>
       </div>
       {searchedBlock && (
-        <div className="mb-5">
-          <h2 className="mb-2">Searched Block: {searchedBlock.number}</h2>
-          <ul>
+        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
+          <h2 className="mb-2 text-primary">Searched Block: {searchedBlock.number}</h2>
+          <ul className="list-disc pl-5 text-neutral-content">
             {searchedBlock.transactions.map((tx, index) => (
               <li key={index}>{tx.hash}</li>
             ))}
@@ -157,18 +164,18 @@ const Blockexplorer: NextPage = () => {
         </div>
       )}
       {searchedTransaction && (
-        <div className="mb-5">
-          <h2 className="mb-2">Searched Transaction: {searchedTransaction.hash}</h2>
-          <p>From: {searchedTransaction.from}</p>
-          <p>To: {searchedTransaction.to}</p>
-          <p>Value: {ethers.utils.formatEther(searchedTransaction.value)} ETH</p>
+        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
+          <h2 className="mb-2 text-primary">Searched Transaction: {searchedTransaction.hash}</h2>
+          <p className="text-neutral-content">From: {searchedTransaction.from}</p>
+          <p className="text-neutral-content">To: {searchedTransaction.to}</p>
+          <p className="text-neutral-content">Value: {ethers.utils.formatEther(searchedTransaction.value)} ETH</p>
         </div>
       )}
       {searchedAddress && (
-        <div className="mb-5">
-          <h2 className="mb-2">Searched Address: {searchedAddress}</h2>
-          <p>Transactions related to this address:</p>
-          <ul>
+        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
+          <h2 className="mb-2 text-primary">Searched Address: {searchedAddress}</h2>
+          <p className="text-neutral-content">Transactions related to this address:</p>
+          <ul className="list-disc pl-5 text-neutral-content">
             {blocks
               .flatMap(block => block.transactions)
               .filter(tx => tx.from === searchedAddress || tx.to === searchedAddress)
@@ -179,19 +186,24 @@ const Blockexplorer: NextPage = () => {
         </div>
       )}
       <div className="overflow-x-auto">
-        <table className="w-full table-auto border-collapse border-2 border-gray-200 shadow-md overflow-hidden rounded-lg">
-          <thead className="text-left">
+        <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
+          <thead className="bg-primary">
             <tr>
-              <th className="px-4 py-2">Transaction Hash</th>
-              <th className="px-4 py-2">Function Called</th>
-              <th className="px-4 py-2">Block Number</th>
-              <th className="px-4 py-2">Time Mined</th>
-              <th className="px-4 py-2">From</th>
-              <th className="px-4 py-2">To</th>
-              <th className="px-4 py-2">Value (ETH)</th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                Transaction Hash
+              </th>
+              <th className="px-4 py-2 text-primary-content">Function Called</th>
+              <th className="px-4 py-2 text-primary-content">Block Number</th>
+              <th className="px-4 py-2 text-primary-content">Time Mined</th>
+              <th className="px-4 py-2 text-primary-content">From</th>
+              <th className="px-4 py-2 text-primary-content">To</th>
+              <th className="px-4 py-2 text-primary-content">Value (ETH)</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
             {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
               block.transactions.map((tx: TransactionWithFunction) => {
                 const receipt = transactionReceipts[tx.hash];
@@ -209,26 +221,27 @@ const Blockexplorer: NextPage = () => {
                 const functionCalled = tx.data.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash}>
-                    <td className="border px-4 py-2">
-                      <Link className="text-blue-500 underline" href={`/transaction/${tx.hash}`}>
+                  <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                    <td className="border px-4 py-2 text-base-content">
+                      <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
                         {shortTxHash}
                       </Link>
                     </td>
-                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/3">
+
+                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/3 text-base-content">
                       {tx.functionName === "0x" ? "" : tx.functionName}
                       {functionCalled !== "0x" && (
-                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700 bg-blue-200">
+                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
                           {functionCalled}
                         </span>
                       )}
                     </td>
-                    <td className="border px-4 py-2 w-20">{block.number}</td>
-                    <td className="border px-4 py-2">{timeMined}</td>
-                    <td className="border px-4 py-2">
+                    <td className="border px-4 py-2 w-20 text-base-content">{block.number}</td>
+                    <td className="border px-4 py-2 text-base-content">{timeMined}</td>
+                    <td className="border px-4 py-2 text-base-content">
                       <Address address={tx.from} />
                     </td>
-                    <td className="border px-4 py-2">
+                    <td className="border px-4 py-2 text-base-content">
                       {!receipt?.contractAddress ? (
                         tx.to && <Address address={tx.to} />
                       ) : (
@@ -238,7 +251,7 @@ const Blockexplorer: NextPage = () => {
                         </span>
                       )}
                     </td>
-                    <td className="border px-4 py-2">{ethers.utils.formatEther(tx.value)} ETH</td>
+                    <td className="border px-4 py-2 text-base-content">{ethers.utils.formatEther(tx.value)} ETH</td>
                   </tr>
                 );
               }),
@@ -246,20 +259,26 @@ const Blockexplorer: NextPage = () => {
           </tbody>
         </table>
       </div>
-      <div className="absolute right-0 bottom-0 mb-5 mr-5">
+      <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
         <button
-          className={`btn btn-primary btn-sm  ${currentPage === 0 ? "bg-gray-200 cursor-default" : "btn btn-primary"}`}
+          className={`btn ${
+            currentPage === 0
+              ? "bg-gray-200 cursor-default"
+              : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
+          }`}
           disabled={currentPage === 0}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
           {"<"}
         </button>
-        <span className="mr-2 ml-2 self-center">Page {currentPage + 1}</span>
+        <span className="self-center text-primary font-medium">Page {currentPage + 1}</span>
         <button
-          className={`btn btn-primary btn-sm  ${
-            (currentPage + 1) * blocksPerPage >= totalBlocks ? "bg-gray-200 cursor-default" : "btn btn-primary"
+          className={`btn ${
+            currentPage + 1 >= totalBlocks
+              ? "bg-gray-200 cursor-default"
+              : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
           }`}
-          disabled={(currentPage + 1) * blocksPerPage >= totalBlocks}
+          disabled={currentPage + 1 >= Math.ceil(totalBlocks / BLOCKS_PER_PAGE)}
           onClick={() => setCurrentPage(currentPage + 1)}
         >
           {">"}
