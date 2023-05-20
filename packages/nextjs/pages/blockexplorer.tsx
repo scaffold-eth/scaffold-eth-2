@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
 // TODO: Add OPCODES and maybe STORAGE for contracts
@@ -16,7 +17,7 @@ import { Address } from "~~/components/scaffold-eth";
 
 type TransactionWithFunction = TransactionResponse & { functionName?: string };
 
-const BLOCKS_PER_PAGE = 10;
+const BLOCKS_PER_PAGE = 20;
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -137,7 +138,7 @@ const Blockexplorer: NextPage = () => {
   }, [blocks, currentPage]);
 
   return (
-    <div className="m-10">
+    <div className="m-10 mb-20">
       <div className="flex justify-end mb-5">
         <input
           type="text"
@@ -185,7 +186,7 @@ const Blockexplorer: NextPage = () => {
           </ul>
         </div>
       )}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto shadow-lg">
         <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
           <thead className="bg-primary">
             <tr>
@@ -195,12 +196,42 @@ const Blockexplorer: NextPage = () => {
               >
                 Transaction Hash
               </th>
-              <th className="px-4 py-2 text-primary-content">Function Called</th>
-              <th className="px-4 py-2 text-primary-content">Block Number</th>
-              <th className="px-4 py-2 text-primary-content">Time Mined</th>
-              <th className="px-4 py-2 text-primary-content">From</th>
-              <th className="px-4 py-2 text-primary-content">To</th>
-              <th className="px-4 py-2 text-primary-content">Value (ETH)</th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                Function Called
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                Block Number
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                Time Mined
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                From
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                To
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
+              >
+                Value (ETH)
+              </th>
             </tr>
           </thead>
           <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
@@ -228,7 +259,7 @@ const Blockexplorer: NextPage = () => {
                       </Link>
                     </td>
 
-                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/3 text-base-content">
+                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
                       {tx.functionName === "0x" ? "" : tx.functionName}
                       {functionCalled !== "0x" && (
                         <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
@@ -261,7 +292,7 @@ const Blockexplorer: NextPage = () => {
       </div>
       <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
         <button
-          className={`btn ${
+          className={`btn py-1 px-3 rounded-md text-xs ${
             currentPage === 0
               ? "bg-gray-200 cursor-default"
               : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
@@ -269,11 +300,11 @@ const Blockexplorer: NextPage = () => {
           disabled={currentPage === 0}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
-          {"<"}
+          <ArrowLeftIcon className="h-4 w-4" />
         </button>
-        <span className="self-center text-primary font-medium">Page {currentPage + 1}</span>
+        <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
         <button
-          className={`btn ${
+          className={`btn py-1 px-3 rounded-md text-xs ${
             currentPage + 1 >= totalBlocks
               ? "bg-gray-200 cursor-default"
               : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
@@ -281,7 +312,7 @@ const Blockexplorer: NextPage = () => {
           disabled={currentPage + 1 >= Math.ceil(totalBlocks / BLOCKS_PER_PAGE)}
           onClick={() => setCurrentPage(currentPage + 1)}
         >
-          {">"}
+          <ArrowRightIcon className="h-4 w-4" />
         </button>
       </div>
     </div>
