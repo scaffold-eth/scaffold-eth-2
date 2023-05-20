@@ -8,7 +8,8 @@ import { Address } from "~~/components/scaffold-eth";
 
 // TODO: Add OPCODES and maybe STORAGE for contracts
 // TODO: Better pagination(some pages have less than 10 blocks)
-// TODO: Show the function being called along with the method id
+
+type TransactionWithFunction = TransactionResponse & { functionName?: string };
 
 const Blockexplorer: NextPage = () => {
   const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
@@ -19,13 +20,31 @@ const Blockexplorer: NextPage = () => {
   const [totalBlocks, setTotalBlocks] = useState(0);
   const [searchInput, setSearchInput] = useState("");
   const [searchedBlock, setSearchedBlock] = useState<BlockWithTransactions | null>(null);
-  const [searchedTransaction, setSearchedTransaction] = useState<TransactionResponse | null>(null);
+  const [searchedTransaction, setSearchedTransaction] = useState<TransactionWithFunction | null>(null);
   const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
   const router = useRouter();
 
   const blocksPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+
+  async function getFunctionName(signature: string) {
+    const normalizedSignature = signature.startsWith("0x") ? signature.slice(2) : signature;
+
+    try {
+      const response = await fetch(
+        `https://www.4byte.directory/api/v1/signatures/?hex_signature=${normalizedSignature}`,
+      );
+      const json = await response.json();
+
+      if (json.count > 0) {
+        return json.results[0].text_signature;
+      }
+    } catch (error) {
+      console.error("Failed to fetch function name:", error);
+    }
+    return `0x${normalizedSignature}`;
+  }
 
   const fetchBlocks = async () => {
     const blockNumber = await provider.getBlockNumber();
@@ -40,12 +59,19 @@ const Blockexplorer: NextPage = () => {
         break;
       }
 
-      const block = await provider.getBlockWithTransactions(blockNumberToFetch);
+      const block = (await provider.getBlockWithTransactions(blockNumberToFetch)) as BlockWithTransactions & {
+        transactions: TransactionWithFunction[];
+      };
       blocks.push(block);
-
-      for (const tx of block.transactions) {
+      for (const tx of block.transactions as TransactionWithFunction[]) {
         const receipt = await provider.getTransactionReceipt(tx.hash);
         receipts[tx.hash] = receipt;
+
+        if (tx.data.length >= 10 && !tx.data.startsWith("0x60a06040")) {
+          const functionSignature = tx.data.substring(0, 10);
+          tx.functionName = await getFunctionName(functionSignature);
+          console.log("tx.functionName", tx.functionName);
+        }
       }
     }
 
@@ -70,7 +96,6 @@ const Blockexplorer: NextPage = () => {
       }
     }
 
-    // Check if the input is an address
     if (ethers.utils.isAddress(searchInput)) {
       router.push(`/address/${searchInput}`);
       return;
@@ -168,7 +193,7 @@ const Blockexplorer: NextPage = () => {
           </thead>
           <tbody>
             {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
-              block.transactions.map((tx: TransactionResponse) => {
+              block.transactions.map((tx: TransactionWithFunction) => {
                 const receipt = transactionReceipts[tx.hash];
 
                 const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
@@ -190,7 +215,14 @@ const Blockexplorer: NextPage = () => {
                         {shortTxHash}
                       </Link>
                     </td>
-                    <td className="border px-4 py-2">{functionCalled === "0x" ? "" : functionCalled}</td>
+                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/3">
+                      {tx.functionName === "0x" ? "" : tx.functionName}
+                      {functionCalled !== "0x" && (
+                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-gray-700 bg-blue-200">
+                          {functionCalled}
+                        </span>
+                      )}
+                    </td>
                     <td className="border px-4 py-2 w-20">{block.number}</td>
                     <td className="border px-4 py-2">{timeMined}</td>
                     <td className="border px-4 py-2">
