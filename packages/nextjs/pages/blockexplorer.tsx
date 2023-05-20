@@ -6,13 +6,13 @@ import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import deployedContracts from "~~/generated/deployedContracts";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-// TODO: Doing API calls to 4byte slows down showing the txs, maybe show a skeleton UI while fetching,
-// or since this is a block explorer for local hardhat network, we can just use the abi files from the contracts
 // TODO: Add OPCODES and maybe STORAGE for contracts
 // TODO: Better pagination(some pages have less than BLOCKS_PER_PAGE blocks)
-// TODO: Refactor
+// TODO: Refactor, seperate the table to a component
+// TODO: Don't do everything in a loop... Please...
 // TODO: try useMemo to avoid unnecessary re-renders
 // TODO: Error handling for API calls
 // TODO: Use react-query
@@ -39,31 +39,13 @@ const Blockexplorer: NextPage = () => {
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
-  async function getFunctionName(signature: string) {
-    const normalizedSignature = signature.startsWith("0x") ? signature.slice(2) : signature;
-
-    try {
-      const response = await fetch(
-        `https://www.4byte.directory/api/v1/signatures/?hex_signature=${normalizedSignature}`,
-      );
-      const json = await response.json();
-
-      if (json.count > 0) {
-        return json.results[0].text_signature;
-      }
-    } catch (error) {
-      console.error("Failed to fetch function name:", error);
-    }
-    return `0x${normalizedSignature}`;
-  }
-
   const fetchBlocks = async () => {
     const blockNumber = await provider.getBlockNumber();
     setTotalBlocks(blockNumber);
     const blocks: BlockWithTransactions[] = [];
     const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
-
     const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
+
     for (let i = 0; i < BLOCKS_PER_PAGE; i++) {
       const blockNumberToFetch = startingBlock - i;
       if (blockNumberToFetch < 0) {
@@ -73,15 +55,30 @@ const Blockexplorer: NextPage = () => {
       const block = (await provider.getBlockWithTransactions(blockNumberToFetch)) as BlockWithTransactions & {
         transactions: TransactionWithFunction[];
       };
+
       blocks.push(block);
+
+      const chain = deployedContracts[31337][0];
+      const interfaces: { [contractName: string]: ethers.utils.Interface } = {};
+
+      for (const [contractName, contract] of Object.entries(chain.contracts)) {
+        interfaces[contractName] = new ethers.utils.Interface(contract.abi);
+      }
+
       for (const tx of block.transactions as TransactionWithFunction[]) {
         const receipt = await provider.getTransactionReceipt(tx.hash);
         receipts[tx.hash] = receipt;
 
         if (tx.data.length >= 10 && !tx.data.startsWith("0x60a06040")) {
-          const functionSignature = tx.data.substring(0, 10);
-          tx.functionName = await getFunctionName(functionSignature);
-          console.log("tx.functionName", tx.functionName);
+          for (const [contractName, contractInterface] of Object.entries(interfaces)) {
+            try {
+              const decodedData = contractInterface.parseTransaction({ data: tx.data });
+              tx.functionName = `${contractName}: ${decodedData.name}`;
+              break;
+            } catch (e) {
+              console.log(`Parsing failed for contract ${contractName}: ${e}`);
+            }
+          }
         }
       }
     }
