@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
@@ -27,47 +28,79 @@ const TransactionPage: NextPage = () => {
   }, [txHash]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-2 mt-8">
+    <div className="m-10 mb-20">
       <button
-        className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="btn bg-primary text-primary-content hover:bg-accent hover:text-accent-content shadow-md transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 mb-5"
         onClick={() => router.back()}
       >
         Back
       </button>
       {transaction ? (
-        <div className="p-8 border-b border-gray-200 shadow-lg overflow-hidden rounded-lg w-3/4 bg-white">
-          <h2 className="text-3xl font-bold mb-4 text-center text-gray-700">Transaction Details</h2>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">Transaction Hash:</strong> {transaction.hash}
-          </p>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">Block Number:</strong> {transaction.blockNumber}
-          </p>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">From:</strong> {transaction.from}
-          </p>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">To:</strong> {transaction.to}
-          </p>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">Value:</strong>{" "}
-            {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
-          </p>
-          <p className="mb-4 text-gray-700">
-            <strong className="font-semibold text-gray-900">Gas Price:</strong>{" "}
-            {ethers.utils.formatUnits(transaction.gasPrice || ethers.constants.Zero, "gwei")} Gwei
-          </p>
-          <div className="mb-4">
-            <strong className="font-semibold text-gray-900 block mb-2">Data:</strong>
-            <textarea
-              readOnly
-              value={transaction.data}
-              className="w-full h-32 p-2 border-2  text-gray-900 border-gray-200 rounded resize-none overflow-auto"
-            />
-          </div>
+        <div className="overflow-x-auto shadow-lg rounded-lg bg-base p-8">
+          <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
+          <table className="min-w-full divide-y divide-primary rounded-lg bg-neutral">
+            <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Transaction Hash:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">{transaction.hash}</td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Block Number:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">{transaction.blockNumber}</td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">From:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  <Address address={transaction.from} />
+                </td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">To:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  <Address address={transaction.to} />
+                </td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Value:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
+                </td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Gas Price:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  {ethers.utils.formatUnits(transaction.gasPrice || ethers.constants.Zero, "gwei")} Gwei
+                </td>
+              </tr>
+              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Data:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  <textarea
+                    readOnly
+                    value={transaction.data}
+                    className="w-full h-32 p-2 border-2 text-base-content border-primary rounded resize-none overflow-auto"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       ) : (
-        <p className="text-2xl text-gray-700">Loading...</p>
+        <p className="text-2xl text-base-content">Loading...</p>
       )}
     </div>
   );
