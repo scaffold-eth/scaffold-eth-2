@@ -37,6 +37,8 @@ export const ContractData = () => {
     },
   });
 
+  //// the following code is commented out because it is causing infinite re-renders
+
   // const {
   //   data: myGreetingChangeEvents,
   //   isLoading: isLoadingEvents,

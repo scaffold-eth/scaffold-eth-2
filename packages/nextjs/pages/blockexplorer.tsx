@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
+import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
 import deployedContracts from "~~/generated/deployedContracts";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { Block, TransactionWithFunction } from "~~/utils/scaffold-eth/block";
 
 // TODO: Add OPCODES and maybe STORAGE for contracts
 // TODO: Better pagination(some pages have less than BLOCKS_PER_PAGE blocks)
@@ -17,12 +17,10 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 // TODO: Error handling for API calls
 // TODO: Add tests
 
-type TransactionWithFunction = TransactionResponse & { functionName?: string };
-
 const BLOCKS_PER_PAGE = 20;
 
 const Blockexplorer: NextPage = () => {
-  const [blocks, setBlocks] = useState<BlockWithTransactions[]>([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [transactionReceipts, setTransactionReceipts] = useState<{
     [key: string]: ethers.providers.TransactionReceipt;
   }>({});
@@ -30,7 +28,6 @@ const Blockexplorer: NextPage = () => {
   const [totalBlocks, setTotalBlocks] = useState(0);
   const [searchInput, setSearchInput] = useState("");
 
-  const configuredNetwork = getTargetNetwork();
   const router = useRouter();
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -38,7 +35,7 @@ const Blockexplorer: NextPage = () => {
   const fetchBlocks = async () => {
     const blockNumber = await provider.getBlockNumber();
     setTotalBlocks(blockNumber);
-    const blocks: BlockWithTransactions[] = [];
+    const fetchedBlocks: BlockWithTransactions[] = [];
     const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
     const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
 
@@ -52,7 +49,7 @@ const Blockexplorer: NextPage = () => {
         transactions: TransactionWithFunction[];
       };
 
-      blocks.push(block);
+      fetchedBlocks.push(block);
 
       const chain = deployedContracts[31337][0];
       const interfaces: { [contractName: string]: ethers.utils.Interface } = {};
@@ -79,7 +76,7 @@ const Blockexplorer: NextPage = () => {
       }
     }
 
-    setBlocks(blocks);
+    setBlocks(fetchedBlocks);
     setTransactionReceipts(receipts);
   };
 
@@ -135,11 +132,7 @@ const Blockexplorer: NextPage = () => {
   return (
     <div className="m-10 mb-20">
       <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} />
-      <TransactionsTable
-        blocks={blocks}
-        transactionReceipts={transactionReceipts}
-        configuredNetwork={configuredNetwork}
-      />
+      <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} />
       <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
         <button
           className={`btn py-1 px-3 rounded-md text-xs ${

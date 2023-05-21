@@ -1,41 +1,12 @@
 import Link from "next/link";
-import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import { Address } from "~~/components/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/block";
 
-type TransactionWithFunction = TransactionResponse & { functionName?: string };
+export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsTableProps) => {
+  const targetNetwork = getTargetNetwork();
 
-// Define your types
-interface Block {
-  hash: string;
-  transactions: TransactionWithFunction[];
-  timestamp: number;
-  number: number;
-}
-
-interface ConfiguredNetwork {
-  nativeCurrency: {
-    symbol: string;
-  };
-}
-
-interface TransactionReceipts {
-  [key: string]: {
-    contractAddress: string;
-  };
-}
-
-interface TransactionsTableProps {
-  blocks: Block[];
-  transactionReceipts: TransactionReceipts;
-  configuredNetwork: ConfiguredNetwork;
-}
-
-export const TransactionsTable: React.FC<TransactionsTableProps> = ({
-  blocks,
-  transactionReceipts,
-  configuredNetwork,
-}) => {
   return (
     <div className="overflow-x-auto shadow-lg">
       <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
@@ -81,12 +52,12 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
             >
-              Value ({configuredNetwork.nativeCurrency.symbol})
+              Value ({targetNetwork.nativeCurrency.symbol})
             </th>
           </tr>
         </thead>
         <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-          {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
+          {blocks.map(block =>
             block.transactions.map((tx: TransactionWithFunction) => {
               const receipt = transactionReceipts[tx.hash];
 
@@ -126,7 +97,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     )}
                   </td>
                   <td className="border px-4 py-2 text-base-content">
-                    {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
+                    {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
                   </td>
                 </tr>
               );
