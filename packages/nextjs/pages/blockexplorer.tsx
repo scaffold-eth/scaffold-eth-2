@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { SearchBar } from "~~/components/blockexplorer/SearchBar";
+import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
 import deployedContracts from "~~/generated/deployedContracts";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -83,7 +83,8 @@ const Blockexplorer: NextPage = () => {
     setTransactionReceipts(receipts);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (ethers.utils.isHexString(searchInput)) {
       try {
         const tx = await provider.getTransaction(searchInput);
@@ -133,119 +134,12 @@ const Blockexplorer: NextPage = () => {
 
   return (
     <div className="m-10 mb-20">
-      <div className="flex justify-end mb-5">
-        <input
-          type="text"
-          className="border-primary bg-base-100 text-base-content p-2 mr-2 w-full md:w-1/2 lg:w-1/3 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
-          placeholder="Search by hash or address"
-          value={searchInput}
-          onChange={e => setSearchInput(e.target.value.trim())}
-        />
-        <button
-          className="btn bg-primary text-primary-content hover:bg-accent hover:text-accent-content shadow-md transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
-      </div>
-      <div className="overflow-x-auto shadow-lg">
-        <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
-          <thead className="bg-primary">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                Transaction Hash
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                Function Called
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                Block Number
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                Time Mined
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                From
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                To
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-              >
-                Value ({configuredNetwork.nativeCurrency.symbol})
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-            {Array.from(blocks.reduce((map, block) => map.set(block.hash, block), new Map()).values()).map(block =>
-              block.transactions.map((tx: TransactionWithFunction) => {
-                const receipt = transactionReceipts[tx.hash];
-
-                const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-                const timeMined = new Date(block.timestamp * 1000).toLocaleString();
-                const functionCalled = tx.data.substring(0, 10);
-
-                return (
-                  <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
-                    <td className="border px-4 py-2 text-base-content">
-                      <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
-                        {shortTxHash}
-                      </Link>
-                    </td>
-
-                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
-                      {tx.functionName === "0x" ? "" : tx.functionName}
-                      {functionCalled !== "0x" && (
-                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                          {functionCalled}
-                        </span>
-                      )}
-                    </td>
-                    <td className="border px-4 py-2 w-20 text-base-content">{block.number}</td>
-                    <td className="border px-4 py-2 text-base-content">{timeMined}</td>
-                    <td className="border px-4 py-2 text-base-content">
-                      <Address address={tx.from} />
-                    </td>
-                    <td className="border px-4 py-2 text-base-content">
-                      {!receipt?.contractAddress ? (
-                        tx.to && <Address address={tx.to} />
-                      ) : (
-                        <span>
-                          Contract Creation:
-                          <Address address={receipt.contractAddress} />
-                        </span>
-                      )}
-                    </td>
-                    <td className="border px-4 py-2 text-base-content">
-                      {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
-                    </td>
-                  </tr>
-                );
-              }),
-            )}
-          </tbody>
-        </table>
-      </div>
+      <SearchBar searchInput={searchInput} setSearchInput={setSearchInput} handleSearch={handleSearch} />
+      <TransactionsTable
+        blocks={blocks}
+        transactionReceipts={transactionReceipts}
+        configuredNetwork={configuredNetwork}
+      />
       <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
         <button
           className={`btn py-1 px-3 rounded-md text-xs ${
