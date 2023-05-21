@@ -7,6 +7,8 @@ import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
+const TXS_PER_PAGE = 20;
+
 const AddressPage: NextPage = () => {
   const router = useRouter();
   const address = typeof router.query.address === "string" ? router.query.address : "";
@@ -17,8 +19,6 @@ const AddressPage: NextPage = () => {
     [key: string]: ethers.providers.TransactionReceipt;
   }>({});
   const configuredNetwork = getTargetNetwork();
-
-  const transactionsPerPage = 10;
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
@@ -56,20 +56,16 @@ const AddressPage: NextPage = () => {
     if (address) fetchTransactions();
   }, [address]);
 
-  const goBack = () => {
-    router.back();
-  };
-
-  const displayedTransactions = transactions.slice(
-    currentPage * transactionsPerPage,
-    (currentPage + 1) * transactionsPerPage,
-  );
+  const displayedTransactions = transactions.slice(currentPage * TXS_PER_PAGE, (currentPage + 1) * TXS_PER_PAGE);
 
   const totalTransactions = transactions.length;
 
   return (
     <div className="flex flex-col items-center justify-center py-2 mt-8">
-      <button className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={goBack}>
+      <button
+        className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => router.back()}
+      >
         Back
       </button>
       <h1 className="text-4xl mb-6 text-center">Transactions for Address: {address}</h1>
@@ -84,7 +80,7 @@ const AddressPage: NextPage = () => {
               <th className="px-4 py-2">Block Number</th>
               <th className="px-4 py-2">From</th>
               <th className="px-4 py-2">To</th>
-              <th className="px-4 py-2">Value (ETH)</th>
+              <th className="px-4 py-2">Value ({configuredNetwork.nativeCurrency.symbol})</th>
             </tr>
           </thead>
           <tbody>
@@ -113,7 +109,9 @@ const AddressPage: NextPage = () => {
                       </span>
                     )}
                   </td>
-                  <td className="border px-4 py-2">{ethers.utils.formatEther(tx.value)} ETH</td>
+                  <td className="border px-4 py-2">
+                    {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
+                  </td>
                 </tr>
               );
             })}
@@ -132,11 +130,11 @@ const AddressPage: NextPage = () => {
           <span className="mr-2">Page {currentPage + 1}</span>
           <button
             className={`px-4 py-2 rounded-lg ${
-              (currentPage + 1) * transactionsPerPage >= totalTransactions
+              (currentPage + 1) * TXS_PER_PAGE >= totalTransactions
                 ? "bg-gray-200 cursor-default"
                 : "bg-blue-500 text-white"
             }`}
-            disabled={(currentPage + 1) * transactionsPerPage >= totalTransactions}
+            disabled={(currentPage + 1) * TXS_PER_PAGE >= totalTransactions}
             onClick={() => setCurrentPage(currentPage + 1)}
           >
             {">"}

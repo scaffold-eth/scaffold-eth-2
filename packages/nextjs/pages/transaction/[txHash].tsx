@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
   const router = useRouter();
   const { txHash } = router.query;
-
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
+
+  const configuredNetwork = getTargetNetwork();
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
   useEffect(() => {
@@ -24,13 +26,12 @@ const TransactionPage: NextPage = () => {
     }
   }, [txHash]);
 
-  const goBack = () => {
-    router.back();
-  };
-
   return (
     <div className="flex flex-col items-center justify-center py-2 mt-8">
-      <button className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={goBack}>
+      <button
+        className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => router.back()}
+      >
         Back
       </button>
       {transaction ? (
@@ -50,7 +51,7 @@ const TransactionPage: NextPage = () => {
           </p>
           <p className="mb-4 text-gray-700">
             <strong className="font-semibold text-gray-900">Value:</strong>{" "}
-            {ethers.utils.formatEther(transaction.value)} ETH
+            {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
           </p>
           <p className="mb-4 text-gray-700">
             <strong className="font-semibold text-gray-900">Gas Price:</strong>{" "}

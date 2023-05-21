@@ -11,11 +11,10 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // TODO: Add OPCODES and maybe STORAGE for contracts
 // TODO: Better pagination(some pages have less than BLOCKS_PER_PAGE blocks)
-// TODO: Refactor, seperate the table to a component
+// TODO: Refactor, seperate the table and the search bar to a component
 // TODO: Don't do everything in a loop... Please...
 // TODO: try useMemo to avoid unnecessary re-renders
 // TODO: Error handling for API calls
-// TODO: Use react-query
 // TODO: Add tests
 
 type TransactionWithFunction = TransactionResponse & { functionName?: string };
@@ -30,11 +29,8 @@ const Blockexplorer: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0);
   const [searchInput, setSearchInput] = useState("");
-  const [searchedBlock, setSearchedBlock] = useState<BlockWithTransactions | null>(null);
-  const [searchedTransaction, setSearchedTransaction] = useState<TransactionWithFunction | null>(null);
-  const [searchedAddress, setSearchedAddress] = useState<string | null>(null);
-  const configuredNetwork = getTargetNetwork();
 
+  const configuredNetwork = getTargetNetwork();
   const router = useRouter();
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -69,7 +65,7 @@ const Blockexplorer: NextPage = () => {
         const receipt = await provider.getTransactionReceipt(tx.hash);
         receipts[tx.hash] = receipt;
 
-        if (tx.data.length >= 10 && !tx.data.startsWith("0x60a06040")) {
+        if (tx.data.length >= 10) {
           for (const [contractName, contractInterface] of Object.entries(interfaces)) {
             try {
               const decodedData = contractInterface.parseTransaction({ data: tx.data });
@@ -88,10 +84,6 @@ const Blockexplorer: NextPage = () => {
   };
 
   const handleSearch = async () => {
-    setSearchedBlock(null);
-    setSearchedTransaction(null);
-    setSearchedAddress(null);
-
     if (ethers.utils.isHexString(searchInput)) {
       try {
         const tx = await provider.getTransaction(searchInput);
@@ -156,40 +148,6 @@ const Blockexplorer: NextPage = () => {
           Search
         </button>
       </div>
-      {searchedBlock && (
-        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
-          <h2 className="mb-2 text-primary">Searched Block: {searchedBlock.number}</h2>
-          <ul className="list-disc pl-5 text-neutral-content">
-            {searchedBlock.transactions.map((tx, index) => (
-              <li key={index}>{tx.hash}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {searchedTransaction && (
-        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
-          <h2 className="mb-2 text-primary">Searched Transaction: {searchedTransaction.hash}</h2>
-          <p className="text-neutral-content">From: {searchedTransaction.from}</p>
-          <p className="text-neutral-content">To: {searchedTransaction.to}</p>
-          <p className="text-neutral-content">
-            Value: {ethers.utils.formatEther(searchedTransaction.value)} {configuredNetwork.nativeCurrency.symbol}
-          </p>
-        </div>
-      )}
-      {searchedAddress && (
-        <div className="mb-5 bg-neutral p-3 rounded-lg shadow-md">
-          <h2 className="mb-2 text-primary">Searched Address: {searchedAddress}</h2>
-          <p className="text-neutral-content">Transactions related to this address:</p>
-          <ul className="list-disc pl-5 text-neutral-content">
-            {blocks
-              .flatMap(block => block.transactions)
-              .filter(tx => tx.from === searchedAddress || tx.to === searchedAddress)
-              .map(tx => (
-                <li key={tx.hash}>{tx.hash}</li>
-              ))}
-          </ul>
-        </div>
-      )}
       <div className="overflow-x-auto shadow-lg">
         <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
           <thead className="bg-primary">
