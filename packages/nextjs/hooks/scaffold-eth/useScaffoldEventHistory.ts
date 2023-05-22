@@ -109,6 +109,7 @@ export const useScaffoldEventHistory = <
     if (!deployedContractLoading) {
       readEvents();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     provider,
     fromBlock,
@@ -118,7 +119,8 @@ export const useScaffoldEventHistory = <
     deployedContractData?.address,
     contract,
     deployedContractData,
-    filters,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(filters),
     blockData,
     transactionData,
     receiptData,
