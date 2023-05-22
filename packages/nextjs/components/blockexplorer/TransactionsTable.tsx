@@ -6,7 +6,7 @@ import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffo
 
 // @todo show skeleton UI while fetching data
 
-export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsTableProps) => {
+export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
   const targetNetwork = getTargetNetwork();
 
   return (
@@ -58,54 +58,78 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
             </th>
           </tr>
         </thead>
-        <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-          {blocks.map(block =>
-            block.transactions.map((tx: TransactionWithFunction) => {
-              const receipt = transactionReceipts[tx.hash];
+        {isLoading ? (
+          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+            {[...Array(20)].map((_, rowIndex) => (
+              <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
+                {[...Array(7)].map((_, colIndex) => (
+                  <td
+                    key={colIndex}
+                    className={`${
+                      colIndex === 1 ? "w-full md:w-1/2 lg:w-1/5" : "w-20"
+                    } border px-4 py-2 text-base-content`}
+                  >
+                    <div
+                      className="h-2 bg-gray-200 rounded-full w-3/4 animate-pulse"
+                      style={{
+                        animationDelay: `${0.1 * (rowIndex + colIndex)}s`,
+                      }}
+                    ></div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+            {blocks.map(block =>
+              block.transactions.map((tx: TransactionWithFunction) => {
+                const receipt = transactionReceipts[tx.hash];
 
-              const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-              const timeMined = new Date(block.timestamp * 1000).toLocaleString();
-              const functionCalled = tx.data.substring(0, 10);
+                const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
+                const timeMined = new Date(block.timestamp * 1000).toLocaleString();
+                const functionCalled = tx.data.substring(0, 10);
 
-              return (
-                <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
-                  <td className="border px-4 py-2 text-base-content">
-                    <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
-                      {shortTxHash}
-                    </Link>
-                  </td>
+                return (
+                  <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                    <td className="border px-4 py-2 text-base-content">
+                      <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
+                        {shortTxHash}
+                      </Link>
+                    </td>
 
-                  <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
-                    {tx.functionName === "0x" ? "" : tx.functionName}
-                    {functionCalled !== "0x" && (
-                      <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                        {functionCalled}
-                      </span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2 w-20 text-base-content">{block.number}</td>
-                  <td className="border px-4 py-2 text-base-content">{timeMined}</td>
-                  <td className="border px-4 py-2 text-base-content">
-                    <Address address={tx.from} />
-                  </td>
-                  <td className="border px-4 py-2 text-base-content">
-                    {!receipt?.contractAddress ? (
-                      tx.to && <Address address={tx.to} />
-                    ) : (
-                      <span>
-                        Contract Creation:
-                        <Address address={receipt.contractAddress} />
-                      </span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2 text-base-content">
-                    {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
-                  </td>
-                </tr>
-              );
-            }),
-          )}
-        </tbody>
+                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
+                      {tx.functionName === "0x" ? "" : tx.functionName}
+                      {functionCalled !== "0x" && (
+                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
+                          {functionCalled}
+                        </span>
+                      )}
+                    </td>
+                    <td className="border px-4 py-2 w-20 text-base-content">{block.number}</td>
+                    <td className="border px-4 py-2 text-base-content">{timeMined}</td>
+                    <td className="border px-4 py-2 text-base-content">
+                      <Address address={tx.from} />
+                    </td>
+                    <td className="border px-4 py-2 text-base-content">
+                      {!receipt?.contractAddress ? (
+                        tx.to && <Address address={tx.to} />
+                      ) : (
+                        <span>
+                          Contract Creation:
+                          <Address address={receipt.contractAddress} />
+                        </span>
+                      )}
+                    </td>
+                    <td className="border px-4 py-2 text-base-content">
+                      {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
+                    </td>
+                  </tr>
+                );
+              }),
+            )}
+          </tbody>
+        )}
       </table>
     </div>
   );

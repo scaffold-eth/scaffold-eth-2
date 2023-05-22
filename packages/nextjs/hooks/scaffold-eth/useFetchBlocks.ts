@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
@@ -13,10 +13,16 @@ export const useFetchBlocks = () => {
   }>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0);
+  const [isLoading, setIsLoading] = useState(false); // New state for loading
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
+  // Use useMemo here to create abortController only once
+  const abortController = useMemo(() => new AbortController(), []);
+
   const fetchBlocks = async () => {
+    setIsLoading(true); // Set loading to true at the start of fetch
+
     const blockNumber = await provider.getBlockNumber();
     setTotalBlocks(blockNumber);
     const fetchedBlocks: BlockWithTransactions[] = [];
@@ -42,11 +48,16 @@ export const useFetchBlocks = () => {
 
     setBlocks(fetchedBlocks);
     setTransactionReceipts(receipts);
+    setIsLoading(false); // Set loading to false after fetch is complete
   };
 
   useEffect(() => {
     fetchBlocks();
-  }, [currentPage]);
+    // Here include abortController in the clean-up function
+    return () => {
+      abortController.abort();
+    };
+  }, [currentPage, abortController]);
 
   useEffect(() => {
     provider.on("block", async blockNumber => {
@@ -68,10 +79,12 @@ export const useFetchBlocks = () => {
       }
     });
 
+    // And here too
     return () => {
       provider.off("block");
+      abortController.abort();
     };
-  }, [blocks, currentPage]);
+  }, [blocks, currentPage, abortController]);
 
   return {
     blocks,
@@ -79,5 +92,6 @@ export const useFetchBlocks = () => {
     currentPage,
     totalBlocks,
     setCurrentPage,
+    isLoading,
   };
 };
