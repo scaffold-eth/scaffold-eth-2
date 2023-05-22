@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ExtractAbiEventNames } from "abitype";
+import { Abi, ExtractAbiEventNames } from "abitype";
 import { ethers } from "ethers";
 import { useContract, useProvider } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -36,7 +36,7 @@ export const useScaffoldEventHistory = <
 
   const contract = useContract({
     address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
+    abi: deployedContractData?.abi as Abi,
     signerOrProvider: provider,
   });
 
