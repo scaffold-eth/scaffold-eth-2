@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import type { TransactionResponse } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -130,31 +131,7 @@ const AddressPage: NextPage = () => {
           </tbody>
         </table>
       </div>
-      <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
-        <button
-          className={`btn py-1 px-3 rounded-md text-xs ${
-            currentPage === 0
-              ? "bg-gray-200 cursor-default"
-              : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
-          }`}
-          disabled={currentPage === 0}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          {"<"}
-        </button>
-        <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
-        <button
-          className={`btn py-1 px-3 rounded-md text-xs ${
-            (currentPage + 1) * TXS_PER_PAGE >= totalTransactions
-              ? "bg-gray-200 cursor-default"
-              : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content"
-          }`}
-          disabled={(currentPage + 1) * TXS_PER_PAGE >= totalTransactions}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          {">"}
-        </button>
-      </div>
+      <PaginationButton currentPage={currentPage} totalItems={totalTransactions} setCurrentPage={setCurrentPage} />
     </div>
   );
 };

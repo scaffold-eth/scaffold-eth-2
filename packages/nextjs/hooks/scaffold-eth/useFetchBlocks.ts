@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
-import deployedContracts from "~~/generated/deployedContracts";
-import { Block, TransactionWithFunction } from "~~/utils/scaffold-eth/block";
+import { decodeTransactionData } from "~~/utils/scaffold-eth";
+import { Block } from "~~/utils/scaffold-eth/block";
 
 const BLOCKS_PER_PAGE = 20;
 
@@ -29,35 +29,15 @@ export const useFetchBlocks = () => {
         break;
       }
 
-      const block = (await provider.getBlockWithTransactions(blockNumberToFetch)) as BlockWithTransactions & {
-        transactions: TransactionWithFunction[];
-      };
+      const block = (await provider.getBlockWithTransactions(blockNumberToFetch)) as BlockWithTransactions;
 
-      fetchedBlocks.push(block);
-
-      const chain = deployedContracts[31337][0];
-      const interfaces: { [contractName: string]: ethers.utils.Interface } = {};
-
-      for (const [contractName, contract] of Object.entries(chain.contracts)) {
-        interfaces[contractName] = new ethers.utils.Interface(contract.abi);
-      }
-
-      for (const tx of block.transactions as TransactionWithFunction[]) {
+      for (const tx of block.transactions) {
+        decodeTransactionData(tx);
         const receipt = await provider.getTransactionReceipt(tx.hash);
         receipts[tx.hash] = receipt;
-
-        if (tx.data.length >= 10) {
-          for (const [contractName, contractInterface] of Object.entries(interfaces)) {
-            try {
-              const decodedData = contractInterface.parseTransaction({ data: tx.data });
-              tx.functionName = `${contractName}: ${decodedData.name}`;
-              break;
-            } catch (e) {
-              console.log(`Parsing failed for contract ${contractName}: ${e}`);
-            }
-          }
-        }
       }
+
+      fetchedBlocks.push(block);
     }
 
     setBlocks(fetchedBlocks);

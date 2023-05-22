@@ -1,12 +1,8 @@
-import React, { Dispatch, FormEvent, SetStateAction } from "react";
+import { useSearchHandler } from "~~/hooks/scaffold-eth";
 
-type SearchBarProps = {
-  searchInput: string;
-  setSearchInput: Dispatch<SetStateAction<string>>;
-  handleSearch: (event: React.FormEvent<HTMLFormElement>) => void;
-};
+export const SearchBar = () => {
+  const { handleSearch, searchInput, setSearchInput } = useSearchHandler();
 
-export const SearchBar: React.FC<SearchBarProps> = ({ searchInput, setSearchInput, handleSearch }) => {
   return (
     <form onSubmit={handleSearch} className="flex items-center justify-end mb-5 space-x-3">
       <input
