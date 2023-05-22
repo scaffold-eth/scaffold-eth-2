@@ -4,8 +4,6 @@ import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/block";
 
-// @todo show skeleton UI while fetching data
-
 export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
   const targetNetwork = getTargetNetwork();
 

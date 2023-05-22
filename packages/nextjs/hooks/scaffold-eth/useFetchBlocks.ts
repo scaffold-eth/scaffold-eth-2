@@ -14,38 +14,56 @@ export const useFetchBlocks = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
 
   const fetchBlocks = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
 
-    const blockNumber = await provider.getBlockNumber();
-    setTotalBlocks(blockNumber);
+    try {
+      const blockNumber = await provider.getBlockNumber();
+      setTotalBlocks(blockNumber);
 
-    const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
-    const blockNumbersToFetch = Array.from(
-      { length: Math.min(BLOCKS_PER_PAGE, startingBlock + 1) },
-      (_, i) => startingBlock - i,
-    );
+      const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
+      const blockNumbersToFetch = Array.from(
+        { length: Math.min(BLOCKS_PER_PAGE, startingBlock + 1) },
+        (_, i) => startingBlock - i,
+      );
 
-    const blocksWithTransactions: Promise<BlockWithTransactions>[] = blockNumbersToFetch.map(blockNumber =>
-      provider.getBlockWithTransactions(blockNumber),
-    );
-    const fetchedBlocks = await Promise.all(blocksWithTransactions);
+      const blocksWithTransactions: Promise<BlockWithTransactions>[] = blockNumbersToFetch.map(async blockNumber => {
+        try {
+          return await provider.getBlockWithTransactions(blockNumber);
+        } catch (err) {
+          setError(err instanceof Error ? err : new Error("An error occurred."));
+          throw err;
+        }
+      });
+      const fetchedBlocks = await Promise.all(blocksWithTransactions);
 
-    fetchedBlocks.forEach(block => {
-      block.transactions.forEach(tx => decodeTransactionData(tx));
-    });
+      fetchedBlocks.forEach(block => {
+        block.transactions.forEach(tx => decodeTransactionData(tx));
+      });
 
-    const txReceipts = await Promise.all(
-      fetchedBlocks.flatMap(block =>
-        block.transactions.map(tx => provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }))),
-      ),
-    );
+      const txReceipts = await Promise.all(
+        fetchedBlocks.flatMap(block =>
+          block.transactions.map(async tx => {
+            try {
+              return await provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }));
+            } catch (err) {
+              setError(err instanceof Error ? err : new Error("An error occurred."));
+              throw err;
+            }
+          }),
+        ),
+      );
 
-    setBlocks(fetchedBlocks);
-    setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...txReceipts) }));
+      setBlocks(fetchedBlocks);
+      setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...txReceipts) }));
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error("An error occurred."));
+    }
     setIsLoading(false);
   }, [currentPage, provider]);
 
@@ -55,22 +73,31 @@ export const useFetchBlocks = () => {
 
   useEffect(() => {
     const handleNewBlock = async (blockNumber: number) => {
-      const newBlock = await provider.getBlockWithTransactions(blockNumber);
-      if (!blocks.some(block => block.number === newBlock.number)) {
-        if (currentPage === 0) {
-          setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
+      try {
+        const newBlock = await provider.getBlockWithTransactions(blockNumber);
+        if (!blocks.some(block => block.number === newBlock.number)) {
+          if (currentPage === 0) {
+            setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
 
-          newBlock.transactions.forEach(tx => decodeTransactionData(tx));
+            newBlock.transactions.forEach(tx => decodeTransactionData(tx));
 
-          const receipts = await Promise.all(
-            newBlock.transactions.map(tx =>
-              provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt })),
-            ),
-          );
+            const receipts = await Promise.all(
+              newBlock.transactions.map(async tx => {
+                try {
+                  return await provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }));
+                } catch (err) {
+                  setError(err instanceof Error ? err : new Error("An error occurred."));
+                  throw err;
+                }
+              }),
+            );
 
-          setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...receipts) }));
+            setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...receipts) }));
+          }
+          setTotalBlocks(blockNumber + 1);
         }
-        setTotalBlocks(blockNumber + 1);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error("An error occurred."));
       }
     };
 
@@ -80,6 +107,7 @@ export const useFetchBlocks = () => {
       provider.off("block", handleNewBlock);
     };
   }, [blocks, currentPage, provider]);
+
   return {
     blocks,
     transactionReceipts,
@@ -87,5 +115,6 @@ export const useFetchBlocks = () => {
     totalBlocks,
     setCurrentPage,
     isLoading,
+    error,
   };
 };
