@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
@@ -13,79 +13,73 @@ export const useFetchBlocks = () => {
   }>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0);
-  const [isLoading, setIsLoading] = useState(false); // New state for loading
+  const [isLoading, setIsLoading] = useState(false);
 
-  const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+  const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
 
-  // Use useMemo here to create abortController only once
-  const abortController = useMemo(() => new AbortController(), []);
-
-  const fetchBlocks = async () => {
-    setIsLoading(true); // Set loading to true at the start of fetch
+  const fetchBlocks = useCallback(async () => {
+    setIsLoading(true);
 
     const blockNumber = await provider.getBlockNumber();
     setTotalBlocks(blockNumber);
-    const fetchedBlocks: BlockWithTransactions[] = [];
-    const receipts: { [key: string]: ethers.providers.TransactionReceipt } = {};
+
     const startingBlock = blockNumber - currentPage * BLOCKS_PER_PAGE;
+    const blockNumbersToFetch = Array.from(
+      { length: Math.min(BLOCKS_PER_PAGE, startingBlock + 1) },
+      (_, i) => startingBlock - i,
+    );
 
-    for (let i = 0; i < BLOCKS_PER_PAGE; i++) {
-      const blockNumberToFetch = startingBlock - i;
-      if (blockNumberToFetch < 0) {
-        break;
-      }
+    const blocksWithTransactions: Promise<BlockWithTransactions>[] = blockNumbersToFetch.map(blockNumber =>
+      provider.getBlockWithTransactions(blockNumber),
+    );
+    const fetchedBlocks = await Promise.all(blocksWithTransactions);
 
-      const block = (await provider.getBlockWithTransactions(blockNumberToFetch)) as BlockWithTransactions;
+    fetchedBlocks.forEach(block => {
+      block.transactions.forEach(tx => decodeTransactionData(tx));
+    });
 
-      for (const tx of block.transactions) {
-        decodeTransactionData(tx);
-        const receipt = await provider.getTransactionReceipt(tx.hash);
-        receipts[tx.hash] = receipt;
-      }
-
-      fetchedBlocks.push(block);
-    }
+    const txReceipts = await Promise.all(
+      fetchedBlocks.flatMap(block =>
+        block.transactions.map(tx => provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }))),
+      ),
+    );
 
     setBlocks(fetchedBlocks);
-    setTransactionReceipts(receipts);
-    setIsLoading(false); // Set loading to false after fetch is complete
-  };
+    setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...txReceipts) }));
+    setIsLoading(false);
+  }, [currentPage, provider]);
 
   useEffect(() => {
     fetchBlocks();
-    // Here include abortController in the clean-up function
-    return () => {
-      abortController.abort();
-    };
-  }, [currentPage, abortController]);
+  }, [fetchBlocks]);
 
   useEffect(() => {
-    provider.on("block", async blockNumber => {
+    const handleNewBlock = async (blockNumber: number) => {
       const newBlock = await provider.getBlockWithTransactions(blockNumber);
-
       if (!blocks.some(block => block.number === newBlock.number)) {
         if (currentPage === 0) {
           setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
 
-          for (const tx of newBlock.transactions) {
-            const receipt = await provider.getTransactionReceipt(tx.hash);
-            setTransactionReceipts(prevReceipts => ({
-              ...prevReceipts,
-              [tx.hash]: receipt,
-            }));
-          }
+          newBlock.transactions.forEach(tx => decodeTransactionData(tx));
+
+          const receipts = await Promise.all(
+            newBlock.transactions.map(tx =>
+              provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt })),
+            ),
+          );
+
+          setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...receipts) }));
         }
         setTotalBlocks(blockNumber + 1);
       }
-    });
-
-    // And here too
-    return () => {
-      provider.off("block");
-      abortController.abort();
     };
-  }, [blocks, currentPage, abortController]);
 
+    provider.on("block", handleNewBlock);
+
+    return () => {
+      provider.off("block", handleNewBlock);
+    };
+  }, [blocks, currentPage, provider]);
   return {
     blocks,
     transactionReceipts,

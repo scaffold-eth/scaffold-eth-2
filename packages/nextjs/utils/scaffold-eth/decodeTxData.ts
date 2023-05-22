@@ -11,13 +11,13 @@ for (const [contractName, contract] of Object.entries(chain.contracts)) {
 
 export const decodeTransactionData = (tx: TransactionWithFunction): TransactionWithFunction => {
   if (tx.data.length >= 10) {
-    for (const [contractName, contractInterface] of Object.entries(interfaces)) {
+    for (const [, contractInterface] of Object.entries(interfaces)) {
       try {
         const decodedData = contractInterface.parseTransaction({ data: tx.data });
-        tx.functionName = `${contractName}: ${decodedData.name}`;
+        tx.functionName = `${decodedData.name}`;
         break;
       } catch (e) {
-        console.log(`Parsing failed for contract ${contractName}: ${e}`);
+        console.error(`Parsing failed: ${e}`);
       }
     }
   }
