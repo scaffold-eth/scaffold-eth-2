@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ethers } from "ethers";
+import { TransactionHash } from "~~/components/blockexplorer/TransactionHash";
 import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/block";
@@ -83,22 +83,18 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
             {blocks.map(block =>
               block.transactions.map((tx: TransactionWithFunction) => {
                 const receipt = transactionReceipts[tx.hash];
-
-                const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
                 const timeMined = new Date(block.timestamp * 1000).toLocaleString();
                 const functionCalled = tx.data.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                  <tr key={tx.hash} className="bg-base-100 hover:bg-base-300 transition-colors duration-200">
                     <td className="border px-4 py-2 text-base-content">
-                      <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
-                        {shortTxHash}
-                      </Link>
+                      <TransactionHash hash={tx.hash} />
                     </td>
 
                     <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
                       {tx.functionName === "0x" ? "" : tx.functionName}
-                      {functionCalled !== "0x" && (
+                      {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
                         <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
                           {functionCalled}
                         </span>

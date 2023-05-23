@@ -11,6 +11,7 @@ const TransactionPage: NextPage = () => {
   const router = useRouter();
   const { txHash } = router.query;
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
+  const [receipt, setReceipt] = useState<ethers.providers.TransactionReceipt | null>(null);
 
   const configuredNetwork = getTargetNetwork();
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -19,7 +20,11 @@ const TransactionPage: NextPage = () => {
     if (txHash) {
       const fetchTransaction = async () => {
         const tx = await provider.getTransaction(txHash as string);
+        const receipt = await provider.getTransactionReceipt(txHash as string);
+
         setTransaction(tx);
+        setReceipt(receipt);
+
         console.log("transaction page tx", tx);
       };
 
@@ -57,7 +62,7 @@ const TransactionPage: NextPage = () => {
                   <strong className="text-primary-content">From:</strong>
                 </td>
                 <td className="border px-4 py-2 text-base-content">
-                  <Address address={transaction.from} />
+                  <Address address={transaction.from} format="long" />
                 </td>
               </tr>
               <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
@@ -65,7 +70,14 @@ const TransactionPage: NextPage = () => {
                   <strong className="text-primary-content">To:</strong>
                 </td>
                 <td className="border px-4 py-2 text-base-content">
-                  <Address address={transaction.to} />
+                  {!receipt?.contractAddress ? (
+                    transaction.to && <Address address={transaction.to} format="long" />
+                  ) : (
+                    <span>
+                      Contract Creation:
+                      <Address address={receipt.contractAddress} format="long" />
+                    </span>
+                  )}
                 </td>
               </tr>
               <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
@@ -88,11 +100,11 @@ const TransactionPage: NextPage = () => {
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Data:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
+                <td className="border px-4 py-2 ">
                   <textarea
                     readOnly
                     value={transaction.data}
-                    className="w-full h-32 p-2 border-2 text-base-content border-primary rounded resize-none overflow-auto"
+                    className="w-full h-32 p-2 border-2 bg-inherit text-base-content border-primary rounded resize-none overflow-auto"
                   />
                 </td>
               </tr>
