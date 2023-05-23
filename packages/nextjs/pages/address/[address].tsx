@@ -19,6 +19,7 @@ const AddressPage: NextPage = () => {
   const [transactionReceipts, setTransactionReceipts] = useState<{
     [key: string]: ethers.providers.TransactionReceipt;
   }>({});
+  const [isLoading, setIsLoading] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -30,6 +31,8 @@ const AddressPage: NextPage = () => {
   }, [address]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     const fetchTransactions = async () => {
       const currentBlockNumber = await provider.getBlockNumber();
       const fetchedTransactions: TransactionResponse[] = [];
@@ -52,6 +55,7 @@ const AddressPage: NextPage = () => {
 
       setTransactions(fetchedTransactions);
       setTransactionReceipts(receipts);
+      setIsLoading(false);
     };
 
     if (address) fetchTransactions();
@@ -75,6 +79,7 @@ const AddressPage: NextPage = () => {
       <p className="text-2xl text-center mb-6 text-primary-content">
         Balance: {balance} {configuredNetwork.nativeCurrency.symbol}
       </p>
+
       <div className="overflow-x-auto shadow-lg">
         <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
           <thead className="bg-primary">
@@ -96,41 +101,66 @@ const AddressPage: NextPage = () => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-            {displayedTransactions.map(tx => {
-              const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
-              const receipt = transactionReceipts[tx.hash];
-
-              return (
-                <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
-                  <td className="border px-4 py-2 text-base-content">
-                    <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
-                      {shortTxHash}
-                    </Link>
-                  </td>
-                  <td className="border px-4 py-2 w-20 text-base-content">{tx.blockNumber}</td>
-                  <td className="border px-4 py-2 text-base-content">
-                    <Address address={tx.from} />
-                  </td>
-                  <td className="border px-4 py-2 text-base-content">
-                    {!receipt?.contractAddress ? (
-                      tx.to && <Address address={tx.to} />
-                    ) : (
-                      <span>
-                        Contract Creation:
-                        <Address address={receipt.contractAddress} />
-                      </span>
-                    )}
-                  </td>
-                  <td className="border px-4 py-2 text-base-content">
-                    {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
-                  </td>
+          {isLoading ? (
+            <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+              {[...Array(20)].map((_, rowIndex) => (
+                <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
+                  {[...Array(5)].map((_, colIndex) => (
+                    <td
+                      key={colIndex}
+                      className={`${
+                        colIndex === 1 ? "w-full md:w-1/2 lg:w-1/5" : "w-20"
+                      } border px-4 py-2 text-base-content`}
+                    >
+                      <div
+                        className="h-2 bg-gray-200 rounded-full w-3/4 animate-pulse"
+                        style={{
+                          animationDelay: `${0.1 * (rowIndex + colIndex)}s`,
+                        }}
+                      ></div>
+                    </td>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
+              ))}
+            </tbody>
+          ) : (
+            <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+              {displayedTransactions.map(tx => {
+                const shortTxHash = `${tx.hash.substring(0, 6)}...${tx.hash.substring(tx.hash.length - 4)}`;
+                const receipt = transactionReceipts[tx.hash];
+
+                return (
+                  <tr key={tx.hash} className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+                    <td className="border px-4 py-2 text-base-content">
+                      <Link className="text-base-content hover:text-accent-focus" href={`/transaction/${tx.hash}`}>
+                        {shortTxHash}
+                      </Link>
+                    </td>
+                    <td className="border px-4 py-2 w-20 text-base-content">{tx.blockNumber}</td>
+                    <td className="border px-4 py-2 text-base-content">
+                      <Address address={tx.from} />
+                    </td>
+                    <td className="border px-4 py-2 text-base-content">
+                      {!receipt?.contractAddress ? (
+                        tx.to && <Address address={tx.to} />
+                      ) : (
+                        <span>
+                          Contract Creation:
+                          <Address address={receipt.contractAddress} />
+                        </span>
+                      )}
+                    </td>
+                    <td className="border px-4 py-2 text-base-content">
+                      {ethers.utils.formatEther(tx.value)} {configuredNetwork.nativeCurrency.symbol}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          )}
         </table>
       </div>
+
       <PaginationButton currentPage={currentPage} totalItems={totalTransactions} setCurrentPage={setCurrentPage} />
     </div>
   );
