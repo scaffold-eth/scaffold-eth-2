@@ -1630,9 +1630,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@rainbow-me/rainbowkit@npm:0.11.0"
+"@rainbow-me/rainbowkit@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@rainbow-me/rainbowkit@npm:1.0.0"
   dependencies:
     "@vanilla-extract/css": 1.9.1
     "@vanilla-extract/dynamic": 2.0.2
@@ -1641,11 +1641,11 @@ __metadata:
     qrcode: 1.5.0
     react-remove-scroll: 2.5.4
   peerDependencies:
-    ethers: ">=5.5.1"
     react: ">=17"
     react-dom: ">=17"
-    wagmi: 0.11.x
-  checksum: 696d8a9458d869bd13097f75d5c10694bb40f4353fc6b59f2e78549f2879ace3dee1add8d3c655131f5f1fabc93141f80b2c419315725bc2d1d6ca7492d25326
+    viem: ~0.3.19
+    wagmi: ^1.0.1
+  checksum: d9a73027ad5b6cd659fef8dd2e8bdcf14fd78bc6f00f0b3fb77f167622dca90f8acff5a727f71d2e031caed84f18e08880b021e9b4f22263ffa8d5dcb550da5b
   languageName: node
   linkType: hard
 
@@ -1800,7 +1800,7 @@ __metadata:
     "@ethersproject/networks": ^5.7.1
     "@ethersproject/web": ^5.7.1
     "@heroicons/react": ^2.0.11
-    "@rainbow-me/rainbowkit": ^0.11.0
+    "@rainbow-me/rainbowkit": ^1.0.0
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^17.0.35
     "@types/react": ^18.0.9
