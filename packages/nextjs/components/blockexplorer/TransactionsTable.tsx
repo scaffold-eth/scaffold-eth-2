@@ -18,7 +18,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
             <th className="bg-primary">Time Mined</th>
             <th className="bg-primary">From</th>
             <th className="bg-primary">To</th>
-            <th className="bg-primary">Value ({targetNetwork.nativeCurrency.symbol})</th>
+            <th className="bg-primary text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
           </tr>
         </thead>
         {isLoading ? (
@@ -79,13 +79,13 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                       {!receipt?.contractAddress ? (
                         tx.to && <Address address={tx.to} />
                       ) : (
-                        <div>
+                        <div className="relative">
                           <Address address={receipt.contractAddress} />
-                          <small className="absolute">(Contract Creation)</small>
+                          <small className="absolute top-6">(Contract Creation)</small>
                         </div>
                       )}
                     </td>
-                    <td>
+                    <td className="text-right">
                       {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
                     </td>
                   </tr>

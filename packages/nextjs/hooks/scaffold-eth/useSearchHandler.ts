@@ -13,7 +13,7 @@ export const useSearchHandler = () => {
       try {
         const tx = await provider.getTransaction(searchInput);
         if (tx) {
-          router.push(`/transaction/${searchInput}`);
+          router.push(`/blockexplorer/transaction/${searchInput}`);
           return;
         }
       } catch (error) {
@@ -22,7 +22,7 @@ export const useSearchHandler = () => {
     }
 
     if (ethers.utils.isAddress(searchInput)) {
-      router.push(`/address/${searchInput}`);
+      router.push(`/blockexplorer/address/${searchInput}`);
       return;
     }
   };
