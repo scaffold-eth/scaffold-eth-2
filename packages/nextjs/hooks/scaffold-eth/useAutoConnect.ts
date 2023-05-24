@@ -16,7 +16,7 @@ const walletIdStorageKey = "scaffoldEth2.wallet";
  */
 const getInitialConnector = (
   previousWalletId: string,
-  connectors: Connector<any, any, any>[],
+  connectors: Connector[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   const burnerConfig = scaffoldConfig.burnerWallet;
   const targetNetwork = getTargetNetwork();
