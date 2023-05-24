@@ -7,8 +7,8 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 // @todo the table could use a different background in dark mode
 // @todo show "no transactions for this address yet" when there are no transactions
-// @todo when the tx is contract creation, the to address should be the contract address in tx page
 // @todo show pages like "5 out of 10 pages" or sth
+// @todo perhaps the address component's copy and checkmark icons can change color depending on the theme
 
 const Blockexplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading, error } = useFetchBlocks();
