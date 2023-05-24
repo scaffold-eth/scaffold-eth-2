@@ -8,78 +8,49 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
   const targetNetwork = getTargetNetwork();
 
   return (
-    <div className="overflow-x-auto shadow-lg">
-      <table className="min-w-full divide-y divide-primary shadow-lg rounded-lg bg-neutral">
-        <thead className="bg-primary">
+    <div className="flex justify-center">
+      <table className="table table-zebra w-full shadow-lg">
+        <thead>
           <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              Transaction Hash
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              Function Called
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              Block Number
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              Time Mined
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              From
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              To
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-primary-content uppercase tracking-wider"
-            >
-              Value ({targetNetwork.nativeCurrency.symbol})
-            </th>
+            <th className="bg-primary">Transaction Hash</th>
+            <th className="bg-primary">Function Called</th>
+            <th className="bg-primary">Block Number</th>
+            <th className="bg-primary">Time Mined</th>
+            <th className="bg-primary">From</th>
+            <th className="bg-primary">To</th>
+            <th className="bg-primary">Value ({targetNetwork.nativeCurrency.symbol})</th>
           </tr>
         </thead>
         {isLoading ? (
-          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+          <tbody>
             {[...Array(20)].map((_, rowIndex) => (
               <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
-                {[...Array(7)].map((_, colIndex) => (
-                  <td
-                    key={colIndex}
-                    className={`${
-                      colIndex === 1 ? "w-full md:w-1/2 lg:w-1/5" : "w-20"
-                    } border px-4 py-2 text-base-content`}
-                  >
-                    <div
-                      className="h-2 bg-gray-200 rounded-full w-3/4 animate-pulse"
-                      style={{
-                        animationDelay: `${0.1 * (rowIndex + colIndex)}s`,
-                      }}
-                    ></div>
-                  </td>
-                ))}
+                <td className="w-1/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td className="w-2/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td className="w-1/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td className="w-2/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td className="w-2/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td className="w-2/12">
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
+                <td>
+                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                </td>
               </tr>
             ))}
           </tbody>
         ) : (
-          <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
+          <tbody>
             {blocks.map(block =>
               block.transactions.map((tx: TransactionWithFunction) => {
                 const receipt = transactionReceipts[tx.hash];
@@ -87,12 +58,11 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                 const functionCalled = tx.data.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash} className="bg-base-100 hover:bg-base-300 transition-colors duration-200">
-                    <td className="border px-4 py-2 text-base-content">
+                  <tr key={tx.hash} className="hover">
+                    <td className="w-1/12">
                       <TransactionHash hash={tx.hash} />
                     </td>
-
-                    <td className="border px-4 py-2 w-full md:w-1/2 lg:w-1/5 text-base-content">
+                    <td className="w-2/12">
                       {tx.functionName === "0x" ? "" : tx.functionName}
                       {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
                         <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
@@ -100,22 +70,22 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                         </span>
                       )}
                     </td>
-                    <td className="border px-4 py-2 w-20 text-base-content">{block.number}</td>
-                    <td className="border px-4 py-2 text-base-content">{timeMined}</td>
-                    <td className="border px-4 py-2 text-base-content">
+                    <td className="w-1/12">{block.number}</td>
+                    <td className="w-2/12">{timeMined}</td>
+                    <td className="w-2/12">
                       <Address address={tx.from} />
                     </td>
-                    <td className="border px-4 py-2 text-base-content">
+                    <td className="w-2/12">
                       {!receipt?.contractAddress ? (
                         tx.to && <Address address={tx.to} />
                       ) : (
-                        <span>
-                          Contract Creation:
+                        <div>
                           <Address address={receipt.contractAddress} />
-                        </span>
+                          <small className="absolute">(Contract Creation)</small>
+                        </div>
                       )}
                     </td>
-                    <td className="border px-4 py-2 text-base-content">
+                    <td>
                       {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
                     </td>
                   </tr>
