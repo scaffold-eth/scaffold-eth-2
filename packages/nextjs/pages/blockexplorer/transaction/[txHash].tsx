@@ -34,10 +34,7 @@ const TransactionPage: NextPage = () => {
 
   return (
     <div className="m-10 mb-20">
-      <button
-        className="btn bg-primary text-primary-content hover:bg-accent hover:text-accent-content shadow-md transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110 mb-5"
-        onClick={() => router.back()}
-      >
+      <button className="btn btn-primary" onClick={() => router.back()}>
         Back
       </button>
       {transaction ? (
@@ -45,19 +42,19 @@ const TransactionPage: NextPage = () => {
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
           <table className="min-w-full divide-y divide-primary rounded-lg bg-neutral">
             <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Transaction Hash:</strong>
                 </td>
                 <td className="border px-4 py-2 text-base-content">{transaction.hash}</td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Block Number:</strong>
                 </td>
                 <td className="border px-4 py-2 text-base-content">{transaction.blockNumber}</td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">From:</strong>
                 </td>
@@ -65,7 +62,7 @@ const TransactionPage: NextPage = () => {
                   <Address address={transaction.from} format="long" />
                 </td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">To:</strong>
                 </td>
@@ -80,7 +77,7 @@ const TransactionPage: NextPage = () => {
                   )}
                 </td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Value:</strong>
                 </td>
@@ -88,7 +85,7 @@ const TransactionPage: NextPage = () => {
                   {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
                 </td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Gas Price:</strong>
                 </td>
@@ -96,7 +93,7 @@ const TransactionPage: NextPage = () => {
                   {ethers.utils.formatUnits(transaction.gasPrice || ethers.constants.Zero, "gwei")} Gwei
                 </td>
               </tr>
-              <tr className="bg-base-200 hover:bg-base-300 transition-colors duration-200">
+              <tr className="bg-base-200">
                 <td className="border px-4 py-2 text-base-content">
                   <strong className="text-primary-content">Data:</strong>
                 </td>

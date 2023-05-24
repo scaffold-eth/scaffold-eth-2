@@ -17,25 +17,19 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
   );
 
   const prevButtonClass = useMemo(
-    () =>
-      isPrevButtonDisabled
-        ? "bg-gray-200 cursor-default"
-        : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content",
+    () => (isPrevButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary"),
     [isPrevButtonDisabled],
   );
 
   const nextButtonClass = useMemo(
-    () =>
-      isNextButtonDisabled
-        ? "bg-gray-200 cursor-default"
-        : "bg-primary text-primary-content hover:bg-accent hover:text-accent-content",
+    () => (isNextButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary"),
     [isNextButtonDisabled],
   );
 
   return (
     <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
       <button
-        className={`btn py-1 px-3 rounded-md text-xs ${prevButtonClass}`}
+        className={`btn btn-primary ${prevButtonClass}`}
         disabled={isPrevButtonDisabled}
         onClick={() => setCurrentPage(currentPage - 1)}
       >
@@ -43,7 +37,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
       </button>
       <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
       <button
-        className={`btn py-1 px-3 rounded-md text-xs ${nextButtonClass}`}
+        className={`btn btn-primary ${nextButtonClass}`}
         disabled={isNextButtonDisabled}
         onClick={() => setCurrentPage(currentPage + 1)}
       >
