@@ -30,11 +30,11 @@ export const appChains = configureChains(
   [
     alchemyProvider({
       apiKey: scaffoldConfig.alchemyApiKey,
-      priority: 0,
     }),
-    publicProvider({ priority: 1 }),
+    publicProvider(),
   ],
   {
+    // We might not need this checkout https://github.com/scaffold-eth/scaffold-eth-2/pull/45#discussion_r1024496359, will test and remove this before merging
     stallTimeout: 3_000,
     // Sets pollingInterval if using chain's other than local hardhat chain
     ...(configuredNetwork.id !== chains.hardhat.id
