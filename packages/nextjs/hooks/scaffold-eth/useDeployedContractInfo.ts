@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useIsMounted } from "usehooks-ts";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
@@ -23,7 +24,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
         return;
       }
       const code = await publicClient.getBytecode({
-        address: deployedContract.address,
+        address: deployedContract.address as Address,
       });
 
       if (!isMounted()) {
