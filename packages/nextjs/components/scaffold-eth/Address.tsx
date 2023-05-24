@@ -23,7 +23,7 @@ export const Address = ({ address, disableAddressLink, format }: TAddressProps) 
 
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
-    address,
+    name: address,
     enabled: isAddress(address ?? ""),
     chainId: 1,
     cacheTime: 30_000,

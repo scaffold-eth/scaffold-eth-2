@@ -27,7 +27,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   });
 
   const { data: ensAvatar } = useEnsAvatar({
-    address: value,
+    name: value,
     enabled: isAddress(value),
     chainId: 1,
     cacheTime: 30_000,
