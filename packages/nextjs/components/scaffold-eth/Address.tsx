@@ -77,7 +77,7 @@ export const Address = ({ address, disableAddressLink, format }: TAddressProps) 
       </div>
       {disableAddressLink ? (
         <span className="ml-1.5 text-lg font-normal">{displayAddress}</span>
-      ) : blockExplorerAddressLink.includes("localhost") ? (
+      ) : blockExplorerAddressLink.includes("blockexplorer") ? (
         <span className="ml-1.5 text-lg font-normal">
           <Link href={`/blockexplorer/address/${address}`}>{displayAddress}</Link>
         </span>
