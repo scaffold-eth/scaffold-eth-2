@@ -28,7 +28,7 @@
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "chain:foundry": "cd packages/foundry && anvil --config-out localhost.json",
-    "deploy:foundry": "cd packages/foundry && forge script script/Deploy.s.sol --rpc-url localhost --broadcast && node script/generateTsAbis.ts"
+    "deploy:foundry": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url localhost --broadcast && node script/generateTsAbis.ts"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
