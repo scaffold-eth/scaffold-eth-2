@@ -33,7 +33,7 @@ export const ContractData = () => {
   useScaffoldEventSubscriber({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    listener: (greetingSetter, newGreeting, premium, value) => {
+    listener: (greetingSetter: any, newGreeting, premium, value) => {
       console.log(greetingSetter, newGreeting, premium, value);
     },
   });

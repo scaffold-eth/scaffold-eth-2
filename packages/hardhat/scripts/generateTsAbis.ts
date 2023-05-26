@@ -21,7 +21,7 @@ function main() {
   );
 
   // remove generted output temp folder
-  fs.rmSync("./temp", { recursive: true, force: true });
+  // fs.rmSync("./temp", { recursive: true, force: true });
 }
 
 try {
