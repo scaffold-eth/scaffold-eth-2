@@ -1,0 +1,9 @@
+[profile.default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+fs_permissions = [{ access = "read-write", path = "./"}]
+[rpc_endpoints]
+localhost = "http://127.0.0.1:8545"
+mumbai = "${MUMBAI_RPC}"
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
