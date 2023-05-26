@@ -93,7 +93,7 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
-  if (network.id === 31337) {
+  if (network.id === chains.hardhat.id) {
     return `/blockexplorer/address/${address}`;
   }
 
