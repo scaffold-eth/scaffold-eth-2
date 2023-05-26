@@ -245,13 +245,12 @@ const { data: yourContract } = useScaffoldContract({
 await yourContract?.greeting();
 
 // Used to write to a contract and can be called in any function
-import { Signer } from "ethers";
-import { useSigner } from "wagmi";
+import { useWalletClient } from "wagmi";
 
-const { data: signer, isError, isLoading } = useSigner();
+cosnt {data : walletClient } = useWalletClient()
 const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
-  signerOrProvider: signer as Signer,
+  walletClient,
 });
 const setGreeting = async () => {
   // Call the method in any function
