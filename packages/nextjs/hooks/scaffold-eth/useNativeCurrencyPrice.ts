@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
-import { useProvider } from "wagmi";
+import { usePublicClient } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { fetchPriceFromUniswap } from "~~/utils/scaffold-eth";
 
@@ -11,7 +11,7 @@ const enablePolling = false;
  * @returns nativeCurrencyPrice: number
  */
 export const useNativeCurrencyPrice = () => {
-  const provider = useProvider({ chainId: 1 });
+  const provider = usePublicClient({ chainId: 1 });
   const [nativeCurrencyPrice, setNativeCurrencyPrice] = useState(0);
 
   // Get the price of ETH from Uniswap on mount

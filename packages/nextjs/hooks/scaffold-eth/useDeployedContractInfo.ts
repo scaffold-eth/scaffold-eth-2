@@ -24,6 +24,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
         return;
       }
       const code = await publicClient.getBytecode({
+        // TODO: Remoev asserstion once this is solved -> https://github.com/wagmi-dev/wagmi/pull/2421
         address: deployedContract.address as Address,
       });
 
