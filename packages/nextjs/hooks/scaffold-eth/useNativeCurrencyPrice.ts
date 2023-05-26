@@ -11,21 +11,21 @@ const enablePolling = false;
  * @returns nativeCurrencyPrice: number
  */
 export const useNativeCurrencyPrice = () => {
-  const provider = usePublicClient({ chainId: 1 });
+  const publicClient = usePublicClient({ chainId: 1 });
   const [nativeCurrencyPrice, setNativeCurrencyPrice] = useState(0);
 
   // Get the price of ETH from Uniswap on mount
   useEffect(() => {
     (async () => {
-      const price = await fetchPriceFromUniswap(provider);
+      const price = await fetchPriceFromUniswap(publicClient);
       setNativeCurrencyPrice(price);
     })();
-  }, [provider]);
+  }, [publicClient]);
 
   // Get the price of ETH from Uniswap at a given interval
   useInterval(
     async () => {
-      const price = await fetchPriceFromUniswap(provider);
+      const price = await fetchPriceFromUniswap(publicClient);
       setNativeCurrencyPrice(price);
     },
     enablePolling ? scaffoldConfig.pollingInterval : null,
