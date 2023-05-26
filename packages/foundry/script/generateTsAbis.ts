@@ -82,6 +82,9 @@ function main() {
       }
     )
   );
+
+  // remove generted output temp folder
+  fs.rmSync("./deployments.json", { recursive: true, force: true });
 }
 
 try {
