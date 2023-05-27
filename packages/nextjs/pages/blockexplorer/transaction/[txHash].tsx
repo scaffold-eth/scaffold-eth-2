@@ -44,35 +44,35 @@ const TransactionPage: NextPage = () => {
         Back
       </button>
       {transaction ? (
-        <div className="overflow-x-auto shadow-lg rounded-lg bg-base p-8">
+        <div className="overflow-x-auto shadow-lg">
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
-          <table className="min-w-full divide-y divide-primary rounded-lg bg-neutral">
-            <tbody className="bg-base-100 divide-y divide-primary-content text-base-content">
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Transaction Hash:</strong>
+          <table className="table w-full">
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Transaction Hash:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">{transaction.hash}</td>
+                <td>{transaction.hash}</td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Block Number:</strong>
+              <tr>
+                <td>
+                  <strong>Block Number:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">{transaction.blockNumber}</td>
+                <td>{transaction.blockNumber}</td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">From:</strong>
+              <tr>
+                <td>
+                  <strong>From:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
+                <td>
                   <Address address={transaction.from} format="long" />
                 </td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">To:</strong>
+              <tr>
+                <td>
+                  <strong>To:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
+                <td>
                   {!receipt?.contractAddress ? (
                     transaction.to && <Address address={transaction.to} format="long" />
                   ) : (
@@ -83,19 +83,19 @@ const TransactionPage: NextPage = () => {
                   )}
                 </td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Value:</strong>
+              <tr>
+                <td>
+                  <strong>Value:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
+                <td>
                   {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
                 </td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Function called:</strong>
+              <tr>
+                <td>
+                  <strong>Function called:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
+                <td>
                   {functionCalled === "0x"
                     ? "This transaction did not call any function."
                     : getFunctionDetails(transaction)}
@@ -106,24 +106,18 @@ const TransactionPage: NextPage = () => {
                   )}
                 </td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Gas Price:</strong>
+              <tr>
+                <td>
+                  <strong>Gas Price:</strong>
                 </td>
-                <td className="border px-4 py-2 text-base-content">
-                  {ethers.utils.formatUnits(transaction.gasPrice || ethers.constants.Zero, "gwei")} Gwei
-                </td>
+                <td>{ethers.utils.formatUnits(transaction.gasPrice || ethers.constants.Zero, "gwei")} Gwei</td>
               </tr>
-              <tr className="bg-base-200">
-                <td className="border px-4 py-2 text-base-content">
-                  <strong className="text-primary-content">Data:</strong>
+              <tr>
+                <td>
+                  <strong>Data:</strong>
                 </td>
-                <td className="border px-4 py-2 ">
-                  <textarea
-                    readOnly
-                    value={transaction.data}
-                    className="w-full h-32 p-2 border-2 bg-inherit text-base-content border-primary rounded resize-none overflow-auto"
-                  />
+                <td className="form-control">
+                  <textarea readOnly value={transaction.data} className="p-4 textarea-primary bg-inherit" />
                 </td>
               </tr>
             </tbody>
