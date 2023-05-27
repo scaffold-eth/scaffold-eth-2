@@ -15,7 +15,9 @@ export const decodeTransactionData = (tx: TransactionWithFunction): TransactionW
       try {
         const decodedData = contractInterface.parseTransaction({ data: tx.data });
         tx.functionName = `${decodedData.name}`;
-        tx.functionArgs = [...decodedData.args]; // Here we're adding the arguments to the transaction object.
+        tx.functionArgs = Object.values(decodedData.args);
+        tx.functionArgNames = contractInterface.getFunction(decodedData.name).inputs.map((input: any) => input.name);
+        tx.functionArgTypes = contractInterface.getFunction(decodedData.name).inputs.map((input: any) => input.type);
         break;
       } catch (e) {
         console.error(`Parsing failed: ${e}`);
@@ -23,4 +25,25 @@ export const decodeTransactionData = (tx: TransactionWithFunction): TransactionW
     }
   }
   return tx;
+};
+
+type FunctionArgNameType = string;
+type IndexType = number;
+type TransactionType = TransactionWithFunction | null;
+
+export const getFunctionDetails = (transaction: TransactionType): string => {
+  if (
+    transaction &&
+    transaction.functionName &&
+    transaction.functionArgNames &&
+    transaction.functionArgTypes &&
+    transaction.functionArgs
+  ) {
+    const details = transaction.functionArgNames.map(
+      (name: FunctionArgNameType, i: IndexType) =>
+        `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
+    );
+    return `${transaction.functionName}(${details.join(", ")})`;
+  }
+  return "";
 };

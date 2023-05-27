@@ -2,7 +2,9 @@ import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstr
 
 export type TransactionWithFunction = TransactionResponse & {
   functionName?: string;
-  functionArgs?: Array<any>;
+  functionArgs?: any[];
+  functionArgNames?: string[];
+  functionArgTypes?: string[];
 };
 
 export interface Block extends BlockWithTransactions {

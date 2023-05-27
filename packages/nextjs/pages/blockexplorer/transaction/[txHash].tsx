@@ -3,7 +3,12 @@ import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
-import { TransactionWithFunction, decodeTransactionData, getTargetNetwork } from "~~/utils/scaffold-eth";
+import {
+  TransactionWithFunction,
+  decodeTransactionData,
+  getFunctionDetails,
+  getTargetNetwork,
+} from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
   const router = useRouter();
@@ -91,10 +96,12 @@ const TransactionPage: NextPage = () => {
                   <strong className="text-primary-content">Function called:</strong>
                 </td>
                 <td className="border px-4 py-2 text-base-content">
-                  {functionCalled === "0x" ? "This transaction did not call any function." : transaction.functionName}
+                  {functionCalled === "0x"
+                    ? "This transaction did not call any function."
+                    : getFunctionDetails(transaction)}
                   {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
                     <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                      {functionCalled}({transaction.functionArgs?.join(", ")})
+                      {functionCalled}
                     </span>
                   )}
                 </td>
