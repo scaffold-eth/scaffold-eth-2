@@ -1,17 +1,16 @@
-// pages/transaction/[txHash].tsx
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { TransactionResponse } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { TransactionWithFunction, decodeTransactionData, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
   const router = useRouter();
   const { txHash } = router.query;
-  const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
+  const [transaction, setTransaction] = useState<TransactionWithFunction | null>(null);
   const [receipt, setReceipt] = useState<ethers.providers.TransactionReceipt | null>(null);
+  const [functionCalled, setFunctionCalled] = useState<string | null>(null);
 
   const configuredNetwork = getTargetNetwork();
   const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
@@ -22,10 +21,12 @@ const TransactionPage: NextPage = () => {
         const tx = await provider.getTransaction(txHash as string);
         const receipt = await provider.getTransactionReceipt(txHash as string);
 
-        setTransaction(tx);
+        const transactionWithDecodedData = decodeTransactionData(tx);
+        setTransaction(transactionWithDecodedData);
         setReceipt(receipt);
 
-        console.log("transaction page tx", tx);
+        const functionCalled = transactionWithDecodedData.data.substring(0, 10);
+        setFunctionCalled(functionCalled);
       };
 
       fetchTransaction();
@@ -83,6 +84,19 @@ const TransactionPage: NextPage = () => {
                 </td>
                 <td className="border px-4 py-2 text-base-content">
                   {ethers.utils.formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
+                </td>
+              </tr>
+              <tr className="bg-base-200">
+                <td className="border px-4 py-2 text-base-content">
+                  <strong className="text-primary-content">Function called:</strong>
+                </td>
+                <td className="border px-4 py-2 text-base-content">
+                  {functionCalled === "0x" ? "This transaction did not call any function." : transaction.functionName}
+                  {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
+                    <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
+                      {functionCalled}
+                    </span>
+                  )}
                 </td>
               </tr>
               <tr className="bg-base-200">

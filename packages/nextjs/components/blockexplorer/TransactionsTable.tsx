@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { TransactionHash } from "~~/components/blockexplorer/TransactionHash";
 import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/block";
+import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/";
 
 export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
   const targetNetwork = getTargetNetwork();
