@@ -23,6 +23,8 @@ export const useScaffoldContractWrite = <
   functionName,
   args,
   value,
+  onBlockConfirmation,
+  blockConfirmations,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
@@ -61,7 +63,7 @@ export const useScaffoldContractWrite = <
     if (wagmiContractWrite.writeAsync) {
       try {
         setIsMining(true);
-        await writeTx(wagmiContractWrite.writeAsync());
+        await writeTx(wagmiContractWrite.writeAsync(), { onBlockConfirmation, blockConfirmations });
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
