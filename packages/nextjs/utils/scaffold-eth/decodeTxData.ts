@@ -15,6 +15,7 @@ export const decodeTransactionData = (tx: TransactionWithFunction): TransactionW
       try {
         const decodedData = contractInterface.parseTransaction({ data: tx.data });
         tx.functionName = `${decodedData.name}`;
+        tx.functionArgs = [...decodedData.args]; // Here we're adding the arguments to the transaction object.
         break;
       } catch (e) {
         console.error(`Parsing failed: ${e}`);

@@ -94,7 +94,7 @@ const TransactionPage: NextPage = () => {
                   {functionCalled === "0x" ? "This transaction did not call any function." : transaction.functionName}
                   {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
                     <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                      {functionCalled}
+                      {functionCalled}({transaction.functionArgs?.join(", ")})
                     </span>
                   )}
                 </td>

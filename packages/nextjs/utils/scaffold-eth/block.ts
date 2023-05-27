@@ -1,6 +1,9 @@
 import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
 
-export type TransactionWithFunction = TransactionResponse & { functionName?: string };
+export type TransactionWithFunction = TransactionResponse & {
+  functionName?: string;
+  functionArgs?: Array<any>;
+};
 
 export interface Block extends BlockWithTransactions {
   transactions: TransactionWithFunction[];
