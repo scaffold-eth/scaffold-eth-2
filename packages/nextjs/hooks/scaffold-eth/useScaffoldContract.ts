@@ -1,5 +1,5 @@
 import { Abi } from "abitype";
-import { Address, getContract } from "viem";
+import { getContract } from "viem";
 import { GetWalletClientResult } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
@@ -22,11 +22,14 @@ export const useScaffoldContract = <TContractName extends ContractName>({
   // type GetWalletClientResult = WalletClient | null, hence narrowing it to undefined so that it can be passed to getContract
   const walletClientInstance = walletClient != null ? walletClient : undefined;
 
-  const contract = getContract({
-    address: deployedContractData?.address as Address,
-    abi: deployedContractData?.abi as Abi,
-    walletClient: walletClientInstance,
-  });
+  let contract = undefined;
+  if (deployedContractData) {
+    contract = getContract({
+      address: deployedContractData.address,
+      abi: deployedContractData.abi as Abi,
+      walletClient: walletClientInstance,
+    });
+  }
 
   return {
     data: contract,
