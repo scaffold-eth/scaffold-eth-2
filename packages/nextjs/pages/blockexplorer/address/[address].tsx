@@ -5,7 +5,7 @@ import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
-import { AddressCodeTab, PaginationButton, TransactionsTable } from "~~/components/blockexplorer/";
+import { AddressCodeTab, AddressLogsTab, PaginationButton, TransactionsTable } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
@@ -21,7 +21,6 @@ type PageProps = {
 
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
-  // const address = typeof router.query.address === "string" ? router.query.address : "";
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
@@ -103,8 +102,8 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "code" && contractData && (
         <AddressCodeTab bytecode={contractData.bytecode} assembly={contractData.assembly} />
       )}
-      {/* {activeTab === 'storage' && <AddressStorageTab address={address} />}
-      {activeTab === 'logs' && <AddressLogsTab address={address} />} */}
+      {/* {activeTab === "storage" && <AddressStorageTab address={address} />} */}
+      {activeTab === "logs" && <AddressLogsTab address={address} provider={provider} />}
     </div>
   );
 };
@@ -118,7 +117,6 @@ interface Params extends ParsedUrlQuery {
 export const getServerSideProps: GetServerSideProps = async context => {
   const address = (context.params as Params).address;
 
-  // Set the path to the build-info directory
   const buildInfoDirectory = path.join(
     __dirname,
     "..",
@@ -132,25 +130,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
     "build-info",
   );
 
-  // Check if the directory exists
   if (!fs.existsSync(buildInfoDirectory)) {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
   }
 
-  // Read the directory
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
 
   let bytecode = "";
   let assembly = "";
 
-  // Iterate over the files in the directory
   for (let i = 0; i < buildInfoFiles.length; i++) {
     const filePath = path.join(buildInfoDirectory, buildInfoFiles[i]);
 
-    // Parse the JSON file
     const buildInfo = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-    // Check if the contract address exists in the file
     for (const contractName in buildInfo.output.contracts) {
       for (const contract in buildInfo.output.contracts[contractName]) {
         bytecode = buildInfo.output.contracts[contractName][contract].evm.deployedBytecode.object;
