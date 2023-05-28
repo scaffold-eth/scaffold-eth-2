@@ -13,6 +13,8 @@
     "chain": "yarn workspace @se-2/hardhat chain",
     "fork": "yarn workspace @se-2/hardhat fork",
     "deploy": "yarn workspace @se-2/hardhat deploy",
+    "deploy:watch": "yarn workspace @se-2/hardhat deploy:watch",
+    "deploy:watch-reset": "yarn workspace @se-2/hardhat deploy:watch-reset",
     "verify": "yarn workspace @se-2/hardhat verify",
     "compile": "yarn workspace @se-2/hardhat compile",
     "generate": "yarn workspace @se-2/hardhat generate",

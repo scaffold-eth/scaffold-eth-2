@@ -1785,6 +1785,7 @@ __metadata:
     "@types/mocha": ^9.1.1
     "@types/prettier": ^2
     "@types/qrcode": ^1
+    "@types/watch": ^1
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
     chai: ^4.3.6
@@ -1803,6 +1804,7 @@ __metadata:
     ts-node: ^10.9.1
     typechain: ^8.1.0
     typescript: ^4.9.5
+    watch: ^1.0.2
   languageName: unknown
   linkType: soft
 
@@ -2580,6 +2582,15 @@ __metadata:
   version: 2.0.2
   resolution: "@types/trusted-types@npm:2.0.2"
   checksum: 3371eef5f1c50e1c3c07a127c1207b262ba65b83dd167a1c460fc1b135a3fb0c97b9f508efebd383f239cc5dd5b7169093686a692a501fde9c3f7208657d9b0d
+  languageName: node
+  linkType: hard
+
+"@types/watch@npm:^1":
+  version: 1.0.3
+  resolution: "@types/watch@npm:1.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 8655d45bb17089def1f777f82359eb10772652376b817a2c98b2e3b432868289f02817e8fe7d42ec5218719a1d5461b1465f33cda282e96e07b0ee6bf270d26f
   languageName: node
   linkType: hard
 
@@ -7072,6 +7083,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"exec-sh@npm:^0.2.0":
+  version: 0.2.2
+  resolution: "exec-sh@npm:0.2.2"
+  dependencies:
+    merge: ^1.2.0
+  checksum: 3ec5f99c8f7c4bebfeed1a797818f8754de00415d60a99f327e7f970834ca85252c449bf4b2efbff4c11e76eccc6b976a1956a5394a612d8e3d412185f59b0c0
+  languageName: node
+  linkType: hard
+
 "execa@npm:^6.1.0":
   version: 6.1.0
   resolution: "execa@npm:6.1.0"
@@ -9498,6 +9518,13 @@ __metadata:
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
   checksum: 7268db63ed5169466540b6fb947aec313200bcf6d40c5ab722c22e242f651994619bcd85601602972d3c85bd2cc45a358a4c61937e9f11a061919a1da569b0c2
+  languageName: node
+  linkType: hard
+
+"merge@npm:^1.2.0":
+  version: 1.2.1
+  resolution: "merge@npm:1.2.1"
+  checksum: 2298c4fdcf64561f320b92338681f7ffcafafb579a6e294066ae3e7bd10ae25df363903d2f028072733b9f79a1f75d2b999aef98ad5d73de13641da39cda0913
   languageName: node
   linkType: hard
 
@@ -13359,6 +13386,18 @@ __metadata:
     typescript:
       optional: true
   checksum: 98f1227650bcc7a92184da2b8b7adfb91b60d1135a41597e13f929aecbe698b54af076d8b532c0d4599cf3e5e57b2d39ce4c9b998e8f7a48042f09afdcb48aab
+  languageName: node
+  linkType: hard
+
+"watch@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "watch@npm:1.0.2"
+  dependencies:
+    exec-sh: ^0.2.0
+    minimist: ^1.2.0
+  bin:
+    watch: ./cli.js
+  checksum: 7ffe99f8bdbd3311d84bdd80d90e74536da90d6b64b339a73dce57884c50527881b83e507e49ab85212682350791999c296fbf2a136b579530046fb97ffb9526
   languageName: node
   linkType: hard
 
