@@ -164,6 +164,12 @@ const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
   args: ["The value to set"],
   // For payable functions, expressed in ETH
   value: "0.01",
+  // The number of block confirmations to wait for before considering transaction to be confirmed (default : 1).
+  blockConfirmations: 1,
+  // The callback function to execute when the transaction is confirmed.
+  onBlockConfirmation: (txnReceipt) => {
+    console.log("Transaction blockHash", txnReceipt.blockHash);
+  },
 });
 ```
 
