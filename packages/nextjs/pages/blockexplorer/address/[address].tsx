@@ -5,6 +5,7 @@ import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
+import * as chains from "wagmi/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -13,6 +14,7 @@ import {
   TransactionsTable,
 } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
+import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
 type AddressCodeTabProps = {
@@ -38,6 +40,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       const contractCode = await provider.getCode(address);
       setIsContract(contractCode !== "0x");
     };
+    console.log(Object.keys(deployedContracts[31337][0].contracts)[0]);
 
     checkIsContract();
   }, [address, provider]);
@@ -141,6 +144,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
 
+  const chainId = chains.hardhat.id;
+  const contractPath = `contracts/${Object.keys(deployedContracts[chainId][0].contracts)[0]}.sol`;
+
   let bytecode = "";
   let assembly = "";
 
@@ -149,10 +155,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
     const buildInfo = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-    for (const contractName in buildInfo.output.contracts) {
-      for (const contract in buildInfo.output.contracts[contractName]) {
-        bytecode = buildInfo.output.contracts[contractName][contract].evm.deployedBytecode.object;
-        assembly = buildInfo.output.contracts[contractName][contract].evm.bytecode.opcodes;
+    if (buildInfo.output.contracts[contractPath]) {
+      for (const contract in buildInfo.output.contracts[contractPath]) {
+        bytecode = buildInfo.output.contracts[contractPath][contract].evm.bytecode.object;
+        assembly = buildInfo.output.contracts[contractPath][contract].evm.bytecode.opcodes;
         break;
       }
     }
