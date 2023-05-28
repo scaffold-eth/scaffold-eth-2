@@ -5,7 +5,13 @@ import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
-import { AddressCodeTab, AddressLogsTab, PaginationButton, TransactionsTable } from "~~/components/blockexplorer/";
+import {
+  AddressCodeTab,
+  AddressLogsTab,
+  AddressStorageTab,
+  PaginationButton,
+  TransactionsTable,
+} from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
@@ -36,7 +42,6 @@ const AddressPage = ({ address, contractData }: PageProps) => {
     checkIsContract();
   }, [address, provider]);
 
-  // Filter blocks that contain transactions related to the desired address
   const filteredBlocks = blocks.filter(block =>
     block.transactions.some(
       tx => tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase(),
@@ -102,7 +107,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "code" && contractData && (
         <AddressCodeTab bytecode={contractData.bytecode} assembly={contractData.assembly} />
       )}
-      {/* {activeTab === "storage" && <AddressStorageTab address={address} />} */}
+      {activeTab === "storage" && <AddressStorageTab address={address} provider={provider} />}
       {activeTab === "logs" && <AddressLogsTab address={address} provider={provider} />}
     </div>
   );
