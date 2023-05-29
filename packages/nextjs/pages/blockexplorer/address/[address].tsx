@@ -40,7 +40,6 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       const contractCode = await provider.getCode(address);
       setIsContract(contractCode !== "0x");
     };
-    console.log(Object.keys(deployedContracts[31337][0].contracts)[0]);
 
     checkIsContract();
   }, [address, provider]);

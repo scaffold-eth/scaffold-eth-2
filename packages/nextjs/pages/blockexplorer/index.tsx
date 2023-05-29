@@ -49,13 +49,11 @@ const Blockexplorer: NextPage = () => {
   }, [error, ConnectedChain]);
 
   return (
-    <>
-      <div className="m-10 mb-20">
-        <SearchBar />
-        <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
-        <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />
-      </div>
-    </>
+    <div className="m-10 mb-20">
+      <SearchBar />
+      <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
+      <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />
+    </div>
   );
 };
 

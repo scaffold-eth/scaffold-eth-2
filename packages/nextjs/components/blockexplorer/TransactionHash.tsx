@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
-export const TransactionHash = ({ hash }: { hash?: string }) => {
+export const TransactionHash = ({ hash }: { hash: string }) => {
   const [addressCopied, setAddressCopied] = useState(false);
 
   return (

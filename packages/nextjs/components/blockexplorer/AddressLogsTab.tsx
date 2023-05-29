@@ -22,5 +22,3 @@ export const AddressLogsTab = ({ address, provider }: AddressLogsTabProps) => {
     </div>
   );
 };
-
-export default AddressLogsTab;

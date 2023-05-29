@@ -24,10 +24,9 @@ export const useContractLogs = (address: string, provider: ethers.providers.Prov
     };
 
     const filter = { address: address };
-    provider.on(filter, handleLog);
 
     fetchLogs();
-
+    provider.on(filter, handleLog);
     return () => {
       provider.off(filter, handleLog);
     };

@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
 interface PaginationButtonProps {
@@ -10,21 +9,11 @@ interface PaginationButtonProps {
 const ITEMS_PER_PAGE = 20;
 
 export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: PaginationButtonProps) => {
-  const isPrevButtonDisabled = useMemo(() => currentPage === 0, [currentPage]);
-  const isNextButtonDisabled = useMemo(
-    () => currentPage + 1 >= Math.ceil(totalItems / ITEMS_PER_PAGE),
-    [currentPage, totalItems],
-  );
+  const isPrevButtonDisabled = currentPage === 0;
+  const isNextButtonDisabled = currentPage + 1 >= Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-  const prevButtonClass = useMemo(
-    () => (isPrevButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary"),
-    [isPrevButtonDisabled],
-  );
-
-  const nextButtonClass = useMemo(
-    () => (isNextButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary"),
-    [isNextButtonDisabled],
-  );
+  const prevButtonClass = isPrevButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary";
+  const nextButtonClass = isNextButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary";
 
   return (
     <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">

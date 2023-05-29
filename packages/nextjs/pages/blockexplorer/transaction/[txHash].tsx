@@ -118,7 +118,7 @@ const TransactionPage: NextPage = () => {
                   <strong>Data:</strong>
                 </td>
                 <td className="form-control">
-                  <textarea readOnly value={transaction.data} className="p-4 textarea-primary bg-inherit" />
+                  <textarea readOnly value={transaction.data} className="p-0 textarea-primary bg-inherit" />
                 </td>
               </tr>
             </tbody>
