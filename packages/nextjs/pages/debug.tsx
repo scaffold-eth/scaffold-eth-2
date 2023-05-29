@@ -1,6 +1,5 @@
-import { useState } from "react";
 import type { NextPage } from "next";
-import { useEffectOnce, useLocalStorage } from "usehooks-ts";
+import { useLocalStorage } from "usehooks-ts";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
@@ -9,18 +8,10 @@ const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 
 const Debug: NextPage = () => {
   const contractNames = getContractNames();
-  const [selectedContract, setSelectedContract] = useState<ContractName>(contractNames[0]);
-  const [selectedContractStorageValue, setSelectedContractStorageValue] = useLocalStorage<ContractName>(
+  const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
   );
-
-  useEffectOnce(() => setSelectedContract(selectedContractStorageValue));
-
-  const onSelectContract = (contractName: ContractName) => {
-    setSelectedContract(contractName);
-    setSelectedContractStorageValue(contractName);
-  };
 
   return (
     <>
@@ -37,7 +28,7 @@ const Debug: NextPage = () => {
                       contractName === selectedContract ? "bg-base-300" : "bg-base-100"
                     }`}
                     key={contractName}
-                    onClick={() => onSelectContract(contractName)}
+                    onClick={() => setSelectedContract(contractName)}
                   >
                     {contractName}
                   </button>
