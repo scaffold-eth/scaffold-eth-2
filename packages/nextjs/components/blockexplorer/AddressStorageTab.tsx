@@ -21,7 +21,6 @@ export const AddressStorageTab = ({ address, provider }: AddressStorageTabProps)
           if (storageAtPosition === "0x" + "0".repeat(64)) break;
 
           storageData.push(storageAtPosition);
-          console.log(storageAtPosition);
           idx++;
         }
         setStorage(storageData);
@@ -35,15 +34,19 @@ export const AddressStorageTab = ({ address, provider }: AddressStorageTabProps)
 
   return (
     <div className="flex flex-col gap-3 p-4">
-      <div className="mockup-code overflow-auto max-h-[500px]">
-        <pre className="px-5 whitespace-pre-wrap break-words">
-          {storage.map((data, i) => (
-            <div key={i}>
-              <strong>Storage Slot {i}:</strong> {data}
-            </div>
-          ))}
-        </pre>
-      </div>
+      {storage.length > 0 ? (
+        <div className="mockup-code overflow-auto max-h-[500px]">
+          <pre className="px-5 whitespace-pre-wrap break-words">
+            {storage.map((data, i) => (
+              <div key={i}>
+                <strong>Storage Slot {i}:</strong> {data}
+              </div>
+            ))}
+          </pre>
+        </div>
+      ) : (
+        <div className="text-lg">This contract does not have any variables.</div>
+      )}
     </div>
   );
 };

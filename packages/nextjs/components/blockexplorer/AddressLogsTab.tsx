@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { useContractLogs } from "~~/hooks/scaffold-eth";
 
 type AddressLogsTabProps = {
   address: string;
@@ -7,37 +7,7 @@ type AddressLogsTabProps = {
 };
 
 export const AddressLogsTab = ({ address, provider }: AddressLogsTabProps) => {
-  const [logs, setLogs] = useState<ethers.providers.Log[]>([]);
-
-  useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const filter = {
-          address: address,
-          fromBlock: 0,
-          toBlock: "latest",
-        };
-        const existingLogs = await provider.getLogs(filter);
-        setLogs(existingLogs);
-      } catch (error) {
-        console.error("Failed to fetch logs:", error);
-      }
-    };
-
-    const handleLog = (log: ethers.providers.Log) => {
-      setLogs(prevLogs => [...prevLogs, log]);
-    };
-
-    const filter = { address: address };
-    provider.on(filter, handleLog);
-
-    fetchLogs();
-
-    return () => {
-      provider.off(filter, handleLog);
-    };
-  }, [address, provider]);
-
+  const logs = useContractLogs(address, provider);
   return (
     <div className="flex flex-col gap-3 p-4">
       <div className="mockup-code overflow-auto max-h-[500px]">

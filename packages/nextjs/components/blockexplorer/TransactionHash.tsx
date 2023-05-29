@@ -18,7 +18,6 @@ export const TransactionHash = ({ hash }: { hash?: string }) => {
         />
       ) : (
         <CopyToClipboard
-          // @todo do not use "as"
           text={hash as string}
           onCopy={() => {
             setAddressCopied(true);
