@@ -122,31 +122,8 @@ interface Params extends ParsedUrlQuery {
   address: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const address = (context.params as Params).address;
-
-  const buildInfoDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "hardhat",
-    "artifacts",
-    "build-info",
-  );
-
-  if (!fs.existsSync(buildInfoDirectory)) {
-    throw new Error(`Directory ${buildInfoDirectory} not found.`);
-  }
-
+async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
-
-  const chainId = chains.hardhat.id;
-  const contractPath = `contracts/${Object.keys(deployedContracts[chainId][0].contracts)[0]}.sol`;
-
   let bytecode = "";
   let assembly = "";
 
@@ -167,6 +144,34 @@ export const getServerSideProps: GetServerSideProps = async context => {
       break;
     }
   }
+
+  return { bytecode, assembly };
+}
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const address = (context.params as Params).address;
+
+  const buildInfoDirectory = path.join(
+    __dirname,
+    "..",
+    "..",
+    "..",
+    "..",
+    "..",
+    "..",
+    "hardhat",
+    "artifacts",
+    "build-info",
+  );
+
+  if (!fs.existsSync(buildInfoDirectory)) {
+    throw new Error(`Directory ${buildInfoDirectory} not found.`);
+  }
+
+  const chainId = chains.hardhat.id;
+  const contractPath = `contracts/${Object.keys(deployedContracts[chainId][0].contracts)[0]}.sol`;
+
+  const { bytecode, assembly } = await fetchByteCodeAndAssembly(buildInfoDirectory, contractPath);
 
   return { props: { address, contractData: { bytecode, assembly } } };
 };
