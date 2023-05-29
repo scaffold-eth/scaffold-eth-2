@@ -13214,13 +13214,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.7.2":
+"usehooks-ts@npm:2.7.2":
   version: 2.7.2
   resolution: "usehooks-ts@npm:2.7.2"
   peerDependencies:
     react: ^16.8.0  || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
   checksum: c4edfc53aa60f6c107c8724dbd60c06b5888f1905091797c1639255924dd45ea337355c5d51e4826f7f07c0167742f9f2d3bf23e11fb6d9b15ad7abe01d1d51d
+  languageName: node
+  linkType: hard
+
+"usehooks-ts@patch:usehooks-ts@npm%3A2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::locator=se-2%40workspace%3A.":
+  version: 2.7.2
+  resolution: "usehooks-ts@patch:usehooks-ts@npm%3A2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::version=2.7.2&hash=68bde7&locator=se-2%40workspace%3A."
+  peerDependencies:
+    react: ^16.8.0  || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+  checksum: 7c79b57c9378e1043156ec1c339e0d6abaaf803e72cb46b61af82dbe2f0f19c29a2b6ede788a5d3969641df509485949c21b181aee5c462105b4605c40433385
   languageName: node
   linkType: hard
 
