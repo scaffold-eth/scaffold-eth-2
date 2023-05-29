@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
@@ -18,7 +18,7 @@ const TransactionPage: NextPage = () => {
   const [functionCalled, setFunctionCalled] = useState<string | null>(null);
 
   const configuredNetwork = getTargetNetwork();
-  const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+  const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
 
   useEffect(() => {
     if (txHash) {
@@ -32,11 +32,12 @@ const TransactionPage: NextPage = () => {
 
         const functionCalled = transactionWithDecodedData.data.substring(0, 10);
         setFunctionCalled(functionCalled);
+        console.log("fetching txs in txhash page...");
       };
 
       fetchTransaction();
     }
-  }, [txHash]);
+  }, [txHash, provider]);
 
   return (
     <div className="m-10 mb-20">
