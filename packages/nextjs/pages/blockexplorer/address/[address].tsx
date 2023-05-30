@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ethers } from "ethers";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import * as chains from "wagmi/chains";
+import { hardhat, localhost } from "wagmi/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -15,6 +14,7 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -32,11 +32,11 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
 
-  const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
+  const provider = getLocalProvider(localhost);
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await provider.getCode(address);
+      const contractCode = await provider?.getCode(address);
       setIsContract(contractCode !== "0x");
     };
 
@@ -108,8 +108,8 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "code" && contractData && (
         <AddressCodeTab bytecode={contractData.bytecode} assembly={contractData.assembly} />
       )}
-      {activeTab === "storage" && <AddressStorageTab address={address} provider={provider} />}
-      {activeTab === "logs" && <AddressLogsTab address={address} provider={provider} />}
+      {activeTab === "storage" && <AddressStorageTab address={address} />}
+      {activeTab === "logs" && <AddressLogsTab address={address} />}
     </div>
   );
 };
@@ -162,7 +162,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
   }
 
-  const chainId = chains.hardhat.id;
+  const chainId = hardhat.id;
 
   let contractPath = "";
 

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { localhost } from "wagmi/chains";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 type AddressStorageTabProps = {
   address: string;
-  provider: ethers.providers.Provider;
 };
 
-export const AddressStorageTab = ({ address, provider }: AddressStorageTabProps) => {
+const provider = getLocalProvider(localhost);
+
+export const AddressStorageTab = ({ address }: AddressStorageTabProps) => {
   const [storage, setStorage] = useState<string[]>([]);
 
   useEffect(() => {
@@ -16,11 +18,14 @@ export const AddressStorageTab = ({ address, provider }: AddressStorageTabProps)
         let idx = 0;
 
         while (true) {
-          const storageAtPosition = await provider.getStorageAt(address, idx);
+          const storageAtPosition = await provider?.getStorageAt(address, idx);
 
           if (storageAtPosition === "0x" + "0".repeat(64)) break;
 
-          storageData.push(storageAtPosition);
+          if (storageAtPosition) {
+            storageData.push(storageAtPosition);
+          }
+
           idx++;
         }
         setStorage(storageData);
@@ -30,7 +35,7 @@ export const AddressStorageTab = ({ address, provider }: AddressStorageTabProps)
     };
 
     fetchStorage();
-  }, [address, provider]);
+  }, [address]);
 
   return (
     <div className="flex flex-col gap-3 p-4">

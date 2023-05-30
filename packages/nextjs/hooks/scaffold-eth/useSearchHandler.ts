@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
+import { localhost } from "wagmi/chains";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
+
+const provider = getLocalProvider(localhost) || new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
 export const useSearchHandler = () => {
   const [searchInput, setSearchInput] = useState("");
-  const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
   const router = useRouter();
 
   const handleSearch = async (event: React.FormEvent) => {

@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
+import { localhost } from "wagmi/chains";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { Block } from "~~/utils/scaffold-eth/block";
 
 const BLOCKS_PER_PAGE = 20;
+
+const provider = getLocalProvider(localhost) || new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
 export const useFetchBlocks = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -15,8 +19,6 @@ export const useFetchBlocks = () => {
   const [totalBlocks, setTotalBlocks] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
-  const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
 
   const fetchBlocks = useCallback(async () => {
     setIsLoading(true);
@@ -66,7 +68,7 @@ export const useFetchBlocks = () => {
       setError(err instanceof Error ? err : new Error("An error occurred."));
     }
     setIsLoading(false);
-  }, [currentPage, provider]);
+  }, [currentPage]);
 
   useEffect(() => {
     fetchBlocks();
@@ -108,7 +110,7 @@ export const useFetchBlocks = () => {
     return () => {
       provider.off("block", handleNewBlock);
     };
-  }, [blocks, currentPage, provider]);
+  }, [blocks, currentPage]);
 
   return {
     blocks,

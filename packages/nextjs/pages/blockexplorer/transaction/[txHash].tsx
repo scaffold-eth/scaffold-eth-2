@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 import type { NextPage } from "next";
+import { localhost } from "wagmi/chains";
 import { Address } from "~~/components/scaffold-eth";
 import {
   TransactionWithFunction,
@@ -9,6 +10,9 @@ import {
   getFunctionDetails,
   getTargetNetwork,
 } from "~~/utils/scaffold-eth";
+import { getLocalProvider } from "~~/utils/scaffold-eth";
+
+const provider = getLocalProvider(localhost) || new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
 const TransactionPage: NextPage = () => {
   const router = useRouter();
@@ -18,7 +22,6 @@ const TransactionPage: NextPage = () => {
   const [functionCalled, setFunctionCalled] = useState<string | null>(null);
 
   const configuredNetwork = getTargetNetwork();
-  const provider = useMemo(() => new ethers.providers.JsonRpcProvider("http://localhost:8545"), []);
 
   useEffect(() => {
     if (txHash) {
@@ -36,7 +39,7 @@ const TransactionPage: NextPage = () => {
 
       fetchTransaction();
     }
-  }, [txHash, provider]);
+  }, [txHash]);
 
   return (
     <div className="m-10 mb-20">
