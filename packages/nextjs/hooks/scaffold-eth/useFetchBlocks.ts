@@ -50,7 +50,8 @@ export const useFetchBlocks = () => {
         fetchedBlocks.flatMap(block =>
           block.transactions.map(async tx => {
             try {
-              return await provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }));
+              const receipt = await provider.getTransactionReceipt(tx.hash);
+              return { [tx.hash]: receipt };
             } catch (err) {
               setError(err instanceof Error ? err : new Error("An error occurred."));
               throw err;
@@ -84,7 +85,8 @@ export const useFetchBlocks = () => {
             const receipts = await Promise.all(
               newBlock.transactions.map(async tx => {
                 try {
-                  return await provider.getTransactionReceipt(tx.hash).then(receipt => ({ [tx.hash]: receipt }));
+                  const receipt = await provider.getTransactionReceipt(tx.hash);
+                  return { [tx.hash]: receipt };
                 } catch (err) {
                   setError(err instanceof Error ? err : new Error("An error occurred."));
                   throw err;
