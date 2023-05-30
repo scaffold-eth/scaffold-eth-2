@@ -100,7 +100,7 @@ const TransactionPage: NextPage = () => {
                   {functionCalled === "0x"
                     ? "This transaction did not call any function."
                     : getFunctionDetails(transaction)}
-                  {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
+                  {functionCalled !== "0x" && (
                     <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
                       {functionCalled}
                     </span>

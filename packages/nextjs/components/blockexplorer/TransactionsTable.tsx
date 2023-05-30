@@ -64,7 +64,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                     </td>
                     <td className="w-2/12">
                       {tx.functionName === "0x" ? "" : tx.functionName}
-                      {functionCalled !== "0x" && functionCalled !== "0x60a06040" && (
+                      {functionCalled !== "0x" && (
                         <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
                           {functionCalled}
                         </span>
