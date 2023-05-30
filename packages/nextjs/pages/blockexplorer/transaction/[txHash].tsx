@@ -45,7 +45,7 @@ const TransactionPage: NextPage = () => {
         Back
       </button>
       {transaction ? (
-        <div className="overflow-x-auto shadow-lg">
+        <div className="overflow-x-auto">
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
           <table className="table w-full">
             <tbody>
