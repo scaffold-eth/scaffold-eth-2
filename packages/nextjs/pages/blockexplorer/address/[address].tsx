@@ -143,7 +143,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const address = context.params?.address as string;
+  const address = (context.params?.address as string).toLowerCase();
 
   const buildInfoDirectory = path.join(
     __dirname,
@@ -163,7 +163,21 @@ export const getServerSideProps: GetServerSideProps = async context => {
   }
 
   const chainId = chains.hardhat.id;
-  const contractPath = `contracts/${Object.keys(deployedContracts[chainId][0].contracts)[0]}.sol`;
+
+  let contractPath = "";
+
+  const deployedContractsOnChain = deployedContracts[chainId][0].contracts;
+  for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
+    if (contractInfo.address.toLowerCase() === address) {
+      contractPath = `contracts/${contractName}.sol`;
+      break;
+    }
+  }
+
+  if (!contractPath) {
+    // No contract found at this address
+    return { props: { address, contractData: null } };
+  }
 
   const { bytecode, assembly } = await fetchByteCodeAndAssembly(buildInfoDirectory, contractPath);
 

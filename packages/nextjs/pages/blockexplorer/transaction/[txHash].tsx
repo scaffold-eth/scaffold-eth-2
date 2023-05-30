@@ -32,7 +32,6 @@ const TransactionPage: NextPage = () => {
 
         const functionCalled = transactionWithDecodedData.data.substring(0, 10);
         setFunctionCalled(functionCalled);
-        console.log("fetching txs in txhash page...");
       };
 
       fetchTransaction();
