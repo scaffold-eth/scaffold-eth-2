@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import { ParsedUrlQuery } from "querystring";
 import * as chains from "wagmi/chains";
 import {
   AddressCodeTab,
@@ -117,10 +116,6 @@ const AddressPage = ({ address, contractData }: PageProps) => {
 
 export default AddressPage;
 
-interface Params extends ParsedUrlQuery {
-  address: string;
-}
-
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
   let bytecode = "";
@@ -148,7 +143,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const address = (context.params as Params).address;
+  const address = context.params?.address as string;
 
   const buildInfoDirectory = path.join(
     __dirname,
