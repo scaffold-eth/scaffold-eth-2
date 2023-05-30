@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import { useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
@@ -10,7 +9,6 @@ import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 const Blockexplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading, error } = useFetchBlocks();
-  const { chain: ConnectedChain } = useNetwork();
 
   useEffect(() => {
     if (getTargetNetwork().id === hardhat.id && error) {
@@ -28,25 +26,25 @@ const Blockexplorer: NextPage = () => {
       );
     }
 
-    if (getTargetNetwork().id !== hardhat.id && !error) {
+    if (getTargetNetwork().id !== hardhat.id) {
       notification.error(
         <>
           <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
           <p className="m-0">
-            - You are on <code className="italic bg-base-300 text-base font-bold">{ConnectedChain?.name}</code> This
+            - You are on <code className="italic bg-base-300 text-base font-bold">{getTargetNetwork().name}</code> This
             block explorer is only for <code className="italic bg-base-300 text-base font-bold">localhost</code>.
           </p>
           <p className="mt-1 break-normal">
             - You can use{" "}
-            <a className="text-accent" href={ConnectedChain?.blockExplorers?.default.url}>
-              {ConnectedChain?.blockExplorers?.default.name}
+            <a className="text-accent" href={getTargetNetwork().blockExplorers?.default.url}>
+              {getTargetNetwork().blockExplorers?.default.name}
             </a>{" "}
             instead
           </p>
         </>,
       );
     }
-  }, [error, ConnectedChain]);
+  }, [error]);
 
   return (
     <div className="m-10 mb-20">
