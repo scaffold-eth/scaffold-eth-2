@@ -28,34 +28,26 @@ contract ScaffoldETHDeploy is Script {
     }
 
     function exportDeployments() internal {
-        string memory jsonWrite = "deployments";
+        // fetch already existing contracts
+        root = vm.projectRoot();
+        path = string.concat(root, "/deployments/");
+        string memory chainIdStr = vm.toString(block.chainid);
+        path = string.concat(path, string.concat(chainIdStr, ".json"));
+
+        string memory jsonWrite;
 
         uint256 len = deployments.length;
 
-        for (uint256 i = 0; i < len | 0; i++) {
+        for (uint256 i = 0; i < len; i++) {
             vm.serializeString(
                 jsonWrite,
                 vm.toString(deployments[i].addr),
                 deployments[i].name
             );
         }
-        console.logString(jsonWrite);
 
-        if (deployments.length > 0) {
-            jsonWrite = vm.serializeString(
-                jsonWrite,
-                vm.toString(deployments[deployments.length - 1].addr),
-                deployments[deployments.length - 1].name
-            );
-        }
-
-        root = vm.projectRoot();
-        path = string.concat(root, "/deployments.json");
-        jsonWrite = vm.serializeString(
-            jsonWrite,
-            vm.toString(block.chainid),
-            jsonWrite
-        );
+        Chain memory chain = getChain(block.chainid);
+        jsonWrite = vm.serializeString(jsonWrite, "networkName", chain.name);
         vm.writeJson(jsonWrite, path);
     }
 }

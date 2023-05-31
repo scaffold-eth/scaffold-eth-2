@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 //@ts-expect-error  This script runs after `hardhat deploy --export` therefore its deterministic that it will present
-const deployments = require("../deployments.json");
+// const deployments = require("../deployments.json");
 const prettier = require("prettier");
 
 function getDirectories(path) {
@@ -9,7 +9,11 @@ function getDirectories(path) {
     return fs.statSync(path + "/" + file).isDirectory();
   });
 }
-
+function getFiles(path) {
+  return fs.readdirSync(path).filter(function (file) {
+    return fs.statSync(path + "/" + file).isFile();
+  });
+}
 function getAbiOfContract(contractName) {
   const current_path_to_artifacts = path.join(
     __dirname,
@@ -29,14 +33,27 @@ function main() {
     "..",
     "broadcast/Deploy.s.sol"
   );
+  const current_path_to_deployments = path.join(__dirname, "..", "deployments");
+
   const chains = getDirectories(current_path_to_broadcast);
+  const Deploymentchains = getFiles(current_path_to_deployments);
+
+  var deployments = {};
+
+  Deploymentchains.forEach((chain) => {
+    chain = chain.slice(0, -5);
+    var deploymentObject = JSON.parse(
+      fs.readFileSync(`${current_path_to_deployments}/${chain}.json`)
+    );
+    deployments[chain] = deploymentObject;
+  });
 
   var allGeneratedContracts = {};
 
   chains.forEach((chain) => {
     allGeneratedContracts[chain] = [];
     allGeneratedContracts[chain].push({
-      name: "localhost",
+      name: deployments[chain].networkName || "hardhat",
       chainId: chain,
       contracts: {},
     });
@@ -82,9 +99,6 @@ function main() {
       }
     )
   );
-
-  // remove generted output temp folder
-  fs.rmSync("./deployments.json", { recursive: true, force: true });
 }
 
 try {
