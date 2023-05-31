@@ -13214,23 +13214,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:2.7.2":
-  version: 2.7.2
-  resolution: "usehooks-ts@npm:2.7.2"
+"usehooks-ts@npm:^2.7.2":
+  version: 2.9.1
+  resolution: "usehooks-ts@npm:2.9.1"
   peerDependencies:
     react: ^16.8.0  || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: c4edfc53aa60f6c107c8724dbd60c06b5888f1905091797c1639255924dd45ea337355c5d51e4826f7f07c0167742f9f2d3bf23e11fb6d9b15ad7abe01d1d51d
+  checksum: 36f1e4142ce23bc019b81d2e93aefd7f2c350abcf255598c21627114a69a2f2f116b35dc3a353375f09c6e4c9b704a04f104e3d10e98280545c097feca66c30a
   languageName: node
   linkType: hard
 
-"usehooks-ts@patch:usehooks-ts@npm%3A2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::locator=se-2%40workspace%3A.":
-  version: 2.7.2
-  resolution: "usehooks-ts@patch:usehooks-ts@npm%3A2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::version=2.7.2&hash=68bde7&locator=se-2%40workspace%3A."
+"usehooks-ts@patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::locator=se-2%40workspace%3A.":
+  version: 2.9.1
+  resolution: "usehooks-ts@patch:usehooks-ts@npm%3A2.9.1#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::version=2.9.1&hash=68bde7&locator=se-2%40workspace%3A."
   peerDependencies:
     react: ^16.8.0  || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: 7c79b57c9378e1043156ec1c339e0d6abaaf803e72cb46b61af82dbe2f0f19c29a2b6ede788a5d3969641df509485949c21b181aee5c462105b4605c40433385
+  checksum: 6807ae0e6ffd158790e5018d3a322efd0fe97853b6b83751725e5e81d0962cb6230ca65a24341bb5cee3f1bc330721611440c399fc950723153c5cc61eb74b04
   languageName: node
   linkType: hard
 
