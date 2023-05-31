@@ -41,5 +41,8 @@
     "envfile": "^6.18.0",
     "ethers": "^5.7.1",
     "prettier": "^2.8.8"
+  },
+  "resolutions": {
+    "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
   }
 }
