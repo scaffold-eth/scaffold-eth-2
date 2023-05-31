@@ -4,42 +4,35 @@ import Head from "next/head";
 interface MetaHeaderProps {
   title?: string;
   description?: string;
-  favicon?: string;
-  ogTitle?: string;
-  ogDescription?: string;
   ogImage?: string;
   twitterCard?: string;
-  twitterTitle?: string;
-  twitterDescription?: string;
   twitterImage?: string;
 }
 
-const MetaHeader: React.FC<MetaHeaderProps> = ({
-  title,
-  description,
-  favicon,
-  ogTitle,
-  ogDescription,
-  ogImage,
-  twitterCard,
-  twitterTitle,
-  twitterDescription,
+export const MetaHeader = ({
+  // default values are set in case user does not provide them as props when using MetaHeader component.
+  title = "Scaffold-ETH 2 App",
+  description = "Built with 🏗 scaffold-eth-2",
+  ogImage = "thumbnail.png",
+  twitterCard = "summary_large_image",
   twitterImage,
-}) => {
+}: MetaHeaderProps) => {
+  // Set default twitterImage if not provided, must be an absolute path to work properly on Twitter
+  twitterImage =
+    twitterImage || (typeof window !== "undefined" ? `${window.location.origin}/thumbnail.jpg` : undefined);
+
   return (
     <Head>
       {title ? <title>{title}</title> : null}
       {description && <meta name="description" content={description} />}
-      {favicon && <link rel="icon" type="image/png" sizes="32x32" href={favicon} />}
-      {ogTitle && <meta property="og:title" content={ogTitle} />}
-      {ogDescription && <meta property="og:description" content={ogDescription} />}
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+      {title && <meta property="og:title" content={title} />}
+      {description && <meta property="og:description" content={description} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
       {twitterCard && <meta name="twitter:card" content={twitterCard} />}
-      {twitterTitle && <meta name="twitter:title" content={twitterTitle} />}
-      {twitterDescription && <meta name="twitter:description" content={twitterDescription} />}
+      {title && <meta name="twitter:title" content={title} />}
+      {description && <meta name="twitter:description" content={description} />}
       {twitterImage && <meta name="twitter:image" content={twitterImage} />}
     </Head>
   );
 };
-
-export default MetaHeader;
