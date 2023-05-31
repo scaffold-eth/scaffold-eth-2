@@ -13,4 +13,4 @@ docs/
 # Dotenv file
 .env
 localhost.json
-deployments
+deployments/*
