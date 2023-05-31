@@ -41,6 +41,7 @@ function main() {
   var deployments = {};
 
   Deploymentchains.forEach((chain) => {
+    if (!chain.endsWith(".json")) return;
     chain = chain.slice(0, -5);
     var deploymentObject = JSON.parse(
       fs.readFileSync(`${current_path_to_deployments}/${chain}.json`)
