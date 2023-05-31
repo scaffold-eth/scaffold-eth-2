@@ -24,10 +24,21 @@ yarn deploy:foundry {networkNname: optional}
 yarn start
 ```
 
-2. Add networks in `packages/foundry/foundry.toml`
+# Config
+
+1. Add networks in `packages/foundry/foundry.toml`
 
 ```rust
 [rpc_endpoints]
 localhost = "http://127.0.0.1:8545"
 mumbai = "https://rpc.ankr.com/polygon_mumbai"
+```
+
+2. Record Contract with different name in `script/Deploy.s.sol`
+
+```solidity
+        YourContract yourContract1 = new YourContract(vm.addr(1));
+
+        // this is optional : the original contract name is DEFAULT
+        deployments.push(Deployment("YourContract1", address(yourContract1)));
 ```
