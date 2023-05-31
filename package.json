@@ -28,7 +28,8 @@
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "chain:foundry": "cd packages/foundry && anvil --config-out localhost.json",
-    "deploy:foundry": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url ${0:-localhost} --broadcast && node script/generateTsAbis.ts"
+    "deploy:foundry": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url ${0:-localhost} --broadcast && node script/generateTsAbis.ts",
+    "generate:foundry": "cd packages/foundry && node script/generateAccount.ts"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
@@ -37,6 +38,8 @@
     "lint-staged": "^13.0.3"
   },
   "dependencies": {
+    "envfile": "^6.18.0",
+    "ethers": "^5.7.1",
     "prettier": "^2.8.8"
   }
 }

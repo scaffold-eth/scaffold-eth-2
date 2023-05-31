@@ -17,9 +17,17 @@ yarn chain:foundry
 ```
 
 ```
-yarn deploy:foundry
+yarn deploy:foundry {networkNname: optional}
 ```
 
 ```
 yarn start
+```
+
+2. Add networks in `packages/foundry/foundry.toml`
+
+```rust
+[rpc_endpoints]
+localhost = "http://127.0.0.1:8545"
+mumbai = "https://rpc.ankr.com/polygon_mumbai"
 ```
