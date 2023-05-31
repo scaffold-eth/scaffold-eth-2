@@ -1,4 +1,3 @@
 {
-  "0x137F7A1c85b5a0971657AA724CAC91FffE33Ecce": "YourContract1",
-  "0x77a50a79Dde845148B76Da2F1d16c07EBF3D9220": "YourContract2"
+  "networkName": "Polygon Mumbai"
 }
