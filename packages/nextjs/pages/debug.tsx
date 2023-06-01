@@ -12,8 +12,8 @@ const Debug: NextPage = () => {
   return (
     <>
       <MetaHeader
-        title="Debug your Scaffold-ETH 2 Contracts"
-        description="Easily debug your deployed 🏗 Scaffold-ETH 2 contracts, using this built-in feature."
+        title="Debug your Contracts | Scaffold-ETH 2"
+        description="Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way"
       />
       <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
         {contractNames.length === 0 ? (
