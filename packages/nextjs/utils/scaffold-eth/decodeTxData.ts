@@ -19,7 +19,7 @@ const interfaces = chainMetaData
     }, {} as ContractsInterfaces)
   : {};
 
-export const decodeTransactionData = (tx: TransactionWithFunction): TransactionWithFunction => {
+export const decodeTransactionData = (tx: TransactionWithFunction) => {
   if (tx.data.length >= 10) {
     for (const [, contractInterface] of Object.entries(interfaces)) {
       try {
@@ -37,7 +37,7 @@ export const decodeTransactionData = (tx: TransactionWithFunction): TransactionW
   return tx;
 };
 
-export const getFunctionDetails = (transaction: TransactionType): string => {
+export const getFunctionDetails = (transaction: TransactionType) => {
   if (
     transaction &&
     transaction.functionName &&
