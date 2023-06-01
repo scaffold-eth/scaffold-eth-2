@@ -26,13 +26,13 @@ type PageProps = {
   contractData: AddressCodeTabProps | null;
 };
 
+const provider = getLocalProvider(localhost);
+
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
-
-  const provider = getLocalProvider(localhost);
 
   useEffect(() => {
     const checkIsContract = async () => {
@@ -41,7 +41,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
     };
 
     checkIsContract();
-  }, [address, provider]);
+  }, [address]);
 
   const filteredBlocks = blocks.filter(block =>
     block.transactions.some(
