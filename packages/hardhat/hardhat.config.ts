@@ -14,7 +14,19 @@ const deployerPrivateKey =
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.17",
+  solidity: {
+    version: "0.8.17",
+    settings: {
+      // By default, the Solidity Optimizer is disabled
+      // https://docs.soliditylang.org/en/latest/internals/optimizer.html#benefits-of-optimizing-solidity-code
+      // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+      // https://hardhat.org/hardhat-runner/docs/config
+      optimizer: {
+        enabled: false,
+        runs: 200,
+      },
+    },
+  },
   defaultNetwork: "localhost",
   namedAccounts: {
     deployer: {
