@@ -13,5 +13,4 @@ export * from "./useScaffoldEventSubscriber";
 export * from "./useScaffoldEventHistory";
 export * from "./useTransactor";
 export * from "./useFetchBlocks";
-export * from "./useSearchHandler";
 export * from "./useContractLogs";
