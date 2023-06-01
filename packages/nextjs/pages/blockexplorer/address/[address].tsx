@@ -15,6 +15,7 @@ import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
+import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -144,6 +145,9 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const address = (context.params?.address as string).toLowerCase();
+  const contracts = deployedContracts as GenericContractsDeclaration | null;
+  const chainId = hardhat.id;
+  let contractPath = "";
 
   const buildInfoDirectory = path.join(
     __dirname,
@@ -162,11 +166,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
   }
 
-  const chainId = hardhat.id;
-
-  let contractPath = "";
-
-  const deployedContractsOnChain = deployedContracts[chainId][0].contracts;
+  const deployedContractsOnChain = contracts ? contracts[chainId][0].contracts : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
       contractPath = `contracts/${contractName}.sol`;

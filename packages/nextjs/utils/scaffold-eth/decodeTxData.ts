@@ -1,13 +1,23 @@
+import { GenericContractsDeclaration } from "./contract";
+import { JsonFragment } from "@ethersproject/abi";
 import { ethers } from "ethers";
-import deployedContracts from "~~/generated/deployedContracts";
+import { hardhat } from "wagmi/chains";
+import contractData from "~~/generated/deployedContracts";
 import { TransactionWithFunction } from "~~/utils/scaffold-eth";
 
-const chain = deployedContracts[31337][0];
-const interfaces: { [contractName: string]: ethers.utils.Interface } = {};
+type ContractsInterfaces = Record<string, ethers.utils.Interface>;
+type FunctionArgNameType = string;
+type IndexType = number;
+type TransactionType = TransactionWithFunction | null;
 
-for (const [contractName, contract] of Object.entries(chain.contracts)) {
-  interfaces[contractName] = new ethers.utils.Interface(contract.abi);
-}
+const deployedContracts = contractData as GenericContractsDeclaration | null;
+const chainMetaData = deployedContracts?.[hardhat.id]?.[0];
+const interfaces = chainMetaData
+  ? Object.entries(chainMetaData.contracts).reduce((finalInterfacesObj, [contractName, contract]) => {
+      finalInterfacesObj[contractName] = new ethers.utils.Interface(contract.abi as JsonFragment[]);
+      return finalInterfacesObj;
+    }, {} as ContractsInterfaces)
+  : {};
 
 export const decodeTransactionData = (tx: TransactionWithFunction): TransactionWithFunction => {
   if (tx.data.length >= 10) {
@@ -26,10 +36,6 @@ export const decodeTransactionData = (tx: TransactionWithFunction): TransactionW
   }
   return tx;
 };
-
-type FunctionArgNameType = string;
-type IndexType = number;
-type TransactionType = TransactionWithFunction | null;
 
 export const getFunctionDetails = (transaction: TransactionType): string => {
   if (
