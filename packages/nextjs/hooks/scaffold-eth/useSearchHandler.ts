@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { localhost } from "wagmi/chains";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 
-const provider = getLocalProvider(localhost) || new ethers.providers.JsonRpcProvider("http://localhost:8545");
+const provider = getLocalProvider(localhost);
 
 export const useSearchHandler = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -14,7 +14,7 @@ export const useSearchHandler = () => {
     event.preventDefault();
     if (ethers.utils.isHexString(searchInput)) {
       try {
-        const tx = await provider.getTransaction(searchInput);
+        const tx = await provider?.getTransaction(searchInput);
         if (tx) {
           router.push(`/blockexplorer/transaction/${searchInput}`);
           return;
