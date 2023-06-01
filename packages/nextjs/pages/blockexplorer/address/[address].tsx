@@ -53,7 +53,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   return (
     <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">
-        <button className="btn btn-primary" onClick={() => router.back()}>
+        <button className="btn btn-sm btn-primary" onClick={() => router.back()}>
           Back
         </button>
       </div>
@@ -65,7 +65,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
                 <Address address={address} format="long" />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={address} className="text-lg" />
+                  <Balance address={address} className="text" />
                 </div>
               </div>
             </div>
@@ -75,25 +75,25 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {isContract && (
         <div className="tabs">
           <button
-            className={`tab tab-lg tab-lifted ${activeTab === "transactions" ? "tab-active" : ""}`}
+            className={`tab tab-lifted ${activeTab === "transactions" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("transactions")}
           >
             Transactions
           </button>
           <button
-            className={`tab tab-lg tab-lifted ${activeTab === "code" ? "tab-active" : ""}`}
+            className={`tab tab-lifted ${activeTab === "code" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("code")}
           >
             Code
           </button>
           <button
-            className={`tab tab-lg tab-lifted ${activeTab === "storage" ? "tab-active" : ""}`}
+            className={`tab tab-lifted ${activeTab === "storage" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("storage")}
           >
             Storage
           </button>
           <button
-            className={`tab tab-lg tab-lifted ${activeTab === "logs" ? "tab-active" : ""}`}
+            className={`tab tab-lifted ${activeTab === "logs" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("logs")}
           >
             Logs

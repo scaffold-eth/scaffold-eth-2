@@ -18,7 +18,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
   return (
     <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
       <button
-        className={`btn btn-primary ${prevButtonClass}`}
+        className={`btn btn-sm ${prevButtonClass}`}
         disabled={isPrevButtonDisabled}
         onClick={() => setCurrentPage(currentPage - 1)}
       >
@@ -26,7 +26,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
       </button>
       <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
       <button
-        className={`btn btn-primary ${nextButtonClass}`}
+        className={`btn btn-sm ${nextButtonClass}`}
         disabled={isNextButtonDisabled}
         onClick={() => setCurrentPage(currentPage + 1)}
       >

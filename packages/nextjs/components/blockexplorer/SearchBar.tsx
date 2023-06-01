@@ -38,7 +38,7 @@ export const SearchBar = () => {
         placeholder="Search by hash or address"
         onChange={e => setSearchInput(e.target.value)}
       />
-      <button className="btn btn-primary" type="submit">
+      <button className="btn btn-sm btn-primary" type="submit">
         Search
       </button>
     </form>

@@ -43,7 +43,7 @@ const TransactionPage: NextPage = () => {
 
   return (
     <div className="m-10 mb-20">
-      <button className="btn btn-primary" onClick={() => router.back()}>
+      <button className="btn btn-sm btn-primary" onClick={() => router.back()}>
         Back
       </button>
       {transaction ? (
