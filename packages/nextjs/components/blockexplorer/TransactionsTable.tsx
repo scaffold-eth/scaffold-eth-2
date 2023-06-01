@@ -25,27 +25,11 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
           <tbody>
             {[...Array(20)].map((_, rowIndex) => (
               <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
-                <td className="w-1/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td className="w-2/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td className="w-1/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td className="w-2/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td className="w-2/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td className="w-2/12">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
-                <td>
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                </td>
+                {[...Array(7)].map((_, colIndex) => (
+                  <td className="w-1/12" key={colIndex}>
+                    <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
