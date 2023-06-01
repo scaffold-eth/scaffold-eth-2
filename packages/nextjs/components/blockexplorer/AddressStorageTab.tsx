@@ -2,13 +2,9 @@ import { useEffect, useState } from "react";
 import { localhost } from "wagmi/chains";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 
-type AddressStorageTabProps = {
-  address: string;
-};
-
 const provider = getLocalProvider(localhost);
 
-export const AddressStorageTab = ({ address }: AddressStorageTabProps) => {
+export const AddressStorageTab = ({ address }: { address: string }) => {
   const [storage, setStorage] = useState<string[]>([]);
 
   useEffect(() => {

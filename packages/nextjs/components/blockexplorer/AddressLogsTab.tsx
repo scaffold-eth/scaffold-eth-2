@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useContractLogs } from "~~/hooks/scaffold-eth";
 
-type AddressLogsTabProps = {
-  address: string;
-};
-
-export const AddressLogsTab = ({ address }: AddressLogsTabProps) => {
+export const AddressLogsTab = ({ address }: { address: string }) => {
   const [logs, setLogs] = useState<any[]>([]);
 
   const contractLogs = useContractLogs(address);
