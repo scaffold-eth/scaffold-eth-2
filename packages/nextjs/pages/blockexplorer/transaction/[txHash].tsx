@@ -99,13 +99,15 @@ const TransactionPage: NextPage = () => {
                   <strong>Function called:</strong>
                 </td>
                 <td>
-                  {functionCalled === "0x"
-                    ? "This transaction did not call any function."
-                    : getFunctionDetails(transaction)}
-                  {functionCalled !== "0x" && (
-                    <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                      {functionCalled}
-                    </span>
+                  {functionCalled === "0x" ? (
+                    "This transaction did not call any function."
+                  ) : (
+                    <>
+                      {getFunctionDetails(transaction)}
+                      <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
+                        {functionCalled}
+                      </span>
+                    </>
                   )}
                 </td>
               </tr>
