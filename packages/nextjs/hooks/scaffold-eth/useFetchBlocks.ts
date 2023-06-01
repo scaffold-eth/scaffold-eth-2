@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { BlockWithTransactions } from "@ethersproject/abstract-provider";
 import { ethers } from "ethers";
 import { localhost } from "wagmi/chains";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
@@ -34,9 +33,9 @@ export const useFetchBlocks = () => {
         (_, i) => startingBlock - i,
       );
 
-      const blocksWithTransactions: Promise<BlockWithTransactions>[] = blockNumbersToFetch.map(async blockNumber => {
+      const blocksWithTransactions = blockNumbersToFetch.map(async blockNumber => {
         try {
-          return await provider.getBlockWithTransactions(blockNumber);
+          return provider.getBlockWithTransactions(blockNumber);
         } catch (err) {
           setError(err instanceof Error ? err : new Error("An error occurred."));
           throw err;

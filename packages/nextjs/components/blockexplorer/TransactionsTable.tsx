@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { TransactionHash } from "~~/components/blockexplorer/TransactionHash";
 import { Address } from "~~/components/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import { TransactionWithFunction, TransactionsTableProps } from "~~/utils/scaffold-eth/";
+import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
 
 export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
   const targetNetwork = getTargetNetwork();
@@ -52,7 +52,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         ) : (
           <tbody>
             {blocks.map(block =>
-              block.transactions.map((tx: TransactionWithFunction) => {
+              block.transactions.map(tx => {
                 const receipt = transactionReceipts[tx.hash];
                 const timeMined = new Date(block.timestamp * 1000).toLocaleString();
                 const functionCalled = tx.data.substring(0, 10);
