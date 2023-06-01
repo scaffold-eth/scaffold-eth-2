@@ -1,16 +1,12 @@
-import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { MetaHeader } from "~~/components/MetaHeader";
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>Scaffold-ETH 2 App</title>
-        <meta name="description" content="Created with 🏗 scaffold-eth-2" />
-      </Head>
-
+      <MetaHeader />
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center mb-8">
