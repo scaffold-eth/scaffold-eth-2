@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
-import { localhost } from "wagmi/chains";
 import { useContractLogs } from "~~/hooks/scaffold-eth";
-import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 type AddressLogsTabProps = {
   address: string;
 };
 
-const provider = getLocalProvider(localhost) || new ethers.providers.JsonRpcProvider("http://localhost:8545");
-
 export const AddressLogsTab = ({ address }: AddressLogsTabProps) => {
   const [logs, setLogs] = useState<any[]>([]);
 
-  const contractLogs = useContractLogs(address, provider);
+  const contractLogs = useContractLogs(address);
 
   useEffect(() => {
     setLogs(contractLogs);

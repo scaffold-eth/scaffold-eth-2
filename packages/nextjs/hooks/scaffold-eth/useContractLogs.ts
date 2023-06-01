@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { useProvider } from "wagmi";
 
-export const useContractLogs = (address: string, provider: ethers.providers.Provider): ethers.providers.Log[] => {
+export const useContractLogs = (address: string) => {
   const [logs, setLogs] = useState<ethers.providers.Log[]>([]);
+  const provider = useProvider();
 
   useEffect(() => {
     const fetchLogs = async () => {
