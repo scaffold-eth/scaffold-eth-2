@@ -29,9 +29,11 @@ const Blockexplorer: NextPage = () => {
     if (getTargetNetwork().id !== hardhat.id) {
       notification.error(
         <>
-          <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
+          <p className="font-bold mt-0 mb-1">
+            <code className="italic bg-base-300 text-base font-bold"> targeNetwork </code> is not localhost
+          </p>
           <p className="m-0">
-            - You are on <code className="italic bg-base-300 text-base font-bold">{getTargetNetwork().name}</code> This
+            - You are on <code className="italic bg-base-300 text-base font-bold">{getTargetNetwork().name}</code> .This
             block explorer is only for <code className="italic bg-base-300 text-base font-bold">localhost</code>.
           </p>
           <p className="mt-1 break-normal">
