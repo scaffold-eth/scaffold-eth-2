@@ -11,7 +11,7 @@ type MetaHeaderProps = {
 
 export const MetaHeader = ({
   title = "Scaffold-ETH 2 App",
-  description = "Built with 🏗 scaffold-eth-2",
+  description = "Built with 🏗 Scaffold-ETH 2",
   image = "thumbnail.png",
   twitterCard = "summary_large_image",
   children,
