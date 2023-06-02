@@ -42,14 +42,14 @@ const TransactionPage: NextPage = () => {
   }, [txHash]);
 
   return (
-    <div className="m-10 mb-20">
+    <div className="container mx-auto mt-10 mb-20">
       <button className="btn btn-sm btn-primary" onClick={() => router.back()}>
         Back
       </button>
       {transaction ? (
         <div className="overflow-x-auto">
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
-          <table className="table w-full">
+          <table className="table w-full shadow-lg">
             <tbody>
               <tr>
                 <td>
@@ -103,10 +103,8 @@ const TransactionPage: NextPage = () => {
                     "This transaction did not call any function."
                   ) : (
                     <>
-                      {getFunctionDetails(transaction)}
-                      <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                        {functionCalled}
-                      </span>
+                      <span className="mr-2">{getFunctionDetails(transaction)}</span>
+                      <span className="badge badge-primary font-bold">{functionCalled}</span>
                     </>
                   )}
                 </td>

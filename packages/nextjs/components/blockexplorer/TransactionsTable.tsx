@@ -42,16 +42,14 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                 const functionCalled = tx.data.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash} className="hover">
+                  <tr key={tx.hash} className="hover text-sm">
                     <td className="w-1/12">
                       <TransactionHash hash={tx.hash} />
                     </td>
                     <td className="w-2/12">
-                      {tx.functionName === "0x" ? "" : tx.functionName}
+                      {tx.functionName === "0x" ? "" : <span className="mr-1">{tx.functionName}</span>}
                       {functionCalled !== "0x" && (
-                        <span className="ml-2 inline-block rounded-full px-3 py-1 text-sm font-semibold text-primary-content bg-accent">
-                          {functionCalled}
-                        </span>
+                        <span className="badge badge-primary font-bold text-xs">{functionCalled}</span>
                       )}
                     </td>
                     <td className="w-1/12">{block.number}</td>
@@ -65,7 +63,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                       ) : (
                         <div className="relative">
                           <Address address={receipt.contractAddress} />
-                          <small className="absolute top-6">(Contract Creation)</small>
+                          <small className="absolute top-5 left-8">(Contract Creation)</small>
                         </div>
                       )}
                     </td>

@@ -49,7 +49,7 @@ const Blockexplorer: NextPage = () => {
   }, [error]);
 
   return (
-    <div className="m-10 mb-20">
+    <div className="container mx-auto my-10">
       <SearchBar />
       <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
       <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />

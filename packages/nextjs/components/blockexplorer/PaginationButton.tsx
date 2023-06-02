@@ -15,8 +15,10 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
   const prevButtonClass = isPrevButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary";
   const nextButtonClass = isNextButtonDisabled ? "bg-gray-200 cursor-default" : "btn btn-primary";
 
+  if (isNextButtonDisabled && isPrevButtonDisabled) return null;
+
   return (
-    <div className="absolute right-0 bottom-0 mb-5 mr-5 flex space-x-3">
+    <div className="mt-5 justify-end flex gap-3">
       <button
         className={`btn btn-sm ${prevButtonClass}`}
         disabled={isPrevButtonDisabled}
