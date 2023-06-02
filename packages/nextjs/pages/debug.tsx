@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useLocalStorage } from "usehooks-ts";
+import { MetaHeader } from "~~/components/MetaHeader";
 import { ContractUI } from "~~/components/scaffold-eth";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
@@ -15,6 +16,10 @@ const Debug: NextPage = () => {
 
   return (
     <>
+      <MetaHeader
+        title="Debug Contracts | Scaffold-ETH 2"
+        description="Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way"
+      />
       <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
         {contractNames.length === 0 ? (
           <p className="text-3xl mt-14">No contracts found!</p>
