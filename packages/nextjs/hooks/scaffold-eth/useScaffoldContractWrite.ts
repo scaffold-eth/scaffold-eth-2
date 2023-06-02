@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { utils } from "ethers";
-import { useContractWrite, useNetwork } from "wagmi";
+import { parseEther } from "viem";
+import { useContractWrite, useNetwork, usePrepareContractWrite } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
@@ -33,18 +33,16 @@ export const useScaffoldContractWrite = <
   const [isMining, setIsMining] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
-  const wagmiContractWrite = useContractWrite({
-    mode: "recklesslyUnprepared",
+  const { config } = usePrepareContractWrite({
     chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
-    args: args as unknown[],
     functionName: functionName as any,
-    overrides: {
-      value: value ? utils.parseEther(value) : undefined,
-    },
+    args: args as unknown[],
+    value: (value ? parseEther(value) : undefined) as any,
     ...writeConfig,
   });
+  const wagmiContractWrite = useContractWrite(config);
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {

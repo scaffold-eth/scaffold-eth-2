@@ -1,5 +1,5 @@
 import { WriteContractResult, getPublicClient } from "@wagmi/core";
-import { SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
+import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
 import { useWalletClient } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
@@ -10,7 +10,7 @@ type TransactionFunc = (
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
     blockConfirmations?: number;
   },
-) => Promise<Record<string, any> | undefined>;
+) => Promise<Hash | undefined>;
 
 /**
  * Custom notification content for TXs.

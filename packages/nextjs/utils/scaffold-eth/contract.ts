@@ -1,4 +1,3 @@
-import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import {
   Abi,
   AbiParameterToPrimitiveType,
@@ -8,7 +7,8 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
+import { TransactionReceipt } from "viem";
+import { UseContractEventConfig, UseContractReadConfig, UsePrepareContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -112,13 +112,6 @@ export type FunctionNamesWithInputs<
 type ReadAbiStateMutability = "view" | "pure";
 type WriteAbiStateMutability = "nonpayable" | "payable";
 
-type RestConfigParam<TAbiStateMutability extends AbiStateMutability> = Partial<
-  Omit<
-    TAbiStateMutability extends ReadAbiStateMutability ? UseContractReadConfig : UseContractWriteConfig,
-    "chainId" | "abi" | "address" | "functionName" | "args"
-  >
->;
-
 type OptionalTupple<T> = T extends readonly [infer H, ...infer R] ? readonly [H | undefined, ...OptionalTupple<R>] : T;
 
 type UseScaffoldArgsParam<
@@ -143,23 +136,35 @@ export type UseScaffoldReadConfig<
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, ReadAbiStateMutability, TFunctionName> &
-    RestConfigParam<ReadAbiStateMutability>
+    Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
+
+type ExtractStateMutability<
+  TContractName extends ContractName,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
+> = Extract<
+  ContractAbi<TContractName>[number],
+  {
+    name: TFunctionName;
+    stateMutability: string;
+  }
+>["stateMutability"];
 
 export type UseScaffoldWriteConfig<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
   contractName: TContractName;
-  value?: string;
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 } & IsContractsFileMissing<
-  Partial<UseContractWriteConfig> & { args?: unknown[] },
-  {
+  Partial<Omit<UsePrepareContractWriteConfig, "value"> & { value: `${number}` }>,
+  (ExtractStateMutability<TContractName, TFunctionName> extends "payable"
+    ? { value: `${number}` }
+    : { value?: never }) & {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &
-    RestConfigParam<WriteAbiStateMutability>
+    Omit<UsePrepareContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value">
 >;
 
 export type UseScaffoldEventConfig<
