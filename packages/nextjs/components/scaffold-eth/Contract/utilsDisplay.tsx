@@ -1,35 +1,30 @@
 import { ReactElement } from "react";
 import { TransactionResponse } from "@ethersproject/providers";
-import { formatUnits } from "@ethersproject/units";
-import { BigNumber } from "ethers";
 import { Address } from "~~/components/scaffold-eth";
+import { replacer } from "~~/utils/scaffold-eth/common";
 
-type DisplayContent = string | number | BigNumber | Record<string, any> | TransactionResponse | undefined | unknown;
+type DisplayContent = string | number | bigint | Record<string, any> | TransactionResponse | undefined | unknown;
 
 export const displayTxResult = (
   displayContent: DisplayContent | DisplayContent[],
   asText = false,
 ): string | ReactElement | number => {
-  if (displayContent == null) {
+  if (!displayContent) {
     return "";
   }
 
-  if (displayContent && BigNumber.isBigNumber(displayContent)) {
-    try {
-      return displayContent.toNumber();
-    } catch (e) {
-      return "Ξ" + formatUnits(displayContent, "ether");
-    }
+  if (typeof displayContent === "bigint" || typeof displayContent === "number") {
+    return displayContent.toString();
   }
 
   if (typeof displayContent === "string" && displayContent.indexOf("0x") === 0 && displayContent.length === 42) {
     return asText ? displayContent : <Address address={displayContent} />;
   }
 
-  if (displayContent && Array.isArray(displayContent)) {
+  if (Array.isArray(displayContent)) {
     const mostReadable = (v: DisplayContent) =>
       ["number", "boolean"].includes(typeof v) ? v : displayTxResultAsText(v);
-    const displayable = JSON.stringify(displayContent.map(mostReadable));
+    const displayable = JSON.stringify(displayContent.map(mostReadable), replacer);
 
     return asText ? (
       displayable
@@ -38,7 +33,7 @@ export const displayTxResult = (
     );
   }
 
-  return JSON.stringify(displayContent, null, 2);
+  return JSON.stringify(displayContent, replacer, 2);
 };
 
 const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Abi } from "abitype";
-import { useContract, useProvider } from "wagmi";
+import { useContract, usePublicClient } from "wagmi";
+import { getContract } from "wagmi/actions";
 import { Spinner } from "~~/components/Spinner";
 import {
   Address,
@@ -23,18 +24,24 @@ type ContractUIProps = {
  * UI component to interface with deployed contracts.
  **/
 export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
-  const provider = useProvider();
+  const publicClient = usePublicClient();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
 
-  const contract = useContract({
-    address: deployedContractData?.address,
-    abi: deployedContractData?.abi as Abi,
-    signerOrProvider: provider,
-  });
+  const contract = useMemo(
+    () =>
+      deployedContractData
+        ? getContract({
+            address: deployedContractData.address,
+            abi: deployedContractData.abi as Abi,
+            // signerOrProvider: provider,
+          })
+        : undefined,
+    [deployedContractData],
+  );
 
   const displayedContractFunctions = useMemo(() => getAllContractFunctions(contract), [contract]);
 

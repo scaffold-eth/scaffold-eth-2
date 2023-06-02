@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
-import { BytesLike, Signer, Wallet, ethers } from "ethers";
+import { BytesLike, Wallet, ethers } from "ethers";
 import { useDebounce } from "use-debounce";
 import { useLocalStorage } from "usehooks-ts";
-import { useProvider } from "wagmi";
+import { WalletClient, usePublicClient } from "wagmi";
 
 const burnerStorageKey = "scaffoldEth2.burnerWallet.sk";
 
@@ -65,7 +65,7 @@ export const loadBurnerSK = (): string => {
  * @category Hooks
  */
 export type TBurnerSigner = {
-  signer: Signer | undefined;
+  walletClient: WalletClient | undefined;
   account: string | undefined;
   /**
    * create a new burner signer
@@ -90,7 +90,7 @@ export type TBurnerSigner = {
 export const useBurnerWallet = (): TBurnerSigner => {
   const [burnerSk, setBurnerSk] = useLocalStorage<BytesLike>(burnerStorageKey, newDefaultWallet.privateKey);
 
-  const provider = useProvider();
+  const publicClient = usePublicClient();
   const walletRef = useRef<Wallet>();
   const isCreatingNewBurnerRef = useRef(false);
 
@@ -111,11 +111,11 @@ export const useBurnerWallet = (): TBurnerSigner => {
    * create a new burnerkey
    */
   const generateNewBurner = useCallback(() => {
-    if (provider && !isCreatingNewBurnerRef.current) {
+    if (publicClient && !isCreatingNewBurnerRef.current) {
       console.log("🔑 Create new burner wallet...");
       isCreatingNewBurnerRef.current = true;
 
-      const wallet = Wallet.createRandom().connect(provider);
+      const wallet = Wallet.createRandom().connect(publicClient);
       setBurnerSk(() => {
         console.log("🔥 ...Save new burner wallet");
         isCreatingNewBurnerRef.current = false;
@@ -126,17 +126,17 @@ export const useBurnerWallet = (): TBurnerSigner => {
       console.log("⚠ Could not create burner wallet");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider?.network?.chainId]);
+  }, [publicClient?.network?.chainId]);
 
   /**
    * Load wallet with burnerSk
    * connect and set wallet, once we have burnerSk and valid provider
    */
   useEffect(() => {
-    if (burnerSk && provider.network.chainId) {
+    if (burnerSk && publicClient.network.chainId) {
       let wallet: Wallet | undefined = undefined;
       if (isValidSk(burnerSk)) {
-        wallet = new ethers.Wallet(burnerSk, provider);
+        wallet = new ethers.Wallet(burnerSk, publicClient);
       } else {
         wallet = generateNewBurner?.();
       }
@@ -149,10 +149,10 @@ export const useBurnerWallet = (): TBurnerSigner => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [burnerSk, provider?.network?.chainId]);
+  }, [burnerSk, publicClient?.network?.chainId]);
 
   return {
-    signer,
+    walletClient: signer,
     account,
     generateNewBurner,
     saveBurner,

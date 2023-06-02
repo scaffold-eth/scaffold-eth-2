@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TransactionReceipt } from "@ethersproject/abstract-provider";
-import { BigNumber } from "ethers";
 import { FunctionFragment } from "ethers/lib/utils";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import {
@@ -36,7 +35,7 @@ export const WriteOnlyFunctionForm = ({
   setRefreshDisplayVariables,
 }: TWriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
-  const [txValue, setTxValue] = useState<string | BigNumber>("");
+  const [txValue, setTxValue] = useState<string | bigint>("");
   const { chain } = useNetwork();
   const writeTxn = useTransactor();
   const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;

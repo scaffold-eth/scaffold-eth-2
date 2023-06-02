@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Abi, ExtractAbiEventNames } from "abitype";
 import { ethers } from "ethers";
-import { useContract, useProvider } from "wagmi";
+import { useContract, usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { replacer } from "~~/utils/scaffold-eth/common";
 import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -32,12 +33,12 @@ export const useScaffoldEventHistory = <
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
-  const provider = useProvider();
+  const publicClient = usePublicClient();
 
   const contract = useContract({
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
-    signerOrProvider: provider,
+    signerOrProvider: publicClient,
   });
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export const useScaffoldEventHistory = <
           topics.push(...indexedTopics);
         }
 
-        const logs = await provider.getLogs({
+        const logs = await publicClient.getLogs({
           address: deployedContractData?.address,
           topics: topics,
           fromBlock: fromBlock,
@@ -77,15 +78,15 @@ export const useScaffoldEventHistory = <
         for (let i = logs.length - 1; i >= 0; i--) {
           let block;
           if (blockData) {
-            block = await provider.getBlock(logs[i].blockHash);
+            block = await publicClient.getBlock(logs[i].blockHash);
           }
           let transaction;
           if (transactionData) {
-            transaction = await provider.getTransaction(logs[i].transactionHash);
+            transaction = await publicClient.getTransaction(logs[i].transactionHash);
           }
           let receipt;
           if (receiptData) {
-            receipt = await provider.getTransactionReceipt(logs[i].transactionHash);
+            receipt = await publicClient.getTransactionReceipt(logs[i].transactionHash);
           }
           const log = {
             log: logs[i],
@@ -111,7 +112,7 @@ export const useScaffoldEventHistory = <
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    provider,
+    publicClient,
     fromBlock,
     contractName,
     eventName,
@@ -120,7 +121,7 @@ export const useScaffoldEventHistory = <
     contract,
     deployedContractData,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(filters),
+    JSON.stringify(filters, replacer),
     blockData,
     transactionData,
     receiptData,
