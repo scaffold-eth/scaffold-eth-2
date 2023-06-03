@@ -1,6 +1,7 @@
-import { HttpTransport, PrivateKeyAccount, WalletClient, createPublicClient, createWalletClient, http } from "viem";
+import { StaticJsonRpcProvider } from "@ethersproject/providers";
+import { HttpTransport, PrivateKeyAccount, WalletClient, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { Chain, Connector, PublicClient } from "wagmi";
+import { Chain, Connector } from "wagmi";
 import { loadBurnerSK } from "~~/hooks/scaffold-eth";
 import { BurnerConnectorError, BurnerConnectorErrorList } from "~~/services/web3/wagmi-burner/BurnerConnectorErrors";
 import { BurnerConnectorData, BurnerConnectorOptions } from "~~/services/web3/wagmi-burner/BurnerConnectorTypes";
@@ -13,12 +14,12 @@ export const defaultBurnerChainId = getTargetNetwork().id;
 /**
  * This class is a wagmi connector for BurnerWallet.  Its used by {@link burnerWalletConfig}
  */
-export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOptions> {
+export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConnectorOptions> {
   readonly id = burnerWalletId;
   readonly name = burnerWalletName;
   readonly ready = true;
 
-  private provider?: PublicClient;
+  private provider?: StaticJsonRpcProvider;
   /**
    * this is the store for getWallet()
    */
@@ -32,10 +33,7 @@ export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOpti
   async getProvider() {
     if (!this.provider) {
       const chain = this.getChainFromId();
-      this.provider = createPublicClient({
-        chain,
-        transport: http(),
-      });
+      this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default.http[0]);
     }
     return this.provider;
   }
@@ -46,7 +44,7 @@ export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOpti
       const bunerAccount = privateKeyToAccount(loadBurnerSK());
 
       const client = createWalletClient({
-        chain: chain ?? this.provider?.chain,
+        chain: chain,
         account: bunerAccount,
         transport: http(),
       });
@@ -58,10 +56,7 @@ export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOpti
   async connect(config?: { chainId?: number | undefined } | undefined): Promise<Required<BurnerConnectorData>> {
     const chain = this.getChainFromId(config?.chainId);
 
-    this.provider = createPublicClient({
-      chain,
-      transport: http(),
-    });
+    this.provider = new StaticJsonRpcProvider(chain.rpcUrls.default.http[0]);
     const account = await this.getAccount();
 
     if (this.provider == null || account == null) {
@@ -103,8 +98,8 @@ export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOpti
   }
 
   async getChainId(): Promise<number> {
-    const network = this.provider?.chain;
-    const chainId = network?.id ?? this.options.defaultChainId;
+    const network = await this.provider?.getNetwork();
+    const chainId = network?.chainId ?? this.options.defaultChainId;
     if (chainId == null) {
       throw new BurnerConnectorError(BurnerConnectorErrorList.chainIdNotResolved);
     }
@@ -121,21 +116,25 @@ export class BurnerConnector extends Connector<PublicClient, BurnerConnectorOpti
     }
   }
 
-  protected onAccountsChanged(): void {
+  protected async onAccountsChanged() {
+    const chainId = await this.getChainId();
+    const chain = this.getChainFromId(chainId);
     const bunerAccount = privateKeyToAccount(loadBurnerSK());
 
     const client = createWalletClient({
-      chain: this.provider?.chain,
+      chain: chain,
       account: bunerAccount,
       transport: http(),
     });
     this.burnerWallet = client;
   }
-  protected onChainChanged(): void {
+  protected async onChainChanged() {
+    const chainId = await this.getChainId();
+    const chain = this.getChainFromId(chainId);
     const bunerAccount = privateKeyToAccount(loadBurnerSK());
 
     const client = createWalletClient({
-      chain: this.provider?.chain,
+      chain: chain,
       account: bunerAccount,
       transport: http(),
     });

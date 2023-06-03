@@ -1,4 +1,4 @@
-import { PublicClient } from "viem";
+import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { ConnectorData } from "wagmi";
 
 export type BurnerConnectorOptions = {
@@ -6,5 +6,5 @@ export type BurnerConnectorOptions = {
 };
 
 export type BurnerConnectorData = ConnectorData & {
-  provider: PublicClient;
+  provider: StaticJsonRpcProvider;
 };
