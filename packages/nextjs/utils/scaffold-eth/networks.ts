@@ -90,6 +90,10 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
+  if (network.id === chains.hardhat.id) {
+    return `/blockexplorer/address/${address}`;
+  }
+
   if (!blockExplorerBaseURL) {
     return `https://etherscan.io/address/${address}`;
   }

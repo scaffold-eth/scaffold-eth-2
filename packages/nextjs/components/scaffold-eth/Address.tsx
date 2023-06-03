@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ethers } from "ethers";
 import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEnsAvatar, useEnsName } from "wagmi";
+import { hardhat } from "wagmi/chains";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -76,6 +78,10 @@ export const Address = ({ address, disableAddressLink, format }: TAddressProps) 
       </div>
       {disableAddressLink ? (
         <span className="ml-1.5 text-lg font-normal">{displayAddress}</span>
+      ) : getTargetNetwork().id === hardhat.id ? (
+        <span className="ml-1.5 text-lg font-normal">
+          <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
+        </span>
       ) : (
         <a
           className="ml-1.5 text-lg font-normal"
