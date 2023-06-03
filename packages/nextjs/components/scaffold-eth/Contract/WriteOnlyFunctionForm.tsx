@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import { FunctionFragment } from "ethers/lib/utils";
+import { TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
@@ -53,10 +53,7 @@ export const WriteOnlyFunctionForm = ({
     functionName: functionFragment.name,
     abi: [functionFragment],
     args: getParsedContractFunctionArgs(form),
-    mode: "recklesslyUnprepared",
-    overrides: {
-      value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
-    },
+    value: (typeof txValue === "string" ? parseTxnValue(txValue) : txValue) as any,
   });
 
   const handleWrite = async () => {

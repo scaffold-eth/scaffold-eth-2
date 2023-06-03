@@ -1,15 +1,11 @@
 import { useMemo, useState } from "react";
-import { Abi } from "abitype";
-import { useContract, usePublicClient } from "wagmi";
-import { getContract } from "wagmi/actions";
 import { Spinner } from "~~/components/Spinner";
 import {
   Address,
   Balance,
-  getAllContractFunctions,
-  getContractReadOnlyMethodsWithParams,
-  getContractVariablesAndNoParamsReadMethods,
   getContractWriteMethods,
+  useContractReadOnlyMethodsWithParams,
+  useContractVariablesAndNoParamsReadMethods,
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -24,35 +20,15 @@ type ContractUIProps = {
  * UI component to interface with deployed contracts.
  **/
 export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
-  const publicClient = usePublicClient();
   const [refreshDisplayVariables, setRefreshDisplayVariables] = useState(false);
   const configuredNetwork = getTargetNetwork();
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
 
-  const contract = useMemo(
-    () =>
-      deployedContractData
-        ? getContract({
-            address: deployedContractData.address,
-            abi: deployedContractData.abi as Abi,
-            // signerOrProvider: provider,
-          })
-        : undefined,
-    [deployedContractData],
-  );
+  const contractVariablesDisplay = useContractVariablesAndNoParamsReadMethods(contractName, refreshDisplayVariables);
+  const contractMethodsDisplay = useContractReadOnlyMethodsWithParams(contractName);
 
-  const displayedContractFunctions = useMemo(() => getAllContractFunctions(contract), [contract]);
-
-  const contractVariablesDisplay = useMemo(() => {
-    return getContractVariablesAndNoParamsReadMethods(contract, displayedContractFunctions, refreshDisplayVariables);
-  }, [contract, displayedContractFunctions, refreshDisplayVariables]);
-
-  const contractMethodsDisplay = useMemo(
-    () => getContractReadOnlyMethodsWithParams(contract, displayedContractFunctions),
-    [contract, displayedContractFunctions],
-  );
   const contractWriteMethods = useMemo(
     () => getContractWriteMethods(contract, displayedContractFunctions, setRefreshDisplayVariables),
     [contract, displayedContractFunctions],

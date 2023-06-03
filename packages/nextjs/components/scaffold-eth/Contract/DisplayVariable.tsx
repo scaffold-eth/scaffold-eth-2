@@ -1,36 +1,50 @@
 import { useEffect } from "react";
-import { FunctionFragment } from "ethers/lib/utils";
-import { useContractRead } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { displayTxResult } from "~~/components/scaffold-eth";
-import { useAnimationConfig } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useAnimationConfig, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
+import { ContractAbi, ContractName } from "~~/utils/scaffold-eth/contract";
 
-type TDisplayVariableProps = {
-  functionFragment: FunctionFragment;
-  contractAddress: string;
+type DisplayVariableProps<
+  TContractName extends ContractName,
+  TFunctionName extends Extract<
+    ContractAbi<TContractName>[number],
+    {
+      readonly stateMutability: "view" | "pure";
+      readonly inputs: readonly [];
+    }
+  >["name"],
+> = {
+  contractName: TContractName;
+  functionName: TFunctionName;
   refreshDisplayVariables: boolean;
 };
 
-export const DisplayVariable = ({
-  contractAddress,
-  functionFragment,
+export const DisplayVariable = <
+  TContractName extends ContractName,
+  TFunctionName extends Extract<
+    ContractAbi<TContractName>[number],
+    {
+      readonly stateMutability: "view" | "pure";
+      readonly inputs: readonly [];
+    }
+  >["name"],
+>({
+  contractName,
+  functionName,
   refreshDisplayVariables,
-}: TDisplayVariableProps) => {
+}: DisplayVariableProps<TContractName, TFunctionName>) => {
   const {
     data: result,
     isFetching,
     refetch,
-  } = useContractRead({
-    chainId: getTargetNetwork().id,
-    address: contractAddress,
-    abi: [functionFragment],
-    functionName: functionFragment.name,
-    args: [],
-    onError: error => {
+  } = useScaffoldContractRead({
+    contractName,
+    functionName,
+    onError: (error: any) => {
       notification.error(error.message);
     },
-  });
+  } as any); // TODO: fix any
 
   const { showAnimation } = useAnimationConfig(result);
 
@@ -41,7 +55,7 @@ export const DisplayVariable = ({
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-all">{functionFragment.name}</h3>
+        <h3 className="font-medium text-lg mb-0 break-all">{functionName}</h3>
         <button className={`btn btn-ghost btn-xs ${isFetching ? "loading" : ""}`} onClick={async () => await refetch()}>
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>

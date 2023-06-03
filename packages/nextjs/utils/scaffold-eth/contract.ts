@@ -80,12 +80,14 @@ export enum ContractCodeStatus {
 }
 
 type AbiStateMutability = "pure" | "view" | "nonpayable" | "payable";
+export type ReadAbiStateMutability = "view" | "pure";
+export type WriteAbiStateMutability = "nonpayable" | "payable";
 
 export type FunctionNamesWithoutInputs<
-  TAbi extends Abi,
+  TContractName extends ContractName,
   TAbiStateMutibility extends AbiStateMutability = AbiStateMutability,
 > = Extract<
-  TAbi[number],
+  ContractAbi<TContractName>[number],
   {
     type: "function";
     stateMutability: TAbiStateMutibility;
@@ -94,11 +96,11 @@ export type FunctionNamesWithoutInputs<
 >["name"];
 
 export type FunctionNamesWithInputs<
-  TAbi extends Abi,
+  TContractName extends ContractName,
   TAbiStateMutibility extends AbiStateMutability = AbiStateMutability,
 > = Exclude<
   Extract<
-    TAbi[number],
+    ContractAbi<TContractName>[number],
     {
       type: "function";
       stateMutability: TAbiStateMutibility;
@@ -109,35 +111,18 @@ export type FunctionNamesWithInputs<
   }
 >["name"];
 
-type ReadAbiStateMutability = "view" | "pure";
-type WriteAbiStateMutability = "nonpayable" | "payable";
-
 type OptionalTupple<T> = T extends readonly [infer H, ...infer R] ? readonly [H | undefined, ...OptionalTupple<R>] : T;
 
 type UseScaffoldArgsParam<
   TContractName extends ContractName,
-  TAbiStateMutability extends AbiStateMutability,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, TAbiStateMutability>,
-> = TFunctionName extends FunctionNamesWithInputs<ContractAbi<TContractName>, TAbiStateMutability>
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>>,
+> = TFunctionName extends FunctionNamesWithInputs<TContractName>
   ? {
       args: OptionalTupple<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>;
     }
   : {
       args?: never;
     };
-
-export type UseScaffoldReadConfig<
-  TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
-> = {
-  contractName: TContractName;
-} & IsContractsFileMissing<
-  Partial<UseContractReadConfig>,
-  {
-    functionName: TFunctionName;
-  } & UseScaffoldArgsParam<TContractName, ReadAbiStateMutability, TFunctionName> &
-    Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
->;
 
 type ExtractStateMutability<
   TContractName extends ContractName,
@@ -149,6 +134,19 @@ type ExtractStateMutability<
     stateMutability: string;
   }
 >["stateMutability"];
+
+export type UseScaffoldReadConfig<
+  TContractName extends ContractName,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
+> = {
+  contractName: TContractName;
+} & IsContractsFileMissing<
+  Partial<UseContractReadConfig>,
+  {
+    functionName: TFunctionName;
+  } & UseScaffoldArgsParam<TContractName, TFunctionName> &
+    Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
+>;
 
 export type UseScaffoldWriteConfig<
   TContractName extends ContractName,
@@ -163,7 +161,7 @@ export type UseScaffoldWriteConfig<
     ? { value: `${number}` }
     : { value?: never }) & {
     functionName: TFunctionName;
-  } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &
+  } & UseScaffoldArgsParam<TContractName, TFunctionName> &
     Omit<UsePrepareContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value">
 >;
 
