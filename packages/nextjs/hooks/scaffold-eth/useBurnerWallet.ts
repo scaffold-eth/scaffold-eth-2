@@ -39,10 +39,10 @@ export const saveBurnerSK = (privateKey: Hex): void => {
  * @internal
  * @returns
  */
-export const loadBurnerSK = (): string => {
-  let currentSk = "";
+export const loadBurnerSK = (): Hex => {
+  let currentSk: Hex = "0x";
   if (typeof window != "undefined" && window != null) {
-    currentSk = window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "";
+    currentSk = (window?.localStorage?.getItem?.(burnerStorageKey)?.replaceAll('"', "") ?? "0x") as Hex;
   }
 
   if (!!currentSk && isValidSk(currentSk)) {
