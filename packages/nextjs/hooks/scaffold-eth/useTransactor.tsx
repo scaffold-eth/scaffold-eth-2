@@ -29,9 +29,9 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
 };
 
 /**
- * Runs TXs showing UI feedback.
- * @param _signer
- * @dev If signer is provided => dev wants to send a raw tx.
+ * @description Runs Transaction passed in to returned funtion showing UI feedback.
+ * @param _walletClient
+ * @returns function that takes a transaction and returns a promise of the transaction hash
  */
 export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => {
   let walletClient = _walletClient;
@@ -51,7 +51,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
     let transactionHash: Awaited<WriteContractResult>["hash"] | undefined = undefined;
     try {
       const network = await walletClient.getChainId();
-      // Get full transaction from public walletClient
+      // Get full transaction from public client
       const publicClient = getPublicClient();
 
       notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
