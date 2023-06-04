@@ -1,123 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
-import { Abi, AbiFunction, AbiParameter } from "abitype";
-import { Contract } from "ethers";
-import { FunctionFragment } from "ethers/lib/utils";
-import { DisplayVariable, ReadOnlyFunctionForm, WriteOnlyFunctionForm } from "~~/components/scaffold-eth";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import {
-  ContractName,
-  FunctionNamesWithInputs,
-  FunctionNamesWithoutInputs,
-  ReadAbiStateMutability,
-} from "~~/utils/scaffold-eth/contract";
-
-/**
- * @dev used to filter all readOnly functions with zero params
- * @param {ContractName} contractName
- * @param {boolean} refreshDisplayVariables refetch values
- * @returns { methods: (JSX.Element | null)[] } array of DisplayVariable component
- * which has corresponding input field for param type and button to read
- */
-const useContractVariablesAndNoParamsReadMethods = (
-  contractName: ContractName,
-  refreshDisplayVariables: boolean,
-): { isLoading: boolean; methods: (JSX.Element | null)[] } => {
-  const { data: deployedContractData, isLoading } = useDeployedContractInfo(contractName);
-
-  return {
-    isLoading,
-    methods: deployedContractData?.abi
-      ? ((deployedContractData.abi as Abi).filter(part => part.type === "function") as AbiFunction[])
-          .map(fn => {
-            const isQueryableWithNoParams =
-              (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-            if (isQueryableWithNoParams) {
-              return (
-                <DisplayVariable
-                  contractName={contractName}
-                  functionName={fn.name as FunctionNamesWithoutInputs<ContractName, ReadAbiStateMutability>}
-                  key={fn.name}
-                  refreshDisplayVariables={refreshDisplayVariables}
-                />
-              );
-            }
-            return null;
-          })
-          .filter(n => n)
-      : [],
-  };
-};
-
-/**
- * @dev used to filter all readOnly functions with greater than or equal to 1 params
- * @param {ContractName} contractName
- * @param {boolean} refreshDisplayVariables refetch values
- * @returns { methods: (JSX.Element | null)[] } array of DisplayVariable component
- * which has corresponding input field for param type and button to read
- */
-const useContractReadOnlyMethodsWithParams = (
-  contractName: ContractName,
-): { isLoading: boolean; methods: (JSX.Element | null)[] } => {
-  const { data: deployedContractData, isLoading } = useDeployedContractInfo(contractName);
-
-  return {
-    isLoading,
-    methods: deployedContractData?.abi
-      ? ((deployedContractData.abi as Abi).filter(part => part.type === "function") as AbiFunction[])
-          .map(fn => {
-            const isQueryableWithNoParams =
-              (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-            if (isQueryableWithNoParams) {
-              return (
-                <ReadOnlyFunctionForm
-                  contractName={contractName}
-                  functionName={fn.name as FunctionNamesWithInputs<ContractName, ReadAbiStateMutability>}
-                  inputs={fn.inputs}
-                  key={fn.name}
-                />
-              );
-            }
-            return null;
-          })
-          .filter(n => n)
-      : [],
-  };
-};
-
-/**
- * @dev used to filter all write functions
- * @param {Contract} contract
- * @param {FunctionFragment[]} contractMethodsAndVariables - array of all functions in the contract
- * @param {Dispatch<SetStateAction<boolean>>} setRefreshDisplayVariables - trigger variable refresh
- * @returns {  methods: (JSX.Element | null)[] } array of WriteOnlyFunctionForm component
- * which has corresponding input field for param type, txnValue input if required and button to send transaction
- */
-const getContractWriteMethods = (
-  contract: Contract | null,
-  contractMethodsAndVariables: FunctionFragment[],
-  setRefreshDisplayVariables: Dispatch<SetStateAction<boolean>>,
-): { methods: (JSX.Element | null)[] } => {
-  return {
-    methods: contract
-      ? contractMethodsAndVariables
-          .map((fn, idx) => {
-            const isWriteableFunction = fn.stateMutability !== "view" && fn.stateMutability !== "pure";
-            if (isWriteableFunction) {
-              return (
-                <WriteOnlyFunctionForm
-                  key={`${fn.name}-${idx}`}
-                  functionFragment={fn}
-                  contractAddress={contract.address}
-                  setRefreshDisplayVariables={setRefreshDisplayVariables}
-                />
-              );
-            }
-            return null;
-          })
-          .filter(n => n)
-      : [],
-  };
-};
+import { AbiParameter } from "abitype";
 
 /**
  * @dev utility function to generate key corresponding to function metaData
@@ -195,11 +76,13 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
   return parsedArguments;
 };
 
-export {
-  useContractVariablesAndNoParamsReadMethods,
-  useContractReadOnlyMethodsWithParams,
-  getContractWriteMethods,
-  getFunctionInputKey,
-  getParsedContractFunctionArgs,
-  getParsedEthersError,
+const getInitialFormState = (functionName: string, inputs: readonly AbiParameter[]) => {
+  const initialForm: Record<string, any> = {};
+  inputs.forEach((input, inputIndex) => {
+    const key = getFunctionInputKey(functionName, input, inputIndex);
+    initialForm[key] = "";
+  });
+  return initialForm;
 };
+
+export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getParsedEthersError };

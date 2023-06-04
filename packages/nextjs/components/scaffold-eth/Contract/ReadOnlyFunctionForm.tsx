@@ -4,20 +4,12 @@ import {
   ContractInput,
   displayTxResult,
   getFunctionInputKey,
+  getInitialFormState,
   getParsedContractFunctionArgs,
 } from "~~/components/scaffold-eth";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { ContractName, FunctionNamesWithInputs, ReadAbiStateMutability } from "~~/utils/scaffold-eth/contract";
-
-const getInitialFormState = (functionName: string, inputs: readonly AbiParameter[]) => {
-  const initialForm: Record<string, any> = {};
-  inputs.forEach((input, inputIndex) => {
-    const key = getFunctionInputKey(functionName, input, inputIndex);
-    initialForm[key] = "";
-  });
-  return initialForm;
-};
 
 type TReadOnlyFunctionFormProps = {
   contractName: ContractName;
@@ -32,12 +24,12 @@ export const ReadOnlyFunctionForm = ({ contractName, functionName, inputs }: TRe
   const { isFetching, refetch } = useScaffoldContractRead({
     contractName,
     functionName,
-    args: getParsedContractFunctionArgs(form),
+    args: getParsedContractFunctionArgs(form) as any,
     enabled: false,
     onError: (error: any) => {
       notification.error(error.message);
     },
-  } as any); // TODO: fix any
+  });
 
   const inputElements = inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(functionName, input, inputIndex);
