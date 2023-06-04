@@ -206,7 +206,7 @@ export type UseScaffoldEventHistoryConfig<
 > = {
   contractName: TContractName;
   eventName: IsContractsFileMissing<string, TEventName>;
-  fromBlock: number;
+  fromBlock: bigint;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: boolean;
   transactionData?: boolean;

@@ -213,8 +213,8 @@ const {
   } = useScaffoldEventHistory({
   contractName: "YourContract",
   eventName: "GreetingChange",
-  // Specify the starting block number from which to read events.
-  fromBlock: 31231,
+  // Specify the starting block number from which to read events, this is a bigint.
+  fromBlock: 31231n,
   blockData: true,
   // Apply filters to the event based on parameter names and values { [parameterName]: value },
   filters: { premium: true }
