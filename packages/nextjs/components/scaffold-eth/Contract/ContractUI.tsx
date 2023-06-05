@@ -11,8 +11,8 @@ import {
   getContractWriteMethods,
 } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { ContractName } from "~~/hooks/scaffold-eth/contract.types";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 type ContractUIProps = {
   contractName: ContractName;

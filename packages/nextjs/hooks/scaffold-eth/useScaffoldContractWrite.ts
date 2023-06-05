@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "./contract.types";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { utils } from "ethers";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedEthersError } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -23,6 +23,8 @@ export const useScaffoldContractWrite = <
   functionName,
   args,
   value,
+  onBlockConfirmation,
+  blockConfirmations,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
@@ -61,7 +63,7 @@ export const useScaffoldContractWrite = <
     if (wagmiContractWrite.writeAsync) {
       try {
         setIsMining(true);
-        await writeTx(wagmiContractWrite.writeAsync());
+        await writeTx(wagmiContractWrite.writeAsync(), { onBlockConfirmation, blockConfirmations });
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);

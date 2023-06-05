@@ -8,7 +8,10 @@ import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TTransactionFunc = (
   tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
-  callback?: ((_param: any) => void) | undefined,
+  options?: {
+    onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
+    blockConfirmations?: number;
+  },
 ) => Promise<Record<string, any> | undefined>;
 
 /**
@@ -39,7 +42,7 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
     signer = data;
   }
 
-  const result: TTransactionFunc = async (tx, callback) => {
+  const result: TTransactionFunc = async (tx, options) => {
     if (!signer) {
       notification.error("Wallet/Signer not connected");
       console.error("⚡️ ~ file: useTransactor.tsx ~ error");
@@ -47,7 +50,6 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
     }
 
     let notificationId = null;
-    let transactionReceipt: TransactionReceipt | undefined;
     let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
     try {
       const provider = signer.provider;
@@ -67,20 +69,20 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
       const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
 
       notificationId = notification.loading(
-        <TxnNotification message="Mining transaction, Hold tight!" blockExplorerLink={blockExplorerTxURL} />,
+        <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
       );
-      transactionReceipt = await transactionResponse.wait();
+
+      const transactionReceipt = await transactionResponse.wait(options?.blockConfirmations);
       notification.remove(notificationId);
 
-      notification.success(<TxnNotification message="Mined successfully !" blockExplorerLink={blockExplorerTxURL} />, {
-        icon: "🎉",
-      });
+      notification.success(
+        <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
+        {
+          icon: "🎉",
+        },
+      );
 
-      if (transactionReceipt) {
-        if (callback != null && transactionReceipt.blockHash != null && transactionReceipt.confirmations >= 1) {
-          callback({ ...transactionResponse, ...transactionReceipt });
-        }
-      }
+      if (options?.onBlockConfirmation) options.onBlockConfirmation(transactionReceipt);
     } catch (error: any) {
       if (notificationId) {
         notification.remove(notificationId);

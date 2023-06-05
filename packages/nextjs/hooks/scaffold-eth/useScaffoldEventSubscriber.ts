@@ -1,8 +1,8 @@
-import { AbiEventArgs, ContractAbi, ContractName } from "./contract.types";
 import { Abi, ExtractAbiEventNames } from "abitype";
 import { useContractEvent } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { AbiEventArgs, ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev wrapper for wagmi's useContractEvent
@@ -21,12 +21,7 @@ export const useScaffoldEventSubscriber = <
   eventName,
   listener,
   once,
-}: {
-  contractName: TContractName;
-  eventName: TEventName;
-  listener: (...args: TEventInputs) => void;
-  once?: boolean;
-}) => {
+}: UseScaffoldEventConfig<TContractName, TEventName, TEventInputs>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
   return useContractEvent({
