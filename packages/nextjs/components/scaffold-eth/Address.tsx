@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ethers } from "ethers";
 import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -52,7 +51,7 @@ export const Address = ({ address, disableAddressLink, format }: TAddressProps) 
     );
   }
 
-  if (!ethers.utils.isAddress(address)) {
+  if (!isAddress(address)) {
     return <span className="text-error">Wrong address</span>;
   }
 

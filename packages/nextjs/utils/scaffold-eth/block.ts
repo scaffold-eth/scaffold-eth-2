@@ -1,20 +1,7 @@
-import { BlockWithTransactions, TransactionResponse } from "@ethersproject/abstract-provider";
-
-export type TransactionWithFunction = TransactionResponse & {
-  functionName?: string;
-  functionArgs?: any[];
-  functionArgNames?: string[];
-  functionArgTypes?: string[];
-};
-
-export interface Block extends BlockWithTransactions {
-  transactions: TransactionWithFunction[];
-}
+import { Block, TransactionReceipt } from "viem";
 
 interface TransactionReceipts {
-  [key: string]: {
-    contractAddress: string;
-  };
+  [key: string]: TransactionReceipt;
 }
 
 export interface TransactionsTableProps {

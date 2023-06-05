@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
 import { createWalletClient, http, parseEther } from "viem";
 import { useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
