@@ -13,12 +13,13 @@ type TAddressProps = {
   address?: string;
   disableAddressLink?: boolean;
   format?: "short" | "long";
+  size?: "xl" | "lg" | "md" | "sm" | "xs";
 };
 
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
-export const Address = ({ address, disableAddressLink, format }: TAddressProps) => {
+export const Address = ({ address, disableAddressLink, format, size = "md" }: TAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
@@ -77,14 +78,14 @@ export const Address = ({ address, disableAddressLink, format }: TAddressProps) 
         )}
       </div>
       {disableAddressLink ? (
-        <span className="ml-1.5 text-lg font-normal">{displayAddress}</span>
+        <span className={`ml-1.5 text-${size} font-normal`}>{displayAddress}</span>
       ) : getTargetNetwork().id === hardhat.id ? (
-        <span className="ml-1.5 text-lg font-normal">
+        <span className={`ml-1.5 text-${size} font-normal`}>
           <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
         </span>
       ) : (
         <a
-          className="ml-1.5 text-lg font-normal"
+          className={`ml-1.5 text-${size} font-normal`}
           target="_blank"
           href={blockExplorerAddressLink}
           rel="noopener noreferrer"
