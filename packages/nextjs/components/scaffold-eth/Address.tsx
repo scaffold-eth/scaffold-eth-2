@@ -15,6 +15,15 @@ type TAddressProps = {
   format?: "short" | "long";
   size?: "3xl" | "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 };
+const blockieSizeMap = {
+  "3xl": 10,
+  "2xl": 9,
+  xl: 8,
+  lg: 7,
+  base: 5,
+  sm: 4,
+  xs: 3,
+};
 
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
@@ -31,15 +40,6 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     chainId: 1,
     cacheTime: 30_000,
   });
-  const sizeMap = {
-    "3xl": 10,
-    "2xl": 9,
-    xl: 8,
-    lg: 7,
-    base: 5,
-    sm: 4,
-    xs: 3,
-  };
 
   // We need to apply this pattern to avoid Hydration errors.
   useEffect(() => {
@@ -84,12 +84,17 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
           <img
             className="rounded-full"
             src={ensAvatar}
-            width={(sizeMap[size] * 24) / sizeMap["base"]}
-            height={(sizeMap[size] * 24) / sizeMap["base"]}
+            width={(blockieSizeMap[size] * 24) / blockieSizeMap["base"]}
+            height={(blockieSizeMap[size] * 24) / blockieSizeMap["base"]}
             alt={`${address} avatar`}
           />
         ) : (
-          <Blockies className="mx-auto rounded-full" size={sizeMap[size]} seed={address.toLowerCase()} scale={3} />
+          <Blockies
+            className="mx-auto rounded-full"
+            size={blockieSizeMap[size]}
+            seed={address.toLowerCase()}
+            scale={3}
+          />
         )}
       </div>
       {disableAddressLink ? (

@@ -55,14 +55,14 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                     <td className="w-1/12">{block.number}</td>
                     <td className="w-2/12">{timeMined}</td>
                     <td className="w-2/12">
-                      <Address address={tx.from} />
+                      <Address address={tx.from} size="sm" />
                     </td>
                     <td className="w-2/12">
                       {!receipt?.contractAddress ? (
-                        tx.to && <Address address={tx.to} />
+                        tx.to && <Address address={tx.to} size="sm" />
                       ) : (
                         <div className="relative">
-                          <Address address={receipt.contractAddress} />
+                          <Address address={receipt.contractAddress} size="sm" />
                           <small className="absolute top-5 left-8">(Contract Creation)</small>
                         </div>
                       )}
