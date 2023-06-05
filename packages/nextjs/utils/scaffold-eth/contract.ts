@@ -1,3 +1,4 @@
+import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import {
   Abi,
   AbiParameterToPrimitiveType,
@@ -153,6 +154,8 @@ export type UseScaffoldWriteConfig<
 > = {
   contractName: TContractName;
   value?: string;
+  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
+  blockConfirmations?: number;
 } & IsContractsFileMissing<
   Partial<UseContractWriteConfig<"recklesslyUnprepared">> & { args?: unknown[] },
   {
