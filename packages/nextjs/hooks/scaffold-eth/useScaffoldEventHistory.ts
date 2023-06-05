@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ExtractAbiEventNames } from "abitype";
+import { Abi, ExtractAbiEventNames } from "abitype";
 import { ethers } from "ethers";
 import { useContract, useProvider } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -36,7 +36,7 @@ export const useScaffoldEventHistory = <
 
   const contract = useContract({
     address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
+    abi: deployedContractData?.abi as Abi,
     signerOrProvider: provider,
   });
 
@@ -109,6 +109,7 @@ export const useScaffoldEventHistory = <
     if (!deployedContractLoading) {
       readEvents();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     provider,
     fromBlock,
@@ -118,7 +119,8 @@ export const useScaffoldEventHistory = <
     deployedContractData?.address,
     contract,
     deployedContractData,
-    filters,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(filters),
     blockData,
     transactionData,
     receiptData,
