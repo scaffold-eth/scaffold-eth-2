@@ -23,8 +23,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
-  const [ensAvatarSize, setEnsAvatarSize] = useState(24);
-  const [blockiesSize, setBlockiesSize] = useState(5);
+
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
     address,
@@ -32,6 +31,15 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     chainId: 1,
     cacheTime: 30_000,
   });
+  const sizeMap = {
+    "3xl": 10,
+    "2xl": 9,
+    xl: 8,
+    lg: 7,
+    base: 5,
+    sm: 4,
+    xs: 3,
+  };
 
   // We need to apply this pattern to avoid Hydration errors.
   useEffect(() => {
@@ -41,20 +49,6 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   useEffect(() => {
     setEnsAvatar(fetchedEnsAvatar);
   }, [fetchedEnsAvatar]);
-  useEffect(() => {
-    const sizeMap = {
-      "3xl": 10,
-      "2xl": 9,
-      xl: 8,
-      lg: 7,
-      base: 5,
-      sm: 4,
-      xs: 3,
-    };
-    setEnsAvatarSize((sizeMap[size] * 24) / sizeMap["base"]);
-
-    setBlockiesSize(sizeMap[size]);
-  }, [size]);
 
   // Skeleton UI
   if (!address) {
@@ -90,12 +84,12 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
           <img
             className="rounded-full"
             src={ensAvatar}
-            width={ensAvatarSize}
-            height={ensAvatarSize}
+            width={(sizeMap[size] * 24) / sizeMap["base"]}
+            height={(sizeMap[size] * 24) / sizeMap["base"]}
             alt={`${address} avatar`}
           />
         ) : (
-          <Blockies className="mx-auto rounded-full" size={blockiesSize} seed={address.toLowerCase()} scale={3} />
+          <Blockies className="mx-auto rounded-full" size={sizeMap[size]} seed={address.toLowerCase()} scale={3} />
         )}
       </div>
       {disableAddressLink ? (
