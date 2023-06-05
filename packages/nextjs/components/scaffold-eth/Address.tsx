@@ -23,7 +23,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
-
+  const [ensAvatarSize, setEnsAvatarSize] = useState(24);
   const [blockiesSize, setBlockiesSize] = useState(5);
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
@@ -51,6 +51,8 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
       sm: 4,
       xs: 3,
     };
+    setEnsAvatarSize((sizeMap[size] * 24) / sizeMap["base"]);
+
     setBlockiesSize(sizeMap[size]);
   }, [size]);
 
@@ -85,7 +87,13 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
         {ensAvatar ? (
           // Don't want to use nextJS Image here (and adding remote patterns for the URL)
           // eslint-disable-next-line
-          <img className="rounded-full" src={ensAvatar} width={24} height={24} alt={`${address} avatar`} />
+          <img
+            className="rounded-full"
+            src={ensAvatar}
+            width={ensAvatarSize}
+            height={ensAvatarSize}
+            alt={`${address} avatar`}
+          />
         ) : (
           <Blockies className="mx-auto rounded-full" size={blockiesSize} seed={address.toLowerCase()} scale={3} />
         )}
