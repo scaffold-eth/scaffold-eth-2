@@ -13,17 +13,18 @@ type TAddressProps = {
   address?: string;
   disableAddressLink?: boolean;
   format?: "short" | "long";
-  size?: "xl" | "lg" | "md" | "sm" | "xs";
+  size?: "3xl" | "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
 };
 
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
-export const Address = ({ address, disableAddressLink, format, size = "md" }: TAddressProps) => {
+export const Address = ({ address, disableAddressLink, format, size = "base" }: TAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 
+  const [blockiesSize, setBlockiesSize] = useState(5);
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
     address,
@@ -40,6 +41,18 @@ export const Address = ({ address, disableAddressLink, format, size = "md" }: TA
   useEffect(() => {
     setEnsAvatar(fetchedEnsAvatar);
   }, [fetchedEnsAvatar]);
+  useEffect(() => {
+    const sizeMap = {
+      "3xl": 10,
+      "2xl": 9,
+      xl: 8,
+      lg: 7,
+      base: 5,
+      sm: 4,
+      xs: 3,
+    };
+    setBlockiesSize(sizeMap[size]);
+  }, [size]);
 
   // Skeleton UI
   if (!address) {
@@ -74,7 +87,7 @@ export const Address = ({ address, disableAddressLink, format, size = "md" }: TA
           // eslint-disable-next-line
           <img className="rounded-full" src={ensAvatar} width={24} height={24} alt={`${address} avatar`} />
         ) : (
-          <Blockies className="mx-auto rounded-full" size={8} seed={address.toLowerCase()} scale={3} />
+          <Blockies className="mx-auto rounded-full" size={blockiesSize} seed={address.toLowerCase()} scale={3} />
         )}
       </div>
       {disableAddressLink ? (
