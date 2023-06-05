@@ -4,14 +4,14 @@ import { TransactionReceipt } from "viem";
 import { useNetwork, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
-  IntegerInput,
+  EtherInput,
   TxReceipt,
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
 } from "~~/components/scaffold-eth";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, parseTxnValue } from "~~/utils/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, WriteAbiStateMutability } from "~~/utils/scaffold-eth/contract";
 
 type WriteOnlyFunctionFormProps = {
@@ -30,7 +30,7 @@ export const WriteOnlyFunctionForm = ({
   onChange,
 }: WriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionName, inputs));
-  const [txValue, setTxValue] = useState<string | bigint>("");
+  const [txValue, setTxValue] = useState<string>("");
   const { chain } = useNetwork();
   const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;
 
@@ -42,7 +42,7 @@ export const WriteOnlyFunctionForm = ({
     contractName,
     functionName,
     args: getParsedContractFunctionArgs(form) as any,
-    value: (typeof txValue === "string" ? parseTxnValue(txValue) : txValue) as any,
+    value: txValue as any, // TODO: fix value type
     onBlockConfirmation: () => {
       onChange();
     },
@@ -80,13 +80,13 @@ export const WriteOnlyFunctionForm = ({
         <p className="font-medium my-0 break-words">{functionName}</p>
         {inputElements}
         {isPayable ? (
-          <IntegerInput
+          <EtherInput
             value={txValue}
             onChange={updatedTxValue => {
               setDisplayedTxResult(undefined);
               setTxValue(updatedTxValue);
             }}
-            placeholder="value (wei)"
+            placeholder="value (ether)"
           />
         ) : null}
         <div className="flex justify-between gap-2">
