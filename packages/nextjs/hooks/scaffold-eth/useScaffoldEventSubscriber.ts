@@ -9,8 +9,7 @@ import { AbiEventArgs, ContractAbi, ContractName, UseScaffoldEventConfig } from 
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
- * @param config.listener - the callback that receives event
- * @param config.once - if set to true it will receive only a single event, then stop listening for the event. Defaults to false
+ * @param config.listener - the callback that receives events. If only interested in 1 event, call `unwatch` inside of the listener
  */
 export const useScaffoldEventSubscriber = <
   TContractName extends ContractName,
@@ -20,7 +19,6 @@ export const useScaffoldEventSubscriber = <
   contractName,
   eventName,
   listener,
-  once,
 }: UseScaffoldEventConfig<TContractName, TEventName, TEventInputs>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
@@ -30,6 +28,5 @@ export const useScaffoldEventSubscriber = <
     chainId: getTargetNetwork().id,
     listener: listener as (...args: unknown[]) => void,
     eventName: eventName as string,
-    once: once ?? false,
   });
 };

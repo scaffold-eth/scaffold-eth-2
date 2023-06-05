@@ -176,7 +176,6 @@ export type UseScaffoldEventConfig<
   {
     eventName: TEventName;
     listener: (...args: TEventInputs) => void;
-    once?: boolean;
   }
 >;
 
