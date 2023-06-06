@@ -3,8 +3,52 @@ import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-async function getContractDataFromHre(hre: HardhatRuntimeEnvironment) {
-  const contracts = {} as any;
+function getDirectories(path: string) {
+  return fs
+    .readdirSync(path, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+}
+
+function getContractNames(path: string) {
+  return fs
+    .readdirSync(path, { withFileTypes: true })
+    .filter(dirent => dirent.isFile() && dirent.name.endsWith(".json"))
+    .map(dirent => dirent.name.split(".")[0]);
+}
+
+const DEPLOYMENTS_DIR = "./deployments";
+
+function getContractDataFromDeployments({ exclude }: { exclude: { chainId: number; name: string } }) {
+  if (!fs.existsSync(DEPLOYMENTS_DIR)) {
+    return undefined;
+  }
+  const output = {} as Record<string, any>;
+  for (const chainName of getDirectories(DEPLOYMENTS_DIR).filter(name => name !== exclude.name)) {
+    const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+    const contracts = {} as Record<string, any>;
+    for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
+      const { abi, address } = JSON.parse(
+        fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
+      );
+      contracts[contractName] = { address, abi };
+    }
+    output[chainId] = [
+      {
+        chainId,
+        name: chainName,
+        contracts,
+      },
+    ];
+  }
+  return output;
+}
+
+async function getContractDataFromHre(
+  hre: HardhatRuntimeEnvironment,
+  currentNetwork: { chainId: number; name: string },
+) {
+  const contracts = {} as Record<string, any>;
   const allDeployments = await hre.deployments.all();
 
   for (const contractName in allDeployments) {
@@ -15,13 +59,11 @@ async function getContractDataFromHre(hre: HardhatRuntimeEnvironment) {
     contracts[contractName].abi = deploymentInfo.abi;
   }
 
-  const provider = hre.ethers.provider;
-  const { chainId } = await provider.getNetwork();
   const output = {
-    [chainId]: [
+    [currentNetwork.chainId]: [
       {
-        chainId: chainId.toString(),
-        name: hre.network.name,
+        chainId: currentNetwork.chainId.toString(),
+        name: currentNetwork.name,
         contracts,
       },
     ],
@@ -36,8 +78,20 @@ async function getContractDataFromHre(hre: HardhatRuntimeEnvironment) {
 const generateTsAbis: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const TARGET_DIR = "../nextjs/generated/";
 
-  const contractsData = await getContractDataFromHre(hre);
-  const fileContent = Object.entries(contractsData).reduce((content, [chainId, chainConfig]) => {
+  const currentNetwork = {
+    chainId: (await hre.ethers.provider.getNetwork()).chainId,
+    name: hre.network.name,
+  };
+
+  const newContractsData = await getContractDataFromHre(hre, currentNetwork);
+  const existingContractsData = getContractDataFromDeployments({ exclude: currentNetwork });
+
+  const allContractsData = {
+    ...existingContractsData,
+    ...newContractsData,
+  };
+
+  const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
   }, "");
 
