@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 function getDirectories(path: string) {
   return fs
@@ -19,12 +18,12 @@ function getContractNames(path: string) {
 
 const DEPLOYMENTS_DIR = "./deployments";
 
-function getContractDataFromDeployments({ exclude }: { exclude: { chainId: number; name: string } }) {
+function getContractDataFromDeployments() {
   if (!fs.existsSync(DEPLOYMENTS_DIR)) {
-    return undefined;
+    throw Error("At least one other deployment script should exist to generate an actual contract.");
   }
   const output = {} as Record<string, any>;
-  for (const chainName of getDirectories(DEPLOYMENTS_DIR).filter(name => name !== exclude.name)) {
+  for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
     const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
     const contracts = {} as Record<string, any>;
     for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
@@ -44,52 +43,13 @@ function getContractDataFromDeployments({ exclude }: { exclude: { chainId: numbe
   return output;
 }
 
-async function getContractDataFromHre(
-  hre: HardhatRuntimeEnvironment,
-  currentNetwork: { chainId: number; name: string },
-) {
-  const contracts = {} as Record<string, any>;
-  const allDeployments = await hre.deployments.all();
-
-  for (const contractName in allDeployments) {
-    contracts[contractName] = {};
-    const deploymentInfo = allDeployments[contractName];
-
-    contracts[contractName].address = deploymentInfo.address;
-    contracts[contractName].abi = deploymentInfo.abi;
-  }
-
-  const output = {
-    [currentNetwork.chainId]: [
-      {
-        chainId: currentNetwork.chainId.toString(),
-        name: currentNetwork.name,
-        contracts,
-      },
-    ],
-  } as Record<string, any>;
-  return output;
-}
-
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
  * This script should be run last.
  */
-const generateTsAbis: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const generateTsAbis: DeployFunction = async function () {
   const TARGET_DIR = "../nextjs/generated/";
-
-  const currentNetwork = {
-    chainId: (await hre.ethers.provider.getNetwork()).chainId,
-    name: hre.network.name,
-  };
-
-  const newContractsData = await getContractDataFromHre(hre, currentNetwork);
-  const existingContractsData = getContractDataFromDeployments({ exclude: currentNetwork });
-
-  const allContractsData = {
-    ...existingContractsData,
-    ...newContractsData,
-  };
+  const allContractsData = getContractDataFromDeployments();
 
   const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
