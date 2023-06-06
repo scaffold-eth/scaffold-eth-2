@@ -5,14 +5,18 @@
   "workspaces": {
     "packages": [
       "packages/hardhat",
-      "packages/nextjs"
+      "packages/nextjs",
+      "packages/foundry"
     ]
   },
   "scripts": {
     "account": "yarn workspace @se-2/hardhat account",
     "fork": "yarn workspace @se-2/hardhat fork",
     "verify": "yarn workspace @se-2/hardhat verify",
-    "compile": "yarn workspace @se-2/hardhat compile",
+    "compile": "yarn workspace @se-2/foundry compile",
+    "chain": "yarn workspace @se-2/foundry chain",
+    "deploy": "yarn workspace @se-2/foundry deploy",
+    "generate": "yarn workspace @se-2/foundry generate",
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
@@ -23,20 +27,11 @@
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "chain": "cd packages/foundry && anvil --config-out localhost.json",
-    "deploy": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url ${0:-localhost} --broadcast && node script/generateTsAbis.ts",
-    "generate": "cd packages/foundry && node script/generateAccount.ts"
+    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
-    "@types/prettier": "^2",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
-  },
-  "dependencies": {
-    "envfile": "^6.18.0",
-    "ethers": "^5.7.1",
-    "prettier": "^2.8.8"
   }
 }
