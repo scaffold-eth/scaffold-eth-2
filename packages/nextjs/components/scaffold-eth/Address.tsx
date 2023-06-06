@@ -13,16 +13,17 @@ type TAddressProps = {
   address?: string;
   disableAddressLink?: boolean;
   format?: "short" | "long";
-  size?: "3xl" | "2xl" | "xl" | "lg" | "base" | "sm" | "xs";
+  size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
 };
+
 const blockieSizeMap = {
-  "3xl": 10,
-  "2xl": 9,
-  xl: 8,
-  lg: 7,
-  base: 5,
-  sm: 4,
-  xs: 3,
+  xs: 6,
+  sm: 7,
+  base: 8,
+  lg: 9,
+  xl: 10,
+  "2xl": 12,
+  "3xl": 15,
 };
 
 /**

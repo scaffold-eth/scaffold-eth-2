@@ -63,7 +63,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                       ) : (
                         <div className="relative">
                           <Address address={receipt.contractAddress} size="sm" />
-                          <small className="absolute top-5 left-8">(Contract Creation)</small>
+                          <small className="absolute top-4 left-4">(Contract Creation)</small>
                         </div>
                       )}
                     </td>
