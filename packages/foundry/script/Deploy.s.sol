@@ -11,13 +11,7 @@ contract DeployScript is ScaffoldETHDeploy {
 
         vm.startBroadcast(deployerPrivateKey);
         YourContract yourContract = new YourContract(vm.addr(1));
-        // YourContract yourContract2 = new YourContract(vm.addr(1));
         vm.stopBroadcast();
-
-        // optional
-        // deployments.push(Deployment("YourContract1", address(yourContract1)));
-        // deployments.push(Deployment("YourContract2", address(yourContract2)));
-
         exportDeployments();
     }
 

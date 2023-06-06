@@ -29,7 +29,7 @@ contract YourContract {
     );
 
     // Constructor: Called once on contract deployment
-    // Check packages/hardhat/deploy/00_deploy_your_contract.ts
+    // Check packages/foundry/deploy/Deploy.s.sol
     constructor(address _owner) {
         owner = _owner;
     }
@@ -48,7 +48,7 @@ contract YourContract {
      * @param _newGreeting (string memory) - new greeting to save on the contract
      */
     function setGreeting(string memory _newGreeting) public payable {
-        // Print data to the hardhat chain console. Remove when deploying to a live network.
+        // Print data to the foundry console. Remove when deploying to a live network.
 
         console.logString("Setting new greeting");
         console.logString(_newGreeting);
