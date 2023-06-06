@@ -15,6 +15,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
   ] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const provider = useProvider({ chainId: scaffoldConfig.targetNetwork.id });
+
   useEffect(() => {
     const checkContractDeployment = async () => {
       if (!deployedContract) {
@@ -22,6 +23,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
         return;
       }
       const code = await provider.getCode((deployedContract as Contract<TContractName>).address);
+
       if (!isMounted()) {
         return;
       }
