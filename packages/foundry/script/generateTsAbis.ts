@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-//@ts-expect-error  This script runs after `hardhat deploy --export` therefore its deterministic that it will present
+//@ts-expect-error  This script runs after `forge deploy` therefore its deterministic that it will present
 // const deployments = require("../deployments.json");
 const prettier = require("prettier");
 
