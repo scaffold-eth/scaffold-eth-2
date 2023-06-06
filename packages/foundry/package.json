@@ -1,0 +1,18 @@
+{
+  "name": "@se-2/foundry",
+  "version": "0.0.1",
+  "scripts": {
+    "chain": "anvil --config-out localhost.json",
+    "compile": "forge compile",
+    "generate": "node script/generateAccount.ts",
+    "deploy": "forge build && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast && node script/generateTsAbis.ts"
+  },
+  "devDependencies": {
+    "@types/prettier": "^2"
+  },
+  "dependencies": {
+    "envfile": "^6.18.0",
+    "ethers": "^5.7.1",
+    "prettier": "^2.8.8"
+  }
+}
