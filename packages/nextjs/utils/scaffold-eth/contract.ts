@@ -114,7 +114,9 @@ type WriteAbiStateMutability = "nonpayable" | "payable";
 
 type RestConfigParam<TAbiStateMutability extends AbiStateMutability> = Partial<
   Omit<
-    TAbiStateMutability extends ReadAbiStateMutability ? UseContractReadConfig : UseContractWriteConfig,
+    TAbiStateMutability extends ReadAbiStateMutability
+      ? UseContractReadConfig
+      : UseContractWriteConfig<"recklesslyUnprepared">,
     "chainId" | "abi" | "address" | "functionName" | "args"
   >
 >;
@@ -155,7 +157,7 @@ export type UseScaffoldWriteConfig<
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 } & IsContractsFileMissing<
-  Partial<UseContractWriteConfig> & { args?: unknown[] },
+  Partial<UseContractWriteConfig<"recklesslyUnprepared">> & { args?: unknown[] },
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, WriteAbiStateMutability, TFunctionName> &
