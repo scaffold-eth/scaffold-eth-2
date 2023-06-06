@@ -10,12 +10,9 @@
   },
   "scripts": {
     "account": "yarn workspace @se-2/hardhat account",
-    "chain": "yarn workspace @se-2/hardhat chain",
     "fork": "yarn workspace @se-2/hardhat fork",
-    "deploy": "yarn workspace @se-2/hardhat deploy",
     "verify": "yarn workspace @se-2/hardhat verify",
     "compile": "yarn workspace @se-2/hardhat compile",
-    "generate": "yarn workspace @se-2/hardhat generate",
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
@@ -27,9 +24,9 @@
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "chain:foundry": "cd packages/foundry && anvil --config-out localhost.json",
-    "deploy:foundry": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url ${0:-localhost} --broadcast && node script/generateTsAbis.ts",
-    "generate:foundry": "cd packages/foundry && node script/generateAccount.ts"
+    "chain": "cd packages/foundry && anvil --config-out localhost.json",
+    "deploy": "cd packages/foundry && forge build && forge script script/Deploy.s.sol --rpc-url ${0:-localhost} --broadcast && node script/generateTsAbis.ts",
+    "generate": "cd packages/foundry && node script/generateAccount.ts"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
