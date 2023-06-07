@@ -9,5 +9,3 @@ temp
 #Hardhat files
 cache
 artifacts
-
-deployments
