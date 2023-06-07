@@ -4,8 +4,6 @@ import "../src/YourContract.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
-    // mapping(address => string) contractNames;
-
     function run() external {
         uint256 deployerPrivateKey = setupLocalhostEnv();
 
