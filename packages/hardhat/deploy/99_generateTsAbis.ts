@@ -64,6 +64,8 @@ const generateTsAbis: DeployFunction = async function () {
       parser: "typescript",
     }),
   );
+  
+  console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
 };
 
 export default generateTsAbis;
