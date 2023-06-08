@@ -4,7 +4,6 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/hardhat",
       "packages/nextjs",
       "packages/foundry"
     ]
@@ -17,9 +16,6 @@
     "chain": "yarn workspace @se-2/foundry chain",
     "deploy": "yarn workspace @se-2/foundry deploy",
     "generate": "yarn workspace @se-2/foundry generate",
-    "hardhat:lint": "yarn workspace @se-2/hardhat lint",
-    "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
-    "hardhat:test": "yarn workspace @se-2/hardhat test",
     "start": "yarn workspace @se-2/nextjs dev",
     "next:lint": "yarn workspace @se-2/nextjs lint",
     "next:format": "yarn workspace @se-2/nextjs format",
