@@ -1,7 +1,7 @@
 import { DisplayVariable } from "./DisplayVariable";
 import { Abi, AbiFunction } from "abitype";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName, FunctionNamesWithoutInputs, ReadAbiStateMutability } from "~~/utils/scaffold-eth/contract";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 export const ContractVariables = ({
   contractName,
@@ -10,14 +10,14 @@ export const ContractVariables = ({
   contractName: ContractName;
   refreshDisplayVariables: boolean;
 }) => {
-  const { data: deployedContractData, isLoading } = useDeployedContractInfo(contractName);
+  const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
-  if (isLoading) {
-    return <>Loading...</>;
+  if (!deployedContractData) {
+    return null;
   }
 
   const functionsToDisplay = (
-    ((deployedContractData?.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
+    (deployedContractData.abi as Abi).filter(part => part.type === "function") as AbiFunction[]
   ).filter(fn => {
     const isQueryableWithNoParams =
       (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
@@ -32,8 +32,8 @@ export const ContractVariables = ({
     <>
       {functionsToDisplay.map(fn => (
         <DisplayVariable
-          contractName={contractName}
-          functionName={fn.name as FunctionNamesWithoutInputs<ContractName, ReadAbiStateMutability>}
+          abiFunction={fn}
+          contractAddress={deployedContractData.address}
           key={fn.name}
           refreshDisplayVariables={refreshDisplayVariables}
         />

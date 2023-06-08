@@ -9,10 +9,11 @@ export const displayTxResult = (
   displayContent: DisplayContent | DisplayContent[],
   asText = false,
 ): string | ReactElement | number => {
-  if (!displayContent) {
+  if (displayContent == null) {
     return "";
   }
 
+  // TODO: Handle too big bigNumber to show ethers value -> https://github.com/scaffold-eth/scaffold-eth-2/commit/e5a591f820851f919632f3343d1f3f4548f07ac7#diff-5ca89ee1d9a40426f20c02e8b49a214feace564a3dc64907d5d4c5de90dcde03
   if (typeof displayContent === "bigint" || typeof displayContent === "number") {
     return displayContent.toString();
   }
