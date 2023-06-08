@@ -1,8 +1,8 @@
-import { AbiParameter } from "abitype";
+import { AbiFunction, AbiParameter } from "abitype";
 
 /**
  * @dev utility function to generate key corresponding to function metaData
- * @param {FunctionFragment} functionInfo
+ * @param {AbiFunction} functionName
  * @param {utils.ParamType} input - object containing function name and input type corresponding to index
  * @param {number} inputIndex
  * @returns {string} key
@@ -76,10 +76,11 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
   return parsedArguments;
 };
 
-const getInitialFormState = (functionName: string, inputs: readonly AbiParameter[]) => {
+const getInitialFormState = (abiFunction: AbiFunction) => {
   const initialForm: Record<string, any> = {};
-  inputs.forEach((input, inputIndex) => {
-    const key = getFunctionInputKey(functionName, input, inputIndex);
+  if (!abiFunction.inputs) return initialForm;
+  abiFunction.inputs.forEach((input, inputIndex) => {
+    const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     initialForm[key] = "";
   });
   return initialForm;

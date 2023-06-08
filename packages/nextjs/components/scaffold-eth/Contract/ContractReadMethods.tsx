@@ -1,17 +1,17 @@
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { Abi, AbiFunction } from "abitype";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName, FunctionNamesWithInputs, ReadAbiStateMutability } from "~~/utils/scaffold-eth/contract";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 export const ContractReadMethods = ({ contractName }: { contractName: ContractName }) => {
-  const { data: deployedContractData, isLoading } = useDeployedContractInfo(contractName);
+  const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
-  if (isLoading) {
-    return <>Loading...</>;
+  if (!deployedContractData) {
+    return null;
   }
 
   const functionsToDisplay = (
-    ((deployedContractData?.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
+    ((deployedContractData.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
   ).filter(fn => {
     const isQueryableWithParams =
       (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
@@ -25,12 +25,7 @@ export const ContractReadMethods = ({ contractName }: { contractName: ContractNa
   return (
     <>
       {functionsToDisplay.map(fn => (
-        <ReadOnlyFunctionForm
-          contractName={contractName}
-          functionName={fn.name as FunctionNamesWithInputs<ContractName, ReadAbiStateMutability>}
-          inputs={fn.inputs}
-          key={fn.name}
-        />
+        <ReadOnlyFunctionForm contractAddress={deployedContractData.address} abiFunction={fn} key={fn.name} />
       ))}
     </>
   );

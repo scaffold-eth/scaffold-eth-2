@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AbiParameter } from "abitype";
+import { Abi, AbiFunction } from "abitype";
+import { useContractRead } from "wagmi";
 import {
   ContractInput,
   displayTxResult,
@@ -7,32 +8,30 @@ import {
   getInitialFormState,
   getParsedContractFunctionArgs,
 } from "~~/components/scaffold-eth";
-import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
-import { ContractName, FunctionNamesWithInputs, ReadAbiStateMutability } from "~~/utils/scaffold-eth/contract";
 
 type TReadOnlyFunctionFormProps = {
-  contractName: ContractName;
-  functionName: FunctionNamesWithInputs<ContractName, ReadAbiStateMutability>;
-  inputs: readonly AbiParameter[];
+  contractAddress: string;
+  abiFunction: AbiFunction;
 };
 
-export const ReadOnlyFunctionForm = ({ contractName, functionName, inputs }: TReadOnlyFunctionFormProps) => {
-  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionName, inputs));
+export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnlyFunctionFormProps) => {
+  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
-  const { isFetching, refetch } = useScaffoldContractRead({
-    contractName,
-    functionName,
-    args: getParsedContractFunctionArgs(form) as any,
+  const { isFetching, refetch } = useContractRead({
+    address: contractAddress,
+    functionName: abiFunction.name,
+    abi: [abiFunction] as Abi,
+    args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: (error: any) => {
       notification.error(error.message);
     },
   });
 
-  const inputElements = inputs.map((input, inputIndex) => {
-    const key = getFunctionInputKey(functionName, input, inputIndex);
+  const inputElements = abiFunction.inputs.map((input, inputIndex) => {
+    const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
       <ContractInput
         key={key}
@@ -49,7 +48,7 @@ export const ReadOnlyFunctionForm = ({ contractName, functionName, inputs }: TRe
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">{functionName}</p>
+      <p className="font-medium my-0 break-words">{abiFunction.name}</p>
       {inputElements}
       <div className="flex justify-between gap-2">
         <div className="flex-grow">
@@ -62,7 +61,7 @@ export const ReadOnlyFunctionForm = ({ contractName, functionName, inputs }: TRe
         <button
           className={`btn btn-secondary btn-sm ${isFetching ? "loading" : ""}`}
           onClick={async () => {
-            const data = await refetch();
+            const { data } = await refetch();
             setResult(data);
           }}
         >

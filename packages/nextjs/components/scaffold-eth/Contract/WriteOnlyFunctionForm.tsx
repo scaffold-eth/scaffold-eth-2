@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AbiParameter, ExtractAbiFunctionNames } from "abitype";
+import { AbiFunction, AbiParameter, ExtractAbiFunctionNames } from "abitype";
 import { TransactionReceipt } from "viem";
 import { useNetwork, useWaitForTransaction } from "wagmi";
 import {
@@ -14,7 +14,9 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, WriteAbiStateMutability } from "~~/utils/scaffold-eth/contract";
 
+// TODO: WIP - Fix this Properly
 type WriteOnlyFunctionFormProps = {
+  abiFunction: AbiFunction;
   contractName: ContractName;
   functionName: ExtractAbiFunctionNames<ContractAbi<ContractName>, WriteAbiStateMutability>;
   inputs: readonly AbiParameter[];
@@ -23,13 +25,14 @@ type WriteOnlyFunctionFormProps = {
 };
 
 export const WriteOnlyFunctionForm = ({
+  abiFunction,
   contractName,
   functionName,
   inputs,
   isPayable,
   onChange,
 }: WriteOnlyFunctionFormProps) => {
-  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionName, inputs));
+  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [txValue, setTxValue] = useState<string>("");
   const { chain } = useNetwork();
   const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;

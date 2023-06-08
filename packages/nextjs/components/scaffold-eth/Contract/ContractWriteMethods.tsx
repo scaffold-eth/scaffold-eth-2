@@ -3,6 +3,7 @@ import { Abi, AbiFunction } from "abitype";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { ContractName, FunctionNamesWithInputs, WriteAbiStateMutability } from "~~/utils/scaffold-eth/contract";
 
+// TODO: Fix this properly
 export const ContractWriteMethods = ({
   contractName,
   onChange,
@@ -32,6 +33,7 @@ export const ContractWriteMethods = ({
       {functionsToDisplay.map(fn => (
         <WriteOnlyFunctionForm
           key={fn.name}
+          abiFunction={fn}
           contractName={contractName}
           functionName={fn.name as FunctionNamesWithInputs<ContractName, WriteAbiStateMutability>}
           inputs={fn.inputs}
