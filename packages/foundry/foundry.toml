@@ -7,7 +7,6 @@ fs_permissions = [{ access = "read-write", path = "./"}]
 [rpc_endpoints]
 default_network = "http://127.0.0.1:8545"
 localhost = "http://127.0.0.1:8545"
-
 mainnet = "https://rpc.ankr.com/eth"
 sepolia = "https://rpc.sepolia.org"
 goerli = "https://rpc.ankr.com/eth_goerli"

@@ -10,7 +10,7 @@
   },
   "scripts": {
     "account": "yarn workspace @se-2/foundry account",
-    "fork": "yarn workspace @se-2/hardhat fork",
+    "fork": "yarn workspace @se-2/foundry fork",
     "verify": "yarn workspace @se-2/hardhat verify",
     "compile": "yarn workspace @se-2/foundry compile",
     "chain": "yarn workspace @se-2/foundry chain",

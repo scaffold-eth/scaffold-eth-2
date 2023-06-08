@@ -4,6 +4,7 @@
   "scripts": {
     "account": "forge script script/ListAccount.s.sol",
     "chain": "anvil --config-out localhost.json",
+    "fork": "anvil --fork-url ${0:-mainnet} --config-out localhost.json",
     "compile": "forge compile",
     "generate": "node script/generateAccount.ts",
     "deploy": "forge build && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast && node script/generateTsAbis.ts",
