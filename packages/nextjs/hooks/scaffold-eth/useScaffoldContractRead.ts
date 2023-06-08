@@ -34,6 +34,7 @@ export const useScaffoldContractRead = <
     abi: deployedContract?.abi,
     watch: true,
     args,
+    enabled: !Array.isArray(args) || !args.some(arg => arg === undefined),
     ...(readConfig as any),
   }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
     data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
