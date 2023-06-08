@@ -8,14 +8,14 @@ fs_permissions = [{ access = "read-write", path = "./"}]
 default_network = "http://127.0.0.1:8545"
 localhost = "http://127.0.0.1:8545"
 
-mainnet = "https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}"
-sepolia = "https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}"
-goerli = "https://eth-goerli.alchemyapi.io/v2/${providerApiKey}"
-arbitrum = "https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}"
-arbitrumGoerli = "https://arb-goerli.g.alchemy.com/v2/${providerApiKey}"
-optimism = "https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}"
-optimismGoerli = "https://opt-goerli.g.alchemy.com/v2/${providerApiKey}"
-polygon = "https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}"
-polygonMumbai = "https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}"
+mainnet = "https://rpc.ankr.com/eth"
+sepolia = "https://rpc.sepolia.org"
+goerli = "https://rpc.ankr.com/eth_goerli"
+arbitrum = "https://rpc.ankr.com/arbitrum"
+arbitrumGoerli = "https://arbitrum-goerli.public.blastapi.io"
+optimism = "https://rpc.ankr.com/optimism"
+optimismGoerli = "https://optimism-goerli.public.blastapi.io"
+polygon = "https://rpc.ankr.com/polygon"
+polygonMumbai = "https://rpc.ankr.com/polygon_mumbai"
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
