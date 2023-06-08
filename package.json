@@ -15,6 +15,7 @@
     "compile": "yarn workspace @se-2/foundry compile",
     "chain": "yarn workspace @se-2/foundry chain",
     "deploy": "yarn workspace @se-2/foundry deploy",
+    "foundry:test": "yarn workspace @se-2/foundry test",
     "generate": "yarn workspace @se-2/foundry generate",
     "start": "yarn workspace @se-2/nextjs dev",
     "next:lint": "yarn workspace @se-2/nextjs lint",

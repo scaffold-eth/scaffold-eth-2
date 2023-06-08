@@ -5,7 +5,8 @@
     "chain": "anvil --config-out localhost.json",
     "compile": "forge compile",
     "generate": "node script/generateAccount.ts",
-    "deploy": "forge build && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast && node script/generateTsAbis.ts"
+    "deploy": "forge build && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast && node script/generateTsAbis.ts",
+    "test": "forge test"
   },
   "devDependencies": {
     "@types/prettier": "^2"
