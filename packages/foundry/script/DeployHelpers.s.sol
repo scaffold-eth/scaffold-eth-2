@@ -7,14 +7,12 @@ contract ScaffoldETHDeploy is Script {
         string name;
         address addr;
     }
+
     string root;
     string path;
     Deployment[] public deployments;
 
-    function setupLocalhostEnv()
-        internal
-        returns (uint256 localhostPrivateKey)
-    {
+    function setupLocalhostEnv() internal returns (uint256 localhostPrivateKey) {
         if (block.chainid == 31337) {
             root = vm.projectRoot();
             path = string.concat(root, "/localhost.json");
@@ -39,11 +37,7 @@ contract ScaffoldETHDeploy is Script {
         uint256 len = deployments.length;
 
         for (uint256 i = 0; i < len; i++) {
-            vm.serializeString(
-                jsonWrite,
-                vm.toString(deployments[i].addr),
-                deployments[i].name
-            );
+            vm.serializeString(jsonWrite, vm.toString(deployments[i].addr), deployments[i].name);
         }
 
         Chain memory chain = getChain(block.chainid);

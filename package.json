@@ -9,12 +9,13 @@
     ]
   },
   "scripts": {
-    "account": "yarn workspace @se-2/hardhat account",
+    "account": "yarn workspace @se-2/foundry account",
     "fork": "yarn workspace @se-2/hardhat fork",
     "verify": "yarn workspace @se-2/hardhat verify",
     "compile": "yarn workspace @se-2/foundry compile",
     "chain": "yarn workspace @se-2/foundry chain",
     "deploy": "yarn workspace @se-2/foundry deploy",
+    "foundry:lint": "yarn workspace @se-2/foundry lint",
     "foundry:test": "yarn workspace @se-2/foundry test",
     "generate": "yarn workspace @se-2/foundry generate",
     "start": "yarn workspace @se-2/nextjs dev",

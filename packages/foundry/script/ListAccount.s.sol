@@ -1,4 +1,4 @@
-pragma solidity 0.8.19;
+pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
 import "forge-std/Vm.sol";
@@ -7,9 +7,7 @@ contract ListAccount is Script {
     function run() external {
         uint256 privateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
         if (privateKey == 0) {
-            console.logString(
-                "You don't have a deployer account. Run `yarn generate` first"
-            );
+            console.logString("You don't have a deployer account. Run `yarn generate` first");
         } else {
             address acc = vm.addr(privateKey);
             Vm.Rpc[] memory availableRPCs = vm.rpcUrlStructs();
@@ -19,9 +17,7 @@ contract ListAccount is Script {
                     console.logString(string.concat("--- ", rpc.key, " ---"));
                     printAccountInfo(acc);
                 } catch (bytes memory err) {
-                    console.logString(
-                        string.concat("Cant connect to network : ", rpc.key)
-                    );
+                    console.logString(string.concat("Cant connect to network : ", rpc.key));
                 }
             }
         }
