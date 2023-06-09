@@ -1,55 +1,56 @@
 import { useEffect, useState } from "react";
-import { AbiFunction, AbiParameter, ExtractAbiFunctionNames } from "abitype";
+import { Abi, AbiFunction } from "abitype";
 import { TransactionReceipt } from "viem";
-import { useNetwork, useWaitForTransaction } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
-  EtherInput,
+  IntegerInput,
   TxReceipt,
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
+  getParsedEthersError,
 } from "~~/components/scaffold-eth";
-import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
-import { ContractAbi, ContractName, WriteAbiStateMutability } from "~~/utils/scaffold-eth/contract";
+import { useTransactor } from "~~/hooks/scaffold-eth";
+import { getTargetNetwork, notification, parseTxnValue } from "~~/utils/scaffold-eth";
 
-// TODO: WIP - Fix this Properly
 type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;
-  contractName: ContractName;
-  functionName: ExtractAbiFunctionNames<ContractAbi<ContractName>, WriteAbiStateMutability>;
-  inputs: readonly AbiParameter[];
-  isPayable: boolean;
   onChange: () => void;
+  contractAddress: string;
 };
 
-export const WriteOnlyFunctionForm = ({
-  abiFunction,
-  contractName,
-  functionName,
-  inputs,
-  isPayable,
-  onChange,
-}: WriteOnlyFunctionFormProps) => {
+export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }: WriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
-  const [txValue, setTxValue] = useState<string>("");
+  const [txValue, setTxValue] = useState<string | bigint>("");
   const { chain } = useNetwork();
+  const writeTxn = useTransactor();
   const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;
 
-  const {
-    data: result,
-    isLoading,
-    writeAsync,
-  } = useScaffoldContractWrite({
-    contractName,
-    functionName,
-    args: getParsedContractFunctionArgs(form) as any,
-    value: txValue as any, // TODO: fix value type
-    onBlockConfirmation: () => {
-      onChange();
-    },
+  const { config } = usePrepareContractWrite({
+    chainId: getTargetNetwork().id,
+    address: contractAddress,
+    functionName: abiFunction.name,
+    abi: [abiFunction] as Abi,
+    args: getParsedContractFunctionArgs(form),
+    //TODO : Handle this properly
+    // @ts-expect-error
+    value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
   });
+
+  const { data: result, isLoading, writeAsync } = useContractWrite(config);
+
+  const handleWrite = async () => {
+    if (writeAsync) {
+      try {
+        await writeTxn(writeAsync());
+        onChange();
+      } catch (e: any) {
+        const message = getParsedEthersError(e);
+        notification.error(message);
+      }
+    }
+  };
 
   const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
   const { data: txResult } = useWaitForTransaction({
@@ -60,8 +61,8 @@ export const WriteOnlyFunctionForm = ({
   }, [txResult]);
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
-  const inputElements = inputs.map((input, inputIndex) => {
-    const key = getFunctionInputKey(functionName, input, inputIndex);
+  const inputs = abiFunction.inputs.map((input, inputIndex) => {
+    const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
       <ContractInput
         key={key}
@@ -75,21 +76,21 @@ export const WriteOnlyFunctionForm = ({
       />
     );
   });
-  const zeroInputs = inputs.length === 0 && !isPayable;
+  const zeroInputs = inputs.length === 0 && abiFunction.stateMutability !== "payable";
 
   return (
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
-        <p className="font-medium my-0 break-words">{functionName}</p>
-        {inputElements}
-        {isPayable ? (
-          <EtherInput
+        <p className="font-medium my-0 break-words">{abiFunction.name}</p>
+        {inputs}
+        {abiFunction.stateMutability === "payable" ? (
+          <IntegerInput
             value={txValue}
             onChange={updatedTxValue => {
               setDisplayedTxResult(undefined);
               setTxValue(updatedTxValue);
             }}
-            placeholder="value (ether)"
+            placeholder="value (wei)"
           />
         ) : null}
         <div className="flex justify-between gap-2">
@@ -108,7 +109,7 @@ export const WriteOnlyFunctionForm = ({
             <button
               className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
               disabled={writeDisabled}
-              onClick={writeAsync}
+              onClick={handleWrite}
             >
               Send 💸
             </button>
