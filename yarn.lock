@@ -1830,7 +1830,7 @@ __metadata:
     use-debounce: ^8.0.4
     usehooks-ts: ^2.7.2
     vercel: ^28.15.1
-    viem: ^0.3.37
+    viem: ^1.0.2
     wagmi: ^1.0.8
     zustand: ^4.1.2
   languageName: unknown
@@ -3137,6 +3137,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wagmi/chains@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@wagmi/chains@npm:1.1.0"
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 3359df95f61120450dbe526f29860c60a9dc795dcfa5e6b2133b0b7662708f0d3998e99fae7f8337e3a92d97fcfa0e9900d88721d820dd3a8bf43832cedd8a64
+  languageName: node
+  linkType: hard
+
 "@wagmi/connectors@npm:2.0.0":
   version: 2.0.0
   resolution: "@wagmi/connectors@npm:2.0.0"
@@ -3704,6 +3716,19 @@ __metadata:
     zod:
       optional: true
   checksum: ec9ade7e2b54f6d22b5dc1688b7fa71958361f595b94bbde0a3fa5e53742400e587bb99ba6df7d041ebc229c766df4263d9a15fe523941112fe111b07848a05d
+  languageName: node
+  linkType: hard
+
+"abitype@npm:0.8.7":
+  version: 0.8.7
+  resolution: "abitype@npm:0.8.7"
+  peerDependencies:
+    typescript: ">=5.0.4"
+    zod: ^3 >=3.19.1
+  peerDependenciesMeta:
+    zod:
+      optional: true
+  checksum: 4351466808969bcc73e5c535c3d96bb687ee2be0bccd48eba024c47e6cc248f0c8bd368f9e42dab35d39923e63b1349ade470f72812de27127968caf1a1426c9
   languageName: node
   linkType: hard
 
@@ -13042,20 +13067,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^0.3.37":
-  version: 0.3.37
-  resolution: "viem@npm:0.3.37"
+"viem@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "viem@npm:1.0.2"
   dependencies:
     "@adraffy/ens-normalize": 1.9.0
     "@noble/curves": 1.0.0
     "@noble/hashes": 1.3.0
     "@scure/bip32": 1.3.0
     "@scure/bip39": 1.2.0
-    "@wagmi/chains": 0.3.1
-    abitype: 0.8.2
+    "@wagmi/chains": 1.1.0
+    abitype: 0.8.7
     isomorphic-ws: 5.0.0
     ws: 8.12.0
-  checksum: 2972763025a5b4d4ce9ff7745dabd5448f4eddf34d3fa0e65912cbf8b348c743e18e19d0a056dd2556ea47c43d6ed6070e11f1ee12d3c5be2a0b673917fce48c
+  checksum: 95f570126d6252a321702c805d1957e1405102a01037ad7d5085815ba793f7af41638a113f992bddb801602d5acaf8d321a2f9f16d4489d63b2beffdec1d202c
   languageName: node
   linkType: hard
 

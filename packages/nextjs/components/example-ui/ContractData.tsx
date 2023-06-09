@@ -33,8 +33,16 @@ export const ContractData = () => {
   useScaffoldEventSubscriber({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    listener: (greetingSetter, newGreeting, premium, value) => {
-      console.log(greetingSetter, newGreeting, premium, value);
+    listener: logs => {
+      logs.map(log => {
+        const { greetingSetter, newGreeting, premium, value } = log.args as {
+          greetingSetter?: `0x${string}` | undefined;
+          newGreeting?: string | undefined;
+          premium?: boolean | undefined;
+          value?: bigint | undefined;
+        }; // assertion needed to prevent TS error when deployedContracts is null
+        console.log(greetingSetter, newGreeting, premium, value);
+      });
     },
   });
 

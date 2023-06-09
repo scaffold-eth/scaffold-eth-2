@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createWalletClient, http, parseEther } from "viem";
+import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
@@ -15,8 +15,8 @@ const FAUCET_ACCOUNT_INDEX = 0;
  */
 export const Faucet = () => {
   const [loading, setLoading] = useState(false);
-  const [inputAddress, setInputAddress] = useState("");
-  const [faucetAddress, setFaucetAddress] = useState("");
+  const [inputAddress, setInputAddress] = useState<AddressType>();
+  const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
@@ -51,6 +51,9 @@ export const Faucet = () => {
   }, [localWalletClient]);
 
   const sendETH = async () => {
+    if (!faucetAddress) {
+      return;
+    }
     try {
       setLoading(true);
       await faucetTxn({
@@ -60,7 +63,7 @@ export const Faucet = () => {
         chain: hardhat,
       });
       setLoading(false);
-      setInputAddress("");
+      setInputAddress(undefined);
       setSendValue("");
     } catch (error) {
       const parsedError = getParsedEthersError(error);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Abi, AbiFunction } from "abitype";
-import { TransactionReceipt } from "viem";
+import { Address, TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
@@ -17,7 +17,7 @@ import { getTargetNetwork, notification, parseTxnValue } from "~~/utils/scaffold
 type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;
   onChange: () => void;
-  contractAddress: string;
+  contractAddress: Address;
 };
 
 export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }: WriteOnlyFunctionFormProps) => {

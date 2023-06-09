@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Abi, AbiFunction } from "abitype";
+import { Address } from "viem";
 import { useContractRead } from "wagmi";
 import {
   ContractInput,
@@ -11,7 +12,7 @@ import {
 import { notification } from "~~/utils/scaffold-eth";
 
 type TReadOnlyFunctionFormProps = {
-  contractAddress: string;
+  contractAddress: Address;
   abiFunction: AbiFunction;
 };
 

@@ -7,7 +7,7 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { TransactionReceipt } from "viem";
+import { Address, TransactionReceipt } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UsePrepareContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -18,7 +18,7 @@ export type GenericContractsDeclaration = {
     chainId: string;
     contracts: {
       [key: string]: {
-        address: string;
+        address: Address;
         abi: Abi;
       };
     };
@@ -168,15 +168,16 @@ export type UseScaffoldWriteConfig<
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
-  TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
+  // TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
 > = {
   contractName: TContractName;
 } & IsContractsFileMissing<
   UseContractEventConfig,
-  {
-    eventName: TEventName;
-    listener: (...args: TEventInputs) => void;
-  }
+  UseContractEventConfig<ContractAbi<TContractName>, TEventName>
+  // {
+  //   eventName: TEventName;
+  //   listener: (...args: TEventInputs) => void;
+  // }
 >;
 
 type IndexedEventInputs<
