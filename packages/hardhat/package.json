@@ -5,7 +5,7 @@
     "account": "hardhat run scripts/listAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy --export-all ./temp/hardhat_contracts.json \"$@\" && hardhat run scripts/generateTsAbis.ts",
+    "deploy": "hardhat deploy",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "generate": "hardhat run scripts/generateAccount.ts",
     "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
