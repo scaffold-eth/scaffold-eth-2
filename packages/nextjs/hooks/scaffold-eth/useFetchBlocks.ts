@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Block, Transaction, TransactionReceipt } from "viem";
 import { usePublicClient } from "wagmi";
 import { localhost } from "wagmi/chains";
-import { decodeTransactionData } from "~~/utils/scaffold-eth";
+import { TransactionWithFunction, decodeTransactionData } from "~~/utils/scaffold-eth";
 
 const BLOCKS_PER_PAGE = 20;
 
@@ -43,7 +43,7 @@ export const useFetchBlocks = () => {
       const fetchedBlocks = await Promise.all(blocksWithTransactions);
 
       fetchedBlocks.forEach(block => {
-        block.transactions.forEach(tx => decodeTransactionData(tx));
+        block.transactions.forEach(tx => decodeTransactionData(tx as TransactionWithFunction));
       });
 
       const txReceipts = await Promise.all(
