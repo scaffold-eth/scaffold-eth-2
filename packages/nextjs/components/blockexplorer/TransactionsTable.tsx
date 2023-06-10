@@ -1,7 +1,7 @@
-import { Transaction, formatEther } from "viem";
+import { formatEther } from "viem";
 import { TransactionHash } from "~~/components/blockexplorer/TransactionHash";
 import { Address } from "~~/components/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { TransactionWithFunction, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
 
 export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
@@ -36,7 +36,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         ) : (
           <tbody>
             {blocks.map(block =>
-              (block.transactions as Transaction[]).map(tx => {
+              (block.transactions as TransactionWithFunction[]).map(tx => {
                 const receipt = transactionReceipts[tx.hash];
                 const timeMined = new Date(Number(block.timestamp) * 1000).toLocaleString();
                 const functionCalled = tx.input.substring(0, 10);

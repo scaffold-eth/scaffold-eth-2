@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import { hardhat, localhost } from "wagmi/chains";
+import { Address as AddressType, createPublicClient, http } from "viem";
+import { hardhat } from "wagmi/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -14,7 +15,6 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
@@ -27,7 +27,10 @@ type PageProps = {
   contractData: AddressCodeTabProps | null;
 };
 
-const provider = getLocalProvider(localhost);
+const publicClient = createPublicClient({
+  chain: hardhat,
+  transport: http(),
+});
 
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
@@ -37,7 +40,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await provider?.getCode(address);
+      const contractCode = await publicClient.getBytecode({ address: address as AddressType });
       setIsContract(contractCode !== "0x");
     };
 
@@ -45,9 +48,12 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   }, [address]);
 
   const filteredBlocks = blocks.filter(block =>
-    block.transactions.some(
-      tx => tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase(),
-    ),
+    block.transactions.some(tx => {
+      if (typeof tx === "string") {
+        return false;
+      }
+      return tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase();
+    }),
   );
 
   return (
@@ -103,14 +109,18 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "transactions" && (
         <div className="pt-4">
           <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
-          <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />
+          <PaginationButton
+            currentPage={currentPage}
+            totalItems={Number(totalBlocks)}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       )}
       {activeTab === "code" && contractData && (
         <AddressCodeTab bytecode={contractData.bytecode} assembly={contractData.assembly} />
       )}
       {activeTab === "storage" && <AddressStorageTab address={address} />}
-      {activeTab === "logs" && <AddressLogsTab address={address} />}
+      {activeTab === "logs" && <AddressLogsTab address={address as AddressType} />}
     </div>
   );
 };

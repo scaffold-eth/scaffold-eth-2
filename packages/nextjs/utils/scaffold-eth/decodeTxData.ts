@@ -30,7 +30,7 @@ export const decodeTransactionData = (tx: TransactionWithFunction) => {
           (input: any) => input.name,
         );
         tx.functionArgTypes = getAbiItem({ abi: contractAbi, name: functionName }).inputs.map(
-          (input: any) => input.name,
+          (input: any) => input.type,
         );
 
         break;
