@@ -5,7 +5,6 @@ import { hardhat } from "wagmi/chains";
 import contractData from "~~/generated/deployedContracts";
 
 type ContractsInterfaces = Record<string, Abi>;
-type FunctionArgNameType = string;
 type TransactionType = TransactionWithFunction | null;
 
 const deployedContracts = contractData as GenericContractsDeclaration | null;
@@ -52,8 +51,7 @@ export const getFunctionDetails = (transaction: TransactionType) => {
     transaction.functionArgs
   ) {
     const details = transaction.functionArgNames.map(
-      (name: FunctionArgNameType, i) =>
-        `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
+      (name, i) => `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
     );
     return `${transaction.functionName}(${details.join(", ")})`;
   }
