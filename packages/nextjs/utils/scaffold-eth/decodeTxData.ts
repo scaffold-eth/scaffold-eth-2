@@ -1,53 +1,61 @@
+import { TransactionWithFunction } from "./block";
 import { GenericContractsDeclaration } from "./contract";
-import { Transaction, decodeFunctionData } from "viem";
+import { Abi, decodeFunctionData, getAbiItem } from "viem";
 import { hardhat } from "wagmi/chains";
 import contractData from "~~/generated/deployedContracts";
 
-// type FunctionArgNameType = string;
+type ContractsInterfaces = Record<string, Abi>;
+type FunctionArgNameType = string;
+type TransactionType = TransactionWithFunction | null;
 
 const deployedContracts = contractData as GenericContractsDeclaration | null;
+const chainMetaData = deployedContracts?.[hardhat.id]?.[0];
+const interfaces = chainMetaData
+  ? Object.entries(chainMetaData.contracts).reduce((finalInterfacesObj, [contractName, contract]) => {
+      finalInterfacesObj[contractName] = contract.abi;
+      return finalInterfacesObj;
+    }, {} as ContractsInterfaces)
+  : {};
 
-export const decodeTransactionData = (tx: Transaction) => {
-  if (!deployedContracts?.[hardhat.id]) {
-    return;
-  }
+export const decodeTransactionData = (tx: TransactionWithFunction) => {
   if (tx.input.length >= 10) {
-    for (const [, { abi }] of Object.entries(deployedContracts?.[hardhat.id]?.[0].contracts)) {
+    for (const [, contractAbi] of Object.entries(interfaces)) {
       try {
-        const result = decodeFunctionData({ abi, data: tx.input });
-        return result;
-      } catch {}
-    }
+        const { functionName, args } = decodeFunctionData({
+          abi: contractAbi,
+          data: tx.input,
+        });
+        tx.functionName = functionName;
+        tx.functionArgs = args as any[];
+        tx.functionArgNames = getAbiItem({ abi: contractAbi, name: functionName }).inputs.map(
+          (input: any) => input.name,
+        );
+        tx.functionArgTypes = getAbiItem({ abi: contractAbi, name: functionName }).inputs.map(
+          (input: any) => input.name,
+        );
 
-    // for (const [, contractInterface] of Object.entries(interfaces)) {
-    //   try {
-    //     const decodedData = contractInterface.parseTransaction({ data: tx.input });
-    //     tx.functionName = `${decodedData.name}`;
-    //     tx.functionArgs = Object.values(decodedData.args);
-    //     tx.functionArgNames = contractInterface.getFunction(decodedData.name).inputs.map((input: any) => input.name);
-    //     tx.functionArgTypes = contractInterface.getFunction(decodedData.name).inputs.map((input: any) => input.type);
-    //     break;
-    //   } catch (e) {
-    //     console.error(`Parsing failed: ${e}`);
-    //   }
-    // }
+        break;
+      } catch (e) {
+        console.error(`Parsing failed: ${e}`);
+      }
+    }
   }
-  // return tx;
+  return tx;
 };
 
-export const getFunctionDetails = (transaction: Transaction) => {
-  // if (
-  //   transaction &&
-  //   transaction.functionName &&
-  //   transaction.functionArgNames &&
-  //   transaction.functionArgTypes &&
-  //   transaction.functionArgs
-  // ) {
-  //   const details = transaction.functionArgNames.map(
-  //     (name: FunctionArgNameType, i: number) =>
-  //       `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
-  //   );
-  //   return `${transaction.functionName}(${details.join(", ")})`;
-  // }
+export const getFunctionDetails = (transaction: TransactionType) => {
+  if (
+    transaction &&
+    transaction.functionName &&
+    transaction.functionArgNames &&
+    transaction.functionArgTypes &&
+    transaction.functionArgs
+  ) {
+    const details = transaction.functionArgNames.map(
+      (name: FunctionArgNameType, i) =>
+        `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
+    );
+    return `${transaction.functionName}(${details.join(", ")})`;
+  }
   return "";
 };

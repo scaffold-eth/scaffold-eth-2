@@ -1,4 +1,11 @@
-import { Block, TransactionReceipt } from "viem";
+import { Block, Transaction, TransactionReceipt } from "viem";
+
+export type TransactionWithFunction = Transaction & {
+  functionName?: string;
+  functionArgs?: any[];
+  functionArgNames?: string[];
+  functionArgTypes?: string[];
+};
 
 interface TransactionReceipts {
   [key: string]: TransactionReceipt;

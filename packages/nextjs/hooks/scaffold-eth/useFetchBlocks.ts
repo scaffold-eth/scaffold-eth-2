@@ -43,7 +43,7 @@ export const useFetchBlocks = () => {
       const fetchedBlocks = await Promise.all(blocksWithTransactions);
 
       fetchedBlocks.forEach(block => {
-        block.transactions.forEach(tx => decodeTransactionData(tx as Transaction));
+        block.transactions.forEach(tx => decodeTransactionData(tx));
       });
 
       const txReceipts = await Promise.all(
