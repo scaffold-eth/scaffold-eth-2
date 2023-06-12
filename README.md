@@ -98,12 +98,7 @@ The deployer account is the account that will deploy your contracts. Additionall
 
 You can generate a random account / private key with `yarn generate` or add the private key of your crypto wallet. `yarn generate` will create a random account and add the DEPLOYER_PRIVATE_KEY to the .env file. You can check the generated account with `yarn account`.
 
-3. Enable the Solidity Optimizer
-
-By default, the Optimizer is disabled. You can enable it in `hardhat.config.ts`.
-Here are the [benefits](https://docs.soliditylang.org/en/latest/internals/optimizer.html#benefits-of-optimizing-solidity-code) of enabling the Optimizer.
-
-4. Deploy your smart contract(s)
+3. Deploy your smart contract(s)
 
 Run the command below to deploy the smart contract to the target network. Make sure to have some funds in your deployer account to pay for the transaction.
 
@@ -111,7 +106,7 @@ Run the command below to deploy the smart contract to the target network. Make s
 yarn deploy --network network_name
 ```
 
-5. Verify your smart contract
+4. Verify your smart contract
 
 You can verify your smart contract on Etherscan by running:
 
