@@ -27,14 +27,17 @@ export type GenericContractsDeclaration = {
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
 
-type IsContractsFileMissing<TYes, TNo> = typeof contractsData extends null ? TYes : TNo;
-type ContractsDeclaration = IsContractsFileMissing<GenericContractsDeclaration, typeof contractsData>;
+type ConfiguredChainId = (typeof scaffoldConfig)["targetNetwork"]["id"];
+
+type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [key in ConfiguredChainId]: any }
+  ? TNo
+  : TYes;
+
+type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
 
 export type Chain = keyof ContractsDeclaration;
 
-type SelectedChainId = IsContractsFileMissing<number, (typeof scaffoldConfig)["targetNetwork"]["id"]>;
-
-type Contracts = ContractsDeclaration[SelectedChainId][0]["contracts"];
+type Contracts = ContractsDeclaration[ConfiguredChainId][0]["contracts"];
 
 export type ContractName = keyof Contracts;
 
@@ -58,7 +61,7 @@ export type AbiFunctionOutputs<TAbi extends Abi, TFunctionName extends string> =
   TFunctionName
 >["outputs"];
 
-export type AbiFunctionReturnType<TAbi extends Abi, TFunctionName extends string> = IsContractsFileMissing<
+export type AbiFunctionReturnType<TAbi extends Abi, TFunctionName extends string> = IsContractDeclarationMissing<
   any,
   AbiParametersToPrimitiveTypes<AbiFunctionOutputs<TAbi, TFunctionName>>[0]
 >;
@@ -140,7 +143,7 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
-} & IsContractsFileMissing<
+} & IsContractDeclarationMissing<
   Partial<UseContractReadConfig>,
   {
     functionName: TFunctionName;
@@ -156,7 +159,7 @@ export type UseScaffoldWriteConfig<
   value?: string;
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
-} & IsContractsFileMissing<
+} & IsContractDeclarationMissing<
   Partial<UseContractWriteConfig<"recklesslyUnprepared">> & { args?: unknown[] },
   {
     functionName: TFunctionName;
@@ -170,7 +173,7 @@ export type UseScaffoldEventConfig<
   TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
 > = {
   contractName: TContractName;
-} & IsContractsFileMissing<
+} & IsContractDeclarationMissing<
   UseContractEventConfig,
   {
     eventName: TEventName;
@@ -187,12 +190,12 @@ type IndexedEventInputs<
 export type EventFilters<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
-> = IsContractsFileMissing<
+> = IsContractDeclarationMissing<
   any,
   IndexedEventInputs<TContractName, TEventName> extends never
     ? never
     : {
-        [Key in IsContractsFileMissing<
+        [Key in IsContractDeclarationMissing<
           any,
           IndexedEventInputs<TContractName, TEventName>["name"]
         >]?: AbiParameterToPrimitiveType<Extract<IndexedEventInputs<TContractName, TEventName>, { name: Key }>>;
@@ -204,7 +207,7 @@ export type UseScaffoldEventHistoryConfig<
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 > = {
   contractName: TContractName;
-  eventName: IsContractsFileMissing<string, TEventName>;
+  eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: number;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: boolean;
