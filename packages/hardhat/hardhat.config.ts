@@ -17,12 +17,9 @@ const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.17",
     settings: {
-      // By default, the Solidity Optimizer is enabled
-      // https://docs.soliditylang.org/en/latest/internals/optimizer.html#benefits-of-optimizing-solidity-code
-      // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
-      // https://hardhat.org/hardhat-runner/docs/config
       optimizer: {
         enabled: true,
+        // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
         runs: 200,
       },
     },
