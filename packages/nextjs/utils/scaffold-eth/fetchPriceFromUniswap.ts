@@ -1,8 +1,8 @@
+import { JsonRpcProvider } from "@ethersproject/providers";
 import { Fetcher, Route, Token } from "@uniswap/sdk";
-import { PublicClient } from "wagmi";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-export const fetchPriceFromUniswap = async (publicClient: PublicClient): Promise<number> => {
+export const fetchPriceFromUniswap = async (provider: JsonRpcProvider): Promise<number> => {
   const configuredNetwork = getTargetNetwork();
   if (configuredNetwork.nativeCurrency.symbol !== "ETH" && !configuredNetwork.nativeCurrencyTokenAddress) {
     return 0;
@@ -12,9 +12,9 @@ export const fetchPriceFromUniswap = async (publicClient: PublicClient): Promise
     const TOKEN = await Fetcher.fetchTokenData(
       1,
       configuredNetwork.nativeCurrencyTokenAddress || "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-      publicClient,
+      provider,
     );
-    const pair = await Fetcher.fetchPairData(DAI, TOKEN, publicClient);
+    const pair = await Fetcher.fetchPairData(DAI, TOKEN, provider);
     const route = new Route([pair], TOKEN);
     const price = parseFloat(route.midPrice.toSignificant(6));
     return price;
