@@ -1,4 +1,5 @@
 import { AbiFunction, AbiParameter } from "abitype";
+import { BaseError as BaseViemError } from "viem";
 
 /**
  * @dev utility function to generate key corresponding to function metaData
@@ -13,34 +14,19 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
 };
 
 /**
- * @dev utility function to parse error thrown by ethers
- * @param e - ethers error object
+ * @dev utility function to parse error
+ * @param e - error object
  * @returns {string} parsed error string
  */
-const getParsedEthersError = (e: any): string => {
-  let message =
-    e.data && e.data.message
-      ? e.data.message
-      : e.error && JSON.parse(JSON.stringify(e.error)).body
-      ? JSON.parse(JSON.parse(JSON.stringify(e.error)).body).error.message
-      : e.data
-      ? e.data
-      : JSON.stringify(e);
-  if (!e.error && e.message) {
-    message = e.message;
-  }
+const getParsedError = (e: any | BaseViemError): string => {
+  let message = "An unknown error occurred";
 
-  console.log("Attempt to clean up:", message);
-  try {
-    const obj = JSON.parse(message);
-    if (obj && obj.body) {
-      const errorObj = JSON.parse(obj.body);
-      if (errorObj && errorObj.error && errorObj.error.message) {
-        message = errorObj.error.message;
-      }
-    }
-  } catch (e) {
-    //ignore
+  if (e instanceof BaseViemError) {
+    message = e.details;
+  } else if (e?.data?.message) {
+    message = e.data.message;
+  } else if (e?.message) {
+    message = e.message;
   }
 
   return message;
@@ -86,4 +72,4 @@ const getInitialFormState = (abiFunction: AbiFunction) => {
   return initialForm;
 };
 
-export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getParsedEthersError };
+export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getParsedError };

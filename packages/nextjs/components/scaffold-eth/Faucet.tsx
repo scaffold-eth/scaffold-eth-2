@@ -3,7 +3,7 @@ import { Address as AddressType, createWalletClient, http, parseEther } from "vi
 import { useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { Address, AddressInput, Balance, EtherInput, getParsedEthersError } from "~~/components/scaffold-eth";
+import { Address, AddressInput, Balance, EtherInput, getParsedError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -66,7 +66,7 @@ export const Faucet = () => {
       setInputAddress(undefined);
       setSendValue("");
     } catch (error) {
-      const parsedError = getParsedEthersError(error);
+      const parsedError = getParsedError(error);
       console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
       notification.error(parsedError);
       setLoading(false);

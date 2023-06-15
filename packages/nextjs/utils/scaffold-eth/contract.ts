@@ -8,7 +8,7 @@ import {
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { Address, TransactionReceipt } from "viem";
-import { UseContractEventConfig, UseContractReadConfig, UsePrepareContractWriteConfig } from "wagmi";
+import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -156,13 +156,13 @@ export type UseScaffoldWriteConfig<
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 } & IsContractsFileMissing<
-  Partial<Omit<UsePrepareContractWriteConfig, "value"> & { value: `${number}` }>,
+  Partial<Omit<UseContractWriteConfig, "value"> & { value: `${number}` }>,
   (ExtractStateMutability<TContractName, TFunctionName> extends "payable"
     ? { value: `${number}` }
     : { value?: never }) & {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UsePrepareContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value">
+    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value">
 >;
 
 export type UseScaffoldEventConfig<

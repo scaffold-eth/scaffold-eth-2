@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
-import { useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
   IntegerInput,
@@ -9,7 +9,7 @@ import {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
-  getParsedEthersError,
+  getParsedError,
 } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification, parseTxnValue } from "~~/utils/scaffold-eth";
@@ -27,7 +27,11 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
   const writeTxn = useTransactor();
   const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;
 
-  const { config } = usePrepareContractWrite({
+  const {
+    data: result,
+    isLoading,
+    writeAsync,
+  } = useContractWrite({
     chainId: getTargetNetwork().id,
     address: contractAddress,
     functionName: abiFunction.name,
@@ -38,15 +42,13 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
     value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
   });
 
-  const { data: result, isLoading, writeAsync } = useContractWrite(config);
-
   const handleWrite = async () => {
     if (writeAsync) {
       try {
         await writeTxn(writeAsync());
         onChange();
       } catch (e: any) {
-        const message = getParsedEthersError(e);
+        const message = getParsedError(e);
         notification.error(message);
       }
     }
