@@ -1,4 +1,4 @@
-import { TransactionReceipt } from "@ethersproject/abstract-provider";
+import { TransactionReceipt } from "viem";
 import { displayTxResult } from "~~/components/scaffold-eth";
 
 export const TxReceipt = (

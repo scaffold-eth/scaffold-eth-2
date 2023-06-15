@@ -1,9 +1,17 @@
 import { ReactElement } from "react";
-import { TransactionResponse } from "@ethersproject/providers";
+import { TransactionBase, TransactionReceipt } from "viem";
 import { Address } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
-type DisplayContent = string | number | bigint | Record<string, any> | TransactionResponse | undefined | unknown;
+type DisplayContent =
+  | string
+  | number
+  | bigint
+  | Record<string, any>
+  | TransactionBase
+  | TransactionReceipt
+  | undefined
+  | unknown;
 
 export const displayTxResult = (
   displayContent: DisplayContent | DisplayContent[],

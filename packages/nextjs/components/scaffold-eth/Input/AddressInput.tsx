@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
+import { isAddress } from "viem";
 import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
