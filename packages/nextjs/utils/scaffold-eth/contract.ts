@@ -162,7 +162,7 @@ export type UseScaffoldWriteConfig<
     : { value?: never }) & {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value">
+    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value" | "mode">
 >;
 
 export type UseScaffoldEventConfig<
