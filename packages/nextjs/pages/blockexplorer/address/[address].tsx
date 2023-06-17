@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import { Address as AddressType, createPublicClient, http } from "viem";
+import { createPublicClient, http } from "viem";
 import { hardhat } from "wagmi/chains";
 import {
   AddressCodeTab,
@@ -40,7 +40,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await publicClient.getBytecode({ address: address as AddressType });
+      const contractCode = await publicClient.getBytecode({ address: address });
       setIsContract(contractCode !== "0x");
     };
 
@@ -120,7 +120,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
         <AddressCodeTab bytecode={contractData.bytecode} assembly={contractData.assembly} />
       )}
       {activeTab === "storage" && <AddressStorageTab address={address} />}
-      {activeTab === "logs" && <AddressLogsTab address={address as AddressType} />}
+      {activeTab === "logs" && <AddressLogsTab address={address} />}
     </div>
   );
 };
