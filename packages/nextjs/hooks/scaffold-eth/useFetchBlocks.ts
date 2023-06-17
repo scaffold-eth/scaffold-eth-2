@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Block, Transaction, TransactionReceipt } from "viem";
 import { usePublicClient } from "wagmi";
-import { localhost } from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 import { TransactionWithFunction, decodeTransactionData } from "~~/utils/scaffold-eth";
 
 const BLOCKS_PER_PAGE = 20;
 
 export const useFetchBlocks = () => {
-  const client = usePublicClient({ chainId: localhost.id });
+  const client = usePublicClient({ chainId: hardhat.id });
 
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [transactionReceipts, setTransactionReceipts] = useState<{

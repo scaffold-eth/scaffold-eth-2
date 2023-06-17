@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
-import { localhost } from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 import { Address } from "~~/components/scaffold-eth";
 import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const TransactionPage: NextPage = () => {
-  const client = usePublicClient({ chainId: localhost.id });
+  const client = usePublicClient({ chainId: hardhat.id });
 
   const router = useRouter();
   const { txHash } = router.query as { txHash?: `0x${string}` };

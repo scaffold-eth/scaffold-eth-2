@@ -2,19 +2,19 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { isAddress, isHex } from "viem";
 import { usePublicClient } from "wagmi";
-import { localhost } from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 
 export const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
 
-  const client = usePublicClient({ chainId: localhost.id });
+  const client = usePublicClient({ chainId: hardhat.id });
 
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     if (isHex(searchInput)) {
       try {
-        const tx = await client?.getTransaction({ hash: searchInput });
+        const tx = await client.getTransaction({ hash: searchInput });
         if (tx) {
           router.push(`/blockexplorer/transaction/${searchInput}`);
           return;
