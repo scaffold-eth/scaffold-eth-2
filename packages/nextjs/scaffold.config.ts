@@ -4,6 +4,7 @@ export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
+  walletConnectProjectId: string;
   burnerWallet: {
     enabled: boolean;
     onlyLocal: boolean;
@@ -24,6 +25,12 @@ const scaffoldConfig = {
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
+
+  // This is ours WalletConnect's default project ID.
+  // You can get your own by registering for a WalletConnect Cloud account at https://cloud.walletconnect.com.
+  // It's recommended to store it in an env variable:
+  // .env.local for local testing, and in the Vercel/system env config for live apps.
+  walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "",
 
   // Burner Wallet configuration
   burnerWallet: {
