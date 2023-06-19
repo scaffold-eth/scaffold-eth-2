@@ -45,13 +45,14 @@ export const appChains = configureChains(
   },
 );
 
+const walletsOptions = { chains: appChains.chains, projectId: "" };
 const wallets = [
-  metaMaskWallet({ chains: appChains.chains, shimDisconnect: true }),
-  walletConnectWallet({ chains: appChains.chains }),
-  ledgerWallet({ chains: appChains.chains }),
-  braveWallet({ chains: appChains.chains }),
-  coinbaseWallet({ appName: "scaffold-eth-2", chains: appChains.chains }),
-  rainbowWallet({ chains: appChains.chains }),
+  metaMaskWallet({ ...walletsOptions, shimDisconnect: true }),
+  walletConnectWallet(walletsOptions),
+  ledgerWallet(walletsOptions),
+  braveWallet(walletsOptions),
+  coinbaseWallet({ ...walletsOptions, appName: "scaffold-eth-2" }),
+  rainbowWallet(walletsOptions),
 ];
 
 /**
