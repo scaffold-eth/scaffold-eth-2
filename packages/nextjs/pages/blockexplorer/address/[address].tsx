@@ -41,7 +41,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
   useEffect(() => {
     const checkIsContract = async () => {
       const contractCode = await publicClient.getBytecode({ address: address });
-      setIsContract(contractCode !== "0x");
+      setIsContract(contractCode !== undefined && contractCode !== "0x");
     };
 
     checkIsContract();
