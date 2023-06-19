@@ -76,6 +76,11 @@ const config: HardhatUserConfig = {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
+    zkSyncTestnet: {
+      url: "https://testnet.era.zksync.dev",
+      zksync: true,
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
