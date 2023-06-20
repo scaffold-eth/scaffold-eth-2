@@ -1786,7 +1786,7 @@ __metadata:
     use-debounce: ^8.0.4
     usehooks-ts: ^2.7.2
     vercel: ^28.15.1
-    wagmi: ^0.12.13
+    wagmi: ^0.12.15
     zustand: ^4.1.2
   languageName: unknown
   linkType: soft
@@ -12987,7 +12987,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wagmi@npm:^0.12.13":
+"wagmi@npm:^0.12.15":
   version: 0.12.16
   resolution: "wagmi@npm:0.12.16"
   dependencies:
