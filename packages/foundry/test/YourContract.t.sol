@@ -11,12 +11,18 @@ contract YourContractTest is Test {
         yourContract = new YourContract(vm.addr(1));
     }
 
-    function testMessageOnDeployment() public {
-        require(keccak256(bytes(yourContract.greeting())) == keccak256("Building Unstoppable Apps!!!"));
+    function testMessageOnDeployment() public view {
+        require(
+            keccak256(bytes(yourContract.greeting())) ==
+                keccak256("Building Unstoppable Apps!!!")
+        );
     }
 
     function testSetNewMessage() public {
         yourContract.setGreeting("Learn Scaffold-ETH 2! :)");
-        require(keccak256(bytes(yourContract.greeting())) == keccak256("Learn Scaffold-ETH 2! :)"));
+        require(
+            keccak256(bytes(yourContract.greeting())) ==
+                keccak256("Learn Scaffold-ETH 2! :)")
+        );
     }
 }

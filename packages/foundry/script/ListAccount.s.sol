@@ -7,23 +7,27 @@ contract ListAccount is Script {
     function run() external {
         uint256 privateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
         if (privateKey == 0) {
-            console.logString("You don't have a deployer account. Run `yarn generate` first");
+            console.logString(
+                "You don't have a deployer account. Run `yarn generate` first"
+            );
         } else {
             address acc = vm.addr(privateKey);
             Vm.Rpc[] memory availableRPCs = vm.rpcUrlStructs();
             for (uint256 i = 0; i < availableRPCs.length; i++) {
                 Vm.Rpc memory rpc = availableRPCs[i];
-                try vm.createSelectFork(rpc.url) returns (uint256 forkId) {
+                try vm.createSelectFork(rpc.url) returns (uint256) {
                     console.logString(string.concat("--- ", rpc.key, " ---"));
                     printAccountInfo(acc);
-                } catch (bytes memory err) {
-                    console.logString(string.concat("Cant connect to network : ", rpc.key));
+                } catch (bytes memory) {
+                    console.logString(
+                        string.concat("Cant connect to network : ", rpc.key)
+                    );
                 }
             }
         }
     }
 
-    function printAccountInfo(address acc) internal {
+    function printAccountInfo(address acc) internal view {
         string memory ln;
         ln = string.concat("    balance : ", vm.toString(acc.balance));
         console.logString(ln);
