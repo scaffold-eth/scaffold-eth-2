@@ -39,6 +39,7 @@ To get started with Scaffold-ETH 2, follow the steps below:
 git clone https://github.com/scaffold-eth/scaffold-eth-2.git
 cd scaffold-eth-2
 yarn install
+foundryup
 ```
 
 2. Create your .env file
