@@ -41,7 +41,19 @@ cd scaffold-eth-2
 yarn install
 ```
 
-2. Run a local network in the first terminal:
+2. Create your .env file
+
+```
+(echo "DEPLOYER_PRIVATE_KEY=";  echo "ALCHEMY_API_KEY=oKxs-03sij-U_N0iOlrSsZFr29-IqbuF"; echo "ETHERSCAN_KEY=DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW") >> packages/foundry/.env
+```
+
+```
+git clone https://github.com/scaffold-eth/scaffold-eth-2.git
+cd scaffold-eth-2
+yarn install
+```
+
+3. Run a local network in the first terminal:
 
 ```
 yarn chain
@@ -49,7 +61,7 @@ yarn chain
 
 This command starts a local Ethereum network using Anvil in Foundry. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `foundry.toml`
 
-3. On a second terminal, deploy the test contract:
+4. On a second terminal, deploy the test contract:
 
 ```
 yarn deploy
@@ -57,7 +69,7 @@ yarn deploy
 
 This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/deploy` to deploy the contract to the network. You can also customize the deploy script.
 
-4. On a third terminal, start your NextJS app:
+5. On a third terminal, start your NextJS app:
 
 ```
 yarn start
