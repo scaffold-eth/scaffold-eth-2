@@ -15,6 +15,7 @@
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
 - [Interacting with your Smart Contracts: SE-2 Custom Hooks](#interacting-with-your-smart-contracts-se-2-custom-hooks)
+- [Scaffold-ETH Configuration before deployment](#scaffold-configuration)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
   - [Disabling commit checks](#disabling-commit-checks)
   - [Deploying to Vercel without any checks](#deploying-to-vercel-without-any-checks)
@@ -266,6 +267,49 @@ const setGreeting = async () => {
 ```
 
 This example uses the `useScaffoldContract` hook to obtain a contract instance for the `YourContract` smart contract. The data property of the returned object contains the contract instance that can be used to call any of the smart contract methods.
+
+## Scaffold Configuration
+
+This file(scaffold.config.ts) contains the scaffoldConfig object that allows you to configure various aspects of your DApp (Decentralized Application). The configuration options are described below:
+
+```ts
+export type ScaffoldConfig = {
+  targetNetwork: chains.Chain;
+  pollingInterval: number;
+  alchemyApiKey: string;
+  burnerWallet: {
+    enabled: boolean;
+    onlyLocal: boolean;
+  };
+  walletAutoConnect: boolean;
+};
+```
+
+###Configuration Options
+
+> **targetNetwork**
+> Specifies the network where your DApp will be deployed and run. It is recommended to use the chains.Chain enum provided by the library. For example, chains.hardhat represents the Hardhat network.
+
+> **pollingInterval**
+> Sets the interval (in milliseconds) at which your front-end polls the RPC (Remote Procedure Call) servers for new data. Note that this setting only affects non-local networks. For the local network, it has no effect.
+
+> **alchemyApiKey**
+> Specifies the Alchemy API key to be used for your DApp. Alchemy provides blockchain infrastructure and developer tools. It's recommended to obtain your own API key from the Alchemy Dashboard and store it securely, preferably in an environment variable. The default API key provided in the configuration is for testing purposes only.
+
+> **burnerWallet**
+> This section configures the Burner Wallet functionality, which provides a lightweight wallet for users. The options are as follows:
+>
+> - **enabled**: Set it to true to enable the Burner Wallet feature for all networks. Set it to false to completely remove the Burner Wallet from all networks.
+> - **onlyLocal**: Determines whether the Burner Wallet should be shown only when running on the Hardhat network (chains.hardhat). Set it to true to limit the Burner Wallet visibility to the local network.
+
+> **walletAutoConnect**
+> This option controls the automatic wallet connection behavior. The behavior is as follows:
+>
+> - If the user was connected to a wallet before and the page is reloaded, the wallet will be reconnected automatically.
+> - If the user is not connected to any wallet, on reload, the wallet will be connected automatically to the Burner Wallet if burnerWallet.enabled is true and burnerWallet.onlyLocal is false.
+
+Make sure to update the values in scaffold-config.ts file according to your specific requirements.
+Feel free to customize the configuration based on your DApp's needs. Happy coding!
 
 ## Disabling type and linting error checks
 
