@@ -82,6 +82,11 @@ const config: HardhatUserConfig = {
       zksync: true,
       accounts: [deployerPrivateKey],
     },
+    zkSync: {
+      url: "https://mainnet.era.zksync.io",
+      zksync: true,
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
