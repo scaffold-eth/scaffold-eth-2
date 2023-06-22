@@ -13,7 +13,7 @@ contract ListAccount is Script {
             );
         } else {
             address acc = vm.addr(privateKey);
-            console.logString("------------------Account------------------");
+            console.logString("---------------Public Address--------------");
             console.logString(vm.toString(vm.addr(privateKey)));
             console.logString("-------------------------------------------");
             console.logString("");
