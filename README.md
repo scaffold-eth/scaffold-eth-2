@@ -14,6 +14,7 @@
 - [Quickstart](#quickstart)
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
+  - [Scaffold Configuration](#scaffold-configuration)
 - [Interacting with your Smart Contracts: SE-2 Custom Hooks](#interacting-with-your-smart-contracts-se-2-custom-hooks)
 - [Scaffold-ETH Configuration before deployment](#scaffold-configuration)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
@@ -80,7 +81,7 @@ Once you are ready to deploy your smart contracts, there are a few things you ne
 
 By default, `yarn deploy` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.ts.` You could also simply run `yarn deploy --network target_network` to deploy to another network.
 
-Check the `hardhat.config.ts` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.ts file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+Check the `hardhat.config.ts` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.ts` file. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
 Example: To deploy the contract to the Sepolia network, run the command below:
 
@@ -123,7 +124,63 @@ If you want to deploy directly from the CLI, run `yarn vercel` and follow the st
 
 If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
 
-**Make sure your `packages/nextjs/scaffold.config.ts` file has the values you need.**
+**Make sure to check the values of your Scaffold Configuration before deploying your NextJS App.**
+
+### Scaffold Configuration
+
+You can configure different settings for your dapp at `packages/nextjs/scaffold.config.ts`.
+
+```ts
+export type ScaffoldConfig = {
+  targetNetwork: chains.Chain;
+  pollingInterval: number;
+  alchemyApiKey: string;
+  burnerWallet: {
+    enabled: boolean;
+    onlyLocal: boolean;
+  };
+  walletAutoConnect: boolean;
+};
+```
+
+The configuration parameters are described below, make sure to update the values according to your needs:
+
+- **targetNetwork**  
+  Sets the blockchain network where your dapp is deployed. Use values from `wagmi/chains`.
+
+- **pollingInterval**  
+  The interval in milliseconds at which your front-end application polls the RPC servers for fresh data. _Note that this setting does not affect the local network._
+
+- **alchemyApiKey**  
+  Default Alchemy API key from Scaffold ETH 2 for local testing purposes.  
+  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `ALCHEMY_API_KEY` at `\packages\hardhat\.env` file.
+
+- **burnerWallet**  
+  You can activate the Burner Wallet feature, which provides a lightweight wallet for users.
+
+  - **enabled**  
+    Set it to false to completely remove the Burner Wallet from all networks.
+  - **onlyLocal**  
+    Set it to true to use the Burner Wallet only at local network (hardhat).
+
+- **walletAutoConnect**  
+  Set it to true to activate automatic wallet connection behavior:
+  - If the user was connected into a wallet before, on page reload it reconnects automatically.
+  - If user is not connected to any wallet, on reload, it connects to the burner wallet if `burnerWallet.enabled` is true and `burnerWallet.onlyLocal` is false.
+
+You can extend this configuration file, adding new parameters that you need to use across your dapp. For example:
+
+```ts
+  tokenEmoji: "💎",
+  eventName: "EVENT",
+  hideHeader: true,
+```
+
+To use the values from the `scaffoldConfig` in any other file of your application, you first need to import it in those files:
+
+```ts
+import scaffoldConfig from "~~/scaffold.config";
+```
 
 ## Interacting with your Smart Contracts: SE-2 Custom Hooks
 
@@ -267,49 +324,6 @@ const setGreeting = async () => {
 ```
 
 This example uses the `useScaffoldContract` hook to obtain a contract instance for the `YourContract` smart contract. The data property of the returned object contains the contract instance that can be used to call any of the smart contract methods.
-
-## Scaffold Configuration
-
-This file(scaffold.config.ts) contains the scaffoldConfig object that allows you to configure various aspects of your DApp (Decentralized Application). The configuration options are described below:
-
-```ts
-export type ScaffoldConfig = {
-  targetNetwork: chains.Chain;
-  pollingInterval: number;
-  alchemyApiKey: string;
-  burnerWallet: {
-    enabled: boolean;
-    onlyLocal: boolean;
-  };
-  walletAutoConnect: boolean;
-};
-```
-
-###Configuration Options
-
-> **targetNetwork**
-> Specifies the network where your DApp will be deployed and run. It is recommended to use the chains.Chain enum provided by the library. For example, chains.hardhat represents the Hardhat network.
-
-> **pollingInterval**
-> Sets the interval (in milliseconds) at which your front-end polls the RPC (Remote Procedure Call) servers for new data. Note that this setting only affects non-local networks. For the local network, it has no effect.
-
-> **alchemyApiKey**
-> Specifies the Alchemy API key to be used for your DApp. Alchemy provides blockchain infrastructure and developer tools. It's recommended to obtain your own API key from the Alchemy Dashboard and store it securely, preferably in an environment variable. The default API key provided in the configuration is for testing purposes only.
-
-> **burnerWallet**
-> This section configures the Burner Wallet functionality, which provides a lightweight wallet for users. The options are as follows:
->
-> - **enabled**: Set it to true to enable the Burner Wallet feature for all networks. Set it to false to completely remove the Burner Wallet from all networks.
-> - **onlyLocal**: Determines whether the Burner Wallet should be shown only when running on the Hardhat network (chains.hardhat). Set it to true to limit the Burner Wallet visibility to the local network.
-
-> **walletAutoConnect**
-> This option controls the automatic wallet connection behavior. The behavior is as follows:
->
-> - If the user was connected to a wallet before and the page is reloaded, the wallet will be reconnected automatically.
-> - If the user is not connected to any wallet, on reload, the wallet will be connected automatically to the Burner Wallet if burnerWallet.enabled is true and burnerWallet.onlyLocal is false.
-
-Make sure to update the values in scaffold-config.ts file according to your specific requirements.
-Feel free to customize the configuration based on your DApp's needs. Happy coding!
 
 ## Disabling type and linting error checks
 
