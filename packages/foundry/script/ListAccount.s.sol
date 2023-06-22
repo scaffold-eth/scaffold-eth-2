@@ -13,6 +13,11 @@ contract ListAccount is Script {
             );
         } else {
             address acc = vm.addr(privateKey);
+            console.logString("------------------Account------------------");
+            console.logString(vm.toString(vm.addr(privateKey)));
+            console.logString("-------------------------------------------");
+            console.logString("");
+
             Vm.Rpc[] memory availableRPCs = vm.rpcUrlStructs();
             for (uint256 i = 0; i < availableRPCs.length; i++) {
                 Vm.Rpc memory rpc = availableRPCs[i];
