@@ -49,7 +49,15 @@ export const useScaffoldContractWrite = <
     ...restConfig,
   });
 
-  const sendContractWriteTx = async () => {
+  const sendContractWriteTx = async ({
+    args,
+    value,
+    overrides,
+  }: {
+    args?: UseScaffoldWriteConfig<TContractName, TFunctionName>["args"];
+    value?: UseScaffoldWriteConfig<TContractName, TFunctionName>["value"];
+    overrides?: UseScaffoldWriteConfig<TContractName, TFunctionName>["overrides"];
+  } = {}) => {
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
       return;
@@ -66,7 +74,20 @@ export const useScaffoldContractWrite = <
     if (wagmiContractWrite.writeAsync) {
       try {
         setIsMining(true);
-        await writeTx(wagmiContractWrite.writeAsync(), { onBlockConfirmation, blockConfirmations });
+        await writeTx(
+          wagmiContractWrite.writeAsync({
+            recklesslySetUnpreparedArgs: args as unknown[],
+            recklesslySetUnpreparedOverrides:
+              value && overrides
+                ? { value: utils.parseEther(value), ...overrides }
+                : value
+                ? { value: utils.parseEther(value) }
+                : overrides
+                ? overrides
+                : undefined,
+          }),
+          { onBlockConfirmation, blockConfirmations },
+        );
       } catch (e: any) {
         const message = getParsedEthersError(e);
         notification.error(message);
