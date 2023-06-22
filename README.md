@@ -14,9 +14,8 @@
 - [Quickstart](#quickstart)
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
-  - [Scaffold Configuration](#scaffold-configuration)
+  - [Scaffold App Configuration](#scaffold-app-configuration)
 - [Interacting with your Smart Contracts: SE-2 Custom Hooks](#interacting-with-your-smart-contracts-se-2-custom-hooks)
-- [Scaffold-ETH Configuration before deployment](#scaffold-configuration)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
   - [Disabling commit checks](#disabling-commit-checks)
   - [Deploying to Vercel without any checks](#deploying-to-vercel-without-any-checks)
@@ -126,7 +125,7 @@ If you want to redeploy to the same production URL you can run `yarn vercel --pr
 
 **Make sure to check the values of your Scaffold Configuration before deploying your NextJS App.**
 
-### Scaffold Configuration
+### Scaffold App Configuration
 
 You can configure different settings for your dapp at `packages/nextjs/scaffold.config.ts`.
 
