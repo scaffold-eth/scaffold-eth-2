@@ -997,7 +997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@matterlabs/hardhat-zksync-solc@npm:^0.3.17":
+"@matterlabs/hardhat-zksync-solc@npm:0.3.17, @matterlabs/hardhat-zksync-solc@npm:^0.3.17":
   version: 0.3.17
   resolution: "@matterlabs/hardhat-zksync-solc@npm:0.3.17"
   dependencies:
@@ -1007,6 +1007,20 @@ __metadata:
   peerDependencies:
     hardhat: ^2.14.0
   checksum: 2b069bcad29381a8a007ccae36c51f36b62b667ab5623a6271639663c77976c5ff202cc3f28dd7b58f57b3c5d21a86a5e29c1a05fd13d9867203dfd08f61c554
+  languageName: node
+  linkType: hard
+
+"@matterlabs/hardhat-zksync-verify@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@matterlabs/hardhat-zksync-verify@npm:0.1.8"
+  dependencies:
+    "@matterlabs/hardhat-zksync-solc": 0.3.17
+    axios: ^1.4.0
+    chalk: 4.1.2
+    dockerode: ^3.3.4
+  peerDependencies:
+    "@nomiclabs/hardhat-etherscan": ^3.1.2
+  checksum: dc6b872fd95877ecf4c2f0c68b75917e76f3e4f552a2647d8bb1cffb3dd677d13741efa977e888e3a1531556d9caa2a3e359ed2aa57a02d4f058de4042ef4ea4
   languageName: node
   linkType: hard
 
@@ -1805,6 +1819,7 @@ __metadata:
     "@ethersproject/abi": ^5.7.0
     "@ethersproject/providers": ^5.7.1
     "@matterlabs/hardhat-zksync-solc": ^0.3.17
+    "@matterlabs/hardhat-zksync-verify": ^0.1.8
     "@nomicfoundation/hardhat-chai-matchers": ^1.0.3
     "@nomicfoundation/hardhat-network-helpers": ^1.0.6
     "@nomicfoundation/hardhat-toolbox": ^2.0.0
@@ -4416,6 +4431,17 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.0
   checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "axios@npm:1.4.0"
+  dependencies:
+    follow-redirects: ^1.15.0
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 7fb6a4313bae7f45e89d62c70a800913c303df653f19eafec88e56cea2e3821066b8409bc68be1930ecca80e861c52aa787659df0ffec6ad4d451c7816b9386b
   languageName: node
   linkType: hard
 
@@ -7463,7 +7489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.12.1, follow-redirects@npm:^1.14.0":
+"follow-redirects@npm:^1.12.1, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.15.0":
   version: 1.15.2
   resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
@@ -11169,6 +11195,13 @@ __metadata:
   version: 2.4.0
   resolution: "proxy-compare@npm:2.4.0"
   checksum: ff8952db96980ad7123a1368aa6fed6b1eb390c22758152805bb5e1d4511fb50e798c19deb93feaa3b22f103a758c38d265ae34e4769d4e1748ee59795dfa6b2
+  languageName: node
+  linkType: hard
+
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: ed7fcc2ba0a33404958e34d95d18638249a68c430e30fcb6c478497d72739ba64ce9810a24f53a7d921d0c065e5b78e3822759800698167256b04659366ca4d4
   languageName: node
   linkType: hard
 
