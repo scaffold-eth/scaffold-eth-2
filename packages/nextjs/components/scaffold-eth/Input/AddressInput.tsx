@@ -44,7 +44,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   }, [ensAddress, onChange, value]);
 
   const handleChange = useCallback(
-    (newValue: Address) => {
+    (newValue?: Address) => {
       setEnteredEnsName(undefined);
       onChange(newValue);
     },

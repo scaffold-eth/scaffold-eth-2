@@ -18,9 +18,9 @@ export const IntegerInput = ({
       return;
     }
     if (typeof value === "bigint") {
-      return onChange((value * 10n ** 18n).toString());
+      return onChange(value * 10n ** 18n);
     }
-    return onChange(BigInt(Math.round(Number(value) * 10 ** 18)).toString());
+    return onChange(BigInt(Math.round(Number(value) * 10 ** 18)));
   }, [onChange, value]);
 
   useEffect(() => {

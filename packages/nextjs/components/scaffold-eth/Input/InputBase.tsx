@@ -27,7 +27,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value);
+      onChange(e.target.value as unknown as T);
     },
     [onChange],
   );
