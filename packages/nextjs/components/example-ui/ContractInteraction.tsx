@@ -67,7 +67,7 @@ export const ContractInteraction = () => {
                   className={`btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest ${
                     isLoading ? "loading" : ""
                   }`}
-                  onClick={writeAsync}
+                  onClick={() => writeAsync()}
                 >
                   {!isLoading && (
                     <>
