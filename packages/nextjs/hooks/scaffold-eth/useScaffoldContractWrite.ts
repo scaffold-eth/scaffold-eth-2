@@ -67,11 +67,12 @@ export const useScaffoldContractWrite = <
       try {
         setIsMining(true);
         await writeTx(
-          wagmiContractWrite.writeAsync({
-            args: args as unknown[],
-            value: (value ? parseEther(value) : undefined) as any,
-            // TODO : add gasPrice and gasLimit to wagmi's useContractWrite hook
-          }),
+          () =>
+            wagmiContractWrite.writeAsync({
+              args: args as unknown[],
+              value: (value ? parseEther(value) : undefined) as any,
+              // TODO : add gasPrice and gasLimit to wagmi's useContractWrite hook
+            }),
           { onBlockConfirmation, blockConfirmations },
         );
       } catch (e: any) {

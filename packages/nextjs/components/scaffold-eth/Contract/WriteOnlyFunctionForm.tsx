@@ -45,7 +45,7 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
   const handleWrite = async () => {
     if (writeAsync) {
       try {
-        await writeTxn(writeAsync());
+        await writeTxn(writeAsync);
         onChange();
       } catch (e: any) {
         const message = getParsedError(e);
