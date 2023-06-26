@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { Block, Transaction, TransactionReceipt } from "viem";
 import { usePublicClient } from "wagmi";
 import { hardhat } from "wagmi/chains";
-import { TransactionWithFunction, decodeTransactionData } from "~~/utils/scaffold-eth";
 
 const BLOCKS_PER_PAGE = 20;
 
@@ -42,10 +41,6 @@ export const useFetchBlocks = () => {
       });
       const fetchedBlocks = await Promise.all(blocksWithTransactions);
 
-      fetchedBlocks.forEach(block => {
-        block.transactions.forEach(tx => decodeTransactionData(tx as TransactionWithFunction));
-      });
-
       const txReceipts = await Promise.all(
         fetchedBlocks.flatMap(block =>
           block.transactions.map(async tx => {
@@ -79,8 +74,6 @@ export const useFetchBlocks = () => {
           if (currentPage === 0) {
             setBlocks(prevBlocks => [newBlock, ...prevBlocks.slice(0, BLOCKS_PER_PAGE - 1)]);
 
-            newBlock.transactions.forEach(tx => decodeTransactionData(tx as Transaction));
-
             const receipts = await Promise.all(
               newBlock.transactions.map(async tx => {
                 try {
@@ -104,7 +97,7 @@ export const useFetchBlocks = () => {
       }
     };
 
-    return client.watchBlocks({ onBlock: handleNewBlock });
+    return client.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
   }, [blocks, client, currentPage]);
 
   return {
