@@ -11,7 +11,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-export const AddressInput = ({ value, name, placeholder, onChange }: CommonInputProps<Address | undefined>) => {
+export const AddressInput = ({ value, name, placeholder, onChange }: CommonInputProps<Address | string>) => {
   const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
     name: value,
     enabled: isENS(value),
@@ -44,7 +44,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   }, [ensAddress, onChange, value]);
 
   const handleChange = useCallback(
-    (newValue?: Address) => {
+    (newValue: Address) => {
       setEnteredEnsName(undefined);
       onChange(newValue);
     },
@@ -52,7 +52,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   );
 
   return (
-    <InputBase<Address | undefined>
+    <InputBase<Address>
       name={name}
       placeholder={placeholder}
       error={ensAddress === null}
