@@ -7,6 +7,8 @@ import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
+type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, undefined>>["writeAsync"]>[0];
+
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
  * @param config - The config settings, including extra wagmi configuration
@@ -39,17 +41,18 @@ export const useScaffoldContractWrite = <
     abi: deployedContractData?.abi as Abi,
     functionName: functionName as any,
     args: args as unknown[],
-    value: (value ? parseEther(value) : undefined) as any,
+    value: value ? parseEther(value) : undefined,
     ...writeConfig,
   });
 
   const sendContractWriteTx = async ({
-    args,
-    value,
+    args: newArgs,
+    value: newValue,
+    ...otherConfig
   }: {
     args?: UseScaffoldWriteConfig<TContractName, TFunctionName>["args"];
     value?: UseScaffoldWriteConfig<TContractName, TFunctionName>["value"];
-  } = {}) => {
+  } & UpdatedArgs = {}) => {
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
       return;
@@ -69,9 +72,9 @@ export const useScaffoldContractWrite = <
         await writeTx(
           () =>
             wagmiContractWrite.writeAsync({
-              args: args as unknown[],
-              value: (value ? parseEther(value) : undefined) as any,
-              // TODO : add gasPrice and gasLimit to wagmi's useContractWrite hook
+              args: newArgs ?? args,
+              value: newValue ? parseEther(newValue) : value && parseEther(value),
+              ...otherConfig,
             }),
           { onBlockConfirmation, blockConfirmations },
         );
