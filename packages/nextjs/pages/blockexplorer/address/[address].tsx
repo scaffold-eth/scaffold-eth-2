@@ -149,18 +149,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const chainId = hardhat.id;
   let contractPath = "";
 
-  const buildInfoDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "hardhat",
-    "artifacts",
-    "build-info",
-  );
+  const buildInfoDirectory = path.join(__dirname, "..", "..", "..", "..", "..", "..", "foundry", "out", "build-info");
 
   if (!fs.existsSync(buildInfoDirectory)) {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
