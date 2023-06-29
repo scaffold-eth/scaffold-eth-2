@@ -12,7 +12,7 @@ import {
   getParsedError,
 } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification, parseTxnValue } from "~~/utils/scaffold-eth";
+import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;
@@ -37,9 +37,8 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
     functionName: abiFunction.name,
     abi: [abiFunction] as Abi,
     args: getParsedContractFunctionArgs(form),
-    //TODO : Handle this properly
-    // @ts-expect-error
-    value: typeof txValue === "string" ? parseTxnValue(txValue) : txValue,
+    // @ts-expect-error We will be showing the error in the UI
+    value: txValue,
   });
 
   const handleWrite = async () => {
