@@ -22,11 +22,16 @@ const getParsedError = (e: any | BaseViemError): string => {
   let message = "An unknown error occurred";
 
   if (e instanceof BaseViemError) {
-    message = e.details;
-  } else if (e?.data?.message) {
-    message = e.data.message;
-  } else if (e?.message) {
-    message = e.message;
+    if (e.details) {
+      message = e.details;
+    } else if (e.shortMessage) {
+      message = e.shortMessage;
+      console.log(e.shortMessage);
+    } else if (e.message) {
+      message = e.message;
+    } else if (e.name) {
+      message = e.name;
+    }
   }
 
   return message;
