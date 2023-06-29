@@ -26,7 +26,6 @@ const getParsedError = (e: any | BaseViemError): string => {
       message = e.details;
     } else if (e.shortMessage) {
       message = e.shortMessage;
-      console.log(e.shortMessage);
     } else if (e.message) {
       message = e.message;
     } else if (e.name) {
