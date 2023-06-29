@@ -37,8 +37,7 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
     functionName: abiFunction.name,
     abi: [abiFunction] as Abi,
     args: getParsedContractFunctionArgs(form),
-    // @ts-expect-error We will be showing the error in the UI
-    value: txValue,
+    value: BigInt(txValue),
   });
 
   const handleWrite = async () => {
