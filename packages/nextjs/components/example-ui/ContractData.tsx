@@ -34,8 +34,10 @@ export const ContractData = () => {
     contractName: "YourContract",
     eventName: "GreetingChange",
     listener: logs => {
-      const { greetingSetter, value, premium, newGreeting } = logs[0].args;
-      console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
+      logs.map(log => {
+        const { greetingSetter, value, premium, newGreeting } = log.args;
+        console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
+      });
     },
   });
 

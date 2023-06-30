@@ -7,7 +7,8 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { Address, TransactionReceipt } from "viem";
+import { Address, Log, TransactionReceipt } from "viem";
+import { Prettify } from "viem/dist/types/types/utils";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -175,12 +176,11 @@ export type UseScaffoldWriteConfig<
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
-  // TEventInputs extends AbiEventArgs<ContractAbi<TContractName>, TEventName> & any[],
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  UseContractEventConfig & {
-    listener: (logs: any) => void;
+  Omit<UseContractEventConfig, "listener"> & {
+    listener: (logs: Prettify<Omit<Log<bigint, number, any>, "args"> & { args: Record<string, unknown> }>[]) => void;
   },
   UseContractEventConfig<ContractAbi<TContractName>, TEventName>
 >;
