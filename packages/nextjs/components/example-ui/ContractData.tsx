@@ -34,15 +34,8 @@ export const ContractData = () => {
     contractName: "YourContract",
     eventName: "GreetingChange",
     listener: logs => {
-      logs.map(log => {
-        const { greetingSetter, newGreeting, premium, value } = log.args as {
-          greetingSetter?: `0x${string}` | undefined;
-          newGreeting?: string | undefined;
-          premium?: boolean | undefined;
-          value?: bigint | undefined;
-        }; // assertion needed to prevent TS error when deployedContracts is null
-        console.log(greetingSetter, newGreeting, premium, value);
-      });
+      const { greetingSetter, value, premium, newGreeting } = logs[0].args;
+      console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
     },
   });
 

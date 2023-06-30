@@ -179,12 +179,10 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  UseContractEventConfig,
+  UseContractEventConfig & {
+    listener: (logs: any) => void;
+  },
   UseContractEventConfig<ContractAbi<TContractName>, TEventName>
-  // {
-  //   eventName: TEventName;
-  //   listener: (...args: TEventInputs) => void;
-  // }
 >;
 
 type IndexedEventInputs<
