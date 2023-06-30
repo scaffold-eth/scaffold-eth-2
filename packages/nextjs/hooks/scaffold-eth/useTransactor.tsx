@@ -19,10 +19,10 @@ type TTransactionFunc = (
  */
 const TxnNotification = ({ message, blockExplorerLink }: { message: string; blockExplorerLink?: string }) => {
   return (
-    <div className={`flex flex-col ml-1 cursor-default`}>
+    <div className={`ml-1 flex cursor-default flex-col`}>
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="text-md block underline">
           check out transaction
         </a>
       ) : null}

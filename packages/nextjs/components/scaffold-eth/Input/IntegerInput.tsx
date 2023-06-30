@@ -39,10 +39,10 @@ export const IntegerInput = ({
       suffix={
         !inputError && (
           <div
-            className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+            className="tooltip-top tooltip tooltip-secondary flex space-x-4 before:right-[-10px] before:left-auto before:transform-none before:content-[attr(data-tip)]"
             data-tip="Multiply by 10^18 (wei)"
           >
-            <button className="cursor-pointer font-semibold px-4 text-accent" onClick={multiplyBy1e18}>
+            <button className="cursor-pointer px-4 font-semibold text-accent" onClick={multiplyBy1e18}>
               ∗
             </button>
           </div>

@@ -9,7 +9,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
 
   return (
     <div className="flex justify-center">
-      <table className="table table-zebra w-full shadow-lg">
+      <table className="table-zebra table w-full shadow-lg">
         <thead>
           <tr>
             <th className="bg-primary">Transaction Hash</th>
@@ -24,10 +24,10 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         {isLoading ? (
           <tbody>
             {[...Array(20)].map((_, rowIndex) => (
-              <tr key={rowIndex} className="bg-base-200 hover:bg-base-300 transition-colors duration-200 h-12">
+              <tr key={rowIndex} className="h-12 bg-base-200 transition-colors duration-200 hover:bg-base-300">
                 {[...Array(7)].map((_, colIndex) => (
                   <td className="w-1/12" key={colIndex}>
-                    <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
+                    <div className="h-2 animate-pulse rounded-full bg-gray-200"></div>
                   </td>
                 ))}
               </tr>
@@ -49,7 +49,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                     <td className="w-2/12">
                       {tx.functionName === "0x" ? "" : <span className="mr-1">{tx.functionName}</span>}
                       {functionCalled !== "0x" && (
-                        <span className="badge badge-primary font-bold text-xs">{functionCalled}</span>
+                        <span className="badge badge-primary text-xs font-bold">{functionCalled}</span>
                       )}
                     </td>
                     <td className="w-1/12">{block.number}</td>

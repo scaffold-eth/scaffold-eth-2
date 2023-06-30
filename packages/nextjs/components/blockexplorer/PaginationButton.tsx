@@ -18,7 +18,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
   if (isNextButtonDisabled && isPrevButtonDisabled) return null;
 
   return (
-    <div className="mt-5 justify-end flex gap-3">
+    <div className="mt-5 flex justify-end gap-3">
       <button
         className={`btn btn-sm ${prevButtonClass}`}
         disabled={isPrevButtonDisabled}
@@ -26,7 +26,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
       >
         <ArrowLeftIcon className="h-4 w-4" />
       </button>
-      <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
+      <span className="self-center font-medium text-primary-content">Page {currentPage + 1}</span>
       <button
         className={`btn btn-sm ${nextButtonClass}`}
         disabled={isNextButtonDisabled}

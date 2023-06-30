@@ -99,9 +99,9 @@ export const WriteOnlyFunctionForm = ({
   const zeroInputs = inputs.length === 0 && !functionFragment.payable;
 
   return (
-    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
-      <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
-        <p className="font-medium my-0 break-words">{functionFragment.name}</p>
+    <div className="space-y-3 py-5 first:pt-0 last:pb-1">
+      <div className={`flex gap-3 ${zeroInputs ? "flex-row items-center justify-between" : "flex-col"}`}>
+        <p className="my-0 break-words font-medium">{functionFragment.name}</p>
         {inputs}
         {functionFragment.payable ? (
           <IntegerInput
@@ -122,7 +122,7 @@ export const WriteOnlyFunctionForm = ({
           <div
             className={`flex ${
               writeDisabled &&
-              "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+              "tooltip before:right-[-10px] before:left-auto before:transform-none before:content-[attr(data-tip)]"
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >

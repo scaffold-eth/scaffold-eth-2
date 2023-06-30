@@ -42,13 +42,13 @@ export const FaucetButton = () => {
       className={
         balance
           ? ""
-          : "tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
+          : "tooltip tooltip-bottom tooltip-open tooltip-secondary font-bold before:left-auto before:right-0 before:transform-none before:content-[attr(data-tip)]"
       }
       data-tip="Grab funds from faucet"
     >
       <button
-        className={`btn btn-secondary btn-sm px-2 rounded-full ${
-          loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
+        className={`btn btn-secondary btn-sm rounded-full px-2 ${
+          loading ? "loading before:!mx-0 before:!h-4 before:!w-4" : ""
         }`}
         onClick={sendETH}
         disabled={loading}

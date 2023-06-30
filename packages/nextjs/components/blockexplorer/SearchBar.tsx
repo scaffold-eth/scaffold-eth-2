@@ -30,15 +30,15 @@ export const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex items-center justify-end mb-5 space-x-3">
+    <form onSubmit={handleSearch} className="mb-5 flex items-center justify-end space-x-3">
       <input
-        className="border-primary bg-base-100 text-base-content p-2 mr-2 w-full md:w-1/2 lg:w-1/3 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-accent"
+        className="mr-2 w-full rounded-md border-primary bg-base-100 p-2 text-base-content shadow-md focus:outline-none focus:ring-2 focus:ring-accent md:w-1/2 lg:w-1/3"
         type="text"
         value={searchInput}
         placeholder="Search by hash or address"
         onChange={e => setSearchInput(e.target.value)}
       />
-      <button className="btn btn-sm btn-primary" type="submit">
+      <button className="btn btn-primary btn-sm" type="submit">
         Search
       </button>
     </form>

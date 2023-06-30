@@ -14,7 +14,7 @@ const ExampleUI: NextPage = () => {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet" />
       </MetaHeader>
-      <div className="grid lg:grid-cols-2 flex-grow" data-theme="exampleUi">
+      <div className="grid flex-grow lg:grid-cols-2" data-theme="exampleUi">
         <ContractInteraction />
         <ContractData />
       </div>

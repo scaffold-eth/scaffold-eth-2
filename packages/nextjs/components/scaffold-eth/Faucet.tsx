@@ -35,13 +35,13 @@ export const Faucet = () => {
       } catch (error) {
         notification.error(
           <>
-            <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
+            <p className="mt-0 mb-1 font-bold">Cannot connect to local provider</p>
             <p className="m-0">
-              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
+              - Did you forget to run <code className="bg-base-300 text-base font-bold italic">yarn chain</code> ?
             </p>
             <p className="mt-1 break-normal">
-              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
-              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
+              - Or you can change <code className="bg-base-300 text-base font-bold italic">targetNetwork</code> in{" "}
+              <code className="bg-base-300 text-base font-bold italic">scaffold.config.ts</code>
             </p>
           </>,
         );
@@ -75,7 +75,7 @@ export const Faucet = () => {
     <div>
       <label
         htmlFor="faucet-modal"
-        className="btn btn-primary btn-sm px-2 rounded-full font-normal space-x-2 normal-case"
+        className="btn btn-primary btn-sm space-x-2 rounded-full px-2 font-normal normal-case"
       >
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
@@ -84,8 +84,8 @@ export const Faucet = () => {
       <label htmlFor="faucet-modal" className="modal cursor-pointer">
         <label className="modal-box relative">
           {/* dummy input to capture event onclick on modal box */}
-          <input className="h-0 w-0 absolute top-0 left-0" />
-          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
+          <input className="absolute top-0 left-0 h-0 w-0" />
+          <h3 className="mb-3 text-xl font-bold">Local Faucet</h3>
           <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
             ✕
           </label>
@@ -96,7 +96,7 @@ export const Faucet = () => {
                 <Address address={faucetAddress} />
               </div>
               <div>
-                <span className="text-sm font-bold pl-3">Available:</span>
+                <span className="pl-3 text-sm font-bold">Available:</span>
                 <Balance address={faucetAddress} />
               </div>
             </div>
@@ -108,8 +108,8 @@ export const Faucet = () => {
               />
               <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
               <button
-                className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
-                  loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
+                className={`btn btn-primary btn-sm h-10 space-x-3 rounded-full px-2 ${
+                  loading ? "loading before:!mx-0 before:!h-4 before:!w-4" : ""
                 }`}
                 onClick={sendETH}
                 disabled={loading}

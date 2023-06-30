@@ -16,7 +16,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
       passHref
       className={`${
         isActive ? "bg-secondary shadow-md" : ""
-      } hover:bg-secondary hover:shadow-md focus:bg-secondary py-1.5 px-3 text-sm rounded-full gap-2`}
+      } gap-2 rounded-full py-1.5 px-3 text-sm hover:bg-secondary hover:shadow-md focus:bg-secondary`}
     >
       {children}
     </Link>
@@ -61,12 +61,12 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+    <div className="navbar sticky top-0 z-20 min-h-0 flex-shrink-0 justify-between bg-base-100 px-0 shadow-md shadow-secondary sm:px-2 lg:static">
       <div className="navbar-start w-auto lg:w-1/2">
-        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
+        <div className="dropdown lg:hidden" ref={burgerMenuRef}>
           <label
             tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+            className={`btn btn-ghost ml-1 ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
             onClick={() => {
               setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
             }}
@@ -76,7 +76,7 @@ export const Header = () => {
           {isDrawerOpen && (
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
               onClick={() => {
                 setIsDrawerOpen(false);
               }}
@@ -85,8 +85,8 @@ export const Header = () => {
             </ul>
           )}
         </div>
-        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6">
-          <div className="flex relative w-10 h-10">
+        <Link href="/" passHref className="ml-4 mr-6 hidden items-center gap-2 lg:flex">
+          <div className="relative flex h-10 w-10">
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
@@ -94,9 +94,9 @@ export const Header = () => {
             <span className="text-xs">Ethereum dev stack</span>
           </div>
         </Link>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
+        <ul className="menu menu-horizontal hidden gap-2 px-1 lg:flex lg:flex-nowrap">{navLinks}</ul>
       </div>
-      <div className="navbar-end flex-grow mr-4">
+      <div className="navbar-end mr-4 flex-grow">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
       </div>

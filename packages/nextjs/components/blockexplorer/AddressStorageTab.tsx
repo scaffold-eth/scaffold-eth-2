@@ -36,8 +36,8 @@ export const AddressStorageTab = ({ address }: { address: string }) => {
   return (
     <div className="flex flex-col gap-3 p-4">
       {storage.length > 0 ? (
-        <div className="mockup-code overflow-auto max-h-[500px]">
-          <pre className="px-5 whitespace-pre-wrap break-words">
+        <div className="mockup-code max-h-[500px] overflow-auto">
+          <pre className="whitespace-pre-wrap break-words px-5">
             {storage.map((data, i) => (
               <div key={i}>
                 <strong>Storage Slot {i}:</strong> {data}

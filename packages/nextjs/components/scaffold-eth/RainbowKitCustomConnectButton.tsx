@@ -35,18 +35,18 @@ export const RainbowKitCustomConnectButton = () => {
               if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
                   <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-error btn-sm dropdown-toggle">
+                    <label tabIndex={0} className="dropdown-toggle btn btn-error btn-sm">
                       <span>Wrong network</span>
-                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                      <ChevronDownIcon className="ml-2 h-6 w-4 sm:ml-0" />
                     </label>
-                    <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
+                    <ul tabIndex={0} className="dropdown-content menu rounded-box mt-1 bg-base-100 p-2 shadow-lg">
                       <li>
                         <button
                           className="menu-item"
                           type="button"
                           onClick={() => switchNetwork?.(configuredNetwork.id)}
                         >
-                          <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                          <ArrowsRightLeftIcon className="ml-2 h-6 w-4 sm:ml-0" />
                           <span className="whitespace-nowrap">
                             Switch to <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
                           </span>
@@ -54,7 +54,7 @@ export const RainbowKitCustomConnectButton = () => {
                       </li>
                       <li>
                         <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
-                          <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+                          <ArrowLeftOnRectangleIcon className="ml-2 h-6 w-4 sm:ml-0" /> <span>Disconnect</span>
                         </button>
                       </li>
                     </ul>
@@ -63,10 +63,10 @@ export const RainbowKitCustomConnectButton = () => {
               }
 
               return (
-                <div className="px-2 flex justify-end items-center">
-                  <div className="flex justify-center items-center border-1 rounded-lg">
-                    <div className="flex flex-col items-center mr-1">
-                      <Balance address={account.address} className="min-h-0 h-auto" />
+                <div className="flex items-center justify-end px-2">
+                  <div className="border-1 flex items-center justify-center rounded-lg">
+                    <div className="mr-1 flex flex-col items-center">
+                      <Balance address={account.address} className="h-auto min-h-0" />
                       <span className="text-xs" style={{ color: networkColor }}>
                         {chain.name}
                       </span>

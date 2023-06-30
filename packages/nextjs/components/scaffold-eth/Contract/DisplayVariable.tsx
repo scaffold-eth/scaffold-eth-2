@@ -41,16 +41,16 @@ export const DisplayVariable = ({
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-all">{functionFragment.name}</h3>
+        <h3 className="mb-0 break-all text-lg font-medium">{functionFragment.name}</h3>
         <button className={`btn btn-ghost btn-xs ${isFetching ? "loading" : ""}`} onClick={async () => await refetch()}>
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>
       </div>
-      <div className="text-gray-500 font-medium flex flex-col items-start">
+      <div className="flex flex-col items-start font-medium text-gray-500">
         <div>
           <div
-            className={`break-all block transition bg-transparent ${
-              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
+            className={`block break-all bg-transparent transition ${
+              showAnimation ? "animate-pulse-fast rounded-sm bg-warning" : ""
             }`}
           >
             {displayTxResult(result)}

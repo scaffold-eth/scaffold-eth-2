@@ -13,13 +13,13 @@ export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
 
   return (
-    <div className="min-h-0 p-5 mb-11 lg:mb-0">
+    <div className="mb-11 min-h-0 p-5 lg:mb-0">
       <div>
-        <div className="fixed flex justify-between items-center w-full z-20 p-4 bottom-0 left-0 pointer-events-none">
-          <div className="flex space-x-2 pointer-events-auto">
+        <div className="pointer-events-none fixed bottom-0 left-0 z-20 flex w-full items-center justify-between p-4">
+          <div className="pointer-events-auto flex space-x-2">
             {nativeCurrencyPrice > 0 && (
-              <div className="btn btn-primary btn-sm font-normal cursor-auto">
-                <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
+              <div className="btn btn-primary btn-sm cursor-auto font-normal">
+                <CurrencyDollarIcon className="mr-0.5 h-4 w-4" />
                 <span>{nativeCurrencyPrice}</span>
               </div>
             )}
@@ -30,7 +30,7 @@ export const Footer = () => {
       </div>
       <div className="w-full">
         <ul className="menu menu-horizontal w-full">
-          <div className="flex justify-center items-center gap-2 text-sm w-full">
+          <div className="flex w-full items-center justify-center gap-2 text-sm">
             <div>
               <a
                 href="https://github.com/scaffold-eth/se-2"
