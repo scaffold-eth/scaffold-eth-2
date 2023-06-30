@@ -36,6 +36,8 @@ const getParsedError = (e: any | BaseViemError): string => {
   return message;
 };
 
+// This regex is used to identify array types in the form of `type[size]`
+const ARRAY_TYPE_REGEX = /\[.*\]$/;
 /**
  * @dev Parse form input with array support
  * @param {Record<string,any>} form - form object containing key value pairs
@@ -49,7 +51,7 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
       const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
       let valueOfArg = form[key];
 
-      if (["array", "tuple"].includes(baseTypeOfArg)) {
+      if (ARRAY_TYPE_REGEX.test(baseTypeOfArg) || baseTypeOfArg === "tuple") {
         valueOfArg = JSON.parse(valueOfArg);
       } else if (baseTypeOfArg === "bool") {
         if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
