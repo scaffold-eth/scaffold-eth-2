@@ -5,7 +5,7 @@ pragma solidity >=0.8.0 <0.9.0;
 import "forge-std/console.sol";
 
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
-// import "@openzeppelin/contracts/access/Ownable.sol";
+// import "openzeppelin/access/Ownable.sol";
 
 /**
  * A smart contract that allows changing a state variable of the contract and tracking the changes
