@@ -18,7 +18,7 @@
     "@ethersproject/networks": "^5.7.1",
     "@ethersproject/web": "^5.7.1",
     "@heroicons/react": "^2.0.11",
-    "@rainbow-me/rainbowkit": "^0.11.0",
+    "@rainbow-me/rainbowkit": "^0.12.15",
     "@uniswap/sdk": "^3.0.3",
     "daisyui": "^2.31.0",
     "ethers": "^5.0.0",
@@ -33,7 +33,7 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
-    "wagmi": "^0.11.6",
+    "wagmi": "^0.12.15",
     "zustand": "^4.1.2"
   },
   "devDependencies": {

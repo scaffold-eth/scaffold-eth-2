@@ -1,3 +1,4 @@
+import { Abi } from "abitype";
 import { ethers } from "ethers";
 import { useContract, useProvider } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -21,7 +22,7 @@ export const useScaffoldContract = <TContractName extends ContractName>({
 
   const contract = useContract({
     address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
+    abi: deployedContractData?.abi as Abi,
     signerOrProvider: signerOrProvider === undefined ? provider : signerOrProvider,
   });
 

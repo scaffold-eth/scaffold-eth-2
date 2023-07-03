@@ -21,6 +21,10 @@ dataSources:
         - name: YourContract
           file: ./abis/localhost_YourContract.json
       eventHandlers:
+<<<<<<< HEAD
+        - event: GreetingChange(indexed address,string,bool,uint256)
+=======
         - event: GreetingChange(address,string,bool,uint256)
+>>>>>>> origin/subgraph-package
           handler: handleGreetingChange
       file: ./src/mapping.ts
