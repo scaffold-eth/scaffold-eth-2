@@ -35,8 +35,8 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
 
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
-    name: address,
-    enabled: isAddress(address ?? ""),
+    name: fetchedEns,
+    enabled: Boolean(fetchedEns),
     chainId: 1,
     cacheTime: 30_000,
   });
