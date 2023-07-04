@@ -22,14 +22,14 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
   const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address: value,
-    enabled: Boolean(value && isAddress(value)),
+    enabled: isAddress(value),
     chainId: 1,
     cacheTime: 30_000,
   });
 
   const { data: ensAvatar } = useEnsAvatar({
-    name: value,
-    enabled: Boolean(value && isAddress),
+    name: ensName,
+    enabled: Boolean(ensName),
     chainId: 1,
     cacheTime: 30_000,
   });
