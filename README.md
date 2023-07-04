@@ -253,7 +253,7 @@ await yourContract?.greeting();
 // Used to write to a contract and can be called in any function
 import { useWalletClient } from "wagmi";
 
-cosnt {data : walletClient } = useWalletClient()
+const { data: walletClient } = useWalletClient();
 const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
   walletClient,
