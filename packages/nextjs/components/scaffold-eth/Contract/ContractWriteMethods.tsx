@@ -1,17 +1,14 @@
 import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 import { Abi, AbiFunction } from "abitype";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 export const ContractWriteMethods = ({
-  contractName,
   onChange,
+  deployedContractData,
 }: {
-  contractName: ContractName;
   onChange: () => void;
+  deployedContractData: Contract<ContractName>;
 }) => {
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
-
   if (!deployedContractData) {
     return null;
   }

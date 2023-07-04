@@ -62,7 +62,10 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
             )}
           </div>
           <div className="bg-base-300 rounded-3xl px-6 lg:px-8 py-4 shadow-lg shadow-base-300">
-            <ContractVariables contractName={contractName} refreshDisplayVariables={refreshDisplayVariables} />
+            <ContractVariables
+              refreshDisplayVariables={refreshDisplayVariables}
+              deployedContractData={deployedContractData}
+            />
           </div>
         </div>
         <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
@@ -74,7 +77,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
                 </div>
               </div>
               <div className="p-5 divide-y divide-base-300">
-                <ContractReadMethods contractName={contractName} />
+                <ContractReadMethods deployedContractData={deployedContractData} />
               </div>
             </div>
           </div>
@@ -86,7 +89,10 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
                 </div>
               </div>
               <div className="p-5 divide-y divide-base-300">
-                <ContractWriteMethods contractName={contractName} onChange={triggerRefreshDisplayVariables} />
+                <ContractWriteMethods
+                  deployedContractData={deployedContractData}
+                  onChange={triggerRefreshDisplayVariables}
+                />
               </div>
             </div>
           </div>

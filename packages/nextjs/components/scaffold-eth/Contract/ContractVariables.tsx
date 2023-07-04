@@ -1,17 +1,14 @@
 import { DisplayVariable } from "./DisplayVariable";
 import { Abi, AbiFunction } from "abitype";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 export const ContractVariables = ({
-  contractName,
   refreshDisplayVariables,
+  deployedContractData,
 }: {
-  contractName: ContractName;
   refreshDisplayVariables: boolean;
+  deployedContractData: Contract<ContractName>;
 }) => {
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
-
   if (!deployedContractData) {
     return null;
   }
