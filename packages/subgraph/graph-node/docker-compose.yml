@@ -1,5 +1,10 @@
 version: "3"
 services:
+  anvil:
+    image: ghcr.io/foundry-rs/foundry
+    entrypoint: '/usr/local/bin/anvil --block-time 5 --host 0.0.0.0'
+    ports:
+      - "8545:8545"
   graph-node:
     image: graphprotocol/graph-node:latest
     ports:
@@ -17,7 +22,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: "ipfs:5001"
-      ethereum: "localhost:http://host.docker.internal:8545"
+      ethereum: "localhost:http://anvil:8545"
       GRAPH_LOG: info
     extra_hosts:
       - "host.docker.internal:host-gateway"
