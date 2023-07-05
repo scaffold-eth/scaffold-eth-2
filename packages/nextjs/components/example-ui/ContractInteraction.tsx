@@ -22,7 +22,7 @@ export const ContractInteraction = () => {
   return (
     <div className="relative flex bg-base-300 pb-10">
       <DiamondIcon className="absolute top-24" />
-      <CopyIcon className="absolute bottom-0 left-36" />
+      <CopyIcon className="absolute left-36 bottom-0" />
       <HareIcon className="absolute right-0 bottom-24" />
       <div className="mx-5 flex w-full flex-col sm:mx-8 2xl:mx-20">
         <div className={`mt-10 flex gap-2 ${visible ? "" : "invisible"} max-w-2xl`}>
@@ -51,7 +51,7 @@ export const ContractInteraction = () => {
         </div>
 
         <div className="mt-6 flex flex-col rounded-2xl border-2 border-primary bg-base-200 px-7 py-8 opacity-80 shadow-lg">
-          <span className="text-4xl text-black sm:text-6xl">Set a Greeting_</span>
+          <span className="sm:text-6xlx text-4xl text-black">Set a Greeting_</span>
 
           <div className="mt-8 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-5">
             <input
