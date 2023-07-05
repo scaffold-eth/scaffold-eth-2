@@ -1,4 +1,4 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 Scaffold-ETH 2 - Foundry
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
@@ -62,7 +62,7 @@ This command starts a local Ethereum network using Anvil in Foundry. The network
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/deploy` to deploy the contract to the network. You can also customize the deploy script.
+This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/src` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script/Deploy.s.sol` to deploy the contract to the network. You can also customize the deploy script.
 
 5. On a third terminal, start your NextJS app:
 
@@ -74,9 +74,9 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 Run smart contract test with `yarn foundry:test`
 
-- Edit your smart contract `YourContract.sol` in `packages/foundry/contracts`
+- Edit your smart contract `YourContract.sol` in `packages/foundry/src`
 - Edit your frontend in `packages/nextjs/pages`
-- Edit your deployment scripts in `packages/foundry/deploy`
+- Edit your deployment scripts in `packages/foundry/script/Deploy.s.sol`
 
 ## Deploying your Smart Contracts to a Live Network
 
