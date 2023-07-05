@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ethers } from "ethers";
-import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { isAddress } from "viem";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
@@ -36,8 +35,8 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
 
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
-    address,
-    enabled: isAddress(address ?? ""),
+    name: fetchedEns,
+    enabled: Boolean(fetchedEns),
     chainId: 1,
     cacheTime: 30_000,
   });
@@ -63,7 +62,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     );
   }
 
-  if (!ethers.utils.isAddress(address)) {
+  if (!isAddress(address)) {
     return <span className="text-error">Wrong address</span>;
   }
 

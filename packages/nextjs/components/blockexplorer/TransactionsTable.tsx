@@ -1,7 +1,7 @@
-import { ethers } from "ethers";
+import { formatEther } from "viem";
 import { TransactionHash } from "~~/components/blockexplorer/TransactionHash";
 import { Address } from "~~/components/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { TransactionWithFunction, getTargetNetwork } from "~~/utils/scaffold-eth";
 import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
 
 export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: TransactionsTableProps) => {
@@ -36,10 +36,10 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
         ) : (
           <tbody>
             {blocks.map(block =>
-              block.transactions.map(tx => {
+              (block.transactions as TransactionWithFunction[]).map(tx => {
                 const receipt = transactionReceipts[tx.hash];
-                const timeMined = new Date(block.timestamp * 1000).toLocaleString();
-                const functionCalled = tx.data.substring(0, 10);
+                const timeMined = new Date(Number(block.timestamp) * 1000).toLocaleString();
+                const functionCalled = tx.input.substring(0, 10);
 
                 return (
                   <tr key={tx.hash} className="hover text-sm">
@@ -52,7 +52,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                         <span className="badge badge-primary text-xs font-bold">{functionCalled}</span>
                       )}
                     </td>
-                    <td className="w-1/12">{block.number}</td>
+                    <td className="w-1/12">{block.number?.toString()}</td>
                     <td className="w-2/12">{timeMined}</td>
                     <td className="w-2/12">
                       <Address address={tx.from} size="sm" />
@@ -68,7 +68,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts, isLoading }: Tr
                       )}
                     </td>
                     <td className="text-right">
-                      {ethers.utils.formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
+                      {formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
                     </td>
                   </tr>
                 );

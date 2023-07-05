@@ -57,7 +57,7 @@ const Notification = ({
         }`}
       >
         <div className="self-start text-2xl">{icon ? icon : ENUM_STATUSES[status]}</div>
-        <div className={`break-all ${icon ? "mt-1" : ""}`}>{content}</div>
+        <div className={`whitespace-pre-line break-all ${icon ? "mt-1" : ""}`}>{content}</div>
 
         <div className={`cursor-pointer text-lg ${icon ? "mt-1" : ""}`} onClick={() => toast.dismiss(t.id)}>
           <XMarkIcon className="w-6 cursor-pointer" onClick={() => toast.remove(t.id)} />

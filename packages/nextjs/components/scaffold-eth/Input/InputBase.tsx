@@ -8,7 +8,7 @@ type InputBaseProps<T> = CommonInputProps<T> & {
   suffix?: ReactNode;
 };
 
-export const InputBase = <T extends { toString: () => string } = string>({
+export const InputBase = <T extends { toString: () => string } | undefined = string>({
   name,
   value,
   onChange,

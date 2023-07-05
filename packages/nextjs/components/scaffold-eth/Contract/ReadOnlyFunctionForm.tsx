@@ -1,46 +1,38 @@
 import { useState } from "react";
-import { FunctionFragment } from "ethers/lib/utils";
+import { Abi, AbiFunction } from "abitype";
+import { Address } from "viem";
 import { useContractRead } from "wagmi";
 import {
   ContractInput,
   displayTxResult,
   getFunctionInputKey,
+  getInitialFormState,
   getParsedContractFunctionArgs,
 } from "~~/components/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
-
-const getInitialFormState = (functionFragment: FunctionFragment) => {
-  const initialForm: Record<string, any> = {};
-  functionFragment.inputs.forEach((input, inputIndex) => {
-    const key = getFunctionInputKey(functionFragment, input, inputIndex);
-    initialForm[key] = "";
-  });
-  return initialForm;
-};
+import { notification } from "~~/utils/scaffold-eth";
 
 type TReadOnlyFunctionFormProps = {
-  functionFragment: FunctionFragment;
-  contractAddress: string;
+  contractAddress: Address;
+  abiFunction: AbiFunction;
 };
 
-export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TReadOnlyFunctionFormProps) => {
-  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(functionFragment));
+export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnlyFunctionFormProps) => {
+  const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
   const { isFetching, refetch } = useContractRead({
-    chainId: getTargetNetwork().id,
     address: contractAddress,
-    abi: [functionFragment],
-    functionName: functionFragment.name,
+    functionName: abiFunction.name,
+    abi: [abiFunction] as Abi,
     args: getParsedContractFunctionArgs(form),
     enabled: false,
-    onError: error => {
+    onError: (error: any) => {
       notification.error(error.message);
     },
   });
 
-  const inputs = functionFragment.inputs.map((input, inputIndex) => {
-    const key = getFunctionInputKey(functionFragment, input, inputIndex);
+  const inputElements = abiFunction.inputs.map((input, inputIndex) => {
+    const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
       <ContractInput
         key={key}
@@ -57,8 +49,8 @@ export const ReadOnlyFunctionForm = ({ functionFragment, contractAddress }: TRea
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="my-0 break-words font-medium">{functionFragment.name}</p>
-      {inputs}
+      <p className="my-0 break-words font-medium">{abiFunction.name}</p>
+      {inputElements}
       <div className="flex justify-between gap-2">
         <div className="flex-grow">
           {result !== null && result !== undefined && (
