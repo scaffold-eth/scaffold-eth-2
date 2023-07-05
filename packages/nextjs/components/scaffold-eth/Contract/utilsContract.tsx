@@ -19,7 +19,7 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
  * @returns {string} parsed error string
  */
 const getParsedError = (e: any | BaseViemError): string => {
-  let message = "An unknown error occurred";
+  let message = e.message ?? "An unknown error occurred";
 
   if (e instanceof BaseViemError) {
     if (e.details) {

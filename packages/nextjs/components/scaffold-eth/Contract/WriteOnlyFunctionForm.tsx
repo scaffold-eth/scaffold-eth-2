@@ -37,13 +37,13 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
     functionName: abiFunction.name,
     abi: [abiFunction] as Abi,
     args: getParsedContractFunctionArgs(form),
-    value: BigInt(txValue),
   });
 
   const handleWrite = async () => {
     if (writeAsync) {
       try {
-        await writeTxn(writeAsync);
+        const makeWriteWithParams = () => writeAsync({ value: BigInt(txValue) });
+        await writeTxn(makeWriteWithParams);
         onChange();
       } catch (e: any) {
         const message = getParsedError(e);
