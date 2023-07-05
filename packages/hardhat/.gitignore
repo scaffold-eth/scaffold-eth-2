@@ -6,10 +6,13 @@ typechain
 typechain-types
 temp
 
-#Hardhat files
+# Hardhat files
 cache
 artifacts
 
-#zkSync files
+# zkSync files
 artifacts-zk
 cache-zk
+
+# Contracts deployed on local chain
+/deployments/localhost

@@ -12,10 +12,15 @@ import {
   TransactionsTable,
 } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
-import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
+
+let deployedLocalhostContracts: GenericContractsDeclaration | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  deployedLocalhostContracts = require("~~/contracts/deployedLocalhostContracts")["default"];
+} catch (e) {}
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -145,7 +150,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const address = (context.params?.address as string).toLowerCase();
-  const contracts = deployedContracts as GenericContractsDeclaration | null;
+  const contracts = deployedLocalhostContracts;
   const chainId = hardhat.id;
   let contractPath = "";
 

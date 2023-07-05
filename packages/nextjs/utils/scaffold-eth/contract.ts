@@ -9,8 +9,26 @@ import {
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
-import contractsData from "~~/generated/deployedContracts";
+import deployedContracts from "~~/contracts/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
+
+let deployedLocalhostContracts: GenericContractsDeclaration | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  deployedLocalhostContracts = require("~~/contracts/deployedLocalhostContracts")["default"];
+} catch (e) {}
+
+let contractsData: GenericContractsDeclaration | null = null;
+if (deployedContracts && deployedLocalhostContracts) {
+  contractsData = {
+    ...(deployedContracts as GenericContractsDeclaration),
+    ...(deployedLocalhostContracts as GenericContractsDeclaration),
+  };
+} else if (deployedContracts) {
+  contractsData = deployedContracts;
+} else if (deployedLocalhostContracts) {
+  contractsData = deployedLocalhostContracts;
+}
 
 export type GenericContractsDeclaration = {
   [key: number]: readonly {

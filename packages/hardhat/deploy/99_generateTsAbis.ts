@@ -9,6 +9,7 @@
 import * as fs from "fs";
 import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 function getDirectories(path: string) {
   return fs
@@ -54,26 +55,55 @@ function getContractDataFromDeployments() {
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
  * This script should be run last.
+ *
+ * @param hre HardhatRuntimeEnvironment object.
  */
-const generateTsAbis: DeployFunction = async function () {
-  const TARGET_DIR = "../nextjs/generated/";
+const generateTsAbis: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+  const TARGET_DIR = "../nextjs/contracts/";
   const allContractsData = getContractDataFromDeployments();
+  const deploymentChainId = await hre.getChainId();
 
-  const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
-    return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
-  }, "");
+  if (deploymentChainId === "31337") {
+    const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
+      if (chainId === "31337") {
+        return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
+      } else {
+        return content;
+      }
+    }, "");
 
-  if (!fs.existsSync(TARGET_DIR)) {
-    fs.mkdirSync(TARGET_DIR);
+    if (!fs.existsSync(TARGET_DIR)) {
+      fs.mkdirSync(TARGET_DIR);
+    }
+    fs.writeFileSync(
+      `${TARGET_DIR}deployedLocalhostContracts.ts`,
+      prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
+        parser: "typescript",
+      }),
+    );
+
+    console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedLocalhostContracts.ts`);
+  } else {
+    const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
+      if (chainId === "31337") {
+        return content;
+      } else {
+        return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
+      }
+    }, "");
+
+    if (!fs.existsSync(TARGET_DIR)) {
+      fs.mkdirSync(TARGET_DIR);
+    }
+    fs.writeFileSync(
+      `${TARGET_DIR}deployedContracts.ts`,
+      prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
+        parser: "typescript",
+      }),
+    );
+
+    console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
   }
-  fs.writeFileSync(
-    `${TARGET_DIR}deployedContracts.ts`,
-    prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
-      parser: "typescript",
-    }),
-  );
-
-  console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
 };
 
 export default generateTsAbis;
