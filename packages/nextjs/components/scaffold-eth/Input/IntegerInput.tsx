@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { BigNumber, ethers } from "ethers";
 import { CommonInputProps, InputBase, IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 
-type IntegerInputProps = CommonInputProps<string | BigNumber> & {
+type IntegerInputProps = CommonInputProps<string | bigint> & {
   variant?: IntegerVariant;
 };
 
@@ -18,7 +17,10 @@ export const IntegerInput = ({
     if (!value) {
       return;
     }
-    onChange(ethers.utils.parseEther(value.toString()));
+    if (typeof value === "bigint") {
+      return onChange(value * 10n ** 18n);
+    }
+    return onChange(BigInt(Math.round(Number(value) * 10 ** 18)));
   }, [onChange, value]);
 
   useEffect(() => {

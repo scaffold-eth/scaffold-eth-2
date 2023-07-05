@@ -5,4 +5,6 @@ export type BurnerConnectorOptions = {
   defaultChainId: number;
 };
 
-export type BurnerConnectorData = ConnectorData<StaticJsonRpcProvider>;
+export type BurnerConnectorData = ConnectorData & {
+  provider: StaticJsonRpcProvider;
+};
