@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AbiEvent, ExtractAbiEventNames } from "abitype";
+import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -42,7 +42,7 @@ export const useScaffoldEventHistory = <
           throw new Error("Contract not found");
         }
 
-        const event = deployedContractData.abi.find(
+        const event = (deployedContractData.abi as Abi).find(
           part => part.type === "event" && part.name === eventName,
         ) as AbiEvent;
 
