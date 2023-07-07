@@ -274,8 +274,8 @@ const {
   } = useScaffoldEventHistory({
   contractName: "YourContract",
   eventName: "GreetingChange",
-  // Specify the starting block number from which to read events.
-  fromBlock: 31231,
+  // Specify the starting block number from which to read events, this is a bigint.
+  fromBlock: 31231n,
   blockData: true,
   // Apply filters to the event based on parameter names and values { [parameterName]: value },
   filters: { premium: true }
@@ -312,13 +312,12 @@ const { data: yourContract } = useScaffoldContract({
 await yourContract?.greeting();
 
 // Used to write to a contract and can be called in any function
-import { Signer } from "ethers";
-import { useSigner } from "wagmi";
+import { useWalletClient } from "wagmi";
 
-const { data: signer, isError, isLoading } = useSigner();
+const { data: walletClient } = useWalletClient();
 const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
-  signerOrProvider: signer as Signer,
+  walletClient,
 });
 const setGreeting = async () => {
   // Call the method in any function
