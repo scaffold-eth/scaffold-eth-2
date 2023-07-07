@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useIsMounted } from "usehooks-ts";
 import { createWalletClient, http, parseEther } from "viem";
 import { useAccount, useNetwork } from "wagmi";
 import { hardhat } from "wagmi/chains";
@@ -15,7 +16,10 @@ const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 export const FaucetButton = () => {
   const { address } = useAccount();
   const { balance } = useAccountBalance(address);
+
   const { chain: ConnectedChain } = useNetwork();
+  const isMounted = useIsMounted();
+
   const [loading, setLoading] = useState(false);
   const localWalletClient = createWalletClient({
     chain: hardhat,
@@ -40,7 +44,7 @@ export const FaucetButton = () => {
   };
 
   // Render only on local chain
-  if (!ConnectedChain || ConnectedChain.id !== hardhat.id) {
+  if (ConnectedChain?.id !== hardhat.id || !isMounted()) {
     return null;
   }
 
