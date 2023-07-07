@@ -135,10 +135,7 @@ export type ScaffoldConfig = {
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
-  burnerWallet: {
-    enabled: boolean;
-    onlyLocal: boolean;
-  };
+  onlyLocalBurnerWallet: boolean;
   walletAutoConnect: boolean;
   // your dapp custom config, eg:
   // tokenIcon : string;
@@ -163,13 +160,11 @@ The configuration parameters are described below, make sure to update the values
   WalletConnect's default project ID from Scaffold ETH 2 for local testing purposes.
   It's recommended to obtain your own project ID from the [WalletConnect website](https://cloud.walletconnect.com) and store it in an environment variable: `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` at `\packages\nextjs\.env` file.
 
-- **burnerWallet**  
-  You can activate the Burner Wallet feature, which provides a lightweight wallet for users.
+- **onlyLocalBurnerWallet**  
+  Controls the networks where the Burner Wallet feature is available. This feature provides a lightweight wallet for users.
 
-  - **enabled**  
-    Set it to false to completely remove the Burner Wallet from all networks.
-  - **onlyLocal**  
-    Set it to true to use the Burner Wallet only at local network (hardhat).
+  - `true` => Use Burner Wallet only on hardhat network.
+  - `false` => Use Burner Wallet on all networks.
 
 - **walletAutoConnect**  
   Set it to true to activate automatic wallet connection behavior:
