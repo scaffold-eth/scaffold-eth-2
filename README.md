@@ -134,6 +134,7 @@ export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
+  walletConnectProjectId: string;
   burnerWallet: {
     enabled: boolean;
     onlyLocal: boolean;
