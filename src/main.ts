@@ -45,7 +45,7 @@ export async function createProject(options: Options) {
       },
     },
     {
-      title: `🗃 Initializing git repository`,
+      title: `📡 Initializing git repository`,
       task: () => initGitRepository(targetDirectory, options),
     },
   ]);
