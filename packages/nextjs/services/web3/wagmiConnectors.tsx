@@ -16,11 +16,10 @@ import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletCo
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const configuredNetwork = getTargetNetwork();
-const burnerConfig = scaffoldConfig.burnerWallet;
+const { onlyLocalBurnerWallet } = scaffoldConfig;
 
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
-const enabledChains =
-  (configuredNetwork.id as number) === 1 ? [configuredNetwork] : [configuredNetwork, chains.mainnet];
+const enabledChains = configuredNetwork.id === 1 ? [configuredNetwork] : [configuredNetwork, chains.mainnet];
 
 /**
  * Chains for the app
@@ -53,6 +52,9 @@ const wallets = [
   braveWallet(walletsOptions),
   coinbaseWallet({ ...walletsOptions, appName: "scaffold-eth-2" }),
   rainbowWallet(walletsOptions),
+  ...(configuredNetwork.id === chains.hardhat.id || !onlyLocalBurnerWallet
+    ? [burnerWalletConfig({ chains: [appChains.chains[0]] })]
+    : []),
 ];
 
 /**
@@ -61,6 +63,6 @@ const wallets = [
 export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Supported Wallets",
-    wallets: burnerConfig.enabled ? [...wallets, burnerWalletConfig({ chains: [appChains.chains[0]] })] : wallets,
+    wallets,
   },
 ]);

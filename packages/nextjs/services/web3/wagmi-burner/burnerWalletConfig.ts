@@ -9,7 +9,7 @@ import {
 } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-const burnerConfig = scaffoldConfig.burnerWallet;
+const { onlyLocalBurnerWallet } = scaffoldConfig;
 const targetNetwork = getTargetNetwork();
 export interface BurnerWalletOptions {
   chains: Chain[];
@@ -26,11 +26,7 @@ export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => (
   iconUrl: "https://avatars.githubusercontent.com/u/56928858?s=200&v=4",
   iconBackground: "#0c2f78",
   hidden: () => {
-    if (!burnerConfig.enabled) {
-      return true;
-    }
-
-    if (burnerConfig.onlyLocal) {
+    if (onlyLocalBurnerWallet) {
       return targetNetwork.id !== hardhat.id;
     }
 
