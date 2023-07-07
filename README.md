@@ -139,6 +139,10 @@ export type ScaffoldConfig = {
     onlyLocal: boolean;
   };
   walletAutoConnect: boolean;
+  // your dapp custom config, eg:
+  // tokenIcon : string;
+  // eventName : string;
+  // hideHeader : boolean;
 };
 ```
 
@@ -152,7 +156,11 @@ The configuration parameters are described below, make sure to update the values
 
 - **alchemyApiKey**  
   Default Alchemy API key from Scaffold ETH 2 for local testing purposes.  
-  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `ALCHEMY_API_KEY` at `\packages\hardhat\.env` file.
+  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `NEXT_PUBLIC_ALCHEMY_API_KEY` at `\packages\nextjs\.env` file.
+
+- **walletConnectProjectId**  
+  WalletConnect's default project ID from Scaffold ETH 2 for local testing purposes.
+  It's recommended to obtain your own project ID from the [WalletConnect website](https://cloud.walletconnect.com) and store it in an environment variable: `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` at `\packages\nextjs\.env` file.
 
 - **burnerWallet**  
   You can activate the Burner Wallet feature, which provides a lightweight wallet for users.
@@ -167,7 +175,7 @@ The configuration parameters are described below, make sure to update the values
   - If the user was connected into a wallet before, on page reload it reconnects automatically.
   - If user is not connected to any wallet, on reload, it connects to the burner wallet if `burnerWallet.enabled` is true and `burnerWallet.onlyLocal` is false.
 
-You can extend this configuration file, adding new parameters that you need to use across your dapp. For example:
+You can extend this configuration file, adding new parameters that you need to use across your dapp **(make sure you update the above type `ScaffoldConfig`)**:
 
 ```ts
   tokenEmoji: "💎",
@@ -175,7 +183,7 @@ You can extend this configuration file, adding new parameters that you need to u
   hideHeader: true,
 ```
 
-To use the values from the `scaffoldConfig` in any other file of your application, you first need to import it in those files:
+To use the values from the `ScaffoldConfig` in any other file of your application, you first need to import it in those files:
 
 ```ts
 import scaffoldConfig from "~~/scaffold.config";
