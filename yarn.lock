@@ -610,9 +610,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"create-dapp-example@workspace:.":
+"create-eth@workspace:.":
   version: 0.0.0-use.local
-  resolution: "create-dapp-example@workspace:."
+  resolution: "create-eth@workspace:."
   dependencies:
     "@rollup/plugin-typescript": 11.1.0
     "@types/inquirer": 9.0.3
@@ -633,7 +633,7 @@ __metadata:
     tslib: 2.5.0
     typescript: 5.0.4
   bin:
-    create-dapp-example: bin/create-dapp-se2.js
+    create-eth: bin/create-dapp-se2.js
   languageName: unknown
   linkType: soft
 

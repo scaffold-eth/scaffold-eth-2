@@ -1,7 +1,7 @@
 {
-  "name": "create-dapp-example",
-  "version": "0.0.13",
-  "description": "Create SE-2 dapp with ease",
+  "name": "create-eth",
+  "version": "0.0.1",
+  "description": "Create a Scaffold-ETH-2 app",
   "main": "dist/cli.js",
   "type": "module",
   "bin": "bin/create-dapp-se2.js",
@@ -13,8 +13,13 @@
   },
   "keywords": [
     "cli",
+    "ethereum",
     "scaffold-eth 2",
-    "wagmi"
+    "wagmi",
+    "hardhat",
+    "foundry",
+    "viem",
+    "rainbowkit"
   ],
   "license": "MIT",
   "devDependencies": {
