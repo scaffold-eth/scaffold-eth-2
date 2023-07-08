@@ -51,7 +51,10 @@ export const getFunctionDetails = (transaction: TransactionType) => {
     transaction.functionArgs
   ) {
     const details = transaction.functionArgNames.map(
-      (name, i) => `${transaction.functionArgTypes?.[i] || ""} ${name} = ${transaction.functionArgs?.[i] || ""}`,
+      (name, i) =>
+        `${transaction.functionArgTypes?.[i] || ""} ${name} = ${
+          transaction.functionArgs?.[i] !== undefined ? transaction.functionArgs?.[i] : ""
+        }`,
     );
     return `${transaction.functionName}(${details.join(", ")})`;
   }
