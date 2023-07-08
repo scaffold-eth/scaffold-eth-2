@@ -36,6 +36,10 @@ export async function createProject(options: Options) {
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
     {
+      title: `📡 Initializing git repository`,
+      task: () => initGitRepository(targetDirectory, options),
+    },
+    {
       title: `📦 Installing dependencies with yarn, this could take a while`,
       task: () => installPackages(targetDirectory),
       skip: () => {
@@ -43,10 +47,6 @@ export async function createProject(options: Options) {
           return "Manually skipped";
         }
       },
-    },
-    {
-      title: `📡 Initializing git repository`,
-      task: () => initGitRepository(targetDirectory, options),
     },
   ]);
 
