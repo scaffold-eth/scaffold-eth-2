@@ -2,7 +2,7 @@ import { Extension, Options, TemplateDescriptor, isDefined } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-tree";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
-import { mergePackageJson } from "../utils/merge-pacakge-json";
+import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
 import ncp from "ncp";
 import path from "path";
