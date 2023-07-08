@@ -42,7 +42,7 @@ const TransactionPage: NextPage = () => {
         Back
       </button>
       {transaction ? (
-        <div className="overflow-x-auto">
+        <div>
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
           <table className="table w-full shadow-lg">
             <tbody>
@@ -94,14 +94,16 @@ const TransactionPage: NextPage = () => {
                   <strong>Function called:</strong>
                 </td>
                 <td>
-                  {functionCalled === "0x" ? (
-                    "This transaction did not call any function."
-                  ) : (
-                    <>
-                      <span className="mr-2">{getFunctionDetails(transaction)}</span>
-                      <span className="badge badge-primary font-bold">{functionCalled}</span>
-                    </>
-                  )}
+                  <div className="w-full md:max-w-[600px] lg:max-w-[800px] overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary">
+                    {functionCalled === "0x" ? (
+                      "This transaction did not call any function."
+                    ) : (
+                      <>
+                        <span className="mr-2">{getFunctionDetails(transaction)}</span>
+                        <span className="badge badge-primary font-bold">{functionCalled}</span>
+                      </>
+                    )}
+                  </div>
                 </td>
               </tr>
               <tr>
@@ -115,7 +117,7 @@ const TransactionPage: NextPage = () => {
                   <strong>Data:</strong>
                 </td>
                 <td className="form-control">
-                  <textarea readOnly value={transaction.input} className="p-0 textarea-primary bg-inherit" />
+                  <textarea readOnly value={transaction.input} className="p-0 textarea-primary bg-inherit h-[150px]" />
                 </td>
               </tr>
             </tbody>
