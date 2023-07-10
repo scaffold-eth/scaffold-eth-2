@@ -38,16 +38,16 @@ export async function renderOutroMessage(options: Options) {
     \t${chalk.bold("In a new terminal window, deploy your contracts")}
     \t${chalk.dim("yarn")} deploy
    `;
-
-    message += `
-    \t${chalk.bold("In a new terminal window, start the frontend")}
-    \t${chalk.dim("yarn")} start
-    `;
-
-    message += `
-    ${chalk.bold.green("Thanks for using Scaffold-ETH 2 🙏, Happy Building!")}
-    `;
-
-    console.log(message);
   }
+
+  message += `
+  \t${chalk.bold("In a new terminal window, start the frontend")}
+  \t${chalk.dim("yarn")} start
+  `;
+
+  message += `
+  ${chalk.bold.green("Thanks for using Scaffold-ETH 2 🙏, Happy Building!")}
+  `;
+
+  console.log(message);
 }
