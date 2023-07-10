@@ -2,11 +2,11 @@ import { execa } from "execa";
 import { Options } from "../types";
 import path from "path";
 
-export async function initGitRepository(targetDir: string, options: Options) {
+export async function createFirstGitCommit(
+  targetDir: string,
+  options: Options
+) {
   try {
-    await execa("git", ["init"], { cwd: targetDir });
-    await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
-
     // TODO: Move the logic for adding submodules to tempaltes
     if (options.extensions?.includes("foundry")) {
       await execa(
@@ -29,7 +29,7 @@ export async function initGitRepository(targetDir: string, options: Options) {
     await execa("git", ["add", "-A"], { cwd: targetDir });
     await execa(
       "git",
-      ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2"],
+      ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"],
       { cwd: targetDir }
     );
   } catch (e: any) {

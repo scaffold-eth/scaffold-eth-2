@@ -1,3 +1,4 @@
+import { execa } from "execa";
 import { Extension, Options, TemplateDescriptor, isDefined } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-tree";
@@ -236,4 +237,8 @@ export async function copyTemplateFiles(
   await renameRecursivelyAllFiles(".gitignore-keep", ".gitignore", targetDir);
 
   await renameRecursivelyAllFiles(".env-default", ".env", targetDir);
+
+  // 6. Initialize git repo to avoid husky error
+  await execa("git", ["init"], { cwd: targetDir });
+  await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }
