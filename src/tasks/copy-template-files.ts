@@ -36,7 +36,7 @@ const copyExtensionsFiles = async (
   { extensions }: Options,
   targetDir: string
 ) => {
-  extensions.forEach(async (extension) => {
+  await Promise.all(extensions.map(async (extension) => {
     const extensionPath = extensionDict[extension].path;
     // copy root files
     await copy(extensionPath, path.join(targetDir), {
@@ -89,7 +89,7 @@ const copyExtensionsFiles = async (
         );
       });
     }
-  });
+  }));
 };
 
 const processTemplatedFiles = async (
