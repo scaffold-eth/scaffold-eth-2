@@ -94,7 +94,7 @@ const TransactionPage: NextPage = () => {
                   <strong>Function called:</strong>
                 </td>
                 <td>
-                  <div className="w-full md:max-w-[600px] lg:max-w-[800px] overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary">
+                  <div className="w-full md:max-w-[600px] lg:max-w-[800px] overflow-x-auto whitespace-nowrap">
                     {functionCalled === "0x" ? (
                       "This transaction did not call any function."
                     ) : (

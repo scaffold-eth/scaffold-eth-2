@@ -1823,7 +1823,6 @@ __metadata:
     react-dom: ^18.2.0
     react-fast-marquee: ^1.3.5
     react-hot-toast: ^2.4.0
-    tailwind-scrollbar: ^3.0.4
     tailwindcss: ^3.1.8
     typescript: ^4.9.5
     use-debounce: ^8.0.4
@@ -12524,15 +12523,6 @@ __metadata:
     string-width: ^4.2.3
     strip-ansi: ^6.0.1
   checksum: 5b07fe462ee03d2e1fac02cbb578efd2e0b55ac07e3d3db2e950aa9570ade5a4a2b8d3c15e9f25c89e4e50b646bc4269934601ee1eef4ca7968ad31960977690
-  languageName: node
-  linkType: hard
-
-"tailwind-scrollbar@npm:^3.0.4":
-  version: 3.0.4
-  resolution: "tailwind-scrollbar@npm:3.0.4"
-  peerDependencies:
-    tailwindcss: 3.x
-  checksum: e708baef1ec640e7bef11338e05951f0074fb7cc680255fa33c8a24b5b545121fbf87b5f36fca069128117d578285a714699aa6e39a54a346e6c67fd42571f43
   languageName: node
   linkType: hard
 
