@@ -9,6 +9,66 @@ export type ScaffoldConfig = {
   walletAutoConnect: boolean;
 };
 
+//! NOTE: use this custom chain for deploying to publicgoods.network (PGN) mainnet
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const pgnChain: chains.Chain = {
+  name: "Public Goods Network",
+  id: 424,
+  network: "mainnetPgn",
+  nativeCurrency: {
+    name: "Public Goods Network Ether",
+    symbol: "ETH",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.publicgoods.network"],
+      webSocket: undefined,
+    },
+    public: {
+      http: ["https://rpc.publicgoods.network"],
+      webSocket: undefined,
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Public Goods Network Explorer",
+      url: "https://explorer.publicgoods.network/",
+    },
+  },
+  testnet: false,
+};
+
+//! NOTE: use this custom chain for deploying to publicgoods.network (PGN) sepolia
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const pgnChainSepolia: chains.Chain = {
+  name: "Public Goods Network",
+  id: 424,
+  network: "mainnetPgn",
+  nativeCurrency: {
+    name: "Public Goods Network Ether",
+    symbol: "ETH",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://sepolia.publicgoods.network"],
+      webSocket: undefined,
+    },
+    public: {
+      http: ["https://sepolia.publicgoods.network"],
+      webSocket: undefined,
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Public Goods Network Explorer",
+      url: "https://explorer.sepolia.publicgoods.network/",
+    },
+  },
+  testnet: true,
+};
+
 const scaffoldConfig = {
   // The network where your DApp lives in
   targetNetwork: chains.hardhat,

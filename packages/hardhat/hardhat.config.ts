@@ -1,10 +1,10 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "hardhat-deploy";
 import "@matterlabs/hardhat-zksync-solc";
 import "@matterlabs/hardhat-zksync-verify";
+import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
+import "hardhat-deploy";
+import { HardhatUserConfig } from "hardhat/config";
+dotenv.config();
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -46,8 +46,16 @@ const config: HardhatUserConfig = {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
+    mainnetPgn: {
+      url: "https://rpc.publicgoods.network",
+      accounts: [deployerPrivateKey],
+    },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    sepoliaPgn: {
+      url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
     goerli: {
@@ -95,6 +103,25 @@ const config: HardhatUserConfig = {
     etherscan: {
       apiKey: `${etherscanApiKey}`,
     },
+    // NOTE: it's not allowing this for some reason and needed to verify on blockscout. AFAIK.
+    // customChains: [
+    //   {
+    //     network: "mainnetPgn",
+    //     chainId: 424,
+    //     urls: {
+    //       apiURL: "https://rpc.publicgoods.network",
+    //       browserURL: "https://explorer.publicgoods.network/",
+    //     },
+    //   },
+    //   {
+    //     network: "sepoliaPgn",
+    //     chainId: 58008,
+    //     urls: {
+    //       apiURL: "https://sepolia.publicgoods.network",
+    //       browserURL: "https://explorer.sepolia.publicgoods.network/",
+    //     },
+    //   },
+    // ],
   },
 };
 
