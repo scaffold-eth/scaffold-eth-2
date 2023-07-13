@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { ethers } from "ethers";
+import { useIsMounted } from "usehooks-ts";
+import { createWalletClient, http, parseEther } from "viem";
 import { useAccount, useNetwork } from "wagmi";
-import { hardhat, localhost } from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
-import { getLocalProvider } from "~~/utils/scaffold-eth";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
+const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
 /**
  * FaucetButton button which lets you grab eth.
@@ -15,16 +16,26 @@ const NUM_OF_ETH = "1";
 export const FaucetButton = () => {
   const { address } = useAccount();
   const { balance } = useAccountBalance(address);
+
   const { chain: ConnectedChain } = useNetwork();
+  const isMounted = useIsMounted();
+
   const [loading, setLoading] = useState(false);
-  const provider = getLocalProvider(localhost);
-  const signer = provider?.getSigner();
-  const faucetTxn = useTransactor(signer);
+  const localWalletClient = createWalletClient({
+    chain: hardhat,
+    transport: http(),
+  });
+  const faucetTxn = useTransactor(localWalletClient);
 
   const sendETH = async () => {
     try {
       setLoading(true);
-      await faucetTxn({ to: address, value: ethers.utils.parseEther(NUM_OF_ETH) });
+      await faucetTxn({
+        chain: hardhat,
+        account: FAUCET_ADDRESS,
+        to: address,
+        value: parseEther(NUM_OF_ETH),
+      });
       setLoading(false);
     } catch (error) {
       console.error("⚡️ ~ file: FaucetButton.tsx:sendETH ~ error", error);
@@ -33,7 +44,7 @@ export const FaucetButton = () => {
   };
 
   // Render only on local chain
-  if (!ConnectedChain || ConnectedChain.id !== hardhat.id) {
+  if (ConnectedChain?.id !== hardhat.id || !isMounted()) {
     return null;
   }
 
