@@ -1,4 +1,5 @@
-node_modules
+const contents = () => 
+`node_modules
 
 # dependencies, yarn, etc
 # yarn / eslint
@@ -10,4 +11,6 @@ node_modules
 !.yarn/versions
 .eslintcache
 .vscode/**
-.DS_Store
+.DS_Store`
+
+export default contents
