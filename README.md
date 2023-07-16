@@ -139,8 +139,6 @@ export type ScaffoldConfig = {
   walletAutoConnect: boolean;
   // your dapp custom config, eg:
   // tokenIcon : string;
-  // eventName : string;
-  // hideHeader : boolean;
 };
 ```
 
@@ -167,16 +165,14 @@ The configuration parameters are described below, make sure to update the values
   - `false` => Use Burner Wallet on all networks.
 
 - **walletAutoConnect**  
-  Set it to true to activate automatic wallet connection behavior:
+  Set it to `true` to activate automatic wallet connection behavior:
   - If the user was connected into a wallet before, on page reload it reconnects automatically.
-  - If user is not connected to any wallet, on reload, it connects to the burner wallet if `burnerWallet.enabled` is true and `burnerWallet.onlyLocal` is false.
+  - If user is not connected to any wallet, on reload, it connects to the burner wallet if it is enabled for the current network. See `onlyLocalBurnerWallet`
 
 You can extend this configuration file, adding new parameters that you need to use across your dapp **(make sure you update the above type `ScaffoldConfig`)**:
 
 ```ts
-  tokenEmoji: "💎",
-  eventName: "EVENT",
-  hideHeader: true,
+  tokenIcon: "💎",
 ```
 
 To use the values from the `ScaffoldConfig` in any other file of your application, you first need to import it in those files:
