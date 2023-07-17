@@ -27,7 +27,12 @@
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
+    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
+    "stop-node": "yarn workspace @se-2/subgraph stop-node",
+    "clean-node": "yarn workspace @se-2/subgraph clean-node",
+    "run-node": "yarn workspace @se-2/subgraph run-node",
+    "local-create": "yarn workspace @se-2/subgraph local-create",
+    "local-ship": "yarn workspace @se-2/subgraph local-ship"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
