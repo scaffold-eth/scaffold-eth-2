@@ -1,6 +1,6 @@
 {
   "name": "create-eth",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "Create a Scaffold-ETH-2 app",
   "main": "dist/cli.js",
   "type": "module",

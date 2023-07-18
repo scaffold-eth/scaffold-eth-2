@@ -189,26 +189,6 @@ const processTemplatedFiles = async (
   );
 };
 
-async function renameRecursivelyAllFiles(
-  oldFileName: string,
-  newFileName: string,
-  targetDir: string
-): Promise<void> {
-  const files = await fs.promises.readdir(targetDir);
-
-  for (const file of files) {
-    const filePath = path.join(targetDir, file);
-    const stat = await fs.promises.stat(filePath);
-
-    if (stat.isDirectory()) {
-      await renameRecursivelyAllFiles(oldFileName, newFileName, filePath);
-    } else if (file === oldFileName) {
-      const newFilePath = path.join(targetDir, newFileName);
-      await fs.promises.rename(filePath, newFilePath);
-    }
-  }
-}
-
 export async function copyTemplateFiles(
   options: Options,
   templateDir: string,
@@ -231,14 +211,7 @@ export async function copyTemplateFiles(
   // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 5. Rename recursively all the .gitignore-keep files into .gitignore
-  // Reason: npm publish ignores .gitignore files
-  // ToDo. existing findFilesRecursiveSync function doesn't work
-  await renameRecursivelyAllFiles(".gitignore-keep", ".gitignore", targetDir);
-
-  await renameRecursivelyAllFiles(".env-default", ".env", targetDir);
-
-  // 6. Initialize git repo to avoid husky error
+  // 5. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }

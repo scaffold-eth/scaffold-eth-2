@@ -1,4 +1,5 @@
-# Compiler files
+const contents = () => 
+`# Compiler files
 cache/
 out/
 
@@ -13,3 +14,6 @@ docs/
 # Dotenv file
 .env
 localhost.json
+`
+
+export default contents

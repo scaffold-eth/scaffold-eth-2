@@ -103,7 +103,9 @@ A Template file is a file to which extensions can add content. Removing content 
 
 ### Template file name
 
-All Template file should be named as \`{original-name.with-extension}.template.js\`. This way we can skip those files while copying base and extensions, and process them with the values from the base and the combined extensions.
+All Template file should be named as \`{original-name.with-extension}.template.mjs\`. This way we can skip those files while copying base and extensions, and process them with the values from the base and the combined extensions.
+
+Note how the extension is `.mjs`. We cover why in it's own section, [.mjs extension](#mjs-extension).
 
 ### Template file contents
 
@@ -120,6 +122,10 @@ Also, receiving an array instead of strings give the template itself more contro
 Important to note that named arguments could use any arbitrary name. Because of that, we have to provide default values to all those arguments, otherwise missing values would be parsed as the string "undefined". Because we don't know what are the expected names for each template expects.
 
 ## Things to note about Template files
+### `.mjs` extension
+It's important to note the file extension should be `.mjs`. The CLI uses es6 modules, but other packages might use commonjs imports, like Hardhat.
+
+When a package enforces commonjs imports, our templates created within those packages wouldn't work unless we explicitly tell node that it should use es6 imports. Using `.mjs` extensions is the best way we've found to do that.
 
 ### Default values
 
@@ -154,7 +160,9 @@ Args files are the files used to add content to Template files.
 
 ### Args file name
 
-All Args files should be named as \`{original-name.with-extension}.args.js\`. This way we can check, for a given Template file, if any Args files exist.
+All Args files should be named as \`{original-name.with-extension}.args.mjs\`. This way we can check, for a given Template file, if any Args files exist.
+
+Note how the extension is `.mjs`, due to the same reasons we needed to use it for template files. Read more about [.mjs extension](#mjs-extension).
 
 Important to note here that the relative path of the Template and Args files **must** be the same. Otherwise the Args file content won't be used. By relative path I mean the path relative to the `base/` path or the `extensions/{extension-name}/` paths. An example:
 
@@ -165,16 +173,16 @@ create-dapp-example/
 ├─ templates/
 │  ├─ base/
 │  │  ├─ some-folder/
-│  │  │  ├─ template-at-folder.md.template.js
-│  │  ├─ template-at-root.md.template.js
+│  │  │  ├─ template-at-folder.md.template.mjs
+│  │  ├─ template-at-root.md.template.mjs
 │  │
 │  ├─ extensions/
 │  │  ├─ foo/
 │  │  │  ├─ some-folder/
-│  │  │  │  ├─ template-at-root.md.args.js <-- won't work!
-│  │  │  │  ├─ template-at-folder.md.args.js
-│  │  │  ├─ template-at-root.md.args.js
-│  │  │  ├─ template-at-folder.md.args.js <-- won't work!
+│  │  │  │  ├─ template-at-root.md.args.mjs <-- won't work!
+│  │  │  │  ├─ template-at-folder.md.args.mjs
+│  │  │  ├─ template-at-root.md.args.mjs
+│  │  │  ├─ template-at-folder.md.args.mjs <-- won't work!
 ```
 
 ### Args file content
