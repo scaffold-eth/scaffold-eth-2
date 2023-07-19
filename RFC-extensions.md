@@ -153,6 +153,22 @@ export default withDefaults(contents, {
 
 There's an optional 3rd argument that's for debugging purposes, which is `false` by default. If sent `true`, it will print some information about the arguments received.
 
+⚠️ Important to note that all arguments should be defined in the object sent as the second argument. If an argument is used within the template, but it's not defined in the object, and it's not sent with any args file, it will become the string "undefined". For example:
+
+```js
+// file.ext.template.mjs
+import { withDefaults } from '../path-to/utils.js'
+
+const contents = ({ foo, bar }) => `${foo} and ${bar}`
+
+export default withDefaults(contents, {
+  foo: 'default',
+  // bar: 'not defined!'
+})
+
+// result: "default and undefined"
+```
+
 ### Unwanted new lines
 
 Note when you use backticks, "`", to create interpolated strings, new lines are taken as part of the string. Therefore the following string would start and end with extra empty lines:
