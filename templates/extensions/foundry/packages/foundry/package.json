@@ -6,7 +6,7 @@
     "chain": "anvil --config-out localhost.json",
     "fork": "anvil --fork-url ${0:-mainnet} --config-out localhost.json",
     "compile": "forge compile",
-    "generate": "node script/generateAccount.ts",
+    "generate": "node script/generateAccount.js",
     "deploy": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast && node script/generateTsAbis.js",
     "deploy:verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${0:-default_network} --broadcast --verify && node script/generateTsAbis.js",
     "lint": "forge fmt",
