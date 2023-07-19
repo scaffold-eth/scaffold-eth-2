@@ -1,10 +1,6 @@
 import type { Question } from "inquirer";
 
-export const availableExtensions = ["graph", "none"] as const;
-
 export type Args = string[];
-
-export type Extensions = (typeof availableExtensions)[number];
 
 export type RawOptions = {
   project: string | null;
@@ -18,28 +14,9 @@ type NonNullableRawOptions = {
 
 export type Options = NonNullableRawOptions;
 
-export type templateAppConfig = {
-  _appImports: string[];
-  _appOutsideComponentCode: string;
-  _appProviderWrappers: string[];
-};
-
-export type HandleBarTemplateOptions = Options & {
-  yarnWorkspaces: `packages/${string}`[];
-  _appImports: string[];
-  _appOutsideComponentCode: string[];
-  _appProviderWrappers: string[];
-  _appProvidersClosingTags: string[];
-};
-
 export type Extension =
   | "hardhat"
   | "foundry"
-  | "a3"
-  | "b"
-  | "c"
-  | "d"
-  | "b-extension";
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:
