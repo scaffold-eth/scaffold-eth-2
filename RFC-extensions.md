@@ -129,9 +129,45 @@ When a package enforces commonjs imports, our templates created within those pac
 
 ### Default values
 
-It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, I've created a utility function that receives the template and expected arguments, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
+It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, I've created a utility function that receives the template and expected arguments with their default values, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
 
 As a bonus, using this function will throw an error when an [Args file](#args-file-content) is trying to send an argument with a name not expected by the template.
+
+The way it should be used is as follows:
+```js
+// file.ext.template.mjs
+import { withDefaults } from '../path-to/utils.js'
+
+const contents = ({ foo, bar }) =>
+`blah blah
+foo value is ${foo}
+bar value is ${bar}
+blah blah
+`
+
+export default withDefaults(contents, {
+  foo: 'default foo value',
+  bar: 'default bar value'
+})
+```
+
+There's an optional 3rd argument that's for debugging purposes, which is `false` by default. If sent `true`, it will print some information about the arguments received.
+
+⚠️ Important to note that all arguments should be defined in the object sent as the second argument. If an argument is used within the template, but it's not defined in the object, and it's not sent with any args file, it will become the string "undefined". For example:
+
+```js
+// file.ext.template.mjs
+import { withDefaults } from '../path-to/utils.js'
+
+const contents = ({ foo, bar }) => `${foo} and ${bar}`
+
+export default withDefaults(contents, {
+  foo: 'default',
+  // bar: 'not defined!'
+})
+
+// result: "default and undefined"
+```
 
 ### Unwanted new lines
 

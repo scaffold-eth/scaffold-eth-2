@@ -1,4 +1,7 @@
-import * as chains from "wagmi/chains";
+import { withDefaults } from '../../../utils.js'
+
+const contents = ({ chainName }) =>
+`import * as chains from "wagmi/chains";
 
 export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
@@ -11,7 +14,7 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The network where your DApp lives in
-  targetNetwork: chains.hardhat,
+  targetNetwork: chains.${chainName[0]},
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect on the local network
@@ -41,3 +44,8 @@ const scaffoldConfig = {
 } satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
+`
+
+export default withDefaults(contents, {
+  chainName: 'mainnet'
+})
