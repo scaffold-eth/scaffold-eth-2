@@ -5,6 +5,7 @@ export type Args = string[];
 export type RawOptions = {
   project: string | null;
   install: boolean | null;
+  dev: boolean;
   extensions: Extension[] | null;
 };
 

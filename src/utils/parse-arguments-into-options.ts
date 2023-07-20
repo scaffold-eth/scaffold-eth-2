@@ -12,8 +12,7 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
       "--skip": "--skip-install",
       "-s": "--skip-install",
 
-      "--smartContractFramework": String,
-      "-f": "--smartContractFramework",
+      "--dev": Boolean,
     },
     {
       argv: rawArgs.slice(2).map((a) => a.toLowerCase()),
@@ -21,16 +20,17 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
   );
 
   const install = args["--install"] ?? null;
-
   const skipInstall = args["--skip-install"] ?? null;
-
   const hasInstallRelatedFlag = install || skipInstall;
+
+  const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
   const project = args._[0] ?? null;
 
   return {
     project,
     install: hasInstallRelatedFlag ? install || !skipInstall : null,
+    dev,
     extensions: null, // TODO add extensions flags
   };
 }

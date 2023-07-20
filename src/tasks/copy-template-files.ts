@@ -8,6 +8,7 @@ import fs from "fs";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
+import symlink from "../utils/symlink";
 
 const copy = promisify(ncp);
 
@@ -33,13 +34,15 @@ const isArgsRegex = /([^\/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
 const copyExtensionsFiles = async (
-  { extensions }: Options,
+  { extensions, dev: isDev }: Options,
   targetDir: string
 ) => {
+  const copyOrSymlink = isDev ? symlink : copy
+
   await Promise.all(extensions.map(async (extension) => {
     const extensionPath = extensionDict[extension].path;
-    // copy root files
-    await copy(extensionPath, path.join(targetDir), {
+    // copy (or symlink if dev) root files
+    await copyOrSymlink(extensionPath, path.join(targetDir), {
       clobber: false,
       filter: (path) => {
         const isConfig = isConfigRegex.test(path);
@@ -62,14 +65,15 @@ const copyExtensionsFiles = async (
     // merge root package.json
     mergePackageJson(
       path.join(targetDir, "package.json"),
-      path.join(extensionPath, "package.json")
+      path.join(extensionPath, "package.json"),
+      isDev
     );
 
     const extensionPackagesPath = path.join(extensionPath, "packages");
     const hasPackages = fs.existsSync(extensionPackagesPath);
     if (hasPackages) {
       // copy extension packages files
-      await copy(extensionPackagesPath, path.join(targetDir, "packages"), {
+      await copyOrSymlink(extensionPackagesPath, path.join(targetDir, "packages"), {
         clobber: false,
         filter: (path) => {
           const isArgs = isArgsRegex.test(path);
@@ -85,7 +89,8 @@ const copyExtensionsFiles = async (
       extensionPackages.forEach((packageName) => {
         mergePackageJson(
           path.join(targetDir, "packages", packageName, "package.json"),
-          path.join(extensionPath, "packages", packageName, "package.json")
+          path.join(extensionPath, "packages", packageName, "package.json"),
+          isDev
         );
       });
     }
@@ -93,7 +98,7 @@ const copyExtensionsFiles = async (
 };
 
 const processTemplatedFiles = async (
-  { extensions }: Options,
+  { extensions, dev: isDev }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -185,6 +190,11 @@ const processTemplatedFiles = async (
         templateTargetName
       );
       fs.writeFileSync(targetPath, output);
+
+      if (isDev) {
+        const devOutput = 'TODO: write relevant information for the contributor'
+        fs.writeFileSync(`${targetPath}.dev`, devOutput);
+      }
     })
   );
 };
@@ -194,9 +204,11 @@ export async function copyTemplateFiles(
   templateDir: string,
   targetDir: string
 ) {
+  const copyOrSymlink = options.dev ? symlink : copy
+
   // 1. Copy base template to target directory
   const basePath = path.join(templateDir, baseDir);
-  await copy(basePath, targetDir, {
+  await copyOrSymlink(basePath, targetDir, {
     clobber: false,
     filter: (fileName) => !isTemplateRegex.test(fileName), // NOTE: filter IN
   });

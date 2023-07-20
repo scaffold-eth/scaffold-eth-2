@@ -4,7 +4,8 @@ import fs from "fs";
 
 export function mergePackageJson(
   targetPackageJsonPath: string,
-  secondPackageJsonPath: string
+  secondPackageJsonPath: string,
+  isDev: boolean
 ) {
   if (
     !fs.existsSync(targetPackageJsonPath) ||
@@ -22,4 +23,8 @@ export function mergePackageJson(
   );
 
   fs.writeFileSync(targetPackageJsonPath, mergedPkgStr, "utf8");
+  if (isDev) {
+    const devStr = `TODO: write relevant information for the contributor`
+    fs.writeFileSync(`${targetPackageJsonPath}.dev`, devStr, "utf8");
+  }
 }
