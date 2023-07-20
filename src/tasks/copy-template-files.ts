@@ -29,7 +29,8 @@ const expandExtensions = (options: Options): Extension[] => {
 };
 
 const isTemplateRegex = /([^\/\\]*?)\.template\./;
-const isConfigRegex = /config.json/;
+const isPackageJsonRegex = /package\.json/;
+const isConfigRegex = /([^\/\\]*?)\\config\.json/;
 const isArgsRegex = /([^\/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
@@ -52,10 +53,13 @@ const copyExtensionsFiles = async (
         const isPackagesFolder =
           isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
         const isTemplate = isTemplateRegex.test(path);
+        // PR NOTE: this wasn't needed before because ncp had the clobber: false
+        const isPackageJson = isPackageJsonRegex.test(path);
         const shouldSkip =
           isConfig ||
           isArgs ||
           isTemplate ||
+          isPackageJson ||
           isExtensionFolder ||
           isPackagesFolder;
         return !shouldSkip;
@@ -78,7 +82,8 @@ const copyExtensionsFiles = async (
         filter: (path) => {
           const isArgs = isArgsRegex.test(path);
           const isTemplate = isTemplateRegex.test(path);
-          const shouldSkip = isArgs || isTemplate;
+          const isPackageJson = isPackageJsonRegex.test(path);
+          const shouldSkip = isArgs || isTemplate || isPackageJson;
 
           return !shouldSkip;
         },
@@ -182,6 +187,8 @@ const processTemplatedFiles = async (
         freshArgs
       );
 
+      // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
+
       const output = template(combinedArgs);
 
       const targetPath = path.join(
@@ -192,7 +199,28 @@ const processTemplatedFiles = async (
       fs.writeFileSync(targetPath, output);
 
       if (isDev) {
-        const devOutput = 'TODO: write relevant information for the contributor'
+        const hasCombinedArgs = Object.keys(combinedArgs).length > 0
+        const hasArgsPaths = argsFilesPath.length > 0
+        const devOutput = `--- TEMPLATE FILE
+templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
+
+
+--- ARGS FILES
+${hasArgsPaths
+  ? argsFilesPath.map(path => `\t- ${path.split('scaffold-eth-2/')[1]}`).join('\n')
+  : '(no args files writing to the template)'
+}
+
+
+--- RESULTING ARGS
+${hasCombinedArgs
+  ? Object.entries(combinedArgs)
+  .map(([argName, argValue]) => `\t- ${argName}:\t[${argValue.join(',')}]`)
+  // TODO improvement: figure out how to add the values added by each args file
+  .join('\n')
+  : '(no args sent for the template)'
+}
+`
         fs.writeFileSync(`${targetPath}.dev`, devOutput);
       }
     })
