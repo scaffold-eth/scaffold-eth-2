@@ -2,7 +2,7 @@
   "name": "@se-2/foundry",
   "version": "0.0.1",
   "scripts": {
-    "account": "forge script script/ListAccount.s.sol",
+    "account": "node script/ListAccount.js",
     "chain": "anvil --config-out localhost.json",
     "fork": "anvil --fork-url ${0:-mainnet} --config-out localhost.json",
     "compile": "forge compile",
@@ -13,11 +13,15 @@
     "test": "forge test"
   },
   "devDependencies": {
-    "@types/prettier": "2"
+    "@types/prettier": "2",
+    "@types/qrcode": "1"
   },
   "dependencies": {
+    "dotenv": "~16.3.1",
     "envfile": "~6.18.0",
     "ethers": "~5.7.1",
-    "prettier": "~2.8.8"
+    "prettier": "~2.8.8",
+    "qrcode": "~1.5.3",
+    "toml": "~3.0.0"
   }
 }
