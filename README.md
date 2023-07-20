@@ -152,11 +152,11 @@ The configuration parameters are described below, make sure to update the values
 
 - **alchemyApiKey**  
   Default Alchemy API key from Scaffold ETH 2 for local testing purposes.  
-  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `NEXT_PUBLIC_ALCHEMY_API_KEY` at `\packages\nextjs\.env` file.
+  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `NEXT_PUBLIC_ALCHEMY_API_KEY` at `\packages\nextjs\.env.local` file.
 
 - **walletConnectProjectId**  
   WalletConnect's default project ID from Scaffold ETH 2 for local testing purposes.
-  It's recommended to obtain your own project ID from the [WalletConnect website](https://cloud.walletconnect.com) and store it in an environment variable: `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` at `\packages\nextjs\.env` file.
+  It's recommended to obtain your own project ID from the [WalletConnect website](https://cloud.walletconnect.com) and store it in an environment variable: `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` at `\packages\nextjs\.env.local` file.
 
 - **onlyLocalBurnerWallet**  
   Controls the networks where the Burner Wallet feature is available. This feature provides a lightweight wallet for users.
