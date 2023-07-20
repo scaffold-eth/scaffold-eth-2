@@ -1,5 +1,5 @@
-import chalk from "chalk";
 import type { Options } from "../types";
+import chalk from "chalk";
 import { execa } from "execa";
 
 export async function renderOutroMessage(options: Options) {
@@ -23,7 +23,7 @@ export async function renderOutroMessage(options: Options) {
 
     if (options.extensions.includes("foundry")) {
       try {
-        await execa("foundryup", ["--version"]);
+        await execa("foundryup", ["-h"]);
       } catch (error) {
         message += `
       \t${chalk.bold.yellow(
