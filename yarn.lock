@@ -3094,9 +3094,13 @@ __metadata:
   resolution: "@se-2/foundry@workspace:packages/foundry"
   dependencies:
     "@types/prettier": ^2
+    "@types/qrcode": ^1
+    dotenv: ^16.3.1
     envfile: ^6.18.0
     ethers: ^5.7.1
     prettier: ^2.8.8
+    qrcode: ^1.5.3
+    toml: ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -3701,6 +3705,15 @@ __metadata:
   version: 15.7.5
   resolution: "@types/prop-types@npm:15.7.5"
   checksum: 5b43b8b15415e1f298243165f1d44390403bb2bd42e662bca3b5b5633fdd39c938e91b7fce3a9483699db0f7a715d08cef220c121f723a634972fdf596aec980
+  languageName: node
+  linkType: hard
+
+"@types/qrcode@npm:^1":
+  version: 1.5.1
+  resolution: "@types/qrcode@npm:1.5.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 0f780f31d983fa8d1bfbba1a130e8f7b07866d556807eccfb1d08d841c70644cdee8fc169ca752bdf17e99995e6155fcb6179079338ac8359294c781b95112b5
   languageName: node
   linkType: hard
 
@@ -6586,7 +6599,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.0.0":
+"dotenv@npm:^16.0.0, dotenv@npm:^16.3.1":
   version: 16.3.1
   resolution: "dotenv@npm:16.3.1"
   checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
@@ -12335,7 +12348,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qrcode@npm:1.5.3":
+"qrcode@npm:1.5.3, qrcode@npm:^1.5.3":
   version: 1.5.3
   resolution: "qrcode@npm:1.5.3"
   dependencies:
