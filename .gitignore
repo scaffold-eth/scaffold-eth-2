@@ -1,13 +1,23 @@
 node_modules
 
-# dependencies, yarn, etc
-# yarn / eslint
+# pnpm
+pnpm-debug.log*
+pnpm-error.log*
+.pnpm-debug.log*
+
+# yarn
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# eslint
 .eslintcache
+
+# Visual Studio Code
 .vscode/**
+
+# macOS
 .DS_Store
