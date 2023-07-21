@@ -1,6 +1,14 @@
+import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { QRCodeSVG } from "qrcode.react";
+import CopyToClipboard from "react-copy-to-clipboard";
 import { useDisconnect, useSwitchNetwork } from "wagmi";
-import { ArrowLeftOnRectangleIcon, ArrowsRightLeftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowsRightLeftIcon,
+  CheckCircleIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/solid";
 import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -13,10 +21,11 @@ export const RainbowKitCustomConnectButton = () => {
   const configuredNetwork = getTargetNetwork();
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
+  const [addressCopied, setAddressCopied] = useState(false);
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openConnectModal, mounted }) => {
+      {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
 
         return (
@@ -62,24 +71,58 @@ export const RainbowKitCustomConnectButton = () => {
 
               return (
                 <div className="px-2 flex justify-end items-center">
-                  <div className="flex justify-center items-center border-1 rounded-lg">
-                    <div className="flex flex-col items-center mr-1">
-                      <Balance address={account.address} className="min-h-0 h-auto" />
-                      <span className="text-xs" style={{ color: networkColor }}>
-                        {chain.name}
-                      </span>
-                    </div>
-                    <button
-                      onClick={openAccountModal}
-                      type="button"
-                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
-                    >
+                  <div className="flex flex-col items-center mr-1">
+                    <Balance address={account.address} className="min-h-0 h-auto" />
+                    <span className="text-xs" style={{ color: networkColor }}>
+                      {chain.name}
+                    </span>
+                  </div>
+                  <div className="dropdown dropdown-end">
+                    <label tabIndex={0} className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle">
                       <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
                       <span className="ml-2 mr-1">{account.displayName}</span>
-                      <span>
-                        <ChevronDownIcon className="h-6 w-4" />
-                      </span>
-                    </button>
+                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                    </label>
+                    <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
+                      <li>
+                        <CopyToClipboard
+                          text={account.address}
+                          onCopy={() => {
+                            setAddressCopied(true);
+                            setTimeout(() => {
+                              setAddressCopied(false);
+                            }, 800);
+                          }}
+                        >
+                          <span>
+                            Copy Address
+                            {addressCopied && (
+                              <CheckCircleIcon
+                                className="ml-1.5 text-xl absolute right-1 font-normal text-sky-600 h-5 w-5 cursor-pointer"
+                                aria-hidden="true"
+                              />
+                            )}
+                          </span>
+                        </CopyToClipboard>
+                      </li>
+                      <li className="items-center">
+                        <QRCodeSVG
+                          value={account.address}
+                          size={100}
+                          bgColor={"#ffffff"}
+                          fgColor={"#000000"}
+                          level={"L"}
+                          includeMargin={false}
+                          style={{ borderRadius: "0px" }} // forcefully remove border radius
+                          className="p-1"
+                        />
+                      </li>
+                      <li>
+                        <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
+                          <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+                        </button>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               );
