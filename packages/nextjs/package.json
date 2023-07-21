@@ -19,6 +19,7 @@
     "@rainbow-me/rainbowkit": "^1.0.4",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
+    "abitype": "0.8.7",
     "daisyui": "^2.31.0",
     "next": "^13.1.6",
     "nextjs-progressbar": "^0.0.16",
