@@ -8,6 +8,7 @@ import {
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   ChevronDownIcon,
+  DocumentDuplicateIcon,
 } from "@heroicons/react/24/solid";
 import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
@@ -84,27 +85,6 @@ export const RainbowKitCustomConnectButton = () => {
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
-                      <li>
-                        <CopyToClipboard
-                          text={account.address}
-                          onCopy={() => {
-                            setAddressCopied(true);
-                            setTimeout(() => {
-                              setAddressCopied(false);
-                            }, 800);
-                          }}
-                        >
-                          <span>
-                            Copy Address
-                            {addressCopied && (
-                              <CheckCircleIcon
-                                className="ml-1.5 text-xl absolute right-1 font-normal text-sky-600 h-5 w-5 cursor-pointer"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </span>
-                        </CopyToClipboard>
-                      </li>
                       <li className="items-center">
                         <QRCodeSVG
                           value={account.address}
@@ -116,6 +96,35 @@ export const RainbowKitCustomConnectButton = () => {
                           style={{ borderRadius: "0px" }} // forcefully remove border radius
                           className="p-1"
                         />
+                      </li>
+                      <li>
+                        {addressCopied ? (
+                          <div>
+                            <CheckCircleIcon
+                              className=" text-xl font-normal text-sky-600 h-6 w-4 cursor-pointer"
+                              aria-hidden="true"
+                            />
+                            <span className=" whitespace-nowrap">Copy address</span>
+                          </div>
+                        ) : (
+                          <CopyToClipboard
+                            text={account.address}
+                            onCopy={() => {
+                              setAddressCopied(true);
+                              setTimeout(() => {
+                                setAddressCopied(false);
+                              }, 800);
+                            }}
+                          >
+                            <div>
+                              <DocumentDuplicateIcon
+                                className=" text-xl font-normal text-sky-600 h-6 w-4 cursor-pointer"
+                                aria-hidden="true"
+                              />
+                              <span className=" whitespace-nowrap">Copy address</span>
+                            </div>
+                          </CopyToClipboard>
+                        )}
                       </li>
                       <li>
                         <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
