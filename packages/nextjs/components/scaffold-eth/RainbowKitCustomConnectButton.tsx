@@ -23,9 +23,6 @@ export const RainbowKitCustomConnectButton = () => {
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
   const [addressCopied, setAddressCopied] = useState(false);
-  const [qrSize, setQrSize] = useState(100); // Add this state
-
-  const toggleQrSize = () => setQrSize(qrSize === 100 ? 150 : 100);
 
   return (
     <ConnectButton.Custom>
@@ -91,14 +88,13 @@ export const RainbowKitCustomConnectButton = () => {
                       <li className="items-center">
                         <QRCodeSVG
                           value={account.address}
-                          size={qrSize}
+                          size={100}
                           bgColor={"#ffffff"}
                           fgColor={"#000000"}
                           level={"L"}
                           includeMargin={false}
                           style={{ borderRadius: "0px" }} // forcefully remove border radius
                           className="p-1"
-                          onClick={toggleQrSize}
                         />
                       </li>
                       <li>
