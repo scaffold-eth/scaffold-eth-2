@@ -88,7 +88,7 @@ export const RainbowKitCustomConnectButton = () => {
                       <li className="items-center">
                         <QRCodeSVG
                           value={account.address}
-                          size={100}
+                          size={180}
                           bgColor={"#ffffff"}
                           fgColor={"#000000"}
                           level={"L"}
