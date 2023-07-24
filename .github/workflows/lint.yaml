@@ -28,7 +28,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --immutable
+        run: pnpm install
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
         run: pnpm chain & pnpm deploy
