@@ -148,7 +148,8 @@ const processTemplatedFiles = async (
       const args = await Promise.all(
         argsFilesPath.map(async (argsFilePath) => await import(argsFilePath))
       );
-      const template = (await import(templateFileDescriptor.path)).default;
+      const templateUrl = new URL(`file://${templateFileDescriptor.path}`);
+      const template = (await import(templateUrl.href)).default;
 
       if (!template) {
         throw new Error(
