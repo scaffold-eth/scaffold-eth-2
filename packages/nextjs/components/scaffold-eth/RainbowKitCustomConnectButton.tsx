@@ -86,16 +86,7 @@ export const RainbowKitCustomConnectButton = () => {
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
                       <li className="items-center">
-                        <QRCodeSVG
-                          value={account.address}
-                          size={180}
-                          bgColor={"#ffffff"}
-                          fgColor={"#000000"}
-                          level={"L"}
-                          includeMargin={false}
-                          style={{ borderRadius: "0px" }} // forcefully remove border radius
-                          className="p-1"
-                        />
+                        <QRCodeSVG value={account.address} size={180} className="p-1 !rounded-none cursor-default" />
                       </li>
                       <li>
                         {addressCopied ? (
