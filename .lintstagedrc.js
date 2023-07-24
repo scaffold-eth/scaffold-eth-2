@@ -5,7 +5,7 @@ const buildNextEslintCommand = (filenames) =>
     .map((f) => path.relative(path.join("packages", "nextjs"), f))
     .join(" --file ")}`;
 
-const checkTypesNextCommand = () => "yarn next:check-types";
+const checkTypesNextCommand = () => "pnpm next:check-types";
 
 const buildHardhatEslintCommand = (filenames) =>
   `pnpm hardhat:lint-staged --fix ${filenames
