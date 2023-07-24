@@ -1,0 +1,13 @@
+diff --git a/dist/esm/useLocalStorage/useLocalStorage.js b/dist/esm/useLocalStorage/useLocalStorage.js
+index b0d584d4df29953551dfcf8febac002f89fa7acd..920ae5c52d28af73e3a892bdb935a7805a0f8224 100644
+--- a/dist/esm/useLocalStorage/useLocalStorage.js
++++ b/dist/esm/useLocalStorage/useLocalStorage.js
+@@ -14,7 +14,7 @@ function useLocalStorage(key, initialValue) {
+             return initialValue;
+         }
+     }, [initialValue, key]);
+-    const [storedValue, setStoredValue] = useState(readValue);
++    const [storedValue, setStoredValue] = useState(initialValue);
+     const setValue = useEventCallback(value => {
+         if (typeof window === 'undefined') {
+             console.warn(`Tried setting localStorage key “${key}” even though environment is not a client`);
