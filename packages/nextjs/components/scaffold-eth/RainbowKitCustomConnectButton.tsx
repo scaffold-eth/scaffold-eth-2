@@ -9,8 +9,9 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   DocumentDuplicateIcon,
+  QrCodeIcon,
 } from "@heroicons/react/24/solid";
-import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
+import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -85,12 +86,11 @@ export const RainbowKitCustomConnectButton = () => {
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
-                      <li className="items-center">
-                        <QRCodeSVG
-                          value={account.address}
-                          size={180}
-                          className="p-1 !rounded-none cursor-default bg-inherit"
-                        />
+                      <li>
+                        <label htmlFor="qrcode-modal">
+                          <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                          <span className="whitespace-nowrap">View Qr Code</span>
+                        </label>
                       </li>
                       <li>
                         {addressCopied ? (
@@ -127,6 +127,28 @@ export const RainbowKitCustomConnectButton = () => {
                         </button>
                       </li>
                     </ul>
+                  </div>
+                  <div>
+                    <input type="checkbox" id="qrcode-modal" className="modal-toggle" />
+                    <label htmlFor="qrcode-modal" className="modal cursor-pointer">
+                      <label className="modal-box relative">
+                        {/* dummy input to capture event onclick on modal box */}
+                        <input className="h-0 w-0 absolute top-0 left-0" />
+                        <h3 className="text-xl font-bold mb-3">QR Code</h3>
+                        <label
+                          htmlFor="qrcode-modal"
+                          className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3"
+                        >
+                          ✕
+                        </label>
+                        <div className="space-y-3">
+                          <div className="flex space-x-4 flex-col items-center gap-6">
+                            <QRCodeSVG value={account.address} size={256} />
+                            <Address address={account.address} format="long" />
+                          </div>
+                        </div>
+                      </label>
+                    </label>
                   </div>
                 </div>
               );
