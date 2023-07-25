@@ -1,10 +1,11 @@
 // Web3Auth Libraries
+import { Wallet } from "@rainbow-me/rainbowkit";
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { Web3Auth } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
-import { Chain } from "wagmi";
+import { Chain, Connector } from "wagmi";
 
 export default function Web3AuthConnectorInstance(chains: Chain[]) {
   // Create Web3Auth Instance
@@ -54,33 +55,35 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
   web3AuthInstance.configureAdapter(openloginAdapterInstance);
 
   return {
-    id: "web3auth",
-    name,
-    iconUrl,
-    iconBackground: "#fff",
-    createConnector: () => {
-      const connector = new Web3AuthConnector({
-        chains: chains,
-        options: {
-          web3AuthInstance,
-          modalConfig: {
-            [WALLET_ADAPTERS.OPENLOGIN]: {
-              loginMethods: {
-                google: {
-                  name: "google login",
-                },
-                facebook: {
-                  // it will hide the facebook option from the Web3Auth modal.
-                  name: "facebook login",
+    web3AuthConnectorInstance: {
+      id: "web3auth",
+      name,
+      iconUrl,
+      iconBackground: "#fff",
+      createConnector: () => {
+        const connector = new Web3AuthConnector({
+          chains: chains,
+          options: {
+            web3AuthInstance,
+            modalConfig: {
+              [WALLET_ADAPTERS.OPENLOGIN]: {
+                loginMethods: {
+                  google: {
+                    name: "google login",
+                  },
+                  facebook: {
+                    name: "facebook login",
+                  },
                 },
               },
-            },
-          } as any,
-        },
-      });
-      return {
-        connector,
-      };
-    },
+            } as any,
+          },
+        });
+        return {
+          connector,
+        };
+      },
+    } as Wallet<Connector<any, any>>,
+    web3AuthInstance: web3AuthInstance,
   };
 }
