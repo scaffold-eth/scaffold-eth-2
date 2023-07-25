@@ -5,6 +5,7 @@ import { extensionDict } from "../utils/extensions-tree";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
+import url from 'url'
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
@@ -101,6 +102,7 @@ const processTemplatedFiles = async (
     findFilesRecursiveSync(basePath, (path) => isTemplateRegex.test(path)).map(
       (baseTemplatePath) => ({
         path: baseTemplatePath,
+        fileUrl: url.pathToFileURL(baseTemplatePath).href,
         relativePath: baseTemplatePath.split(basePath)[1],
         source: "base",
       })
@@ -112,6 +114,7 @@ const processTemplatedFiles = async (
         isTemplateRegex.test(filePath)
       ).map((extensionTemplatePath) => ({
         path: extensionTemplatePath,
+        fileUrl: url.pathToFileURL(extensionTemplatePath).href,
         relativePath: extensionTemplatePath.split(extensionDict[ext].path)[1],
         source: `extension ${extensionDict[ext].name}`,
       }))
@@ -131,7 +134,7 @@ const processTemplatedFiles = async (
         `${templateTargetName}.args.`
       );
 
-      const argsFilesPath = extensions
+      const argsFileUrls = extensions
         .map((extension) => {
           const argsFilePath = path.join(
             extensionDict[extension].path,
@@ -141,15 +144,15 @@ const processTemplatedFiles = async (
           if (!fileExists) {
             return [];
           }
-          return argsFilePath;
+          return url.pathToFileURL(argsFilePath).href;
         })
         .flat();
 
       const args = await Promise.all(
-        argsFilesPath.map(async (argsFilePath) => await import(argsFilePath))
+        argsFileUrls.map(async (argsFileUrl) => await import(argsFileUrl))
       );
-      const templateUrl = new URL(`file://${templateFileDescriptor.path}`);
-      const template = (await import(templateUrl.href)).default;
+
+      const template = (await import(templateFileDescriptor.fileUrl)).default;
 
       if (!template) {
         throw new Error(
