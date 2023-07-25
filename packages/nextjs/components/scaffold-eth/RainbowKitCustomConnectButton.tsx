@@ -118,7 +118,7 @@ export const RainbowKitCustomConnectButton = () => {
                       <li>
                         <label htmlFor="qrcode-modal">
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
-                          <span className="whitespace-nowrap">View Qr Code</span>
+                          <span className="whitespace-nowrap">View QR Code</span>
                         </label>
                       </li>
                       <li>
