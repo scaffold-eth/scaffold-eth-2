@@ -134,14 +134,13 @@ export const RainbowKitCustomConnectButton = () => {
                       <label className="modal-box relative">
                         {/* dummy input to capture event onclick on modal box */}
                         <input className="h-0 w-0 absolute top-0 left-0" />
-                        <h3 className="text-xl font-bold mb-3">QR Code</h3>
                         <label
                           htmlFor="qrcode-modal"
                           className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3"
                         >
                           ✕
                         </label>
-                        <div className="space-y-3">
+                        <div className="space-y-3 py-6">
                           <div className="flex space-x-4 flex-col items-center gap-6">
                             <QRCodeSVG value={account.address} size={256} />
                             <Address address={account.address} format="long" />
