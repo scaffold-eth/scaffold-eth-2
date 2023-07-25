@@ -10,7 +10,7 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/outline";
 import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -87,16 +87,10 @@ export const RainbowKitCustomConnectButton = () => {
                     </label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
                       <li>
-                        <label htmlFor="qrcode-modal">
-                          <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
-                          <span className="whitespace-nowrap">View Qr Code</span>
-                        </label>
-                      </li>
-                      <li>
                         {addressCopied ? (
                           <div>
                             <CheckCircleIcon
-                              className=" text-xl font-normal text-sky-600 h-6 w-4 cursor-pointer"
+                              className=" text-xl font-normal h-6 w-4 cursor-pointer"
                               aria-hidden="true"
                             />
                             <span className=" whitespace-nowrap">Copy address</span>
@@ -113,13 +107,19 @@ export const RainbowKitCustomConnectButton = () => {
                           >
                             <div>
                               <DocumentDuplicateIcon
-                                className=" text-xl font-normal text-sky-600 h-6 w-4 cursor-pointer"
+                                className=" text-xl font-normal h-6 w-4 cursor-pointer"
                                 aria-hidden="true"
                               />
                               <span className=" whitespace-nowrap">Copy address</span>
                             </div>
                           </CopyToClipboard>
                         )}
+                      </li>
+                      <li>
+                        <label htmlFor="qrcode-modal">
+                          <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                          <span className="whitespace-nowrap">View Qr Code</span>
+                        </label>
                       </li>
                       <li>
                         <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
