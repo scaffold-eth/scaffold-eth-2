@@ -22,7 +22,7 @@ const { onlyLocalBurnerWallet } = scaffoldConfig;
 // We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
 const enabledChains = configuredNetwork.id === 1 ? [configuredNetwork] : [configuredNetwork, chains.mainnet];
 
-export const web3AuthInstance = Web3AuthConnectorInstance(enabledChains);
+export const { web3AuthConnectorInstance, web3AuthInstance } = Web3AuthConnectorInstance(enabledChains);
 
 /**
  * Chains for the app
@@ -66,7 +66,7 @@ const wallets = [
 export const wagmiConnectors = connectorsForWallets([
   {
     groupName: "Login with Email Or Social Account",
-    wallets: [web3AuthInstance],
+    wallets: [web3AuthConnectorInstance],
   },
   {
     groupName: "Supported Wallets",
