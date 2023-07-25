@@ -27,7 +27,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
     uiConfig: {
       appName: name,
       theme: "light",
-      loginMethodsOrder: ["google", "facebook", "twitter", "apple"],
+      loginMethodsOrder: ["google", "facebook", "twitter", "discord"],
       defaultLanguage: "en",
       appLogo: iconUrl, // Your App Logo Here
       modalZIndex: "2147483647",
