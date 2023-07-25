@@ -1,8 +1,12 @@
+import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useDisconnect, useSwitchNetwork } from "wagmi";
+import { OpenloginUserInfo } from "@web3auth/openlogin-adapter";
+import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
+import { useAccount, useDisconnect, useSwitchNetwork } from "wagmi";
 import { ArrowLeftOnRectangleIcon, ArrowsRightLeftIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
+import { web3AuthInstance } from "~~/services/web3/wagmiConnectors";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 /**
@@ -11,8 +15,25 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const configuredNetwork = getTargetNetwork();
+  const { connector } = useAccount();
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
+  const [userInfo, setUserInfo] = useState<Partial<OpenloginUserInfo> | undefined>(undefined);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        if (web3AuthInstance) {
+          const userInfo = await web3AuthInstance.getUserInfo();
+          console.log(userInfo);
+          setUserInfo(userInfo);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getUserInfo();
+  });
 
   return (
     <ConnectButton.Custom>
@@ -74,8 +95,14 @@ export const RainbowKitCustomConnectButton = () => {
                       type="button"
                       className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
                     >
-                      <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
-                      <span className="ml-2 mr-1">{account.displayName}</span>
+                      <BlockieAvatar
+                        address={account.address}
+                        size={24}
+                        ensImage={userInfo ? userInfo.profileImage : account.ensAvatar}
+                      />
+                      <span className="ml-2 mr-1">
+                        {connector instanceof Web3AuthConnector && userInfo ? userInfo.name : account.displayName}
+                      </span>
                       <span>
                         <ChevronDownIcon className="h-6 w-4" />
                       </span>
