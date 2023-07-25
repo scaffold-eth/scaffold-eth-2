@@ -25,7 +25,6 @@
     "@web3auth/openlogin-adapter": "^6.1.4",
     "@web3auth/web3auth-wagmi-connector": "^4.0.1",
     "daisyui": "^2.31.0",
-    "ethers": "^6.6.5",
     "next": "^13.1.6",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2.0",
