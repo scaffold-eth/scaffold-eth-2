@@ -99,8 +99,9 @@ export const Header = () => {
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
+        {/* Comment out the button below and its import above to test using Web3Auth with RainbowKit/wagmi */}
         <Web3AuthLoginButton />
-        {/* Uncomment below to test using Web3Auth with RainbowKit/wagmi */}
+        {/* Uncomment button below and its import above to test using Web3Auth with RainbowKit/wagmi */}
         {/* <RainbowKitCustomConnectButton />   */}
         <FaucetButton />
       </div>
