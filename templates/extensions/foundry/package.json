@@ -8,6 +8,7 @@
     "deploy:verify": "yarn workspace @se-2/foundry deploy:verify",
     "foundry:lint": "yarn workspace @se-2/foundry lint",
     "foundry:test": "yarn workspace @se-2/foundry test",
+    "test": "yarn foundry:test",
     "generate": "yarn workspace @se-2/foundry generate"
   }
 }
