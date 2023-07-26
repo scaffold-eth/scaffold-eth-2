@@ -7,15 +7,15 @@ export function mergePackageJson(
   secondPackageJsonPath: string,
   isDev: boolean
 ) {
-  if (
-    !fs.existsSync(targetPackageJsonPath) ||
-    !fs.existsSync(secondPackageJsonPath)
-  )
+  const existsTarget = fs.existsSync(targetPackageJsonPath);
+  const existsSecond = fs.existsSync(secondPackageJsonPath);
+  if (!existsTarget && !existsSecond) {
     return;
+  }
 
-  const targetPackageJson = fs.readFileSync(targetPackageJsonPath, "utf8");
+  const targetPackageJson = existsTarget ? fs.readFileSync(targetPackageJsonPath, "utf8") : '{}';
 
-  const secondPackageJson = fs.readFileSync(secondPackageJsonPath, "utf8");
+  const secondPackageJson = existsSecond ? fs.readFileSync(secondPackageJsonPath, "utf8") : '{}';
 
   const mergedPkgStr = mergeJsonStr.default(
     targetPackageJson,
