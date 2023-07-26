@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useIsMounted } from "usehooks-ts";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { useNetwork } from "wagmi";
@@ -11,6 +11,11 @@ import { notification } from "~~/utils/scaffold-eth";
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
 
+const localWalletClient = createWalletClient({
+  chain: hardhat,
+  transport: http(),
+});
+
 /**
  * Faucet modal which lets you send ETH to any address.
  */
@@ -22,15 +27,6 @@ export const Faucet = () => {
 
   const { chain: ConnectedChain } = useNetwork();
   const isMounted = useIsMounted();
-
-  const localWalletClient = useMemo(
-    () =>
-      createWalletClient({
-        chain: hardhat,
-        transport: http(),
-      }),
-    [],
-  );
 
   const faucetTxn = useTransactor(localWalletClient);
 
@@ -56,7 +52,7 @@ export const Faucet = () => {
       }
     };
     getFaucetAddress();
-  }, [localWalletClient]);
+  }, []);
 
   const sendETH = async () => {
     if (!faucetAddress) {
