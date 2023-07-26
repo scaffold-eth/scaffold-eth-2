@@ -15,6 +15,7 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
@@ -154,6 +155,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
+  const configuredNetwork = getTargetNetwork();
   const address = (context.params?.address as string).toLowerCase();
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = hardhat.id;
@@ -167,8 +169,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     "..",
     "..",
     "..",
-    "hardhat",
-    "artifacts",
+    `${configuredNetwork.network}`,
+    `${configuredNetwork.network === "hardhat" ? "artifacts" : "out"}`,
     "build-info",
   );
 
