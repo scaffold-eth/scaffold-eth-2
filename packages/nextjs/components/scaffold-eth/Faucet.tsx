@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useIsMounted } from "usehooks-ts";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { useNetwork } from "wagmi";
@@ -23,10 +23,15 @@ export const Faucet = () => {
   const { chain: ConnectedChain } = useNetwork();
   const isMounted = useIsMounted();
 
-  const localWalletClient = createWalletClient({
-    chain: hardhat,
-    transport: http(),
-  });
+  const localWalletClient = useMemo(
+    () =>
+      createWalletClient({
+        chain: hardhat,
+        transport: http(),
+      }),
+    [],
+  );
+
   const faucetTxn = useTransactor(localWalletClient);
 
   useEffect(() => {
