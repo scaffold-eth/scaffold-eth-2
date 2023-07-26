@@ -28,7 +28,7 @@
     "vercel": "pnpm --filter @se-2/nextjs vercel",
     "vercel:yolo": "pnpm --filter @se-2/nextjs vercel:yolo"
   },
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "pnpm@8.6.10",
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
