@@ -96,10 +96,13 @@ export const RainbowKitCustomConnectButton = () => {
                       <span className="ml-2 mr-1">{account.displayName}</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
-                    <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-100 rounded-box">
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 mt-1 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
+                    >
                       <li>
                         {addressCopied ? (
-                          <div>
+                          <div className="btn-sm !rounded-xl">
                             <CheckCircleIcon
                               className=" text-xl font-normal h-6 w-4 cursor-pointer"
                               aria-hidden="true"
@@ -116,7 +119,7 @@ export const RainbowKitCustomConnectButton = () => {
                               }, 800);
                             }}
                           >
-                            <div>
+                            <div className="btn-sm !rounded-xl">
                               <DocumentDuplicateIcon
                                 className=" text-xl font-normal h-6 w-4 cursor-pointer"
                                 aria-hidden="true"
@@ -127,13 +130,13 @@ export const RainbowKitCustomConnectButton = () => {
                         )}
                       </li>
                       <li>
-                        <label htmlFor="qrcode-modal">
+                        <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl">
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <span className="whitespace-nowrap">View QR Code</span>
                         </label>
                       </li>
                       <li>
-                        <button className="menu-item" type="button">
+                        <button className="menu-item btn-sm !rounded-xl" type="button">
                           <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <a
                             target="_blank"
@@ -141,12 +144,16 @@ export const RainbowKitCustomConnectButton = () => {
                             rel="noopener noreferrer"
                             className="whitespace-nowrap"
                           >
-                            View on block explorer
+                            View on Block Explorer
                           </a>
                         </button>
                       </li>
                       <li>
-                        <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
+                        <button
+                          className="menu-item text-error btn-sm !rounded-xl"
+                          type="button"
+                          onClick={() => disconnect()}
+                        >
                           <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
                         </button>
                       </li>
