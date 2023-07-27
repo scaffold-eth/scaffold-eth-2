@@ -5,6 +5,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useDisconnect, useSwitchNetwork } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
+  ArrowTopRightOnSquareIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   ChevronDownIcon,
@@ -13,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -29,6 +30,9 @@ export const RainbowKitCustomConnectButton = () => {
     <ConnectButton.Custom>
       {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
+        const blockExplorerAddressLink = account
+          ? getBlockExplorerAddressLink(getTargetNetwork(), account.address)
+          : undefined;
 
         return (
           <>
@@ -122,6 +126,19 @@ export const RainbowKitCustomConnectButton = () => {
                         </label>
                       </li>
                       <li>
+                        <button className="menu-item" type="button">
+                          <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                          <a
+                            target="_blank"
+                            href={blockExplorerAddressLink}
+                            rel="noopener noreferrer"
+                            className="whitespace-nowrap"
+                          >
+                            View on block explorer
+                          </a>
+                        </button>
+                      </li>
+                      <li>
                         <button className="menu-item text-error" type="button" onClick={() => disconnect()}>
                           <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
                         </button>
@@ -143,7 +160,7 @@ export const RainbowKitCustomConnectButton = () => {
                         <div className="space-y-3 py-6">
                           <div className="flex space-x-4 flex-col items-center gap-6">
                             <QRCodeSVG value={account.address} size={256} />
-                            <Address address={account.address} format="long" />
+                            <Address address={account.address} format="long" disableAddressLink />
                           </div>
                         </div>
                       </label>
