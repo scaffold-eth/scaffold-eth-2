@@ -10,6 +10,11 @@ import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
 const NUM_OF_ETH = "1";
 const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
+const localWalletClient = createWalletClient({
+  chain: hardhat,
+  transport: http(),
+});
+
 /**
  * FaucetButton button which lets you grab eth.
  */
@@ -21,10 +26,7 @@ export const FaucetButton = () => {
   const isMounted = useIsMounted();
 
   const [loading, setLoading] = useState(false);
-  const localWalletClient = createWalletClient({
-    chain: hardhat,
-    transport: http(),
-  });
+
   const faucetTxn = useTransactor(localWalletClient);
 
   const sendETH = async () => {
