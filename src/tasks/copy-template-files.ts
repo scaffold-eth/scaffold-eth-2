@@ -11,6 +11,7 @@ import { promisify } from "util";
 import symlink from "../utils/symlink";
 
 const copy = promisify(ncp);
+let copyOrSymlink = copy
 
 const expandExtensions = (options: Options): Extension[] => {
   const expandedExtensions = options.extensions
@@ -30,10 +31,51 @@ const expandExtensions = (options: Options): Extension[] => {
 
 const isTemplateRegex = /([^\/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
+const isYarnLockRegex = /yarn\.lock/;
 const isConfigRegex = /([^\/\\]*?)\\config\.json/;
 const isArgsRegex = /([^\/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
+
+const copyBaseFiles = async (
+    { dev: isDev }: Options,
+    basePath: string,
+    targetDir: string
+  ) => {
+  await copyOrSymlink(basePath, targetDir, {
+    clobber: false,
+    filter: (fileName) => {  // NOTE: filter IN
+      const isTemplate = isTemplateRegex.test(fileName)
+      const isPackageJson = isPackageJsonRegex.test(fileName)
+      const isYarnLock = isYarnLockRegex.test(fileName)
+      const shouldSkip = isTemplate || isPackageJson || (isDev && isYarnLock)
+      return !shouldSkip
+    },
+  });
+
+  const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path))
+
+  basePackageJsonPaths.forEach(packageJsonPath => {
+    const partialPath = packageJsonPath.split(basePath)[1]
+    mergePackageJson(
+      path.join(targetDir, partialPath),
+      path.join(basePath, partialPath),
+      isDev
+    );
+  })
+
+  if (isDev) {
+    const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path))
+    baseYarnLockPaths.forEach(yarnLockPath => {
+      const partialPath = yarnLockPath.split(basePath)[1]
+      copy(
+        path.join(basePath, partialPath),
+        path.join(targetDir, partialPath)
+      )
+    })
+  }
+}
+
 const copyExtensionsFiles = async (
   { extensions, dev: isDev }: Options,
   targetDir: string
@@ -232,14 +274,11 @@ export async function copyTemplateFiles(
   templateDir: string,
   targetDir: string
 ) {
-  const copyOrSymlink = options.dev ? symlink : copy
+  copyOrSymlink = options.dev ? symlink : copy
+  const basePath = path.join(templateDir, baseDir);
 
   // 1. Copy base template to target directory
-  const basePath = path.join(templateDir, baseDir);
-  await copyOrSymlink(basePath, targetDir, {
-    clobber: false,
-    filter: (fileName) => !isTemplateRegex.test(fileName), // NOTE: filter IN
-  });
+  await copyBaseFiles(options, basePath, targetDir)
 
   // 2. Add "parent" extensions (set via config.json#extend field)
   const expandedExtension = expandExtensions(options);
