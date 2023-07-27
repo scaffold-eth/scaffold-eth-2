@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "account": "pnpm --filter @se-2/hardhat account",
     "chain": "pnpm --filter @se-2/hardhat chain",
     "fork": "pnpm --filter @se-2/hardhat fork",
