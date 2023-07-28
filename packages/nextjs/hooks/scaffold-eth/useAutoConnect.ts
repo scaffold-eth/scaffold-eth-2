@@ -6,7 +6,7 @@ import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId, defaultBurnerChainId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-const walletIdStorageKey = "scaffoldEth2.wallet";
+const SCAFFOLD_WALLET_STROAGE_KEY = "scaffoldEth2.wallet";
 const WAGMI_WALLET_STORAGE_KEY = "wagmi.wallet";
 
 /**
@@ -49,7 +49,7 @@ const getInitialConnector = (
  */
 export const useAutoConnect = (): void => {
   const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY);
-  const [walletId, setWalletId] = useLocalStorage<string>(walletIdStorageKey, wagmiWalletValue ?? "");
+  const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STROAGE_KEY, wagmiWalletValue ?? "");
   const connectState = useConnect();
   const accountState = useAccount();
 
@@ -59,7 +59,7 @@ export const useAutoConnect = (): void => {
       setWalletId(accountState.connector?.id ?? "");
     } else {
       // user has disconnected, reset walletName
-      window.localStorage.setItem(WAGMI_WALLET_STORAGE_KEY, "");
+      window.localStorage.setItem(WAGMI_WALLET_STORAGE_KEY, JSON.stringify(""));
       setWalletId("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
