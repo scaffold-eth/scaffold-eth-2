@@ -1,8 +1,8 @@
-import { Abi } from "abitype";
 import { getContract } from "viem";
+import { usePublicClient } from "wagmi";
 import { GetWalletClientResult } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
  * Gets a deployed contract by contract name and returns a contract instance
@@ -18,16 +18,15 @@ export const useScaffoldContract = <TContractName extends ContractName>({
   walletClient?: GetWalletClientResult;
 }) => {
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
-
-  // type GetWalletClientResult = WalletClient | null, hence narrowing it to undefined so that it can be passed to getContract
-  const walletClientInstance = walletClient != null ? walletClient : undefined;
+  const publicClient = usePublicClient();
 
   let contract = undefined;
   if (deployedContractData) {
     contract = getContract({
       address: deployedContractData.address,
-      abi: deployedContractData.abi as Abi,
-      walletClient: walletClientInstance,
+      abi: deployedContractData.abi as Contract<TContractName>["abi"],
+      walletClient: walletClient ? walletClient : undefined,
+      publicClient,
     });
   }
 
