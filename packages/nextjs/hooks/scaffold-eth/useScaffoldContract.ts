@@ -1,5 +1,5 @@
-import { getContract } from "viem";
-import { usePublicClient } from "wagmi";
+import { Account, Address, Transport, getContract } from "viem";
+import { Chain, PublicClient, usePublicClient } from "wagmi";
 import { GetWalletClientResult } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
@@ -10,19 +10,30 @@ import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
  * @param config.contractName - Deployed contract name
  * @param config.walletClient - An viem wallet client instance (optional)
  */
-export const useScaffoldContract = <TContractName extends ContractName>({
+export const useScaffoldContract = <
+  TContractName extends ContractName,
+  TWalletClient extends Exclude<GetWalletClientResult, null> | undefined,
+>({
   contractName,
   walletClient,
 }: {
   contractName: TContractName;
-  walletClient?: GetWalletClientResult;
+  walletClient?: TWalletClient;
 }) => {
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
 
   let contract = undefined;
   if (deployedContractData) {
-    contract = getContract({
+    contract = getContract<
+      Transport,
+      Address,
+      Contract<TContractName>["abi"],
+      Chain,
+      Account,
+      PublicClient,
+      TWalletClient
+    >({
       address: deployedContractData.address,
       abi: deployedContractData.abi as Contract<TContractName>["abi"],
       walletClient: walletClient ? walletClient : undefined,
