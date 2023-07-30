@@ -6,6 +6,9 @@ type MetaHeaderProps = {
   description?: string;
   image?: string;
   twitterCard?: string;
+  timestamp?: string;
+  url?: string;
+  noIndex?: boolean;
   children?: React.ReactNode;
 };
 
@@ -18,6 +21,9 @@ export const MetaHeader = ({
   description = "Built with 🏗 Scaffold-ETH 2",
   image = "thumbnail.jpg",
   twitterCard = "summary_large_image",
+  timestamp,
+  url,
+  noIndex = false,
   children,
 }: MetaHeaderProps) => {
   const imageUrl = baseUrl + image;
@@ -42,10 +48,30 @@ export const MetaHeader = ({
         <>
           <meta property="og:image" content={imageUrl} />
           <meta name="twitter:image" content={imageUrl} />
+          <meta name="twitter:image:alt" content={`Scaffold-ETH Image`} key="twitteralt" />
         </>
       )}
       {twitterCard && <meta name="twitter:card" content={twitterCard} />}
       <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+
+      {url && (
+        <>
+          <link rel="canonical" href={url} />
+          <meta property="og:url" content={url} />
+        </>
+      )}
+      {timestamp && <meta name="revised" content={timestamp} key="timestamp" />}
+      {!noIndex ? <meta name="robots" content="index, follow" /> : <meta name="robots" content="noindex, nofollow" />}
+
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Scaffold-ETH 2 App" />
+      <meta name="twitter:site" content="@harendrashakya_" key="twittersite" />
+
+      <meta name="keywords" key="keywords" content="Ethereum, DeFi, Blockchain, smart contracts" />
+      <meta name="apple-mobile-web-app-title" content={`Scaffold-ETH 2 App`} />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
       {children}
     </Head>
   );
