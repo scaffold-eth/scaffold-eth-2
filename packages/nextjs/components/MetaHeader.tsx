@@ -65,7 +65,6 @@ export const MetaHeader = ({
 
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Scaffold-ETH 2 App" />
-      <meta name="twitter:site" content="@harendrashakya_" key="twittersite" />
 
       <meta name="keywords" key="keywords" content="Ethereum, DeFi, Blockchain, smart contracts" />
       <meta name="apple-mobile-web-app-title" content={`Scaffold-ETH 2 App`} />
