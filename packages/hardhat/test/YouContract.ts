@@ -1,16 +1,17 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, deployments } from "hardhat";
 import { YourContract } from "../typechain-types";
+import { Deployment } from "hardhat-deploy/types";
 
 describe("YourContract", function () {
   // We define a fixture to reuse the same setup in every test.
 
   let yourContract: YourContract;
   before(async () => {
-    const [owner] = await ethers.getSigners();
-    const yourContractFactory = await ethers.getContractFactory("YourContract");
-    yourContract = (await yourContractFactory.deploy(owner.address)) as YourContract;
-    await yourContract.deployed();
+    // Since we already have deployment scripts available, there's no need to write them again
+    await deployments.fixture(["all"]);
+    const deployment: Deployment = await deployments.get("YourContract");
+    yourContract = await ethers.getContractAt(deployment.abi, deployment.address);
   });
 
   describe("Deployment", function () {
