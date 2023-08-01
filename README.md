@@ -240,6 +240,22 @@ To send the transaction, you can call the `writeAsync` function returned by the 
 
 This example sends a transaction to the `YourContract` smart contract to call the `setGreeting` function with the arguments passed in `args`. The `writeAsync` function sends the transaction to the smart contract, and the `isLoading` and `isMining` properties indicate whether the transaction is currently being processed by the network.
 
+If you have any state, you can just pass it into the `args`, and it will automatically update when you call `writeAsync()`. Example:
+
+```ts
+const [address, setAddress] = useState("");
+
+const { writeAsync } = useScaffoldContractWrite({
+  contractName: "YourContract",
+  functionName: "calculateStuffWithAddress",
+  args: [address],
+});
+
+<input onChange={e => setAddress(e.target.value)} />
+
+<button onClick={writeAsync}> {/* This will submit with the current value of `address`! */}
+```
+
 ### useScaffoldEventSubscriber:
 
 Use this hook to subscribe to events emitted by your smart contract, and receive real-time updates when these events are emitted.
