@@ -36,8 +36,6 @@ type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [k
 
 type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
 
-export type Chain = keyof ContractsDeclaration;
-
 type Contracts = ContractsDeclaration[ConfiguredChainId][0]["contracts"];
 
 export type ContractName = keyof Contracts;
@@ -72,11 +70,6 @@ export type AbiEventInputs<TAbi extends Abi, TEventName extends ExtractAbiEventN
   TEventName
 >["inputs"];
 
-export type AbiEventArgs<
-  TAbi extends Abi,
-  TEventName extends ExtractAbiEventNames<TAbi>,
-> = AbiParametersToPrimitiveTypes<AbiEventInputs<TAbi, TEventName>>;
-
 export enum ContractCodeStatus {
   "LOADING",
   "DEPLOYED",
@@ -86,18 +79,6 @@ export enum ContractCodeStatus {
 type AbiStateMutability = "pure" | "view" | "nonpayable" | "payable";
 export type ReadAbiStateMutability = "view" | "pure";
 export type WriteAbiStateMutability = "nonpayable" | "payable";
-
-export type FunctionNamesWithoutInputs<
-  TContractName extends ContractName,
-  TAbiStateMutibility extends AbiStateMutability = AbiStateMutability,
-> = Extract<
-  ContractAbi<TContractName>[number],
-  {
-    type: "function";
-    stateMutability: TAbiStateMutibility;
-    inputs: readonly [];
-  }
->["name"];
 
 export type FunctionNamesWithInputs<
   TContractName extends ContractName,
