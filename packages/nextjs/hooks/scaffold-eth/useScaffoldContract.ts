@@ -10,10 +10,7 @@ import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
  * @param config.contractName - Deployed contract name
  * @param config.walletClient - An viem wallet client instance (optional)
  */
-export const useScaffoldContract = <
-  TContractName extends ContractName,
-  TWalletClient extends Exclude<GetWalletClientResult, null> | undefined,
->({
+export const useScaffoldContract = <TContractName extends ContractName, TWalletClient extends GetWalletClientResult>({
   contractName,
   walletClient,
 }: {
@@ -32,7 +29,7 @@ export const useScaffoldContract = <
       Chain,
       Account,
       PublicClient,
-      TWalletClient
+      NonNullable<TWalletClient>
     >({
       address: deployedContractData.address,
       abi: deployedContractData.abi as Contract<TContractName>["abi"],
