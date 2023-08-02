@@ -32,9 +32,6 @@ contract DeployScript is ScaffoldETHDeploy {
          * This function should be called last.
          */
         exportDeployments();
-
-        // If your chain is not present in foundry's stdChain, then you need to call function with chainName:
-        // exportDeployments("chiado")
     }
 
     function test() public {}
