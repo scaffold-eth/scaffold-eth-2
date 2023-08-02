@@ -34,7 +34,10 @@ contract YourContract {
         owner = _owner;
     }
 
+    // Modifier: used to define a set of rules that must be met before or after a function is executed
+    // Check the withdraw() function
     modifier isOwner() {
+        // msg.sender: predefined variable that represents address of the account that called the current function
         require(msg.sender == owner, "Caller is not owner");
         _;
     }
