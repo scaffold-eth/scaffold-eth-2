@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { ethers } from "ethers";
+import { hexToString, isHex, stringToHex } from "viem";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
 export const Bytes32Input = ({ value, onChange, name, placeholder }: CommonInputProps) => {
@@ -7,11 +7,7 @@ export const Bytes32Input = ({ value, onChange, name, placeholder }: CommonInput
     if (!value) {
       return;
     }
-    onChange(
-      ethers.utils.isHexString(value)
-        ? ethers.utils.parseBytes32String(value)
-        : ethers.utils.formatBytes32String(value),
-    );
+    onChange(isHex(value) ? hexToString(value, { size: 32 }) : stringToHex(value, { size: 32 }));
   }, [onChange, value]);
 
   return (

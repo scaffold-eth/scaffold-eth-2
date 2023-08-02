@@ -38,7 +38,7 @@ contract YourContract {
     // Check the withdraw() function
     modifier isOwner() {
         // msg.sender: predefined variable that represents address of the account that called the current function
-        require(msg.sender == owner, "Not the Owner");
+        require(msg.sender == owner, "Caller is not owner");
         _;
     }
 
@@ -53,7 +53,6 @@ contract YourContract {
         console.logString("Setting new greeting");
         console.logString(_newGreeting);
 
-        // Change state variables
         greeting = _newGreeting;
         totalCounter += 1;
         userGreetingCounter[msg.sender] += 1;

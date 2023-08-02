@@ -1,32 +1,27 @@
 import { useEffect } from "react";
-import { FunctionFragment } from "ethers/lib/utils";
+import { Abi, AbiFunction } from "abitype";
+import { Address } from "viem";
 import { useContractRead } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { displayTxResult } from "~~/components/scaffold-eth";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
-type TDisplayVariableProps = {
-  functionFragment: FunctionFragment;
-  contractAddress: string;
+type DisplayVariableProps = {
+  contractAddress: Address;
+  abiFunction: AbiFunction;
   refreshDisplayVariables: boolean;
 };
 
-export const DisplayVariable = ({
-  contractAddress,
-  functionFragment,
-  refreshDisplayVariables,
-}: TDisplayVariableProps) => {
+export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVariables }: DisplayVariableProps) => {
   const {
     data: result,
     isFetching,
     refetch,
   } = useContractRead({
-    chainId: getTargetNetwork().id,
     address: contractAddress,
-    abi: [functionFragment],
-    functionName: functionFragment.name,
-    args: [],
+    functionName: abiFunction.name,
+    abi: [abiFunction] as Abi,
     onError: error => {
       notification.error(error.message);
     },
@@ -41,7 +36,7 @@ export const DisplayVariable = ({
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-all">{functionFragment.name}</h3>
+        <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
         <button className={`btn btn-ghost btn-xs ${isFetching ? "loading" : ""}`} onClick={async () => await refetch()}>
           {!isFetching && <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />}
         </button>

@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import { hardhat, localhost } from "wagmi/chains";
+import { createPublicClient, http } from "viem";
+import { hardhat } from "wagmi/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -14,7 +15,6 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
@@ -27,7 +27,10 @@ type PageProps = {
   contractData: AddressCodeTabProps | null;
 };
 
-const provider = getLocalProvider(localhost);
+const publicClient = createPublicClient({
+  chain: hardhat,
+  transport: http(),
+});
 
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
@@ -37,17 +40,20 @@ const AddressPage = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await provider?.getCode(address);
-      setIsContract(contractCode !== "0x");
+      const contractCode = await publicClient.getBytecode({ address: address });
+      setIsContract(contractCode !== undefined && contractCode !== "0x");
     };
 
     checkIsContract();
   }, [address]);
 
   const filteredBlocks = blocks.filter(block =>
-    block.transactions.some(
-      tx => tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase(),
-    ),
+    block.transactions.some(tx => {
+      if (typeof tx === "string") {
+        return false;
+      }
+      return tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase();
+    }),
   );
 
   return (
@@ -103,7 +109,11 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "transactions" && (
         <div className="pt-4">
           <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
-          <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />
+          <PaginationButton
+            currentPage={currentPage}
+            totalItems={Number(totalBlocks)}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       )}
       {activeTab === "code" && contractData && (
@@ -126,7 +136,6 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
     const filePath = path.join(buildInfoDirectory, buildInfoFiles[i]);
 
     const buildInfo = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
     if (buildInfo.output.contracts[contractPath]) {
       for (const contract in buildInfo.output.contracts[contractPath]) {
         bytecode = buildInfo.output.contracts[contractPath][contract].evm.bytecode.object;
@@ -158,11 +167,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const deployedContractsOnChain = contracts ? contracts[chainId][0].contracts : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
-      contractPath = `contracts/${contractName}.sol`;
+      contractPath = `src/${contractName}.sol`;
       break;
     }
   }
-
   if (!contractPath) {
     // No contract found at this address
     return { props: { address, contractData: null } };

@@ -1,4 +1,4 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 Scaffold-ETH 2 - Foundry
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
@@ -14,6 +14,7 @@
 - [Quickstart](#quickstart)
 - [Deploying your Smart Contracts to a Live Network](#deploying-your-smart-contracts-to-a-live-network)
 - [Deploying your NextJS App](#deploying-your-nextjs-app)
+  - [Scaffold App Configuration](#scaffold-app-configuration)
 - [Interacting with your Smart Contracts: SE-2 Custom Hooks](#interacting-with-your-smart-contracts-se-2-custom-hooks)
 - [Disabling Type & Linting Error Checks](#disabling-type-and-linting-error-checks)
   - [Disabling commit checks](#disabling-commit-checks)
@@ -62,7 +63,7 @@ This command starts a local Ethereum network using Anvil in Foundry. The network
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/deploy` to deploy the contract to the network. You can also customize the deploy script.
+This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/src` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script/Deploy.s.sol` to deploy the contract to the network. You can also customize the deploy script.
 
 5. On a third terminal, start your NextJS app:
 
@@ -74,9 +75,9 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 Run smart contract test with `yarn foundry:test`
 
-- Edit your smart contract `YourContract.sol` in `packages/foundry/contracts`
+- Edit your smart contract `YourContract.sol` in `packages/foundry/src`
 - Edit your frontend in `packages/nextjs/pages`
-- Edit your deployment scripts in `packages/foundry/deploy`
+- Edit your deployment scripts in `packages/foundry/script/Deploy.s.sol`
 
 ## Deploying your Smart Contracts to a Live Network
 
@@ -106,7 +107,63 @@ If you want to deploy directly from the CLI, run `yarn vercel` and follow the st
 
 If you want to redeploy to the same production URL you can run `yarn vercel --prod`. If you omit the `--prod` flag it will deploy it to a preview/test URL.
 
-**Make sure your `packages/nextjs/scaffold.config.ts` file has the values you need.**
+**Make sure to check the values of your Scaffold Configuration before deploying your NextJS App.**
+
+### Scaffold App Configuration
+
+You can configure different settings for your dapp at `packages/nextjs/scaffold.config.ts`.
+
+```ts
+export type ScaffoldConfig = {
+  targetNetwork: chains.Chain;
+  pollingInterval: number;
+  alchemyApiKey: string;
+  walletConnectProjectId: string;
+  onlyLocalBurnerWallet: boolean;
+  walletAutoConnect: boolean;
+  // your dapp custom config, eg:
+  // tokenIcon : string;
+};
+```
+
+The configuration parameters are described below, make sure to update the values according to your needs:
+
+- **targetNetwork**  
+  Sets the blockchain network where your dapp is deployed. Use values from `wagmi/chains`.
+
+- **pollingInterval**  
+  The interval in milliseconds at which your front-end application polls the RPC servers for fresh data. _Note that this setting does not affect the local network._
+
+- **alchemyApiKey**  
+  Default Alchemy API key from Scaffold ETH 2 for local testing purposes.  
+  It's recommended to obtain your own API key from the [Alchemy Dashboard](https://dashboard.alchemyapi.io/) and store it in an environment variable: `NEXT_PUBLIC_ALCHEMY_API_KEY` at `\packages\nextjs\.env.local` file.
+
+- **walletConnectProjectId**  
+  WalletConnect's default project ID from Scaffold ETH 2 for local testing purposes.
+  It's recommended to obtain your own project ID from the [WalletConnect website](https://cloud.walletconnect.com) and store it in an environment variable: `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` at `\packages\nextjs\.env.local` file.
+
+- **onlyLocalBurnerWallet**  
+  Controls the networks where the Burner Wallet feature is available. This feature provides a lightweight wallet for users.
+
+  - `true` => Use Burner Wallet only on hardhat network.
+  - `false` => Use Burner Wallet on all networks.
+
+- **walletAutoConnect**  
+  Set it to `true` to activate automatic wallet connection behavior:
+  - If the user was connected into a wallet before, on page reload it reconnects automatically.
+  - If user is not connected to any wallet, on reload, it connects to the burner wallet if it is enabled for the current network. See `onlyLocalBurnerWallet`
+
+You can extend this configuration file, adding new parameters that you need to use across your dapp **(make sure you update the above type `ScaffoldConfig`)**:
+
+```ts
+  tokenIcon: "💎",
+```
+
+To use the values from the `ScaffoldConfig` in any other file of your application, you first need to import it in those files:
+
+```ts
+import scaffoldConfig from "~~/scaffold.config";
+```
 
 ## Interacting with your Smart Contracts: SE-2 Custom Hooks
 
@@ -197,8 +254,8 @@ const {
   } = useScaffoldEventHistory({
   contractName: "YourContract",
   eventName: "GreetingChange",
-  // Specify the starting block number from which to read events.
-  fromBlock: 31231,
+  // Specify the starting block number from which to read events, this is a bigint.
+  fromBlock: 31231n,
   blockData: true,
   // Apply filters to the event based on parameter names and values { [parameterName]: value },
   filters: { premium: true }
@@ -235,13 +292,12 @@ const { data: yourContract } = useScaffoldContract({
 await yourContract?.greeting();
 
 // Used to write to a contract and can be called in any function
-import { Signer } from "ethers";
-import { useSigner } from "wagmi";
+import { useWalletClient } from "wagmi";
 
-const { data: signer, isError, isLoading } = useSigner();
+const { data: walletClient } = useWalletClient();
 const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
-  signerOrProvider: signer as Signer,
+  walletClient,
 });
 const setGreeting = async () => {
   // Call the method in any function

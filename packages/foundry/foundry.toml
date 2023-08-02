@@ -17,6 +17,8 @@ optimism = "https://opt-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
 optimismGoerli = "https://opt-goerli.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
 polygon = "https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
 polygonMumbai = "https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+gnosis = "https://rpc.gnosischain.com"
+chiado = "https://rpc.chiadochain.net"
 
 [etherscan]
 polygonMumbai = { key = "${ETHERSCAN_API_KEY}" }
