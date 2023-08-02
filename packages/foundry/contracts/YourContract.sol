@@ -38,7 +38,7 @@ contract YourContract {
     // Check the withdraw() function
     modifier isOwner() {
         // msg.sender: predefined variable that represents address of the account that called the current function
-        require(msg.sender == owner, "Caller is not owner");
+        require(msg.sender == owner, "Not the Owner");
         _;
     }
 

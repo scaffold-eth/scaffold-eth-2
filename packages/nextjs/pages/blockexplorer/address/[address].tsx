@@ -167,7 +167,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const deployedContractsOnChain = contracts ? contracts[chainId][0].contracts : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
-      contractPath = `src/${contractName}.sol`;
+      contractPath = `contracts/${contractName}.sol`;
       break;
     }
   }
