@@ -1,39 +1,48 @@
 {
-  "name": "se-2",
-  "version": "0.0.1",
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/hardhat",
-      "packages/nextjs"
-    ]
-  },
+  "name": "create-eth",
+  "version": "0.0.16",
+  "description": "Create a Scaffold-ETH-2 app",
+  "main": "dist/cli.js",
+  "type": "module",
+  "bin": "bin/create-dapp-se2.js",
   "scripts": {
-    "account": "yarn workspace @se-2/hardhat account",
-    "chain": "yarn workspace @se-2/hardhat chain",
-    "fork": "yarn workspace @se-2/hardhat fork",
-    "deploy": "yarn workspace @se-2/hardhat deploy",
-    "verify": "yarn workspace @se-2/hardhat verify",
-    "compile": "yarn workspace @se-2/hardhat compile",
-    "generate": "yarn workspace @se-2/hardhat generate",
-    "hardhat:lint": "yarn workspace @se-2/hardhat lint",
-    "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
-    "hardhat:test": "yarn workspace @se-2/hardhat test",
-    "start": "yarn workspace @se-2/nextjs dev",
-    "next:lint": "yarn workspace @se-2/nextjs lint",
-    "next:format": "yarn workspace @se-2/nextjs format",
-    "next:check-types": "yarn workspace @se-2/nextjs check-types",
-    "postinstall": "husky install",
-    "precommit": "lint-staged",
-    "vercel": "yarn workspace @se-2/nextjs vercel",
-    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo"
+    "build": "rollup -c rollup.config.js",
+    "dev": "rollup -c rollup.config.js --watch",
+    "cli": "rm -rf test && node bin/create-dapp-se2.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "packageManager": "yarn@3.2.3",
+  "keywords": [
+    "cli",
+    "ethereum",
+    "scaffold-eth 2",
+    "wagmi",
+    "hardhat",
+    "foundry",
+    "viem",
+    "rainbowkit"
+  ],
+  "license": "MIT",
   "devDependencies": {
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3"
+    "@rollup/plugin-typescript": "11.1.0",
+    "@types/inquirer": "9.0.3",
+    "@types/listr": "0.14.4",
+    "@types/ncp": "2.0.5",
+    "@types/node": "18.16.0",
+    "rollup": "3.21.0",
+    "rollup-plugin-auto-external": "2.0.0",
+    "tslib": "2.5.0",
+    "typescript": "5.0.4"
   },
-  "resolutions": {
-    "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
-  }
+  "dependencies": {
+    "arg": "5.0.2",
+    "chalk": "5.2.0",
+    "execa": "7.1.1",
+    "handlebars": "^4.7.7",
+    "inquirer": "9.2.0",
+    "listr": "0.14.3",
+    "merge-packages": "^0.1.6",
+    "ncp": "2.0.0",
+    "pkg-install": "1.0.0"
+  },
+  "packageManager": "yarn@3.5.0"
 }
