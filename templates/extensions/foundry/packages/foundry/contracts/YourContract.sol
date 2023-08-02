@@ -53,7 +53,6 @@ contract YourContract {
         console.logString("Setting new greeting");
         console.logString(_newGreeting);
 
-        // Change state variables
         greeting = _newGreeting;
         totalCounter += 1;
         userGreetingCounter[msg.sender] += 1;
