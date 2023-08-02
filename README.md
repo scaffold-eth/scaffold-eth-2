@@ -305,7 +305,7 @@ const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
 });
 // Returns the greeting and can be called in any function, unlike useScaffoldContractRead
-await yourContract?.greeting();
+await yourContract?.read.greeting();
 
 // Used to write to a contract and can be called in any function
 import { useWalletClient } from "wagmi";
@@ -317,7 +317,7 @@ const { data: yourContract } = useScaffoldContract({
 });
 const setGreeting = async () => {
   // Call the method in any function
-  await yourContract?.setGreeting("the greeting here");
+  await yourContract?.write.setGreeting(["the greeting here"]);
 };
 ```
 
