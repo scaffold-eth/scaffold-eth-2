@@ -1,6 +1,6 @@
 import type { Options } from "ncp";
 import { existsSync, lstatSync, readdirSync } from "fs";
-import { mkdir, symlink } from "fs/promises";
+import { mkdir, link } from "fs/promises";
 import path from "path";
 
 /**
@@ -9,7 +9,7 @@ import path from "path";
  * 
  * - clobber not implemented
  */
-const symlinkRecursive = async (source: string, destination: string, options?: Options): Promise<void> => {
+const linkRecursive = async (source: string, destination: string, options?: Options): Promise<void> => {
   const passesFilter = options?.filter === undefined
     ? true // no filter
     : typeof options.filter === 'function'
@@ -31,13 +31,13 @@ const symlinkRecursive = async (source: string, destination: string, options?: O
         if (isSubPathAFolder && !existsDestSubPath) {
           await mkdir(destSubPath)
         }
-        await symlinkRecursive(sourceSubpath, destSubPath, options)
+        await linkRecursive(sourceSubpath, destSubPath, options)
       })
     )
     return
   }
 
-  return symlink(source, destination)
+  return link(source, destination)
 }
 
-export default symlinkRecursive
+export default linkRecursive

@@ -8,10 +8,10 @@ import fs from "fs";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
-import symlink from "../utils/symlink";
+import link from "../utils/link";
 
 const copy = promisify(ncp);
-let copyOrSymlink = copy
+let copyOrLink = copy
 
 const expandExtensions = (options: Options): Extension[] => {
   const expandedExtensions = options.extensions
@@ -32,6 +32,7 @@ const expandExtensions = (options: Options): Extension[] => {
 const isTemplateRegex = /([^\/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
+const isNextGeneratedRegex = /packages\/nextjs\/generated/
 const isConfigRegex = /([^\/\\]*?)\\config\.json/;
 const isArgsRegex = /([^\/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
@@ -42,13 +43,18 @@ const copyBaseFiles = async (
     basePath: string,
     targetDir: string
   ) => {
-  await copyOrSymlink(basePath, targetDir, {
+  await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: (fileName) => {  // NOTE: filter IN
       const isTemplate = isTemplateRegex.test(fileName)
       const isPackageJson = isPackageJsonRegex.test(fileName)
       const isYarnLock = isYarnLockRegex.test(fileName)
-      const shouldSkip = isTemplate || isPackageJson || (isDev && isYarnLock)
+      const isNextGenerated = isNextGeneratedRegex.test(fileName)
+
+      const skipAlways = isTemplate || isPackageJson
+      const skipDevOnly = isYarnLock || isNextGenerated
+      const shouldSkip = skipAlways || (isDev && skipDevOnly)
+
       return !shouldSkip
     },
   });
@@ -73,6 +79,15 @@ const copyBaseFiles = async (
         path.join(targetDir, partialPath)
       )
     })
+
+    const nextGeneratedPaths = findFilesRecursiveSync(basePath, path => isNextGeneratedRegex.test(path))
+    nextGeneratedPaths.forEach(nextGeneratedPath => {
+      const partialPath = nextGeneratedPath.split(basePath)[1]
+      copy(
+        path.join(basePath, partialPath),
+        path.join(targetDir, partialPath)
+      )
+    })
   }
 }
 
@@ -80,12 +95,10 @@ const copyExtensionsFiles = async (
   { extensions, dev: isDev }: Options,
   targetDir: string
 ) => {
-  const copyOrSymlink = isDev ? symlink : copy
-
   await Promise.all(extensions.map(async (extension) => {
     const extensionPath = extensionDict[extension].path;
-    // copy (or symlink if dev) root files
-    await copyOrSymlink(extensionPath, path.join(targetDir), {
+    // copy (or link if dev) root files
+    await copyOrLink(extensionPath, path.join(targetDir), {
       clobber: false,
       filter: (path) => {
         const isConfig = isConfigRegex.test(path);
@@ -119,7 +132,7 @@ const copyExtensionsFiles = async (
     const hasPackages = fs.existsSync(extensionPackagesPath);
     if (hasPackages) {
       // copy extension packages files
-      await copyOrSymlink(extensionPackagesPath, path.join(targetDir, "packages"), {
+      await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
         clobber: false,
         filter: (path) => {
           const isArgs = isArgsRegex.test(path);
@@ -274,7 +287,7 @@ export async function copyTemplateFiles(
   templateDir: string,
   targetDir: string
 ) {
-  copyOrSymlink = options.dev ? symlink : copy
+  copyOrLink = options.dev ? link : copy
   const basePath = path.join(templateDir, baseDir);
 
   // 1. Copy base template to target directory
