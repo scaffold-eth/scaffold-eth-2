@@ -77,6 +77,7 @@ export const extensionWithSubextensions = (
 
 export type TemplateDescriptor = {
   path: string;
+  fileUrl: string;
   relativePath: string;
   source: string;
 };
