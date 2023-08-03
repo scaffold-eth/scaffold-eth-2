@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
+import "forge-std/Vm.sol";
 
 contract ScaffoldETHDeploy is Script {
     struct Deployment {
@@ -48,8 +49,34 @@ contract ScaffoldETHDeploy is Script {
             );
         }
 
-        Chain memory chain = getChain(block.chainid);
-        jsonWrite = vm.serializeString(jsonWrite, "networkName", chain.name);
+        string memory chainName = getChain(block.chainid).name;
+        jsonWrite = vm.serializeString(jsonWrite, "networkName", chainName);
+        vm.writeJson(jsonWrite, path);
+    }
+
+    function exportDeployments(string memory customChainName) internal {
+        // fetch already existing contracts
+        root = vm.projectRoot();
+        path = string.concat(root, "/deployments/");
+        string memory chainIdStr = vm.toString(block.chainid);
+        path = string.concat(path, string.concat(chainIdStr, ".json"));
+
+        string memory jsonWrite;
+
+        uint256 len = deployments.length;
+
+        for (uint256 i = 0; i < len; i++) {
+            vm.serializeString(
+                jsonWrite,
+                vm.toString(deployments[i].addr),
+                deployments[i].name
+            );
+        }
+        jsonWrite = vm.serializeString(
+            jsonWrite,
+            "networkName",
+            customChainName
+        );
         vm.writeJson(jsonWrite, path);
     }
 }
