@@ -1,8 +1,8 @@
-import { Abi } from "abitype";
-import { getContract } from "viem";
+import { Account, Address, Transport, getContract } from "viem";
+import { Chain, PublicClient, usePublicClient } from "wagmi";
 import { GetWalletClientResult } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ContractName } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
  * Gets a deployed contract by contract name and returns a contract instance
@@ -11,14 +11,17 @@ import { ContractName } from "~~/utils/scaffold-eth/contract";
  * @param config.proxyContractName - Deployed proxy contract name if you wish to use an address other than the one associated with the contractName (optional)
  * @param config.walletClient - An viem wallet client instance (optional)
  */
-export const useScaffoldContract = <TContractName extends ContractName>({
+export const useScaffoldContract = <
+  TContractName extends ContractName,
+  TWalletClient extends Exclude<GetWalletClientResult, null> | undefined,
+>({
   contractName,
   proxyContractName,
   walletClient,
 }: {
   contractName: TContractName;
   proxyContractName?: TContractName;
-  walletClient?: GetWalletClientResult;
+  walletClient?: TWalletClient | null;
 }) => {
   // If no proxy is given then we default to the given contractName
   if (!proxyContractName) {
@@ -26,16 +29,23 @@ export const useScaffoldContract = <TContractName extends ContractName>({
   }
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const { data: proxyContractData, isLoading: proxyContractLoading } = useDeployedContractInfo(proxyContractName);
-
-  // type GetWalletClientResult = WalletClient | null, hence narrowing it to undefined so that it can be passed to getContract
-  const walletClientInstance = walletClient != null ? walletClient : undefined;
+  const publicClient = usePublicClient();
 
   let contract = undefined;
   if (deployedContractData && proxyContractData) {
-    contract = getContract({
+    contract = getContract<
+      Transport,
+      Address,
+      Contract<TContractName>["abi"],
+      Chain,
+      Account,
+      PublicClient,
+      TWalletClient
+    >({
       address: proxyContractData.address,
-      abi: deployedContractData.abi as Abi,
-      walletClient: walletClientInstance,
+      abi: deployedContractData.abi as Contract<TContractName>["abi"],
+      walletClient: walletClient ? walletClient : undefined,
+      publicClient,
     });
   }
 

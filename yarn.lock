@@ -1817,6 +1817,7 @@ __metadata:
     nextjs-progressbar: ^0.0.16
     postcss: ^8.4.16
     prettier: ^2.8.4
+    qrcode.react: ^3.1.0
     react: ^18.2.0
     react-blockies: ^1.4.1
     react-copy-to-clipboard: ^5.1.0
@@ -1828,8 +1829,8 @@ __metadata:
     use-debounce: ^8.0.4
     usehooks-ts: ^2.7.2
     vercel: ^28.15.1
-    viem: ^1.2.1
-    wagmi: ^1.3.2
+    viem: 1.2.1
+    wagmi: 1.3.2
     zustand: ^4.1.2
   languageName: unknown
   linkType: soft
@@ -10893,6 +10894,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qrcode.react@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "qrcode.react@npm:3.1.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 94a2942ecf83f461d869adb20305ae663c6d1abe93ef2c72442b07d756ce70cf6deb6fd588dc5b382b48c6991cfde1dfd5ac9b814c1461e71d5edb2d945e67fc
+  languageName: node
+  linkType: hard
+
 "qrcode@npm:1.5.0":
   version: 1.5.0
   resolution: "qrcode@npm:1.5.0"
@@ -13375,7 +13385,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^1.0.0, viem@npm:^1.2.1":
+"viem@npm:1.2.1, viem@npm:^1.0.0":
   version: 1.2.1
   resolution: "viem@npm:1.2.1"
   dependencies:
@@ -13394,7 +13404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wagmi@npm:^1.3.2":
+"wagmi@npm:1.3.2":
   version: 1.3.2
   resolution: "wagmi@npm:1.3.2"
   dependencies:
