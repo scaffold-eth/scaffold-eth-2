@@ -148,6 +148,7 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
+  proxyContractName?: TContractName;
 } & IsContractDeclarationMissing<
   Partial<UseContractReadConfig>,
   {
@@ -161,6 +162,7 @@ export type UseScaffoldWriteConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
   contractName: TContractName;
+  proxyContractName?: TContractName;
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 } & IsContractDeclarationMissing<
@@ -178,6 +180,7 @@ export type UseScaffoldEventConfig<
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 > = {
   contractName: TContractName;
+  proxyContractName?: TContractName;
 } & IsContractDeclarationMissing<
   Omit<UseContractEventConfig, "listener"> & {
     listener: (logs: Prettify<Omit<Log<bigint, number, any>, "args"> & { args: Record<string, unknown> }>[]) => void;
@@ -210,6 +213,7 @@ export type UseScaffoldEventHistoryConfig<
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 > = {
   contractName: TContractName;
+  proxyContractName?: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
   filters?: EventFilters<TContractName, TEventName>;

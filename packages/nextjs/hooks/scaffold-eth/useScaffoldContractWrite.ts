@@ -13,6 +13,7 @@ type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, un
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
  * @param config - The config settings, including extra wagmi configuration
  * @param config.contractName - deployed contract name
+ * @param config.proxyContractName - Deployed proxy contract name if you wish to use an address other than the one associated with the contractName (optional)
  * @param config.functionName - name of the function to be called
  * @param config.args - arguments for the function
  * @param config.value - value in ETH that will be sent with transaction
@@ -22,6 +23,7 @@ export const useScaffoldContractWrite = <
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
 >({
   contractName,
+  proxyContractName,
   functionName,
   args,
   value,
@@ -29,7 +31,12 @@ export const useScaffoldContractWrite = <
   blockConfirmations,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
+  // If no proxy is given then we default to the given contractName
+  if (!proxyContractName) {
+    proxyContractName = contractName;
+  }
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const { data: proxyContractData } = useDeployedContractInfo(proxyContractName);
   const { chain } = useNetwork();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
@@ -37,7 +44,7 @@ export const useScaffoldContractWrite = <
 
   const wagmiContractWrite = useContractWrite({
     chainId: configuredNetwork.id,
-    address: deployedContractData?.address,
+    address: proxyContractData?.address,
     abi: deployedContractData?.abi as Abi,
     functionName: functionName as any,
     args: args as unknown[],
@@ -54,7 +61,11 @@ export const useScaffoldContractWrite = <
     value?: UseScaffoldWriteConfig<TContractName, TFunctionName>["value"];
   } & UpdatedArgs = {}) => {
     if (!deployedContractData) {
-      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
+      return;
+    }
+    if (!proxyContractData) {
+      notification.error("Proxy Contract is not deployed, did you forget to run `yarn deploy`?");
       return;
     }
     if (!chain?.id) {

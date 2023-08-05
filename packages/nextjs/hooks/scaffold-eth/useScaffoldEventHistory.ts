@@ -10,6 +10,7 @@ import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/uti
  * @dev reads events from a deployed contract
  * @param config - The config settings
  * @param config.contractName - deployed contract name
+ * @param config.proxyContractName - Deployed proxy contract name if you wish to use an address other than the one associated with the contractName (optional)
  * @param config.eventName - name of the event to listen for
  * @param config.fromBlock - the block number to start reading events from
  * @param config.filters - filters to be applied to the event (parameterName: value)
@@ -22,6 +23,7 @@ export const useScaffoldEventHistory = <
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 >({
   contractName,
+  proxyContractName,
   eventName,
   fromBlock,
   filters,
@@ -29,17 +31,25 @@ export const useScaffoldEventHistory = <
   transactionData,
   receiptData,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName>) => {
+  // If no proxy is given then we default to the given contractName
+  if (!proxyContractName) {
+    proxyContractName = contractName;
+  }
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
+  const { data: proxyContractData, isLoading: proxyContractLoading } = useDeployedContractInfo(proxyContractName);
   const publicClient = usePublicClient();
 
   useEffect(() => {
     async function readEvents() {
       try {
         if (!deployedContractData) {
-          throw new Error("Contract not found");
+          throw new Error("Target contract not found");
+        }
+        if (!proxyContractData) {
+          throw new Error("Proxy contract not found");
         }
 
         const event = (deployedContractData.abi as Abi).find(
@@ -47,7 +57,7 @@ export const useScaffoldEventHistory = <
         ) as AbiEvent;
 
         const logs = await publicClient.getLogs({
-          address: deployedContractData?.address,
+          address: proxyContractData?.address,
           event,
           args: filters as any, // TODO: check if it works and fix type
           fromBlock,
@@ -81,7 +91,7 @@ export const useScaffoldEventHistory = <
         setIsLoading(false);
       }
     }
-    if (!deployedContractLoading) {
+    if (!deployedContractLoading && !proxyContractLoading) {
       readEvents();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +101,7 @@ export const useScaffoldEventHistory = <
     contractName,
     eventName,
     deployedContractLoading,
-    deployedContractData?.address,
+    proxyContractData?.address,
     deployedContractData,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(filters, replacer),

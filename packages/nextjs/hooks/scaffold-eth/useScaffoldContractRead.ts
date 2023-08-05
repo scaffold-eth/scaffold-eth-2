@@ -13,6 +13,7 @@ import {
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
  * @param config - The config settings, including extra wagmi configuration
  * @param config.contractName - deployed contract name
+ * @param config.proxyContractName - Deployed proxy contract name if you wish to use an address other than the one associated with the contractName (optional)
  * @param config.functionName - name of the function to be called
  * @param config.args - args to be passed to the function call
  */
@@ -21,16 +22,22 @@ export const useScaffoldContractRead = <
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
 >({
   contractName,
+  proxyContractName,
   functionName,
   args,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
+  // If no proxy is given then we default to the given contractName
+  if (!proxyContractName) {
+    proxyContractName = contractName;
+  }
   const { data: deployedContract } = useDeployedContractInfo(contractName);
+  const { data: proxyContract } = useDeployedContractInfo(proxyContractName);
 
   return useContractRead({
     chainId: getTargetNetwork().id,
     functionName,
-    address: deployedContract?.address,
+    address: proxyContract?.address,
     abi: deployedContract?.abi,
     watch: true,
     args,
