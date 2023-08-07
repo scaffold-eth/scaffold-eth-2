@@ -43,7 +43,7 @@ To get started with Scaffold-ETH 2, follow the steps below:
 npx create-eth@latest
 ```
 
-> 💬 Hint: If you choose Foundry as solidity framework in the CLI, you must have Foundryup previously installed in your machine. Checkout: [Getfoundry.sh](https://getfoundry.sh)
+> 💬 Hint: If you choose Foundry as solidity framework in the CLI, you'll also need Foundryup installed in your machine. Checkout: [Getfoundry.sh](https://getfoundry.sh)
 
 2. Run a local network in the first terminal:
 
