@@ -135,7 +135,9 @@ export type UseScaffoldReadConfig<
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
     Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
->;
+> & {
+    address?: string;
+  };
 
 export type UseScaffoldWriteConfig<
   TContractName extends ContractName,
@@ -144,6 +146,7 @@ export type UseScaffoldWriteConfig<
   contractName: TContractName;
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
+  address?: string;
 } & IsContractDeclarationMissing<
   Partial<Omit<UseContractWriteConfig, "value"> & { value: `${number}` }>,
   (ExtractStateMutability<TContractName, TFunctionName> extends "payable"
