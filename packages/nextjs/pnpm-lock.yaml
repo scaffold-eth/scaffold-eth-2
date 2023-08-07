@@ -1,5 +1,14 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+patchedDependencies:
+  usehooks-ts@2.7.2:
+    hash: ko3lgsykypgz5336j3xlk66tfm
+    path: patches/usehooks-ts@2.7.2.patch
+
 dependencies:
   '@ethersproject/providers':
     specifier: ^5.7.2
@@ -51,7 +60,7 @@ dependencies:
     version: 8.0.4(react@18.2.0)
   usehooks-ts:
     specifier: ^2.7.2
-    version: 2.7.2(react-dom@18.2.0)(react@18.2.0)
+    version: 2.7.2(patch_hash=ko3lgsykypgz5336j3xlk66tfm)(react-dom@18.2.0)(react@18.2.0)
   viem:
     specifier: 1.2.1
     version: 1.2.1(typescript@4.9.5)
@@ -6002,7 +6011,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /usehooks-ts@2.7.2(react-dom@18.2.0)(react@18.2.0):
+  /usehooks-ts@2.7.2(patch_hash=ko3lgsykypgz5336j3xlk66tfm)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-DeLqSnGg9VvpwPZA+6lKVURJKM9EBu7bbIXuYclQ9COO3w4lacnJa0uP0iJbC/lAmY7GlmPinjZfGNNmDTlUpg==}
     engines: {node: '>=16.15.0', npm: '>=8'}
     peerDependencies:
@@ -6012,6 +6021,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
+    patched: true
 
   /utf-8-validate@5.0.10:
     resolution: {integrity: sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==}

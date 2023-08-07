@@ -29,15 +29,9 @@
     "vercel": "pnpm run --filter @se-2/nextjs vercel",
     "vercel:yolo": "pnpm run --filter @se-2/nextjs vercel:yolo"
   },
-  "packageManager": "pnpm@8.6.10",
+  "packageManager": "pnpm@8.6.12",
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "usehooks-ts@2.7.2": "patches/usehooks-ts@2.7.2.patch"
-    },
-    "allowNonAppliedPatches": "true"
   }
 }

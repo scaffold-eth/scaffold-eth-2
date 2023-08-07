@@ -1,9 +1,8 @@
 lockfileVersion: '6.0'
 
-patchedDependencies:
-  usehooks-ts@2.7.2:
-    hash: ko3lgsykypgz5336j3xlk66tfm
-    path: patches/usehooks-ts@2.7.2.patch
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 devDependencies:
   husky:
