@@ -5,4 +5,4 @@
 	branch = v1.5.5
 [submodule "packages/foundry/lib/openzeppelin-contracts"]
 	path = packages/foundry/lib/openzeppelin-contracts
-	url = https://github.com/Openzeppelin/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
