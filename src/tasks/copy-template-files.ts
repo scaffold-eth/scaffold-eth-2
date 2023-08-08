@@ -259,14 +259,14 @@ const processTemplatedFiles = async (
 
       if (isDev) {
         const hasCombinedArgs = Object.keys(combinedArgs).length > 0
-        const hasArgsPaths = argsFilesPath.length > 0
+        const hasArgsPaths = argsFileUrls.length > 0
         const devOutput = `--- TEMPLATE FILE
 templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 
 
 --- ARGS FILES
 ${hasArgsPaths
-  ? argsFilesPath.map(path => `\t- ${path.split('scaffold-eth-2/')[1]}`).join('\n')
+  ? argsFileUrls.map(url => `\t- ${url.split('scaffold-eth-2/')[1]}`).join('\n')
   : '(no args files writing to the template)'
 }
 
