@@ -233,7 +233,7 @@ const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
 To send the transaction, you can call the `writeAsync` function returned by the hook. Here's an example usage:
 
 ```ts
-<button className="btn btn-primary" onClick={writeAsync}>
+<button className="btn btn-primary" onClick={() => writeAsync()}>
   Send TX
 </button>
 ```
