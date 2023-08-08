@@ -29,6 +29,7 @@ Before you begin, you need to install the following tools:
 - [Node (v18 LTS)](https://nodejs.org/en/download/)
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
+- [Foundryup](https://book.getfoundry.sh/getting-started/installation)
 
 ## Quickstart
 
@@ -43,7 +44,7 @@ yarn install
 foundryup
 ```
 
-2. Create your .env file
+2. Create your `.env` file inside `packages/foundry`:
 
 ```
 (echo "DEPLOYER_PRIVATE_KEY=";  echo "ALCHEMY_API_KEY=oKxs-03sij-U_N0iOlrSsZFr29-IqbuF"; echo "ETHERSCAN_API_KEY=DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW") >> packages/foundry/.env
@@ -85,18 +86,41 @@ Once you are ready to deploy your smart contracts, there are a few things you ne
 
 1. Select the network
 
-By default, `yarn deploy` will deploy the contract to the local network. You can change the defaultNetwork in `packages/foundry/foundry.toml`.
+By default, `yarn deploy` will deploy the contract to the local network. You can change the defaultNetwork in `packages/foundry/foundry.toml`.You could also simply run `yarn deploy --network target_network` to deploy to another network
 
-Check the `foundry.toml` for the networks that are pre-configured. You can also add other network settings to the `foundry.toml file`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+Check the `foundry.toml` for the networks that are pre-configured. You can also add other network settings to the `foundry.toml`. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
+
+Example: To deploy the contract to the Sepolia network, run the command below:
+
+```
+yarn deploy --network sepolia
+```
+
+2. Generate a new account or add one to deploy the contract(s) from. Additionally you will need to add your Alchemy API key. Rename `.env.example` to `.env` and fill the required keys.
+
+```
+ALCHEMY_API_KEY="",
+DEPLOYER_PRIVATE_KEY=""
+```
 
 The deployer account is the account that will deploy your contracts. Additionally, the deployer account will be used to execute any function calls that are part of your deployment script.
 
 You can generate a random account / private key with `yarn generate` or add the private key of your crypto wallet. `yarn generate` will create a random account and add the `DEPLOYER_PRIVATE_KEY` to the `.env` file. You can check the generated account with `yarn account`.
 
-2. To deploy and verify :
+3. Deploy your smart contract(s)
+
+Run the command below to deploy the smart contract to the target network. Make sure to have some funds in your deployer account to pay for the transaction.
 
 ```
-yarn deploy:verify
+yarn deploy --network network_name
+```
+
+4. Deploy and verify your smart contract(s)
+
+You can deploy & verify your smart contract on Etherscan by running:
+
+```
+yarn deploy:verify --network network_name
 ```
 
 ## Deploying your NextJS App

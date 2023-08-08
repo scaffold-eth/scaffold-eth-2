@@ -5,9 +5,15 @@ import "../contracts/YourContract.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
+    error InvalidPrivateKey(string);
+
     function run() external {
         uint256 deployerPrivateKey = setupLocalhostEnv();
-
+        if (deployerPrivateKey == 0) {
+            revert InvalidPrivateKey(
+                "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use `yarn generate` to generate a new random account"
+            );
+        }
         vm.startBroadcast(deployerPrivateKey);
         YourContract yourContract = new YourContract(
             vm.addr(deployerPrivateKey)
@@ -26,9 +32,6 @@ contract DeployScript is ScaffoldETHDeploy {
          * This function should be called last.
          */
         exportDeployments();
-
-        // If your chain is not present in foundry's stdChain, then you need to call function with chainName:
-        // exportDeployments("chiado")
     }
 
     function test() public {}
