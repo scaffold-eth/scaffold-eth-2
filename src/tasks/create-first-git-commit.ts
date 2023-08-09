@@ -2,6 +2,7 @@ import { execa } from "execa";
 import { Options } from "../types";
 import path from "path";
 
+// Checkout the latest release tag in a git submodule
 async function checkoutLatestTag(submodulePath: string): Promise<void> {
   try {
     const { stdout } = await execa("git", ["tag", "-l", "--sort=-v:refname"], {
