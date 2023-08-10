@@ -1,8 +1,9 @@
 import type { Options } from "ncp";
 import { existsSync, lstatSync, readdirSync } from "fs";
-import { mkdir, link } from "fs/promises";
+import { promises } from "fs";
 import path from "path";
 
+const { mkdir, link } = promises;
 /**
  * The goal is that this function has the same API as ncp, so they can be used
  * interchangeably.
