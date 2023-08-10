@@ -96,14 +96,15 @@ Once you are ready to deploy your smart contracts, there are a few things you ne
 
 1. Select the network
 
-By default, `yarn deploy` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.ts.` or `packages/foundry/foundry.toml` depending if you are using Hardhat or Foundry. You could also simply run `yarn deploy --network target_network` to deploy to another network using Hardhat, or run `yarn deploy target_network` if you use Foundry.
+By default, `yarn deploy` will deploy the contract to the local network. You can change the defaultNetwork in `packages/hardhat/hardhat.config.ts.` or `packages/foundry/foundry.toml` depending if you are using Hardhat or Foundry. You could also simply run `yarn deploy --network target_network` to deploy to another network.
 
 Check the `hardhat.config.ts` / `foundry.toml` for the networks that are pre-configured. You can also add other network settings to the `hardhat.config.ts` / `foundry.toml` file. Here are the [Alchemy docs](https://docs.alchemy.com/docs/how-to-add-alchemy-rpc-endpoints-to-metamask) for information on specific networks.
 
 Example: To deploy the contract to the Sepolia network, run the command below:
 
-- Hardhat => `yarn deploy --network sepolia`
-- Foundry => `yarn deploy sepolia`
+```
+yarn deploy --network sepolia
+```
 
 2. Generate a new account or add one to deploy the contract(s) from. Additionally you will need to add your Alchemy API key. Rename `.env.example` to `.env` and fill the required keys.
 
