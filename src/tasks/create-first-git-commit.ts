@@ -66,15 +66,6 @@ export async function createFirstGitCommit(
       await checkoutLatestTag(
         path.resolve(foundryWorkSpacePath, "lib", "openzeppelin-contracts")
       );
-
-      // Commit the submodule changes in openzepplin-contracts
-      await execa("git", ["commit", "-am", "update forge-std"], {
-        cwd: path.resolve(
-          foundryWorkSpacePath,
-          "lib",
-          "openzeppelin-contracts"
-        ),
-      });
     }
 
     await execa("git", ["add", "-A"], { cwd: targetDir });
@@ -83,6 +74,13 @@ export async function createFirstGitCommit(
       ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"],
       { cwd: targetDir }
     );
+
+    // Update the submodule, since we have checked out the latest tag in the previous step of foundry
+    if (options.extensions?.includes("foundry")) {
+      await execa("git", ["submodule", "update", "--init", "--recursive"], {
+        cwd: path.resolve(targetDir, "packages", "foundry"),
+      });
+    }
   } catch (e: any) {
     // cast error as ExecaError to get stderr
 
