@@ -54,11 +54,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     [onChange],
   );
 
-  const popularAddresses = [
-    { description: "addr1", address: "0x04cd158190d83ef7e50d181c44aafdb181a621b2" },
-    { description: "addr2", address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266" },
-  ];
-
+  const addressBook = useAddressBook();
   return (
     <>
       <InputBase<Address>
@@ -98,11 +94,18 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       />
       {showPopularAddresses && (
         <ol className="border-2 border-base-300 bg-base-200 text-accent p-2 mx-4 rounded-md">
-          {popularAddresses.map(({ address, description }) => (
-            <li key={address} className="flex space-x-4 cursor-pointer" onClick={() => handleChange(address)}>
-              <Blockies className="!rounded-full" seed={address} size={7} scale={3} />
-              <div>{description}</div>
+          {addressBook.map(({ address, description }, index) => (
+            <li
+              key={`${address}-${index}`}
+              className="flex space-x-4 cursor-pointer"
+              onClick={() => {
+                toggleShowPopularAddresses();
+                handleChange(address);
+              }}
+            >
+              <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={3} />
               <div>{address?.slice(0, 5) + "..." + address?.slice(-4)}</div>
+              <div>{description}</div>
             </li>
           ))}
         </ol>
