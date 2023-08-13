@@ -127,11 +127,19 @@ yarn deploy --network network_name
 
 4. Verify your smart contract
 
-You can verify your smart contract on Etherscan by running:
+**Hardhat.** You can verify your smart contract on Etherscan by running:
 
 ```
 yarn verify --network network_name
 ```
+
+**Foundry.** There isn't a specific command to verify in Foundry, in this case you need to **Deploy and Verify** within the same command.
+
+```
+yarn deploy:verify --network sepolia
+```
+
+Right now is kind of of unstable for custom configured networks but works great for Sepolia and Goerli.
 
 ## Deploying your NextJS App
 
