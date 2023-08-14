@@ -49,7 +49,7 @@ export const RainbowKitCustomConnectButton = () => {
               if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
                   <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-error btn-sm dropdown-toggle">
+                    <label tabIndex={0} className="btn btn-error btn-sm dropdown-toggle gap-1">
                       <span>Wrong network</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
                     </label>
@@ -59,7 +59,7 @@ export const RainbowKitCustomConnectButton = () => {
                     >
                       <li>
                         <button
-                          className="menu-item btn-sm !rounded-xl"
+                          className="btn-sm !rounded-xl flex py-3 gap-3"
                           type="button"
                           onClick={() => switchNetwork?.(configuredNetwork.id)}
                         >
@@ -71,7 +71,7 @@ export const RainbowKitCustomConnectButton = () => {
                       </li>
                       <li>
                         <button
-                          className="menu-item text-error btn-sm !rounded-xl"
+                          className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
                           type="button"
                           onClick={() => disconnect()}
                         >
@@ -92,7 +92,7 @@ export const RainbowKitCustomConnectButton = () => {
                     </span>
                   </div>
                   <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle">
+                    <label tabIndex={0} className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0">
                       <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
                       <span className="ml-2 mr-1">{account.displayName}</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
@@ -103,7 +103,7 @@ export const RainbowKitCustomConnectButton = () => {
                     >
                       <li>
                         {addressCopied ? (
-                          <div className="btn-sm !rounded-xl">
+                          <div className="btn-sm !rounded-xl flex gap-3 py-3">
                             <CheckCircleIcon
                               className=" text-xl font-normal h-6 w-4 cursor-pointer"
                               aria-hidden="true"
@@ -120,7 +120,7 @@ export const RainbowKitCustomConnectButton = () => {
                               }, 800);
                             }}
                           >
-                            <div className="btn-sm !rounded-xl">
+                            <div className="btn-sm !rounded-xl flex gap-3 py-3">
                               <DocumentDuplicateIcon
                                 className=" text-xl font-normal h-6 w-4 cursor-pointer"
                                 aria-hidden="true"
@@ -131,13 +131,13 @@ export const RainbowKitCustomConnectButton = () => {
                         )}
                       </li>
                       <li>
-                        <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl">
+                        <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <span className="whitespace-nowrap">View QR Code</span>
                         </label>
                       </li>
                       <li>
-                        <button className="menu-item btn-sm !rounded-xl" type="button">
+                        <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
                           <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <a
                             target="_blank"
@@ -151,7 +151,7 @@ export const RainbowKitCustomConnectButton = () => {
                       </li>
                       <li>
                         <button
-                          className="menu-item text-error btn-sm !rounded-xl"
+                          className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
                           type="button"
                           onClick={() => disconnect()}
                         >
