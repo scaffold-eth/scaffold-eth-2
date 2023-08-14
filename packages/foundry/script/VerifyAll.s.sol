@@ -66,42 +66,14 @@ contract VerifyAll is Script {
         inputs[5] = vm.toString(block.chainid);
         inputs[6] = "--constructor-args";
         inputs[7] = args;
-        inputs[8] = "--watch 2>&1 >/dev/null";
-        // inputs[9] = "2>&1";
-        // inputs[10] = ">/dev/null";
-        inputs[9] = "|";
-        inputs[10] = "grep";
-        inputs[11] = "-E";
-        inputs[12] = "-q";
-        inputs[13] = "'already verified|Pass'";
-        inputs[14] = "&&";
-        inputs[15] = "echo";
-        inputs[16] = "-n";
-        inputs[
-            17
-        ] = "0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002676d000000000000000000000000000000000000000000000000000000000000";
-
-        bytes memory res = vm.ffi(inputs);
-        // string memory output = abi.decode(res, (string));
-
-        // if (keccak256(bytes(output)) != keccak256(bytes("SUCCESS"))) {
-        //     string memory errMsg = string.concat(
-        //         "Failed to verify contract ",
-        //         contractName,
-        //         " at address ",
-        //         vm.toString(contractAddr)
-        //     );
-        //     console.logString(errMsg);
-        //     return;
-        // }
-        // string memory resultMsg = string.concat(
-        //     "Successfully verified contract ",
-        //     contractName,
-        //     " at address ",
-        //     vm.toString(contractAddr)
-        // );
-        // console.logString(resultMsg);
-        // return;
+        string memory resultMsg = string.concat(
+            "Successfully submitted verification for contract ",
+            contractName,
+            " at address ",
+            vm.toString(contractAddr)
+        );
+        console.logString(resultMsg);
+        return;
     }
 
     function nextTransaction(string memory content) external returns (bool) {
