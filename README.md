@@ -259,7 +259,7 @@ const { writeAsync, isLoading, isMining } = useScaffoldContractWrite({
 To send the transaction, you can call the `writeAsync` function returned by the hook. Here's an example usage:
 
 ```ts
-<button className="btn btn-primary" onClick={writeAsync}>
+<button className="btn btn-primary" onClick={() => writeAsync()}>
   Send TX
 </button>
 ```
@@ -331,7 +331,7 @@ const { data: yourContract } = useScaffoldContract({
   contractName: "YourContract",
 });
 // Returns the greeting and can be called in any function, unlike useScaffoldContractRead
-await yourContract?.greeting();
+await yourContract?.read.greeting();
 
 // Used to write to a contract and can be called in any function
 import { useWalletClient } from "wagmi";
@@ -343,7 +343,7 @@ const { data: yourContract } = useScaffoldContract({
 });
 const setGreeting = async () => {
   // Call the method in any function
-  await yourContract?.setGreeting("the greeting here");
+  await yourContract?.write.setGreeting(["the greeting here"]);
 };
 ```
 
