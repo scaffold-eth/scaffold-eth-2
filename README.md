@@ -65,7 +65,11 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your frontend in `packages/nextjs/pages`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
-Visit our [Docs website](https://docs.scaffoldeth.io) to learn more about Scaffold ETH-2 and how to start building with it.
+## Documentation
+
+Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+
+To know more about its features, check out our [website](https://scaffoldeth.io).
 
 ## Contributing to Scaffold-ETH 2
 
