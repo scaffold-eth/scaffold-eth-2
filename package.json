@@ -32,7 +32,9 @@
     "clean-node": "yarn workspace @se-2/subgraph clean-node",
     "run-node": "yarn workspace @se-2/subgraph run-node",
     "local-create": "yarn workspace @se-2/subgraph local-create",
-    "local-ship": "yarn workspace @se-2/subgraph local-ship"
+    "local-ship": "yarn workspace @se-2/subgraph local-ship",
+    "abi-copy": "yarn workspace @se-2/subgraph abi-copy",
+    "codegen": "yarn workspace @se-2/subgraph codegen"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
