@@ -57,7 +57,7 @@ contract VerifyAll is Script {
         for (uint i = 0; i < arguments.length; i++) {
             args = string.concat(args, vm.toString(arguments[i]));
         }
-        string[] memory inputs = new string[](18);
+        string[] memory inputs = new string[](8);
         inputs[0] = "forge";
         inputs[1] = "verify-contract";
         inputs[2] = vm.toString(contractAddr);
