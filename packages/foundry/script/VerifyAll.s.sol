@@ -11,7 +11,9 @@ contract VerifyAll is Script {
         string memory root = vm.projectRoot();
         string memory path = string.concat(
             root,
-            "/broadcast/Deploy.s.sol/80001/run-latest.json"
+            "/broadcast/Deploy.s.sol/",
+            vm.toString(block.chainid),
+            "/run-latest.json"
         );
         string memory content = vm.readFile(path);
 
