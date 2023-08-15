@@ -59,7 +59,7 @@ contract VerifyAll is Script {
         for (uint i = 0; i < arguments.length; i++) {
             args = string.concat(args, vm.toString(arguments[i]));
         }
-        string[] memory inputs = new string[](8);
+        string[] memory inputs = new string[](9);
         inputs[0] = "forge";
         inputs[1] = "verify-contract";
         inputs[2] = vm.toString(contractAddr);
@@ -68,15 +68,12 @@ contract VerifyAll is Script {
         inputs[5] = vm.toString(block.chainid);
         inputs[6] = "--constructor-args";
         inputs[7] = args;
+        inputs[8] = "--watch";
 
         bytes memory res = vm.ffi(inputs);
-        string memory resultMsg = string.concat(
-            "Successfully submitted verification for contract ",
-            contractName,
-            " at address ",
-            vm.toString(contractAddr)
-        );
-        console.logString(resultMsg);
+
+        console.logString(string(res));
+        console.logString("\n");
         return;
     }
 
