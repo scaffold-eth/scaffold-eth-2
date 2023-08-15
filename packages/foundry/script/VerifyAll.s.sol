@@ -68,6 +68,8 @@ contract VerifyAll is Script {
         inputs[5] = vm.toString(block.chainid);
         inputs[6] = "--constructor-args";
         inputs[7] = args;
+
+        bytes memory res = vm.ffi(inputs);
         string memory resultMsg = string.concat(
             "Successfully submitted verification for contract ",
             contractName,
