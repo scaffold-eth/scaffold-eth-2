@@ -38,10 +38,10 @@ export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVa
       <div className="flex items-center gap-2">
         <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
-          {!isFetching ? (
-            <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-          ) : (
+          {isFetching ? (
             <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
       </div>

@@ -67,12 +67,12 @@ export const ContractInteraction = () => {
                   onClick={() => writeAsync()}
                   disabled={isLoading}
                 >
-                  {!isLoading ? (
+                  {isLoading ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
                     <>
                       Send <ArrowSmallRightIcon className="w-3 h-3 mt-0.5" />
                     </>
-                  ) : (
-                    <span className="loading loading-spinner loading-sm"></span>
                   )}
                 </button>
               </div>
