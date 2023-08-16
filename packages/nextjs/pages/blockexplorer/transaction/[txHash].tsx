@@ -37,14 +37,14 @@ const TransactionPage: NextPage = () => {
   }, [client, txHash]);
 
   return (
-    <div className="container mx-auto mt-10 mb-20">
+    <div className="container mx-auto mt-10 mb-20 px-10 md:px-0">
       <button className="btn btn-sm btn-primary" onClick={() => router.back()}>
         Back
       </button>
       {transaction ? (
-        <div>
+        <div className="overflow-x-auto">
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
-          <table className="table w-full shadow-lg">
+          <table className="table rounded-lg bg-base-100 w-full shadow-lg md:table-lg table-md">
             <tbody>
               <tr>
                 <td>

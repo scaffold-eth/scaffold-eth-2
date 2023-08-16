@@ -18,7 +18,7 @@ export const Footer = () => {
         <div className="fixed flex justify-between items-center w-full z-10 p-4 bottom-0 left-0 pointer-events-none">
           <div className="flex space-x-2 pointer-events-auto">
             {nativeCurrencyPrice > 0 && (
-              <div className="btn btn-primary btn-sm font-normal cursor-auto">
+              <div className="btn btn-primary btn-sm font-normal cursor-auto gap-0">
                 <CurrencyDollarIcon className="h-4 w-4 mr-0.5" />
                 <span>{nativeCurrencyPrice}</span>
               </div>
