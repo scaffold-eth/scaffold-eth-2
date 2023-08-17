@@ -266,7 +266,7 @@ templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 
 --- ARGS FILES
 ${hasArgsPaths
-  ? argsFileUrls.map(url => `\t- ${url.split('scaffold-eth-2/')[1]}`).join('\n')
+  ? argsFileUrls.map(url => `\t- ${path.join('templates', url.split('templates')[1])}`).join('\n')
   : '(no args files writing to the template)'
 }
 
