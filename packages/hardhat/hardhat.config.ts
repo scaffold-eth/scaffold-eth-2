@@ -98,6 +98,14 @@ const config: HardhatUserConfig = {
       url: "https://rpc.chiadochain.net",
       accounts: [deployerPrivateKey],
     },
+    base: {
+      url: "https://mainnet.base.org",
+      accounts: [deployerPrivateKey],
+    },
+    baseGoerli: {
+      url: "https://goerli.base.org",
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
