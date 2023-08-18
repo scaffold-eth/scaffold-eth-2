@@ -87,5 +87,4 @@ Once the PR is approved, we'll "squash-and-merge" to keep the git commit history
 
 ## Developer Guide
 
-You can find a detailed guide on `contributors/DEVELOPER-GUIDE.md` (TODO add link once published
-)
+You can find a detailed guide on [`contributors/DEVELOPER-GUIDE.md`](https://github.com/scaffold-eth/scaffold-eth-2/blob/cli-dev-mode/contributors/DEVELOPER-GUIDE.md)

@@ -34,7 +34,7 @@ You can send any option or flag to the CLI command, except for the project name,
 
 The source files for the instance projects can be found under `templates/`. You'll see there are two folders there: `base/` and `extensions/`. The `base/` folder has the source files that will be present in all instances, whereas `extensions/` hold the source files that will be added or not to the instances based on the user choices within the CLI tool.
 
-It's highly recommended that you go through RFC-extensions.md (TODO add link once published to the right folder) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
+It's highly recommended that you go through [RFC-extensions.md](https://github.com/scaffold-eth/scaffold-eth-2/blob/cli-dev-mode/contributors/RFC-extensions.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
 
 While you might be tempted to change files straight in the source, we've created a better way to do it with the dev mode. We feel this is worth a separate section in this document.
 
