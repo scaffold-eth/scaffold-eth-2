@@ -6,7 +6,7 @@ This guide aims to provide an overview of the contribution workflow to help us m
 
 ## About the Project
 
-Scaffold-ETH 2 is a minimal and forkable repo providing builders with a starter kit to build decentralized applications on Ethereum.
+Scaffold-ETH 2 is CLI tool to create a minimal repo providing builders with a starter kit to build decentralized applications on Ethereum.
 
 Read the [README](README.md) to get an overview of the project.
 
@@ -14,7 +14,7 @@ Read the [README](README.md) to get an overview of the project.
 
 The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application.
 
-The repo can be forked to include integrations and more features, but we want to keep the master branch simple and minimal.
+The repo can be forked to include integrations and more features.
 
 ### Project Status
 
@@ -84,3 +84,8 @@ Once you submit your PR:
 - As you update your PR and apply changes, mark each conversation resolved.
 
 Once the PR is approved, we'll "squash-and-merge" to keep the git commit history clean.
+
+## Developer Guide
+
+You can find a detailed guide on `contributors/DEVELOPER-GUIDE.md` (TODO add link once published
+)
