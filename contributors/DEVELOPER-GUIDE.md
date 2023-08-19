@@ -3,6 +3,7 @@
 This project is aimed to be consumed via `npx create`. The code in this repo is the source used to generate the consumable script.
 
 The steps you should follow to make changes to the code are the following:
+
 1. Clone and `cd` into the repo
 2. Start a development server watching changes with `yarn dev`. This process will build the script as you save changes.
 
@@ -15,20 +16,14 @@ To avoid confusion when talking about this project or resulting projects, we'll 
 The CLI tool source code can be found under `src/`. As you make changes in those files, the development server will compile the source and generate the script inside `bin/`.
 
 To run the script you can simply run
+
 ```bash
 yarn cli
 ```
 
-This command will do two things:
-1. Remove the folder `test-cli/` if it exists.
-2. Run the CLI script using the folder `test-cli/` as the destination.
+This command will run the compiled script inside `bin/`.
 
-If you wanted to use a different name or destination, you could also run the CLI via node.
-```bash
-node path-to-this-repo/bin/create-dapp-se2.js [project-name --flags]
-```
-
-You can send any option or flag to the CLI command, except for the project name, which is hardcoded to be "test-cli" in the package.json script. For example, a handy command is `yarn cli -s` to tell the CLI to skip installing dependencies.
+You can send any option or flag to the CLI command. For example, a handy command is `yarn cli -s` to tell the CLI to skip installing dependencies or `yarn cli [project_path]` example `yarn cli ../test-cli` this will skip the "Project Name" prompt and use the provided path where project instance will be created in.
 
 ## Changes to the Resulting Project
 
@@ -39,6 +34,7 @@ It's highly recommended that you go through [RFC-extensions.md](RFC-extensions.m
 While you might be tempted to change files straight in the source, we've created a better way to do it with the dev mode. We feel this is worth a separate section in this document.
 
 ## Dev Mode
+
 The dev mode creates a special instance linked to the `templates/` folder. You can enable it by adding the `--dev` flag when using the CLI.
 
 ```bash
