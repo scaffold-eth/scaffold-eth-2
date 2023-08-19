@@ -4,17 +4,18 @@ import fs from "fs";
 
 export function mergePackageJson(
   targetPackageJsonPath: string,
-  secondPackageJsonPath: string
+  secondPackageJsonPath: string,
+  isDev: boolean
 ) {
-  if (
-    !fs.existsSync(targetPackageJsonPath) ||
-    !fs.existsSync(secondPackageJsonPath)
-  )
+  const existsTarget = fs.existsSync(targetPackageJsonPath);
+  const existsSecond = fs.existsSync(secondPackageJsonPath);
+  if (!existsTarget && !existsSecond) {
     return;
+  }
 
-  const targetPackageJson = fs.readFileSync(targetPackageJsonPath, "utf8");
+  const targetPackageJson = existsTarget ? fs.readFileSync(targetPackageJsonPath, "utf8") : '{}';
 
-  const secondPackageJson = fs.readFileSync(secondPackageJsonPath, "utf8");
+  const secondPackageJson = existsSecond ? fs.readFileSync(secondPackageJsonPath, "utf8") : '{}';
 
   const mergedPkgStr = mergeJsonStr.default(
     targetPackageJson,
@@ -22,4 +23,8 @@ export function mergePackageJson(
   );
 
   fs.writeFileSync(targetPackageJsonPath, mergedPkgStr, "utf8");
+  if (isDev) {
+    const devStr = `TODO: write relevant information for the contributor`
+    fs.writeFileSync(`${targetPackageJsonPath}.dev`, devStr, "utf8");
+  }
 }

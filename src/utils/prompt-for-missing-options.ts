@@ -15,6 +15,7 @@ import { extensionDict } from "./extensions-tree";
 const defaultOptions: RawOptions = {
   project: "my-dapp-example",
   install: true,
+  dev: false,
   extensions: [],
 };
 
@@ -106,6 +107,7 @@ export async function promptForMissingOptions(
   const mergedOptions: Options = {
     project: options.project ?? answers.project,
     install: options.install ?? answers.install,
+    dev: options.dev ?? defaultOptions.dev,
     extensions: [],
   };
 

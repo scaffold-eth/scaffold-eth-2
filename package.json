@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "dev": "rollup -c rollup.config.js --watch",
-    "cli": "rm -rf test && node bin/create-dapp-se2.js",
+    "cli": "node bin/create-dapp-se2.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

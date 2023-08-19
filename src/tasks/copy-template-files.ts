@@ -9,8 +9,10 @@ import url from 'url'
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
+import link from "../utils/link";
 
 const copy = promisify(ncp);
+let copyOrLink = copy
 
 const expandExtensions = (options: Options): Extension[] => {
   const expandedExtensions = options.extensions
@@ -29,18 +31,75 @@ const expandExtensions = (options: Options): Extension[] => {
 };
 
 const isTemplateRegex = /([^\/\\]*?)\.template\./;
-const isConfigRegex = /config.json/;
+const isPackageJsonRegex = /package\.json/;
+const isYarnLockRegex = /yarn\.lock/;
+const isNextGeneratedRegex = /packages\/nextjs\/generated/
+const isConfigRegex = /([^\/\\]*?)\\config\.json/;
 const isArgsRegex = /([^\/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
+
+const copyBaseFiles = async (
+    { dev: isDev }: Options,
+    basePath: string,
+    targetDir: string
+  ) => {
+  await copyOrLink(basePath, targetDir, {
+    clobber: false,
+    filter: (fileName) => {  // NOTE: filter IN
+      const isTemplate = isTemplateRegex.test(fileName)
+      const isPackageJson = isPackageJsonRegex.test(fileName)
+      const isYarnLock = isYarnLockRegex.test(fileName)
+      const isNextGenerated = isNextGeneratedRegex.test(fileName)
+
+      const skipAlways = isTemplate || isPackageJson
+      const skipDevOnly = isYarnLock || isNextGenerated
+      const shouldSkip = skipAlways || (isDev && skipDevOnly)
+
+      return !shouldSkip
+    },
+  });
+
+  const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path))
+
+  basePackageJsonPaths.forEach(packageJsonPath => {
+    const partialPath = packageJsonPath.split(basePath)[1]
+    mergePackageJson(
+      path.join(targetDir, partialPath),
+      path.join(basePath, partialPath),
+      isDev
+    );
+  })
+
+  if (isDev) {
+    const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path))
+    baseYarnLockPaths.forEach(yarnLockPath => {
+      const partialPath = yarnLockPath.split(basePath)[1]
+      copy(
+        path.join(basePath, partialPath),
+        path.join(targetDir, partialPath)
+      )
+    })
+
+    const nextGeneratedPaths = findFilesRecursiveSync(basePath, path => isNextGeneratedRegex.test(path))
+    nextGeneratedPaths.forEach(nextGeneratedPath => {
+      const partialPath = nextGeneratedPath.split(basePath)[1]
+      copy(
+        path.join(basePath, partialPath),
+        path.join(targetDir, partialPath)
+      )
+    })
+  }
+}
+
 const copyExtensionsFiles = async (
-  { extensions }: Options,
+  { extensions, dev: isDev }: Options,
   targetDir: string
 ) => {
   await Promise.all(extensions.map(async (extension) => {
     const extensionPath = extensionDict[extension].path;
-    // copy root files
-    await copy(extensionPath, path.join(targetDir), {
+    // copy (or link if dev) root files
+    await copyOrLink(extensionPath, path.join(targetDir), {
       clobber: false,
       filter: (path) => {
         const isConfig = isConfigRegex.test(path);
@@ -50,10 +109,13 @@ const copyExtensionsFiles = async (
         const isPackagesFolder =
           isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
         const isTemplate = isTemplateRegex.test(path);
+        // PR NOTE: this wasn't needed before because ncp had the clobber: false
+        const isPackageJson = isPackageJsonRegex.test(path);
         const shouldSkip =
           isConfig ||
           isArgs ||
           isTemplate ||
+          isPackageJson ||
           isExtensionFolder ||
           isPackagesFolder;
         return !shouldSkip;
@@ -63,19 +125,21 @@ const copyExtensionsFiles = async (
     // merge root package.json
     mergePackageJson(
       path.join(targetDir, "package.json"),
-      path.join(extensionPath, "package.json")
+      path.join(extensionPath, "package.json"),
+      isDev
     );
 
     const extensionPackagesPath = path.join(extensionPath, "packages");
     const hasPackages = fs.existsSync(extensionPackagesPath);
     if (hasPackages) {
       // copy extension packages files
-      await copy(extensionPackagesPath, path.join(targetDir, "packages"), {
+      await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
         clobber: false,
         filter: (path) => {
           const isArgs = isArgsRegex.test(path);
           const isTemplate = isTemplateRegex.test(path);
-          const shouldSkip = isArgs || isTemplate;
+          const isPackageJson = isPackageJsonRegex.test(path);
+          const shouldSkip = isArgs || isTemplate || isPackageJson;
 
           return !shouldSkip;
         },
@@ -86,7 +150,8 @@ const copyExtensionsFiles = async (
       extensionPackages.forEach((packageName) => {
         mergePackageJson(
           path.join(targetDir, "packages", packageName, "package.json"),
-          path.join(extensionPath, "packages", packageName, "package.json")
+          path.join(extensionPath, "packages", packageName, "package.json"),
+          isDev
         );
       });
     }
@@ -94,7 +159,7 @@ const copyExtensionsFiles = async (
 };
 
 const processTemplatedFiles = async (
-  { extensions }: Options,
+  { extensions, dev: isDev }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -181,6 +246,8 @@ const processTemplatedFiles = async (
         freshArgs
       );
 
+      // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
+
       const output = template(combinedArgs);
 
       const targetPath = path.join(
@@ -189,6 +256,32 @@ const processTemplatedFiles = async (
         templateTargetName
       );
       fs.writeFileSync(targetPath, output);
+
+      if (isDev) {
+        const hasCombinedArgs = Object.keys(combinedArgs).length > 0
+        const hasArgsPaths = argsFileUrls.length > 0
+        const devOutput = `--- TEMPLATE FILE
+templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
+
+
+--- ARGS FILES
+${hasArgsPaths
+  ? argsFileUrls.map(url => `\t- ${path.join('templates', url.split('templates')[1])}`).join('\n')
+  : '(no args files writing to the template)'
+}
+
+
+--- RESULTING ARGS
+${hasCombinedArgs
+  ? Object.entries(combinedArgs)
+  .map(([argName, argValue]) => `\t- ${argName}:\t[${argValue.join(',')}]`)
+  // TODO improvement: figure out how to add the values added by each args file
+  .join('\n')
+  : '(no args sent for the template)'
+}
+`
+        fs.writeFileSync(`${targetPath}.dev`, devOutput);
+      }
     })
   );
 };
@@ -198,12 +291,11 @@ export async function copyTemplateFiles(
   templateDir: string,
   targetDir: string
 ) {
-  // 1. Copy base template to target directory
+  copyOrLink = options.dev ? link : copy
   const basePath = path.join(templateDir, baseDir);
-  await copy(basePath, targetDir, {
-    clobber: false,
-    filter: (fileName) => !isTemplateRegex.test(fileName), // NOTE: filter IN
-  });
+
+  // 1. Copy base template to target directory
+  await copyBaseFiles(options, basePath, targetDir)
 
   // 2. Add "parent" extensions (set via config.json#extend field)
   const expandedExtension = expandExtensions(options);
