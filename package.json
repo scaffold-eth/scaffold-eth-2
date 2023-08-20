@@ -34,6 +34,7 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
     "arg": "5.0.2",
     "chalk": "5.2.0",
     "execa": "7.1.1",
