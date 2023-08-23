@@ -42,7 +42,7 @@ export const Footer = () => {
               </a>
             </div>
             <span>·</span>
-            <div>
+            <div className="flex items-center">
               Built with <HeartIcon className="inline-block h-4 w-4" /> at 🏰{" "}
               <a
                 href="https://buidlguidl.com/"
