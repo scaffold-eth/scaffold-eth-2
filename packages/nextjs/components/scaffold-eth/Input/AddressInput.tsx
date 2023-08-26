@@ -5,6 +5,7 @@ import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { BookOpenIcon } from "@heroicons/react/24/outline";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
+import { useAddressBook } from "~~/hooks/scaffold-eth/useAddressBook";
 
 // ToDo:  move this function to an utility file
 const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".xyz");
