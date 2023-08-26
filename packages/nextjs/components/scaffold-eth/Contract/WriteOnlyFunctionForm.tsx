@@ -106,11 +106,8 @@ export const WriteOnlyFunctionForm = ({ abiFunction, onChange, contractAddress }
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
-            <button
-              className={`btn btn-secondary btn-sm ${isLoading ? "loading" : ""}`}
-              disabled={writeDisabled}
-              onClick={handleWrite}
-            >
+            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isLoading} onClick={handleWrite}>
+              {isLoading && <span className="loading loading-spinner loading-xs"></span>}
               Send 💸
             </button>
           </div>
