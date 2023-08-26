@@ -21,8 +21,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     cacheTime: 30_000,
   });
 
-  const [showPopularAddresses, setShowPopularAddresses] = useState<boolean>(false);
-  const toggleShowPopularAddresses = () => setShowPopularAddresses(!showPopularAddresses);
+  const [showRelevantAddresses, setShowRelevantAddresses] = useState<boolean>(false);
+  const toggleShowRelevantAddresses = () => setShowRelevantAddresses(!showRelevantAddresses);
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
   const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address: value,
@@ -84,8 +84,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
           <>
             <div
               className="self-center cursor-pointer text-xl font-semibold px-4 text-accent tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-              onClick={toggleShowPopularAddresses}
-              data-tip="popular addresses"
+              onClick={toggleShowRelevantAddresses}
+              data-tip="relevant addresses"
             >
               <BookOpenIcon className="h-4 w-4 cursor-pointer" aria-hidden="true" />
             </div>
@@ -93,14 +93,14 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
           </>
         }
       />
-      {showPopularAddresses && (
+      {showRelevantAddresses && (
         <ol className="border-2 border-base-300 bg-base-200 text-accent p-2 mx-4 rounded-md">
           {addressBook.map(({ address, description }, index) => (
             <li
               key={`${address}-${index}`}
               className="flex space-x-4 cursor-pointer"
               onClick={() => {
-                toggleShowPopularAddresses();
+                toggleShowRelevantAddresses();
                 handleChange(address);
               }}
             >
