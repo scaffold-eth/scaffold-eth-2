@@ -102,6 +102,12 @@ contract VerifyAll is Script {
         FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
 
         if (f.stderr.length != 0) {
+            console.logString(
+                string.concat(
+                    "Submitting verification for contract: ",
+                    vm.toString(contractAddr)
+                )
+            );
             console.logString(string(f.stderr));
         } else {
             console.logString(string(f.stdout));
