@@ -109,7 +109,9 @@ contract VerifyAll is Script {
         return;
     }
 
-    function nextTransaction(string memory content) external returns (bool) {
+    function nextTransaction(
+        string memory content
+    ) external view returns (bool) {
         try this.getTransactionFromRaw(content, currTransactionIdx) {
             return true;
         } catch {
@@ -135,11 +137,8 @@ contract VerifyAll is Script {
     function getTransactionFromRaw(
         string memory content,
         uint96 idx
-    ) external view {
-        bytes32 hash = abi.decode(
-            vm.parseJson(content, searchStr(idx, "hash")),
-            (bytes32)
-        );
+    ) external pure {
+        abi.decode(vm.parseJson(content, searchStr(idx, "hash")), (bytes32));
     }
 
     function searchStr(
