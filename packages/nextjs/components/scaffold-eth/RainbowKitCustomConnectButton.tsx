@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Modal from "../TriggerWithModal/Modal";
+import Trigger from "../TriggerWithModal/Trigger";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { QRCodeSVG } from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -134,10 +136,10 @@ export const RainbowKitCustomConnectButton = () => {
                         )}
                       </li>
                       <li>
-                        <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
+                        <Trigger id="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <span className="whitespace-nowrap">View QR Code</span>
-                        </label>
+                        </Trigger>
                       </li>
                       <li>
                         <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
@@ -163,27 +165,14 @@ export const RainbowKitCustomConnectButton = () => {
                       </li>
                     </ul>
                   </div>
-                  <div>
-                    <input type="checkbox" id="qrcode-modal" className="modal-toggle" />
-                    <label htmlFor="qrcode-modal" className="modal cursor-pointer">
-                      <label className="modal-box relative">
-                        {/* dummy input to capture event onclick on modal box */}
-                        <input className="h-0 w-0 absolute top-0 left-0" />
-                        <label
-                          htmlFor="qrcode-modal"
-                          className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3"
-                        >
-                          ✕
-                        </label>
-                        <div className="space-y-3 py-6">
-                          <div className="flex space-x-4 flex-col items-center gap-6">
-                            <QRCodeSVG value={account.address} size={256} />
-                            <Address address={account.address} format="long" disableAddressLink />
-                          </div>
-                        </div>
-                      </label>
-                    </label>
-                  </div>
+                  <Modal id="qrcode-modal">
+                    <div className="space-y-3 py-6">
+                      <div className="flex space-x-4 flex-col items-center gap-6">
+                        <QRCodeSVG value={account.address} size={256} />
+                        <Address address={account.address} format="long" disableAddressLink />
+                      </div>
+                    </div>
+                  </Modal>
                 </div>
               );
             })()}
