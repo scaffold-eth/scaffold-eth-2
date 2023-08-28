@@ -9,7 +9,8 @@
     "build": "rollup -c rollup.config.js",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-se2.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "changeset:release": "yarn build && changeset publish"
   },
   "keywords": [
     "cli",
@@ -34,6 +35,7 @@
     "typescript": "5.0.4"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.2",
     "arg": "5.0.2",
     "chalk": "5.2.0",
     "execa": "7.1.1",

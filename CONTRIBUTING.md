@@ -68,8 +68,9 @@ We follow the ["fork-and-pull" Git workflow](https://github.com/susam/gitpr)
 2. Clone the project
 3. Create a new branch with a descriptive name
 4. Commit your changes to the new branch
-5. Push changes to your fork
-6. Open a PR in our repository and tag one of the maintainers to review your PR
+5. Add [changeset](#changeset) if applicable
+6. Push changes to your fork
+7. Open a PR in our repository and tag one of the maintainers to review your PR
 
 Here are some tips for a high-quality pull request:
 
@@ -84,6 +85,22 @@ Once you submit your PR:
 - As you update your PR and apply changes, mark each conversation resolved.
 
 Once the PR is approved, we'll "squash-and-merge" to keep the git commit history clean.
+
+### Changeset
+
+When adding new features or fixing bugs, we'll need to bump the package versions. We use [Changesets](https://github.com/changesets/changesets) to do this.
+
+> Note: Only changes to the codebase that affect the public API or existing behavior (e.g. bugs) need changesets.
+
+Each changeset defines the version should be a major/minor/patch release, as well as providing release notes that will be added to the changelog upon release.
+
+To create a new changeset, run `yarn changeset add`. This will run the Changesets CLI, prompting you for details about the change. You’ll be able to edit the file after it’s created — don’t worry about getting everything perfect up front.
+
+Since we’re currently in beta, all changes should be marked as a minor/patch release to keep us within the `v0.x` range.
+
+Even though you can technically use any markdown formatting you like, headings should be avoided since each changeset will ultimately be nested within a bullet list. Instead, bold text should be used as section headings.
+
+If your PR is making changes to an area that already has a changeset (e.g. there’s an existing changeset covering theme API changes but you’re making further changes to the same API), you should update the existing changeset in your PR rather than creating a new one.
 
 ## Developer Guide
 
