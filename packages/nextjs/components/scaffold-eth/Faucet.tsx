@@ -12,6 +12,8 @@ import { notification } from "~~/utils/scaffold-eth";
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
 
+const FAUCET_MODAL_ID = "faucet-modal";
+
 const localWalletClient = createWalletClient({
   chain: hardhat,
   transport: http(),
@@ -84,12 +86,12 @@ export const Faucet = () => {
 
   return (
     <div>
-      <Trigger id="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full font-normal normal-case">
+      <Trigger id={FAUCET_MODAL_ID} className="btn btn-primary btn-sm px-2 rounded-full font-normal normal-case">
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </Trigger>
 
-      <Modal id="faucet-modal">
+      <Modal id={FAUCET_MODAL_ID}>
         <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
         <div className="space-y-3">
           <div className="flex space-x-4">

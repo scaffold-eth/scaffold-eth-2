@@ -18,6 +18,8 @@ import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
 
+const QR_CODE_MODAL_ID = "qrcode-modal";
+
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
@@ -136,7 +138,7 @@ export const RainbowKitCustomConnectButton = () => {
                         )}
                       </li>
                       <li>
-                        <Trigger id="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
+                        <Trigger id={QR_CODE_MODAL_ID} className="btn-sm !rounded-xl flex gap-3 py-3">
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <span className="whitespace-nowrap">View QR Code</span>
                         </Trigger>
@@ -165,7 +167,7 @@ export const RainbowKitCustomConnectButton = () => {
                       </li>
                     </ul>
                   </div>
-                  <Modal id="qrcode-modal">
+                  <Modal id={QR_CODE_MODAL_ID}>
                     <div className="space-y-3 py-6">
                       <div className="flex space-x-4 flex-col items-center gap-6">
                         <QRCodeSVG value={account.address} size={256} />

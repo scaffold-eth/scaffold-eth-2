@@ -6,9 +6,10 @@ type ModalProps = {
   id: string; // Unique identifier for the modal.
   children: React.ReactNode; // Content to be displayed inside the modal.
   className?: string; // Optional classNames to be applied to the modal.
+  closeOnOutsideClick?: boolean; // Option to close the modal on outside click.
 };
 
-const Modal: React.FC<ModalProps> = ({ id, children, className }) => {
+const Modal: React.FC<ModalProps> = ({ id, children, className, closeOnOutsideClick = true }) => {
   return (
     <div role="dialog">
       {/* Checkbox for toggling the modal. */}
@@ -22,6 +23,8 @@ const Modal: React.FC<ModalProps> = ({ id, children, className }) => {
           {/* Modal content. */}
           {children}
         </div>
+        {/* Transparent backdrop for closing on outside click */}
+        {closeOnOutsideClick && <label htmlFor={`modal-${id}`} className="modal-backdrop" />}
       </div>
     </div>
   );
