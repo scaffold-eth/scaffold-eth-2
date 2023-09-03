@@ -24,6 +24,7 @@
     "next:lint": "pnpm run --filter @se-2/nextjs lint",
     "next:format": "pnpm run --filter @se-2/nextjs format",
     "next:check-types": "pnpm run --filter @se-2/nextjs check-types",
+    "test": "yarn hardhat:test",
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "pnpm run --filter @se-2/nextjs vercel",

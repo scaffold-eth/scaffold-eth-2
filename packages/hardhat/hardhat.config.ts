@@ -90,6 +90,22 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
       verifyURL: "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
     },
+    gnosis: {
+      url: "https://rpc.gnosischain.com",
+      accounts: [deployerPrivateKey],
+    },
+    chiado: {
+      url: "https://rpc.chiadochain.net",
+      accounts: [deployerPrivateKey],
+    },
+    base: {
+      url: "https://mainnet.base.org",
+      accounts: [deployerPrivateKey],
+    },
+    baseGoerli: {
+      url: "https://goerli.base.org",
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {

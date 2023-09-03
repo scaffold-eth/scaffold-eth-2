@@ -3,7 +3,6 @@ import { CommonInputProps } from "~~/components/scaffold-eth";
 
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
-  disabled?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
 };
