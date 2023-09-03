@@ -25,6 +25,9 @@ dependencies:
   '@uniswap/v2-sdk':
     specifier: ^3.0.1
     version: 3.0.1
+  abitype:
+    specifier: ^0.9.8
+    version: 0.9.8(typescript@5.2.2)
   daisyui:
     specifier: ^3.5.1
     version: 3.6.4
@@ -2121,6 +2124,20 @@ packages:
 
   /abitype@0.9.3(typescript@5.2.2):
     resolution: {integrity: sha512-dz4qCQLurx97FQhnb/EIYTk/ldQ+oafEDUqC0VVIeQS1Q48/YWt/9YNfMmp9SLFqN41ktxny3c8aYxHjmFIB/w==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.19.1
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      zod:
+        optional: true
+    dependencies:
+      typescript: 5.2.2
+    dev: false
+
+  /abitype@0.9.8(typescript@5.2.2):
+    resolution: {integrity: sha512-puLifILdm+8sjyss4S+fsUN09obiT1g2YW6CtcQF+QDzxR0euzgEB29MZujC6zMk2a6SVmtttq1fc6+YFA7WYQ==}
     peerDependencies:
       typescript: '>=5.0.4'
       zod: ^3 >=3.19.1
