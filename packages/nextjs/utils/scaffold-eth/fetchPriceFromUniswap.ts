@@ -1,6 +1,6 @@
 import { CurrencyAmount, Token } from "@uniswap/sdk-core";
 import { Pair, Route } from "@uniswap/v2-sdk";
-import { createPublicClient, http, parseAbi } from "viem";
+import { Address, createPublicClient, http, parseAbi } from "viem";
 import { mainnet } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
@@ -28,7 +28,7 @@ export const fetchPriceFromUniswap = async (): Promise<number> => {
       configuredNetwork.nativeCurrencyTokenAddress || "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       18,
     );
-    const pairAddress = Pair.getAddress(TOKEN, DAI);
+    const pairAddress = Pair.getAddress(TOKEN, DAI) as Address;
 
     const wagmiConfig = {
       address: pairAddress,

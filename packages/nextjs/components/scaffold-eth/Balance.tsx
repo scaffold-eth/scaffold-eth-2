@@ -1,3 +1,4 @@
+import { Address } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -11,7 +12,7 @@ type TBalanceProps = {
  */
 export const Balance = ({ address, className = "" }: TBalanceProps) => {
   const configuredNetwork = getTargetNetwork();
-  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useAccountBalance(address);
+  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useAccountBalance(address as Address);
 
   if (!address || isLoading || balance === null) {
     return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Blockies from "react-blockies";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { isAddress } from "viem";
+import { Address as AddressType, isAddress } from "viem";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
@@ -33,7 +33,11 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
 
-  const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
+  const { data: fetchedEns } = useEnsName({
+    address: address as AddressType,
+    enabled: isAddress(address ?? ""),
+    chainId: 1,
+  });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
     name: fetchedEns,
     enabled: Boolean(fetchedEns),
