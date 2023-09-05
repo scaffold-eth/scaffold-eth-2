@@ -100,7 +100,9 @@ type Expand<T> = T extends object ? (T extends infer O ? { [K in keyof O]: O[K] 
 
 type UnionToIntersection<U> = Expand<(U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never>;
 
-type OptionalTupple<T> = T extends readonly [infer H, ...infer R] ? readonly [H | undefined, ...OptionalTupple<R>] : T;
+type OptionalTupple<T> = T extends readonly [infer H, ...infer R]
+  ? readonly [(H extends Address ? string : H) | undefined, ...OptionalTupple<R>]
+  : T;
 
 type UseScaffoldArgsParam<
   TContractName extends ContractName,
