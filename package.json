@@ -11,7 +11,7 @@
   "scripts": {
     "account": "yarn workspace @se-2/foundry account",
     "fork": "yarn workspace @se-2/foundry fork",
-    "verify": "yarn workspace @se-2/hardhat verify",
+    "verify": "yarn workspace @se-2/foundry verify",
     "compile": "yarn workspace @se-2/foundry compile",
     "chain": "yarn workspace @se-2/foundry chain",
     "deploy": "yarn workspace @se-2/foundry deploy",
