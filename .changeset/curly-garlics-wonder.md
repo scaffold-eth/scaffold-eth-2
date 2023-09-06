@@ -14,6 +14,6 @@
 
 6. fix: test file name #522
 
-7. Foundry v2 #489
+7. add support for `yarn verify --network networkName` in foundry similar to hardhat #489
 
 8. updated the Git task title from "Initializing Git repository" => "Initializing Git repository and submodules" when the user selects foundry as an extension
