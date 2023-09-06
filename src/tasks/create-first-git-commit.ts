@@ -57,6 +57,18 @@ export async function createFirstGitCommit(
           cwd: foundryWorkSpacePath,
         }
       );
+      await execa(
+        "git",
+        [
+          "submodule",
+          "add",
+          "https://github.com/gnsps/solidity-bytes-utils",
+          "lib/solidity-bytes-utils",
+        ],
+        {
+          cwd: foundryWorkSpacePath,
+        }
+      );
       await execa("git", ["submodule", "update", "--init", "--recursive"], {
         cwd: foundryWorkSpacePath,
       });
