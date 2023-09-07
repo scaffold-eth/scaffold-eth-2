@@ -54,7 +54,7 @@ export const useScaffoldContractWrite = <
     value?: UseScaffoldWriteConfig<TContractName, TFunctionName>["value"];
   } & UpdatedArgs = {}) => {
     if (!deployedContractData) {
-      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
+      notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
       return;
     }
     if (!chain?.id) {
@@ -62,7 +62,7 @@ export const useScaffoldContractWrite = <
       return;
     }
     if (chain?.id !== configuredNetwork.id) {
-      notification.error("You on the wrong network");
+      notification.error("You are on the wrong network");
       return;
     }
 

@@ -9,6 +9,7 @@
     "foundry:lint": "yarn workspace @se-2/foundry lint",
     "foundry:test": "yarn workspace @se-2/foundry test",
     "test": "yarn foundry:test",
+    "verify": "yarn workspace @se-2/foundry verify",
     "generate": "yarn workspace @se-2/foundry generate"
   }
 }
