@@ -12,11 +12,9 @@ export const useFetchBlocks = () => {
   }>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalBlocks, setTotalBlocks] = useState(0n);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchBlocks = useCallback(async () => {
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -62,7 +60,6 @@ export const useFetchBlocks = () => {
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred."));
     }
-    setIsLoading(false);
   }, [currentPage]);
 
   useEffect(() => {
@@ -114,7 +111,6 @@ export const useFetchBlocks = () => {
     currentPage,
     totalBlocks,
     setCurrentPage,
-    isLoading,
     error,
   };
 };
