@@ -73,11 +73,7 @@ export const useFetchBlocks = () => {
     const handleNewBlock = async (newBlock: any) => {
       try {
         if (currentPage === 0) {
-          if (
-            newBlock.transactions &&
-            newBlock.transactions.length > 0 &&
-            typeof newBlock.transactions[0] === "string"
-          ) {
+          if (newBlock.transactions.length > 0) {
             const transactionsDetails = await Promise.all(
               newBlock.transactions.map((txHash: string) => extendedClient.getTransaction({ hash: txHash as Hash })),
             );
@@ -110,8 +106,7 @@ export const useFetchBlocks = () => {
     };
 
     return extendedClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blocks, extendedClient, currentPage]);
+  }, [blocks, currentPage]);
 
   return {
     blocks,
