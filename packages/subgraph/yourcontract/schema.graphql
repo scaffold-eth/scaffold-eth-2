@@ -1,7 +1,9 @@
-type Purpose @entity {
+type Greeting @entity {
   id: ID!
   sender: Sender!
-  purpose: String!
+  greeting: String!
+  premium:Boolean!
+  amount:BigInt!
   createdAt: BigInt!
   transactionHash: String!
 }
@@ -9,7 +11,5 @@ type Purpose @entity {
 type Sender @entity {
   id: ID!
   address: Bytes!
-  purposes: [Purpose!] @derivedFrom(field: "sender")
   createdAt: BigInt!
-  purposeCount: BigInt!
 }

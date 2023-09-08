@@ -1,0 +1,25 @@
+specVersion: 0.0.4
+schema:
+  file: ./YourContract/schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: YourContract
+    network: hardhat
+    source:
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+      abi: YourContract
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Greeting
+        - Sender
+      abis:
+        - name: YourContract
+          file: ./YourContract/abis/YourContract.json
+      eventHandlers:
+        - event: GreetingChange(indexed address,string,bool,uint256) 
+          handler: handleGreetingChange
+      file: ./YourContract/mappings/index.ts

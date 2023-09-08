@@ -1,33 +1,30 @@
 import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   YourContract,
-  SetPurpose,
-} from "../generated/YourContract/YourContract";
-import { Purpose, Sender } from "../generated/schema";
+  GreetingChange
+} from "../../generated/YourContract/YourContract";
+import { Greeting, Sender, } from "../../generated/schema";
 
-export function handleSetPurpose(event: SetPurpose): void {
-  let senderString = event.params.sender.toHexString();
+export function  handleGreetingChange(event: GreetingChange): void {
+  let senderString = event.params.greetingSetter.toHexString();
+  let greeting =  new Greeting(event.transaction.hash.toHex() + "-" + event.logIndex.toString())
+  greeting.amount = event.params.value
+  greeting.createdAt = event.block.timestamp;
+  greeting.transactionHash = event.transaction.hash.toHex();
 
-  let sender = Sender.load(senderString);
+  greeting.save()
 
-  if (sender === null) {
-    sender = new Sender(senderString);
-    sender.address = event.params.sender;
-    sender.createdAt = event.block.timestamp;
-    sender.purposeCount = BigInt.fromI32(1);
-  } else {
-    sender.purposeCount = sender.purposeCount.plus(BigInt.fromI32(1));
-  }
+ 
+  // let sender = Sender.load(senderString);
 
-  let purpose = new Purpose(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  );
+  // if (sender === null) {
+  //   sender = new Sender(senderString);
+  //   sender.address = event.params.greetingSetter;
+  //   sender.createdAt = event.block.timestamp;
+  // } else {
+  //   sender.purposeCount = sender.purposeCount.plus(BigInt.fromI32(1));
+  // }
 
-  purpose.purpose = event.params.purpose;
-  purpose.sender = senderString;
-  purpose.createdAt = event.block.timestamp;
-  purpose.transactionHash = event.transaction.hash.toHex();
-
-  purpose.save();
-  sender.save();
+  // purpose.save();
+  // sender.save();
 }

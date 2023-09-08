@@ -7,7 +7,9 @@
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
     "create-local": "graph create --node http://localhost:8020/ scaffold-eth/your-contract",
     "remove-local": "graph remove --node http://localhost:8020/ scaffold-eth/your-contract",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scaffold-eth/your-contract"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scaffold-eth/your-contract",
+    "start-node": "docker-compose --file ./graph-node/docker-compose.yaml up -d",
+    "graph-local-clean": "docker-compose down -v && docker-compose rm -v && rm -rf data/ipfs data/postgres"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.56.0",
