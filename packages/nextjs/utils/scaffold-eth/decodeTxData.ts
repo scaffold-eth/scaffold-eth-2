@@ -17,7 +17,7 @@ const interfaces = chainMetaData
   : {};
 
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
-  if (tx.input.length >= 10) {
+  if (tx.input.length >= 10 && !tx.input.startsWith("0x60e06040")) {
     for (const [, contractAbi] of Object.entries(interfaces)) {
       try {
         const { functionName, args } = decodeFunctionData({
