@@ -8,21 +8,21 @@
     "build": "next build",
     "serve": "next start",
     "lint": "next lint",
-    "format": "prettier --write . '!(node_module|.next|contracts)/**/*'",
+    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },
   "dependencies": {
-    "@ethersproject/networks": "^5.7.1",
-    "@ethersproject/web": "^5.7.1",
+    "@ethersproject/providers": "^5.7.2",
     "@heroicons/react": "^2.0.11",
-    "@rainbow-me/rainbowkit": "^0.11.0",
-    "@uniswap/sdk": "^3.0.3",
-    "daisyui": "^2.31.0",
-    "ethers": "^5.0.0",
+    "@rainbow-me/rainbowkit": "1.0.8",
+    "@uniswap/sdk-core": "^4.0.1",
+    "@uniswap/v2-sdk": "^3.0.1",
+    "daisyui": "^3.5.1",
     "next": "^13.1.6",
     "nextjs-progressbar": "^0.0.16",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-blockies": "^1.4.1",
     "react-copy-to-clipboard": "^5.1.0",
@@ -31,7 +31,8 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
-    "wagmi": "^0.12.10",
+    "viem": "^1.6.7",
+    "wagmi": "1.3.10",
     "zustand": "^4.1.2"
   },
   "devDependencies": {
@@ -48,8 +49,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "postcss": "^8.4.16",
     "prettier": "^2.8.4",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.9.5",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6",
     "vercel": "^28.15.1"
   }
 }
