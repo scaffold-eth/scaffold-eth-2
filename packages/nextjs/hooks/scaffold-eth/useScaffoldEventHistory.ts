@@ -1,9 +1,10 @@
-import { ContractAbi, ContractName } from "~~/utils/scaffold-eth/contract";
-import { ExtractAbiEventNames } from "abitype";
-import { useProvider, useContract } from "wagmi";
+import { useEffect, useState } from "react";
+import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
+import { Hash } from "viem";
+import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { ethers } from "ethers";
-import { useEffect, useState } from 'react';
+import { replacer } from "~~/utils/scaffold-eth/common";
+import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev reads events from a deployed contract
@@ -27,87 +28,52 @@ export const useScaffoldEventHistory = <
   blockData,
   transactionData,
   receiptData,
-}: {
-  contractName: TContractName;
-  eventName: TEventName;
-  fromBlock: number;
-  filters?: any;
-  blockData?: boolean;
-  transactionData?: boolean;
-  receiptData?: boolean;
-}) => {
+}: UseScaffoldEventHistoryConfig<TContractName, TEventName>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
-  const provider = useProvider();
-
-  const contract = useContract({
-    address: deployedContractData?.address,
-    abi: deployedContractData?.abi,
-    signerOrProvider: provider,
-  });
+  const publicClient = usePublicClient();
 
   useEffect(() => {
     async function readEvents() {
       try {
-        if (!deployedContractData || !contract) {
-          throw new Error("Contract not found")
+        if (!deployedContractData) {
+          throw new Error("Contract not found");
         }
 
-        const fragment = contract.interface.getEvent(eventName);
-        const emptyIface = new ethers.utils.Interface([])
-        const topicHash = emptyIface.getEventTopic(fragment)
-        const topics = <any>[topicHash];
+        const event = (deployedContractData.abi as Abi).find(
+          part => part.type === "event" && part.name === eventName,
+        ) as AbiEvent;
 
-        const indexedParameters = fragment.inputs.filter((input) => input.indexed);
-
-        if (indexedParameters.length > 0 && filters) {
-          const indexedTopics = indexedParameters.map((input) => {
-            const value = filters[input.name];
-            if (value === undefined) {
-              return null;
-            }
-            if (Array.isArray(value)) {
-              return value.map((v) => ethers.utils.hexZeroPad(ethers.utils.hexlify(v), 32));
-            }
-            return ethers.utils.hexZeroPad(ethers.utils.hexlify(value), 32);
-          });
-          topics.push(...indexedTopics);
-        }
-
-        const logs = await provider.getLogs({
+        const logs = await publicClient.getLogs({
           address: deployedContractData?.address,
-          topics: topics,
-          fromBlock: fromBlock,
+          event,
+          args: filters as any, // TODO: check if it works and fix type
+          fromBlock,
         });
         const newEvents = [];
         for (let i = logs.length - 1; i >= 0; i--) {
-          let block;
-          if (blockData) {
-            block = await provider.getBlock(logs[i].blockHash);
-          }
-          let transaction;
-          if (transactionData) {
-            transaction = await provider.getTransaction(logs[i].transactionHash);
-          }
-          let receipt;
-          if (receiptData) {
-            receipt = await provider.getTransactionReceipt(logs[i].transactionHash);
-          }
-          const log = {
+          newEvents.push({
             log: logs[i],
-            args: contract.interface.parseLog(logs[i]).args,
-            block: block,
-            transaction: transaction,
-            receipt: receipt,
-          }
-          newEvents.push(log);
+            args: logs[i].args,
+            block:
+              blockData && logs[i].blockHash === null
+                ? null
+                : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
+            transaction:
+              transactionData && logs[i].transactionHash !== null
+                ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
+                : null,
+            receipt:
+              receiptData && logs[i].transactionHash !== null
+                ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
+                : null,
+          });
         }
         setEvents(newEvents);
         setError(undefined);
-      }
-      catch (e: any) {
+      } catch (e: any) {
         console.error(e);
         setEvents(undefined);
         setError(e);
@@ -118,7 +84,21 @@ export const useScaffoldEventHistory = <
     if (!deployedContractLoading) {
       readEvents();
     }
-  }, [provider, fromBlock, contractName, eventName, deployedContractLoading, deployedContractData?.address, contract]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    publicClient,
+    fromBlock,
+    contractName,
+    eventName,
+    deployedContractLoading,
+    deployedContractData?.address,
+    deployedContractData,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    JSON.stringify(filters, replacer),
+    blockData,
+    transactionData,
+    receiptData,
+  ]);
 
   return {
     data: events,

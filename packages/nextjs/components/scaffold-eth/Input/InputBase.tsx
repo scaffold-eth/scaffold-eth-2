@@ -3,12 +3,11 @@ import { CommonInputProps } from "~~/components/scaffold-eth";
 
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
-  disabled?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
 };
 
-export const InputBase = <T extends { toString: () => string } = string>({
+export const InputBase = <T extends { toString: () => string } | undefined = string>({
   name,
   value,
   onChange,

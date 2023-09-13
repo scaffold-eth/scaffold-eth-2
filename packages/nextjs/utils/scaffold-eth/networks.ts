@@ -1,10 +1,12 @@
-import { Network } from "@ethersproject/networks";
 import * as chains from "wagmi/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
 export type TChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
+  // Used to fetch price by providing mainnet token address
+  // for networks having native currency other than ETH
+  nativeCurrencyTokenAddress?: string;
 };
 
 export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
@@ -25,9 +27,11 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   },
   [chains.polygon.id]: {
     color: "#2bbdf7",
+    nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
   [chains.polygonMumbai.id]: {
     color: "#92D9FA",
+    nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
   [chains.optimismGoerli.id]: {
     color: "#f01a37",
@@ -55,9 +59,7 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
  * @param txnHash
  * @dev returns empty string if the network is localChain
  */
-export function getBlockExplorerTxLink(network: Network, txnHash: string) {
-  const { chainId } = network;
-
+export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   const chainNames = Object.keys(chains);
 
   const targetChainArr = chainNames.filter(chainName => {
@@ -88,6 +90,10 @@ export function getBlockExplorerTxLink(network: Network, txnHash: string) {
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
+  if (network.id === chains.hardhat.id) {
+    return `/blockexplorer/address/${address}`;
+  }
+
   if (!blockExplorerBaseURL) {
     return `https://etherscan.io/address/${address}`;
   }
