@@ -20,7 +20,7 @@
 Before you begin, you need to install the following tools:
 
 - [Node (v18 LTS)](https://nodejs.org/en/download/)
-- [pnpm (v8.7.1+)](https://pnpm.io/cli/install)
+- [pnpm (v8.7.1+)](https://pnpm.io/installation)
 - [Git](https://git-scm.com/downloads)
 
 ## Quickstart
