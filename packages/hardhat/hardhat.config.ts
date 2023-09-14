@@ -107,10 +107,8 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
   },
-  verify: {
-    etherscan: {
-      apiKey: `${etherscanApiKey}`,
-    },
+  etherscan: {
+    apiKey: `${etherscanApiKey}`,
   },
 };
 
