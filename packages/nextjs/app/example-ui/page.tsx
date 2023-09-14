@@ -1,3 +1,4 @@
+'use client'
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { ContractData } from "~~/components/example-ui/ContractData";

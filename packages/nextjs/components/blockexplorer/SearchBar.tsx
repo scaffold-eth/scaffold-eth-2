@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { isAddress, isHex } from "viem";
 import { usePublicClient } from "wagmi";
 import { hardhat } from "wagmi/chains";

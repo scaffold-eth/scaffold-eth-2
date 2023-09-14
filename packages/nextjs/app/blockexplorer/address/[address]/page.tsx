@@ -1,5 +1,6 @@
+'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
@@ -23,7 +24,7 @@ type AddressCodeTabProps = {
 };
 
 type PageProps = {
-  address: string;
+  params: {address:string};
   contractData: AddressCodeTabProps | null;
 };
 
@@ -32,8 +33,9 @@ const publicClient = createPublicClient({
   transport: http(),
 });
 
-const AddressPage = ({ address, contractData }: PageProps) => {
+const AddressPage = ({ params, contractData }: PageProps) => {
   const router = useRouter();
+  const address=params?.address as string;
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
