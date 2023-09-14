@@ -34,8 +34,11 @@ export const ContractData = () => {
   useScaffoldEventSubscriber({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    listener: (greetingSetter, newGreeting, premium, value) => {
-      console.log(greetingSetter, newGreeting, premium, value);
+    listener: logs => {
+      logs.map(log => {
+        const { greetingSetter, value, premium, newGreeting } = log.args;
+        console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
+      });
     },
   });
 
@@ -46,7 +49,7 @@ export const ContractData = () => {
   } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    fromBlock: Number(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) || 0,
+    fromBlock: process.env.NEXT_PUBLIC_DEPLOY_BLOCK ? BigInt(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) : 0n,
     filters: { greetingSetter: address },
     blockData: true,
   });

@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
-import { hardhat, localhost } from "wagmi/chains";
+import { createPublicClient, http } from "viem";
+import { hardhat } from "wagmi/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -14,7 +15,6 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { getLocalProvider } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
@@ -27,7 +27,10 @@ type PageProps = {
   contractData: AddressCodeTabProps | null;
 };
 
-const provider = getLocalProvider(localhost);
+const publicClient = createPublicClient({
+  chain: hardhat,
+  transport: http(),
+});
 
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
@@ -37,17 +40,20 @@ const AddressPage = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await provider?.getCode(address);
-      setIsContract(contractCode !== "0x");
+      const contractCode = await publicClient.getBytecode({ address: address });
+      setIsContract(contractCode !== undefined && contractCode !== "0x");
     };
 
     checkIsContract();
   }, [address]);
 
   const filteredBlocks = blocks.filter(block =>
-    block.transactions.some(
-      tx => tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase(),
-    ),
+    block.transactions.some(tx => {
+      if (typeof tx === "string") {
+        return false;
+      }
+      return tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase();
+    }),
   );
 
   return (
@@ -59,7 +65,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       </div>
       <div className="col-span-5 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         <div className="col-span-1 flex flex-col">
-          <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4">
+          <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4 overflow-x-auto">
             <div className="flex">
               <div className="flex flex-col gap-1">
                 <Address address={address} format="long" />
@@ -103,7 +109,11 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {activeTab === "transactions" && (
         <div className="pt-4">
           <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
-          <PaginationButton currentPage={currentPage} totalItems={totalBlocks} setCurrentPage={setCurrentPage} />
+          <PaginationButton
+            currentPage={currentPage}
+            totalItems={Number(totalBlocks)}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       )}
       {activeTab === "code" && contractData && (
