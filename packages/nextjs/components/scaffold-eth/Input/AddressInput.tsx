@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { isAddress } from "ethers/lib/utils";
 import Blockies from "react-blockies";
+import { isAddress } from "viem";
+import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
@@ -10,7 +11,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-export const AddressInput = ({ value, name, placeholder, onChange }: CommonInputProps) => {
+export const AddressInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps<Address | string>) => {
   const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
     name: value,
     enabled: isENS(value),
@@ -27,8 +28,8 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   });
 
   const { data: ensAvatar } = useEnsAvatar({
-    address: value,
-    enabled: isAddress(value),
+    name: ensName,
+    enabled: Boolean(ensName),
     chainId: 1,
     cacheTime: 30_000,
   });
@@ -43,7 +44,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   }, [ensAddress, onChange, value]);
 
   const handleChange = useCallback(
-    (newValue: string) => {
+    (newValue: Address) => {
       setEnteredEnsName(undefined);
       onChange(newValue);
     },
@@ -51,13 +52,13 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   );
 
   return (
-    <InputBase
+    <InputBase<Address>
       name={name}
       placeholder={placeholder}
       error={ensAddress === null}
       value={value}
       onChange={handleChange}
-      disabled={isEnsAddressLoading || isEnsNameLoading}
+      disabled={isEnsAddressLoading || isEnsNameLoading || disabled}
       prefix={
         ensName && (
           <div className="flex bg-base-300 rounded-l-full items-center">

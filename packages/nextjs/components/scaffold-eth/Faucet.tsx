@@ -1,37 +1,38 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { useNetwork } from "wagmi";
-import { hardhat, localhost } from "wagmi/chains";
+import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { Address, AddressInput, Balance, EtherInput, getParsedEthersError } from "~~/components/scaffold-eth";
+import { Address, AddressInput, Balance, EtherInput, getParsedError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getLocalProvider, notification } from "~~/utils/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
 // Account index to use from generated hardhat accounts.
 const FAUCET_ACCOUNT_INDEX = 0;
 
-const provider = getLocalProvider(localhost);
+const localWalletClient = createWalletClient({
+  chain: hardhat,
+  transport: http(),
+});
 
 /**
  * Faucet modal which lets you send ETH to any address.
  */
 export const Faucet = () => {
   const [loading, setLoading] = useState(false);
-  const [inputAddress, setInputAddress] = useState("");
-  const [faucetAddress, setFaucetAddress] = useState("");
+  const [inputAddress, setInputAddress] = useState<AddressType>();
+  const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
 
   const { chain: ConnectedChain } = useNetwork();
-  const signer = provider?.getSigner(FAUCET_ACCOUNT_INDEX);
-  const faucetTxn = useTransactor(signer);
+
+  const faucetTxn = useTransactor(localWalletClient);
 
   useEffect(() => {
     const getFaucetAddress = async () => {
       try {
-        if (provider) {
-          const accounts = await provider.listAccounts();
-          setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
-        }
+        const accounts = await localWalletClient.getAddresses();
+        setFaucetAddress(accounts[FAUCET_ACCOUNT_INDEX]);
       } catch (error) {
         notification.error(
           <>
@@ -52,14 +53,22 @@ export const Faucet = () => {
   }, []);
 
   const sendETH = async () => {
+    if (!faucetAddress) {
+      return;
+    }
     try {
       setLoading(true);
-      await faucetTxn({ to: inputAddress, value: ethers.utils.parseEther(sendValue) });
+      await faucetTxn({
+        to: inputAddress,
+        value: parseEther(sendValue as `${number}`),
+        account: faucetAddress,
+        chain: hardhat,
+      });
       setLoading(false);
-      setInputAddress("");
+      setInputAddress(undefined);
       setSendValue("");
     } catch (error) {
-      const parsedError = getParsedEthersError(error);
+      const parsedError = getParsedError(error);
       console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
       notification.error(parsedError);
       setLoading(false);
@@ -67,16 +76,13 @@ export const Faucet = () => {
   };
 
   // Render only on local chain
-  if (!ConnectedChain || ConnectedChain.id !== hardhat.id) {
+  if (ConnectedChain?.id !== hardhat.id) {
     return null;
   }
 
   return (
     <div>
-      <label
-        htmlFor="faucet-modal"
-        className="btn btn-primary btn-sm px-2 rounded-full font-normal space-x-2 normal-case"
-      >
+      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full font-normal normal-case">
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
@@ -103,18 +109,16 @@ export const Faucet = () => {
             <div className="flex flex-col space-y-3">
               <AddressInput
                 placeholder="Destination Address"
-                value={inputAddress}
+                value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value)}
               />
               <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-              <button
-                className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
-                  loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""
-                }`}
-                onClick={sendETH}
-                disabled={loading}
-              >
-                {!loading && <BanknotesIcon className="h-6 w-6" />}
+              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+                {!loading ? (
+                  <BanknotesIcon className="h-6 w-6" />
+                ) : (
+                  <span className="loading loading-spinner loading-sm"></span>
+                )}
                 <span>Send</span>
               </button>
             </div>

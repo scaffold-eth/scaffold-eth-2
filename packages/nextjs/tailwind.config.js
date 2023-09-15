@@ -36,7 +36,7 @@ module.exports = {
         scaffoldEthDark: {
           primary: "#212638",
           "primary-content": "#F9FBFF",
-          secondary: "#2A3655",
+          secondary: "#323f61",
           "secondary-content": "#F9FBFF",
           accent: "#4969A6",
           "accent-content": "#F9FBFF",
@@ -92,6 +92,9 @@ module.exports = {
     extend: {
       fontFamily: {
         "bai-jamjuree": ["Bai Jamjuree", "sans-serif"],
+      },
+      boxShadow: {
+        center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
       },
       keyframes: {
         grow: {
