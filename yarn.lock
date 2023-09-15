@@ -1805,7 +1805,7 @@ __metadata:
     autoprefixer: ^10.4.12
     daisyui: ^3.5.1
     eslint: ^8.15.0
-    eslint-config-next: ^13.4.19
+    eslint-config-next: latest
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     next: latest
@@ -6334,7 +6334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:^13.4.19":
+"eslint-config-next@npm:latest":
   version: 13.4.19
   resolution: "eslint-config-next@npm:13.4.19"
   dependencies:
