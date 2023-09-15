@@ -15,6 +15,7 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
+import { Metadata } from "next";
 
 const ScaffoldEthApp = ({ children }: {children:React.ReactNode}) => {
   const price = useNativeCurrencyPrice();
