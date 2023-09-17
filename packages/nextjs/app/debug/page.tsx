@@ -2,7 +2,7 @@ import DebugContracts from "./debugContracts";
 import type { Metadata, NextPage } from "next";
 
 export const metadata: Metadata = {
-  title: "Debug Contract",
+  title: "Debug Contractyy",
   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
   openGraph: {
     title: "Debug Contract",
