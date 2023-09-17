@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
@@ -7,13 +8,13 @@ import { usePublicClient } from "wagmi";
 import { hardhat } from "wagmi/chains";
 import { Address } from "~~/components/scaffold-eth";
 import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
+
 type PageProps = {
-  params: {txHash?: `0x${string}`};
- 
+  params: { txHash?: `0x${string}` };
 };
-const TransactionPage:NextPage<PageProps> = ({params}:PageProps) => {
+const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
   const client = usePublicClient({ chainId: hardhat.id });
-  const txHash=params?.txHash as `0x${string}`;
+  const txHash = params?.txHash as `0x${string}`;
   const router = useRouter();
   const [transaction, setTransaction] = useState<Transaction>();
   const [receipt, setReceipt] = useState<TransactionReceipt>();

@@ -1,17 +1,13 @@
-
-import type { Metadata, NextPage } from "next";
 import DebugContracts from "./debugContracts";
+import type { Metadata, NextPage } from "next";
 import { generateMetadata } from "~~/utils/generateMetadata";
 
-
-export const metadata:Metadata = generateMetadata({
+export const metadata: Metadata = generateMetadata({
   title: "Debug Contracts | Scaffold-ETH 2",
   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
-})
-
+});
 
 const Debug: NextPage = () => {
-
   return (
     <>
       <DebugContracts />

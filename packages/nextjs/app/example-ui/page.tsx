@@ -1,14 +1,12 @@
-
 import type { Metadata, NextPage } from "next";
 import { ContractData } from "~~/components/example-ui/ContractData";
 import { ContractInteraction } from "~~/components/example-ui/ContractInteraction";
 import { generateMetadata } from "~~/utils/generateMetadata";
 
-
-export const metadata:Metadata = generateMetadata({
+export const metadata: Metadata = generateMetadata({
   title: "Example UI | Scaffold-ETH 2",
   description: "Example UI created with 🏗 Scaffold-ETH 2, showcasing some of its features.",
-})
+});
 
 const ExampleUI: NextPage = () => {
   return (

@@ -3,10 +3,10 @@ import type { Metadata, NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { generateMetadata } from "~~/utils/generateMetadata";
 
-export const metadata:Metadata = generateMetadata({
+export const metadata: Metadata = generateMetadata({
   title: "Scaffold-ETH 2",
   description: "Example UI created with 🏗 Scaffold-ETH 2, showcasing some of its features.",
-})
+});
 const Home: NextPage = () => {
   return (
     <>

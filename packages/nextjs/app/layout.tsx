@@ -1,8 +1,10 @@
-'use client'
+"use client";
+
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { Metadata } from "next";
 import NextNProgress from "nextjs-progressbar";
 import { Toaster } from "react-hot-toast";
 import { useDarkMode } from "usehooks-ts";
@@ -15,9 +17,8 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 import "~~/styles/globals.css";
-import { Metadata } from "next";
 
-const ScaffoldEthApp = ({ children }: {children:React.ReactNode}) => {
+const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
   // This variable is required for initial client side rendering of correct theme for RainbowKit
@@ -46,9 +47,7 @@ const ScaffoldEthApp = ({ children }: {children:React.ReactNode}) => {
           >
             <div className="flex flex-col min-h-screen">
               <Header />
-              <main className="relative flex flex-col flex-1">
-                {children}
-              </main>
+              <main className="relative flex flex-col flex-1">{children}</main>
               <Footer />
             </div>
             <Toaster />
