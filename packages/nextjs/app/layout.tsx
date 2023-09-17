@@ -1,6 +1,6 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
-import { RainbowKitProviderComponent } from "~~/components/RainbowKitProviderComponent";
+import { RainbowKitProviderComponent } from "~~/components/AppComponent";
 import "~~/styles/globals.css";
 
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
