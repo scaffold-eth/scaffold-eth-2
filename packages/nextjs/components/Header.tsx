@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +12,7 @@ const NavLink = ({ href, children }: { href: string; children: React.ReactNode }
   const pathname = usePathname();
   const isActive = pathname === href;
 
- return (
+  return (
     <Link
       href={href}
       passHref

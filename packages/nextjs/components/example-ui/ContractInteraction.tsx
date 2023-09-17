@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 import { useState } from "react";
 import { CopyIcon } from "./assets/CopyIcon";
 import { DiamondIcon } from "./assets/DiamondIcon";
