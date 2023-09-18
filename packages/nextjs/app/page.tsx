@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Metadata, NextPage } from "next";
+import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 const Home: NextPage = () => {

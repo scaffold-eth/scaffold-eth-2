@@ -1,11 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { Bai_Jamjuree } from "next/font/google";
 import { CopyIcon } from "./assets/CopyIcon";
 import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+
+const bai_jamjuree = Bai_Jamjuree({
+  style: "normal",
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const ContractInteraction = () => {
   const [visible, setVisible] = useState(true);
@@ -59,7 +66,7 @@ export const ContractInteraction = () => {
             <input
               type="text"
               placeholder="Write your greeting here"
-              className="input font-bai-jamjuree w-full px-5 bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] border border-primary text-lg sm:text-2xl placeholder-white uppercase"
+              className={`input ${bai_jamjuree.className} w-full px-5 bg-[url('/assets/gradient-bg.png')] bg-[length:100%_100%] border border-primary text-lg sm:text-2xl placeholder-white uppercase`}
               onChange={e => setNewGreeting(e.target.value)}
             />
             <div className="flex rounded-full border border-primary p-1 flex-shrink-0">

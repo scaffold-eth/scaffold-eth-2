@@ -1,4 +1,4 @@
-import DebugContracts from "../../components/debug/debugContractsComponent";
+import DebugContractsComponents from "../../components/debug/debugContractsComponent";
 import type { Metadata, NextPage } from "next";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const Debug: NextPage = () => {
   return (
     <>
-      <DebugContracts />
+      <DebugContractsComponents />
       <div className="text-center mt-8 bg-secondary p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>
         <p className="text-neutral">
