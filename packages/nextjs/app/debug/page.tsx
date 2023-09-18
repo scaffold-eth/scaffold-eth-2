@@ -1,8 +1,8 @@
-import DebugContracts from "./debugContracts";
+import DebugContracts from "../../components/debug/debugContractsComponent";
 import type { Metadata, NextPage } from "next";
 
 export const metadata: Metadata = {
-  title: "Debug Contractyy",
+  title: "Debug Contract",
   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
   openGraph: {
     title: "Debug Contract",

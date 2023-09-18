@@ -9,7 +9,7 @@ import { getContractNames } from "~~/utils/scaffold-eth/contractNames";
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 const contractNames = getContractNames();
 
-export default function DebugContracts() {
+export default function DebugContractsComponents() {
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
