@@ -3,10 +3,8 @@ import { Metadata } from "next";
 import { AppComponent } from "~~/components/AppComponent";
 import "~~/styles/globals.css";
 
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? (`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` as string)
-  : ("/" as string);
-const imageUrl = `${baseUrl}/thumbnail.jpg` as string;
+const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
+const imageUrl = `${baseUrl}/thumbnail.jpg`;
 export const metadata: Metadata = {
   title: {
     default: "Scaffold-ETH 2 App",
