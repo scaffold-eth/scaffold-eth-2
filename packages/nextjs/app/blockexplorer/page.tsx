@@ -1,26 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import type { Metadata, NextPage } from "next";
+import type { NextPage } from "next";
 import { hardhat } from "wagmi/chains";
 import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
-
-export const metadata: Metadata = {
-  title: "Block Explorer | Scaffold-ETH 2",
-  description: "Block Explorer created with 🏗 Scaffold-ETH 2",
-  openGraph: {
-    title: "Block Explorer | Scaffold-ETH 2",
-    description: "Block Explorer created with 🏗 Scaffold-ETH 2",
-  },
-  twitter: {
-    title: "Block Explorer | Scaffold-ETH 2",
-    description: "Block Explorer created with 🏗 Scaffold-ETH 2",
-  },
-};
 
 const Blockexplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading, error } = useFetchBlocks();
