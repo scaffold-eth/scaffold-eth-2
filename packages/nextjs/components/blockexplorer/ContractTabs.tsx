@@ -27,7 +27,7 @@ const publicClient = createPublicClient({
   transport: http(),
 });
 
-export default function ContractTabs({ address, contractData }: PageProps) {
+export function ContractTabs({ address, contractData }: PageProps) {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);

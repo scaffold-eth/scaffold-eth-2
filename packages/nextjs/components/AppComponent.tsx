@@ -5,7 +5,6 @@ import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { BlockieAvatar } from "./scaffold-eth";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
-import NextNProgress from "nextjs-progressbar";
 import { Toaster } from "react-hot-toast";
 import { useDarkMode } from "usehooks-ts";
 import { WagmiConfig } from "wagmi";
@@ -13,6 +12,7 @@ import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
+import {ProgressBar} from "./scaffold-eth/ProgressBar";
 
 export const AppComponent = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
@@ -32,7 +32,7 @@ export const AppComponent = ({ children }: { children: React.ReactNode }) => {
   }, [isDarkMode]);
   return (
     <WagmiConfig config={wagmiConfig}>
-      <NextNProgress />
+      <ProgressBar/>
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}

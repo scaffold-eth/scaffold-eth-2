@@ -1,13 +1,10 @@
-import { useRouter } from "next/navigation";
-import ContractTabs from "./ContractTabs";
 import fs from "fs";
 import path from "path";
-import { hardhat } from "wagmi/chains";
-import { Balance } from "~~/components/scaffold-eth";
-import { Address } from "~~/components/scaffold-eth/Address";
+import { BackButton } from "~~/components/blockexplorer/BackButton";
+import { ContractTabs } from "~~/components/blockexplorer/ContractTabs";
+import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
-import { BackButton } from "~~/components/blockexplorer/BackButton";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -88,14 +85,13 @@ export const getData = async (address: any) => {
 };
 
 const AddressPage = async ({ params, chainid }: PageProps) => {
-
   const address = params.address as string;
   console.log(address);
   const contractData = (await getData(address)) as AddressCodeTabProps;
   return (
     <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">
-       <BackButton />
+        <BackButton />
       </div>
       <div className="col-span-5 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         <div className="col-span-1 flex flex-col">

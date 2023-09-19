@@ -2,14 +2,14 @@ import DebugContractsComponents from "../../components/debug/debugContractsCompo
 import type { Metadata, NextPage } from "next";
 
 export const metadata: Metadata = {
-  title: "Debug Contract",
+  title: "Debug Contracts",
   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
   openGraph: {
-    title: "Debug Contract",
+    title: "Debug Contracts",
     description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
   },
   twitter: {
-    title: "Debug Contract",
+    title: "Debug Contracts",
     description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
   },
 };
