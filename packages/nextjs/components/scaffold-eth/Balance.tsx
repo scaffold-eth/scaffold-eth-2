@@ -1,3 +1,5 @@
+"use client";
+
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
