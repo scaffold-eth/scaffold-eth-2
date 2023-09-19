@@ -42,8 +42,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
   return { bytecode, assembly };
 }
 
-export const getData = async (address: any) => {
-  // const address = (context.params?.address as string).toLowerCase();
+export const getData = async (address: string) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = 31337;
   let contractPath = "";
@@ -84,8 +83,8 @@ export const getData = async (address: any) => {
   return { bytecode, assembly };
 };
 
-const AddressPage = async ({ params, chainid }: PageProps) => {
-  const address = params.address as string;
+const AddressPage = async ({ params }: PageProps) => {
+  const address = params?.address as string;
   console.log(address);
   const contractData = (await getData(address)) as AddressCodeTabProps;
   return (
