@@ -6,14 +6,10 @@ import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-type AddressCodeTabProps = {
-  bytecode: string;
-  assembly: string;
-};
+
 
 type PageProps = {
   params: { address: string };
-  chainid: any;
 };
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
@@ -85,8 +81,7 @@ export const getData = async (address: string) => {
 
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
-  console.log(address);
-  const contractData = (await getData(address)) as AddressCodeTabProps;
+  const contractData = await getData(address);
   return (
     <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">

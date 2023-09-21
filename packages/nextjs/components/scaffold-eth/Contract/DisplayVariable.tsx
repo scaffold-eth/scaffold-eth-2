@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
