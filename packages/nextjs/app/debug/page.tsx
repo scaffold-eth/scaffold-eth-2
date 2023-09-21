@@ -1,18 +1,11 @@
 import { DebugContracts } from "../../components/debug/DebugContracts";
 import type { Metadata, NextPage } from "next";
+import { getMetaData } from "~~/utils/scaffold-eth/getMetaData";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = getMetaData({
   title: "Debug Contracts",
   description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
-  openGraph: {
-    title: "Debug Contracts",
-    description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
-  },
-  twitter: {
-    title: "Debug Contracts",
-    description: "Debug your deployed 🏗 Scaffold-ETH 2 contracts in an easy way",
-  },
-};
+});
 
 const Debug: NextPage = () => {
   return (
