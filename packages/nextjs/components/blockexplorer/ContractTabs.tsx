@@ -28,7 +28,7 @@ const publicClient = createPublicClient({
 });
 
 export function ContractTabs({ address, contractData }: PageProps) {
-  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
+  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
 
@@ -82,7 +82,7 @@ export function ContractTabs({ address, contractData }: PageProps) {
       )}
       {activeTab === "transactions" && (
         <div className="pt-4">
-          <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
+          <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} />
           <PaginationButton
             currentPage={currentPage}
             totalItems={Number(totalBlocks)}
