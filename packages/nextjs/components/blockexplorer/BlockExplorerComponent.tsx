@@ -9,7 +9,7 @@ import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 export function BlockExplorer() {
-  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading, error } = useFetchBlocks();
+  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();
 
   useEffect(() => {
     if (getTargetNetwork().id === hardhat.id && error) {
@@ -51,7 +51,7 @@ export function BlockExplorer() {
   return (
     <div className="container mx-auto my-10">
       <SearchBar />
-      <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
+      <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} />
       <PaginationButton currentPage={currentPage} totalItems={Number(totalBlocks)} setCurrentPage={setCurrentPage} />
     </div>
   );
