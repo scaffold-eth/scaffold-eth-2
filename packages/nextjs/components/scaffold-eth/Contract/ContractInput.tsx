@@ -1,3 +1,5 @@
+"use client";
+
 import { Dispatch, SetStateAction } from "react";
 import { AbiParameter } from "abitype";
 import {

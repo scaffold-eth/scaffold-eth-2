@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { isAddress } from "viem";

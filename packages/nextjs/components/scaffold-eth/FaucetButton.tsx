@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { createWalletClient, http, parseEther } from "viem";
 import { useAccount, useNetwork } from "wagmi";
