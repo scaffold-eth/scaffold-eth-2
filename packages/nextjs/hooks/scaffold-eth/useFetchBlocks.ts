@@ -1,9 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
-import { Block, Hash, Transaction, TransactionReceipt } from "viem";
+import {
+  Block,
+  Hash,
+  Transaction,
+  TransactionReceipt,
+  createTestClient,
+  publicActions,
+  walletActions,
+  webSocket,
+} from "viem";
+import { hardhat } from "wagmi/chains";
 import { decodeTransactionData } from "~~/utils/scaffold-eth";
-import { extendedClient } from "~~/utils/scaffold-eth";
 
 const BLOCKS_PER_PAGE = 20;
+
+export const testClient = createTestClient({
+  chain: hardhat,
+  mode: "hardhat",
+  transport: webSocket("ws://127.0.0.1:8545"),
+})
+  .extend(publicActions)
+  .extend(walletActions);
 
 export const useFetchBlocks = () => {
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -18,7 +35,7 @@ export const useFetchBlocks = () => {
     setError(null);
 
     try {
-      const blockNumber = await extendedClient.getBlockNumber();
+      const blockNumber = await testClient.getBlockNumber();
       setTotalBlocks(blockNumber);
 
       const startingBlock = blockNumber - BigInt(currentPage * BLOCKS_PER_PAGE);
@@ -29,7 +46,7 @@ export const useFetchBlocks = () => {
 
       const blocksWithTransactions = blockNumbersToFetch.map(async blockNumber => {
         try {
-          return extendedClient.getBlock({ blockNumber, includeTransactions: true });
+          return testClient.getBlock({ blockNumber, includeTransactions: true });
         } catch (err) {
           setError(err instanceof Error ? err : new Error("An error occurred."));
           throw err;
@@ -45,7 +62,7 @@ export const useFetchBlocks = () => {
         fetchedBlocks.flatMap(block =>
           block.transactions.map(async tx => {
             try {
-              const receipt = await extendedClient.getTransactionReceipt({ hash: (tx as Transaction).hash });
+              const receipt = await testClient.getTransactionReceipt({ hash: (tx as Transaction).hash });
               return { [(tx as Transaction).hash]: receipt };
             } catch (err) {
               setError(err instanceof Error ? err : new Error("An error occurred."));
@@ -72,7 +89,7 @@ export const useFetchBlocks = () => {
         if (currentPage === 0) {
           if (newBlock.transactions.length > 0) {
             const transactionsDetails = await Promise.all(
-              newBlock.transactions.map((txHash: string) => extendedClient.getTransaction({ hash: txHash as Hash })),
+              newBlock.transactions.map((txHash: string) => testClient.getTransaction({ hash: txHash as Hash })),
             );
             newBlock.transactions = transactionsDetails;
           }
@@ -82,7 +99,7 @@ export const useFetchBlocks = () => {
           const receipts = await Promise.all(
             newBlock.transactions.map(async (tx: Transaction) => {
               try {
-                const receipt = await extendedClient.getTransactionReceipt({ hash: (tx as Transaction).hash });
+                const receipt = await testClient.getTransactionReceipt({ hash: (tx as Transaction).hash });
                 return { [(tx as Transaction).hash]: receipt };
               } catch (err) {
                 setError(err instanceof Error ? err : new Error("An error occurred fetching receipt."));
@@ -102,7 +119,7 @@ export const useFetchBlocks = () => {
       }
     };
 
-    return extendedClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
+    return testClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
   }, [currentPage]);
 
   return {
