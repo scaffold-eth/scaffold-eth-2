@@ -9,7 +9,7 @@ import {
   AddressStorageTab,
   PaginationButton,
   TransactionsTable,
-} from "~~/components/blockexplorer";
+} from ".";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
 type AddressCodeTabProps = {

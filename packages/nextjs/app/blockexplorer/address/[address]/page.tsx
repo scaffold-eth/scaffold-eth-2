@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { BackButton } from "~~/components/blockexplorer/BackButton";
-import { ContractTabs } from "~~/components/blockexplorer/ContractTabs";
+import { BackButton } from "../../_components/BackButton";
+import { ContractTabs } from "../../_components/ContractTabs";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
@@ -81,7 +81,7 @@ export const getData = async (address: string) => {
 
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
-  const contractData = await getData(address);
+  const contractData: { bytecode: string; assembly: string } | null = await getData(address);
   return (
     <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">

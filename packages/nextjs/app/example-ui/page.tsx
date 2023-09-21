@@ -1,6 +1,6 @@
+import { ContractData } from "./_components/ContractData";
+import { ContractInteraction } from "./_components/ContractInteraction";
 import type { Metadata, NextPage } from "next";
-import { ContractData } from "~~/components/example-ui/ContractData";
-import { ContractInteraction } from "~~/components/example-ui/ContractInteraction";
 import { getMetaData } from "~~/utils/scaffold-eth/getMetaData";
 
 export const metadata: Metadata = getMetaData({
