@@ -7,7 +7,6 @@ export const Bytes32Input = ({ value, onChange, name, placeholder, disabled }: C
     if (!value) {
       return;
     }
-    console.log(value);
     onChange(isHex(value) ? hexToString(value, { size: 32 }) : stringToHex(value, { size: 32 }));
   }, [onChange, value]);
 
