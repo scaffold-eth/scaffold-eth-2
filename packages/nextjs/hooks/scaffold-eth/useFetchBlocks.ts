@@ -103,7 +103,7 @@ export const useFetchBlocks = () => {
     };
 
     return extendedClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
-  }, [blocks, currentPage]);
+  }, [currentPage]);
 
   return {
     blocks,
