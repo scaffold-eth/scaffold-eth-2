@@ -37,7 +37,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
   return { bytecode, assembly };
 }
 
-export const getData = async (address: string) => {
+const getContractData = async (address: string) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = HARDHAT_CHAIN_ID;
   let contractPath = "";
@@ -80,7 +80,7 @@ export const getData = async (address: string) => {
 
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
-  const contractData: { bytecode: string; assembly: string } | null = await getData(address);
+  const contractData: { bytecode: string; assembly: string } | null = await getContractData(address);
   return (
     <div className="m-10 mb-20">
       <div className="flex justify-start mb-5">
