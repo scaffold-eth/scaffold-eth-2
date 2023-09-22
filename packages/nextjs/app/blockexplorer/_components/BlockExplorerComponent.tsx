@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { hardhat } from "wagmi/chains";
 import { PaginationButton } from "./PaginationButton";
 import { SearchBar } from "./SearchBar";
 import { TransactionsTable } from "./TransactionsTable";
+import { hardhat } from "wagmi/chains";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
