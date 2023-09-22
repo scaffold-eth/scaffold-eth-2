@@ -2,11 +2,11 @@ import { BackButton } from "../../_components/BackButton";
 import { ContractTabs } from "../../_components/ContractTabs";
 import fs from "fs";
 import path from "path";
+import { hardhat } from "viem/chains";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
-const HARDHAT_CHAIN_ID = 31337;
 type PageProps = {
   params: { address: string };
 };
@@ -39,7 +39,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 
 const getContractData = async (address: string) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
-  const chainId = HARDHAT_CHAIN_ID;
+  const chainId = hardhat.id;
   let contractPath = "";
 
   const buildInfoDirectory = path.join(
