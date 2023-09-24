@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import Blockies from "react-blockies";
+import { blo } from "blo";
 import { isAddress } from "viem";
 import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
@@ -74,7 +74,11 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
           </div>
         )
       }
-      suffix={value && <Blockies className="!rounded-full" seed={value?.toLowerCase() as string} size={7} scale={5} />}
+      suffix={
+        // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+        // eslint-disable-next-line @next/next/no-img-element
+        value && <img alt="" className="!rounded-full" src={blo(value as `0x${string}`)} width="35" height="35" />
+      }
     />
   );
 };
