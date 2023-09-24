@@ -8,10 +8,19 @@ import {
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { Address, Log, TransactionReceipt } from "viem";
-import { Prettify } from "viem/dist/types/types/utils";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
+
+/**
+ * @description Combines members of an intersection into a readable type.
+ * @example
+ * Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
+ * => { a: string, b: string, c: number, d: bigint }
+ */
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & unknown;
 
 export type GenericContractsDeclaration = {
   [key: number]: readonly {
