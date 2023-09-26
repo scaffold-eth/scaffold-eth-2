@@ -10,6 +10,7 @@
     "lint": "next lint",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
+    "vercel-cli": "vercel",
     "vercel:preview": "vercel build && vercel deploy --prebuilt",
     "vercel": "vercel build --prod && vercel deploy --prebuilt --prod",
     "vercel:yolo": "NEXT_PUBLIC_IGNORE_BUILD_ERROR=true vercel build --prod && vercel deploy --prebuilt --prod"
