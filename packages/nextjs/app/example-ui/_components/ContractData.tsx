@@ -18,6 +18,7 @@ const bai_jamjuree = Bai_Jamjuree({
   weight: "400",
   subsets: ["latin"],
 });
+
 export const ContractData = () => {
   const { address } = useAccount();
   const [transitionEnabled, setTransitionEnabled] = useState(true);

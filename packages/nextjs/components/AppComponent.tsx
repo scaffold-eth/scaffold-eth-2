@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Footer } from "./Footer";
-import { Header } from "./Header";
-import { BlockieAvatar } from "./scaffold-eth";
-import { ProgressBar } from "./scaffold-eth/ProgressBar";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { Toaster } from "react-hot-toast";
 import { useDarkMode } from "usehooks-ts";
 import { WagmiConfig } from "wagmi";
+import { Footer } from "~~/components/Footer";
+import { Header } from "~~/components/Header";
+import { BlockieAvatar } from "~~/components/scaffold-eth";
+import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";

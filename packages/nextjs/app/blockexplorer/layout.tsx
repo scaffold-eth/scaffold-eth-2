@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import { getMetaData } from "~~/utils/scaffold-eth/getMetaData";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetaData";
 
-export const metadata: Metadata = getMetaData({
+export const metadata: Metadata = getMetadata({
   title: "Block Explorer",
   description: "Block Explorer created with 🏗 Scaffold-ETH 2",
 });
