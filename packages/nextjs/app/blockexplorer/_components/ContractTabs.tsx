@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AddressCodeTab, AddressLogsTab, AddressStorageTab, PaginationButton, TransactionsTable } from ".";
 import { createPublicClient, http } from "viem";
 import { hardhat } from "wagmi/chains";
+import {
+  AddressCodeTab,
+  AddressLogsTab,
+  AddressStorageTab,
+  PaginationButton,
+  TransactionsTable,
+} from "~~/app/blockexplorer/_components";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
 type AddressCodeTabProps = {

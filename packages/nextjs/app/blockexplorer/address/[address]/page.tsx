@@ -1,8 +1,7 @@
-import { BackButton } from "../../_components/BackButton";
-import { ContractTabs } from "../../_components/ContractTabs";
 import fs from "fs";
 import path from "path";
 import { hardhat } from "viem/chains";
+import { BackButton, ContractTabs } from "~~/app/blockexplorer/_components";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/generated/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
