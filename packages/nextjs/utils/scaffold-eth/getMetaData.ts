@@ -1,6 +1,14 @@
-export const getMetadata = ({ title, description }: { title: string; description: string }) => {
+export const getMetadata = ({
+  title,
+  description,
+  imageRelativePath = "/thumbnail.jpg",
+}: {
+  title: string;
+  description: string;
+  imageRelativePath?: string;
+}) => {
   const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
-  const imageUrl = `${baseUrl}/thumbnail.jpg`;
+  const imageUrl = `${baseUrl}${imageRelativePath}`;
   return {
     title: title,
     description: description,
