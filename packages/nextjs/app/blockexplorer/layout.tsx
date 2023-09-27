@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getMetadata } from "~~/utils/scaffold-eth/getMetaData";
+import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata: Metadata = getMetadata({
   title: "Block Explorer",
