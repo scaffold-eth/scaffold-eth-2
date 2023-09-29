@@ -72,7 +72,7 @@ export const useScaffoldContractWrite = <
           () =>
             wagmiContractWrite.writeAsync({
               args: newArgs ?? args,
-              value: newValue ? newValue : value && value,
+              value: newValue ?? value,
               ...otherConfig,
             }),
           { onBlockConfirmation, blockConfirmations },
