@@ -8,10 +8,19 @@ import {
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { Address, Log, TransactionReceipt } from "viem";
-import { Prettify } from "viem/dist/types/types/utils";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
+
+/**
+ * @description Combines members of an intersection into a readable type.
+ * @example
+ * Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
+ * => { a: string, b: string, c: number, d: bigint }
+ */
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & unknown;
 
 export type GenericContractsDeclaration = {
   [key: number]: readonly {
@@ -35,8 +44,6 @@ type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [k
   : TYes;
 
 type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
-
-export type Chain = keyof ContractsDeclaration;
 
 type Contracts = ContractsDeclaration[ConfiguredChainId][0]["contracts"];
 
@@ -72,11 +79,6 @@ export type AbiEventInputs<TAbi extends Abi, TEventName extends ExtractAbiEventN
   TEventName
 >["inputs"];
 
-export type AbiEventArgs<
-  TAbi extends Abi,
-  TEventName extends ExtractAbiEventNames<TAbi>,
-> = AbiParametersToPrimitiveTypes<AbiEventInputs<TAbi, TEventName>>;
-
 export enum ContractCodeStatus {
   "LOADING",
   "DEPLOYED",
@@ -86,18 +88,6 @@ export enum ContractCodeStatus {
 type AbiStateMutability = "pure" | "view" | "nonpayable" | "payable";
 export type ReadAbiStateMutability = "view" | "pure";
 export type WriteAbiStateMutability = "nonpayable" | "payable";
-
-export type FunctionNamesWithoutInputs<
-  TContractName extends ContractName,
-  TAbiStateMutibility extends AbiStateMutability = AbiStateMutability,
-> = Extract<
-  ContractAbi<TContractName>[number],
-  {
-    type: "function";
-    stateMutability: TAbiStateMutibility;
-    inputs: readonly [];
-  }
->["name"];
 
 export type FunctionNamesWithInputs<
   TContractName extends ContractName,

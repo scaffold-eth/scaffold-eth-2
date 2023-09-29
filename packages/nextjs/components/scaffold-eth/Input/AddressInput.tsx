@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import Blockies from "react-blockies";
+import { blo } from "blo";
 import { isAddress } from "viem";
 import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
@@ -11,7 +11,7 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-export const AddressInput = ({ value, name, placeholder, onChange }: CommonInputProps<Address | string>) => {
+export const AddressInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps<Address | string>) => {
   const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
     name: value,
     enabled: isENS(value),
@@ -58,7 +58,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
       error={ensAddress === null}
       value={value}
       onChange={handleChange}
-      disabled={isEnsAddressLoading || isEnsNameLoading}
+      disabled={isEnsAddressLoading || isEnsNameLoading || disabled}
       prefix={
         ensName && (
           <div className="flex bg-base-300 rounded-l-full items-center">
@@ -74,7 +74,11 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
           </div>
         )
       }
-      suffix={value && <Blockies className="!rounded-full" seed={value?.toLowerCase() as string} size={7} scale={5} />}
+      suffix={
+        // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+        // eslint-disable-next-line @next/next/no-img-element
+        value && <img alt="" className="!rounded-full" src={blo(value as `0x${string}`)} width="35" height="35" />
+      }
     />
   );
 };

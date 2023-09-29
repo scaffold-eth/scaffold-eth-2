@@ -51,21 +51,24 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
       <p className="font-medium my-0 break-words">{abiFunction.name}</p>
       {inputElements}
-      <div className="flex justify-between gap-2">
-        <div className="flex-grow">
+      <div className="flex justify-between gap-2 flex-wrap">
+        <div className="flex-grow w-4/5">
           {result !== null && result !== undefined && (
-            <span className="block bg-secondary rounded-3xl text-sm px-4 py-1.5">
-              <strong>Result</strong>: {displayTxResult(result)}
-            </span>
+            <div className="bg-secondary rounded-3xl text-sm px-4 py-1.5 break-words">
+              <p className="font-bold m-0 mb-1">Result:</p>
+              <pre className="whitespace-pre-wrap break-words">{displayTxResult(result)}</pre>
+            </div>
           )}
         </div>
         <button
-          className={`btn btn-secondary btn-sm ${isFetching ? "loading" : ""}`}
+          className="btn btn-secondary btn-sm"
           onClick={async () => {
             const { data } = await refetch();
             setResult(data);
           }}
+          disabled={isFetching}
         >
+          {isFetching && <span className="loading loading-spinner loading-xs"></span>}
           Read 📡
         </button>
       </div>
