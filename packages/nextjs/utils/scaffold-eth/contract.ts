@@ -122,17 +122,6 @@ type UseScaffoldArgsParam<
       args?: never;
     };
 
-type ExtractStateMutability<
-  TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
-> = Extract<
-  ContractAbi<TContractName>[number],
-  {
-    name: TFunctionName;
-    stateMutability: string;
-  }
->["stateMutability"];
-
 export type UseScaffoldReadConfig<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
@@ -154,13 +143,11 @@ export type UseScaffoldWriteConfig<
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 } & IsContractDeclarationMissing<
-  Partial<Omit<UseContractWriteConfig, "value"> & { value: `${number}` }>,
-  (ExtractStateMutability<TContractName, TFunctionName> extends "payable"
-    ? { value: `${number}` }
-    : { value?: never }) & {
+  Partial<UseContractWriteConfig>,
+  {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "value" | "mode">
+    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "mode">
 >;
 
 export type UseScaffoldEventConfig<
