@@ -7,7 +7,15 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { Address, GetEventArgs, Log, TransactionReceipt } from "viem";
+import {
+  Address,
+  Block,
+  GetEventArgs,
+  GetTransactionReceiptReturnType,
+  GetTransactionReturnType,
+  Log,
+  TransactionReceipt,
+} from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -231,12 +239,43 @@ export type EventFilters<
 export type UseScaffoldEventHistoryConfig<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TBlockData extends boolean = false,
+  TTransactionData extends boolean = false,
+  TReceiptData extends boolean = false,
 > = {
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
   filters?: EventFilters<TContractName, TEventName>;
-  blockData?: boolean;
-  transactionData?: boolean;
-  receiptData?: boolean;
+  blockData?: TBlockData;
+  transactionData?: TTransactionData;
+  receiptData?: TReceiptData;
 };
+
+export type UseScaffoldEventHistoryEventData<
+  TContractName extends ContractName,
+  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TBlockData extends boolean = false,
+  TTransactionData extends boolean = false,
+  TReceiptData extends boolean = false,
+  TEvent extends ExtractAbiEvent<ContractAbi<TContractName>, TEventName> = ExtractAbiEvent<
+    ContractAbi<TContractName>,
+    TEventName
+  >,
+> = IsContractDeclarationMissing<
+  any[],
+  {
+    log: Log<bigint, number, false, TEvent, false, [TEvent], TEventName>;
+    args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
+      GetEventArgs<
+        ContractAbi<TContractName>,
+        TEventName,
+        {
+          IndexedOnly: false;
+        }
+      >;
+    block: TBlockData extends true ? Block<bigint, true> : null;
+    receipt: TReceiptData extends true ? GetTransactionReturnType : null;
+    transaction: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
+  }[]
+>;
