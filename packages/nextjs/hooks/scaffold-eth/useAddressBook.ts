@@ -16,22 +16,27 @@ function getWalletAddress(address: string) {
   return address ? [{ description: "Connected wallet", address }] : [];
 }
 
-async function getContractOwners(contractsData: ContractsData) {
-  return Promise.all(
-    contractsData
-      ? Object.entries(contractsData).map(async ([name, { address, abi }]) => {
-          const ownerAddress = await readContract({
-            address,
-            abi,
-            functionName: "owner",
-          });
-          return {
-            description: `${name} owner`,
-            address: ownerAddress as string,
-          };
-        })
-      : [],
-  );
+async function getContractPublicAddresses(contractsData: ContractsData) {
+  if (!contractsData) return [];
+  const publicAddresses = [];
+  for (const [contractName, { address, abi }] of Object.entries(contractsData)) {
+    for (const item of abi) {
+      // TODO: multiple outputs
+      if (item.type === "function" && item.stateMutability === "view" && item.outputs[0].type === "address") {
+        console.log("item", item);
+        const outputAddress = await readContract({
+          address,
+          abi,
+          functionName: item.name || "",
+        });
+        publicAddresses.push({
+          description: `${contractName} ${item.name}`,
+          address: outputAddress as string,
+        });
+      }
+    }
+  }
+  return publicAddresses;
 }
 
 type AddressBookEntry = {
@@ -55,9 +60,9 @@ export const useAddressBook = (): AddressBookEntry[] => {
   useEffect(() => {
     async function getAddressBook() {
       if (isMounted() && address && contractsData) {
-        const contractOwners = await getContractOwners(contractsData);
+        const contractPublicAddresses = await getContractPublicAddresses(contractsData);
         setAddressBook(
-          [...getContractAddresses(contractsData), ...getWalletAddress(address), ...contractOwners].sort(
+          [...getContractAddresses(contractsData), ...getWalletAddress(address), ...contractPublicAddresses].sort(
             ({ description: a }, { description: b }) => a.localeCompare(b),
           ),
         );
