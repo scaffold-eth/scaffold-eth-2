@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 const ANIMATION_TIME = 2000;

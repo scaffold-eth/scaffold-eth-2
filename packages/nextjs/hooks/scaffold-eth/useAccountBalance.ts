@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useGlobalState } from "~~/services/store/store";

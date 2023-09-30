@@ -1,3 +1,5 @@
+"use client";
+
 import { useDarkMode } from "usehooks-ts";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
