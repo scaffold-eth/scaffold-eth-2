@@ -101,8 +101,16 @@ export const useScaffoldEventHistory = <
   ]);
 
   return {
-    data: events,
+    data: events?.map(addIndexedArgsToEvent),
     isLoading: isLoading,
     error: error,
   };
+};
+
+export const addIndexedArgsToEvent = (event: any) => {
+  if (event.args && !Array.isArray(event.args)) {
+    return { ...event, args: { ...event.args, ...Object.values(event.args) } };
+  }
+
+  return event;
 };

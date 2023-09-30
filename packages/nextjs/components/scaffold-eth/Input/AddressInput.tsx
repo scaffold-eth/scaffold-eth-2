@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import Blockies from "react-blockies";
+import { blo } from "blo";
 import { isAddress } from "viem";
 import { Address } from "viem";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
@@ -89,7 +89,11 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
             >
               <BookOpenIcon className="h-4 w-4 cursor-pointer" aria-hidden="true" />
             </div>
-            {value && <Blockies className="!rounded-full" seed={value?.toLowerCase() as string} size={7} scale={5} />}
+            {
+              // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+              // eslint-disable-next-line @next/next/no-img-element
+              value && <img alt="" className="!rounded-full" src={blo(value as `0x${string}`)} width="35" height="35" />
+            }
           </>
         }
       />
@@ -104,7 +108,13 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
                 handleChange(address);
               }}
             >
-              <Blockies className="!rounded-full" seed={address?.toLowerCase() as string} size={7} scale={3} />
+              <img
+                alt=""
+                className="!rounded-full"
+                src={blo(address.toLowerCase() as `0x${string}`)}
+                width="35"
+                height="35"
+              />
               <div>{address?.slice(0, 5) + "..." + address?.slice(-4)}</div>
               <div>{description}</div>
             </li>
