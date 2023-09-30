@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { Hash } from "viem";

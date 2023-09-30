@@ -1,4 +1,4 @@
-import { AddressClientComponent } from "./address-client-component";
+import AddressComponent from "../../_components/AddressComponent";
 import fs from "fs";
 import path from "path";
 import { hardhat } from "viem/chains";
@@ -79,7 +79,7 @@ const getContractData = async (address: string) => {
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
   const contractData: { bytecode: string; assembly: string } | null = await getContractData(address);
-  return <AddressClientComponent address={address} contractData={contractData} />;
+  return <AddressComponent address={address} contractData={contractData} />;
 };
 
 export default AddressPage;

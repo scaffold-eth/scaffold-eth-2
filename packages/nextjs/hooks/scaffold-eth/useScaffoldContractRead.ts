@@ -1,5 +1,3 @@
-"use client";
-
 import type { ExtractAbiFunctionNames } from "abitype";
 import { useContractRead } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Account, Address, Transport, getContract } from "viem";
 import { Chain, PublicClient, usePublicClient } from "wagmi";
 import { GetWalletClientResult } from "wagmi/actions";
