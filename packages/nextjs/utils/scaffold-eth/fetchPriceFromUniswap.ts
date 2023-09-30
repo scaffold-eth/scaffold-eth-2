@@ -1,3 +1,5 @@
+"use client";
+
 import { CurrencyAmount, Token } from "@uniswap/sdk-core";
 import { Pair, Route } from "@uniswap/v2-sdk";
 import { createPublicClient, http, parseAbi } from "viem";

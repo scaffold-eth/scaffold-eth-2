@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Address, Log } from "viem";
 import { usePublicClient } from "wagmi";

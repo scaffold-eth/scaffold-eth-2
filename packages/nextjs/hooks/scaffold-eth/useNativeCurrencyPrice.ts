@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import scaffoldConfig from "~~/scaffold.config";

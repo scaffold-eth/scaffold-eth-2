@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useEffectOnce, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { Connector, useAccount, useConnect } from "wagmi";
