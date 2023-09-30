@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 export const getMetadata = ({
   title,
   description,
@@ -6,8 +8,8 @@ export const getMetadata = ({
   title: string;
   description: string;
   imageRelativePath?: string;
-}) => {
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
+}): Metadata => {
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "";
   const imageUrl = `${baseUrl}${imageRelativePath}`;
   return {
     title: title,
