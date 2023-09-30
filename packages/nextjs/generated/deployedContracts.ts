@@ -1,3 +1,3 @@
-const contracts = null;
+const deployedContracts = null;
 
-export default contracts;
+export default deployedContracts;
