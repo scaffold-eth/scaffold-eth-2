@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Hex, HttpTransport, PrivateKeyAccount, createWalletClient, http } from "viem";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Abi, ExtractAbiEventNames } from "abitype";
 import { Log } from "viem";
 import { useContractEvent } from "wagmi";
