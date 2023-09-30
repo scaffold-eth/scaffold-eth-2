@@ -1,3 +1,5 @@
+import Image from "next/image";
+import { useDarkMode } from "usehooks-ts";
 import { hardhat } from "wagmi/chains";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/outline";
@@ -11,6 +13,7 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  */
 export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
+  const { isDarkMode } = useDarkMode();
 
   return (
     <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">
@@ -42,18 +45,19 @@ export const Footer = () => {
               </a>
             </div>
             <span>·</span>
-            <div>
+            <div className="flex justify-center items-center gap-1">
               <p className="m-0 text-center">
-                Built with <HeartIcon className="inline-block h-4 w-4" /> at 🏰{" "}
-                <a
-                  href="https://buidlguidl.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline underline-offset-2"
-                >
-                  BuidlGuidl
-                </a>
+                Built with <HeartIcon className="inline-block h-4 w-4" /> at
               </p>
+              <div className="relative w-20 h-4 pb-5">
+                <a href="https://buidlguidl.com/" target="_blank" rel="noreferrer">
+                  {isDarkMode ? (
+                    <Image alt="SE2 logo" className="pb-1 cursor-pointer" fill src="/bg-logo-light.svg" />
+                  ) : (
+                    <Image alt="SE2 logo" className="pb-1 cursor-pointer" fill src="/bg-logo-dark.svg" />
+                  )}
+                </a>
+              </div>
             </div>
             <span>·</span>
             <div className="text-center">
