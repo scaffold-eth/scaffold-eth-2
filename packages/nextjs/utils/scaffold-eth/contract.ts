@@ -7,7 +7,7 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { Address, Log, TransactionReceipt } from "viem";
+import { Address, GetEventArgs, Log, TransactionReceipt } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import contractsData from "~~/generated/deployedContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -157,9 +157,42 @@ export type UseScaffoldEventConfig<
   contractName: TContractName;
 } & IsContractDeclarationMissing<
   Omit<UseContractEventConfig, "listener"> & {
-    listener: (logs: Prettify<Omit<Log<bigint, number, any>, "args"> & { args: Record<string, unknown> }>[]) => void;
+    listener: (
+      logs: Prettify<
+        Omit<Log<bigint, number, any>, "args" | "eventName"> & {
+          args: Record<string, unknown>;
+          eventName: string;
+        }
+      >[],
+    ) => void;
   },
-  UseContractEventConfig<ContractAbi<TContractName>, TEventName>
+  Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
+    listener: (
+      logs: Prettify<
+        Omit<
+          Log<
+            bigint,
+            number,
+            false,
+            ExtractAbiEvent<ContractAbi<TContractName>, TEventName>,
+            false,
+            [ExtractAbiEvent<ContractAbi<TContractName>, TEventName>],
+            TEventName
+          >,
+          "args"
+        > & {
+          args: AbiParametersToPrimitiveTypes<ExtractAbiEvent<ContractAbi<TContractName>, TEventName>["inputs"]> &
+            GetEventArgs<
+              ContractAbi<TContractName>,
+              TEventName,
+              {
+                IndexedOnly: false;
+              }
+            >;
+        }
+      >[],
+    ) => void;
+  }
 >;
 
 type IndexedEventInputs<
