@@ -13,7 +13,14 @@ const isENS = (address = "") => address.endsWith(".eth") || address.endsWith(".x
 /**
  * Address input with ENS name resolution
  */
-export const AddressInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps<Address | string>) => {
+export const AddressInput = ({
+  value,
+  name,
+  placeholder,
+  onChange,
+  disabled,
+  withAddressBook = true,
+}: CommonInputProps<Address | string> & { withAddressBook?: boolean }) => {
   const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
     name: value,
     enabled: isENS(value),
@@ -21,8 +28,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     cacheTime: 30_000,
   });
 
-  const [showKnownAddresses, setShowKnownAddresses] = useState<boolean>(false);
-  const toggleShowKnownAddresses = () => setShowKnownAddresses(!showKnownAddresses);
+  const [showAddressBook, setShowAddressBook] = useState<boolean>(false);
+  const toggleShowAddressBook = () => setShowAddressBook(!showAddressBook);
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
   const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address: value,
@@ -82,13 +89,15 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
         }
         suffix={
           <>
-            <div
-              className="self-center cursor-pointer text-xl font-semibold px-4 text-accent tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-              onClick={toggleShowKnownAddresses}
-              data-tip="show known addresses"
-            >
-              <BookOpenIcon className="h-4 w-4 cursor-pointer" aria-hidden="true" />
-            </div>
+            {withAddressBook && (
+              <div
+                className="self-center cursor-pointer text-xl font-semibold px-4 text-accent tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+                onClick={toggleShowAddressBook}
+                data-tip="search known addresses"
+              >
+                <BookOpenIcon className="h-4 w-4 cursor-pointer" aria-hidden="true" />
+              </div>
+            )}
             {
               // Don't want to use nextJS Image here (and adding remote patterns for the URL)
               // eslint-disable-next-line @next/next/no-img-element
@@ -97,14 +106,14 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
           </>
         }
       />
-      {showKnownAddresses && (
-        <ol className="border-2 border-base-300 bg-base-200 text-accent p-2 mx-4 rounded-md">
+      {withAddressBook && showAddressBook && (
+        <ol className="absolute -bottom-12 border-2 border-base-300 bg-base-200 text-accent p-2 rounded-xl">
           {addressBook.map(({ address, description }, index) => (
             <li
               key={`${address}-${index}`}
               className="flex space-x-4 cursor-pointer"
               onClick={() => {
-                toggleShowKnownAddresses();
+                toggleShowAddressBook();
                 handleChange(address);
               }}
             >
@@ -115,8 +124,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
                 width="35"
                 height="35"
               />
-              <div>{address?.slice(0, 5) + "..." + address?.slice(-4)}</div>
-              <div>{description}</div>
+              <div className="hidden sm:flex">{address?.slice(0, 5) + "..." + address?.slice(-4)}</div>
+              <div className="truncate">{description}</div>
             </li>
           ))}
         </ol>
