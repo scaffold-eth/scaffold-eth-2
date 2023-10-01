@@ -174,6 +174,10 @@ export type UseScaffoldWriteConfig<
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TEvent extends ExtractAbiEvent<ContractAbi<TContractName>, TEventName> = ExtractAbiEvent<
+    ContractAbi<TContractName>,
+    TEventName
+  >,
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
@@ -190,19 +194,8 @@ export type UseScaffoldEventConfig<
   Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
     listener: (
       logs: Prettify<
-        Omit<
-          Log<
-            bigint,
-            number,
-            false,
-            ExtractAbiEvent<ContractAbi<TContractName>, TEventName>,
-            false,
-            [ExtractAbiEvent<ContractAbi<TContractName>, TEventName>],
-            TEventName
-          >,
-          "args"
-        > & {
-          args: AbiParametersToPrimitiveTypes<ExtractAbiEvent<ContractAbi<TContractName>, TEventName>["inputs"]> &
+        Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
+          args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
             GetEventArgs<
               ContractAbi<TContractName>,
               TEventName,
