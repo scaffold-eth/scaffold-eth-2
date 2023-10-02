@@ -5,6 +5,7 @@ import {
   ledgerWallet,
   metaMaskWallet,
   rainbowWallet,
+  safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains } from "wagmi";
@@ -55,6 +56,7 @@ const wallets = [
   ...(configuredNetwork.id === chains.hardhat.id || !onlyLocalBurnerWallet
     ? [burnerWalletConfig({ chains: [appChains.chains[0]] })]
     : []),
+  safeWallet({ ...walletsOptions, debug: false, allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/] }),
 ];
 
 /**
