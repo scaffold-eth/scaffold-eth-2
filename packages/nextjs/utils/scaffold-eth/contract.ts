@@ -245,7 +245,7 @@ export type UseScaffoldEventHistoryConfig<
   receiptData?: TReceiptData;
 };
 
-export type UseScaffoldEventHistoryEventData<
+export type UseScaffoldEventHistoryData<
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
   TBlockData extends boolean = false,
@@ -256,19 +256,20 @@ export type UseScaffoldEventHistoryEventData<
     TEventName
   >,
 > = IsContractDeclarationMissing<
-  any[],
-  {
-    log: Log<bigint, number, false, TEvent, false, [TEvent], TEventName>;
-    args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
-      GetEventArgs<
-        ContractAbi<TContractName>,
-        TEventName,
-        {
-          IndexedOnly: false;
-        }
-      >;
-    block: TBlockData extends true ? Block<bigint, true> : null;
-    receipt: TReceiptData extends true ? GetTransactionReturnType : null;
-    transaction: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
-  }[]
+  any[] | undefined,
+  | {
+      log: Log<bigint, number, false, TEvent, false, [TEvent], TEventName>;
+      args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
+        GetEventArgs<
+          ContractAbi<TContractName>,
+          TEventName,
+          {
+            IndexedOnly: false;
+          }
+        >;
+      block: TBlockData extends true ? Block<bigint, true> : null;
+      receipt: TReceiptData extends true ? GetTransactionReturnType : null;
+      transaction: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
+    }[]
+  | undefined
 >;

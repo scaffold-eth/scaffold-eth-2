@@ -8,7 +8,7 @@ import {
   ContractAbi,
   ContractName,
   UseScaffoldEventHistoryConfig,
-  UseScaffoldEventHistoryEventData,
+  UseScaffoldEventHistoryData,
 } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -109,7 +109,7 @@ export const useScaffoldEventHistory = <
   ]);
 
   return {
-    data: events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryEventData<
+    data: events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
       TContractName,
       TEventName,
       TBlockData,
