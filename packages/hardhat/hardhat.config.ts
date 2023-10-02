@@ -114,10 +114,10 @@ const config: HardhatUserConfig = {
       url: "https://goerli.base.org",
       accounts: [deployerPrivateKey],
     },
-    scrollSepolia:{
+    scrollSepolia: {
       url: "https://sepolia-rpc.scroll.io",
-      accounts: [deployerPrivateKey]
-    }
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
