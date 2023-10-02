@@ -1,5 +1,3 @@
-"use client";
-
 import * as chains from "wagmi/chains";
 import scaffoldConfig from "~~/scaffold.config";
 

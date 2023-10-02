@@ -1,5 +1,3 @@
-"use client";
-
 import { TransactionWithFunction } from "./block";
 import { GenericContractsDeclaration } from "./contract";
 import { Abi, decodeFunctionData, getAbiItem } from "viem";
