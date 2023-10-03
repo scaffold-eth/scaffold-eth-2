@@ -2,8 +2,8 @@ import { hardhat } from "wagmi/chains";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
+import { BuidlGuidlLogo } from "~~/components/assets/BuidlGuidlLogo";
 import { Faucet } from "~~/components/scaffold-eth";
-import { BuidlGuidlLogo } from "~~/public/assets/BuidlGuidlLogo";
 import { useGlobalState } from "~~/services/store/store";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -54,7 +54,7 @@ export const Footer = () => {
                 rel="noreferrer"
               >
                 <BuidlGuidlLogo className="w-3 h-5 pb-1" />
-                <div className="underline">BuidlGuidl</div>
+                <span className="underline">BuidlGuidl</span>
               </a>
             </div>
             <span>·</span>
