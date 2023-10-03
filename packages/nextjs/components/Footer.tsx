@@ -54,7 +54,7 @@ export const Footer = () => {
                 rel="noreferrer"
               >
                 <BuidlGuidlLogo className="w-3 h-5 pb-1" />
-                <span className="underline">BuidlGuidl</span>
+                <span className="underline underline-offset-2">BuidlGuidl</span>
               </a>
             </div>
             <span>·</span>
