@@ -9,6 +9,9 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 const SCAFFOLD_WALLET_STROAGE_KEY = "scaffoldEth2.wallet";
 const WAGMI_WALLET_STORAGE_KEY = "wagmi.wallet";
 
+// ID of the SAFE connector instance
+const SAFE_ID = "safe";
+
 /**
  * This function will get the initial wallet connector (if any), the app will connect to
  * @param previousWalletId
@@ -19,8 +22,14 @@ const getInitialConnector = (
   previousWalletId: string,
   connectors: Connector[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
-  const targetNetwork = getTargetNetwork();
+  // Look for the SAFE connector instance and connect to it instantly if loaded in SAFE frame
+  const safeConnectorInstance = connectors.find(connector => connector.id === SAFE_ID && connector.ready);
 
+  if (safeConnectorInstance) {
+    return { connector: safeConnectorInstance };
+  }
+
+  const targetNetwork = getTargetNetwork();
   const allowBurner = scaffoldConfig.onlyLocalBurnerWallet ? targetNetwork.id === hardhat.id : true;
 
   if (!previousWalletId) {
