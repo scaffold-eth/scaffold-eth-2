@@ -5,6 +5,7 @@ import { Bai_Jamjuree } from "next/font/google";
 import { CopyIcon } from "./assets/CopyIcon";
 import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
+import { parseEther } from "viem";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
@@ -22,7 +23,7 @@ export const ContractInteraction = () => {
     contractName: "YourContract",
     functionName: "setGreeting",
     args: [newGreeting],
-    value: "0.01",
+    value: parseEther("0.01"),
     onBlockConfirmation: txnReceipt => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
