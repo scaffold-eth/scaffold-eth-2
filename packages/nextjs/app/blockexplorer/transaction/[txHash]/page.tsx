@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
 import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
+import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
-import { hardhat } from "wagmi/chains";
 import { Address } from "~~/components/scaffold-eth";
 import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
 

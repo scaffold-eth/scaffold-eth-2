@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import { hardhat } from "wagmi/chains";
+import { hardhat } from "viem/chains";
 import { PaginationButton, SearchBar, TransactionsTable } from "~~/app/blockexplorer/_components";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";

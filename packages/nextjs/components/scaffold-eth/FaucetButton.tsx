@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { createWalletClient, http, parseEther } from "viem";
+import { hardhat } from "viem/chains";
 import { useAccount, useNetwork } from "wagmi";
-import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
 
