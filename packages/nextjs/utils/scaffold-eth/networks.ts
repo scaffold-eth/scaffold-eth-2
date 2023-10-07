@@ -1,4 +1,4 @@
-import * as chains from "wagmi/chains";
+import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
 export type TChainAttributes = {
@@ -52,8 +52,8 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
     color: "#1969ff",
   },
   [chains.scrollSepolia.id]: {
-    color: '#fbebd4'
-  }
+    color: "#fbebd4",
+  },
 };
 
 /**

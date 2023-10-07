@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPublicClient, http } from "viem";
-import { hardhat } from "wagmi/chains";
+import { hardhat } from "viem/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
