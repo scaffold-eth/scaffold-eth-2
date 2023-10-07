@@ -6,15 +6,14 @@ import { Address, TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import {
   ContractInput,
-  IntegerInput,
   TxReceipt,
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
-  getParsedError,
-} from "~~/components/scaffold-eth";
+} from "~~/app/debug/_components/contract";
+import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { getParsedError, getTargetNetwork, notification } from "~~/utils/scaffold-eth";
 
 type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;

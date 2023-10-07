@@ -1,5 +1,4 @@
 import { AbiFunction, AbiParameter } from "abitype";
-import { BaseError as BaseViemError } from "viem";
 
 /**
  * @dev utility function to generate key corresponding to function metaData
@@ -11,29 +10,6 @@ import { BaseError as BaseViemError } from "viem";
 const getFunctionInputKey = (functionName: string, input: AbiParameter, inputIndex: number): string => {
   const name = input?.name || `input_${inputIndex}_`;
   return functionName + "_" + name + "_" + input.internalType + "_" + input.type;
-};
-
-/**
- * @dev utility function to parse error
- * @param e - error object
- * @returns {string} parsed error string
- */
-const getParsedError = (e: any | BaseViemError): string => {
-  let message = e.message ?? "An unknown error occurred";
-
-  if (e instanceof BaseViemError) {
-    if (e.details) {
-      message = e.details;
-    } else if (e.shortMessage) {
-      message = e.shortMessage;
-    } else if (e.message) {
-      message = e.message;
-    } else if (e.name) {
-      message = e.name;
-    }
-  }
-
-  return message;
 };
 
 // This regex is used to identify array types in the form of `type[size]`
@@ -78,4 +54,4 @@ const getInitialFormState = (abiFunction: AbiFunction) => {
   return initialForm;
 };
 
-export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getParsedError };
+export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs };

@@ -1,16 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { ContractInput } from "./ContractInput";
+import { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs } from "./utilsContract";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
-import {
-  ContractInput,
-  displayTxResult,
-  getFunctionInputKey,
-  getInitialFormState,
-  getParsedContractFunctionArgs,
-} from "~~/components/scaffold-eth";
+import { displayTxResult } from "~~/app/debug/_components/contract";
 import { notification } from "~~/utils/scaffold-eth";
 
 type TReadOnlyFunctionFormProps = {
