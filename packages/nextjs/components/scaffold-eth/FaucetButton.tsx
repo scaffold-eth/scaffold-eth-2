@@ -63,6 +63,7 @@ export const FaucetButton = () => {
         ) : (
           <span className="loading loading-spinner loading-xs"></span>
         )}
+        <span>{address}</span>
       </button>
     </div>
   );
