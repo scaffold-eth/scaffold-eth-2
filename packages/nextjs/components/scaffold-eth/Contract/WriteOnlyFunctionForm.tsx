@@ -90,11 +90,12 @@ export const WriteOnlyFunctionForm = ({
         <p className="font-medium my-0 break-words">
           {abiFunction.name}{" "}
           {inheritedBy && (
-            <span
-              data-tip={`Inherited by ${inheritedBy}`}
-              className="cursor-help tooltip tooltip-secondary before:content-[attr(data-tip)]"
-            >
-              *
+            <span className="group cursor-help p-2">
+              <span>*</span>
+              <span className="group-hover:opacity-100 bg-secondary absolute opacity-0 p-2 m-2 nowrap">
+                {" "}
+                {`Inherited by ${inheritedBy}`}
+              </span>
             </span>
           )}
         </p>
