@@ -30,6 +30,8 @@ type Prettify<T> = {
   [K in keyof T]: T[K];
 } & unknown;
 
+export type InheritedFunctions = { readonly [key: string]: string };
+
 export type GenericContractsDeclaration = {
   [key: number]: readonly {
     name: string;
@@ -38,6 +40,7 @@ export type GenericContractsDeclaration = {
       [key: string]: {
         address: Address;
         abi: Abi;
+        inheritedFunctions: InheritedFunctions;
       };
     };
   }[];

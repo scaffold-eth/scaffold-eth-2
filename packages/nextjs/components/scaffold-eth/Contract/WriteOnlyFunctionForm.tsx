@@ -88,7 +88,7 @@ export const WriteOnlyFunctionForm = ({
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
         <p className="font-medium my-0 break-words">
-          {abiFunction.name}
+          {abiFunction.name}{" "}
           {inheritedBy && (
             <span
               data-tip={`Inherited by ${inheritedBy}`}
