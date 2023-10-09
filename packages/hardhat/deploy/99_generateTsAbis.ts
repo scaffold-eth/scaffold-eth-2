@@ -10,6 +10,9 @@ import * as fs from "fs";
 import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
 
+const DEPLOYMENTS_DIR = "./deployments";
+const ARTIFACTS_DIR = "./artifacts";
+
 function getDirectories(path: string) {
   return fs
     .readdirSync(path, { withFileTypes: true })
@@ -24,7 +27,22 @@ function getContractNames(path: string) {
     .map(dirent => dirent.name.split(".")[0]);
 }
 
-const DEPLOYMENTS_DIR = "./deployments";
+function getInheritedFunctions(sources: { [key: string]: any }, contractName: string) {
+  const inheritedFunctions = {} as Record<string, any>;
+  for (const sourcePath of Object.keys(sources)) {
+    const sourceName = sourcePath.split("/").pop().split(".sol")[0];
+    if (sourceName === contractName) {
+      continue;
+    }
+    const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
+    for (const functionAbi of abi) {
+      if (functionAbi.type === "function") {
+        inheritedFunctions[functionAbi.name] = sourcePath;
+      }
+    }
+  }
+  return inheritedFunctions;
+}
 
 function getContractDataFromDeployments() {
   if (!fs.existsSync(DEPLOYMENTS_DIR)) {
@@ -35,10 +53,11 @@ function getContractDataFromDeployments() {
     const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
     const contracts = {} as Record<string, any>;
     for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
-      const { abi, address } = JSON.parse(
+      const { address, abi, metadata } = JSON.parse(
         fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
       );
-      contracts[contractName] = { address, abi };
+      const inheritedFunctions = getInheritedFunctions(JSON.parse(metadata).sources, contractName);
+      contracts[contractName] = { address, abi, inheritedFunctions };
     }
     output[chainId] = [
       {
@@ -50,6 +69,8 @@ function getContractDataFromDeployments() {
   }
   return output;
 }
+
+// scaffold-eth/packages/hardhat/artefacts/... = all.metadata.sources...
 
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts

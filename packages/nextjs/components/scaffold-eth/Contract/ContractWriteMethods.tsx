@@ -26,14 +26,23 @@ export const ContractWriteMethods = ({
 
   return (
     <>
-      {functionsToDisplay.map((fn, idx) => (
-        <WriteOnlyFunctionForm
-          key={`${fn.name}-${idx}}`}
-          abiFunction={fn}
-          onChange={onChange}
-          contractAddress={deployedContractData.address}
-        />
-      ))}
+      {functionsToDisplay
+        .map((fn, idx) => (
+          <WriteOnlyFunctionForm
+            key={`${fn.name}-${idx}}`}
+            abiFunction={fn}
+            onChange={onChange}
+            contractAddress={deployedContractData.address}
+            inheritedBy={deployedContractData.inheritedFunctions[fn.name]}
+          />
+        ))
+        .sort((a, b) => {
+          if (a.props.inheritedBy && !b.props.inheritedBy) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })}
     </>
   );
 };
