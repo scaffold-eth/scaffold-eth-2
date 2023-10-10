@@ -31,10 +31,10 @@ module.exports = {
             "--tooltip-tail": "6px",
           },
           ".link": {
-            "textUnderlineOffset": "2px"
+            textUnderlineOffset: "2px",
           },
           ".link:hover": {
-            "opacity": "80%",
+            opacity: "80%",
           },
         },
       },
@@ -64,10 +64,10 @@ module.exports = {
             "--tooltip-color": "hsl(var(--p))",
           },
           ".link": {
-            "textUnderlineOffset": "2px"
+            textUnderlineOffset: "2px",
           },
           ".link:hover": {
-            "opacity": "80%",
+            opacity: "80%",
           },
         },
       },
