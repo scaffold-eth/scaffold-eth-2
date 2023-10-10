@@ -1,6 +1,6 @@
 import { DisplayVariable } from "./DisplayVariable";
 import { Abi, AbiFunction } from "abitype";
-import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
 
 export const ContractVariables = ({
   refreshDisplayVariables,
@@ -27,14 +27,17 @@ export const ContractVariables = ({
 
   return (
     <>
-      {functionsToDisplay.map(fn => (
-        <DisplayVariable
-          abiFunction={fn}
-          contractAddress={deployedContractData.address}
-          key={fn.name}
-          refreshDisplayVariables={refreshDisplayVariables}
-        />
-      ))}
+      {functionsToDisplay
+        .map(fn => (
+          <DisplayVariable
+            abiFunction={fn}
+            contractAddress={deployedContractData.address}
+            key={fn.name}
+            refreshDisplayVariables={refreshDisplayVariables}
+            inheritedBy={(deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name]}
+          />
+        ))
+        .sort((a, b) => (b.props.inheritedBy ? b.props.inheritedBy.localeCompare(a.props.inheritedBy) : 1))}
     </>
   );
 };

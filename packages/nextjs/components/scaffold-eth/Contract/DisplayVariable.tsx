@@ -11,9 +11,15 @@ type DisplayVariableProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
   refreshDisplayVariables: boolean;
+  inheritedBy?: string;
 };
 
-export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVariables }: DisplayVariableProps) => {
+export const DisplayVariable = ({
+  contractAddress,
+  abiFunction,
+  refreshDisplayVariables,
+  inheritedBy,
+}: DisplayVariableProps) => {
   const {
     data: result,
     isFetching,
@@ -36,7 +42,18 @@ export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVa
   return (
     <div className="space-y-1 pb-2">
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
+        <h3 className="font-medium text-lg mb-0 break-all">
+          {abiFunction.name}
+          {inheritedBy && (
+            <span className="group cursor-help p-2">
+              <span>*</span>
+              <span className="group-hover:opacity-100 bg-secondary absolute opacity-0 p-2 m-2 nowrap">
+                {" "}
+                {`Inherited by ${inheritedBy}`}
+              </span>
+            </span>
+          )}
+        </h3>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (
             <span className="loading loading-spinner loading-xs"></span>
