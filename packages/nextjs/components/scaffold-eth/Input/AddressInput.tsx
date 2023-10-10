@@ -81,11 +81,9 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
         )
       }
       suffix={
-        debouncedValue && (
-          // Don't want to use nextJS Image here (and adding remote patterns for the URL)
-          // eslint-disable-next-line @next/next/no-img-element
-          <img alt="" className="!rounded-full" src={blo(debouncedValue as `0x${string}`)} width="35" height="35" />
-        )
+        // Don't want to use nextJS Image here (and adding remote patterns for the URL)
+        // eslint-disable-next-line @next/next/no-img-element
+        value && <img alt="" className="!rounded-full" src={blo(value as `0x${string}`)} width="35" height="35" />
       }
     />
   );
