@@ -53,11 +53,13 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedBy
       <p className="font-medium my-0 break-words">
         {abiFunction.name}
         {inheritedBy && (
-          <span className="group cursor-help p-2">
+          <span className="has-tooltip p-2">
             <span>*</span>
-            <span className="group-hover:opacity-100 bg-secondary absolute opacity-0 p-2 m-2 nowrap">
-              {" "}
-              {`Inherited by ${inheritedBy}`}
+            <span className="nested-tooltip bg-secondary rounded p-3 m-2">
+              Inherited by:{" "}
+              <code className="italic bg-base-300 text-base font-bold break-words break-all inline-block">
+                {inheritedBy}
+              </code>
             </span>
           </span>
         )}
