@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
@@ -108,14 +108,20 @@ export const useScaffoldEventHistory = <
     receiptData,
   ]);
 
+  const eventHistoryData = useMemo(
+    () =>
+      events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+        TContractName,
+        TEventName,
+        TBlockData,
+        TTransactionData,
+        TReceiptData
+      >,
+    [events],
+  );
+
   return {
-    data: events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
-      TContractName,
-      TEventName,
-      TBlockData,
-      TTransactionData,
-      TReceiptData
-    >,
+    data: eventHistoryData,
     isLoading: isLoading,
     error: error,
   };
