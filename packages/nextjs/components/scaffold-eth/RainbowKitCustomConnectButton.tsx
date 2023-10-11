@@ -1,5 +1,6 @@
 "use client";
 
+// @refresh reset
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { QRCodeSVG } from "qrcode.react";
