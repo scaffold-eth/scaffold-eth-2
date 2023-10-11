@@ -30,14 +30,6 @@ module.exports = {
           ".tooltip": {
             "--tooltip-tail": "6px",
           },
-          ".nested-tooltip": {
-            visibility: "hidden",
-            position: "absolute",
-          },
-          ".has-tooltip:hover .nested-tooltip": {
-            visibility: "visible",
-            "z-index": "100",
-          },
         },
       },
       {
@@ -64,14 +56,6 @@ module.exports = {
           ".tooltip": {
             "--tooltip-tail": "6px",
             "--tooltip-color": "hsl(var(--p))",
-          },
-          ".nested-tooltip": {
-            visibility: "hidden",
-            position: "absolute",
-          },
-          ".has-tooltip:hover .nested-tooltip": {
-            visibility: "visible",
-            "z-index": "100",
           },
         },
       },

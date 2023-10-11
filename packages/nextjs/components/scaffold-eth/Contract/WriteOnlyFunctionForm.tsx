@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { InheritanceTip } from "./InheritanceTip";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
@@ -18,14 +19,14 @@ type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;
   onChange: () => void;
   contractAddress: Address;
-  inheritedBy?: string;
+  inheritedFrom?: string;
 };
 
 export const WriteOnlyFunctionForm = ({
   abiFunction,
   onChange,
   contractAddress,
-  inheritedBy,
+  inheritedFrom,
 }: WriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [txValue, setTxValue] = useState<string | bigint>("");
@@ -88,18 +89,8 @@ export const WriteOnlyFunctionForm = ({
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
         <p className="font-medium my-0 break-words">
-          {abiFunction.name}{" "}
-          {inheritedBy && (
-            <span className="has-tooltip p-2">
-              <span>*</span>
-              <span className="nested-tooltip bg-secondary rounded p-3 m-2">
-                Inherited by:{" "}
-                <code className="italic bg-base-300 text-base font-bold break-words break-all inline-block">
-                  {inheritedBy}
-                </code>
-              </span>
-            </span>
-          )}
+          {abiFunction.name}
+          <InheritanceTip inheritedFrom={inheritedFrom} />
         </p>
         {inputs}
         {abiFunction.stateMutability === "payable" ? (

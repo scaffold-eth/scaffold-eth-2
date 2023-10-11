@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { InheritanceTip } from "./InheritanceTip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -14,10 +15,10 @@ import { notification } from "~~/utils/scaffold-eth";
 type TReadOnlyFunctionFormProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
-  inheritedBy?: string;
+  inheritedFrom?: string;
 };
 
-export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedBy }: TReadOnlyFunctionFormProps) => {
+export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedFrom }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
@@ -52,17 +53,7 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedBy
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
       <p className="font-medium my-0 break-words">
         {abiFunction.name}
-        {inheritedBy && (
-          <span className="has-tooltip p-2">
-            <span>*</span>
-            <span className="nested-tooltip bg-secondary rounded p-3 m-2">
-              Inherited by:{" "}
-              <code className="italic bg-base-300 text-base font-bold break-words break-all inline-block">
-                {inheritedBy}
-              </code>
-            </span>
-          </span>
-        )}
+        <InheritanceTip inheritedFrom={inheritedFrom} />
       </p>
       {inputElements}
       <div className="flex justify-between gap-2 flex-wrap">

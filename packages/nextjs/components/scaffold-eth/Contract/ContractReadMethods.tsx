@@ -27,10 +27,10 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
             contractAddress={deployedContractData.address}
             abiFunction={fn}
             key={fn.name}
-            inheritedBy={(deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name]}
+            inheritedFrom={(deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name]}
           />
         ))
-        .sort((a, b) => (b.props.inheritedBy ? b.props.inheritedBy.localeCompare(a.props.inheritedBy) : 1))}
+        .sort((a, b) => (b.props.inheritedFrom ? b.props.inheritedFrom.localeCompare(a.props.inheritedFrom) : 1))}
     </>
   );
 };
