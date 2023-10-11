@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useEffectOnce, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { hardhat } from "viem/chains";
 import { Connector, useAccount, useConnect } from "wagmi";
@@ -60,19 +59,15 @@ export const useAutoConnect = (): void => {
   const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY);
   const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STROAGE_KEY, wagmiWalletValue ?? "");
   const connectState = useConnect();
-  const accountState = useAccount();
-
-  useEffect(() => {
-    if (accountState.isConnected) {
-      // user is connected, set walletName
-      setWalletId(accountState.connector?.id ?? "");
-    } else {
-      // user has disconnected, reset walletName
+  useAccount({
+    onConnect({ connector }) {
+      setWalletId(connector?.id ?? "");
+    },
+    onDisconnect() {
       window.localStorage.setItem(WAGMI_WALLET_STORAGE_KEY, JSON.stringify(""));
       setWalletId("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountState.isConnected, accountState.connector?.name]);
+    },
+  });
 
   useEffectOnce(() => {
     const initialConnector = getInitialConnector(walletId, connectState.connectors);
