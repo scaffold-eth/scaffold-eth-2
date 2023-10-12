@@ -1,4 +1,4 @@
-> ⚠️ This branch is under active development.  
+> ⚠️ The [CLI branch](https://github.com/scaffold-eth/scaffold-eth-2/tree/cli) is under active development.  
 > If you find any bug, please report as [issue](https://github.com/scaffold-eth/scaffold-eth-2/issues) or send a message in [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
 
 # 🏗 Scaffold-ETH 2
