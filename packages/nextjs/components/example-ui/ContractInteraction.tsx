@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CopyIcon } from "./assets/CopyIcon";
 import { DiamondIcon } from "./assets/DiamondIcon";
 import { HareIcon } from "./assets/HareIcon";
+import { parseEther } from "viem";
 import { ArrowSmallRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
@@ -13,7 +14,7 @@ export const ContractInteraction = () => {
     contractName: "YourContract",
     functionName: "setGreeting",
     args: [newGreeting],
-    value: "0.01",
+    value: parseEther("0.01"),
     onBlockConfirmation: txnReceipt => {
       console.log("📦 Transaction blockHash", txnReceipt.blockHash);
     },
@@ -63,12 +64,13 @@ export const ContractInteraction = () => {
             <div className="flex rounded-full border border-primary p-1 flex-shrink-0">
               <div className="flex rounded-full border-2 border-primary p-1">
                 <button
-                  className={`btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest ${
-                    isLoading ? "loading" : ""
-                  }`}
+                  className="btn btn-primary rounded-full capitalize font-normal font-white w-24 flex items-center gap-1 hover:gap-2 transition-all tracking-widest"
                   onClick={() => writeAsync()}
+                  disabled={isLoading}
                 >
-                  {!isLoading && (
+                  {isLoading ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
                     <>
                       Send <ArrowSmallRightIcon className="w-3 h-3 mt-0.5" />
                     </>

@@ -86,6 +86,14 @@ const config: HardhatUserConfig = {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
+    polygonZkEvm: {
+      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    polygonZkEvmTestnet: {
+      url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
     zkSyncTestnet: {
       url: "https://testnet.era.zksync.dev",
       zksync: true,
@@ -97,6 +105,26 @@ const config: HardhatUserConfig = {
       zksync: true,
       accounts: [deployerPrivateKey],
       verifyURL: "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
+    },
+    gnosis: {
+      url: "https://rpc.gnosischain.com",
+      accounts: [deployerPrivateKey],
+    },
+    chiado: {
+      url: "https://rpc.chiadochain.net",
+      accounts: [deployerPrivateKey],
+    },
+    base: {
+      url: "https://mainnet.base.org",
+      accounts: [deployerPrivateKey],
+    },
+    baseGoerli: {
+      url: "https://goerli.base.org",
+      accounts: [deployerPrivateKey],
+    },
+    scrollSepolia: {
+      url: "https://sepolia-rpc.scroll.io",
+      accounts: [deployerPrivateKey],
     },
   },
   verify: {

@@ -3,6 +3,7 @@ export interface CommonInputProps<T = string> {
   onChange: (newValue: T) => void;
   name?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export enum IntegerVariant {
@@ -104,3 +105,7 @@ export const isValidInteger = (dataType: IntegerVariant, value: bigint | string,
   }
   return true;
 };
+
+// Treat any dot-separated string as a potential ENS name
+const ensRegex = /.+\..+/;
+export const isENS = (address = "") => ensRegex.test(address);

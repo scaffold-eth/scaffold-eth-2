@@ -34,7 +34,7 @@ const publicClient = createPublicClient({
 
 const AddressPage = ({ address, contractData }: PageProps) => {
   const router = useRouter();
-  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, isLoading } = useFetchBlocks();
+  const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage } = useFetchBlocks();
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
 
@@ -65,7 +65,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       </div>
       <div className="col-span-5 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
         <div className="col-span-1 flex flex-col">
-          <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4">
+          <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4 overflow-x-auto">
             <div className="flex">
               <div className="flex flex-col gap-1">
                 <Address address={address} format="long" />
@@ -108,7 +108,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       )}
       {activeTab === "transactions" && (
         <div className="pt-4">
-          <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} isLoading={isLoading} />
+          <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} />
           <PaginationButton
             currentPage={currentPage}
             totalItems={Number(totalBlocks)}

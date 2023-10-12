@@ -36,14 +36,14 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "ethers": "^5.7.1",
-    "hardhat": "^2.11.2",
+    "hardhat": "^2.17.3",
     "hardhat-deploy": "^0.11.26",
     "hardhat-gas-reporter": "^1.0.9",
     "prettier": "^2.8.4",
     "solidity-coverage": "^0.8.2",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.1",

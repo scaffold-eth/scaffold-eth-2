@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
-import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/utils/scaffold-eth/contract";
+import {
+  ContractAbi,
+  ContractName,
+  UseScaffoldEventHistoryConfig,
+  UseScaffoldEventHistoryData,
+} from "~~/utils/scaffold-eth/contract";
 
 /**
  * @dev reads events from a deployed contract
@@ -20,6 +25,9 @@ import { ContractAbi, ContractName, UseScaffoldEventHistoryConfig } from "~~/uti
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TBlockData extends boolean = false,
+  TTransactionData extends boolean = false,
+  TReceiptData extends boolean = false,
 >({
   contractName,
   eventName,
@@ -28,7 +36,7 @@ export const useScaffoldEventHistory = <
   blockData,
   transactionData,
   receiptData,
-}: UseScaffoldEventHistoryConfig<TContractName, TEventName>) => {
+}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
@@ -100,9 +108,29 @@ export const useScaffoldEventHistory = <
     receiptData,
   ]);
 
+  const eventHistoryData = useMemo(
+    () =>
+      events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+        TContractName,
+        TEventName,
+        TBlockData,
+        TTransactionData,
+        TReceiptData
+      >,
+    [events],
+  );
+
   return {
-    data: events,
+    data: eventHistoryData,
     isLoading: isLoading,
     error: error,
   };
+};
+
+export const addIndexedArgsToEvent = (event: any) => {
+  if (event.args && !Array.isArray(event.args)) {
+    return { ...event, args: { ...event.args, ...Object.values(event.args) } };
+  }
+
+  return event;
 };

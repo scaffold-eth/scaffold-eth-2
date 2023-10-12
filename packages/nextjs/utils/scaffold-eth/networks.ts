@@ -51,6 +51,9 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
   [chains.fantomTestnet.id]: {
     color: "#1969ff",
   },
+  [chains.scrollSepolia.id]: {
+    color: '#fbebd4'
+  }
 };
 
 /**
