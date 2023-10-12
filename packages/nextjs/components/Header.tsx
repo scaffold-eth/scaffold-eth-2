@@ -1,37 +1,10 @@
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { headerMenuLinks } from "~~/components/headerMenuLinks";
+import { HeaderMenuLinks } from "~~/components/HeaderMenuLinks";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
-
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const router = useRouter();
-  const isActive = router.pathname === href;
-
-  return (
-    <Link
-      href={href}
-      passHref
-      className={`${
-        isActive ? "bg-secondary shadow-md" : ""
-      } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
-    >
-      {children}
-    </Link>
-  );
-};
-
-const navLinks = headerMenuLinks.map(({ label, href, icon }) => (
-  <li key={href}>
-    <NavLink href={href}>
-      <span>{icon}</span>
-      <span>{label}</span>
-    </NavLink>
-  </li>
-));
 
 /**
  * Site header
@@ -65,7 +38,7 @@ export const Header = () => {
                 setIsDrawerOpen(false);
               }}
             >
-              {navLinks}
+              <HeaderMenuLinks />
             </ul>
           )}
         </div>
@@ -78,7 +51,9 @@ export const Header = () => {
             <span className="text-xs">Ethereum dev stack</span>
           </div>
         </Link>
-        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
+          <HeaderMenuLinks />
+        </ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
         <RainbowKitCustomConnectButton />
