@@ -54,3 +54,20 @@ There are some files that are not just copied, but generated from the CLI using 
 Once you're happy with the file contents, you'd need to reverse-engineer the changes needed in this project's `template/` folder. To make it easier to figure out what to change, we generate sibling files to any of these special ones, with the exact same name but adding `*.dev` to them.
 
 For example, `generated.txt` would have a sibling `generated.txt.dev` file with information about the "template" and "args" files that contributed to the current result.
+
+## Back-merging main branch / Publishing to NPM
+
+1. Make sure you have the latest changes from `main` branch
+2. Checkout to `cli` branch and create a new branch from it eg: `cli-backmerge`
+3. Checkout to `cli-backmerge` branch and `git merge main`
+4. If there are any conflicts, resolve them and commit the changes
+5. Add changeset by doing `yarn changeset add` follow prompt and commit changes, learn more about changeset [here](https://github.com/scaffold-eth/scaffold-eth-2/blob/cli/CONTRIBUTING.md#changeset)
+6. Push the branch and create a PR against `cli` branch
+
+### Publishing to NPM
+
+Once the previous PR containing `changeset` is merged to `cli` branch, github bot will automatically create a new PR against `cli` branch containing version increment in `package.json` based on `changeset` and will also update `CHANGELOG.md` with respective `changesets` present.
+
+After this GH bot PR is merged to `cli`. It will auto publish a new release to NPM.
+
+> NOTE: Even after resolving conflicts and merging `cli-backmerge` to `cli` branch, you see will conflicts not being resolved in `cli` as compared to `main` branch and for that you need to directly push an extra commit to `cli` branch merging main into cli.
