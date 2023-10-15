@@ -33,7 +33,12 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
-              <a href="https://github.com/TwilightLogic/aa-scaffold" target="_blank" rel="noreferrer" className="link">
+              <a
+                href="https://github.com/TwilightLogic/smart-accounts-website"
+                target="_blank"
+                rel="noreferrer"
+                className="link"
+              >
                 Fork me
               </a>
             </div>
@@ -54,7 +59,12 @@ export const Footer = () => {
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href="https://github.com/TwilightLogic/aa-scaffold" target="_blank" rel="noreferrer" className="link">
+              <a
+                href="https://github.com/TwilightLogic/smart-accounts-website"
+                target="_blank"
+                rel="noreferrer"
+                className="link"
+              >
                 Support
               </a>
             </div>
