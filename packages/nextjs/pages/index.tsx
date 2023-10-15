@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 
@@ -25,12 +26,26 @@ const Home: NextPage = () => {
                 <span className="block font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-400">
                   Smart Accounts
                 </span>
-                <span className="text-3xl sm:text-5xl">&quot;Your Next AA Wallet&quot;</span>
+                <span className="text-3xl sm:text-5xl text-primary-content">&quot;Your Next AA Wallet&quot;</span>
               </h1>
-              <p className="mt-6 text-lg leading-8">
+              <p className="mt-6 text-lg leading-8 text-primary-content">
                 <span className="font-semibold">Smart Accounts</span> is an Account Abstraction Wallet to replace
                 regular wallets with smart contract wallets, enabling a Web3 experience as smooth as Web2.
               </p>
+            </div>
+            <div className="mt-10 flex items-center justify-center gap-x-3">
+              <Link
+                href="/"
+                className="rounded-md bg-secondary px-3.5 py-2.5 text-md font-semibold shadow-sm hover:bg-secondary-focus focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition cursor-pointer"
+              >
+                Docs
+              </Link>
+              <Link
+                href="/demo"
+                className="rounded-md bg-primary px-3.5 py-2.5 text-md font-semibold shadow-sm hover:bg-primary-focus focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition cursor-pointer"
+              >
+                Demo this ✨
+              </Link>
             </div>
           </div>
           <div
