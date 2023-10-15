@@ -226,7 +226,7 @@ export default function AACard() {
   };
 
   return (
-    <Center p="10">
+    <Center p="10" h="calc(90vh)">
       <Box borderWidth="1px" borderRadius="lg" p="6" boxShadow="xl" className="bg-base-300 border-base-300">
         <Heading bgGradient="linear(to-l, #ff80b5, #9089fc)" bgClip="text" fontSize="3xl" fontWeight="extrabold">
           Passkeys Account Abstraction demo
