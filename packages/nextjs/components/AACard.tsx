@@ -235,7 +235,7 @@ export default function AACard() {
               Account
             </Heading>
             <Box paddingTop="3">
-              <Text>Passkeys: {base.storedPasskeys ? base.storedPasskeys.registration.credential.id : "None"}</Text>
+              <Text>Passkeys: {base.storedPasskeys ? base.storedPasskeys.registration?.credential.id : "None"}</Text>
               <Text>
                 Created Account:{" "}
                 {base.account ? (
