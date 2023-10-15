@@ -48,10 +48,6 @@ export default function AACard() {
   const [message, setMessage] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(message);
-  }, [message]);
-
-  useEffect(() => {
     const storedKeyJson = localStorage.getItem("smart-accounts:key");
     if (storedKeyJson) {
       setBase(prev => {
@@ -104,11 +100,12 @@ export default function AACard() {
       const userOperationEvent = await response.wait();
 
       setMessage(prev => {
-        const messages = prev;
-        messages.push(`create account opHash: ${response.userOpHash}`);
         // @ts-ignore
-        messages.push(`create account txHash: ${userOperationEvent!.transactionHash}`);
-        return messages;
+        return [
+          ...prev,
+          `create account opHash: ${response.userOpHash}`,
+          `create account txHash: ${userOperationEvent!.transactionHash}`,
+        ];
       });
       localStorage.setItem(`smart-accounts:account:${chainId}`, accountBuilder.getSender());
       base.account = accountBuilder.getSender();
@@ -167,11 +164,12 @@ export default function AACard() {
 
       const userOperationEvent = await response.wait();
       setMessage(prev => {
-        const messages = prev;
-        messages.push(`create session key opHash: ${response.userOpHash}`);
         // @ts-ignore
-        messages.push(`create session key txHash: ${userOperationEvent!.transactionHash}`);
-        return messages;
+        return [
+          ...prev,
+          `create session key opHash: ${response.userOpHash}`,
+          `create session key txHash: ${userOperationEvent!.transactionHash}`,
+        ];
       });
       setBase(prev => {
         return { ...prev, stage: 3 };
@@ -210,11 +208,12 @@ export default function AACard() {
       const response = await client.sendUserOperation(accountBuilder);
       const userOperationEvent = await response.wait();
       setMessage(prev => {
-        const messages = prev;
-        messages.push(`mint nft opHash: ${response.userOpHash}`);
         // @ts-ignore
-        messages.push(`mint nft txHash: ${userOperationEvent!.transactionHash}`);
-        return messages;
+        return [
+          ...prev,
+          `mint nft opHash: ${response.userOpHash}`,
+          `mint nft txHash: ${userOperationEvent!.transactionHash}`,
+        ];
       });
       setBase(prev => {
         return { ...prev, stage: 3 };
