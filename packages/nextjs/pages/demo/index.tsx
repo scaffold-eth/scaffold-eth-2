@@ -1,7 +1,13 @@
+import dynamic from "next/dynamic";
 import { NextPage } from "next";
 
+const AACard = dynamic(async () => await import("~~/components/AACard"), { ssr: false });
 const Demo: NextPage = () => {
-  return <div>This is a demo page.</div>;
+  return (
+    <div>
+      <AACard />
+    </div>
+  );
 };
 
 export default Demo;
