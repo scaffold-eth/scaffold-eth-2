@@ -28,7 +28,7 @@ const Home: NextPage = () => {
                 </span>
                 <span className="text-3xl sm:text-5xl text-primary-content">&quot;Your Next AA Wallet&quot;</span>
               </h1>
-              <p className="mt-6 text-lg leading-8 text-primary-content">
+              <p className="mt-6 text-lg leading-8 text-secondary-content">
                 <span className="font-semibold">Smart Accounts</span> is an Account Abstraction Wallet to replace
                 regular wallets with smart contract wallets, enabling a Web3 experience as smooth as Web2.
               </p>
