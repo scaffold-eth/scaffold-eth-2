@@ -108,10 +108,13 @@ export default function AACard() {
         ];
       });
       localStorage.setItem(`smart-accounts:account:${chainId}`, accountBuilder.getSender());
-      base.account = accountBuilder.getSender();
-      base.stage = 2;
+      setBase(prev => {
+        return { ...prev, stage: 2, account: accountBuilder.getSender() };
+      });
     } finally {
-      base.creatingAccount = false;
+      setBase(prev => {
+        return { ...prev, creatingAccount: false };
+      });
     }
   };
 
@@ -119,7 +122,9 @@ export default function AACard() {
     if (!base.storedPasskeys || !base.account) {
       throw Error("create passkeys or account first");
     }
-    base.creatingSessionKey = true;
+    setBase(prev => {
+      return { ...prev, creatingSessionKey: true };
+    });
     try {
       const ecdsaWallet = ethers.Wallet.createRandom();
       setBase(prev => {
@@ -226,7 +231,7 @@ export default function AACard() {
   };
 
   return (
-    <Center p="10" h="calc(90vh)">
+    <Center p="10">
       <Box borderWidth="1px" borderRadius="lg" p="6" boxShadow="xl" className="bg-base-300 border-base-300">
         <Heading bgGradient="linear(to-l, #ff80b5, #9089fc)" bgClip="text" fontSize="3xl" fontWeight="extrabold">
           Passkeys Account Abstraction demo
