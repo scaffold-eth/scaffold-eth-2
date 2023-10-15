@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Button, Center, Heading, Link, Stack, StackDivider, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Link, Stack, Text, Wrap, WrapItem } from "@chakra-ui/react";
 import { RegistrationEncoded } from "@passwordless-id/webauthn/dist/esm/types";
 import { BigNumber, ethers } from "ethers";
 import { hexZeroPad } from "ethers/lib/utils";
@@ -208,10 +208,10 @@ export default function AACard() {
       const response = await client.sendUserOperation(accountBuilder);
       const userOperationEvent = await response.wait();
       setMessage(prev => {
-        // @ts-ignore
         return [
           ...prev,
           `mint nft opHash: ${response.userOpHash}`,
+          // @ts-ignore
           `mint nft txHash: ${userOperationEvent!.transactionHash}`,
         ];
       });
@@ -227,14 +227,22 @@ export default function AACard() {
 
   return (
     <Center p="10">
-      <Box borderWidth="1px" borderRadius="lg" p="6">
-        <Heading size="md">Passkeys Account Abstraction demo</Heading>
-        <Stack divider={<StackDivider />} spacing="4" paddingTop="6">
+      <Box borderWidth="1px" borderRadius="lg" p="6" boxShadow="xl" className="bg-base-300 border-base-300">
+        <Heading bgGradient="linear(to-l, #ff80b5, #9089fc)" bgClip="text" fontSize="3xl" fontWeight="extrabold">
+          Passkeys Account Abstraction demo
+        </Heading>
+        <Box paddingTop="6">
           <Box p="2">
-            <Heading size="xs" textTransform="uppercase">
+            <Heading
+              fontSize="md"
+              textTransform="uppercase"
+              bgGradient="linear(to-l, #ff80b5, #9089fc)"
+              bgClip="text"
+              fontWeight="extrabold"
+            >
               Account
             </Heading>
-            <Box paddingTop="3">
+            <Box>
               <Text>Passkeys: {base.storedPasskeys ? base.storedPasskeys.registration?.credential.id : "None"}</Text>
               <Text>
                 Created Account:{" "}
@@ -250,7 +258,13 @@ export default function AACard() {
             </Box>
           </Box>
           <Box p="2">
-            <Heading size="xs" textTransform="uppercase">
+            <Heading
+              fontSize="md"
+              textTransform="uppercase"
+              bgGradient="linear(to-l, #ff80b5, #9089fc)"
+              bgClip="text"
+              fontWeight="extrabold"
+            >
               Message
             </Heading>
             <Box paddingTop="3">
@@ -265,11 +279,11 @@ export default function AACard() {
             <Wrap spacing={4}>
               <WrapItem>
                 {base.stage == 1 ? (
-                  <Button colorScheme="blue" onClick={createPasskey}>
+                  <Button colorScheme="purple" variant="outline" onClick={createPasskey}>
                     Create Passkeys
                   </Button>
                 ) : (
-                  <Button colorScheme="gray" onClick={createPasskey}>
+                  <Button colorScheme="purple" onClick={createPasskey}>
                     Create Passkeys
                   </Button>
                 )}
@@ -279,7 +293,7 @@ export default function AACard() {
                   <Button
                     isLoading={base.creatingAccount}
                     loadingText="Creating Passkeys Account"
-                    colorScheme="red"
+                    colorScheme="pink"
                     onClick={createAccount}
                   >
                     Create Passkeys Account
@@ -291,7 +305,7 @@ export default function AACard() {
                   <Button
                     isLoading={base.creatingSessionKey}
                     loadingText="Creating Session Key"
-                    colorScheme="orange"
+                    colorScheme="linkedin"
                     onClick={createSessionKey}
                   >
                     Create Session Key
@@ -312,17 +326,17 @@ export default function AACard() {
               )}
             </Wrap>
           </Box>
-          <Box p="2">
-            <Stack direction="row" justify="center">
-              <Text>
-                Made by{" "}
-                <Link isExternal color="teal.500" href="https://github.com/ququzone/smart-accounts">
-                  Smart Accounts
-                </Link>
-              </Text>
-            </Stack>
-          </Box>
-        </Stack>
+        </Box>
+        <Box p="2">
+          <Stack direction="row" justify="center">
+            <Text>
+              Made by{" "}
+              <Link isExternal color="teal.500" href="https://github.com/ququzone/smart-accounts">
+                Smart Accounts
+              </Link>
+            </Text>
+          </Stack>
+        </Box>
       </Box>
     </Center>
   );
