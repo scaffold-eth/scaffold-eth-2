@@ -10,7 +10,6 @@
       {
         "endOfLine": "auto"
       }
-    ],
-    "@next/next/no-page-custom-font": ["off"]
+    ]
   }
 }
