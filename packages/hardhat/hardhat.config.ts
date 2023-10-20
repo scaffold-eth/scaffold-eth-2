@@ -118,6 +118,10 @@ const config: HardhatUserConfig = {
       url: "https://sepolia-rpc.scroll.io",
       accounts: [deployerPrivateKey],
     },
+    scroll: {
+      url: "https://rpc.scroll.io",
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
