@@ -39,6 +39,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         chains={appChains.chains}
         avatar={BlockieAvatar}
         theme={isDarkTheme ? darkTheme() : lightTheme()}
+        coolMode
       >
         <div className="flex flex-col min-h-screen">
           <Header />
