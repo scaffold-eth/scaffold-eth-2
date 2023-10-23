@@ -42,11 +42,8 @@ export const DisplayVariable = ({
 
   return (
     <div className="space-y-1 pb-2">
-      <div className="flex items-center gap-2">
-        <h3 className="font-medium text-lg mb-0 break-all">
-          {abiFunction.name}
-          <InheritanceTooltip inheritedFrom={inheritedFrom} />
-        </h3>
+      <div className="flex items-center">
+        <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (
             <span className="loading loading-spinner loading-xs"></span>
@@ -54,6 +51,7 @@ export const DisplayVariable = ({
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
+        <InheritanceTooltip inheritedFrom={inheritedFrom} tooltipType="tooltip-primary" />
       </div>
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
