@@ -27,7 +27,7 @@ function getContractNames(path: string) {
     .map(dirent => dirent.name.split(".")[0]);
 }
 
-function getInheritedFunctions(sources: { [key: string]: any }, contractName: string) {
+function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
   const inheritedFunctions = {} as Record<string, any>;
   for (const sourcePath of Object.keys(sources)) {
     const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
