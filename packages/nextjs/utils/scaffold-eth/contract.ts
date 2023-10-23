@@ -40,7 +40,7 @@ export type GenericContractsDeclaration = {
       [key: string]: {
         address: Address;
         abi: Abi;
-        inheritedFunctions: InheritedFunctions;
+        inheritedFunctions?: InheritedFunctions;
       };
     };
   }[];
