@@ -1892,7 +1892,6 @@ __metadata:
     react: ^18.2.0
     react-copy-to-clipboard: ^5.1.0
     react-dom: ^18.2.0
-    react-fast-marquee: ^1.3.5
     react-hot-toast: ^2.4.0
     tailwindcss: ^3.3.3
     typescript: ^5.1.6
@@ -11275,16 +11274,6 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
-  languageName: node
-  linkType: hard
-
-"react-fast-marquee@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "react-fast-marquee@npm:1.3.5"
-  peerDependencies:
-    react: ">= 16.8.0 || 18.0.0"
-    react-dom: ">= 16.8.0 || 18.0.0"
-  checksum: 95301d63faa858ac0e8c2ab32e1e864ed49d8b36e96216960af0ac797bc30fe11c7747b9c3bed3728f5371e57a93277a064fd433c6f8e1a24a9a32bbf1d354e8
   languageName: node
   linkType: hard
 
