@@ -9,11 +9,19 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
 
   const functionsToDisplay = (
     ((deployedContractData.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
-  ).filter(fn => {
-    const isQueryableWithParams =
-      (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
-    return isQueryableWithParams;
-  });
+  )
+    .filter(fn => {
+      const isQueryableWithParams =
+        (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length > 0;
+      return isQueryableWithParams;
+    })
+    .map(fn => {
+      return {
+        fn,
+        inheritedFrom: (deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name],
+      };
+    })
+    .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));
 
   if (!functionsToDisplay.length) {
     return <>No read methods</>;
@@ -21,16 +29,14 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
 
   return (
     <>
-      {functionsToDisplay
-        .map(fn => (
-          <ReadOnlyFunctionForm
-            contractAddress={deployedContractData.address}
-            abiFunction={fn}
-            key={fn.name}
-            inheritedFrom={(deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name]}
-          />
-        ))
-        .sort((a, b) => (b.props.inheritedFrom ? b.props.inheritedFrom.localeCompare(a.props.inheritedFrom) : 1))}
+      {functionsToDisplay.map(({ fn, inheritedFrom }) => (
+        <ReadOnlyFunctionForm
+          contractAddress={deployedContractData.address}
+          abiFunction={fn}
+          key={fn.name}
+          inheritedFrom={inheritedFrom}
+        />
+      ))}
     </>
   );
 };

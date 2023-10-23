@@ -15,11 +15,19 @@ export const ContractVariables = ({
 
   const functionsToDisplay = (
     (deployedContractData.abi as Abi).filter(part => part.type === "function") as AbiFunction[]
-  ).filter(fn => {
-    const isQueryableWithNoParams =
-      (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
-    return isQueryableWithNoParams;
-  });
+  )
+    .filter(fn => {
+      const isQueryableWithNoParams =
+        (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
+      return isQueryableWithNoParams;
+    })
+    .map(fn => {
+      return {
+        fn,
+        inheritedFrom: (deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name],
+      };
+    })
+    .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));
 
   if (!functionsToDisplay.length) {
     return <>No contract variables</>;
@@ -27,17 +35,15 @@ export const ContractVariables = ({
 
   return (
     <>
-      {functionsToDisplay
-        .map(fn => (
-          <DisplayVariable
-            abiFunction={fn}
-            contractAddress={deployedContractData.address}
-            key={fn.name}
-            refreshDisplayVariables={refreshDisplayVariables}
-            inheritedFrom={(deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name]}
-          />
-        ))
-        .sort((a, b) => (b.props.inheritedFrom ? b.props.inheritedFrom.localeCompare(a.props.inheritedFrom) : 1))}
+      {functionsToDisplay.map(({ fn, inheritedFrom }) => (
+        <DisplayVariable
+          abiFunction={fn}
+          contractAddress={deployedContractData.address}
+          key={fn.name}
+          refreshDisplayVariables={refreshDisplayVariables}
+          inheritedFrom={inheritedFrom}
+        />
+      ))}
     </>
   );
 };
