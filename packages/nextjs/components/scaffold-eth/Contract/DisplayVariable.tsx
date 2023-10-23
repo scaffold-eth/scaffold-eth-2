@@ -51,7 +51,7 @@ export const DisplayVariable = ({
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
-        <InheritanceTooltip inheritedFrom={inheritedFrom} tooltipType="tooltip-primary" />
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
