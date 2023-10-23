@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
+import { hardhat } from "viem/chains";
 import { useNetwork } from "wagmi";
-import { hardhat } from "wagmi/chains";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Address, AddressInput, Balance, EtherInput, getParsedError } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -82,7 +82,7 @@ export const Faucet = () => {
 
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm px-2 rounded-full font-normal normal-case">
+      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal normal-case gap-1">
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
