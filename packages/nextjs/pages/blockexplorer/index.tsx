@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { NextPage } from "next";
-import { hardhat } from "wagmi/chains";
+import { hardhat } from "viem/chains";
 import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
