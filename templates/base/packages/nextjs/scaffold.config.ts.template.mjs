@@ -1,7 +1,7 @@
 import { withDefaults } from '../../../utils.js'
 
 const contents = ({ chainName }) =>
-`import * as chains from "wagmi/chains";
+`import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
   targetNetwork: chains.Chain;
