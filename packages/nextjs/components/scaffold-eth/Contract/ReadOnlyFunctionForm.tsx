@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { InheritanceTip } from "./InheritanceTip";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -53,7 +53,7 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedFr
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
       <p className="font-medium my-0 break-words">
         {abiFunction.name}
-        <InheritanceTip inheritedFrom={inheritedFrom} />
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </p>
       {inputElements}
       <div className="flex justify-between gap-2 flex-wrap">

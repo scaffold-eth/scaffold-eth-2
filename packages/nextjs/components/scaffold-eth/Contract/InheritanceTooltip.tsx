@@ -1,4 +1,4 @@
-export const InheritanceTip = ({ inheritedFrom }: { inheritedFrom?: string }) => {
+export const InheritanceTooltip = ({ inheritedFrom }: { inheritedFrom?: string }) => {
   return (
     <>
       {inheritedFrom && (

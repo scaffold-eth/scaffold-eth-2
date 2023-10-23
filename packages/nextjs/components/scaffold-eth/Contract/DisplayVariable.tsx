@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { InheritanceTip } from "./InheritanceTip";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -45,7 +45,7 @@ export const DisplayVariable = ({
       <div className="flex items-center gap-2">
         <h3 className="font-medium text-lg mb-0 break-all">
           {abiFunction.name}
-          <InheritanceTip inheritedFrom={inheritedFrom} />
+          <InheritanceTooltip inheritedFrom={inheritedFrom} />
         </h3>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (

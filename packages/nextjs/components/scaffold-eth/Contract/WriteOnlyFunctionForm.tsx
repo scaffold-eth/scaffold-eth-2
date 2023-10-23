@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { InheritanceTip } from "./InheritanceTip";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
@@ -90,7 +90,7 @@ export const WriteOnlyFunctionForm = ({
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
         <p className="font-medium my-0 break-words">
           {abiFunction.name}
-          <InheritanceTip inheritedFrom={inheritedFrom} />
+          <InheritanceTooltip inheritedFrom={inheritedFrom} />
         </p>
         {inputs}
         {abiFunction.stateMutability === "payable" ? (
