@@ -4,7 +4,7 @@ import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
 import { createPublicClient, http } from "viem";
-import { hardhat } from "wagmi/chains";
+import { hardhat } from "viem/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,

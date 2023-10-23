@@ -1,5 +1,5 @@
 import { Chain, Wallet } from "@rainbow-me/rainbowkit";
-import { hardhat } from "wagmi/chains";
+import { hardhat } from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 import {
   BurnerConnector,
