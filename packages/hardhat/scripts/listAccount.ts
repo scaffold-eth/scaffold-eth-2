@@ -1,8 +1,11 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import { ethers, Wallet } from "ethers";
 import QRCode from "qrcode";
 import { config } from "hardhat";
+import { privateKeyToAccount } from "viem/accounts";
+import * as chains from "viem/chains";
+import { Chain, createPublicClient, formatEther, http } from "viem";
+import { HttpNetworkConfig } from "hardhat/types";
 
 async function main() {
   const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
@@ -12,23 +15,30 @@ async function main() {
     return;
   }
 
-  // Get account from private key.
-  const wallet = new Wallet(privateKey);
-  const address = wallet.address;
+  // Get account from private key.;
+  const randomAccount = privateKeyToAccount(privateKey as `0x${string}`);
+  const address = randomAccount.address;
   console.log(await QRCode.toString(address, { type: "terminal", small: true }));
   console.log("Public address:", address, "\n");
 
   // Balance on each network
   const availableNetworks = config.networks;
+
   for (const networkName in availableNetworks) {
     try {
-      const network = availableNetworks[networkName];
-      if (!("url" in network)) continue;
-      const provider = new ethers.providers.JsonRpcProvider(network.url);
-      const balance = await provider.getBalance(address);
+      const hardhatConfigNetwork = availableNetworks[networkName];
+      if (!("url" in hardhatConfigNetwork)) continue;
+      // @ts-expect-error: TODO: fix types
+      const viemChain = chains[networkName] as Chain;
+      const publicClient = createPublicClient({
+        chain: viemChain,
+        transport: http((availableNetworks[networkName] as HttpNetworkConfig).url),
+      });
+      const balance = await publicClient.getBalance({ address });
       console.log("--", networkName, "-- 📡");
-      console.log("   balance:", +ethers.utils.formatEther(balance));
-      console.log("   nonce:", +(await provider.getTransactionCount(address)));
+      console.log("   balance:", formatEther(balance));
+      const nonce = await publicClient.getTransactionCount({ address });
+      console.log("   nonce:", nonce);
     } catch (e) {
       console.log("Can't connect to network", networkName);
     }

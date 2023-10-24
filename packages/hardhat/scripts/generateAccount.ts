@@ -1,4 +1,5 @@
-import { ethers } from "ethers";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+
 import { parse, stringify } from "envfile";
 import * as fs from "fs";
 
@@ -10,17 +11,18 @@ const envFilePath = "./.env";
  */
 const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");
-  const randomWallet = ethers.Wallet.createRandom();
+  const privateKey = generatePrivateKey();
+  const randomAccount = privateKeyToAccount(privateKey);
 
   const newEnvConfig = {
     ...existingEnvConfig,
-    DEPLOYER_PRIVATE_KEY: randomWallet.privateKey,
+    DEPLOYER_PRIVATE_KEY: privateKey,
   };
 
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
   console.log("📄 Private Key saved to packages/hardhat/.env file");
-  console.log("🪄 Generated wallet address:", randomWallet.address);
+  console.log("🪄 Generated wallet address:", randomAccount.address);
 };
 
 async function main() {
