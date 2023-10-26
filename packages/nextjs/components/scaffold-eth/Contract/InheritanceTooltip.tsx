@@ -4,10 +4,10 @@ export const InheritanceTooltip = ({ inheritedFrom }: { inheritedFrom?: string }
   <>
     {inheritedFrom && (
       <span
-        className={`cursor-help tooltip tooltip-top tooltip-accent px-2 before:content-[attr(data-tip)]`}
+        className={"tooltip tooltip-top tooltip-accent px-2 break-normal"}
         data-tip={`Inherited from: ${inheritedFrom}`}
       >
-        <InformationCircleIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+        <InformationCircleIcon className="h-4 w-4" aria-hidden="true" />
       </span>
     )}
   </>
