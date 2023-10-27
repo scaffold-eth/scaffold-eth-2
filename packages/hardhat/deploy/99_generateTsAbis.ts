@@ -27,20 +27,43 @@ function getContractNames(path: string) {
     .map(dirent => dirent.name.split(".")[0]);
 }
 
-function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
-  const inheritedFunctions = {} as Record<string, any>;
+function getAcutalSourcesForContract(sources: Record<string, any>, contractName: string) {
   for (const sourcePath of Object.keys(sources)) {
     const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
     if (sourceName === contractName) {
-      continue;
+      const contractContent = sources[sourcePath].content as string;
+      const regex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
+      const match = contractContent.match(regex);
+
+      if (match) {
+        const inheritancePart = match[2];
+        // Split the inherited contracts by commas to get the list of inherited contracts
+        const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
+
+        return inheritedContracts;
+      } else return [];
     }
-    const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
-    for (const functionAbi of abi) {
-      if (functionAbi.type === "function") {
-        inheritedFunctions[functionAbi.name] = sourcePath;
+  }
+  return [];
+}
+
+function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
+  const actualSources = getAcutalSourcesForContract(sources, contractName);
+  const inheritedFunctions = {} as Record<string, any>;
+
+  for (const sourceContractName of actualSources) {
+    const sourcePath = Object.keys(sources).find(key => key.includes(sourceContractName));
+    if (sourcePath) {
+      const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
+      const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
+      for (const functionAbi of abi) {
+        if (functionAbi.type === "function") {
+          inheritedFunctions[functionAbi.name] = sourcePath;
+        }
       }
     }
   }
+
   return inheritedFunctions;
 }
 
