@@ -71,7 +71,7 @@ Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building wit
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
-# Other Flavors 🍦 
+# Other Flavors 
 
 - [scaffold-eth-envio](https://github.com/enviodev/scaffold-eth-2-envio)
 
