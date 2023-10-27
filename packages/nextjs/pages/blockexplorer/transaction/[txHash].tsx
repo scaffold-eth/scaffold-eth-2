@@ -6,6 +6,7 @@ import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { replacer } from "~~/utils/scaffold-eth/common";
 
 const TransactionPage: NextPage = () => {
   const client = usePublicClient({ chainId: hardhat.id });
@@ -118,6 +119,21 @@ const TransactionPage: NextPage = () => {
                 </td>
                 <td className="form-control">
                   <textarea readOnly value={transaction.input} className="p-0 textarea-primary bg-inherit h-[150px]" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Logs:</strong>
+                </td>
+                <td className="form-control">
+                  <ul>
+                    {receipt?.logs &&
+                      receipt.logs.map((log, i) => (
+                        <li key={i}>
+                          <strong>Topics {i}:</strong> {JSON.stringify(log.topics, replacer, 2)}
+                        </li>
+                      ))}
+                  </ul>
                 </td>
               </tr>
             </tbody>
