@@ -32,8 +32,6 @@ type Prettify<T> = {
 
 export type GenericContractsDeclaration = {
   [key: number]: {
-    name: string;
-    chainId: string;
     contracts: {
       [key: string]: {
         address: Address;

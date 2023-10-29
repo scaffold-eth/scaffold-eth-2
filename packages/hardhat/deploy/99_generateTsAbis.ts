@@ -41,8 +41,6 @@ function getContractDataFromDeployments() {
       contracts[contractName] = { address, abi };
     }
     output[chainId] = {
-      chainId,
-      name: chainName,
       contracts,
     };
   }
