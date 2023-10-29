@@ -31,7 +31,7 @@ type Prettify<T> = {
 } & unknown;
 
 export type GenericContractsDeclaration = {
-  [key: number]: readonly {
+  [key: number]: {
     name: string;
     chainId: string;
     contracts: {
@@ -40,7 +40,7 @@ export type GenericContractsDeclaration = {
         abi: Abi;
       };
     };
-  }[];
+  };
 };
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
@@ -53,7 +53,7 @@ type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [k
 
 type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
 
-type Contracts = ContractsDeclaration[ConfiguredChainId][0]["contracts"];
+type Contracts = ContractsDeclaration[ConfiguredChainId]["contracts"];
 
 export type ContractName = keyof Contracts;
 
