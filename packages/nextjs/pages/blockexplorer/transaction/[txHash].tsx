@@ -125,14 +125,13 @@ const TransactionPage: NextPage = () => {
                 <td>
                   <strong>Logs:</strong>
                 </td>
-                <td className="form-control">
+                <td>
                   <ul>
-                    {receipt?.logs &&
-                      receipt.logs.map((log, i) => (
-                        <li key={i}>
-                          <strong>Topics {i}:</strong> {JSON.stringify(log.topics, replacer, 2)}
-                        </li>
-                      ))}
+                    {receipt?.logs?.map((log, i) => (
+                      <li key={i}>
+                        <strong>Topics {i}:</strong> {JSON.stringify(log.topics, replacer, 2)}
+                      </li>
+                    ))}
                   </ul>
                 </td>
               </tr>
