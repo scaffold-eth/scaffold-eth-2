@@ -62,9 +62,13 @@ const generateTsAbis: DeployFunction = async function () {
   }
   fs.writeFileSync(
     `${TARGET_DIR}deployedContracts.ts`,
-    prettier.format(`const contracts = {${fileContent}} as const; \n\n export default contracts`, {
-      parser: "typescript",
-    }),
+    prettier.format(
+      `import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract"; \n\n
+ const contracts = {${fileContent}} satisfies GenericContractsDeclaration | null ; \n\n export default contracts`,
+      {
+        parser: "typescript",
+      },
+    ),
   );
 
   console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
