@@ -32,11 +32,9 @@ type Prettify<T> = {
 
 export type GenericContractsDeclaration = {
   [key: number]: {
-    contracts: {
-      [key: string]: {
-        address: Address;
-        abi: Abi;
-      };
+    [key: string]: {
+      address: Address;
+      abi: Abi;
     };
   };
 };
@@ -51,7 +49,7 @@ type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [k
 
 type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
 
-type Contracts = ContractsDeclaration[ConfiguredChainId]["contracts"];
+type Contracts = ContractsDeclaration[ConfiguredChainId];
 
 export type ContractName = keyof Contracts;
 

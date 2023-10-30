@@ -40,9 +40,7 @@ function getContractDataFromDeployments() {
       );
       contracts[contractName] = { address, abi };
     }
-    output[chainId] = {
-      contracts,
-    };
+    output[chainId] = contracts;
   }
   return output;
 }
