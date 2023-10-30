@@ -129,7 +129,7 @@ const TransactionPage: NextPage = () => {
                   <ul>
                     {receipt?.logs?.map((log, i) => (
                       <li key={i}>
-                        <strong>Topics {i}:</strong> {JSON.stringify(log.topics, replacer, 2)}
+                        <strong>Log {i} topics:</strong> {JSON.stringify(log.topics, replacer, 2)}
                       </li>
                     ))}
                   </ul>
