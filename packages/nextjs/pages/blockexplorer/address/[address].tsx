@@ -13,7 +13,7 @@ import {
   TransactionsTable,
 } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
-import deployedContracts from "~~/generated/deployedContracts";
+import deployedContracts from "~~/contracts/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 

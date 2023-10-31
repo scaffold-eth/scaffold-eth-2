@@ -19,8 +19,8 @@ import {
   TransactionReceipt,
 } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
-import deployedContractsData from "~~/generated/deployedContracts";
-import externalContractsData from "~~/generated/externalContracts";
+import deployedContractsData from "~~/contracts/deployedContracts";
+import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
 export type GenericContractsDeclaration = {
