@@ -1,3 +1,4 @@
+import { deepMerge } from "./common";
 import {
   Abi,
   AbiParameterToPrimitiveType,
@@ -17,7 +18,8 @@ import {
   TransactionReceipt,
 } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
-import contractsData from "~~/generated/deployedContracts";
+import deployedContractsData from "~~/generated/deployedContracts";
+import externalContractsData from "~~/generated/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
 /**
@@ -38,6 +40,7 @@ export type GenericContractsDeclaration = {
     };
   };
 };
+const contractsData = deepMerge(deployedContractsData, externalContractsData);
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
 
