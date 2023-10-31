@@ -64,7 +64,7 @@ const generateTsAbis: DeployFunction = async function () {
     `${TARGET_DIR}deployedContracts.ts`,
     prettier.format(
       `import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract"; \n\n
- const deployedContracts = {${fileContent}} satisfies GenericContractsDeclaration | null ; \n\n export default deployedContracts `,
+ const deployedContracts = {${fileContent}} as const; \n\n export default deployedContracts deployedContracts satisfies GenericContractsDeclaration`,
       {
         parser: "typescript",
       },

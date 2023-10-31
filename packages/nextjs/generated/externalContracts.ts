@@ -8,8 +8,8 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
  *      address: "0x..."
  *      abi: [...],
  *    }
- * } satisfies GenericContractsDeclaration | null;
+ * } as const;
  */
-const externalContracts = {} satisfies GenericContractsDeclaration | null;
+const externalContracts = {} as const;
 
-export default externalContracts;
+export default externalContracts satisfies GenericContractsDeclaration;
