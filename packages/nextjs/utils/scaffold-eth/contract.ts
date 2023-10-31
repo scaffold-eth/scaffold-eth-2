@@ -8,6 +8,7 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
+import type { Simplify } from "type-fest";
 import {
   Address,
   Block,
@@ -21,16 +22,6 @@ import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig }
 import deployedContractsData from "~~/generated/deployedContracts";
 import externalContractsData from "~~/generated/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
-
-/**
- * @description Combines members of an intersection into a readable type.
- * @example
- * Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
- * => { a: string, b: string, c: number, d: bigint }
- */
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & unknown;
 
 export type GenericContractsDeclaration = {
   [chainId: number]: {
@@ -169,7 +160,7 @@ export type UseScaffoldEventConfig<
 } & IsContractDeclarationMissing<
   Omit<UseContractEventConfig, "listener"> & {
     listener: (
-      logs: Prettify<
+      logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
           args: Record<string, unknown>;
           eventName: string;
@@ -179,7 +170,7 @@ export type UseScaffoldEventConfig<
   },
   Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
     listener: (
-      logs: Prettify<
+      logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
           args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
             GetEventArgs<
