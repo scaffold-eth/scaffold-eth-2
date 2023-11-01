@@ -1,4 +1,3 @@
-import { deepMerge } from "./common";
 import {
   Abi,
   AbiParameterToPrimitiveType,
@@ -9,6 +8,7 @@ import {
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
 import type { Simplify } from "type-fest";
+import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
@@ -23,6 +23,19 @@ import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
+const deepMergeContracts = <D extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>>(
+  destination: D,
+  source: S,
+) => {
+  const result: Record<PropertyKey, any> = {};
+  const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(destination)]));
+  for (const key of allKeys) {
+    result[key] = { ...destination[key], ...source[key] };
+  }
+  return result as MergeDeepRecord<D, S, { arrayMergeMode: "replace" }>;
+};
+const contractsData = deepMergeContracts(deployedContractsData, externalContractsData);
+
 export type GenericContractsDeclaration = {
   [chainId: number]: {
     [contractName: string]: {
@@ -31,7 +44,6 @@ export type GenericContractsDeclaration = {
     };
   };
 };
-const contractsData = deepMerge(deployedContractsData, externalContractsData);
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
 

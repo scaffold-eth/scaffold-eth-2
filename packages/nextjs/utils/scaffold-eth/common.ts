@@ -9,21 +9,9 @@ export const deepMerge = <D extends Record<PropertyKey, any>, S extends Record<P
   source: S,
 ) => {
   const result: Record<PropertyKey, any> = {};
-  for (const key in destination) {
-    if (key in source) {
-      if (typeof destination[key] === "object" && typeof source[key] === "object" && !Array.isArray(source[key])) {
-        result[key] = deepMerge(destination[key], source[key]);
-      } else {
-        result[key] = source[key];
-      }
-    } else {
-      result[key] = destination[key];
-    }
-  }
-  for (const key in source) {
-    if (!(key in destination)) {
-      result[key] = source[key];
-    }
+  const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(destination)]));
+  for (const key of allKeys) {
+    result[key] = { ...destination[key], ...source[key] };
   }
   return result as MergeDeepRecord<D, S, { arrayMergeMode: "replace" }>;
 };
