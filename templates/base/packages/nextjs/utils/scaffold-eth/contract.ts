@@ -7,6 +7,8 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
+import type { Simplify } from "type-fest";
+import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
@@ -17,30 +19,30 @@ import {
   TransactionReceipt,
 } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
-import contractsData from "~~/generated/deployedContracts";
+import deployedContractsData from "~~/contracts/deployedContracts";
+import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
-/**
- * @description Combines members of an intersection into a readable type.
- * @example
- * Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
- * => { a: string, b: string, c: number, d: bigint }
- */
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & unknown;
+const deepMergeContracts = <D extends Record<PropertyKey, any>, S extends Record<PropertyKey, any>>(
+  destination: D,
+  source: S,
+) => {
+  const result: Record<PropertyKey, any> = {};
+  const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(destination)]));
+  for (const key of allKeys) {
+    result[key] = { ...destination[key], ...source[key] };
+  }
+  return result as MergeDeepRecord<D, S, { arrayMergeMode: "replace" }>;
+};
+const contractsData = deepMergeContracts(deployedContractsData, externalContractsData);
 
 export type GenericContractsDeclaration = {
-  [key: number]: readonly {
-    name: string;
-    chainId: string;
-    contracts: {
-      [key: string]: {
-        address: Address;
-        abi: Abi;
-      };
+  [chainId: number]: {
+    [contractName: string]: {
+      address: Address;
+      abi: Abi;
     };
-  }[];
+  };
 };
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
@@ -53,7 +55,7 @@ type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [k
 
 type ContractsDeclaration = IsContractDeclarationMissing<GenericContractsDeclaration, typeof contractsData>;
 
-type Contracts = ContractsDeclaration[ConfiguredChainId][0]["contracts"];
+type Contracts = ContractsDeclaration[ConfiguredChainId];
 
 export type ContractName = keyof Contracts;
 
@@ -170,7 +172,7 @@ export type UseScaffoldEventConfig<
 } & IsContractDeclarationMissing<
   Omit<UseContractEventConfig, "listener"> & {
     listener: (
-      logs: Prettify<
+      logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
           args: Record<string, unknown>;
           eventName: string;
@@ -180,7 +182,7 @@ export type UseScaffoldEventConfig<
   },
   Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
     listener: (
-      logs: Prettify<
+      logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
           args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
             GetEventArgs<
