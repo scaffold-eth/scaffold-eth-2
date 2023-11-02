@@ -173,7 +173,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
   );
 
   if (!fs.existsSync(buildInfoDirectory)) {
-    throw new Error(`Directory ${buildInfoDirectory} not found.`);
+    console.error(`Directory ${buildInfoDirectory} not found.`);
+    return { props: { address, contractData: null } };
   }
 
   const deployedContractsOnChain = contracts ? contracts[chainId] : {};
