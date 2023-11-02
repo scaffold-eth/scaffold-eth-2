@@ -122,6 +122,52 @@ const config: HardhatUserConfig = {
       url: "https://rpc.scroll.io",
       accounts: [deployerPrivateKey],
     },
+    songbird: {
+      url: "https://songbird-api.flare.network/ext/bc/C/rpc",
+      accounts: [deployerPrivateKey],
+      chainId: 19,
+      verify: {
+        etherscan: {
+          // hardhat-verify or hardhat-etherscan want "/api" at the end, hardhat-deploy doesn't
+          apiUrl: "https://songbird-explorer.flare.network",
+        },
+      },
+    },
+    coston: {
+      // faucet: https://faucet.towolabs.com/
+      url: "https://coston-api.flare.network/ext/bc/C/rpc",
+      accounts: [deployerPrivateKey],
+      chainId: 16,
+      verify: {
+        etherscan: {
+          // hardhat-verify or hardhat-etherscan want "/api" at the end, hardhat-deploy doesn't
+          apiUrl: "https://coston-explorer.flare.network",
+        },
+      },
+    },
+    flare: {
+      url: "https://flare-api.flare.network/ext/C/rpc",
+      accounts: [deployerPrivateKey],
+      chainId: 14,
+      verify: {
+        etherscan: {
+          // hardhat-verify or hardhat-etherscan want "/api" at the end, hardhat-deploy doesn't
+          apiUrl: "https://flare-explorer.flare.network",
+        },
+      },
+    },
+    coston2: {
+      // faucet: https://coston2-faucet.towolabs.com/
+      url: "https://coston2-api.flare.network/ext/C/rpc",
+      accounts: [deployerPrivateKey],
+      chainId: 114,
+      verify: {
+        etherscan: {
+          // hardhat-verify or hardhat-etherscan want "/api" at the end, hardhat-deploy doesn't
+          apiUrl: "https://coston2-explorer.flare.network",
+        },
+      },
+    },
   },
   verify: {
     etherscan: {
