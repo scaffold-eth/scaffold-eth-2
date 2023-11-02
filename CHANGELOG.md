@@ -1,11 +1,20 @@
 # create-eth
 
+## 0.0.24
+
+### Patch Changes
+
+- 06ba1eb: - remove chainId from useContractWrite (#584)
+  - Add copy to clipboard to TxReceipt (#590)
+  - Add event logs to transaction page (#591)
+  - deployedContracts & externalContracts (#592)
+
 ## 0.0.23
 
 ### Patch Changes
 
 - 30d9000:
-  
+
   1. Extract header menu links (#570)
   2. Move Block Explorer to footer (#574)
   3. Remove ExampleUI (pages, components, assets, content) (#578)
