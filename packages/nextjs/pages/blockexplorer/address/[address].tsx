@@ -13,7 +13,7 @@ import {
   TransactionsTable,
 } from "~~/components/blockexplorer/";
 import { Address, Balance } from "~~/components/scaffold-eth";
-import deployedContracts from "~~/generated/deployedContracts";
+import deployedContracts from "~~/contracts/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
@@ -176,7 +176,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
   }
 
-  const deployedContractsOnChain = contracts ? contracts[chainId][0].contracts : {};
+  const deployedContractsOnChain = contracts ? contracts[chainId] : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
       contractPath = `contracts/${contractName}.sol`;
