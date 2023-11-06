@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
+import { useInterval } from "usehooks-ts";
 import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -21,6 +22,7 @@ import {
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
+ * @param config.poolingInterval - if set to a number, the events will be updated every poolingInterval milliseconds (default: no pooling)*
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -28,6 +30,7 @@ export const useScaffoldEventHistory = <
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
+  TPoolingInterval extends number | null = null,
 >({
   contractName,
   eventName,
@@ -36,30 +39,44 @@ export const useScaffoldEventHistory = <
   blockData,
   transactionData,
   receiptData,
-}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
+  poolingInterval,
+}: UseScaffoldEventHistoryConfig<
+  TContractName,
+  TEventName,
+  TBlockData,
+  TTransactionData,
+  TReceiptData,
+  TPoolingInterval
+>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [fromBlockUpdated, setFromBlockUpdated] = useState<bigint>(fromBlock);
+
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
 
-  useEffect(() => {
-    async function readEvents() {
-      try {
-        if (!deployedContractData) {
-          throw new Error("Contract not found");
-        }
+  const readEvents = async () => {
+    try {
+      if (!deployedContractData) {
+        throw new Error("Contract not found");
+      }
 
-        const event = (deployedContractData.abi as Abi).find(
-          part => part.type === "event" && part.name === eventName,
-        ) as AbiEvent;
+      const event = (deployedContractData.abi as Abi).find(
+        part => part.type === "event" && part.name === eventName,
+      ) as AbiEvent;
 
+      const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
+      if (blockNumber >= fromBlockUpdated) {
         const logs = await publicClient.getLogs({
           address: deployedContractData?.address,
           event,
           args: filters as any, // TODO: check if it works and fix type
-          fromBlock,
+          fromBlock: fromBlockUpdated,
+          toBlock: blockNumber,
         });
+        setFromBlockUpdated(blockNumber + 1n);
+
         const newEvents = [];
         for (let i = logs.length - 1; i >= 0; i--) {
           newEvents.push({
@@ -79,16 +96,23 @@ export const useScaffoldEventHistory = <
                 : null,
           });
         }
-        setEvents(newEvents);
+        if (events) {
+          setEvents([...events, ...newEvents]);
+        } else {
+          setEvents(newEvents);
+        }
         setError(undefined);
-      } catch (e: any) {
-        console.error(e);
-        setEvents(undefined);
-        setError(e);
-      } finally {
-        setIsLoading(false);
       }
+    } catch (e: any) {
+      console.error(e);
+      setEvents(undefined);
+      setError(e);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
     if (!deployedContractLoading) {
       readEvents();
     }
@@ -107,6 +131,15 @@ export const useScaffoldEventHistory = <
     transactionData,
     receiptData,
   ]);
+
+  useInterval(
+    async () => {
+      if (!deployedContractLoading) {
+        readEvents();
+      }
+    },
+    poolingInterval ? poolingInterval : null,
+  );
 
   const eventHistoryData = useMemo(
     () =>
