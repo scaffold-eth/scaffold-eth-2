@@ -72,7 +72,7 @@ export type TBurnerSigner = {
    */
   generateNewBurner: () => void;
   /**
-   * explictly save burner to storage
+   * explicitly save burner to storage
    */
   saveBurner: () => void;
 };
