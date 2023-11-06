@@ -1,6 +1,6 @@
 import { WriteOnlyFunctionForm } from "./WriteOnlyFunctionForm";
 import { Abi, AbiFunction } from "abitype";
-import { Contract, ContractName, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName, GenericContract, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
 
 export const ContractWriteMethods = ({
   onChange,
@@ -23,7 +23,7 @@ export const ContractWriteMethods = ({
     .map(fn => {
       return {
         fn,
-        inheritedFrom: (deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name],
+        inheritedFrom: ((deployedContractData as GenericContract)?.inheritedFunctions as InheritedFunctions)?.[fn.name],
       };
     })
     .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));

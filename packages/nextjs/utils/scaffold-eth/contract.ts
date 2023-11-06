@@ -38,13 +38,15 @@ const contractsData = deepMergeContracts(deployedContractsData, externalContract
 
 export type InheritedFunctions = { readonly [key: string]: string };
 
+export type GenericContract = {
+  address: Address;
+  abi: Abi;
+  inheritedFunctions?: InheritedFunctions;
+};
+
 export type GenericContractsDeclaration = {
   [chainId: number]: {
-    [contractName: string]: {
-      address: Address;
-      abi: Abi;
-      inheritedFunctions?: InheritedFunctions;
-    };
+    [contractName: string]: GenericContract;
   };
 };
 

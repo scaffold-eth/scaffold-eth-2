@@ -1,6 +1,6 @@
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 import { Abi, AbiFunction } from "abitype";
-import { Contract, ContractName, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
+import { Contract, ContractName, GenericContract, InheritedFunctions } from "~~/utils/scaffold-eth/contract";
 
 export const ContractReadMethods = ({ deployedContractData }: { deployedContractData: Contract<ContractName> }) => {
   if (!deployedContractData) {
@@ -18,7 +18,7 @@ export const ContractReadMethods = ({ deployedContractData }: { deployedContract
     .map(fn => {
       return {
         fn,
-        inheritedFrom: (deployedContractData.inheritedFunctions as InheritedFunctions)[fn.name],
+        inheritedFrom: ((deployedContractData as GenericContract)?.inheritedFunctions as InheritedFunctions)?.[fn.name],
       };
     })
     .sort((a, b) => (b.inheritedFrom ? b.inheritedFrom.localeCompare(a.inheritedFrom) : 1));
