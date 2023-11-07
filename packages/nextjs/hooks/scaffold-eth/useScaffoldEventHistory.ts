@@ -23,7 +23,7 @@ import {
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
- * @param config.watch - if set to true, the events will be updated every poolingInterval milliseconds set at scaffoldConfig (default: false)
+ * @param config.watch - if set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
