@@ -4,6 +4,7 @@ import { useInterval } from "usehooks-ts";
 import { Hash } from "viem";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -22,7 +23,7 @@ import {
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
- * @param config.poolingInterval - if set to a number, the events will be updated every poolingInterval milliseconds (default: no pooling)*
+ * @param config.watch - if set to true, the events will be updated every poolingInterval milliseconds set at scaffoldConfig (default: false)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -30,7 +31,7 @@ export const useScaffoldEventHistory = <
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
-  TPoolingInterval extends number | null = null,
+  TWatch extends boolean = false,
 >({
   contractName,
   eventName,
@@ -39,15 +40,8 @@ export const useScaffoldEventHistory = <
   blockData,
   transactionData,
   receiptData,
-  poolingInterval,
-}: UseScaffoldEventHistoryConfig<
-  TContractName,
-  TEventName,
-  TBlockData,
-  TTransactionData,
-  TReceiptData,
-  TPoolingInterval
->) => {
+  watch,
+}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData, TWatch>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
@@ -138,7 +132,7 @@ export const useScaffoldEventHistory = <
         readEvents();
       }
     },
-    poolingInterval ? poolingInterval : null,
+    watch ? scaffoldConfig.pollingInterval : null,
   );
 
   const eventHistoryData = useMemo(

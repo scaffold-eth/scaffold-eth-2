@@ -224,7 +224,7 @@ export type UseScaffoldEventHistoryConfig<
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
-  TPoolingInterval extends number | null = null,
+  TWatch extends boolean = false,
 > = {
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
@@ -233,7 +233,7 @@ export type UseScaffoldEventHistoryConfig<
   blockData?: TBlockData;
   transactionData?: TTransactionData;
   receiptData?: TReceiptData;
-  poolingInterval?: TPoolingInterval;
+  watch?: TWatch;
 };
 
 export type UseScaffoldEventHistoryData<
