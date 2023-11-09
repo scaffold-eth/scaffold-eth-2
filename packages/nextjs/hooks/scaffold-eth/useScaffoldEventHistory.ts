@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { useInterval } from "usehooks-ts";
 import { Hash } from "viem";
+import * as chains from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import scaffoldConfig from "~~/scaffold.config";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -48,6 +50,7 @@ export const useScaffoldEventHistory = <
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
+  const configuredNetwork = getTargetNetwork();
 
   const readEvents = async () => {
     try {
@@ -131,7 +134,7 @@ export const useScaffoldEventHistory = <
         readEvents();
       }
     },
-    watch ? scaffoldConfig.pollingInterval : null,
+    watch ? (configuredNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
   );
 
   const eventHistoryData = useMemo(
