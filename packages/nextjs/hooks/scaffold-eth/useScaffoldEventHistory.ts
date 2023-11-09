@@ -52,7 +52,7 @@ export const useScaffoldEventHistory = <
   const publicClient = usePublicClient();
   const configuredNetwork = getTargetNetwork();
 
-  const readEvents = async () => {
+  const readEvents = async ({ append }: { append?: boolean }) => {
     try {
       if (!deployedContractData) {
         throw new Error("Contract not found");
@@ -92,7 +92,7 @@ export const useScaffoldEventHistory = <
                 : null,
           });
         }
-        if (events) {
+        if (events && append) {
           setEvents([...events, ...newEvents]);
         } else {
           setEvents(newEvents);
@@ -110,7 +110,7 @@ export const useScaffoldEventHistory = <
 
   useEffect(() => {
     if (!deployedContractLoading) {
-      readEvents();
+      readEvents({});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -131,7 +131,7 @@ export const useScaffoldEventHistory = <
   useInterval(
     async () => {
       if (!deployedContractLoading) {
-        readEvents();
+        readEvents({ append: true });
       }
     },
     watch ? (configuredNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
