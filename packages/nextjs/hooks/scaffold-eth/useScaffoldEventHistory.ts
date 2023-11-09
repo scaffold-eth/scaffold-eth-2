@@ -31,7 +31,6 @@ export const useScaffoldEventHistory = <
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
-  TWatch extends boolean = false,
 >({
   contractName,
   eventName,
@@ -41,7 +40,7 @@ export const useScaffoldEventHistory = <
   transactionData,
   receiptData,
   watch,
-}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData, TWatch>) => {
+}: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>();
