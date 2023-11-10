@@ -44,7 +44,7 @@ export const useScaffoldEventHistory = <
   watch,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [fromBlockUpdated, setFromBlockUpdated] = useState<bigint>(fromBlock);
 
@@ -52,7 +52,8 @@ export const useScaffoldEventHistory = <
   const publicClient = usePublicClient();
   const configuredNetwork = getTargetNetwork();
 
-  const readEvents = async ({ append }: { append?: boolean }) => {
+  const readEvents = async (fromBlock?: bigint) => {
+    setIsLoading(true);
     try {
       if (!deployedContractData) {
         throw new Error("Contract not found");
@@ -63,12 +64,13 @@ export const useScaffoldEventHistory = <
       ) as AbiEvent;
 
       const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
-      if (blockNumber >= fromBlockUpdated) {
+
+      if ((fromBlock && blockNumber >= fromBlock) || blockNumber >= fromBlockUpdated) {
         const logs = await publicClient.getLogs({
           address: deployedContractData?.address,
           event,
           args: filters as any, // TODO: check if it works and fix type
-          fromBlock: fromBlockUpdated,
+          fromBlock: fromBlock || fromBlockUpdated,
           toBlock: blockNumber,
         });
         setFromBlockUpdated(blockNumber + 1n);
@@ -92,7 +94,7 @@ export const useScaffoldEventHistory = <
                 : null,
           });
         }
-        if (events && append) {
+        if (events && typeof fromBlock === "undefined") {
           setEvents([...events, ...newEvents]);
         } else {
           setEvents(newEvents);
@@ -109,13 +111,17 @@ export const useScaffoldEventHistory = <
   };
 
   useEffect(() => {
+    readEvents(fromBlock);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromBlock]);
+
+  useEffect(() => {
     if (!deployedContractLoading) {
-      readEvents({});
+      readEvents();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     publicClient,
-    fromBlock,
     contractName,
     eventName,
     deployedContractLoading,
@@ -131,7 +137,7 @@ export const useScaffoldEventHistory = <
   useInterval(
     async () => {
       if (!deployedContractLoading) {
-        readEvents({ append: true });
+        readEvents();
       }
     },
     watch ? (configuredNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
