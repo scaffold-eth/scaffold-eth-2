@@ -21,7 +21,7 @@ function getFiles(path) {
     return fs.statSync(path + "/" + file).isFile();
   });
 }
-function getAbiOfContract(contractName) {
+function getArtifactOfContract(contractName) {
   const current_path_to_artifacts = path.join(
     __dirname,
     "..",
@@ -31,7 +31,36 @@ function getAbiOfContract(contractName) {
     fs.readFileSync(`${current_path_to_artifacts}/${contractName}.json`)
   );
 
-  return artifactJson.abi;
+  return artifactJson;
+}
+
+function getInheritedFromContracts(artifact) {
+  let inheritedFromContracts = [];
+  for (const astNode of artifact.ast.nodes) {
+    if (astNode.nodeType == "ContractDefinition") {
+      if (astNode.baseContracts.length > 0) {
+        inheritedFromContracts = astNode.baseContracts.map(({baseName}) => baseName.name);
+      }
+    }
+  }
+  return inheritedFromContracts;
+}
+
+function getInheritedFunctions(mainArtifact) {
+  const inheritedFromContracts = getInheritedFromContracts(mainArtifact);
+  const inheritedFunctions = {};
+  for (const inheritanceContractName of inheritedFromContracts) {
+    const {
+      abi,
+      ast: { absolutePath },
+    } = getArtifactOfContract(inheritanceContractName);
+    for (const abiEntry of abi) {
+      if (abiEntry.type == "function") {
+        inheritedFunctions[abiEntry.name] = absolutePath;
+      }
+    }
+  }
+  return inheritedFunctions;
 }
 
 function main() {
@@ -67,12 +96,16 @@ function main() {
       (transaction) => transaction.transactionType == "CREATE"
     );
     transactionsCreate.forEach((transaction) => {
+      const artifact = getArtifactOfContract(transaction.contractName);
       allGeneratedContracts[chain][
         deployments[chain][transaction.contractAddress] ||
           transaction.contractName
       ] = {
         address: transaction.contractAddress,
-        abi: getAbiOfContract(transaction.contractName),
+        abi: artifact.abi,
+        inheritedFunctions: getInheritedFunctions(
+          artifact,
+        ),
       };
     });
   });
