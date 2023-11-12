@@ -39,8 +39,8 @@ function getActualSourcesForContract(sources: Record<string, any>, contractName:
     const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
     if (sourceName === contractName) {
       const contractContent = sources[sourcePath].content as string;
-      const regex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
-      const match = contractContent.match(regex);
+      const interfacesRegex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
+      const match = contractContent.match(interfacesRegex);
 
       if (match) {
         const inheritancePart = match[2];
