@@ -1,4 +1,5 @@
-node_modules
+const contents = () => 
+`node_modules
 .env
 coverage
 coverage.json
@@ -14,4 +15,6 @@ artifacts
 artifacts-zk
 cache-zk
 
-deployments
+deployments`
+
+export default contents

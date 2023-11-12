@@ -1,0 +1,35 @@
+[profile.default]
+src = 'contracts'
+out = 'out'
+libs = ['lib']
+fs_permissions = [{ access = "read-write", path = "./"}]
+
+[rpc_endpoints]
+default_network = "http://127.0.0.1:8545"
+localhost = "http://127.0.0.1:8545"
+
+mainnet = "https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}"
+sepolia = "https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+goerli = "https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}"
+arbitrum = "https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+arbitrumGoerli = "https://arb-goerli.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+optimism = "https://opt-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+optimismGoerli = "https://opt-goerli.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+polygon = "https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+polygonMumbai = "https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+gnosis = "https://rpc.gnosischain.com"
+chiado = "https://rpc.chiadochain.net"
+base = "https://mainnet.base.org"
+baseGoerli = "https://goerli.base.org"
+polygonZkEvm = "https://polygonzkevm-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+polygonZkEvmTestnet = "https://polygonzkevm-testnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+zkSyncTestnet = "https://testnet.era.zksync.dev"
+zkSync = "https://mainnet.era.zksync.io"
+scrollSepolia = "https://sepolia-rpc.scroll.io"
+scroll = "https://rpc.scroll.io"
+
+[etherscan]
+polygonMumbai = { key = "${ETHERSCAN_API_KEY}" }
+goerli = { key = "${ETHERSCAN_API_KEY}" }
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
