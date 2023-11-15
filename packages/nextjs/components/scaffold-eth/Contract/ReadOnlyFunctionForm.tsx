@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -14,9 +15,10 @@ import { notification } from "~~/utils/scaffold-eth";
 type TReadOnlyFunctionFormProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
+  inheritedFrom?: string;
 };
 
-export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnlyFunctionFormProps) => {
+export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedFrom }: TReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
@@ -49,7 +51,10 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">{abiFunction.name}</p>
+      <p className="font-medium my-0 break-words">
+        {abiFunction.name}
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />
+      </p>
       {inputElements}
       <div className="flex justify-between gap-2 flex-wrap">
         <div className="flex-grow w-4/5">
