@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.25
+
+### Patch Changes
+
+- 0135237: - Fix typos in comments (#596)
+  - Show inherited functions in Debug (when deploying with hardhat) (#564)
+
 ## 0.0.24
 
 ### Patch Changes
