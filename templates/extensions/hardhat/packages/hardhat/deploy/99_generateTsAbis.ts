@@ -34,7 +34,7 @@ function getContractNames(path: string) {
     .map(dirent => dirent.name.split(".")[0]);
 }
 
-function getActualSourcesFromContract(sources: Record<string, any>, contractName: string) {
+function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
   for (const sourcePath of Object.keys(sources)) {
     const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
     if (sourceName === contractName) {
@@ -56,7 +56,7 @@ function getActualSourcesFromContract(sources: Record<string, any>, contractName
 }
 
 function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
-  const actualSources = getActualSourcesFromContract(sources, contractName);
+  const actualSources = getActualSourcesForContract(sources, contractName);
   const inheritedFunctions = {} as Record<string, any>;
 
   for (const sourceContractName of actualSources) {
