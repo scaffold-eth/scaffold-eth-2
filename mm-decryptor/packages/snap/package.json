@@ -29,7 +29,8 @@
   "dependencies": {
     "@metamask/snaps-types": "^3.0.1",
     "@metamask/snaps-ui": "^3.0.1",
-    "buffer": "^6.0.3"
+    "buffer": "^6.0.3",
+    "eth-crypto": "^2.6.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
@@ -40,6 +41,7 @@
     "@metamask/eslint-config-typescript": "^12.0.0",
     "@metamask/snaps-cli": "^3.0.1",
     "@metamask/snaps-jest": "^3.0.0",
+    "@types/jest": "^29.5.8",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "eslint": "^8.45.0",
