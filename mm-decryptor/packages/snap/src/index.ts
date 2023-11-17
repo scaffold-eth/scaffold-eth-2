@@ -14,8 +14,10 @@ import { decrypt } from './decrypt';
 export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
   switch (request.method) {
     case 'decrypt':
-      let decrypted = await decrypt();
-      throw new Error(decrypted);
+      if (request.params == undefined || request.params.encryptedString == undefined) {
+        throw new Error('Request should include params.encryptedString.');
+      }
+      return await decrypt(request.params.encryptedString);
     default:
       throw new Error('Method not found.');
   }
