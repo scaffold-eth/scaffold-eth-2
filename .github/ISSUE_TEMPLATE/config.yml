@@ -1,8 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Ask Question
-    url: https://github.com/scaffold-eth/scaffold-eth-2/discussions/new?category=q-a
-    about: Ask questions and discuss with other community members
-  - name: Request Feature
-    url: https://github.com/scaffold-eth/scaffold-eth-2/discussions/new?category=ideas 
-    about: Requests features or brainstorm ideas for new functionality
