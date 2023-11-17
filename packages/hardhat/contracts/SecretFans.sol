@@ -183,6 +183,11 @@ contract SecretFans is ERC1155("") {
 		return (NftRegistry[tokenId].uri);
 	}
 
+
+	function mint (uint256 tokenId) public {
+		
+		_mint(msg.sender, tokenId, 1, "");
+	}
 	/**
 	 * Function that allows the contract to receive ETH
 	 */
