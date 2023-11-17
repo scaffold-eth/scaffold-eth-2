@@ -15,7 +15,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
  * It also allows the owner to withdraw the Ether in the contract
  * @author BuidlGuidl
  */
-contract SecretFans is ERC1155 {
+contract SecretFans is ERC1155("") {
 	uint256 constant defaultMinSubFee = 0.01 ether;
 	uint256 constant maxSubs = 128;
 	uint256 public currentTokenId = 0;
@@ -26,7 +26,7 @@ contract SecretFans is ERC1155 {
 		uint256 minSubFee;
 		uint256 totalETH;
 		uint256 totalShares;
-		bytes32[maxSubs * 2 - 1] subsMerkleTree;
+		bytes32[128 * 2 - 1] subsMerkleTree;
 	}
 
 	struct NftRegister {
@@ -51,7 +51,7 @@ contract SecretFans is ERC1155 {
 		address contentCreator,
 		bytes32 publicKey
 	) public payable {
-		ContentCreatorChannel channel = channels[contentCreator];
+		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(channel.nSubs < maxSubs, ""); //TODO
 		require(
 			msg.value > channel.minSubFee,
@@ -70,15 +70,15 @@ contract SecretFans is ERC1155 {
 	function subscribeSpotsFull(uint256 _subscriptionFee) public {}
 
 	function publish(
-		string memory uri,
+		string memory _uri,
 		bytes calldata encryptedContentEncriptionKeys
 	) public {
 		uint256 _currentTokenId = currentTokenId;
 		// TODO verify ZKP
 		NftRegistry[_currentTokenId] = NftRegister(
-			uri,
+			_uri,
 			msg.sender,
-			channels[contentCreator].subsMerkleRoot
+			Channels[msg.sender].subsMerkleTree[Channels[msg.sender].subsMerkleTree.length]
 		);
 		//TODO withdraw money form totalETH (transfer, actualize pool)
 		currentTokenId++;
