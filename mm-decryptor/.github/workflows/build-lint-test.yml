@@ -1,0 +1,98 @@
+name: Build, Lint, and Test
+
+on:
+  workflow_call:
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Install Yarn dependencies
+        run: yarn --immutable
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - run: yarn --immutable --immutable-cache
+      - run: yarn build
+      - name: Cache snap build
+        uses: actions/cache@v3
+        with:
+          path: ./packages/snap/dist
+          key: snap-${{ runner.os }}-${{ github.sha }}
+      - name: Require clean working directory
+        shell: bash
+        run: |
+          if ! git diff --exit-code; then
+            echo "Working tree dirty at end of job"
+            exit 1
+          fi
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - run: yarn --immutable --immutable-cache
+      - run: yarn lint
+      - name: Require clean working directory
+        shell: bash
+        run: |
+          if ! git diff --exit-code; then
+            echo "Working tree dirty at end of job"
+            exit 1
+          fi
+
+  e2e-test:
+    name: End-to-end Test
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - name: Restore snap build cache
+        uses: actions/cache@v3
+        with:
+          path: ./packages/snap/dist
+          key: snap-${{ runner.os }}-${{ github.sha }}
+      - run: yarn install --immutable
+      - name: Install Google Chrome
+        run: yarn install-chrome
+      - name: Run e2e tests
+        run: yarn workspace snap run test
+      - name: Require clean working directory
+        shell: bash
+        run: |
+          if ! git diff --exit-code; then
+            echo "Working tree dirty at end of job"
+            exit 1
+          fi

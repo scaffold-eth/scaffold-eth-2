@@ -1,0 +1,61 @@
+{
+  "name": "root",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "homepage": "https://github.com/MetaMask/template-snap-monorepo#readme",
+  "bugs": {
+    "url": "https://github.com/MetaMask/template-snap-monorepo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaMask/template-snap-monorepo.git"
+  },
+  "license": "(MIT-0 OR Apache-2.0)",
+  "author": "",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces foreach --parallel --topological --verbose run build",
+    "install-chrome": "./scripts/install-chrome.sh",
+    "lint": "yarn lint:eslint && yarn lint:misc --check",
+    "lint:eslint": "eslint . --cache --ext js,jsx,ts,tsx",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
+    "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
+    "start": "yarn workspaces foreach --parallel --interlaced --verbose run start",
+    "test": "yarn workspace snap run test"
+  },
+  "devDependencies": {
+    "@lavamoat/allow-scripts": "^3.0.0",
+    "@lavamoat/preinstall-always-fail": "^2.0.0",
+    "@metamask/eslint-config": "^12.0.0",
+    "@metamask/eslint-config-jest": "^12.0.0",
+    "@metamask/eslint-config-nodejs": "^12.0.0",
+    "@metamask/eslint-config-typescript": "^12.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "~2.26.0",
+    "eslint-plugin-jest": "^27.1.5",
+    "eslint-plugin-jsdoc": "^41.1.2",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-packagejson": "^2.2.18",
+    "sharp": "^0.30.7",
+    "typescript": "^4.7.4"
+  },
+  "packageManager": "yarn@3.2.1",
+  "engines": {
+    "node": ">=18.6.0"
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "@lavamoat/preinstall-always-fail": false,
+      "sharp": true
+    }
+  }
+}
