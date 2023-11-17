@@ -13,7 +13,6 @@ import "hardhat/console.sol";
  * @author BuidlGuidl
  */
 contract SecretFans {
-
 	uint256 constant defaultMinSubFee = 0.01 ether;
 	uint256 constant maxSubs = 128;
 
@@ -28,22 +27,31 @@ contract SecretFans {
 
 	mapping(address => ContentCreatorChannel) Channels;
 	//--------------------------------------------Events------------------------------------------------------
-	event subscription(uint16 indexed tournamentID);
+	event subscription(
+		address indexed contentCreator,
+		address subscriber,
+		bytes32 publicKey,
+		uint256 subsShares
+	);
 
-	function subscribeSpotsAvaliable(address contentCreator) public payable {
+	function subscribeSpotsAvaliable(
+		address contentCreator,
+		bytes32 publicKey
+	) public payable {
 		ContentCreatorChannel channel = channels[contentCreator];
-		require(channel.nSubs<maxSubs,""); //TODO
+		require(channel.nSubs < maxSubs, ""); //TODO
 		require(
 			msg.value > channel.minSubFee,
 			"Insufficient balance to pay subscription fee"
 		);
 		channel.totalETH += msg.value;
-		uint256 sharesPerETH = channel.totalShares/channel.totalETH;
-		uint256 newSubsShares = msg.value*sharesPerETH;
+		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
+		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
 
-		
 		//TODO add leaf to merkle tree
+
+		emit subscription(contentCreator, msg.sender, publicKey, newSubsShares);
 	}
 
 	function subscribeSpotsFull(uint256 _subscriptionFee) public {}
