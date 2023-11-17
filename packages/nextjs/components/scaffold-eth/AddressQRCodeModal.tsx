@@ -6,9 +6,6 @@ interface IAddressQRCodeModal {
   modalId: string;
 }
 
-/**
- * Custom Wagmi Connect Button (watch balance + custom design)
- */
 export const AddressQRCodeModal: React.FC<IAddressQRCodeModal> = ({ address, modalId }) => {
   return (
     <>
