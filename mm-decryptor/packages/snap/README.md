@@ -1,12 +1,47 @@
-# TypeScript Example Snap
+# SecretFans snap
 
-This snap demonstrates how to develop a snap with TypeScript. It is a simple
-snap that displays a confirmation dialog when the `hello` JSON-RPC method is
-called.
+This snap takes care of the encryption and decryption going on for secret fans app! But it could really be sued by any other app that needs to perform public/private key encryption and decryption
+It has 3 main fucitonalities
 
-## Testing
+## Get public key
 
-The snap comes with some basic tests, to demonstrate how to write tests for
-snaps. To test the snap, run `yarn test` in this directory. This will use
-[`@metamask/snaps-jest`](https://github.com/MetaMask/snaps/tree/main/packages/snaps-jest)
-to run the tests in `src/index.test.ts`.
+Expose the public ket from the derivation path `m/44'/1'/0'/0/0`. This public key will be shared by the owner in order for others to encrypt messages uppon
+
+### Interface
+
+```js
+{
+  method: 'getPublicKey',
+};
+```
+
+## Encrypt
+
+Encrypts a message towards a public key
+
+### Interface
+
+```js
+{
+  method: 'encrypt',
+  params: {
+    stringToEncrypt: "msg to encrypt",
+    publicKey: "0x....",
+  }
+}
+```
+
+## Decrypt
+
+Decrypts an ecrypted message using the private key derived from `m/44'/1'/0'/0/0`
+
+### Interface
+
+```js
+{
+  method: 'decrypt',
+  params: {
+    encryptedString: "********",
+  }
+}
+```
