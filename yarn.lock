@@ -1369,6 +1369,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:7.20.13":
+  version: 7.20.13
+  resolution: "@babel/runtime@npm:7.20.13"
+  dependencies:
+    regenerator-runtime: "npm:^0.13.11"
+  checksum: 4bea540b54d50af157efc6e9117727c0e9a146b9db43fcd89b8f0024c9464620194efc73e57588b4b141974188dc6f9d338319d74b855d32a785bf14a6fd0d6d
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.17.2, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.8.4":
   version: 7.23.2
   resolution: "@babel/runtime@npm:7.23.2"
@@ -3463,12 +3472,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ethereumjs/common@npm:^2.6.4":
+  version: 2.6.5
+  resolution: "@ethereumjs/common@npm:2.6.5"
+  dependencies:
+    crc-32: "npm:^1.2.0"
+    ethereumjs-util: "npm:^7.1.5"
+  checksum: 065fc993e390631753e9cbc63987954338c42192d227e15a40d9a074eda9e9597916dca51970b59230c7d3b1294c5956258fe6ea29000b5555bf24fe3ff522c5
+  languageName: node
+  linkType: hard
+
 "@ethereumjs/rlp@npm:^4.0.1":
   version: 4.0.1
   resolution: "@ethereumjs/rlp@npm:4.0.1"
   bin:
     rlp: bin/rlp
   checksum: 78379f288e9d88c584c2159c725c4a667a9742981d638bad760ed908263e0e36bdbd822c0a902003e0701195fd1cbde7adad621cd97fdfbf552c45e835ce022c
+  languageName: node
+  linkType: hard
+
+"@ethereumjs/tx@npm:3.5.2":
+  version: 3.5.2
+  resolution: "@ethereumjs/tx@npm:3.5.2"
+  dependencies:
+    "@ethereumjs/common": "npm:^2.6.4"
+    ethereumjs-util: "npm:^7.1.5"
+  checksum: 768cbe0834eef15f4726b44f2a4c52b6180884d90e58108d5251668c7e89d58572de7375d5e63be9d599e79c09259e643837a2afe876126b09c47ac35386cc20
   languageName: node
   linkType: hard
 
@@ -5857,6 +5886,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bn.js@npm:5.1.1":
+  version: 5.1.1
+  resolution: "@types/bn.js@npm:5.1.1"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: d9186feea87a104c44fc20617c8e8fa5384db03e3a46efea53e80da7d6ece72b847b98992465bec9a1d859d685d80e0d7a8abe8309a3f1fd415847bdc4d77fbe
+  languageName: node
+  linkType: hard
+
 "@types/bn.js@npm:^4.11.3":
   version: 4.11.6
   resolution: "@types/bn.js@npm:4.11.6"
@@ -7554,6 +7592,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"acorn@npm:7.1.1":
+  version: 7.1.1
+  resolution: "acorn@npm:7.1.1"
+  bin:
+    acorn: bin/acorn
+  checksum: 4fe83a0bdbdf48e08c3d1a9b216c0de9a20a4857ec2757ec3360d3c44050015cb67bc4bfd3fb85d1680b6a757a8046f7d00c336e938cbfb030438334b047cf46
+  languageName: node
+  linkType: hard
+
 "acorn@npm:^8.0.0, acorn@npm:^8.10.0, acorn@npm:^8.4.1, acorn@npm:^8.6.0, acorn@npm:^8.7.0, acorn@npm:^8.9.0":
   version: 8.11.2
   resolution: "acorn@npm:8.11.2"
@@ -8340,6 +8387,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bip66@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "bip66@npm:1.1.5"
+  dependencies:
+    safe-buffer: "npm:^5.0.1"
+  checksum: 7b4d1b4bfb67cfe8b4af6998f24014ce2a89f1c56e639a4da10f266afcceb9e7e78f395dc05b56af10458ef7c8f627d3077b9e62cd4a1f29777928886ca0557c
+  languageName: node
+  linkType: hard
+
 "bl@npm:^1.0.0":
   version: 1.2.3
   resolution: "bl@npm:1.2.3"
@@ -8524,7 +8580,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserify-aes@npm:^1.2.0":
+"browserify-aes@npm:^1.0.6, browserify-aes@npm:^1.2.0":
   version: 1.2.0
   resolution: "browserify-aes@npm:1.2.0"
   dependencies:
@@ -10076,6 +10132,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"drbg.js@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "drbg.js@npm:1.0.1"
+  dependencies:
+    browserify-aes: "npm:^1.0.6"
+    create-hash: "npm:^1.1.2"
+    create-hmac: "npm:^1.1.4"
+  checksum: d590a7bcd6caa250ca4a4a650351d5adddf019177b42d0466c6aee6bce2963794eb7cff5d0e4ec57e30d6ed4f9516ba1bfc6a88908f99a461eeefa13ed01bef0
+  languageName: node
+  linkType: hard
+
 "duplexify@npm:^3.5.0, duplexify@npm:^3.6.0":
   version: 3.7.1
   resolution: "duplexify@npm:3.7.1"
@@ -10104,6 +10171,23 @@ __metadata:
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
   checksum: 26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
+  languageName: node
+  linkType: hard
+
+"eccrypto@npm:1.1.6":
+  version: 1.1.6
+  resolution: "eccrypto@npm:1.1.6"
+  dependencies:
+    acorn: "npm:7.1.1"
+    elliptic: "npm:6.5.4"
+    es6-promise: "npm:4.2.8"
+    nan: "npm:2.14.0"
+    node-gyp: "npm:latest"
+    secp256k1: "npm:3.7.1"
+  dependenciesMeta:
+    secp256k1:
+      optional: true
+  checksum: 0cea9a7b98113b7352943e5e1eba5633419cac8309e9fa0422a0a05b5ee85dbf65bd9933e8735b321fd12268390b8137f01bacae9dea0137cf0eb2a1311ee9db
   languageName: node
   linkType: hard
 
@@ -10149,7 +10233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"elliptic@npm:6.5.4, elliptic@npm:^6.5.2, elliptic@npm:^6.5.4":
+"elliptic@npm:6.5.4, elliptic@npm:^6.4.1, elliptic@npm:^6.5.2, elliptic@npm:^6.5.4":
   version: 6.5.4
   resolution: "elliptic@npm:6.5.4"
   dependencies:
@@ -10376,7 +10460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es6-promise@npm:^4.0.3":
+"es6-promise@npm:4.2.8, es6-promise@npm:^4.0.3":
   version: 4.2.8
   resolution: "es6-promise@npm:4.2.8"
   checksum: 2373d9c5e9a93bdd9f9ed32ff5cb6dd3dd785368d1c21e9bbbfd07d16345b3774ae260f2bd24c8f836a6903f432b4151e7816a7fa8891ccb4e1a55a028ec42c3
@@ -11325,6 +11409,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eth-crypto@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "eth-crypto@npm:2.6.0"
+  dependencies:
+    "@babel/runtime": "npm:7.20.13"
+    "@ethereumjs/tx": "npm:3.5.2"
+    "@types/bn.js": "npm:5.1.1"
+    eccrypto: "npm:1.1.6"
+    ethereumjs-util: "npm:7.1.5"
+    ethers: "npm:5.7.2"
+    secp256k1: "npm:5.0.0"
+  checksum: 2e3e3140e2a0cb4400ed82a6eb0631a89fe5c07ec2b38103114ab37fb50c0a15b2958eddfc011d1d965989140752f440e8777eef89e8df5f4cd8c8b6f759d0d5
+  languageName: node
+  linkType: hard
+
 "eth-gas-reporter@npm:^0.2.25":
   version: 0.2.27
   resolution: "eth-gas-reporter@npm:0.2.27"
@@ -11458,6 +11557,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ethereumjs-util@npm:7.1.5, ethereumjs-util@npm:^7.1.4, ethereumjs-util@npm:^7.1.5":
+  version: 7.1.5
+  resolution: "ethereumjs-util@npm:7.1.5"
+  dependencies:
+    "@types/bn.js": "npm:^5.1.0"
+    bn.js: "npm:^5.1.2"
+    create-hash: "npm:^1.1.2"
+    ethereum-cryptography: "npm:^0.1.3"
+    rlp: "npm:^2.2.4"
+  checksum: 8b9487f35ecaa078bf9af6858eba6855fc61c73cc2b90c8c37486fcf94faf4fc1c5cda9758e6769f9ef2658daedaf2c18b366312ac461f8c8a122b392e3041eb
+  languageName: node
+  linkType: hard
+
 "ethereumjs-util@npm:^6.0.0, ethereumjs-util@npm:^6.2.1":
   version: 6.2.1
   resolution: "ethereumjs-util@npm:6.2.1"
@@ -11473,20 +11585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethereumjs-util@npm:^7.1.4":
-  version: 7.1.5
-  resolution: "ethereumjs-util@npm:7.1.5"
-  dependencies:
-    "@types/bn.js": "npm:^5.1.0"
-    bn.js: "npm:^5.1.2"
-    create-hash: "npm:^1.1.2"
-    ethereum-cryptography: "npm:^0.1.3"
-    rlp: "npm:^2.2.4"
-  checksum: 8b9487f35ecaa078bf9af6858eba6855fc61c73cc2b90c8c37486fcf94faf4fc1c5cda9758e6769f9ef2658daedaf2c18b366312ac461f8c8a122b392e3041eb
-  languageName: node
-  linkType: hard
-
-"ethers@npm:^5.7.0, ethers@npm:^5.7.1, ethers@npm:^5.7.2":
+"ethers@npm:5.7.2, ethers@npm:^5.7.0, ethers@npm:^5.7.1, ethers@npm:^5.7.2":
   version: 5.7.2
   resolution: "ethers@npm:5.7.2"
   dependencies:
@@ -16092,7 +16191,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.17.0":
+"nan@npm:2.14.0":
+  version: 2.14.0
+  resolution: "nan@npm:2.14.0"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 3774836ebb4084446e6b31cdf7c96662e59561be4a43299bd6aca5d2e360ddb0cec895959cfe70264489da55a89215ee15aeaebfe440e9a6bb0717796e47a16d
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.14.0, nan@npm:^2.17.0":
   version: 2.18.0
   resolution: "nan@npm:2.18.0"
   dependencies:
@@ -16291,6 +16399,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: ade6c097ba829fa4aee1ca340117bb7f8f29fdae7b777e343a9d5cbd548481d1f0894b7b907d23ce615c70d932e8f96154caed95c3fa935cfe8cf87546510f64
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "node-addon-api@npm:5.1.0"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 0eb269786124ba6fad9df8007a149e03c199b3e5a3038125dfb3e747c2d5113d406a4e33f4de1ea600aa2339be1f137d55eba1a73ee34e5fff06c52a5c296d1d
   languageName: node
   linkType: hard
 
@@ -18147,7 +18264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4":
+"regenerator-runtime@npm:^0.13.11, regenerator-runtime@npm:^0.13.4":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 12b069dc774001fbb0014f6a28f11c09ebfe3c0d984d88c9bced77fdb6fedbacbca434d24da9ae9371bfbf23f754869307fb51a4c98a8b8b18e5ef748677ca24
@@ -18737,6 +18854,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"secp256k1@npm:3.7.1":
+  version: 3.7.1
+  resolution: "secp256k1@npm:3.7.1"
+  dependencies:
+    bindings: "npm:^1.5.0"
+    bip66: "npm:^1.1.5"
+    bn.js: "npm:^4.11.8"
+    create-hash: "npm:^1.2.0"
+    drbg.js: "npm:^1.0.1"
+    elliptic: "npm:^6.4.1"
+    nan: "npm:^2.14.0"
+    node-gyp: "npm:latest"
+    safe-buffer: "npm:^5.1.2"
+  checksum: e487b5e62efc91354dfdb8289a106e247eb785d59e6c2036146ff34292c06d651f07556fbd947f69db61feff2f12559e2cd335c0d84368c0f8bd48781fe78f51
+  languageName: node
+  linkType: hard
+
+"secp256k1@npm:5.0.0":
+  version: 5.0.0
+  resolution: "secp256k1@npm:5.0.0"
+  dependencies:
+    elliptic: "npm:^6.5.4"
+    node-addon-api: "npm:^5.0.0"
+    node-gyp: "npm:latest"
+    node-gyp-build: "npm:^4.2.0"
+  checksum: b9ab4c952babfe6103978b2f656265041ebe09b8a91b26a796cbcbe04d2252e28e12ec50d5ed3006bf2ca5feef6edcbd71c7c85122615f5ffbcd1acdd564f77f
+  languageName: node
+  linkType: hard
+
 "secp256k1@npm:^4.0.1":
   version: 4.0.3
   resolution: "secp256k1@npm:4.0.3"
@@ -18754,6 +18900,7 @@ __metadata:
   resolution: "secretfans@workspace:."
   dependencies:
     dotenv: "npm:^16.3.1"
+    eth-crypto: "npm:^2.6.0"
     file-to-array-buffer: "npm:^1.0.0"
     husky: "npm:^8.0.1"
     lint-staged: "npm:^13.0.3"
