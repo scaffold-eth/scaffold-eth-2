@@ -5363,13 +5363,17 @@ __metadata:
     autoprefixer: "npm:^10.4.12"
     blo: "npm:^1.0.1"
     daisyui: "npm:^3.5.1"
+    dotenv: "npm:^16.3.1"
     eslint: "npm:^8.15.0"
     eslint-config-next: "npm:^13.1.6"
     eslint-config-prettier: "npm:^8.5.0"
     eslint-plugin-prettier: "npm:^4.2.1"
+    eth-crypto: "npm:^2.6.0"
+    file-to-array-buffer: "npm:^1.0.0"
     framer-motion: "npm:^10.16.5"
     next: "npm:^13.1.6"
     nextjs-progressbar: "npm:^0.0.16"
+    nft.storage: "npm:^7.1.1"
     postcss: "npm:^8.4.16"
     prettier: "npm:^2.8.4"
     qrcode.react: "npm:^3.1.0"
@@ -18899,12 +18903,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "secretfans@workspace:."
   dependencies:
-    dotenv: "npm:^16.3.1"
-    eth-crypto: "npm:^2.6.0"
-    file-to-array-buffer: "npm:^1.0.0"
     husky: "npm:^8.0.1"
     lint-staged: "npm:^13.0.3"
-    nft.storage: "npm:^7.1.1"
   languageName: unknown
   linkType: soft
 
