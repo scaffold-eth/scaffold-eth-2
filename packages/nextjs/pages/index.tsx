@@ -5,6 +5,7 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import NFTUserView from "~~/components/NFTUserView";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import SubscribeButton from "~~/components/Buttons/SubscribeButton";
+import InstallSnapButton from "~~/components/Buttons/InstallSnapButton";
 
 
 const Home: NextPage = () => {
@@ -25,6 +26,9 @@ const Home: NextPage = () => {
           />
         )
       }
+
+      <InstallSnapButton />
+
 
       {false && !loggedIn && (
         <div className="flex items-center flex-col flex-grow">

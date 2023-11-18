@@ -6,12 +6,11 @@ import { getTargetNetwork, notification } from '~~/utils/scaffold-eth';
 import { getParsedError } from '../scaffold-eth';
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
-export default function SubscribeButton({smartContract, amountETH, contentCreatorAddr}) {
+export default function SubscribeButton({smartContract, amountETH, contentCreatorAddr, publicKey}) {
     console.log("welcome: ", smartContract)
     const writeTxn = useTransactor();
 
 
-    const publicKey = /*TODO: get from metamask snap*/ "0x04fcbbf4c8055a8e04271d4e36dec9be5bdfdfe544fc7ccf8b80e71d11b080b09830e1776c66e99ffbe73accfd2d367e9631eac125d5983a6cfa2f4a514eb7c6f5"
     const {
         data: result,
         isLoading,
