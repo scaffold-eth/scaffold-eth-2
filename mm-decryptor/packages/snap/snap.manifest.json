@@ -1,18 +1,18 @@
 {
   "version": "0.1.0",
   "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example",
+  "proposedName": "SecretFans encryption and decryption",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "q/En+YxOepSJAfSY1LLKLeissyJgv4BUdDmJgOingGo=",
+    "shasum": "gSAz4NQS+VfCmQ6FoEclvDfZZTnbrUXnIXtk69ig/K8=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "secretfans-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

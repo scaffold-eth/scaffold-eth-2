@@ -1,4 +1,6 @@
 import type { OnRpcRequestHandler } from '@metamask/snaps-types';
+import { getPublicKey } from './publicKey';
+import { encrypt } from './encrypt';
 import { decrypt } from './decrypt';
 
 /**
@@ -13,6 +15,16 @@ import { decrypt } from './decrypt';
  */
 export const onRpcRequest: OnRpcRequestHandler = async ({ origin, request }) => {
   switch (request.method) {
+    case 'getPublicKey':
+      return await getPublicKey();
+    case 'encrypt':
+      if (request.params == undefined || request.params.stringToEncrypt == undefined) {
+        throw new Error('Request should include params.stringToEncrypt.');
+      }
+      if (request.params == undefined || request.params.publicKey == undefined) {
+        throw new Error('Request should include params.publicKey.');
+      }
+      return await encrypt(request.params.stringToEncrypt, request.params.publicKey);
     case 'decrypt':
       if (request.params == undefined || request.params.encryptedString == undefined) {
         throw new Error('Request should include params.encryptedString.');
