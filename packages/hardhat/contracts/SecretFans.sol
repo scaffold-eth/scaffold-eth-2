@@ -62,6 +62,8 @@ contract SecretFans is ERC1155("") {
 
 	event newNFTPublished(address indexed contentCreator, uint256 tokenId);
 
+	event EncriptedNFT(uint256 indexed tokenId,address sub, bytes key);
+
 	modifier notLocked() {
 		require(
 			timelock[msg.sender] == 0 ||
@@ -92,7 +94,7 @@ contract SecretFans is ERC1155("") {
 		channel.totalETH += msg.value;
 		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
-		channel.subs[channel.nSubs]=msg.sender;
+		channel.subs[channel.nSubs] = msg.sender;
 
 		subscribers[msg.sender][contentCreator] = subscription(
 			newSubsShares,
@@ -162,6 +164,9 @@ contract SecretFans is ERC1155("") {
 		currentTokenId++;
 		timelock[msg.sender] = block.timestamp + _TIMELOCK;
 		emit newNFTPublished(msg.sender, _currentTokenId);
+		for (uint256 i = 0; i < encryptedContentEncriptionKeys.length; i++) {
+			emit EncriptedNFT(_currentTokenId,encryptedContentEncriptionKeys[i].sub, encryptedContentEncriptionKeys[i].key);
+		}
 	}
 
 	function uri(uint256 tokenId) public view override returns (string memory) {
