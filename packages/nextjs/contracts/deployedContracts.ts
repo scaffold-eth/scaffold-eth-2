@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     SecretFans: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
       abi: [
         {
           anonymous: false,
@@ -39,6 +39,31 @@ const deployedContracts = {
           inputs: [
             {
               indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "sub",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "key",
+              type: "bytes",
+            },
+          ],
+          name: "EncriptedNFT",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
               internalType: "address",
               name: "contentCreator",
               type: "address",
@@ -51,9 +76,9 @@ const deployedContracts = {
             },
             {
               indexed: false,
-              internalType: "bytes32",
+              internalType: "bytes",
               name: "publicKey",
-              type: "bytes32",
+              type: "bytes",
             },
             {
               indexed: false,
@@ -321,6 +346,25 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "getSubPubKeys",
+          outputs: [
+            {
+              internalType: "bytes[]",
+              name: "",
+              type: "bytes[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
               name: "subscriber",
               type: "address",
             },
@@ -330,12 +374,12 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "getSubPubKey",
+          name: "getSubPubKeys",
           outputs: [
             {
-              internalType: "bytes32",
+              internalType: "bytes",
               name: "",
-              type: "bytes32",
+              type: "bytes",
             },
           ],
           stateMutability: "view",
@@ -537,9 +581,9 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "bytes32",
+              internalType: "bytes",
               name: "publicKey",
-              type: "bytes32",
+              type: "bytes",
             },
           ],
           name: "subscribeSpotsAvaliable",
@@ -560,9 +604,9 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "bytes32",
+              internalType: "bytes",
               name: "subscriberInPublicKey",
-              type: "bytes32",
+              type: "bytes",
             },
           ],
           name: "subscribeSpotsFull",
@@ -591,9 +635,9 @@ const deployedContracts = {
               type: "uint256",
             },
             {
-              internalType: "bytes32",
+              internalType: "bytes",
               name: "publicKey",
-              type: "bytes32",
+              type: "bytes",
             },
           ],
           stateMutability: "view",
@@ -640,6 +684,32 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "topUpShares",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "unsubscribe",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "uint256",
               name: "tokenId",
               type: "uint256",
@@ -654,6 +724,24 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "ethToWithdraw",
+              type: "uint256",
+            },
+          ],
+          name: "withdrawShares",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {
