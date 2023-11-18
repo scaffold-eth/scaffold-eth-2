@@ -25,7 +25,7 @@ contract SecretFans is ERC1155("") {
 
 	struct subscription {
 		uint256 shares;
-		bytes32 publicKey;
+		bytes publicKey;
 	}
 
 	struct ContentCreatorChannel {
@@ -56,7 +56,7 @@ contract SecretFans is ERC1155("") {
 	event NewSubscription(
 		address indexed contentCreator,
 		address subscriber,
-		bytes32 publicKey,
+		bytes publicKey,
 		uint256 subsShares
 	);
 
@@ -73,7 +73,7 @@ contract SecretFans is ERC1155("") {
 
 	function subscribeSpotsAvaliable(
 		address contentCreator,
-		bytes32 publicKey
+		bytes memory publicKey
 	) public payable {
 		require(
 			subscribers[msg.sender][contentCreator].shares == 0,
@@ -92,6 +92,7 @@ contract SecretFans is ERC1155("") {
 		channel.totalETH += msg.value;
 		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
+		channel.subs[channel.nSubs]=msg.sender;
 
 		subscribers[msg.sender][contentCreator] = subscription(
 			newSubsShares,
@@ -111,7 +112,7 @@ contract SecretFans is ERC1155("") {
 	function subscribeSpotsFull(
 		address contentCreator,
 		address subscriberOut,
-		bytes32 subscriberInPublicKey
+		bytes memory subscriberInPublicKey
 	) public payable {
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(
@@ -147,11 +148,10 @@ contract SecretFans is ERC1155("") {
 
 	function publish(
 		string memory _uri,
-		decryptionKey[] calldata encryptedContentEncriptionKeys
+		decryptionKey[] calldata encryptedContentEncriptionKeys //TODO fer el evento
 	) public notLocked {
 		ContentCreatorChannel memory channel = Channels[msg.sender];
 		uint256 _currentTokenId = currentTokenId;
-		// TODO verify ZKP
 		NftRegistry[_currentTokenId] = NftRegister(_uri, msg.sender);
 
 		(bool success, ) = msg.sender.call{
@@ -188,4 +188,31 @@ contract SecretFans is ERC1155("") {
 	 * Function that allows the contract to receive ETH
 	 */
 	receive() external payable {}
+
+	function getSubShares(
+		address subscriber,
+		address contentCreator
+	) public view returns (uint256) {
+		return subscribers[subscriber][contentCreator].shares;
+	}
+
+	function getSubPubKey(
+		address subscriber,
+		address contentCreator
+	) public view returns (bytes memory) {
+		return subscribers[subscriber][contentCreator].publicKey;
+	}
+
+	function getCCSubscriptors(
+		address contentCreator
+	) public view returns (address[] memory) {
+		address[128] storage fixedArray = Channels[contentCreator].subs;
+		address[] memory dynamicArray = new address[](fixedArray.length);
+
+		for (uint256 i = 0; i < fixedArray.length; i++) {
+			dynamicArray[i] = fixedArray[i];
+		}
+
+		return dynamicArray;
+	}
 }

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     SecretFans: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
       abi: [
         {
           anonymous: false,
@@ -288,6 +288,73 @@ const deployedContracts = {
         {
           inputs: [],
           name: "defaultMinSubFee",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "getCCSubscriptors",
+          outputs: [
+            {
+              internalType: "address[]",
+              name: "",
+              type: "address[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "subscriber",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "getSubPubKey",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "subscriber",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "getSubShares",
           outputs: [
             {
               internalType: "uint256",
