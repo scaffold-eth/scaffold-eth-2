@@ -19,7 +19,7 @@ export const decrypt = async (encryptedString: string): Promise<string> => {
   const pk = await deriveEthereumPrivateKey(0);
 
   // Decrypt
-  const _encryptedObject = EthCrypto.cipher.parse(encryptedString.result);
+  const _encryptedObject = EthCrypto.cipher.parse(encryptedString);
   // return {
   //   privateKey: pk.privateKey,
   //   encrypted: _encryptedObject
