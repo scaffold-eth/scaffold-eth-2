@@ -3,21 +3,29 @@ import type { NextPage } from "next";
 import Carousel from "~~/components/Carousel";
 import { MetaHeader } from "~~/components/MetaHeader";
 import NFTUserView from "~~/components/NFTUserView";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import SubscribeButton from "~~/components/Buttons/SubscribeButton";
+
 
 const Home: NextPage = () => {
   const images = ["/slideshow-the-first.jpg", "/slideshow-share-content.jpg", "/slideshow-community.jpg"];
   const loggedIn = false;
 
-  const handleSubscribe = () => {
-    console.log("Subscribing");
-  };
+  const { data: contract, isLoading: deployedContractLoading } = useDeployedContractInfo("SecretFans");
 
   return (
     <>
       <MetaHeader />
-      <Button onClick={handleSubscribe} className="primary-btn">
-        Subscribe
-      </Button>
+      {
+        !deployedContractLoading && contract && (
+          < SubscribeButton
+            smartContract={contract}
+            amountETH={BigInt("0x44444444")}
+            contentCreatorAddr="0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97"
+          />
+        )
+      }
+
       {false && !loggedIn && (
         <div className="flex items-center flex-col flex-grow">
           <div className="flex-grow bg-base-300 w-full">
