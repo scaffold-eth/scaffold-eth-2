@@ -10,7 +10,10 @@ export default function TopContentCreators() {
   ];
 
   return (
-    <Box>
+    <Box bg="white" className="p-3"
+        border="2px gray solid"
+        justifyContent="space-between"
+        style={{ borderRadius: "3px", height: "385px" }} >
       <Heading as="h2" size="lg" mb={4}>
         TOP 5 Content Creators
       </Heading>

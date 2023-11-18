@@ -29,10 +29,10 @@ export default function NFTUpload() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
         bg="white"
         border="2px gray solid"
-        style={{ borderRadius: "3px" }}
+        justifyContent="space-between"
+        style={{ borderRadius: "3px", height: "385px" }}
         pt={2}
       >
         <Heading style={{ borderRadius: 0 }} textAlign="center" mb={4}>
