@@ -12,7 +12,7 @@ const PublisherDashboard: NextPage = () => {
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo("SecretFans");
   const [tournamentInfo, setTournamentInfo] = useState<any>({});
 
-  const { isFetching, refetch } = useContractRead({
+  const { isFetching, refetch: refetchChannels } = useContractRead({
     address: deployedContractData?.address,
     functionName: "Channels",
     abi: deployedContractData?.abi as Abi,
@@ -30,15 +30,15 @@ const PublisherDashboard: NextPage = () => {
       setTournamentInfo(tournament);
     },
   });
-  refetch()
+  refetchChannels()
 
   console.log("??????????",tournamentInfo.nsub)
   const publisherProps = {
     subscribers: Number(tournamentInfo.nsub),
-    totalValueLocked: 100,
-    totalShares: 10,
-    pricePerShare: 10,
-    minPriceToSubscribe: 5,
+    totalValueLocked:Number(tournamentInfo.totalETH),
+    totalShares: Number(tournamentInfo.totalShares),
+    pricePerShare: Number(tournamentInfo.totalETH)/Number(tournamentInfo.totalShares),
+    minPriceToSubscribe: Number(tournamentInfo.minsubfee),
     nfts: ["nft1", "nft2"],
   };
 
