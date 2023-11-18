@@ -255,13 +255,6 @@ contract SecretFans is ERC1155("") {
 	}
 
 	function getSubPubKeys(
-		address subscriber,
-		address contentCreator
-	) public view returns (bytes memory) {
-		return subscribers[subscriber][contentCreator].publicKey;
-	}
-
-	function getSubPubKeys(
 		address contentCreator
 	) public view returns (bytes[] memory) {
 		ContentCreatorChannel storage channel = Channels[contentCreator];

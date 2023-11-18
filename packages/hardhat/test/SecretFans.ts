@@ -21,7 +21,7 @@ describe("SecretFans", function () {
   let add0 = ethers.constants.AddressZero;
   let subscriberAddresses: string[] = Array.from({ length: 255 }, () => add0);
   let subscriberShares: bigint[] = Array.from({ length: 255 }, () => 0n);
-  let subscriberPubKeys: string[] = Array.from({ length: 255 }, () => add0);
+  let subscriberPubKeys: string[] = Array.from({ length: 2 }, () => add0);
 
   before(async () => {
     [contentCreator, participant1, participant2] = await ethers.getSigners();
@@ -41,12 +41,15 @@ describe("SecretFans", function () {
 
       const contentCreatorChannel = await secretFans.Channels(contentCreator.getAddress());
       const shares1 = await secretFans.getSubShares(participant1.getAddress(), contentCreator.getAddress());
-      const PubKey1 = await secretFans.getSubPubKey(participant1.getAddress(), contentCreator.getAddress());
+
+      subscriberPubKeys[0]=publicKey1
+      subscriberPubKeys[1]=publicKey2
+      const PubKey1 = await secretFans.getSubPubKeys(contentCreator.getAddress());
       const CCsubs = await secretFans.getCCSubscriptors(contentCreator.getAddress());
 
       expect(contentCreatorChannel.totalETH).to.equal(enrollmentAmount.add(enrollmentAmount2));
       expect(shares1).to.equal(enrollmentAmount);
-      expect(PubKey1).to.equal(publicKey1);
+      expect(PubKey1).to.deep.equal(subscriberPubKeys);
       expect(CCsubs[0]).to.equal(await participant1.getAddress());
 
       const provider = ethers.provider;
