@@ -9,6 +9,7 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol"; // ? NO ?
 import "@openzeppelin/contracts/utils/Strings.sol";
+
 // ! import safe math
 
 /**
@@ -17,7 +18,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
  * @author BuidlGuidl
  */
 contract SecretFans is ERC1155("") {
-	uint256 public constant _TIMELOCK = 1 days;   // ? 1 day ?
+	uint256 public constant _TIMELOCK = 1 days; // ? 1 day ?
 	uint256 public constant defaultMinSubFee = 0.01 ether;
 	uint256 public constant maxSubs = 128;
 	uint256 public currentTokenId = 0;
@@ -44,6 +45,7 @@ contract SecretFans is ERC1155("") {
 	//--------------------------------------------Events------------------------------------------------------
 	event subscription(
 		address indexed contentCreator,
+		uint256 position,
 		address subscriber,
 		bytes32 publicKey,
 		uint256 subsShares
@@ -51,9 +53,10 @@ contract SecretFans is ERC1155("") {
 
 	event newNFTPublished(address indexed contentCreator, uint256 tokenId);
 
-	modifier notLocked{
+	modifier notLocked() {
 		require(
-			timelock[msg.sender] == 0 || timelock[msg.sender] <= block.timestamp,
+			timelock[msg.sender] == 0 ||
+				timelock[msg.sender] <= block.timestamp,
 			"Function is timelocked"
 		);
 		_;
@@ -69,7 +72,10 @@ contract SecretFans is ERC1155("") {
 			msg.value > channel.minSubFee,
 			"Insufficient balance to pay subscription fee"
 		);
-		uint256 sharesPerETH = channel.totalShares / channel.totalETH; // ! need save math 1st sub 0/0
+		uint256 sharesPerETH = 1;
+		if (channel.totalETH != 0) {
+			 sharesPerETH = channel.totalShares / channel.totalETH;
+		} 
 		channel.totalETH += msg.value;
 		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
@@ -101,20 +107,25 @@ contract SecretFans is ERC1155("") {
 			count = count / 2;
 		}
 
+		emit subscription(
+			contentCreator,
+			channel.nSubs,
+			msg.sender,
+			publicKey,
+			newSubsShares
+		); // ? emit nSubs ?
 		channel.nSubs++;
-		emit subscription(contentCreator, msg.sender, publicKey, newSubsShares); // ? emit nSubs ?
 		// TODO create ERC20
 	}
 
 	function subscribeSpotsFull(
 		address contentCreator,
-		uint256 _subscriptionFee,
 		uint256 subscriberOutPosition,
 		address subscriberOut,
 		uint256 subscriberOutShares,
 		bytes32 subscriberOutPublicKey,
 		bytes32 subscriberInPublicKey
-	) public {
+	) public payable{
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(
 			subscriberOutPosition < channel.maxSubs,
@@ -135,17 +146,17 @@ contract SecretFans is ERC1155("") {
 
 		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
 		require(
-			msg.value >= subscriberOutShares * sharesPerETH * 1.5,
+			msg.value >= subscriberOutShares * sharesPerETH * 3 / 2,
 			"Value not enough to pay for subscription"
 		); //! Tokenomics
 
 		(bool success, ) = subscriberOut.call{
-			value: subscriberOutShares * sharesPerETH * 1.5
+			value: subscriberOutShares * sharesPerETH *  3 / 2
 		}("");
 		require(success, "Failed to send Ether.");
 
-		channel.totalETH += msg.value * 0.5; //! Tokenomics
-		uint256 newSubsShares = msg.value * sharesPerETH * 0.5;
+		channel.totalETH += msg.value * 1 / 2; //! Tokenomics
+		uint256 newSubsShares = msg.value * sharesPerETH *  1 / 2;
 		channel.totalShares += newSubsShares;
 
 		uint count = maxSubs; // number of leaves
@@ -172,28 +183,34 @@ contract SecretFans is ERC1155("") {
 			offset += count;
 			count = count / 2;
 		}
+
+		emit subscription(
+			contentCreator,
+			subscriberOutPosition,
+			msg.sender,
+			subscriberInPublicKey,
+			newSubsShares
+		);
 	}
 
 	function publish(
 		string memory _uri,
 		bytes calldata encryptedContentEncriptionKeys
-	) public notLocked{
-		ContentCreatorChannel memory channel = Channels[contentCreator];
+	) public notLocked {
+		ContentCreatorChannel memory channel = Channels[msg.sender];
 		uint256 _currentTokenId = currentTokenId;
 		// TODO verify ZKP
 		NftRegistry[_currentTokenId] = NftRegister(
 			_uri,
 			msg.sender,
-			Channels[msg.sender].subsMerkleTree[
-				Channels[msg.sender].subsMerkleTree.length
-			]
+			channel.subsMerkleTree[channel.subsMerkleTree.length]
 		);
 
-		(bool success, ) = msg.sender.call{ value: channel.totalETH * 0.15 }(
+		(bool success, ) = msg.sender.call{ value: channel.totalETH * 3 / 20 }(
 			""
 		);
 		require(success, "Failed to send Ether.");
-		channel.totalETH -= channel.totalETH * 0.15;
+		channel.totalETH -= channel.totalETH * 3 / 20;
 		currentTokenId++;
 		timelock[msg.sender] = block.timestamp + _TIMELOCK;
 		emit newNFTPublished(msg.sender, _currentTokenId);
@@ -203,9 +220,18 @@ contract SecretFans is ERC1155("") {
 		return (NftRegistry[tokenId].uri);
 	}
 
-	function mint(uint256 tokenId) public {
-		// TODO require just mint 1 x sub
-		// TODO require sub!!
+	function mint(uint256 tokenId, bytes32 leaf, uint256 leafPosition) public {
+		ContentCreatorChannel memory channel = Channels[
+			NftRegistry[tokenId].contentCreator
+		];
+		require(
+			balanceOf(msg.sender, tokenId) == 0,
+			"You already minted this NFT!"
+		);
+		require(
+			channel.subsMerkleTree[leafPosition] == leaf,
+			"You already minted this NFT!"
+		);
 		_mint(msg.sender, tokenId, 1, "");
 	}
 
