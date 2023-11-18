@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Box, Button, Heading, Input, Textarea } from "@chakra-ui/react";
 
+const fileToArrayBuffer = require("file-to-array-buffer");
+
 export default function NFTUpload() {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
@@ -10,11 +12,21 @@ export default function NFTUpload() {
     setFile(event.target.files[0]);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Handle your file submission logic here
     console.log(`Submitting file: ${file.name}`);
     console.log(`Title: ${title}`);
     console.log(`Description: ${description}`);
+    const iv = crypto.getRandomValues(new Uint8Array(16));
+    const encryptionKey = await crypto.subtle.generateKey(
+      // generate key
+      { name: "AES-CBC", length: 256 }, // algorithm
+      true, // extractable
+      ["encrypt", "decrypt"], // can encrypt and decrypt
+    );
+    const blobFile = await fileToArrayBuffer(file);
+    const encryptedContent = await crypto.subtle.encrypt({ name: "AES-CBC", iv }, encryptionKey, blobFile);
+    console.log(encryptedContent);
   };
 
   return (
