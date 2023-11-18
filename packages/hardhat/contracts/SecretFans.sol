@@ -39,7 +39,7 @@ contract SecretFans is ERC1155("") {
 	}
 
 	mapping(uint256 => NftRegister) NftRegistry;
-	mapping(address => ContentCreatorChannel) Channels;
+	mapping(address => ContentCreatorChannel) public Channels;
 	mapping(address => uint256) public timelock;
 
 	//--------------------------------------------Events------------------------------------------------------
@@ -47,7 +47,7 @@ contract SecretFans is ERC1155("") {
 		address indexed contentCreator,
 		uint256 position,
 		address subscriber,
-		bytes32 publicKey,
+		address publicKey,
 		uint256 subsShares
 	);
 
@@ -64,7 +64,7 @@ contract SecretFans is ERC1155("") {
 
 	function subscribeSpotsAvaliable(
 		address contentCreator,
-		bytes32 publicKey
+		address publicKey
 	) public payable {
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(channel.nSubs < maxSubs, ""); //TODO
@@ -81,31 +81,31 @@ contract SecretFans is ERC1155("") {
 		channel.totalShares += newSubsShares;
 
 		// add leaf to merkle tree
-		bytes32 merkleLeaf = keccak256(
-			abi.encodePacked(
-				channel.nSubs,
-				msg.sender,
-				newSubsShares,
-				publicKey
-			)
-		);
-		channel.subsMerkleTree[channel.nSubs] = merkleLeaf;
+		// bytes32 merkleLeaf = keccak256(
+		// 	abi.encodePacked(
+		// 		channel.nSubs,
+		// 		msg.sender,
+		// 		newSubsShares,
+		// 		publicKey
+		// 	)
+		// );
+		// channel.subsMerkleTree[channel.nSubs] = merkleLeaf;
 
-		uint count = maxSubs; // number of leaves
-		uint offset = 0;
+		// uint count = maxSubs; // number of leaves
+		// uint offset = 0;
 
-		while (count > 0) {
-			for (uint i = 0; i < count - 1; i += 2) {
-				channel.subsMerkleTree[count + i] = keccak256(
-					abi.encodePacked(
-						channel.subsMerkleTree[offset + i],
-						channel.subsMerkleTree[offset + i + 1]
-					)
-				);
-			}
-			offset += count;
-			count = count / 2;
-		}
+		// while (count > 0) {
+		// 	for (uint i = 0; i < count - 1; i += 2) {
+		// 		channel.subsMerkleTree[count + i] = keccak256(
+		// 			abi.encodePacked(
+		// 				channel.subsMerkleTree[offset + i],
+		// 				channel.subsMerkleTree[offset + i + 1]
+		// 			)
+		// 		);
+		// 	}
+		// 	offset += count;
+		// 	count = count / 2;
+		// }
 
 		emit subscription(
 			contentCreator,
@@ -123,8 +123,8 @@ contract SecretFans is ERC1155("") {
 		uint256 subscriberOutPosition,
 		address subscriberOut,
 		uint256 subscriberOutShares,
-		bytes32 subscriberOutPublicKey,
-		bytes32 subscriberInPublicKey
+		address subscriberOutPublicKey,
+		address subscriberInPublicKey
 	) public payable{
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(
@@ -239,4 +239,8 @@ contract SecretFans is ERC1155("") {
 	 * Function that allows the contract to receive ETH
 	 */
 	receive() external payable {}
+
+    function getMerkleTree(address channelAddress) public view returns (bytes32[255] memory) {
+        return Channels[channelAddress].subsMerkleTree;
+    }
 }

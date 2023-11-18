@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { SecretFans } from "../typechain-types";
 import type { Signer } from "ethers";
+import { getMerkleRoot } from "../../nextjs/utils/merkleTree/merkleTree";
 
 describe("SecretFans", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -13,6 +14,11 @@ describe("SecretFans", function () {
   const publicKey2 = "0xC497FCB667e24eEe83E9A50c1cAF56BB2845857f";
   const privateKey2 = "310e2789b97e3f003939e14d78961f467765480715551c9add3bfb542a085f94";
   const enrollmentAmount = ethers.utils.parseEther("1");
+  const enrollmentAmount2 = ethers.utils.parseEther("0.76567");
+  let add0 = ethers.constants.AddressZero;
+  let subscriberAddresses: string[] = Array.from({ length: 255 }, () => add0);
+  let subscriberShares: bigint[] = Array.from({ length: 255 }, () => 0n);
+  let subscriberPubKeys: string[] = Array.from({ length: 255 }, () => add0);
 
 
   before(async () => {
@@ -24,18 +30,27 @@ describe("SecretFans", function () {
 
   describe("SecretFans", function () {
     it("Should allow subscibtion", async function () {
-      await secretFans.subscribeSpotsAvaliable(contentCreator.getAddress(), publicKey1, { value: enrollmentAmount })
-      await secretFans.subscribeSpotsAvaliable(contentCreator.getAddress(), publicKey2, { value: enrollmentAmount })
-      expect().to.equal(
-        "Building Unstoppable Apps!!!",
-      );
-    });
+      await secretFans.subscribeSpotsAvaliable(contentCreator.getAddress(), publicKey1, { value: enrollmentAmount });
+      await secretFans.subscribeSpotsAvaliable(contentCreator.getAddress(), publicKey2, { value: enrollmentAmount2 });
+      const contentCreatorChannel = await secretFans.Channels(contentCreator.getAddress());
+      const merkletree = await secretFans.getMerkleTree(contentCreator.getAddress());
 
-    it("Should allow setting a new message", async function () {
-      const newGreeting = "Learn Scaffold-ETH 2! :)";
+      expect(contentCreatorChannel.totalETH).to.equal(enrollmentAmount.add(enrollmentAmount2));
 
-      await secretFans.setGreeting(newGreeting);
-      expect(await secretFans.greeting()).to.equal(newGreeting);
+      console.log(merkletree[254]);
+
+      subscriberAddresses[0] = await participant1.getAddress();
+      subscriberAddresses[1] = await participant2.getAddress();
+      subscriberShares[0] = BigInt(enrollmentAmount.toString());
+      subscriberShares[1] = BigInt(enrollmentAmount2.toString());
+      subscriberPubKeys[0] = publicKey1
+      subscriberPubKeys[1] = publicKey2
+      const cc =await contentCreator.getAddress()
+
+      const backEndMerkleTree = getMerkleRoot(cc, subscriberAddresses,subscriberShares,subscriberPubKeys,2);
+      console.log(backEndMerkleTree.root);
+
+      expect(merkletree[254]).to.equal(backEndMerkleTree.root);
     });
   });
 });
