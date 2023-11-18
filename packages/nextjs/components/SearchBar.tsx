@@ -42,7 +42,7 @@ export default function SearchBar() {
           zIndex="dropdown"
         >
           {matches.map((match, index) => (
-            <Link key={index} passhref href={`/publisher_view?id=${match}`}>
+            <Link key={index} passhref href={`/publisher_browse_view?id=${match}`}>
               <Text className="w-full">{match}</Text>
             </Link>
           ))}
