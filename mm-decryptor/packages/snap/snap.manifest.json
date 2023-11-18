@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "A snap that allows to perfor public/private key encryption/decryption",
   "proposedName": "SecretFans encryption and decryption",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "git+https://github.com/secretfans-eth/secretfans.git"
   },
   "source": {
-    "shasum": "abSliP8YIPVC92jXj+3jClKfUUvCA1FEvhTHrhiENNE=",
+    "shasum": "+R0zfKyJOFAFy/NeXW0im7uxteBt892Ji9SQ+FF53eo=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",

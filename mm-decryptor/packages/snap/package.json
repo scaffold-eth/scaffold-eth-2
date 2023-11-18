@@ -1,6 +1,6 @@
 {
   "name": "secretfans-snap",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "The 'Hello, world!' of MetaMask Snaps, now written in TypeScript.",
   "repository": {
     "type": "git",
