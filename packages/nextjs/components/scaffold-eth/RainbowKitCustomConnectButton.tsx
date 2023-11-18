@@ -1,8 +1,15 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { AddressInfoDropdown, AddressQRCodeModal, Balance, SelectNetwork } from "~~/components/scaffold-eth";
+import {
+  AddressInfoDropdown,
+  AddressQRCodeModal,
+  Balance,
+  SelectNetwork,
+  SwitchNetwork,
+} from "~~/components/scaffold-eth";
+import { useScaffoldConfig } from "~~/context/ScaffoldConfigContext";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -12,13 +19,14 @@ export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { connector: activeAccount } = useAccount();
   const isBurnerWalletActive = activeAccount && activeAccount.id === "burner-wallet";
+  const { configuredNetwork } = useScaffoldConfig();
 
   return (
     <ConnectButton.Custom>
       {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
         const blockExplorerAddressLink = account
-          ? getBlockExplorerAddressLink(getTargetNetwork(), account.address)
+          ? getBlockExplorerAddressLink(configuredNetwork, account.address)
           : undefined;
 
         return (
@@ -30,6 +38,13 @@ export const RainbowKitCustomConnectButton = () => {
                     Connect Wallet
                   </button>
                 );
+              }
+
+              if (
+                (isBurnerWalletActive && chain.unsupported) ||
+                (isBurnerWalletActive && chain.id !== configuredNetwork.id)
+              ) {
+                return <SwitchNetwork />;
               }
 
               return (

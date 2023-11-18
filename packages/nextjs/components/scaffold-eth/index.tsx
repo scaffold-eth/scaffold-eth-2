@@ -9,3 +9,4 @@ export * from "./RainbowKitCustomConnectButton";
 export * from "./AddressInfoDropdown";
 export * from "./AddressQRCodeModal";
 export * from "./SelectNetwork";
+export * from "./SwitchNetwork";
