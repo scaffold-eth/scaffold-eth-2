@@ -1,7 +1,6 @@
 import { Button, Text } from "@chakra-ui/react";
 
-export default function NFTUserView() {
-  const nfts = ["NFT 1", "NFT 2"];
+export default function NFTUserView({ nfts }) {
   return (
     <>
       {nfts.map((nft, index) => (
