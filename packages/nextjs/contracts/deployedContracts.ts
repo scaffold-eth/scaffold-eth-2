@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     SecretFans: {
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
       abi: [
         {
           anonymous: false,
@@ -356,30 +356,6 @@ const deployedContracts = {
               internalType: "bytes[]",
               name: "",
               type: "bytes[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "subscriber",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "contentCreator",
-              type: "address",
-            },
-          ],
-          name: "getSubPubKeys",
-          outputs: [
-            {
-              internalType: "bytes",
-              name: "",
-              type: "bytes",
             },
           ],
           stateMutability: "view",

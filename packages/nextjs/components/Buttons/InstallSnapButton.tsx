@@ -1,8 +1,9 @@
 import React from 'react'
-import { useEffect, useState } from "react";
-
-export default function InstallSnapButton() {
-    const [publicKey, setPublicKey] = useState(null);
+interface InstallSnapButtonProps {
+    setPublicKey: (response: string) => void;
+  }
+  
+  const InstallSnapButton: React.FC<InstallSnapButtonProps> = ({ setPublicKey }) => {
     const install = async () => {
         console.log("Installing");
         const snapId = "local:http://localhost:8080"
@@ -39,3 +40,5 @@ export default function InstallSnapButton() {
         </div>
     )
 }
+
+export default InstallSnapButton;
