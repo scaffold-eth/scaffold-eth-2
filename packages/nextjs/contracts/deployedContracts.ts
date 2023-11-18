@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     SecretFans: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
       abi: [
         {
           anonymous: false,
@@ -32,6 +32,31 @@ const deployedContracts = {
             },
           ],
           name: "ApprovalForAll",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "sub",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "key",
+              type: "bytes",
+            },
+          ],
+          name: "EncriptedNFT",
           type: "event",
         },
         {
@@ -321,6 +346,25 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "getSubPubKeys",
+          outputs: [
+            {
+              internalType: "bytes[]",
+              name: "",
+              type: "bytes[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
               name: "subscriber",
               type: "address",
             },
@@ -330,7 +374,7 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "getSubPubKey",
+          name: "getSubPubKeys",
           outputs: [
             {
               internalType: "bytes",
@@ -640,6 +684,32 @@ const deployedContracts = {
         {
           inputs: [
             {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "topUpShares",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+          ],
+          name: "unsubscribe",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
               internalType: "uint256",
               name: "tokenId",
               type: "uint256",
@@ -654,6 +724,24 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "ethToWithdraw",
+              type: "uint256",
+            },
+          ],
+          name: "withdrawShares",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {

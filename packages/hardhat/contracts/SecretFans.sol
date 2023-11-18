@@ -62,6 +62,8 @@ contract SecretFans is ERC1155("") {
 
 	event newNFTPublished(address indexed contentCreator, uint256 tokenId);
 
+	event EncriptedNFT(uint256 indexed tokenId, address sub, bytes key);
+
 	modifier notLocked() {
 		require(
 			timelock[msg.sender] == 0 ||
@@ -92,7 +94,7 @@ contract SecretFans is ERC1155("") {
 		channel.totalETH += msg.value;
 		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
-		channel.subs[channel.nSubs]=msg.sender;
+		channel.subs[channel.nSubs] = msg.sender;
 
 		subscribers[msg.sender][contentCreator] = subscription(
 			newSubsShares,
@@ -146,6 +148,58 @@ contract SecretFans is ERC1155("") {
 		);
 	}
 
+	function unsubscribe(address contentCreator) public {
+		ContentCreatorChannel storage channel = Channels[contentCreator];
+		uint256 subShares = subscribers[msg.sender][contentCreator].shares;
+		require(subShares != 0, "You're not subscribed.");
+
+		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
+		uint256 subETHvalue = subShares / sharesPerETH;
+
+		(bool success, ) = msg.sender.call{ value: subETHvalue }("");
+		require(success, "Failed to send Ether.");
+
+		channel.totalETH -= subETHvalue;
+		channel.totalShares -= subShares;
+		subscribers[msg.sender][contentCreator].shares = 0;
+		channel.nSubs--;
+	}
+
+	function topUpShares(address contentCreator) public payable {
+		ContentCreatorChannel storage channel = Channels[contentCreator];
+		uint256 subShares = subscribers[msg.sender][contentCreator].shares;
+		require(subShares != 0, "You're not subscribed.");
+
+		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
+		uint256 subSharesValue = msg.value * sharesPerETH;
+
+		channel.totalETH += msg.value;
+		channel.totalShares += subSharesValue;
+		subscribers[msg.sender][contentCreator].shares += subSharesValue;
+	}
+
+	function withdrawShares(
+		address contentCreator,
+		uint256 ethToWithdraw
+	) public {
+		ContentCreatorChannel storage channel = Channels[contentCreator];
+		uint256 subShares = subscribers[msg.sender][contentCreator].shares;
+		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
+		require(
+			subShares / sharesPerETH > ethToWithdraw,
+			"You're not subscribed."
+		);
+
+		(bool success, ) = msg.sender.call{ value: ethToWithdraw }("");
+		require(success, "Failed to send Ether.");
+
+		channel.totalETH -= ethToWithdraw;
+		channel.totalShares -= ethToWithdraw * sharesPerETH;
+		subscribers[msg.sender][contentCreator].shares -=
+			ethToWithdraw *
+			sharesPerETH;
+	}
+
 	function publish(
 		string memory _uri,
 		decryptionKey[] calldata encryptedContentEncriptionKeys //TODO fer el evento
@@ -162,6 +216,13 @@ contract SecretFans is ERC1155("") {
 		currentTokenId++;
 		timelock[msg.sender] = block.timestamp + _TIMELOCK;
 		emit newNFTPublished(msg.sender, _currentTokenId);
+		for (uint256 i = 0; i < encryptedContentEncriptionKeys.length; i++) {
+			emit EncriptedNFT(
+				_currentTokenId,
+				encryptedContentEncriptionKeys[i].sub,
+				encryptedContentEncriptionKeys[i].key
+			);
+		}
 	}
 
 	function uri(uint256 tokenId) public view override returns (string memory) {
@@ -169,9 +230,6 @@ contract SecretFans is ERC1155("") {
 	}
 
 	function mint(uint256 tokenId) public {
-		ContentCreatorChannel memory channel = Channels[
-			NftRegistry[tokenId].contentCreator
-		];
 		require(
 			balanceOf(msg.sender, tokenId) == 0,
 			"You already minted this NFT!"
@@ -196,11 +254,18 @@ contract SecretFans is ERC1155("") {
 		return subscribers[subscriber][contentCreator].shares;
 	}
 
-	function getSubPubKey(
-		address subscriber,
+	function getSubPubKeys(
 		address contentCreator
-	) public view returns (bytes memory) {
-		return subscribers[subscriber][contentCreator].publicKey;
+	) public view returns (bytes[] memory) {
+		ContentCreatorChannel storage channel = Channels[contentCreator];
+		bytes[] memory pubKeys = new bytes[](channel.nSubs);
+
+		for (uint256 i = 0; i < channel.nSubs; i++) {
+			address subAddress = channel.subs[i];
+			pubKeys[i] = subscribers[subAddress][contentCreator].publicKey;
+		}
+
+		return pubKeys;
 	}
 
 	function getCCSubscriptors(
