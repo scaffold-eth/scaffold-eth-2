@@ -23,31 +23,40 @@ contract SecretFans is ERC1155("") {
 	uint256 public constant maxSubs = 128;
 	uint256 public currentTokenId = 0;
 
+	struct subscription {
+		uint256 shares;
+		bytes32 publicKey;
+	}
+
 	struct ContentCreatorChannel {
 		uint256 nSubs;
-		uint256 maxSubs; // ! inutil ?
 		uint256 minSubFee;
 		uint256 totalETH;
 		uint256 totalShares;
-		bytes32[128 * 2 - 1] subsMerkleTree;
+		address[128] subs;
 	}
 
 	struct NftRegister {
 		string uri;
 		address contentCreator;
-		bytes32 subsMerkleRoot;
+	}
+
+	struct decryptionKey {
+		address sub;
+		bytes key;
 	}
 
 	mapping(uint256 => NftRegister) NftRegistry;
 	mapping(address => ContentCreatorChannel) public Channels;
+	mapping(address => mapping(address => subscription)) public subscribers; // subAdd to CCAdd with sub info(shares,pubKey)
+
 	mapping(address => uint256) public timelock;
 
 	//--------------------------------------------Events------------------------------------------------------
-	event subscription(
+	event NewSubscription(
 		address indexed contentCreator,
-		uint256 position,
 		address subscriber,
-		address publicKey,
+		bytes32 publicKey,
 		uint256 subsShares
 	);
 
@@ -64,8 +73,12 @@ contract SecretFans is ERC1155("") {
 
 	function subscribeSpotsAvaliable(
 		address contentCreator,
-		address publicKey
+		bytes32 publicKey
 	) public payable {
+		require(
+			subscribers[msg.sender][contentCreator].shares == 0,
+			"You are already subscribed to this channel"
+		);
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(channel.nSubs < maxSubs, ""); //TODO
 		require(
@@ -74,42 +87,19 @@ contract SecretFans is ERC1155("") {
 		);
 		uint256 sharesPerETH = 1;
 		if (channel.totalETH != 0) {
-			 sharesPerETH = channel.totalShares / channel.totalETH;
-		} 
+			sharesPerETH = channel.totalShares / channel.totalETH;
+		}
 		channel.totalETH += msg.value;
 		uint256 newSubsShares = msg.value * sharesPerETH;
 		channel.totalShares += newSubsShares;
 
-		// add leaf to merkle tree
-		// bytes32 merkleLeaf = keccak256(
-		// 	abi.encodePacked(
-		// 		channel.nSubs,
-		// 		msg.sender,
-		// 		newSubsShares,
-		// 		publicKey
-		// 	)
-		// );
-		// channel.subsMerkleTree[channel.nSubs] = merkleLeaf;
+		subscribers[msg.sender][contentCreator] = subscription(
+			newSubsShares,
+			publicKey
+		);
 
-		// uint count = maxSubs; // number of leaves
-		// uint offset = 0;
-
-		// while (count > 0) {
-		// 	for (uint i = 0; i < count - 1; i += 2) {
-		// 		channel.subsMerkleTree[count + i] = keccak256(
-		// 			abi.encodePacked(
-		// 				channel.subsMerkleTree[offset + i],
-		// 				channel.subsMerkleTree[offset + i + 1]
-		// 			)
-		// 		);
-		// 	}
-		// 	offset += count;
-		// 	count = count / 2;
-		// }
-
-		emit subscription(
+		emit NewSubscription(
 			contentCreator,
-			channel.nSubs,
 			msg.sender,
 			publicKey,
 			newSubsShares
@@ -120,97 +110,55 @@ contract SecretFans is ERC1155("") {
 
 	function subscribeSpotsFull(
 		address contentCreator,
-		uint256 subscriberOutPosition,
 		address subscriberOut,
-		uint256 subscriberOutShares,
-		address subscriberOutPublicKey,
-		address subscriberInPublicKey
-	) public payable{
+		bytes32 subscriberInPublicKey
+	) public payable {
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(
-			subscriberOutPosition < channel.maxSubs,
-			"Wrong subscriber position"
-		);
-		bytes32 leafOut = keccak256(
-			abi.encodePacked(
-				subscriberOutPosition,
-				subscriberOut,
-				subscriberOutShares,
-				subscriberOutPublicKey
-			)
-		);
-		require(
-			leafOut == channel.subsMerkleTree[subscriberOutPosition],
-			"Incorrect leaf data"
+			subscribers[subscriberOut][contentCreator].shares != 0,
+			"This subscriber doesn't exist."
 		);
 
 		uint256 sharesPerETH = channel.totalShares / channel.totalETH;
 		require(
-			msg.value >= subscriberOutShares * sharesPerETH * 3 / 2,
+			msg.value * sharesPerETH >=
+				(subscribers[subscriberOut][contentCreator].shares * 3) / 2,
 			"Value not enough to pay for subscription"
-		); //! Tokenomics
+		); //! Tokenomics. The msg.value needs to be 1.5 times the value of shars of the subOut
 
-		(bool success, ) = subscriberOut.call{
-			value: subscriberOutShares * sharesPerETH *  3 / 2
-		}("");
+		(bool success, ) = subscriberOut.call{ value: (msg.value * 5) / 4 }(""); // ! Tokenomics. 1.25 of the value is sent to the subOut
 		require(success, "Failed to send Ether.");
 
-		channel.totalETH += msg.value * 1 / 2; //! Tokenomics
-		uint256 newSubsShares = msg.value * sharesPerETH *  1 / 2;
-		channel.totalShares += newSubsShares;
+		channel.totalETH += (msg.value * 1) / 4; //! Tokenomics. The other 0.25 of the msg.value is added to the totalETH
+		uint256 incrementTotalShares = (msg.value * sharesPerETH * 1) / 4; //! Tokenomics. The other 0.25 of the msg.value is added to the totalShares
+		channel.totalShares += incrementTotalShares;
+		uint256 newShares = (msg.value * sharesPerETH * 5) / 4;
 
-		uint count = maxSubs; // number of leaves
-		uint offset = 0;
-
-		channel.subsMerkleTree[subscriberOutPosition] = keccak256(
-			abi.encodePacked(
-				subscriberOutPosition,
-				msg.sender,
-				newSubsShares,
-				subscriberInPublicKey
-			)
-		);
-		while (count > 0) {
-			// ! can be optimized, no need to redo all merkle tree
-			for (uint i = 0; i < count - 1; i += 2) {
-				channel.subsMerkleTree[count + i] = keccak256(
-					abi.encodePacked(
-						channel.subsMerkleTree[offset + i],
-						channel.subsMerkleTree[offset + i + 1]
-					)
-				);
-			}
-			offset += count;
-			count = count / 2;
-		}
-
-		emit subscription(
+		// Update subscribers shares balances for this CC
+		subscribers[subscriberOut][contentCreator].shares = 0;
+		subscribers[msg.sender][contentCreator].shares = newShares;
+		emit NewSubscription(
 			contentCreator,
-			subscriberOutPosition,
 			msg.sender,
 			subscriberInPublicKey,
-			newSubsShares
+			newShares
 		);
 	}
 
 	function publish(
 		string memory _uri,
-		bytes calldata encryptedContentEncriptionKeys
+		decryptionKey[] calldata encryptedContentEncriptionKeys
 	) public notLocked {
 		ContentCreatorChannel memory channel = Channels[msg.sender];
 		uint256 _currentTokenId = currentTokenId;
 		// TODO verify ZKP
-		NftRegistry[_currentTokenId] = NftRegister(
-			_uri,
-			msg.sender,
-			channel.subsMerkleTree[channel.subsMerkleTree.length]
-		);
+		NftRegistry[_currentTokenId] = NftRegister(_uri, msg.sender);
 
-		(bool success, ) = msg.sender.call{ value: channel.totalETH * 3 / 20 }(
-			""
-		);
+		(bool success, ) = msg.sender.call{
+			value: (channel.totalETH * 3) / 20
+		}("");
 		require(success, "Failed to send Ether.");
-		channel.totalETH -= channel.totalETH * 3 / 20;
+		channel.totalETH -= (channel.totalETH * 3) / 20;
 		currentTokenId++;
 		timelock[msg.sender] = block.timestamp + _TIMELOCK;
 		emit newNFTPublished(msg.sender, _currentTokenId);
@@ -220,7 +168,7 @@ contract SecretFans is ERC1155("") {
 		return (NftRegistry[tokenId].uri);
 	}
 
-	function mint(uint256 tokenId, bytes32 leaf, uint256 leafPosition) public {
+	function mint(uint256 tokenId) public {
 		ContentCreatorChannel memory channel = Channels[
 			NftRegistry[tokenId].contentCreator
 		];
@@ -229,8 +177,9 @@ contract SecretFans is ERC1155("") {
 			"You already minted this NFT!"
 		);
 		require(
-			channel.subsMerkleTree[leafPosition] == leaf,
-			"You already minted this NFT!"
+			subscribers[msg.sender][NftRegistry[tokenId].contentCreator]
+				.shares != 0,
+			"You are not subscribed!"
 		);
 		_mint(msg.sender, tokenId, 1, "");
 	}
@@ -239,8 +188,4 @@ contract SecretFans is ERC1155("") {
 	 * Function that allows the contract to receive ETH
 	 */
 	receive() external payable {}
-
-    function getMerkleTree(address channelAddress) public view returns (bytes32[255] memory) {
-        return Channels[channelAddress].subsMerkleTree;
-    }
 }

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     SecretFans: {
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       abi: [
         {
           anonymous: false,
@@ -32,6 +32,37 @@ const deployedContracts = {
             },
           ],
           name: "ApprovalForAll",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "contentCreator",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "subscriber",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes32",
+              name: "publicKey",
+              type: "bytes32",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "subsShares",
+              type: "uint256",
+            },
+          ],
+          name: "NewSubscription",
           type: "event",
         },
         {
@@ -147,43 +178,6 @@ const deployedContracts = {
           type: "event",
         },
         {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "contentCreator",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "position",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "subscriber",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "bytes32",
-              name: "publicKey",
-              type: "bytes32",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "subsShares",
-              type: "uint256",
-            },
-          ],
-          name: "subscription",
-          type: "event",
-        },
-        {
           inputs: [
             {
               internalType: "address",
@@ -196,11 +190,6 @@ const deployedContracts = {
             {
               internalType: "uint256",
               name: "nSubs",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "maxSubs",
               type: "uint256",
             },
             {
@@ -353,16 +342,6 @@ const deployedContracts = {
               name: "tokenId",
               type: "uint256",
             },
-            {
-              internalType: "bytes32",
-              name: "leaf",
-              type: "bytes32",
-            },
-            {
-              internalType: "uint256",
-              name: "leafPosition",
-              type: "uint256",
-            },
           ],
           name: "mint",
           outputs: [],
@@ -377,9 +356,21 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "bytes",
+              components: [
+                {
+                  internalType: "address",
+                  name: "sub",
+                  type: "address",
+                },
+                {
+                  internalType: "bytes",
+                  name: "key",
+                  type: "bytes",
+                },
+              ],
+              internalType: "struct SecretFans.decryptionKey[]",
               name: "encryptedContentEncriptionKeys",
-              type: "bytes",
+              type: "tuple[]",
             },
           ],
           name: "publish",
@@ -497,24 +488,9 @@ const deployedContracts = {
               type: "address",
             },
             {
-              internalType: "uint256",
-              name: "subscriberOutPosition",
-              type: "uint256",
-            },
-            {
               internalType: "address",
               name: "subscriberOut",
               type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "subscriberOutShares",
-              type: "uint256",
-            },
-            {
-              internalType: "bytes32",
-              name: "subscriberOutPublicKey",
-              type: "bytes32",
             },
             {
               internalType: "bytes32",
@@ -525,6 +501,35 @@ const deployedContracts = {
           name: "subscribeSpotsFull",
           outputs: [],
           stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "subscribers",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "shares",
+              type: "uint256",
+            },
+            {
+              internalType: "bytes32",
+              name: "publicKey",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
