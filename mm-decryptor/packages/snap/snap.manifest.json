@@ -1,0 +1,33 @@
+{
+  "version": "0.1.3",
+  "description": "A snap that allows to perfor public/private key encryption/decryption",
+  "proposedName": "SecretFans encryption and decryption",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/secretfans-eth/secretfans.git"
+  },
+  "source": {
+    "shasum": "+R0zfKyJOFAFy/NeXW0im7uxteBt892Ji9SQ+FF53eo=",
+    "location": {
+      "npm": {
+        "filePath": "dist/bundle.js",
+        "iconPath": "images/icon.svg",
+        "packageName": "secretfans-snap",
+        "registry": "https://registry.npmjs.org/"
+      }
+    }
+  },
+  "initialPermissions": {
+    "snap_dialog": {},
+    "snap_getBip44Entropy": [
+      {
+        "coinType": 1
+      }
+    ],
+    "endowment:rpc": {
+      "dapps": true,
+      "snaps": false
+    }
+  },
+  "manifestVersion": "0.1"
+}
