@@ -1,13 +1,13 @@
 {
-  "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
+  "version": "0.1.1",
+  "description": "A snap that allows to perfor public/private key encryption/decryption",
   "proposedName": "SecretFans encryption and decryption",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "git+https://github.com/secretfans-eth/secretfans.git"
   },
   "source": {
-    "shasum": "gSAz4NQS+VfCmQ6FoEclvDfZZTnbrUXnIXtk69ig/K8=",
+    "shasum": "abSliP8YIPVC92jXj+3jClKfUUvCA1FEvhTHrhiENNE=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
