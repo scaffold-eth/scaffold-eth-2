@@ -7,8 +7,9 @@ import "hardhat/console.sol";
 // Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol"; // ? NO ?
 import "@openzeppelin/contracts/utils/Strings.sol";
+// ! import safe math
 
 /**
  * A smart contract that allows changing a state variable of the contract and tracking the changes
@@ -16,8 +17,9 @@ import "@openzeppelin/contracts/utils/Strings.sol";
  * @author BuidlGuidl
  */
 contract SecretFans is ERC1155("") {
-	uint256 constant defaultMinSubFee = 0.01 ether;
-	uint256 constant maxSubs = 128;
+	uint256 public constant _TIMELOCK = 1 days;   // ? 1 day ?
+	uint256 public constant defaultMinSubFee = 0.01 ether;
+	uint256 public constant maxSubs = 128;
 	uint256 public currentTokenId = 0;
 
 	struct ContentCreatorChannel {
@@ -37,6 +39,8 @@ contract SecretFans is ERC1155("") {
 
 	mapping(uint256 => NftRegister) NftRegistry;
 	mapping(address => ContentCreatorChannel) Channels;
+	mapping(address => uint256) public timelock;
+
 	//--------------------------------------------Events------------------------------------------------------
 	event subscription(
 		address indexed contentCreator,
@@ -46,6 +50,14 @@ contract SecretFans is ERC1155("") {
 	);
 
 	event newNFTPublished(address indexed contentCreator, uint256 tokenId);
+
+	modifier notLocked{
+		require(
+			timelock[msg.sender] == 0 || timelock[msg.sender] <= block.timestamp,
+			"Function is timelocked"
+		);
+		_;
+	}
 
 	function subscribeSpotsAvaliable(
 		address contentCreator,
@@ -136,7 +148,7 @@ contract SecretFans is ERC1155("") {
 		uint256 newSubsShares = msg.value * sharesPerETH * 0.5;
 		channel.totalShares += newSubsShares;
 
-				uint count = maxSubs; // number of leaves
+		uint count = maxSubs; // number of leaves
 		uint offset = 0;
 
 		channel.subsMerkleTree[subscriberOutPosition] = keccak256(
@@ -146,8 +158,9 @@ contract SecretFans is ERC1155("") {
 				newSubsShares,
 				subscriberInPublicKey
 			)
-		); 
-		while (count > 0) { // ! can be optimized, no need to redo all merkle tree
+		);
+		while (count > 0) {
+			// ! can be optimized, no need to redo all merkle tree
 			for (uint i = 0; i < count - 1; i += 2) {
 				channel.subsMerkleTree[count + i] = keccak256(
 					abi.encodePacked(
@@ -164,7 +177,8 @@ contract SecretFans is ERC1155("") {
 	function publish(
 		string memory _uri,
 		bytes calldata encryptedContentEncriptionKeys
-	) public {
+	) public notLocked{
+		ContentCreatorChannel memory channel = Channels[contentCreator];
 		uint256 _currentTokenId = currentTokenId;
 		// TODO verify ZKP
 		NftRegistry[_currentTokenId] = NftRegister(
@@ -174,8 +188,14 @@ contract SecretFans is ERC1155("") {
 				Channels[msg.sender].subsMerkleTree.length
 			]
 		);
-		//TODO withdraw money form totalETH (transfer, actualize pool)
+
+		(bool success, ) = msg.sender.call{ value: channel.totalETH * 0.15 }(
+			""
+		);
+		require(success, "Failed to send Ether.");
+		channel.totalETH -= channel.totalETH * 0.15;
 		currentTokenId++;
+		timelock[msg.sender] = block.timestamp + _TIMELOCK;
 		emit newNFTPublished(msg.sender, _currentTokenId);
 	}
 
@@ -183,11 +203,12 @@ contract SecretFans is ERC1155("") {
 		return (NftRegistry[tokenId].uri);
 	}
 
-
-	function mint (uint256 tokenId) public {
-		
+	function mint(uint256 tokenId) public {
+		// TODO require just mint 1 x sub
+		// TODO require sub!!
 		_mint(msg.sender, tokenId, 1, "");
 	}
+
 	/**
 	 * Function that allows the contract to receive ETH
 	 */
