@@ -82,6 +82,7 @@ contract SecretFans is ERC1155("") {
 			"You are already subscribed to this channel"
 		);
 		ContentCreatorChannel storage channel = Channels[contentCreator];
+		channel.minSubFee=defaultMinSubFee;
 		require(channel.nSubs < maxSubs, ""); //TODO
 		require(
 			msg.value > channel.minSubFee,

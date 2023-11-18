@@ -5,6 +5,7 @@ import PublisherView from "~~/components/PublisherView";
 import { useAccount, useContractRead } from "wagmi";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { Abi } from "abitype";
+import { formatEther } from "viem";
 
 const PublisherDashboard: NextPage = () => {
 
@@ -35,10 +36,10 @@ const PublisherDashboard: NextPage = () => {
   console.log("??????????",tournamentInfo.nsub)
   const publisherProps = {
     subscribers: Number(tournamentInfo.nsub),
-    totalValueLocked:Number(tournamentInfo.totalETH),
-    totalShares: Number(tournamentInfo.totalShares),
+    totalValueLocked:formatEther((tournamentInfo.totalETH)),
+    totalShares: formatEther(tournamentInfo.totalShares),
     pricePerShare: Number(tournamentInfo.totalETH)/Number(tournamentInfo.totalShares),
-    minPriceToSubscribe: Number(tournamentInfo.minsubfee),
+    minPriceToSubscribe: formatEther(tournamentInfo.minsubfee),
     nfts: ["nft1", "nft2"],
   };
 

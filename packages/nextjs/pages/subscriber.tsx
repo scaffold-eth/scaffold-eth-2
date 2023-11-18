@@ -1,8 +1,38 @@
+import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 import NFTView from "~~/components/NFTView";
+import { useAccount, useContractRead } from "wagmi";
+import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
+import { Abi } from "abitype";
+import { formatEther } from "viem";
 
 const Home: NextPage = () => {
+
+  const { address } = useAccount();
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo("SecretFans");
+  const [tournamentInfo, setTournamentInfo] = useState<any>({});
+
+  const { isFetching, refetch: refetchChannels } = useContractRead({
+    address: deployedContractData?.address,
+    functionName: "Channels",
+    abi: deployedContractData?.abi as Abi,
+    enabled: false,
+    args: [address],
+    onSuccess: (data: any) => {
+      console.log("!!!!!!",data);
+      const tournament = {
+        nsub: data[0],
+        minsubfee: data[1],
+        totalETH: data[2],
+        totalShares: data[3],
+      };
+      console.log("asaber torunamentbox, read"); // TODO no està loggegan aixo
+      setTournamentInfo(tournament);
+    },
+  });
+  refetchChannels()
+  
   const nfts = [
     {
       title: "NFT 1",
