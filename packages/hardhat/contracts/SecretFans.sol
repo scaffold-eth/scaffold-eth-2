@@ -25,7 +25,7 @@ contract SecretFans is ERC1155("") {
 
 	struct subscription {
 		uint256 shares;
-		bytes32 publicKey;
+		bytes publicKey;
 	}
 
 	struct ContentCreatorChannel {
@@ -56,7 +56,7 @@ contract SecretFans is ERC1155("") {
 	event NewSubscription(
 		address indexed contentCreator,
 		address subscriber,
-		bytes32 publicKey,
+		bytes publicKey,
 		uint256 subsShares
 	);
 
@@ -73,7 +73,7 @@ contract SecretFans is ERC1155("") {
 
 	function subscribeSpotsAvaliable(
 		address contentCreator,
-		bytes32 publicKey
+		bytes memory publicKey
 	) public payable {
 		require(
 			subscribers[msg.sender][contentCreator].shares == 0,
@@ -112,7 +112,7 @@ contract SecretFans is ERC1155("") {
 	function subscribeSpotsFull(
 		address contentCreator,
 		address subscriberOut,
-		bytes32 subscriberInPublicKey
+		bytes memory subscriberInPublicKey
 	) public payable {
 		ContentCreatorChannel storage channel = Channels[contentCreator];
 		require(
@@ -199,7 +199,7 @@ contract SecretFans is ERC1155("") {
 	function getSubPubKey(
 		address subscriber,
 		address contentCreator
-	) public view returns (bytes32) {
+	) public view returns (bytes memory) {
 		return subscribers[subscriber][contentCreator].publicKey;
 	}
 
