@@ -5,6 +5,7 @@ import { useDeployedContractInfo, useTransactor } from '~~/hooks/scaffold-eth';
 import { getTargetNetwork, notification } from '~~/utils/scaffold-eth';
 import { getParsedError } from '../scaffold-eth';
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
+import { Button } from "@chakra-ui/react";
 
 export default function SubscribeButton({smartContract, amountETH, contentCreatorAddr, publicKey}) {
     console.log("welcome: ", smartContract)
@@ -43,10 +44,11 @@ export default function SubscribeButton({smartContract, amountETH, contentCreato
 
     return (
         <div>
-            <button
-                className="mb-1 w-56 bg-green-700 text-white active:bg-slate-700 font-bold uppercase text-sm px-4 py-1 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            <Button
+                colorScheme="blue"
+                className="mb-1 w-56 active:bg-slate-700 font-bold uppercase text-sm px-4 py-1 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={handleWrite}>Subscribe</button>
+                onClick={handleWrite}>Subscribe</Button>
 
         </div>
     )
