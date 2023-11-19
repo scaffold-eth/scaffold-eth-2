@@ -1,0 +1,16 @@
+{
+  "name": "push",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pushprotocol/restapi": "^1.4.38",
+    "@pushprotocol/uiweb": "^1.1.19",
+    "ethers": "^5.7.2"
+  }
+}
