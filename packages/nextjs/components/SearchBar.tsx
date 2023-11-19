@@ -5,7 +5,13 @@ export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [matches, setMatches] = useState([]);
 
-  const data = ["Apple", "Banana", "Cherry", "Date", "Elderberry"]; // Your data
+  const data = [
+    "taylor-swift.eth",
+    "justin-bieber.eth",
+    "rihanna.eth",
+    "katy-perry.eth",
+    "brad-pitt.eth",
+  ];
 
   const handleSearch = () => {
     console.log(`Searching for ${searchTerm}`);

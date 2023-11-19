@@ -1,14 +1,58 @@
 import { useState } from "react";
 import { Box, Button, Heading, Input, Textarea } from "@chakra-ui/react";
-
+import { NFTStorage } from "nft.storage";
+import { ethers } from "ethers";
 const EthCrypto = require("eth-crypto");
 
 const fileToArrayBuffer = require("file-to-array-buffer");
 
 export default function NFTUpload() {
+  const [url, setURL] = useState(null);  
+  // const [nft, setNFT] = useState(null);
+  // const [provider, setProvider] = useState(null);
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  // const loadBlockchainData = async () => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum)
+  //   setProvider(provider)
+
+  //   const network = await provider.getNetwork()
+
+  //   const nft = new ethers.Contract(, NFT, provider)
+  //   setNFT(nft)
+  // }
+
+  // useEffect(() => {
+  //   loadBlockchainData()
+  // }, [])
+
+  const uploadNFT = async (name, description, image, encryptedContent) => {
+    const nftstorage = new NFTStorage({ token: process.env.REACT_APP_NFT_STORAGE_API_KEY })
+
+    // Send request to store image
+    const { ipnft } = await nftstorage.store({
+      name,
+      description,
+      image,
+      encryptedContent
+    });
+
+    // Save the URL
+    const url = `https://${ipnft}.ipfs.dweb.link`
+    setURL(url)
+
+    return url;
+  }
+
+  // const mintImage = async (tokenURI) => {
+  //   setMessage("Waiting for Mint...")
+
+  //   const signer = await provider.getSigner()
+  //   const transaction = await nft.connect(signer).mint(tokenURI, { value: ethers.utils.parseUnits("1", "ether") })
+  //   await transaction.wait()
+  // }
 
   const handleFileChange = event => {
     setFile(event.target.files[0]);
@@ -31,6 +75,8 @@ export default function NFTUpload() {
     console.log(encryptedContent);
 
     // TODO: publish to IPFS
+    uploadNFT("name", "description", "<image url>", encryptedContent);
+    //TODO test
 
     // Get public keys of the subs of the content creator
     const subs = [
