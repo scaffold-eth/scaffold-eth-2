@@ -19,10 +19,6 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
-    label: "Debug Contracts",
-    href: "/debug",
-  },
-  {
     label: "Publisher dashboard",
     href: "/publisher",
   },

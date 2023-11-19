@@ -23,6 +23,7 @@
     "@rainbow-me/rainbowkit": "1.1.2",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
+    "@worldcoin/idkit": "^0.5.1",
     "blo": "^1.0.1",
     "daisyui": "^3.5.1",
     "dotenv": "^16.3.1",

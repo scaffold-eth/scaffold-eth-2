@@ -13,15 +13,15 @@ const PublisherBrowseView: NextPage = () => {
   const { id } = router.query;
   const nfts = [
     {
-      title: "NFT 1",
-      description: "NFT 1 description",
-      photoUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+      title: "New song!",
+      description: "Recorder last night :o",
+      photoUrl: "/new-song.jpg",
       fileUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
     },
     {
-      title: "NFT 1",
-      description: "NFT 1 description",
-      photoUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+      title: "Singing Hallelujah",
+      description: "My favourite song <3",
+      photoUrl: "/hallelujah.jpg",
       fileUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
     },
   ];

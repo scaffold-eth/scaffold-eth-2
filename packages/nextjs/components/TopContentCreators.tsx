@@ -2,11 +2,11 @@ import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react"
 
 export default function TopContentCreators() {
   const creators = [
-    { username: "taylor-swift.eth", subscribers: 153487 },
-    { username: "justin-bieber.eth", subscribers: 145678 },
-    { username: "rihanna.eth", subscribers: 137890 },
-    { username: "katy-perry.eth", subscribers: 130456 },
-    { username: "brad-pitt.eth", subscribers: 125678 },
+    { username: "taylor-swift.eth", subscribers: 128 },
+    { username: "justin-bieber.eth", subscribers: 128 },
+    { username: "rihanna.eth", subscribers: 128 },
+    { username: "katy-perry.eth", subscribers: 122 },
+    { username: "brad-pitt.eth", subscribers: 120 },
   ];
 
   return (

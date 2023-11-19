@@ -20,7 +20,7 @@ const Home: NextPage = () => {
     enabled: false,
     args: [address],
     onSuccess: (data: any) => {
-      console.log("!!!!!!",data);
+      // console.log("!!!!!!",data);
       const tournament = {
         nsub: data[0],
         minsubfee: data[1],
@@ -35,11 +35,24 @@ const Home: NextPage = () => {
   
   const nfts = [
     {
-      title: "NFT 1",
-      description: "NFT 1 description",
-      photoUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+      title: "New song!",
+      description: "rihanna.eth",
+      photoUrl: "/new-song.jpg",
       fileUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
     },
+    {
+      title: "Singing Hallelujah",
+      description: "taylor-swift.eth",
+      photoUrl: "/hallelujah.jpg",
+      fileUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+    },
+    {
+      title: "Is Europe in crisis?",
+      description: "your-politician.eth",
+      photoUrl: "/crisis.jpg",
+      fileUrl: "https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE",
+    },
+
   ];
   return (
     <>
@@ -49,7 +62,7 @@ const Home: NextPage = () => {
           <div className="flex justify-center items-center gap-2 flex-col sm:flex-row">
             {/* <NFTUserView /> */}
             {nfts.map((nft, index) => (
-              <NFTView key={index} {...nft} />
+              <NFTView key={index} {...nft} addMint={true} />
             ))}
           </div>
         </div>

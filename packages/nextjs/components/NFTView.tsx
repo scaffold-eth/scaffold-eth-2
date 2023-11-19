@@ -12,7 +12,7 @@ const buttonClassName = "w-full bg-blue-500 hover:bg-blue-700 text-white";
 
 const NFTView = ({ title, description, photoUrl, fileUrl, isDecrypted, addMint }) => (
   <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p="6" style={{ backgroundColor: "white" }}>
-    <Image src={photoUrl} alt={title} />
+    <Image src={photoUrl} style={{maxWidth: "200px"}} alt={title} />
     <VStack align="center" spacing={2}>
       <Text fontWeight="bold">{title}</Text>
       <Text>{description}</Text>
