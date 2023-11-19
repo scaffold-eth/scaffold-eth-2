@@ -1,0 +1,8 @@
+[package]
+name = "nft_zkp"
+type = "bin"
+authors = ["secretfans"]
+compiler_version = ">=0.19.2"
+
+[dependencies]
+aes = { tag = "v0.3.0", git = "https://github.com/TaceoLabs/noir-aes" }
