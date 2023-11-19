@@ -47,14 +47,14 @@ export default function DataTable({
             <Td>Minimum Price to Subscribe ($)</Td>
             <Td>{minPriceToSubscribe}</Td>
           </Tr>
-          <Tr>
+          {/* <Tr>
             <Td>List of NFTs published</Td>
             <Td>
               {nfts.map((nft, index) => (
                 <Box key={index}>{nft}</Box>
               ))}
             </Td>
-          </Tr>
+          </Tr> */}
         </Tbody>
       </Table>
     </Box>

@@ -36,10 +36,10 @@ const PublisherDashboard: NextPage = () => {
   console.log("??????????",tournamentInfo.nsub)
   const publisherProps = {
     subscribers: Number(tournamentInfo.nsub),
-    totalValueLocked:formatEther((tournamentInfo.totalETH)),
-    totalShares: formatEther(tournamentInfo.totalShares),
+    totalValueLocked:formatEther((tournamentInfo.totalETH ?? 0)),
+    totalShares: formatEther(tournamentInfo.totalShares ?? 0),
     pricePerShare: Number(tournamentInfo.totalETH)/Number(tournamentInfo.totalShares),
-    minPriceToSubscribe: formatEther(tournamentInfo.minsubfee),
+    minPriceToSubscribe: formatEther(tournamentInfo.minsubfee ?? 0),
     nfts: ["nft1", "nft2"],
   };
 
