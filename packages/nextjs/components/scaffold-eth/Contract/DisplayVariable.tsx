@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -11,9 +12,15 @@ type DisplayVariableProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
   refreshDisplayVariables: boolean;
+  inheritedFrom?: string;
 };
 
-export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVariables }: DisplayVariableProps) => {
+export const DisplayVariable = ({
+  contractAddress,
+  abiFunction,
+  refreshDisplayVariables,
+  inheritedFrom,
+}: DisplayVariableProps) => {
   const {
     data: result,
     isFetching,
@@ -35,7 +42,7 @@ export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVa
 
   return (
     <div className="space-y-1 pb-2">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (
@@ -44,6 +51,7 @@ export const DisplayVariable = ({ contractAddress, abiFunction, refreshDisplayVa
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
       <div className="text-gray-500 font-medium flex flex-col items-start">
         <div>
