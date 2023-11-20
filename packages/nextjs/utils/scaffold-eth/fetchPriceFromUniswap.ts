@@ -3,7 +3,7 @@ import { Pair, Route } from "@uniswap/v2-sdk";
 import { createPublicClient, http, parseAbi } from "viem";
 import { mainnet } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ChainWithAttributes } from "~~/utils/scaffold-eth";
 
 const publicClient = createPublicClient({
   chain: mainnet,
@@ -16,8 +16,7 @@ const ABI = parseAbi([
   "function token1() external view returns (address)",
 ]);
 
-export const fetchPriceFromUniswap = async (): Promise<number> => {
-  const configuredNetwork = getTargetNetwork();
+export const fetchPriceFromUniswap = async (configuredNetwork: ChainWithAttributes): Promise<number> => {
   if (
     configuredNetwork.nativeCurrency.symbol !== "ETH" &&
     configuredNetwork.nativeCurrency.symbol !== "SEP" &&
@@ -63,7 +62,10 @@ export const fetchPriceFromUniswap = async (): Promise<number> => {
     const price = parseFloat(route.midPrice.toSignificant(6));
     return price;
   } catch (error) {
-    console.error("useNativeCurrencyPrice - Error fetching ETH price from Uniswap: ", error);
+    console.error(
+      `useNativeCurrencyPrice - Error fetching ${configuredNetwork.nativeCurrency.symbol} price from Uniswap: `,
+      error,
+    );
     return 0;
   }
 };

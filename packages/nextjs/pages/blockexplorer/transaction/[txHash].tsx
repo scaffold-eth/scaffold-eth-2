@@ -5,7 +5,7 @@ import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem"
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
-import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { decodeTransactionData, getFunctionDetails, useTargetNetwork } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 const TransactionPage: NextPage = () => {
@@ -17,7 +17,7 @@ const TransactionPage: NextPage = () => {
   const [receipt, setReceipt] = useState<TransactionReceipt>();
   const [functionCalled, setFunctionCalled] = useState<string>();
 
-  const configuredNetwork = getTargetNetwork();
+  const configuredNetwork = useTargetNetwork();
 
   useEffect(() => {
     if (txHash) {

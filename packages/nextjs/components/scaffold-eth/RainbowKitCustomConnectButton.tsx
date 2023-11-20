@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { QRCodeSVG } from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -13,8 +13,10 @@ import {
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
-import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useAutoConnect, useNetworkColor, useOutsideClick } from "~~/hooks/scaffold-eth";
+import { getBlockExplorerAddressLink, getTargetNetworks, useTargetNetwork } from "~~/utils/scaffold-eth";
+
+const allowedNetworks = getTargetNetworks();
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
@@ -22,17 +24,24 @@ import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
   const networkColor = useNetworkColor();
-  const configuredNetwork = getTargetNetwork();
+  const configuredNetwork = useTargetNetwork();
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
+  const [selectingNetwork, setSelectingNetwork] = useState(false);
   const [addressCopied, setAddressCopied] = useState(false);
+  const dropdownRef = useRef<HTMLDetailsElement>(null);
+  const closeDropdown = () => {
+    setSelectingNetwork(false);
+    dropdownRef.current?.removeAttribute("open");
+  };
+  useOutsideClick(dropdownRef, closeDropdown);
 
   return (
     <ConnectButton.Custom>
       {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
         const blockExplorerAddressLink = account
-          ? getBlockExplorerAddressLink(getTargetNetwork(), account.address)
+          ? getBlockExplorerAddressLink(configuredNetwork, account.address)
           : undefined;
 
         return (
@@ -91,20 +100,42 @@ export const RainbowKitCustomConnectButton = () => {
                       {chain.name}
                     </span>
                   </div>
-                  <div className="dropdown dropdown-end leading-3">
-                    <label
+                  <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
+                    <summary
                       tabIndex={0}
                       className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 !h-auto"
                     >
                       <BlockieAvatar address={account.address} size={30} ensImage={account.ensAvatar} />
                       <span className="ml-2 mr-1">{account.displayName}</span>
                       <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
-                    </label>
+                    </summary>
                     <ul
                       tabIndex={0}
                       className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
                     >
-                      <li>
+                      {allowedNetworks.map(network => (
+                        <li key={network.id} className={selectingNetwork ? "" : "hidden"}>
+                          <button
+                            className="menu-item btn-sm !rounded-xl flex gap-3 py-3 whitespace-nowrap"
+                            type="button"
+                            onClick={() => {
+                              closeDropdown();
+                              setSelectingNetwork(false);
+                              switchNetwork?.(network.id);
+                            }}
+                          >
+                            <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
+                            <span
+                              style={{
+                                color: Array.isArray(network.color) ? network.color.slice(-1).pop() : network.color,
+                              }}
+                            >
+                              {network.name}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                      <li className={selectingNetwork ? "hidden" : ""}>
                         {addressCopied ? (
                           <div className="btn-sm !rounded-xl flex gap-3 py-3">
                             <CheckCircleIcon
@@ -120,6 +151,7 @@ export const RainbowKitCustomConnectButton = () => {
                               setAddressCopied(true);
                               setTimeout(() => {
                                 setAddressCopied(false);
+                                closeDropdown();
                               }, 800);
                             }}
                           >
@@ -133,13 +165,17 @@ export const RainbowKitCustomConnectButton = () => {
                           </CopyToClipboard>
                         )}
                       </li>
-                      <li>
-                        <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
+                      <li className={selectingNetwork ? "hidden" : ""}>
+                        <label
+                          htmlFor="qrcode-modal"
+                          className="btn-sm !rounded-xl flex gap-3 py-3"
+                          onClick={closeDropdown}
+                        >
                           <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <span className="whitespace-nowrap">View QR Code</span>
                         </label>
                       </li>
-                      <li>
+                      <li className={selectingNetwork ? "hidden" : ""}>
                         <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
                           <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
                           <a
@@ -152,7 +188,20 @@ export const RainbowKitCustomConnectButton = () => {
                           </a>
                         </button>
                       </li>
-                      <li>
+                      {allowedNetworks.length > 1 ? (
+                        <li className={selectingNetwork ? "hidden" : ""}>
+                          <button
+                            className="btn-sm !rounded-xl flex gap-3 py-3"
+                            type="button"
+                            onClick={() => {
+                              setSelectingNetwork(true);
+                            }}
+                          >
+                            <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Switch Network</span>
+                          </button>
+                        </li>
+                      ) : null}
+                      <li className={selectingNetwork ? "hidden" : ""}>
                         <button
                           className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
                           type="button"
@@ -162,7 +211,7 @@ export const RainbowKitCustomConnectButton = () => {
                         </button>
                       </li>
                     </ul>
-                  </div>
+                  </details>
                   <div>
                     <input type="checkbox" id="qrcode-modal" className="modal-toggle" />
                     <label htmlFor="qrcode-modal" className="modal cursor-pointer">

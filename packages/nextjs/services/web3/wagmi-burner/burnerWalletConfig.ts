@@ -7,10 +7,10 @@ import {
   burnerWalletName,
   defaultBurnerChainId,
 } from "~~/services/web3/wagmi-burner/BurnerConnector";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { getDefaultNetwork } from "~~/utils/scaffold-eth";
 
 const { onlyLocalBurnerWallet } = scaffoldConfig;
-const targetNetwork = getTargetNetwork();
+const targetNetwork = getDefaultNetwork();
 export interface BurnerWalletOptions {
   chains: Chain[];
 }

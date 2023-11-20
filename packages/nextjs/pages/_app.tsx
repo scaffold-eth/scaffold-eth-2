@@ -33,7 +33,7 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   }, [isDarkMode]);
 
   return (
-    <WagmiConfig config={wagmiConfig}>
+    <>
       <NextNProgress />
       <RainbowKitProvider
         chains={appChains.chains}
@@ -49,8 +49,14 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
         </div>
         <Toaster />
       </RainbowKitProvider>
-    </WagmiConfig>
+    </>
   );
 };
 
-export default ScaffoldEthApp;
+const ScaffoldEthAppWithWagmi = (props: AppProps) => (
+  <WagmiConfig config={wagmiConfig}>
+    <ScaffoldEthApp {...props} />
+  </WagmiConfig>
+);
+
+export default ScaffoldEthAppWithWagmi;

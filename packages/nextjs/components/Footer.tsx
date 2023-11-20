@@ -1,20 +1,21 @@
 import React from "react";
 import Link from "next/link";
 import { hardhat } from "viem/chains";
+import { useNetwork } from "wagmi";
 import { CurrencyDollarIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { BuidlGuidlLogo } from "~~/components/assets/BuidlGuidlLogo";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 /**
  * Site footer
  */
 export const Footer = () => {
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
-  const isLocalNetwork = getTargetNetwork().id === hardhat.id;
+  const { chain } = useNetwork();
+  const isLocalNetwork = chain?.id === hardhat.id;
 
   return (
     <div className="min-h-0 py-5 px-1 mb-11 lg:mb-0">

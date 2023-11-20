@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import * as chains from "viem/chains";
+import { useNetwork } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 
-export type TChainAttributes = {
+export type ChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
   // Used to fetch price by providing mainnet token address
@@ -9,7 +11,9 @@ export type TChainAttributes = {
   nativeCurrencyTokenAddress?: string;
 };
 
-export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
+export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
+
+export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.hardhat.id]: {
     color: "#b8af0c",
   },
@@ -105,11 +109,38 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 }
 
 /**
- * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
+ * @returns defaultNetwork object consisting defaultNetwork from scaffold.config and extra network metadata
  */
 
-export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
-  const configuredNetwork = scaffoldConfig.targetNetwork;
+export function getDefaultNetwork(): ChainWithAttributes {
+  const configuredNetwork = scaffoldConfig.targetNetworks[0];
+
+  return {
+    ...configuredNetwork,
+    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
+  };
+}
+
+export function getTargetNetworks(): ChainWithAttributes[] {
+  return scaffoldConfig.targetNetworks.map(targetNetwork => ({
+    ...targetNetwork,
+    ...NETWORKS_EXTRA_DATA[targetNetwork.id],
+  }));
+}
+
+export function useTargetNetwork(): ChainWithAttributes {
+  const { chain } = useNetwork();
+  const [configuredNetwork, setConfiguredNetwork] = useState(
+    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chain?.id) ??
+      scaffoldConfig.targetNetworks[0],
+  );
+
+  useEffect(() => {
+    const newSelectedNetwork = scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chain?.id);
+    if (newSelectedNetwork && newSelectedNetwork.id !== configuredNetwork.id) {
+      setConfiguredNetwork(newSelectedNetwork);
+    }
+  }, [chain, configuredNetwork, setConfiguredNetwork]);
 
   return {
     ...configuredNetwork,
