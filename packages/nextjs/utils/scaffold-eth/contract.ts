@@ -239,6 +239,7 @@ export type UseScaffoldEventHistoryConfig<
   blockData?: TBlockData;
   transactionData?: TTransactionData;
   receiptData?: TReceiptData;
+  watch?: boolean;
 };
 
 export type UseScaffoldEventHistoryData<
