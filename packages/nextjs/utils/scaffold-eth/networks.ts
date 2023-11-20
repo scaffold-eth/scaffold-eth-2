@@ -109,18 +109,8 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 }
 
 /**
- * @returns defaultNetwork object consisting defaultNetwork from scaffold.config and extra network metadata
+ * @returns targetNetworks array containing networks configured in scaffold.config including extra network metadata
  */
-
-export function getDefaultNetwork(): ChainWithAttributes {
-  const configuredNetwork = scaffoldConfig.targetNetworks[0];
-
-  return {
-    ...configuredNetwork,
-    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
-  };
-}
-
 export function getTargetNetworks(): ChainWithAttributes[] {
   return scaffoldConfig.targetNetworks.map(targetNetwork => ({
     ...targetNetwork,

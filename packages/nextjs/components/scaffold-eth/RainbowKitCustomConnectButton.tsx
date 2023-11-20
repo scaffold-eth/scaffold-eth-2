@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { QRCodeSVG } from "qrcode.react";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { useDarkMode } from "usehooks-ts";
 import { useDisconnect, useSwitchNetwork } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
@@ -13,7 +14,7 @@ import {
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { Address, Balance, BlockieAvatar } from "~~/components/scaffold-eth";
-import { useAutoConnect, useNetworkColor, useOutsideClick } from "~~/hooks/scaffold-eth";
+import { getNetworkColor, useAutoConnect, useNetworkColor, useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetworks, useTargetNetwork } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
@@ -23,6 +24,7 @@ const allowedNetworks = getTargetNetworks();
  */
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
+  const { isDarkMode } = useDarkMode();
   const networkColor = useNetworkColor();
   const configuredNetwork = useTargetNetwork();
   const { disconnect } = useDisconnect();
@@ -127,7 +129,7 @@ export const RainbowKitCustomConnectButton = () => {
                             <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
                             <span
                               style={{
-                                color: Array.isArray(network.color) ? network.color.slice(-1).pop() : network.color,
+                                color: getNetworkColor(network, isDarkMode),
                               }}
                             >
                               {network.name}
