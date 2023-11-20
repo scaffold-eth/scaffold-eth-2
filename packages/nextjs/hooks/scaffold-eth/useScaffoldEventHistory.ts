@@ -6,7 +6,7 @@ import * as chains from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import scaffoldConfig from "~~/scaffold.config";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -50,7 +50,7 @@ export const useScaffoldEventHistory = <
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
-  const configuredNetwork = getTargetNetwork();
+  const configuredNetwork = useTargetNetwork();
 
   const readEvents = async (fromBlock?: bigint) => {
     setIsLoading(true);
