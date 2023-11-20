@@ -68,18 +68,26 @@ export const RainbowKitCustomConnectButton = () => {
                       tabIndex={0}
                       className="dropdown-content menu p-2 mt-1 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
                     >
-                      <li>
-                        <button
-                          className="btn-sm !rounded-xl flex py-3 gap-3"
-                          type="button"
-                          onClick={() => switchNetwork?.(configuredNetwork.id)}
-                        >
-                          <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
-                          <span className="whitespace-nowrap">
-                            Switch to <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
-                          </span>
-                        </button>
-                      </li>
+                      {allowedNetworks.map(network => (
+                        <li key={network.id}>
+                          <button
+                            className="menu-item btn-sm !rounded-xl flex gap-3 py-3 whitespace-nowrap"
+                            type="button"
+                            onClick={() => {
+                              switchNetwork?.(network.id);
+                            }}
+                          >
+                            <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
+                            <span
+                              style={{
+                                color: getNetworkColor(network, isDarkMode),
+                              }}
+                            >
+                              {network.name}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
                       <li>
                         <button
                           className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
@@ -115,28 +123,30 @@ export const RainbowKitCustomConnectButton = () => {
                       tabIndex={0}
                       className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
                     >
-                      {allowedNetworks.map(network => (
-                        <li key={network.id} className={selectingNetwork ? "" : "hidden"}>
-                          <button
-                            className="menu-item btn-sm !rounded-xl flex gap-3 py-3 whitespace-nowrap"
-                            type="button"
-                            onClick={() => {
-                              closeDropdown();
-                              setSelectingNetwork(false);
-                              switchNetwork?.(network.id);
-                            }}
-                          >
-                            <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
-                            <span
-                              style={{
-                                color: getNetworkColor(network, isDarkMode),
+                      {allowedNetworks
+                        .filter(network => network.id !== configuredNetwork.id)
+                        .map(network => (
+                          <li key={network.id} className={selectingNetwork ? "" : "hidden"}>
+                            <button
+                              className="menu-item btn-sm !rounded-xl flex gap-3 py-3 whitespace-nowrap"
+                              type="button"
+                              onClick={() => {
+                                closeDropdown();
+                                setSelectingNetwork(false);
+                                switchNetwork?.(network.id);
                               }}
                             >
-                              {network.name}
-                            </span>
-                          </button>
-                        </li>
-                      ))}
+                              <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
+                              <span
+                                style={{
+                                  color: getNetworkColor(network, isDarkMode),
+                                }}
+                              >
+                                {network.name}
+                              </span>
+                            </button>
+                          </li>
+                        ))}
                       <li className={selectingNetwork ? "hidden" : ""}>
                         {addressCopied ? (
                           <div className="btn-sm !rounded-xl flex gap-3 py-3">
