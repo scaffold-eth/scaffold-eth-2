@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import * as chains from "viem/chains";
-import { useNetwork } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 
 export type ChainAttributes = {
@@ -116,24 +114,4 @@ export function getTargetNetworks(): ChainWithAttributes[] {
     ...targetNetwork,
     ...NETWORKS_EXTRA_DATA[targetNetwork.id],
   }));
-}
-
-export function useTargetNetwork(): ChainWithAttributes {
-  const { chain } = useNetwork();
-  const [configuredNetwork, setConfiguredNetwork] = useState(
-    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chain?.id) ??
-      scaffoldConfig.targetNetworks[0],
-  );
-
-  useEffect(() => {
-    const newSelectedNetwork = scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chain?.id);
-    if (newSelectedNetwork && newSelectedNetwork.id !== configuredNetwork.id) {
-      setConfiguredNetwork(newSelectedNetwork);
-    }
-  }, [chain, configuredNetwork, setConfiguredNetwork]);
-
-  return {
-    ...configuredNetwork,
-    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
-  };
 }

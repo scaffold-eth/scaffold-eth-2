@@ -12,8 +12,8 @@ import {
   getParsedContractFunctionArgs,
   getParsedError,
 } from "~~/components/scaffold-eth";
-import { useScaffoldConfig } from "~~/context/ScaffoldConfigContext";
 import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
 
 type WriteOnlyFunctionFormProps = {
@@ -33,8 +33,8 @@ export const WriteOnlyFunctionForm = ({
   const [txValue, setTxValue] = useState<string | bigint>("");
   const { chain } = useNetwork();
   const writeTxn = useTransactor();
-  const { configuredNetwork } = useScaffoldConfig();
-  const writeDisabled = !chain || chain?.id !== configuredNetwork.id;
+  const { targetNetwork } = useTargetNetwork();
+  const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
   const {
     data: result,

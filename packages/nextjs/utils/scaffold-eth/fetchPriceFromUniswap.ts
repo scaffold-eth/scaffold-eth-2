@@ -16,11 +16,11 @@ const ABI = parseAbi([
   "function token1() external view returns (address)",
 ]);
 
-export const fetchPriceFromUniswap = async (configuredNetwork: ChainWithAttributes): Promise<number> => {
+export const fetchPriceFromUniswap = async (targetNetwork: ChainWithAttributes): Promise<number> => {
   if (
-    configuredNetwork.nativeCurrency.symbol !== "ETH" &&
-    configuredNetwork.nativeCurrency.symbol !== "SEP" &&
-    !configuredNetwork.nativeCurrencyTokenAddress
+    targetNetwork.nativeCurrency.symbol !== "ETH" &&
+    targetNetwork.nativeCurrency.symbol !== "SEP" &&
+    !targetNetwork.nativeCurrencyTokenAddress
   ) {
     return 0;
   }
@@ -28,7 +28,7 @@ export const fetchPriceFromUniswap = async (configuredNetwork: ChainWithAttribut
     const DAI = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18);
     const TOKEN = new Token(
       1,
-      configuredNetwork.nativeCurrencyTokenAddress || "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      targetNetwork.nativeCurrencyTokenAddress || "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       18,
     );
     const pairAddress = Pair.getAddress(TOKEN, DAI);
@@ -63,7 +63,7 @@ export const fetchPriceFromUniswap = async (configuredNetwork: ChainWithAttribut
     return price;
   } catch (error) {
     console.error(
-      `useNativeCurrencyPrice - Error fetching ${configuredNetwork.nativeCurrency.symbol} price from Uniswap: `,
+      `useNativeCurrencyPrice - Error fetching ${targetNetwork.nativeCurrency.symbol} price from Uniswap: `,
       error,
     );
     return 0;

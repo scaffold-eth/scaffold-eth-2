@@ -12,8 +12,8 @@ import {
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useScaffoldConfig } from "~~/context/ScaffoldConfigContext";
 import { getNetworkColor, useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
@@ -34,7 +34,7 @@ export const AddressInfoDropdown = ({
   const { isDarkMode } = useDarkMode();
   const { disconnect } = useDisconnect();
   const { switchNetwork } = useSwitchNetwork();
-  const { configuredNetwork } = useScaffoldConfig();
+  const { targetNetwork } = useTargetNetwork();
 
   const [addressCopied, setAddressCopied] = useState(false);
 
@@ -59,7 +59,7 @@ export const AddressInfoDropdown = ({
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
           {allowedNetworks
-            .filter(network => network.id !== configuredNetwork.id)
+            .filter(network => network.id !== targetNetwork.id)
             .map(network => (
               <li key={network.id} className={selectingNetwork ? "" : "hidden"}>
                 <button
@@ -130,6 +130,19 @@ export const AddressInfoDropdown = ({
               </a>
             </button>
           </li>
+          {allowedNetworks.length > 1 ? (
+            <li className={selectingNetwork ? "hidden" : ""}>
+              <button
+                className="btn-sm !rounded-xl flex gap-3 py-3"
+                type="button"
+                onClick={() => {
+                  setSelectingNetwork(true);
+                }}
+              >
+                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Switch Network</span>
+              </button>
+            </li>
+          ) : null}
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"

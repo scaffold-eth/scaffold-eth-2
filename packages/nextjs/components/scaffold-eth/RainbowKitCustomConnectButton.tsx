@@ -1,7 +1,10 @@
+import { AddressInfoDropdown } from "./AddressInfoDropdown";
+import { AddressQRCodeModal } from "./AddressQRCodeModal";
+import { Balance } from "./Balance";
+import { SwitchNetwork } from "./SwitchNetwork";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { AddressInfoDropdown, AddressQRCodeModal, Balance, SwitchNetwork } from "~~/components/scaffold-eth";
-import { useScaffoldConfig } from "~~/context/ScaffoldConfigContext";
 import { useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -10,14 +13,14 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   useAutoConnect();
   const networkColor = useNetworkColor();
-  const { configuredNetwork } = useScaffoldConfig();
+  const { targetNetwork } = useTargetNetwork();
 
   return (
     <ConnectButton.Custom>
       {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
         const blockExplorerAddressLink = account
-          ? getBlockExplorerAddressLink(configuredNetwork, account.address)
+          ? getBlockExplorerAddressLink(targetNetwork, account.address)
           : undefined;
 
         return (
@@ -31,7 +34,7 @@ export const RainbowKitCustomConnectButton = () => {
                 );
               }
 
-              if (chain.unsupported || chain.id !== configuredNetwork.id) {
+              if (chain.unsupported || chain.id !== targetNetwork.id) {
                 return <SwitchNetwork />;
               }
 

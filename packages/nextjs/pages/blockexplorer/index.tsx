@@ -5,11 +5,12 @@ import { PaginationButton } from "~~/components/blockexplorer/PaginationButton";
 import { SearchBar } from "~~/components/blockexplorer/SearchBar";
 import { TransactionsTable } from "~~/components/blockexplorer/TransactionsTable";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { notification, useTargetNetwork } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { notification } from "~~/utils/scaffold-eth";
 
 const Blockexplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();
-  const targetNetwork = useTargetNetwork();
+  const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
     if (targetNetwork.id === hardhat.id && error) {
