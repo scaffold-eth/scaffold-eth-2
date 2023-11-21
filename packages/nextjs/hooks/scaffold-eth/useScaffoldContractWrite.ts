@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { useContractWrite, useNetwork } from "wagmi";
 import { getParsedError } from "~~/components/scaffold-eth";
+import { useScaffoldConfig } from "~~/context/ScaffoldConfigContext";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { notification, useTargetNetwork } from "~~/utils/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
 type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, undefined>>["writeAsync"]>[0];
@@ -32,9 +33,10 @@ export const useScaffoldContractWrite = <
   const { chain } = useNetwork();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
-  const configuredNetwork = useTargetNetwork();
+  const { configuredNetwork } = useScaffoldConfig();
 
   const wagmiContractWrite = useContractWrite({
+    chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
     functionName: functionName as any,
