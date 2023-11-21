@@ -37,7 +37,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
     };
 
     checkContractDeployment();
-  }, [isMounted, contractName, deployedContract, publicClient, targetNetwork]);
+  }, [isMounted, contractName, deployedContract, publicClient]);
 
   return {
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
