@@ -31,13 +31,16 @@ export const SwitchNetwork = () => {
                   switchNetwork?.(network.id);
                 }}
               >
-                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
-                <span
-                  style={{
-                    color: getNetworkColor(network, isDarkMode),
-                  }}
-                >
-                  {network.name}
+                <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                <span>
+                  Switch to{" "}
+                  <span
+                    style={{
+                      color: getNetworkColor(network, isDarkMode),
+                    }}
+                  >
+                    {network.name}
+                  </span>
                 </span>
               </button>
             </li>
@@ -48,7 +51,8 @@ export const SwitchNetwork = () => {
               type="button"
               onClick={() => disconnect()}
             >
-              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" />
+              <span>Disconnect</span>
             </button>
           </li>
         </ul>

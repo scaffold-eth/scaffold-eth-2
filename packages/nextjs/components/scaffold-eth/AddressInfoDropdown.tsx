@@ -71,13 +71,16 @@ export const AddressInfoDropdown = ({
                     switchNetwork?.(network.id);
                   }}
                 >
-                  <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" /> Switch to{" "}
-                  <span
-                    style={{
-                      color: getNetworkColor(network, isDarkMode),
-                    }}
-                  >
-                    {network.name}
+                  <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                  <span>
+                    Switch to{" "}
+                    <span
+                      style={{
+                        color: getNetworkColor(network, isDarkMode),
+                      }}
+                    >
+                      {network.name}
+                    </span>
                   </span>
                 </button>
               </li>
