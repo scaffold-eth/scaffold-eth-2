@@ -4,10 +4,10 @@
 
 ### Patch Changes
 
-- 621c9ac: - Show inherited functions in Debug page (when deploying with foundry)
-- efbe3fc: - Add disableMultiplyBy1e18 flag to IntegerInput component (#609)
-  - Add pooling interval to EventHistory hook (#597)
-  - Fix AbiFunctionReturnType removing [0] (#610)
+- Show inherited functions in Debug page (when deploying with foundry)
+- Add disableMultiplyBy1e18 flag to IntegerInput component (#609)
+- Add pooling interval to EventHistory hook (#597)
+- Fix AbiFunctionReturnType removing [0] (#610)
 
 ## 0.0.25
 
