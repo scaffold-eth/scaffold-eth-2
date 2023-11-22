@@ -26,6 +26,7 @@ import {
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
  * @param config.watch - if set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
+ * @param config.requiredFilters - if a required filter is not set, no events are returned and the error is set (default: empty)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -42,6 +43,7 @@ export const useScaffoldEventHistory = <
   transactionData,
   receiptData,
   watch,
+  requiredFilters,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
@@ -62,6 +64,13 @@ export const useScaffoldEventHistory = <
       const event = (deployedContractData.abi as Abi).find(
         part => part.type === "event" && part.name === eventName,
       ) as AbiEvent;
+
+      if (requiredFilters && requiredFilters.length > 0) {
+        const missingFields = requiredFilters.filter(field => !filters || !filters[field]);
+        if (missingFields.length > 0) {
+          throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
+        }
+      }
 
       const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
 

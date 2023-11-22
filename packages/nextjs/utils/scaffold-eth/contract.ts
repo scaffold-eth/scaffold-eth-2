@@ -240,6 +240,7 @@ export type UseScaffoldEventHistoryConfig<
   transactionData?: TTransactionData;
   receiptData?: TReceiptData;
   watch?: boolean;
+  requiredFilters?: IndexedEventInputs<TContractName, TEventName>["name"][];
 };
 
 export type UseScaffoldEventHistoryData<
