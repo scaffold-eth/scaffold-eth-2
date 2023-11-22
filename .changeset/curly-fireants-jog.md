@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-- Show inherited functions in Debug (when deploying with hardhat) (#564)
+- Show inherited functions in Debug page (when deploying with foundry)
