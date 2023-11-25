@@ -67,7 +67,7 @@ export const useScaffoldContractWrite = <
     if (wagmiContractWrite.writeAsync) {
       try {
         setIsMining(true);
-        await writeTx(
+        const writeTxResult = await writeTx(
           () =>
             wagmiContractWrite.writeAsync({
               args: newArgs ?? args,
@@ -76,6 +76,8 @@ export const useScaffoldContractWrite = <
             }),
           { onBlockConfirmation, blockConfirmations },
         );
+
+        return writeTxResult;
       } catch (e: any) {
         const message = getParsedError(e);
         notification.error(message);
