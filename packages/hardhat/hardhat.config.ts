@@ -122,6 +122,14 @@ const config: HardhatUserConfig = {
       url: "https://rpc.scroll.io",
       accounts: [deployerPrivateKey],
     },
+    pgn: {
+      url: "https://rpc.publicgoods.network",
+      accounts: [deployerPrivateKey],
+    },
+    pgnTestnet: {
+      url: "https://sepolia.publicgoods.network",
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
