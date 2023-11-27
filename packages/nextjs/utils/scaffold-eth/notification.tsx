@@ -9,20 +9,20 @@ import {
 } from "@heroicons/react/24/solid";
 import { Spinner } from "~~/components/assets/Spinner";
 
-type TPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
+type NotificationPositions = "top-left" | "top-center" | "top-right" | "bottom-left" | "bottom-center" | "bottom-right";
 
-type TNotificationProps = {
+type NotificationProps = {
   content: React.ReactNode;
   status: "success" | "info" | "loading" | "error" | "warning";
   duration?: number;
   icon?: string;
-  position?: TPositions;
+  position?: NotificationPositions;
 };
 
 type NotificationOptions = {
   duration?: number;
   icon?: string;
-  position?: TPositions;
+  position?: NotificationPositions;
 };
 
 const ENUM_STATUSES = {
@@ -34,7 +34,7 @@ const ENUM_STATUSES = {
 };
 
 const DEFAULT_DURATION = 3000;
-const DEFAULT_POSITION: TPositions = "top-center";
+const DEFAULT_POSITION: NotificationPositions = "top-center";
 
 /**
  * Custom Notification
@@ -45,7 +45,7 @@ const Notification = ({
   duration = DEFAULT_DURATION,
   icon,
   position = DEFAULT_POSITION,
-}: TNotificationProps) => {
+}: NotificationProps) => {
   return toast.custom(
     t => (
       <div
