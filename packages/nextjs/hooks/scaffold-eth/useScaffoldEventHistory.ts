@@ -16,7 +16,7 @@ import {
 } from "~~/utils/scaffold-eth/contract";
 
 /**
- * @dev reads events from a deployed contract
+ * Reads events from a deployed contract
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for

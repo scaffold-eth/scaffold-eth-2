@@ -58,7 +58,7 @@ const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
 
 /**
  * Gives the block explorer transaction URL.
- * @dev returns empty string if the network is localChain
+ * Returns empty string if the network is a local chain
  */
 export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   const chainNames = Object.keys(chains);
@@ -84,8 +84,8 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
 }
 
 /**
- * Gives the block explorer Address URL.
- * @returns block explorer address URL and etherscan URL if block explorer URL is not present for wagmi network
+ * Gives the block explorer URL for a given address.
+ * Defaults to Etherscan if no (wagmi) block explorer is configured for the network.
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
