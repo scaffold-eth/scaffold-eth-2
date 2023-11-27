@@ -1,7 +1,8 @@
+import { Tuple } from "./types/utils";
 import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
-  targetNetworks: chains.Chain[];
+  targetNetworks: Tuple<chains.Chain>;
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
