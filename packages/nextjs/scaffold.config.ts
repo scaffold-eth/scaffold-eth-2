@@ -1,8 +1,7 @@
-import { Tuple } from "./types/utils";
 import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
-  targetNetworks: Tuple<chains.Chain>;
+  targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
   alchemyApiKey: string;
   walletConnectProjectId: string;
@@ -31,7 +30,7 @@ const scaffoldConfig = {
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
   // Only show the Burner Wallet when running on hardhat network
-  onlyLocalBurnerWallet: true,
+  onlyLocalBurnerWallet: false,
 
   /**
    * Auto connect:
@@ -39,6 +38,6 @@ const scaffoldConfig = {
    * 2. If user is not connected to any wallet:  On reload, connect to burner wallet if burnerWallet.enabled is true && burnerWallet.onlyLocal is false
    */
   walletAutoConnect: true,
-} satisfies ScaffoldConfig;
+} as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
