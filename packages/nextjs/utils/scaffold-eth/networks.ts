@@ -1,7 +1,7 @@
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
-export type TChainAttributes = {
+type ChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
   color: string | [string, string];
   // Used to fetch price by providing mainnet token address
@@ -9,7 +9,7 @@ export type TChainAttributes = {
   nativeCurrencyTokenAddress?: string;
 };
 
-export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
+const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.hardhat.id]: {
     color: "#b8af0c",
   },
@@ -58,9 +58,7 @@ export const NETWORKS_EXTRA_DATA: Record<string, TChainAttributes> = {
 
 /**
  * Gives the block explorer transaction URL.
- * @param network
- * @param txnHash
- * @dev returns empty string if the network is localChain
+ * Returns empty string if the network is a local chain
  */
 export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   const chainNames = Object.keys(chains);
@@ -86,10 +84,8 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
 }
 
 /**
- * Gives the block explorer Address URL.
- * @param network - wagmi chain object
- * @param address
- * @returns block explorer address URL and etherscan URL if block explorer URL is not present for wagmi network
+ * Gives the block explorer URL for a given address.
+ * Defaults to Etherscan if no (wagmi) block explorer is configured for the network.
  */
 export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
@@ -107,8 +103,7 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 /**
  * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
  */
-
-export function getTargetNetwork(): chains.Chain & Partial<TChainAttributes> {
+export function getTargetNetwork(): chains.Chain & Partial<ChainAttributes> {
   const configuredNetwork = scaffoldConfig.targetNetwork;
 
   return {
