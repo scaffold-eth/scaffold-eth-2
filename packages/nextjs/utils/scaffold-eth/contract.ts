@@ -240,6 +240,7 @@ export type UseScaffoldEventHistoryConfig<
   transactionData?: TTransactionData;
   receiptData?: TReceiptData;
   watch?: boolean;
+  enabled?: boolean;
 };
 
 export type UseScaffoldEventHistoryData<

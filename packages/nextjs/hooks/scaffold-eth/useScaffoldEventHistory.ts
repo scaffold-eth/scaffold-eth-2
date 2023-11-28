@@ -16,7 +16,7 @@ import {
 } from "~~/utils/scaffold-eth/contract";
 
 /**
- * @dev reads events from a deployed contract
+ * Reads events from a deployed contract
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
@@ -26,6 +26,7 @@ import {
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
  * @param config.watch - if set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
+ * @param config.enabled - set this to false to disable the hook from running (default: true)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -42,6 +43,7 @@ export const useScaffoldEventHistory = <
   transactionData,
   receiptData,
   watch,
+  enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +59,10 @@ export const useScaffoldEventHistory = <
     try {
       if (!deployedContractData) {
         throw new Error("Contract not found");
+      }
+
+      if (!enabled) {
+        throw new Error("Hook disabled");
       }
 
       const event = (deployedContractData.abi as Abi).find(
@@ -95,7 +101,7 @@ export const useScaffoldEventHistory = <
           });
         }
         if (events && typeof fromBlock === "undefined") {
-          setEvents([...events, ...newEvents]);
+          setEvents([...newEvents, ...events]);
         } else {
           setEvents(newEvents);
         }
@@ -113,7 +119,7 @@ export const useScaffoldEventHistory = <
   useEffect(() => {
     readEvents(fromBlock);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromBlock]);
+  }, [fromBlock, enabled]);
 
   useEffect(() => {
     if (!deployedContractLoading) {

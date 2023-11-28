@@ -1,10 +1,10 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 
-interface PaginationButtonProps {
+type PaginationButtonProps = {
   currentPage: number;
   totalItems: number;
   setCurrentPage: (page: number) => void;
-}
+};
 
 const ITEMS_PER_PAGE = 20;
 
