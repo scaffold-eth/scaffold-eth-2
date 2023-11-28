@@ -3,7 +3,7 @@ import { BaseError as BaseViemError } from "viem";
 
 /**
  * Generates a key based on function metadata
- * @param {AbiFunction} functionName
+ * @param {string} functionName
  * @param {AbiParameter} input - object containing function name and input type corresponding to index
  * @param {number} inputIndex
  * @returns {string} key
