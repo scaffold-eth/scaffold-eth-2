@@ -140,6 +140,13 @@ export const useScaffoldEventHistory = <
     receiptData,
   ]);
 
+  useEffect(() => {
+    // Reset the internal state when target network or fromBlock changed
+    setEvents([]);
+    setFromBlockUpdated(fromBlock);
+    setError(undefined);
+  }, [fromBlock, targetNetwork.id]);
+
   useInterval(
     async () => {
       if (!deployedContractLoading) {
