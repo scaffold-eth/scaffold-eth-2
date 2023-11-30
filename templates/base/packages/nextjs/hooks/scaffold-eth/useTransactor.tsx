@@ -5,7 +5,7 @@ import { getParsedError } from "~~/components/scaffold-eth";
 import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 
 type TransactionFunc = (
-  tx: (() => Promise<WriteContractResult>) | SendTransactionParameters,
+  tx: (() => Promise<WriteContractResult>) | (() => Promise<Hash>) | SendTransactionParameters,
   options?: {
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
     blockConfirmations?: number;
@@ -57,7 +57,12 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
       if (typeof tx === "function") {
         // Tx is already prepared by the caller
-        transactionHash = (await tx()).hash;
+        const result = await tx();
+        if (typeof result === "string") {
+          transactionHash = result;
+        } else {
+          transactionHash = result.hash;
+        }
       } else if (tx != null) {
         transactionHash = await walletClient.sendTransaction(tx);
       } else {
