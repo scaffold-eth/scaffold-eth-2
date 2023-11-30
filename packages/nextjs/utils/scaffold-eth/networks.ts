@@ -9,7 +9,9 @@ type ChainAttributes = {
   nativeCurrencyTokenAddress?: string;
 };
 
-const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
+export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
+
+export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.hardhat.id]: {
     color: "#b8af0c",
   },
@@ -101,13 +103,11 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 }
 
 /**
- * @returns targetNetwork object consisting targetNetwork from scaffold.config and extra network metadata
+ * @returns targetNetworks array containing networks configured in scaffold.config including extra network metadata
  */
-export function getTargetNetwork(): chains.Chain & Partial<ChainAttributes> {
-  const configuredNetwork = scaffoldConfig.targetNetwork;
-
-  return {
-    ...configuredNetwork,
-    ...NETWORKS_EXTRA_DATA[configuredNetwork.id],
-  };
+export function getTargetNetworks(): ChainWithAttributes[] {
+  return scaffoldConfig.targetNetworks.map(targetNetwork => ({
+    ...targetNetwork,
+    ...NETWORKS_EXTRA_DATA[targetNetwork.id],
+  }));
 }
