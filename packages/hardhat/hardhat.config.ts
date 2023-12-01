@@ -4,7 +4,6 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "@matterlabs/hardhat-zksync-solc";
-import "@matterlabs/hardhat-zksync-verify";
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -131,10 +130,13 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
   },
-  verify: {
-    etherscan: {
-      apiKey: `${etherscanApiKey}`,
+  etherscan: {
+    apiKey: {
+      sepolia: `${etherscanApiKey}`,
     },
+  },
+  sourcify: {
+    enabled: false,
   },
 };
 
