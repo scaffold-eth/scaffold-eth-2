@@ -9,6 +9,7 @@ import {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
+  getParsedError,
 } from "~~/components/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -16,20 +17,27 @@ type ReadOnlyFunctionFormProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
   inheritedFrom?: string;
+  abi: Abi;
 };
 
-export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction, inheritedFrom }: ReadOnlyFunctionFormProps) => {
+export const ReadOnlyFunctionForm = ({
+  contractAddress,
+  abiFunction,
+  inheritedFrom,
+  abi,
+}: ReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
   const { isFetching, refetch } = useContractRead({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi: [abiFunction] as Abi,
+    abi,
     args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: (error: any) => {
-      notification.error(error.message);
+      const parsedErrror = getParsedError(error);
+      notification.error(parsedErrror);
     },
   });
 
