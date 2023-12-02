@@ -1,5 +1,5 @@
 import { AbiFunction, AbiParameter } from "abitype";
-import { BaseError as BaseViemError } from "viem";
+import { BaseError as BaseViemError, DecodeErrorResultReturnType } from "viem";
 
 /**
  * Generates a key based on function metadata
@@ -18,14 +18,22 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
  * @param e - error object
  * @returns {string} parsed error string
  */
-const getParsedError = (e: any | BaseViemError): string => {
-  let message = e.message ?? "An unknown error occurred";
-
+const getParsedError = (e: any): string => {
+  let message: string = e.message ?? "An unknown error occurred";
   if (e instanceof BaseViemError) {
     if (e.details) {
       message = e.details;
     } else if (e.shortMessage) {
       message = e.shortMessage;
+      const cause = e.cause as any as { data?: DecodeErrorResultReturnType };
+      if (cause.data && cause.data?.abiItem?.name !== "Error") {
+        const customErrorArgs = cause.data.args?.toString() ?? "";
+        message = `${message.replace(/reverted\.$/, "reverted with following reason:")}\n${
+          cause.data.errorName
+        }(${customErrorArgs})`;
+        console.log("The cause full data", cause.data);
+        console.log("The message is:", message);
+      }
     } else if (e.message) {
       message = e.message;
     } else if (e.name) {
