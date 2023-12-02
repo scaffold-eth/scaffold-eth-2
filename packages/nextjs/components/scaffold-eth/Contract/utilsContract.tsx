@@ -26,6 +26,7 @@ const getParsedError = (e: any): string => {
     } else if (e.shortMessage) {
       message = e.shortMessage;
       const cause = e.cause as any as { data?: DecodeErrorResultReturnType };
+      // if its not generic error, append custom error name and its args to message
       if (cause.data && cause.data?.abiItem?.name !== "Error") {
         const customErrorArgs = cause.data.args?.toString() ?? "";
         message = `${message.replace(/reverted\.$/, "reverted with following reason:")}\n${
