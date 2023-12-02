@@ -1,12 +1,13 @@
 import { QRCodeSVG } from "qrcode.react";
+import { Address as AddressType } from "viem";
 import { Address } from "~~/components/scaffold-eth";
 
-interface IAddressQRCodeModal {
-  address: string;
+type AddressQRCodeModalProps = {
+  address: AddressType;
   modalId: string;
-}
+};
 
-export const AddressQRCodeModal: React.FC<IAddressQRCodeModal> = ({ address, modalId }) => {
+export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps) => {
   return (
     <>
       <div>
