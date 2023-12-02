@@ -30,7 +30,7 @@ export const DisplayVariable = ({
   } = useContractRead({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi,
+    abi: abi,
     onError: error => {
       notification.error(error.message);
     },

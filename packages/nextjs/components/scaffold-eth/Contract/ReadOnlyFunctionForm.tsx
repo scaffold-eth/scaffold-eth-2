@@ -32,7 +32,7 @@ export const ReadOnlyFunctionForm = ({
   const { isFetching, refetch } = useContractRead({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi,
+    abi: abi,
     args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: (error: any) => {

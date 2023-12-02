@@ -31,8 +31,6 @@ const getParsedError = (e: any): string => {
         message = `${message.replace(/reverted\.$/, "reverted with following reason:")}\n${
           cause.data.errorName
         }(${customErrorArgs})`;
-        console.log("The cause full data", cause.data);
-        console.log("The message is:", message);
       }
     } else if (e.message) {
       message = e.message;
