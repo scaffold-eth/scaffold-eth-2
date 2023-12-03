@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
+import { Hash, Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
@@ -13,7 +13,7 @@ const TransactionPage: NextPage = () => {
   const client = usePublicClient({ chainId: hardhat.id });
 
   const router = useRouter();
-  const { txHash } = router.query as { txHash?: `0x${string}` };
+  const { txHash } = router.query as { txHash?: Hash };
   const [transaction, setTransaction] = useState<Transaction>();
   const [receipt, setReceipt] = useState<TransactionReceipt>();
   const [functionCalled, setFunctionCalled] = useState<string>();
