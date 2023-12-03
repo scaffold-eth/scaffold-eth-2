@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { withDefaults } from "../../../../../../utils.js";
+
+const contents = ({ chainName, artifactsDirName }) =>
+  `import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import fs from "fs";
 import { GetServerSideProps } from "next";
 import path from "path";
 import { createPublicClient, http } from "viem";
-import { hardhat } from "viem/chains";
+import { ${chainName[0]} } from "viem/chains";
 import {
   AddressCodeTab,
   AddressLogsTab,
@@ -15,7 +18,6 @@ import {
 import { Address, Balance } from "~~/components/scaffold-eth";
 import deployedContracts from "~~/contracts/deployedContracts";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type AddressCodeTabProps = {
@@ -29,7 +31,7 @@ type PageProps = {
 };
 
 const publicClient = createPublicClient({
-  chain: hardhat,
+  chain: ${chainName[0]},
   transport: http(),
 });
 
@@ -82,25 +84,25 @@ const AddressPage = ({ address, contractData }: PageProps) => {
       {isContract && (
         <div className="tabs">
           <button
-            className={`tab tab-lifted ${activeTab === "transactions" ? "tab-active" : ""}`}
+            className={\`tab tab-lifted \${activeTab === "transactions" ? "tab-active" : ""}\`}
             onClick={() => setActiveTab("transactions")}
           >
             Transactions
           </button>
           <button
-            className={`tab tab-lifted ${activeTab === "code" ? "tab-active" : ""}`}
+            className={\`tab tab-lifted \${activeTab === "code" ? "tab-active" : ""}\`}
             onClick={() => setActiveTab("code")}
           >
             Code
           </button>
           <button
-            className={`tab tab-lifted ${activeTab === "storage" ? "tab-active" : ""}`}
+            className={\`tab tab-lifted \${activeTab === "storage" ? "tab-active" : ""}\`}
             onClick={() => setActiveTab("storage")}
           >
             Storage
           </button>
           <button
-            className={`tab tab-lifted ${activeTab === "logs" ? "tab-active" : ""}`}
+            className={\`tab tab-lifted \${activeTab === "logs" ? "tab-active" : ""}\`}
             onClick={() => setActiveTab("logs")}
           >
             Logs
@@ -155,10 +157,9 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const configuredNetwork = getTargetNetwork();
   const address = (context.params?.address as string).toLowerCase();
   const contracts = deployedContracts as GenericContractsDeclaration | null;
-  const chainId = hardhat.id;
+  const chainId = ${chainName[0]}.id;
   let contractPath = "";
 
   const buildInfoDirectory = path.join(
@@ -169,19 +170,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
     "..",
     "..",
     "..",
-    `${configuredNetwork.network}`,
-    `${configuredNetwork.network === "hardhat" ? "artifacts" : "out"}`,
+    "${chainName[0]}",
+    "${artifactsDirName[0]}",
     "build-info",
   );
 
   if (!fs.existsSync(buildInfoDirectory)) {
-    throw new Error(`Directory ${buildInfoDirectory} not found.`);
+    throw new Error(\`Directory \${buildInfoDirectory} not found.\`);
   }
 
   const deployedContractsOnChain = contracts ? contracts[chainId] : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
-      contractPath = `contracts/${contractName}.sol`;
+      contractPath = \`contracts/\${contractName}.sol\`;
       break;
     }
   }
@@ -195,3 +196,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   return { props: { address, contractData: { bytecode, assembly } } };
 };
+`;
+
+export default withDefaults(contents, {
+  chainName: "hardhat",
+  artifactsDirName: "artifacts",
+});

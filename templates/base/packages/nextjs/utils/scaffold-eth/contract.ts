@@ -52,7 +52,7 @@ export type GenericContractsDeclaration = {
 
 export const contracts = contractsData as GenericContractsDeclaration | null;
 
-type ConfiguredChainId = (typeof scaffoldConfig)["targetNetwork"]["id"];
+type ConfiguredChainId = (typeof scaffoldConfig)["targetNetworks"][0]["id"];
 
 type IsContractDeclarationMissing<TYes, TNo> = typeof contractsData extends { [key in ConfiguredChainId]: any }
   ? TNo
@@ -240,6 +240,7 @@ export type UseScaffoldEventHistoryConfig<
   transactionData?: TTransactionData;
   receiptData?: TReceiptData;
   watch?: boolean;
+  enabled?: boolean;
 };
 
 export type UseScaffoldEventHistoryData<

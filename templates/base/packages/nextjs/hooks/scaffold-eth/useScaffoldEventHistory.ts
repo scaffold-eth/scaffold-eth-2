@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTargetNetwork } from "./useTargetNetwork";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { useInterval } from "usehooks-ts";
 import { Hash } from "viem";
@@ -6,7 +7,6 @@ import * as chains from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import scaffoldConfig from "~~/scaffold.config";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -16,7 +16,7 @@ import {
 } from "~~/utils/scaffold-eth/contract";
 
 /**
- * @dev reads events from a deployed contract
+ * Reads events from a deployed contract
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
@@ -26,6 +26,7 @@ import {
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
  * @param config.watch - if set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
+ * @param config.enabled - set this to false to disable the hook from running (default: true)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -42,6 +43,7 @@ export const useScaffoldEventHistory = <
   transactionData,
   receiptData,
   watch,
+  enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const [events, setEvents] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
@@ -50,13 +52,17 @@ export const useScaffoldEventHistory = <
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
-  const configuredNetwork = getTargetNetwork();
+  const { targetNetwork } = useTargetNetwork();
 
   const readEvents = async (fromBlock?: bigint) => {
     setIsLoading(true);
     try {
       if (!deployedContractData) {
         throw new Error("Contract not found");
+      }
+
+      if (!enabled) {
+        throw new Error("Hook disabled");
       }
 
       const event = (deployedContractData.abi as Abi).find(
@@ -95,7 +101,7 @@ export const useScaffoldEventHistory = <
           });
         }
         if (events && typeof fromBlock === "undefined") {
-          setEvents([...events, ...newEvents]);
+          setEvents([...newEvents, ...events]);
         } else {
           setEvents(newEvents);
         }
@@ -113,7 +119,7 @@ export const useScaffoldEventHistory = <
   useEffect(() => {
     readEvents(fromBlock);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromBlock]);
+  }, [fromBlock, enabled]);
 
   useEffect(() => {
     if (!deployedContractLoading) {
@@ -134,13 +140,20 @@ export const useScaffoldEventHistory = <
     receiptData,
   ]);
 
+  useEffect(() => {
+    // Reset the internal state when target network or fromBlock changed
+    setEvents([]);
+    setFromBlockUpdated(fromBlock);
+    setError(undefined);
+  }, [fromBlock, targetNetwork.id]);
+
   useInterval(
     async () => {
       if (!deployedContractLoading) {
         readEvents();
       }
     },
-    watch ? (configuredNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
+    watch ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
   );
 
   const eventHistoryData = useMemo(

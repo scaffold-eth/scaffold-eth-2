@@ -13,7 +13,8 @@ import {
   getParsedError,
 } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { notification } from "~~/utils/scaffold-eth";
 
 type WriteOnlyFunctionFormProps = {
   abiFunction: AbiFunction;
@@ -32,7 +33,8 @@ export const WriteOnlyFunctionForm = ({
   const [txValue, setTxValue] = useState<string | bigint>("");
   const { chain } = useNetwork();
   const writeTxn = useTransactor();
-  const writeDisabled = !chain || chain?.id !== getTargetNetwork().id;
+  const { targetNetwork } = useTargetNetwork();
+  const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
   const {
     data: result,

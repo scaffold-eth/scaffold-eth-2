@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 /**
  * Check if a click was made outside the passed ref
  */
-export const useOutsideClick = (ref: React.RefObject<HTMLDivElement>, callback: { (): void }) => {
+export const useOutsideClick = (ref: React.RefObject<HTMLElement>, callback: { (): void }) => {
   useEffect(() => {
     function handleOutsideClick(event: MouseEvent) {
       if (!(event.target instanceof Element)) {
