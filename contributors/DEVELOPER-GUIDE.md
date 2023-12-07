@@ -64,10 +64,10 @@ For example, `generated.txt` would have a sibling `generated.txt.dev` file with 
 5. Add changeset by doing `yarn changeset add` follow prompt and commit changes, learn more about changeset [here](https://github.com/scaffold-eth/scaffold-eth-2/blob/cli/CONTRIBUTING.md#changeset)
 6. Push the branch and create a PR against `cli` branch
 
+> NOTE: The `cli-backmerge` branch should be merged with "Create a merge commit" option instead of "Squash and merge" option into `cli` branch to preserve the commit history and not needing to create an extra commit directly into `cli` to merge `main` to resolve conflicts.
+
 ### Publishing to NPM
 
 Once the previous PR containing `changeset` is merged to `cli` branch, github bot will automatically create a new PR against `cli` branch containing version increment in `package.json` based on `changeset` and will also update `CHANGELOG.md` with respective `changesets` present.
 
 After this GH bot PR is merged to `cli`. It will auto publish a new release to NPM.
-
-> NOTE: Even after resolving conflicts and merging `cli-backmerge` to `cli` branch, you see will conflicts not being resolved in `cli` as compared to `main` branch and for that you need to directly push an extra commit to `cli` branch merging main into cli.
