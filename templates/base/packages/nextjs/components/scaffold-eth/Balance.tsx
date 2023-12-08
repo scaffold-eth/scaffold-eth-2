@@ -1,8 +1,9 @@
+import { Address } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 type BalanceProps = {
-  address?: string;
+  address?: Address;
   className?: string;
 };
 
