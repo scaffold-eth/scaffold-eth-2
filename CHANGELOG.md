@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.28
+
+### Patch Changes
+
+- a9d873d: - Allow user to set his preference for AddressType in `abi.d.ts` (#630 & #641)
+  - Check for exact path segment for inheritedFunctions sources (#643)
+  - Fix displaying of custom solidity errors (#638)
+  - Check cause?.data on getParsedError (#649)
+
 ## 0.0.27
 
 ### Patch Changes
