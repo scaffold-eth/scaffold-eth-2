@@ -15,13 +15,14 @@ body:
         - label: I have looked through the [existing issues](https://github.com/scaffold-eth/scaffold-eth-2/issues)
           required: true
 
-  - type: checkboxes
+  - type: dropdown
     attributes:
       label: Which method was used to setup Scaffold-ETH 2 ?
       description: You may select both, if the bug is present in both the methods.
+      multiple: true
       options:
-        - label: git clone
-        - label: npx create-eth@latest
+        - git clone
+        - npx create-eth@latest
     validations:
       required: true
 
