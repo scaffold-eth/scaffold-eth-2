@@ -7,7 +7,7 @@ import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
  * @param The module ID.
  * @param The module builder callback function
  */
-export default buildModule("YourContractModule", m => {
+export default buildModule("DeployYourContract", m => {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
