@@ -30,8 +30,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-        run: yarn chain & yarn deploy ignition/modules/DeployYourContract.ts --network localhost
+      - name: Run hardhat node
+        run: yarn chain
+
+      - name: deploy contracts
+        run: yarn deploy ignition/modules/DeployYourContract.ts --network localhost
+
+      - name: generate contracts typescript outputs
+        run: yarn generate-ts-abi
 
       - name: Run nextjs lint
         run: yarn next:lint --max-warnings=0
