@@ -31,7 +31,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Run hardhat node
-        run: yarn chain
+        run: yarn chain &
 
       - name: deploy contracts
         run: yarn deploy ignition/modules/DeployYourContract.ts --network localhost
