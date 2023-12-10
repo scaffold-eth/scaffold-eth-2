@@ -34,7 +34,7 @@ jobs:
         run: yarn chain &
 
       - name: deploy contracts
-        run: yarn deploy ignition/modules/DeployYourContract.ts --network localhost
+        run: yarn deploy ignition/modules/DeployYourContract.ts --network localhost --show-stack-traces
 
       - name: generate contracts typescript outputs
         run: yarn generate-ts-abi
