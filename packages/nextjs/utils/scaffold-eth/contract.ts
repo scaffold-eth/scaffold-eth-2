@@ -36,6 +36,10 @@ const deepMergeContracts = <L extends Record<PropertyKey, any>, E extends Record
   const result: Record<PropertyKey, any> = {};
   const allKeys = Array.from(new Set([...Object.keys(external), ...Object.keys(local)]));
   for (const key of allKeys) {
+    if (!external[key]) {
+      result[key] = local[key];
+      continue;
+    }
     const amendedExternal = Object.fromEntries(
       Object.entries(external[key] as Record<string, Record<string, unknown>>).map(([contractName, declaration]) => [
         contractName,
