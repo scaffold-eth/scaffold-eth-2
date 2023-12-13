@@ -130,6 +130,22 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
+    moonbeam: {
+      url: "https://rpc.api.moonbeam.network",
+      accounts: [deployerPrivateKey],
+    },
+    moonriver: {
+      url: "https://rpc.api.moonriver.moonbeam.network",
+      accounts: [deployerPrivateKey],
+    },
+    moonbaseAlpha: {
+      url: "https://rpc.api.moonbase.moonbeam.network",
+      accounts: [deployerPrivateKey],
+    },
+    moonbeamDevNode: {
+      url: "http://127.0.0.1:9944",
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
