@@ -4,9 +4,9 @@
 
 ### Patch Changes
 
-- 026a446: - Update wagmi to latest version: (#660)
-  - Fix externalContracts object example code (#653)
-  - Add question for installation method in template Issue (#651)
+- Update wagmi to latest version: (#660)
+- Fix externalContracts object example code (#653)
+- Add question for installation method in template Issue (#651)
 
 ## 0.0.28
 
