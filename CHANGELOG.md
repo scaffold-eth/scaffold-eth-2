@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.29
+
+### Patch Changes
+
+- Update wagmi to latest version: (#660)
+- Fix externalContracts object example code (#653)
+- Add question for installation method in template Issue (#651)
+
 ## 0.0.28
 
 ### Patch Changes
