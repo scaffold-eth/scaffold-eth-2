@@ -16,8 +16,6 @@ const burnerWalletIconBase64 =
 
 /**
  * Wagmi config for burner wallet
- * @param param0
- * @returns
  */
 export const burnerWalletConfig = ({ chains }: BurnerWalletOptions): Wallet => ({
   id: burnerWalletId,

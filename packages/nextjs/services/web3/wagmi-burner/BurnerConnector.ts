@@ -18,9 +18,8 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   readonly ready = true;
 
   private provider?: StaticJsonRpcProvider;
-  /**
-   * this is the store for getWallet()
-   */
+
+  // store for getWallet()
   private burnerWallet: WalletClient<HttpTransport, Chain, PrivateKeyAccount> | undefined;
 
   constructor(config: { chains?: Chain[]; options: BurnerConnectorOptions }) {
