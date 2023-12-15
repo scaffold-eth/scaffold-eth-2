@@ -130,6 +130,11 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
+    mode: {
+      url: "https://sepolia.mode.network",
+      chainId: 919,
+      accounts: [deployerPrivateKey],
+    },
   },
   verify: {
     etherscan: {
