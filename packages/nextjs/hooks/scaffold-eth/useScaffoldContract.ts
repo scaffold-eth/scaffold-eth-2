@@ -5,10 +5,10 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Gets a deployed contract by contract name and returns a contract instance
- * @param config - The config settings
- * @param config.contractName - Deployed contract name
- * @param config.walletClient - An viem wallet client instance (optional)
+ * Gets an instance of contract for the given contract name. Optional walletClient can be passed for doing write transactions.
+ * @param config - The config settings for the hook
+ * @param config.contractName - deployed contract name
+ * @param config.walletClient - optional walletClient from wagmi useWalletClient hook can be passed for doing write transactions
  */
 export const useScaffoldContract = <
   TContractName extends ContractName,

@@ -6,8 +6,7 @@ import { addIndexedArgsToEvent, useDeployedContractInfo } from "~~/hooks/scaffol
 import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Wrapper for wagmi's useContractEvent which automatically loads (by name)
- * the contract ABI and address from the deployed contracts.
+ * Wrapper around wagmi's useEventSubscriber hook which automatically loads (by name) the contract ABI and address from the contracts present in deployedContracts.ts & externalContracts.ts
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
