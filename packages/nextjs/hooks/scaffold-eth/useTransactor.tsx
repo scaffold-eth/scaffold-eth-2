@@ -29,7 +29,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
 };
 
 /**
- * @description Runs Transaction passed in to returned function showing UI feedback.
+ * Runs Transaction passed in to returned function showing UI feedback.
  * @param _walletClient - Optional wallet client to use. If not provided, will use the one from useWalletClient.
  * @returns function that takes in transaction function as callback, shows UI feedback for transcation and returns a promise of the transaction hash
  */
