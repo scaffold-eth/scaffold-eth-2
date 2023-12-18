@@ -5,7 +5,7 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Gets an instance of contract for the given contract name. Optional walletClient can be passed for doing write transactions.
+ * Gets an viem instance of the contract present in deployedContracts.ts or externalContracts.ts corrsponding to targetNetworks configured in scaffold.congfig.ts. Optional walletClient can be passed for doing write transactions.
  * @param config - The config settings for the hook
  * @param config.contractName - deployed contract name
  * @param config.walletClient - optional walletClient from wagmi useWalletClient hook can be passed for doing write transactions
