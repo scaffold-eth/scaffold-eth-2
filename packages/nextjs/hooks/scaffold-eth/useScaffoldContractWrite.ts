@@ -16,6 +16,8 @@ type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, un
  * @param config.functionName - name of the function to be called
  * @param config.args - arguments for the function
  * @param config.value - value in ETH that will be sent with transaction
+ * @param config.blockConfirmations - number of block confirmations to wait for (default: 1)
+ * @param config.onBlockConfirmation - callback that will be called after blockConfirmations.
  */
 export const useScaffoldContractWrite = <
   TContractName extends ContractName,
