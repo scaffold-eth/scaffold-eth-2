@@ -62,7 +62,7 @@ const wallets = [
         }),
       ]
     : []),
-  safeWallet({ ...walletsOptions, debug: false, allowedDomains: [/./s] }),
+  safeWallet({ ...walletsOptions }),
 ];
 
 /**
