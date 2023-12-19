@@ -79,29 +79,23 @@ const AddressPage = ({ address, contractData }: PageProps) => {
         </div>
       </div>
       {isContract && (
-        <div className="tabs">
+        <div className="tabs tabs-lifted w-min">
           <button
-            className={`tab tab-lifted ${activeTab === "transactions" ? "tab-active" : ""}`}
+            className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("transactions")}
           >
             Transactions
           </button>
-          <button
-            className={`tab tab-lifted ${activeTab === "code" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("code")}
-          >
+          <button className={`tab ${activeTab === "code" ? "tab-active" : ""}`} onClick={() => setActiveTab("code")}>
             Code
           </button>
           <button
-            className={`tab tab-lifted ${activeTab === "storage" ? "tab-active" : ""}`}
+            className={`tab  ${activeTab === "storage" ? "tab-active" : ""}`}
             onClick={() => setActiveTab("storage")}
           >
             Storage
           </button>
-          <button
-            className={`tab tab-lifted ${activeTab === "logs" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("logs")}
-          >
+          <button className={`tab  ${activeTab === "logs" ? "tab-active" : ""}`} onClick={() => setActiveTab("logs")}>
             Logs
           </button>
         </div>
