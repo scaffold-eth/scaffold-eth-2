@@ -4,7 +4,7 @@
  * This script generates the file containing the contracts Abi definitions.
  * These definitions are used to derive the types needed in the custom scaffold-eth hooks, for example.
  * This script should run as the last deploy script.
- *  */
+ */
 
 import * as fs from "fs";
 import prettier from "prettier";
