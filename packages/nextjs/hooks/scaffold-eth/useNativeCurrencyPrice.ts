@@ -8,7 +8,6 @@ const enablePolling = false;
 
 /**
  * Get the price of Native Currency based on Native Token/DAI trading pair from Uniswap SDK
- * @returns nativeCurrencyPrice: number
  */
 export const useNativeCurrencyPrice = () => {
   const { targetNetwork } = useTargetNetwork();
