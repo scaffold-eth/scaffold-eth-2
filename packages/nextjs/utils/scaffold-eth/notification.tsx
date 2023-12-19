@@ -7,7 +7,6 @@ import {
   ExclamationTriangleIcon,
   InformationCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Spinner } from "~~/components/assets/Spinner";
 
 type NotificationProps = {
   content: React.ReactNode;
@@ -25,7 +24,7 @@ type NotificationOptions = {
 
 const ENUM_STATUSES = {
   success: <CheckCircleIcon className="w-7 text-success" />,
-  loading: <Spinner />,
+  loading: <span className="loading loading-spinner loading-sm"></span>,
   error: <ExclamationCircleIcon className="w-7 text-error" />,
   info: <InformationCircleIcon className="w-7 text-info" />,
   warning: <ExclamationTriangleIcon className="w-7 text-warning" />,
