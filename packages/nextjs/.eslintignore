@@ -8,4 +8,5 @@ node_modules/
 **/*.json
 **/*.png
 **/*.svg
-**/generated/**/*
+contracts/deployedLocalhostContracts.ts
+contracts/deployedContracts.ts
