@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Revert changes to deployedLocalhostContracts.ts
+git checkout HEAD -- packages/nextjs/contracts/deployedLocalhostContracts.ts
+
+# Lint all staged files
 yarn lint-staged --verbose
