@@ -3,10 +3,6 @@ import { BaseError as BaseViemError, DecodeErrorResultReturnType } from "viem";
 
 /**
  * Generates a key based on function metadata
- * @param {string} functionName
- * @param {AbiParameter} input - object containing function name and input type corresponding to index
- * @param {number} inputIndex
- * @returns {string} key
  */
 const getFunctionInputKey = (functionName: string, input: AbiParameter, inputIndex: number): string => {
   const name = input?.name || `input_${inputIndex}_`;
@@ -14,9 +10,9 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
 };
 
 /**
- * Parses an error to get a displayable string
+ * Parses an viem/wagmi error to get a displayable string
  * @param e - error object
- * @returns {string} parsed error string
+ * @returns parsed error string
  */
 const getParsedError = (e: any): string => {
   let message: string = e.message ?? "An unknown error occurred";
@@ -48,8 +44,6 @@ const ARRAY_TYPE_REGEX = /\[.*\]$/;
 
 /**
  * Parses form input with array support
- * @param {Record<string,any>} form - form object containing key value pairs
- * @returns  parsed error string
  */
 const getParsedContractFunctionArgs = (form: Record<string, any>) => {
   const keys = Object.keys(form);
