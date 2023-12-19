@@ -82,7 +82,7 @@ export const Faucet = () => {
 
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal normal-case gap-1">
+      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal gap-1">
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
       </label>
