@@ -103,13 +103,33 @@ const generateTsAbis: DeployFunction = async function () {
   const TARGET_DIR = "../nextjs/contracts/";
   const allContractsData = getContractDataFromDeployments();
 
+  if (!fs.existsSync(TARGET_DIR)) {
+    fs.mkdirSync(TARGET_DIR);
+  }
+
+  if ("31337" in allContractsData) {
+    const deployedLocalhostContracts = allContractsData["31337"];
+    const deployedLocalhostContractsFileContent = `31337: ${JSON.stringify(deployedLocalhostContracts, null, 2)}`;
+    fs.writeFileSync(
+      `${TARGET_DIR}deployedLocalhostContracts.ts`,
+      prettier.format(
+        `${generatedContractComment} import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract"; \n\n
+ const deployedLocalhostContracts = {${deployedLocalhostContractsFileContent}} as const; \n\n export default deployedLocalhostContracts satisfies GenericContractsDeclaration`,
+        {
+          parser: "typescript",
+        },
+      ),
+    );
+    delete allContractsData["31337"];
+  }
+
+  /* const deployedLocalhostContractts = allContractsData["31337"];
+  console.log("All contracts data", allContractsData); */
+
   const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
   }, "");
 
-  if (!fs.existsSync(TARGET_DIR)) {
-    fs.mkdirSync(TARGET_DIR);
-  }
   fs.writeFileSync(
     `${TARGET_DIR}deployedContracts.ts`,
     prettier.format(
