@@ -10,7 +10,8 @@ import {
 } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Wrapper around wagmi's useContractRead hook which automatically loads (by name) the contract ABI and address from the contracts present in deployedContracts.ts & externalContracts.ts corrsponding to targetNetworks configured in scaffold.congfig.ts
+ * Wrapper around wagmi's useContractRead hook which automatically loads (by name) the contract ABI and address from
+ * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  * @param config - The config settings, including extra wagmi configuration
  * @param config.contractName - deployed contract name
  * @param config.functionName - name of the function to be called

@@ -10,7 +10,8 @@ import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaf
 type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, undefined>>["writeAsync"]>[0];
 
 /**
- * Wrapper around wagmi's useContractWrite hook which automatically loads (by name) the contract ABI and address from the contracts present in deployedContracts.ts & externalContracts.ts corrsponding to targetNetworks configured in scaffold.congfig.ts
+ * Wrapper around wagmi's useContractWrite hook which automatically loads (by name) the contract ABI and address from
+ * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  * @param config - The config settings, including extra wagmi configuration
  * @param config.contractName - contract name
  * @param config.functionName - name of the function to be called

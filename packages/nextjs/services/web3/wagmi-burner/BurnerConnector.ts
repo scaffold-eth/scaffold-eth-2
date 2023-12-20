@@ -38,11 +38,11 @@ export class BurnerConnector extends Connector<StaticJsonRpcProvider, BurnerConn
   async getWalletClient(config?: { chainId?: number | undefined } | undefined) {
     const chain = this.getChainFromId(config?.chainId);
     if (!this.burnerWallet) {
-      const bunerAccount = privateKeyToAccount(loadBurnerSK());
+      const burnerAccount = privateKeyToAccount(loadBurnerSK());
 
       const client = createWalletClient({
         chain: chain,
-        account: bunerAccount,
+        account: burnerAccount,
         transport: http(),
       });
       this.burnerWallet = client;
