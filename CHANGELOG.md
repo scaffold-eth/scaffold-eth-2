@@ -1,5 +1,15 @@
 # create-eth
 
+## 0.0.30
+
+### Patch Changes
+
+- Daisy UI: update to v4 (#656)
+- JSDoc cleanup (#665)
+- use default values for safeConnector (#667)
+- Typos (#668)
+- Remove custom Spinner component (#669)
+
 ## 0.0.29
 
 ### Patch Changes
