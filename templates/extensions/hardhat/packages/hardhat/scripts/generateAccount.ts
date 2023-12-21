@@ -6,7 +6,6 @@ const envFilePath = "./.env";
 
 /**
  * Generate a new random private key and write it to the .env file
- * @param existingEnvConfig
  */
 const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");

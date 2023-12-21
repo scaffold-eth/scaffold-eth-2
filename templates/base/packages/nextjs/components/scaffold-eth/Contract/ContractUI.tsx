@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { ContractReadMethods } from "./ContractReadMethods";
 import { ContractVariables } from "./ContractVariables";
 import { ContractWriteMethods } from "./ContractWriteMethods";
-import { Spinner } from "~~/components/assets/Spinner";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -25,7 +24,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
   if (deployedContractLoading) {
     return (
       <div className="mt-14">
-        <Spinner width="50px" height="50px" />
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
