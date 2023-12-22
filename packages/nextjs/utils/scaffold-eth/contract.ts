@@ -20,7 +20,6 @@ import {
 } from "viem";
 import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
 import deployedContractsData from "~~/contracts/deployedContracts";
-import deployedLocalhostContractsData from "~~/contracts/deployedLocalhostContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -35,8 +34,7 @@ const deepMergeContracts = <D extends Record<PropertyKey, any>, S extends Record
   }
   return result as MergeDeepRecord<D, S, { arrayMergeMode: "replace" }>;
 };
-const allDeployedContracts = deepMergeContracts(deployedContractsData, deployedLocalhostContractsData);
-const contractsData = deepMergeContracts(allDeployedContracts, externalContractsData);
+const contractsData = deepMergeContracts(deployedContractsData, externalContractsData);
 
 export type InheritedFunctions = { readonly [key: string]: string };
 
