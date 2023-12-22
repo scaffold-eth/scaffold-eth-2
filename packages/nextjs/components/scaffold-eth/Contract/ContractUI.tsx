@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { ContractReadMethods } from "./ContractReadMethods";
 import { ContractVariables } from "./ContractVariables";
 import { ContractWriteMethods } from "./ContractWriteMethods";
-import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -45,14 +44,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
           <div className="bg-base-100 border-base-300 border shadow-md shadow-secondary rounded-3xl px-6 lg:px-8 mb-6 space-y-1 py-4">
             <div className="flex">
               <div className="flex flex-col gap-1">
-                <div className="flex items-end space-x-2 font-bold mb-1">
-                  <p className="my-0">{contractName}</p>
-                  {deployedContractData.external && (
-                    <span className="tooltip tooltip-top tooltip-accent" data-tip="External contract">
-                      <BarsArrowUpIcon className="h-5 w-5 cursor-pointer" />
-                    </span>
-                  )}
-                </div>
+                <span className="font-bold">{contractName}</span>
                 <Address address={deployedContractData.address} />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
