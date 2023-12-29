@@ -4,9 +4,9 @@
 
 ### Patch Changes
 
-- 7d62ce7: - Track hardhat-deploy deployments, except localhost (#666)
-  - feat: add external flag to external contracts (#647)
-  - Remove `.github/ISSUE_TEMPLATE` and pull request template when using npx
+- Track hardhat-deploy deployments, except localhost (#666)
+- feat: add external flag to external contracts (#647)
+- Remove `.github/ISSUE_TEMPLATE` and pull request template when using npx
 
 ## 0.0.30
 
