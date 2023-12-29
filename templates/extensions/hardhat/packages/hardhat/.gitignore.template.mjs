@@ -15,6 +15,6 @@ artifacts
 artifacts-zk
 cache-zk
 
-deployments`
+deployments/localhost`
 
 export default contents
