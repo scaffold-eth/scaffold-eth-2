@@ -8,7 +8,7 @@ import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
 
-const Blockexplorer: NextPage = () => {
+const BlockExplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();
   const { targetNetwork } = useTargetNetwork();
 
@@ -59,4 +59,4 @@ const Blockexplorer: NextPage = () => {
   );
 };
 
-export default Blockexplorer;
+export default BlockExplorer;

@@ -20,7 +20,7 @@
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
     "blo": "^1.0.1",
-    "daisyui": "^3.5.1",
+    "daisyui": "^4.4.19",
     "next": "^13.1.6",
     "nextjs-progressbar": "^0.0.16",
     "qrcode.react": "^3.1.0",
@@ -31,7 +31,7 @@
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.7.2",
     "viem": "1.19.9",
-    "wagmi": "1.4.7",
+    "wagmi": "1.4.12",
     "zustand": "^4.1.2"
   },
   "devDependencies": {

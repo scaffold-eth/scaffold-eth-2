@@ -13,12 +13,14 @@ type DisplayVariableProps = {
   abiFunction: AbiFunction;
   refreshDisplayVariables: boolean;
   inheritedFrom?: string;
+  abi: Abi;
 };
 
 export const DisplayVariable = ({
   contractAddress,
   abiFunction,
   refreshDisplayVariables,
+  abi,
   inheritedFrom,
 }: DisplayVariableProps) => {
   const {
@@ -28,7 +30,7 @@ export const DisplayVariable = ({
   } = useContractRead({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi: [abiFunction] as Abi,
+    abi: abi,
     onError: error => {
       notification.error(error.message);
     },

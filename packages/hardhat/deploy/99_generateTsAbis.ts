@@ -4,7 +4,7 @@
  * This script generates the file containing the contracts Abi definitions.
  * These definitions are used to derive the types needed in the custom scaffold-eth hooks, for example.
  * This script should run as the last deploy script.
- *  */
+ */
 
 import * as fs from "fs";
 import prettier from "prettier";
@@ -60,7 +60,7 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
   const inheritedFunctions = {} as Record<string, any>;
 
   for (const sourceContractName of actualSources) {
-    const sourcePath = Object.keys(sources).find(key => key.includes(sourceContractName));
+    const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
     if (sourcePath) {
       const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
       const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());

@@ -6,7 +6,7 @@ import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
-const SCAFFOLD_WALLET_STROAGE_KEY = "scaffoldEth2.wallet";
+const SCAFFOLD_WALLET_STORAGE_KEY = "scaffoldEth2.wallet";
 const WAGMI_WALLET_STORAGE_KEY = "wagmi.wallet";
 
 // ID of the SAFE connector instance
@@ -59,7 +59,7 @@ const getInitialConnector = (
  */
 export const useAutoConnect = (): void => {
   const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY);
-  const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STROAGE_KEY, wagmiWalletValue ?? "");
+  const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STORAGE_KEY, wagmiWalletValue ?? "");
   const connectState = useConnect();
   const accountState = useAccount();
 

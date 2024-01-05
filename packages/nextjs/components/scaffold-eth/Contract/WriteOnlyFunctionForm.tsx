@@ -17,6 +17,7 @@ import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { notification } from "~~/utils/scaffold-eth";
 
 type WriteOnlyFunctionFormProps = {
+  abi: Abi;
   abiFunction: AbiFunction;
   onChange: () => void;
   contractAddress: Address;
@@ -24,6 +25,7 @@ type WriteOnlyFunctionFormProps = {
 };
 
 export const WriteOnlyFunctionForm = ({
+  abi,
   abiFunction,
   onChange,
   contractAddress,
@@ -43,7 +45,7 @@ export const WriteOnlyFunctionForm = ({
   } = useContractWrite({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi: [abiFunction] as Abi,
+    abi: abi,
     args: getParsedContractFunctionArgs(form),
   });
 
