@@ -133,6 +133,9 @@ const config: HardhatUserConfig = {
       apiKey: `${etherscanApiKey}`,
     },
   },
+  sourcify: {
+    enabled: false,
+  },
 };
 
 export default config;
