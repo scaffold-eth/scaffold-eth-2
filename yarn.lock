@@ -1944,6 +1944,7 @@ __metadata:
     "@nomicfoundation/hardhat-verify": ^2.0.1
     "@openzeppelin/contracts": ^4.8.1
     "@typechain/ethers-v5": ^10.1.0
+    "@typechain/ethers-v6": ^0.5.1
     "@typechain/hardhat": ^9.1.0
     "@types/eslint": ^8
     "@types/mocha": ^9.1.1
@@ -2461,6 +2462,20 @@ __metadata:
     typechain: ^8.1.0
     typescript: ">=4.3.0"
   checksum: 452ad685ce792ddefebdcb8ae72f4343ed1411f91701250e273c1a0dd79753d0d40f311cff19ec0c4fd6a9b9cf23e55eb9ae1b94cb388fbc54c122ae4d0e6f47
+  languageName: node
+  linkType: hard
+
+"@typechain/ethers-v6@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "@typechain/ethers-v6@npm:0.5.1"
+  dependencies:
+    lodash: ^4.17.15
+    ts-essentials: ^7.0.1
+  peerDependencies:
+    ethers: 6.x
+    typechain: ^8.3.2
+    typescript: ">=4.7.0"
+  checksum: 44e7970ce95eeb1a02019f8a53bbe30dcb87664e1df15fe436ae48eea1bf91ca72b5b230eac1bdf9cbe9b55bc488b54c6273e6f77155eaeff885fb34cfcd1108
   languageName: node
   linkType: hard
 
