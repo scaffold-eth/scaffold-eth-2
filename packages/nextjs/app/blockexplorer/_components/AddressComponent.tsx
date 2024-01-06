@@ -35,5 +35,3 @@ export const AddressComponent = ({
     </div>
   );
 };
-
-export default AddressComponent;
