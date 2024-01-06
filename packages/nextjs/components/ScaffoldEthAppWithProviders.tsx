@@ -14,17 +14,30 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { appChains } from "~~/services/web3/wagmiConnectors";
 
-export const AppComponent = ({ children }: { children: React.ReactNode }) => {
+const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
-
-  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     if (price > 0) {
       setNativeCurrencyPrice(price);
     }
   }, [setNativeCurrencyPrice, price]);
+
+  return (
+    <>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="relative flex flex-col flex-1">{children}</main>
+        <Footer />
+      </div>
+      <Toaster />
+    </>
+  );
+};
+
+export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
+  const { isDarkMode } = useDarkMode();
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -34,12 +47,7 @@ export const AppComponent = ({ children }: { children: React.ReactNode }) => {
         avatar={BlockieAvatar}
         theme={isDarkMode ? darkTheme() : lightTheme()}
       >
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="relative flex flex-col flex-1">{children}</main>
-          <Footer />
-        </div>
-        <Toaster />
+        <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>
     </WagmiConfig>
   );

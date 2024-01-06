@@ -3,24 +3,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
-import { Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
+import { Hash, Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
-import { decodeTransactionData, getFunctionDetails, getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { decodeTransactionData, getFunctionDetails } from "~~/utils/scaffold-eth";
+import { replacer } from "~~/utils/scaffold-eth/common";
 
 type PageProps = {
-  params: { txHash?: `0x${string}` };
+  params: { txHash?: Hash };
 };
 const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
   const client = usePublicClient({ chainId: hardhat.id });
-  const txHash = params?.txHash as `0x${string}`;
+  const txHash = params?.txHash as Hash;
   const router = useRouter();
   const [transaction, setTransaction] = useState<Transaction>();
   const [receipt, setReceipt] = useState<TransactionReceipt>();
   const [functionCalled, setFunctionCalled] = useState<string>();
 
-  const configuredNetwork = getTargetNetwork();
+  const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
     if (txHash) {
@@ -90,7 +92,7 @@ const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
                   <strong>Value:</strong>
                 </td>
                 <td>
-                  {formatEther(transaction.value)} {configuredNetwork.nativeCurrency.symbol}
+                  {formatEther(transaction.value)} {targetNetwork.nativeCurrency.symbol}
                 </td>
               </tr>
               <tr>
@@ -122,6 +124,20 @@ const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
                 </td>
                 <td className="form-control">
                   <textarea readOnly value={transaction.input} className="p-0 textarea-primary bg-inherit h-[150px]" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Logs:</strong>
+                </td>
+                <td>
+                  <ul>
+                    {receipt?.logs?.map((log, i) => (
+                      <li key={i}>
+                        <strong>Log {i} topics:</strong> {JSON.stringify(log.topics, replacer, 2)}
+                      </li>
+                    ))}
+                  </ul>
                 </td>
               </tr>
             </tbody>

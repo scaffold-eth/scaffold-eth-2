@@ -4,7 +4,7 @@ import { useWalletClient } from "wagmi";
 import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
 
 type TransactionFunc = (
-  tx: (() => Promise<WriteContractResult>) | SendTransactionParameters,
+  tx: (() => Promise<WriteContractResult>) | (() => Promise<Hash>) | SendTransactionParameters,
   options?: {
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
     blockConfirmations?: number;
@@ -19,7 +19,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
           check out transaction
         </a>
       ) : null}
@@ -28,9 +28,9 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
 };
 
 /**
- * @description Runs Transaction passed in to returned funtion showing UI feedback.
- * @param _walletClient
- * @returns function that takes a transaction and returns a promise of the transaction hash
+ * Runs Transaction passed in to returned function showing UI feedback.
+ * @param _walletClient - Optional wallet client to use. If not provided, will use the one from useWalletClient.
+ * @returns function that takes in transaction function as callback, shows UI feedback for transaction and returns a promise of the transaction hash
  */
 export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => {
   let walletClient = _walletClient;
@@ -56,7 +56,12 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
       if (typeof tx === "function") {
         // Tx is already prepared by the caller
-        transactionHash = (await tx()).hash;
+        const result = await tx();
+        if (typeof result === "string") {
+          transactionHash = result;
+        } else {
+          transactionHash = result.hash;
+        }
       } else if (tx != null) {
         transactionHash = await walletClient.sendTransaction(tx);
       } else {

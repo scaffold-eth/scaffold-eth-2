@@ -2,7 +2,7 @@ import AddressComponent from "../../_components/AddressComponent";
 import fs from "fs";
 import path from "path";
 import { hardhat } from "viem/chains";
-import deployedContracts from "~~/generated/deployedContracts";
+import deployedContracts from "~~/contracts/deployedContracts";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type PageProps = {
@@ -58,7 +58,7 @@ const getContractData = async (address: string) => {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
   }
 
-  const deployedContractsOnChain = contracts ? contracts[chainId][0].contracts : {};
+  const deployedContractsOnChain = contracts ? contracts[chainId] : {};
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address) {
       contractPath = `contracts/${contractName}.sol`;

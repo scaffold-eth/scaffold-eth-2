@@ -1,17 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
+import { PaginationButton } from "./_components/PaginationButton";
+import { SearchBar } from "./_components/SearchBar";
+import { TransactionsTable } from "./_components/TransactionsTable";
 import type { NextPage } from "next";
 import { hardhat } from "viem/chains";
-import { PaginationButton, SearchBar, TransactionsTable } from "~~/app/blockexplorer/_components";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { notification } from "~~/utils/scaffold-eth";
 
-const Blockexplorer: NextPage = () => {
+const BlockExplorer: NextPage = () => {
   const { blocks, transactionReceipts, currentPage, totalBlocks, setCurrentPage, error } = useFetchBlocks();
+  const { targetNetwork } = useTargetNetwork();
 
   useEffect(() => {
-    if (getTargetNetwork().id === hardhat.id && error) {
+    if (targetNetwork.id === hardhat.id && error) {
       notification.error(
         <>
           <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
@@ -26,27 +30,27 @@ const Blockexplorer: NextPage = () => {
       );
     }
 
-    if (getTargetNetwork().id !== hardhat.id) {
+    if (targetNetwork.id !== hardhat.id) {
       notification.error(
         <>
           <p className="font-bold mt-0 mb-1">
             <code className="italic bg-base-300 text-base font-bold"> targeNetwork </code> is not localhost
           </p>
           <p className="m-0">
-            - You are on <code className="italic bg-base-300 text-base font-bold">{getTargetNetwork().name}</code> .This
+            - You are on <code className="italic bg-base-300 text-base font-bold">{targetNetwork.name}</code> .This
             block explorer is only for <code className="italic bg-base-300 text-base font-bold">localhost</code>.
           </p>
           <p className="mt-1 break-normal">
             - You can use{" "}
-            <a className="text-accent" href={getTargetNetwork().blockExplorers?.default.url}>
-              {getTargetNetwork().blockExplorers?.default.name}
+            <a className="text-accent" href={targetNetwork.blockExplorers?.default.url}>
+              {targetNetwork.blockExplorers?.default.name}
             </a>{" "}
             instead
           </p>
         </>,
       );
     }
-  }, [error]);
+  }, [error, targetNetwork]);
 
   return (
     <div className="container mx-auto my-10">
@@ -57,4 +61,4 @@ const Blockexplorer: NextPage = () => {
   );
 };
 
-export default Blockexplorer;
+export default BlockExplorer;

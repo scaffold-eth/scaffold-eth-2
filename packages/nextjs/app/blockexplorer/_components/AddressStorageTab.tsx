@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createPublicClient, http, toHex } from "viem";
+import { Address, createPublicClient, http, toHex } from "viem";
 import { hardhat } from "viem/chains";
 
 const publicClient = createPublicClient({
@@ -9,7 +9,7 @@ const publicClient = createPublicClient({
   transport: http(),
 });
 
-export const AddressStorageTab = ({ address }: { address: string }) => {
+export const AddressStorageTab = ({ address }: { address: Address }) => {
   const [storage, setStorage] = useState<string[]>([]);
 
   useEffect(() => {

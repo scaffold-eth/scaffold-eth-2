@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useContractRead } from "wagmi";
@@ -11,25 +12,33 @@ import {
   getInitialFormState,
   getParsedContractFunctionArgs,
 } from "~~/app/debug/_components/contract";
-import { notification } from "~~/utils/scaffold-eth";
+import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
-type TReadOnlyFunctionFormProps = {
+type ReadOnlyFunctionFormProps = {
   contractAddress: Address;
   abiFunction: AbiFunction;
+  inheritedFrom?: string;
+  abi: Abi;
 };
 
-export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnlyFunctionFormProps) => {
+export const ReadOnlyFunctionForm = ({
+  contractAddress,
+  abiFunction,
+  inheritedFrom,
+  abi,
+}: ReadOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [result, setResult] = useState<unknown>();
 
   const { isFetching, refetch } = useContractRead({
     address: contractAddress,
     functionName: abiFunction.name,
-    abi: [abiFunction] as Abi,
+    abi: abi,
     args: getParsedContractFunctionArgs(form),
     enabled: false,
     onError: (error: any) => {
-      notification.error(error.message);
+      const parsedErrror = getParsedError(error);
+      notification.error(parsedErrror);
     },
   });
 
@@ -51,7 +60,10 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">{abiFunction.name}</p>
+      <p className="font-medium my-0 break-words">
+        {abiFunction.name}
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />
+      </p>
       {inputElements}
       <div className="flex justify-between gap-2 flex-wrap">
         <div className="flex-grow w-4/5">

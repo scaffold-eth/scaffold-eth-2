@@ -19,7 +19,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
       <input
         id="theme-toggle"
         type="checkbox"
-        className="toggle toggle-primary bg-primary"
+        className="toggle toggle-primary bg-primary hover:bg-primary border-primary"
         onChange={toggle}
         checked={isDarkMode}
       />

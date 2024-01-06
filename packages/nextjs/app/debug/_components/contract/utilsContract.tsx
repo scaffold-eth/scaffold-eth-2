@@ -1,11 +1,7 @@
 import { AbiFunction, AbiParameter } from "abitype";
 
 /**
- * @dev utility function to generate key corresponding to function metaData
- * @param {AbiFunction} functionName
- * @param {utils.ParamType} input - object containing function name and input type corresponding to index
- * @param {number} inputIndex
- * @returns {string} key
+ * Generates a key based on function metadata
  */
 const getFunctionInputKey = (functionName: string, input: AbiParameter, inputIndex: number): string => {
   const name = input?.name || `input_${inputIndex}_`;
@@ -14,10 +10,9 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
 
 // This regex is used to identify array types in the form of `type[size]`
 const ARRAY_TYPE_REGEX = /\[.*\]$/;
+
 /**
- * @dev Parse form input with array support
- * @param {Record<string,any>} form - form object containing key value pairs
- * @returns  parsed error string
+ * Parses form input with array support
  */
 const getParsedContractFunctionArgs = (form: Record<string, any>) => {
   const keys = Object.keys(form);

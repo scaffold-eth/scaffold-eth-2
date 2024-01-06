@@ -4,10 +4,9 @@ import { useReducer } from "react";
 import { ContractReadMethods } from "./ContractReadMethods";
 import { ContractVariables } from "./ContractVariables";
 import { ContractWriteMethods } from "./ContractWriteMethods";
-import { Spinner } from "~~/components/assets/Spinner";
 import { Address, Balance } from "~~/components/scaffold-eth";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 type ContractUIProps = {
@@ -20,15 +19,14 @@ type ContractUIProps = {
  **/
 export const ContractUI = ({ contractName, className = "" }: ContractUIProps) => {
   const [refreshDisplayVariables, triggerRefreshDisplayVariables] = useReducer(value => !value, false);
-  const configuredNetwork = getTargetNetwork();
-
+  const { targetNetwork } = useTargetNetwork();
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const networkColor = useNetworkColor();
 
   if (deployedContractLoading) {
     return (
       <div className="mt-14">
-        <Spinner width="50px" height="50px" />
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
@@ -36,7 +34,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
   if (!deployedContractData) {
     return (
       <p className="text-3xl mt-14">
-        {`No contract found by the name of "${contractName}" on chain "${configuredNetwork.name}"!`}
+        {`No contract found by the name of "${contractName}" on chain "${targetNetwork.name}"!`}
       </p>
     );
   }
@@ -56,10 +54,10 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
                 </div>
               </div>
             </div>
-            {configuredNetwork && (
+            {targetNetwork && (
               <p className="my-0 text-sm">
                 <span className="font-bold">Network</span>:{" "}
-                <span style={{ color: networkColor }}>{configuredNetwork.name}</span>
+                <span style={{ color: networkColor }}>{targetNetwork.name}</span>
               </p>
             )}
           </div>
