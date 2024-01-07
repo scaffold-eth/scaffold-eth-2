@@ -17,7 +17,7 @@ const Debug: NextPage = () => {
           You can debug & interact with your deployed contracts here.
           <br /> Check{" "}
           <code className="italic bg-base-300 text-base font-bold [word-spacing:-0.5rem] px-1">
-            packages / nextjs / pages / debug.tsx
+            packages / nextjs / app / debug / page.tsx
           </code>{" "}
         </p>
       </div>
