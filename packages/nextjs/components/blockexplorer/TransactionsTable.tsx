@@ -11,16 +11,16 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
   return (
     <div className="flex justify-center px-4 md:px-0">
       <div className="overflow-x-auto w-full shadow-2xl rounded-xl">
-        <table className="table text-xl bg-base-100 table-zebra w-full md:table-md table-sm">
+        <table className="table text-xs bg-base-100 table-zebra w-full md:table-md table-sm">
           <thead>
-            <tr className="rounded-xl text-sm text-base-content">
-              <th className="bg-primary">Transaction Hash</th>
-              <th className="bg-primary">Function Called</th>
-              <th className="bg-primary">Block Number</th>
-              <th className="bg-primary">Time Mined</th>
-              <th className="bg-primary">From</th>
-              <th className="bg-primary">To</th>
-              <th className="bg-primary text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
+            <tr className=" text-xs text-base-content border-b-2 border-base-300">
+              <th className="">Transaction Hash</th>
+              <th className="">Function Called</th>
+              <th className="">Block Number</th>
+              <th className="">Time Mined</th>
+              <th className="">From</th>
+              <th className="">To</th>
+              <th className="text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
             </tr>
           </thead>
           <tbody>
