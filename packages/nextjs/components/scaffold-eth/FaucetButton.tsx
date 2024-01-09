@@ -52,12 +52,12 @@ export const FaucetButton = () => {
     <div
       className={
         balance
-          ? "ml-1"
-          : "ml-1 tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
+          ? "ml-1 text-[#FFF] border-[#0F0]"
+          : "ml-1 tooltip tooltip-bottom tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0 text-[#FF] border-[#0F0]"
       }
       data-tip="Grab funds from faucet"
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+      <button className="btn bg-[#0F0] text-[#000] btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
         {!loading ? (
           <BanknotesIcon className="h-4 w-4" />
         ) : (
