@@ -62,7 +62,8 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+
+  <div className="sticky lg:static top-0 navbar bg-base-200 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2 border-b-[1px] border-base-300">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
@@ -77,7 +78,7 @@ export const Header = () => {
           {isDrawerOpen && (
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
               onClick={() => {
                 setIsDrawerOpen(false);
               }}
@@ -104,5 +105,7 @@ export const Header = () => {
         <FaucetButton />
       </div>
     </div>
+    
+    
   );
 };
