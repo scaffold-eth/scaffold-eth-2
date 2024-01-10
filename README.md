@@ -1,4 +1,6 @@
-xxx# 🏗 Scaffold-ETH 2
+https://raw.githubusercontent.com/didier-moet/scaffold-eth-2/main/IMG_1611.png
+ 
+ 🏗 Scaffold-ETH 2
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
