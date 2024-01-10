@@ -1,4 +1,7 @@
 
+![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/1171422a-0ce4-4203-bcd4-d2d1941d198b)
+
+
  🏗 Scaffold-ETH 2
 
 <h4 align="center">
