@@ -34,7 +34,19 @@ export const ContractVariables = ({
   }
 
   return (
-    <>
+          
+  <>
+  
+  <div className="grid grid-cols-3 bg-base-300 lg:hidden">
+    <div className="table-head col-span-1 p-3 flex items-center">
+    
+    <h3 className="mb-0 text-xs">Function Name</h3>
+    
+    </div>
+  <div className="col-span-2 p-3">
+ <h3 className="mb-0 table-head text-xs">Value</h3>
+  </div>
+  </div>
       {functionsToDisplay.map(({ fn, inheritedFrom }) => (
         <DisplayVariable
           abi={deployedContractData.abi as Abi}
@@ -45,6 +57,8 @@ export const ContractVariables = ({
           inheritedFrom={inheritedFrom}
         />
       ))}
+      
     </>
+    
   );
 };
