@@ -1,7 +1,4 @@
 
-
-![Screenshot](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/1171422a-0ce4-4203-bcd4-d2d1941d198b](https://raw.githubusercontent.com/didier-moet/scaffold-eth-2/main/IMG_1607.png)
- 
  🏗 Scaffold-ETH 2
 
 <h4 align="center">
