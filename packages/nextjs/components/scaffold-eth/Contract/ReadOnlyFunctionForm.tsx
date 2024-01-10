@@ -58,23 +58,31 @@ export const ReadOnlyFunctionForm = ({
   });
 
   return (
-    <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">
-        {abiFunction.name}
-        <InheritanceTooltip inheritedFrom={inheritedFrom} />
-      </p>
+
+    
+    
+    <div className="flex flex-col gap-2 py-5 first:pt-0 last:pb-1">
+    
+   <div className="collapse collapse-plus border-base-200 border rounded">
+<input type="checkbox" />
+        <div className="collapse-title text-sm font-medium my-0 break-words text-secondary">
+          <code>{abiFunction.name}</code>
+          <InheritanceTooltip inheritedFrom={inheritedFrom} />
+          </div>
+          
+          <div className="collapse-content space-y-2">
       {inputElements}
       <div className="flex justify-between gap-2 flex-wrap">
         <div className="flex-grow w-4/5">
           {result !== null && result !== undefined && (
-            <div className="bg-secondary rounded-3xl text-sm px-4 py-1.5 break-words">
-              <p className="font-bold m-0 mb-1">Result:</p>
+            <div className="bg-base-100 rounded text-sm px-4 py-1.5 break-words">
+              <p className="font-bold m-0 mb-1 text-xs">Result:</p>
               <pre className="whitespace-pre-wrap break-words">{displayTxResult(result)}</pre>
             </div>
           )}
         </div>
         <button
-          className="btn btn-secondary btn-sm"
+          className="btn bg-base-400 border-secondary text-secondary p-3 px-6 rounded"
           onClick={async () => {
             const { data } = await refetch();
             setResult(data);
@@ -82,9 +90,14 @@ export const ReadOnlyFunctionForm = ({
           disabled={isFetching}
         >
           {isFetching && <span className="loading loading-spinner loading-xs"></span>}
-          Read 📡
+          Read
         </button>
       </div>
     </div>
+          </div>
+          </div>
+
+
+    
   );
 };
