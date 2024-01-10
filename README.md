@@ -1,6 +1,7 @@
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/1171422a-0ce4-4203-bcd4-d2d1941d198b)
+![Debug Contracts tab](https://raw.githubusercontent.com/didier-moet/scaffold-eth-2/main/IMG_1611.png)
 
+https://raw.githubusercontent.com/didier-moet/scaffold-eth-2/main/IMG_1611.png
 
  🏗 Scaffold-ETH 2
 
