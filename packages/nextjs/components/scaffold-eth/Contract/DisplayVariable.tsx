@@ -43,9 +43,11 @@ export const DisplayVariable = ({
   }, [refetch, refreshDisplayVariables]);
 
   return (
-    <div className="space-y-1 pb-2">
-      <div className="flex items-center">
-        <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
+
+<div className="grid grid-cols-3 lg:grid-cols-1">
+    <div className="data-label col-span-1 p-4 py-6 lg:pb-0 flex items-center">
+    
+    <div className="mb-0 break-all data-label text-sm">{abiFunction.name}</div>
         <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (
             <span className="loading loading-spinner loading-xs"></span>
@@ -53,19 +55,16 @@ export const DisplayVariable = ({
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
-        <InheritanceTooltip inheritedFrom={inheritedFrom} />
-      </div>
-      <div className="text-gray-500 font-medium flex flex-col items-start">
-        <div>
-          <div
-            className={`break-all block transition bg-transparent ${
-              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
-            }`}
-          >
-            {displayTxResult(result)}
-          </div>
-        </div>
-      </div>
+        <InheritanceTooltip inheritedFrom={inheritedFrom} />    
     </div>
+  <div className="data-value col-span-2 p-4 flex items-center">
+  <code className={`break-all block transition bg-transparent ${
+              showAnimation ? "bg-success rounded-sm animate-pulse-fast" : ""
+            }`}>
+            {displayTxResult(result)}
+            </code>
+  </div>
+  </div>
+    
   );
 };
