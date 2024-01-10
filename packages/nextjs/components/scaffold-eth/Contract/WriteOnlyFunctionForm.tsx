@@ -89,13 +89,18 @@ export const WriteOnlyFunctionForm = ({
   const zeroInputs = inputs.length === 0 && abiFunction.stateMutability !== "payable";
 
   return (
-    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
-      <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
-        <p className="font-medium my-0 break-words">
-          {abiFunction.name}
+    <div className="py-2 space-y-2 first:pt-0 last:pb-1">
+      <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center divide-y-2" : "flex-col"}`}>
+
+<div className="collapse collapse-plus rounded">
+<input type="checkbox" />
+        <div className="collapse-title text-sm font-medium my-0 break-words text-secondary">
+          <code>{abiFunction.name}</code>
           <InheritanceTooltip inheritedFrom={inheritedFrom} />
-        </p>
-        {inputs}
+        </div>
+        
+        <div className="collapse-content space-y-2">
+        {inputs} 
         {abiFunction.stateMutability === "payable" ? (
           <IntegerInput
             value={txValue}
@@ -119,9 +124,9 @@ export const WriteOnlyFunctionForm = ({
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isLoading} onClick={handleWrite}>
+            <button className="btn btn-secondary p-3 px-6 rounded" disabled={writeDisabled || isLoading} onClick={handleWrite}>
               {isLoading && <span className="loading loading-spinner loading-xs"></span>}
-              Send 💸
+              Send
             </button>
           </div>
         </div>
@@ -131,6 +136,9 @@ export const WriteOnlyFunctionForm = ({
           <TxReceipt txResult={txResult} />
         </div>
       ) : null}
+    </div>
+    </div>
+  
     </div>
   );
 };
