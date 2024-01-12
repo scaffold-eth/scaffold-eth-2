@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Address } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -5,14 +6,20 @@ import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 type BalanceProps = {
   address?: Address;
   className?: string;
+  usdMode?: boolean;
 };
 
 /**
  * Display (ETH & USD) balance of an ETH address.
  */
-export const Balance = ({ address, className = "" }: BalanceProps) => {
+export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-  const { balance, price, isError, isLoading, onToggleBalance, isEthBalance } = useAccountBalance(address);
+  const { balance, price, isError, isLoading, isEthBalance } = useAccountBalance(address);
+  const [displayUsdMode, setDisplayUsdMode] = useState<boolean | undefined>(usdMode);
+
+  const toggleBalanceMode = () => {
+    setDisplayUsdMode(prevMode => !prevMode);
+  };
 
   if (!address || isLoading || balance === null) {
     return (
@@ -36,10 +43,10 @@ export const Balance = ({ address, className = "" }: BalanceProps) => {
   return (
     <button
       className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}
-      onClick={onToggleBalance}
+      onClick={toggleBalanceMode}
     >
       <div className="w-full flex items-center justify-center">
-        {isEthBalance ? (
+        {isEthBalance && !displayUsdMode ? (
           <>
             <span>{balance?.toFixed(4)}</span>
             <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>

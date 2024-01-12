@@ -71,7 +71,7 @@ const AddressPage = ({ address, contractData }: PageProps) => {
                 <Address address={address} format="long" />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={address} className="text" />
+                  <Balance address={address} className="text" usdMode />
                 </div>
               </div>
             </div>
