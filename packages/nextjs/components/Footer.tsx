@@ -1,6 +1,6 @@
 import { hardhat } from "wagmi/chains";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-import { HeartIcon } from "@heroicons/react/24/outline";
+import { ChatBubbleLeftRightIcon, DocumentTextIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
@@ -32,36 +32,38 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div>
+            <ArrowTopRightOnSquareIcon className="inline-block h-4 w-4" /> {" "}
               <a
-                href="https://github.com/scaffold-eth/se-2"
+                href="https://opensea.io/collection/denota-protocol-beta"
                 target="_blank"
                 rel="noreferrer"
                 className="underline underline-offset-2"
               >
-                Fork me
+                OpenSea Collection
               </a>
             </div>
             <span>·</span>
             <div>
-              Built with <HeartIcon className="inline-block h-4 w-4" /> at 🏰{" "}
+            <DocumentTextIcon className="inline-block h-4 w-4" /> {" "}
               <a
-                href="https://buidlguidl.com/"
+                href="https://denota.gitbook.io/"
                 target="_blank"
                 rel="noreferrer"
                 className="underline underline-offset-2"
               >
-                BuidlGuidl
+                Explore the Gitbook
               </a>
             </div>
             <span>·</span>
             <div>
+            <ChatBubbleLeftRightIcon className="inline-block h-4 w-4" /> {" "}
               <a
-                href="https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA"
+                href="https://t.me/almarazETH"
                 target="_blank"
                 rel="noreferrer"
                 className="underline underline-offset-2"
               >
-                Support
+                Feedback4Pay
               </a>
             </div>
           </div>

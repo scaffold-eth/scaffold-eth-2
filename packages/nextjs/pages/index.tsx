@@ -11,22 +11,20 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+            <span className="block text-4xl font-bold">Denota Protocol</span>
           </h1>
           <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
+          The future of programmable crypto payments! 
+          Imagine a world where your payments aren't just transactions, but smart, programmable assets. 
+          From trustless betting to reversibility and multi-step payments, Denota's Nota NFTs revolutionize how you send funds. 
+          With Denota, each payment is an NFT, capable of carrying custom rules and data for your unique needs. They're not just payments; they're fully onchain, extensible, composable, and transferable payment agreements. Explore our simple yet powerful payment hooks to deploy your own and start generating revenue!
           </p>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
+            {/* <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl"> */}
+              {/* <BugAntIcon className="h-8 w-8 fill-secondary" />
               <p>
                 Tinker with your smart contract using the{" "}
                 <Link href="/debug" passHref className="link">
@@ -53,8 +51,8 @@ const Home: NextPage = () => {
                   Block Explorer
                 </Link>{" "}
                 tab.
-              </p>
-            </div>
+              </p> */}
+            {/* </div> */}
           </div>
         </div>
       </div>

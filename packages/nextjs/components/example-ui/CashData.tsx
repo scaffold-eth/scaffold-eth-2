@@ -21,46 +21,46 @@ export const ContractData = () => {
   const greetingRef = useRef<HTMLDivElement>(null);
 
   const { data: totalCounter } = useScaffoldContractRead({
-    contractName: "YourContract",
-    functionName: "totalCounter",
+    contractName: "NotaRegistrar",
+    functionName: "totalSupply",
   });
 
-  const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead({
-    contractName: "YourContract",
-    functionName: "greeting",
-  });
+  // const { data: currentGreeting, isLoading: isGreetingLoading } = useScaffoldContractRead({
+  //   contractName: "NotaRegistrar",
+  //   functionName: "greeting",
+  // });
 
-  useScaffoldEventSubscriber({
-    contractName: "YourContract",
-    eventName: "GreetingChange",
-    listener: logs => {
-      logs.map(log => {
-        const { greetingSetter, value, premium, newGreeting } = log.args;
-        console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
-      });
-    },
-  });
+  // useScaffoldEventSubscriber({
+  //   contractName: "NotaRegistrar",
+  //   eventName: "Transfer",
+  //   listener: logs => {
+  //     logs.map(log => {
+  //       const { greetingSetter, value, premium, newGreeting } = log.args;
+  //       console.log("📡 GreetingChange event", greetingSetter, value, premium, newGreeting);
+  //     });
+  //   },
+  // });
 
-  const {
-    data: myGreetingChangeEvents,
-    isLoading: isLoadingEvents,
-    error: errorReadingEvents,
-  } = useScaffoldEventHistory({
-    contractName: "YourContract",
-    eventName: "GreetingChange",
-    fromBlock: process.env.NEXT_PUBLIC_DEPLOY_BLOCK ? BigInt(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) : 0n,
-    filters: { greetingSetter: address },
-    blockData: true,
-  });
+  // const {
+  //   data: myGreetingChangeEvents,
+  //   isLoading: isLoadingEvents,
+  //   error: errorReadingEvents,
+  // } = useScaffoldEventHistory({
+  //   contractName: "NotaRegistrar",
+  //   eventName: "GreetingChange",
+  //   fromBlock: process.env.NEXT_PUBLIC_DEPLOY_BLOCK ? BigInt(process.env.NEXT_PUBLIC_DEPLOY_BLOCK) : 0n,
+  //   filters: { greetingSetter: address },
+  //   blockData: true,
+  // });
 
-  console.log("Events:", isLoadingEvents, errorReadingEvents, myGreetingChangeEvents);
+  // console.log("Events:", isLoadingEvents, errorReadingEvents, myGreetingChangeEvents);
 
-  const { data: yourContract } = useScaffoldContract({ contractName: "YourContract" });
-  console.log("yourContract: ", yourContract);
+  const { data: notaRegistrar } = useScaffoldContract({ contractName: "NotaRegistrar" });
+  console.log("notaRegistrar: ", notaRegistrar);
 
   const { showAnimation } = useAnimationConfig(totalCounter);
 
-  const showTransition = transitionEnabled && !!currentGreeting && !isGreetingLoading;
+  const showTransition = false;// transitionEnabled && !!currentGreeting && !isGreetingLoading;
 
   useEffect(() => {
     if (transitionEnabled && containerRef.current && greetingRef.current) {
@@ -102,7 +102,7 @@ export const ContractData = () => {
           <div className="relative overflow-x-hidden" ref={containerRef}>
             {/* for speed calculating purposes */}
             <div className="absolute -left-[9999rem]" ref={greetingRef}>
-              <div className="px-4">{currentGreeting}</div>
+              <div className="px-4">{}</div>
             </div>
             {new Array(3).fill("").map((_, i) => {
               const isLineRightDirection = i % 2 ? isRightDirection : !isRightDirection;
@@ -115,7 +115,7 @@ export const ContractData = () => {
                   speed={marqueeSpeed}
                   className={i % 2 ? "-my-10" : ""}
                 >
-                  <div className="px-4">{currentGreeting || " "}</div>
+                  <div className="px-4">{undefined || " "}</div>
                 </Marquee>
               );
             })}

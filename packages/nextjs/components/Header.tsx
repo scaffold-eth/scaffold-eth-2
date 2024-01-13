@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Bars3Icon, BugAntIcon, MagnifyingGlassIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, PencilSquareIcon, PaperAirplaneIcon, BanknotesIcon, ArrowDownOnSquareStackIcon, ArrowUturnUpIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -40,21 +40,33 @@ export const Header = () => {
         <NavLink href="/">Home</NavLink>
       </li>
       <li>
-        <NavLink href="/debug">
-          <BugAntIcon className="h-4 w-4" />
-          Debug Contracts
+        <NavLink href="/write">
+          <PencilSquareIcon className="h-4 w-4" />
+          Write
         </NavLink>
       </li>
       <li>
-        <NavLink href="/example-ui">
-          <SparklesIcon className="h-4 w-4" />
-          Example UI
+        <NavLink href="/transfer">
+          <PaperAirplaneIcon className="h-4 w-4" />
+          Transfer
         </NavLink>
       </li>
       <li>
-        <NavLink href="/blockexplorer">
-          <MagnifyingGlassIcon className="h-4 w-4" />
-          Block Explorer
+        <NavLink href="/fund">
+          <BanknotesIcon className="h-4 w-4" />
+          Fund
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/cash">
+          <ArrowDownOnSquareStackIcon className="h-4 w-4" />
+          Cash
+        </NavLink>
+      </li>
+      <li>
+        <NavLink href="/hooks">
+          <ArrowUturnUpIcon className="h-4 w-4" />
+          Hook Library
         </NavLink>
       </li>
     </>
@@ -90,8 +102,8 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Scaffold-eth</span>
-            <span className="text-xs">Ethereum dev stack</span>
+            <span className="font-bold leading-tight">NotaPay</span>
+            <span className="text-xs">Payments on your terms</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
