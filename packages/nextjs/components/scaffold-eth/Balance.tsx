@@ -14,11 +14,13 @@ type BalanceProps = {
  */
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-  const { balance, price, isError, isLoading, isEthBalance } = useAccountBalance(address);
-  const [displayUsdMode, setDisplayUsdMode] = useState<boolean | undefined>(usdMode);
+  const { balance, price, isError, isLoading } = useAccountBalance(address);
+  const [displayUsdMode, setDisplayUsdMode] = useState<boolean | undefined>(price > 0 ? usdMode : false);
 
   const toggleBalanceMode = () => {
-    setDisplayUsdMode(prevMode => !prevMode);
+    if (price > 0) {
+      setDisplayUsdMode(prevMode => !prevMode);
+    }
   };
 
   if (!address || isLoading || balance === null) {
@@ -46,7 +48,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
       onClick={toggleBalanceMode}
     >
       <div className="w-full flex items-center justify-center">
-        {isEthBalance && !displayUsdMode ? (
+        {!displayUsdMode ? (
           <>
             <span>{balance?.toFixed(4)}</span>
             <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>

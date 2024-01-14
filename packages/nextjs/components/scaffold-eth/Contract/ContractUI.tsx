@@ -48,7 +48,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
                 <Address address={deployedContractData.address} />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={deployedContractData.address} className="px-0 h-1.5 min-h-[0.375rem]" usdMode />
+                  <Balance address={deployedContractData.address} className="px-0 h-1.5 min-h-[0.375rem]" />
                 </div>
               </div>
             </div>

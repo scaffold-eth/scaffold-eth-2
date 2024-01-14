@@ -103,7 +103,7 @@ export const Faucet = () => {
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress} usdMode />
+                <Balance address={faucetAddress} />
               </div>
             </div>
             <div className="flex flex-col space-y-3">
@@ -112,12 +112,7 @@ export const Faucet = () => {
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
               />
-              <EtherInput
-                placeholder="Amount to send"
-                value={sendValue}
-                onChange={value => setSendValue(value)}
-                usdMode
-              />
+              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
               <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />

@@ -62,6 +62,9 @@ export const EtherInput = ({
   // The displayValue is derived from the ether value that is controlled outside of the component
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
+    if (!nativeCurrencyPrice || nativeCurrencyPrice === 0) {
+      return value;
+    }
     const newDisplayValue = etherValueToDisplayValue(internalUsdMode, value, nativeCurrencyPrice);
     if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
       return transitoryDisplayValue;
@@ -98,7 +101,9 @@ export const EtherInput = ({
   };
 
   const toggleMode = () => {
-    setInternalUSDMode(!internalUsdMode);
+    if (nativeCurrencyPrice > 0) {
+      setInternalUSDMode(!internalUsdMode);
+    }
   };
 
   return (
