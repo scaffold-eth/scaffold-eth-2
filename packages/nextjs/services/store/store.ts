@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import scaffoldConfig from "~~/scaffold.config";
 import { ChainWithAttributes } from "~~/utils/scaffold-eth";
 
