@@ -114,6 +114,14 @@ You can verify your smart contract on Etherscan by running:
 yarn verify --network network_name
 ```
 
+eg: `yarn verify --network sepolia`
+
+This uses [etherscan-verify from hardhat-deploy](https://www.npmjs.com/package/hardhat-deploy#4-hardhat-etherscan-verify) to verify all the deployed contracts.
+
+You can alternatively use [hardhat-verify](https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify) to verify your contracts by running `yarn hardhat-verify --network network_name contract_address`
+
+If the chain you're using is not supported by any of the verifying methods, you can add new supported chains to your chosen method, either [etherscan-verify](https://www.npmjs.com/package/hardhat-deploy#options-2) or [hardhat-verify](https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify#adding-support-for-other-networks).
+
 ## Deploying your NextJS App
 
 **Hint**: We recommend connecting your GitHub repo to Vercel (through the Vercel UI) so it gets automatically deployed when pushing to `main`.
