@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Address } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";

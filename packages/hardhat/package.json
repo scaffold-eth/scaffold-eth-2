@@ -20,7 +20,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.3",
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
-    "@nomicfoundation/hardhat-verify": "^2.0.1",
+    "@nomicfoundation/hardhat-verify": "^2.0.3",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^9.1.0",
     "@types/eslint": "^8",
