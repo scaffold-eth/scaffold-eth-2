@@ -1870,6 +1870,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.39.0
     "@uniswap/sdk-core": ^4.0.1
     "@uniswap/v2-sdk": ^3.0.1
+    addreth: ^1.2.0
     autoprefixer: ^10.4.12
     blo: ^1.0.1
     daisyui: ^4.4.19
@@ -3820,6 +3821,20 @@ __metadata:
   version: 1.2.2
   resolution: "address@npm:1.2.2"
   checksum: ace439960c1e3564d8f523aff23a841904bf33a2a7c2e064f7f60a064194075758b9690e65bd9785692a4ef698a998c57eb74d145881a1cecab8ba658ddb1607
+  languageName: node
+  linkType: hard
+
+"addreth@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "addreth@npm:1.2.0"
+  peerDependencies:
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+    wagmi: ">=1.4.0"
+  peerDependenciesMeta:
+    wagmi:
+      optional: true
+  checksum: 074204f01bcc5a38877f796c9cc87526b762a07ed08323dc438e192bdd4507aca6aac4a6f21a5a9bc3067e104d13198c8e9e548fea7981f794971c47b97da80b
   languageName: node
   linkType: hard
 
