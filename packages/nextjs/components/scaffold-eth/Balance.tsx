@@ -17,7 +17,7 @@ type BalanceProps = {
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
   const { balance, price, isError, isLoading } = useAccountBalance(address);
-  const [displayUsdMode, setDisplayUsdMode] = useState<boolean | undefined>(price > 0 ? usdMode : false);
+  const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
 
   const toggleBalanceMode = () => {
     if (price > 0) {
