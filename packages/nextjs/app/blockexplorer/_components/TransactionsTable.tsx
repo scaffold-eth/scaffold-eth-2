@@ -1,6 +1,7 @@
 import { TransactionHash } from "./TransactionHash";
+import { Address } from "addreth";
 import { formatEther } from "viem";
-import { Address } from "~~/components/scaffold-eth";
+import { AddrethComp } from "~~/components/AddrethComp";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { TransactionWithFunction } from "~~/utils/scaffold-eth";
 import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
@@ -44,14 +45,14 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                     <td className="w-1/12 md:py-4">{block.number?.toString()}</td>
                     <td className="w-2/1 md:py-4">{timeMined}</td>
                     <td className="w-2/12 md:py-4">
-                      <Address address={tx.from} size="sm" />
+                      <AddrethComp address={tx.from as Address} size="sm" />
                     </td>
                     <td className="w-2/12 md:py-4">
                       {!receipt?.contractAddress ? (
-                        tx.to && <Address address={tx.to} size="sm" />
+                        tx.to && <AddrethComp address={tx.to as Address} size="sm" />
                       ) : (
                         <div className="relative">
-                          <Address address={receipt.contractAddress} size="sm" />
+                          <AddrethComp address={receipt.contractAddress as Address} size="sm" />
                           <small className="absolute top-4 left-4">(Contract Creation)</small>
                         </div>
                       )}

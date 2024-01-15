@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
+import { AddrethConfig } from "addreth";
 import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
 import { Footer } from "~~/components/Footer";
@@ -47,7 +48,9 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
         avatar={BlockieAvatar}
         theme={isDarkMode ? darkTheme() : lightTheme()}
       >
-        <ScaffoldEthApp>{children}</ScaffoldEthApp>
+        <ScaffoldEthApp>
+          <AddrethConfig>{children}</AddrethConfig>
+        </ScaffoldEthApp>
       </RainbowKitProvider>
     </WagmiConfig>
   );

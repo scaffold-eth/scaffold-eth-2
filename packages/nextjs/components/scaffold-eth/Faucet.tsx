@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AddrethComp } from "../AddrethComp";
+import { Address } from "addreth";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useNetwork } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
+import { AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
@@ -101,7 +103,7 @@ export const Faucet = () => {
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} />
+                <AddrethComp address={faucetAddress as Address} />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>

@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Address } from "addreth";
 import type { NextPage } from "next";
 import { Hash, Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
+import { AddrethComp } from "~~/components/AddrethComp";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { decodeTransactionData, getFunctionDetails } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
@@ -69,7 +70,7 @@ const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
                   <strong>From:</strong>
                 </td>
                 <td>
-                  <Address address={transaction.from} format="long" />
+                  <AddrethComp address={transaction.from as Address} shortenAddress={false} />
                 </td>
               </tr>
               <tr>
@@ -78,11 +79,11 @@ const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
                 </td>
                 <td>
                   {!receipt?.contractAddress ? (
-                    transaction.to && <Address address={transaction.to} format="long" />
+                    transaction.to && <AddrethComp address={transaction.to as Address} shortenAddress={false} />
                   ) : (
                     <span>
                       Contract Creation:
-                      <Address address={receipt.contractAddress} format="long" />
+                      <AddrethComp address={receipt.contractAddress as Address} shortenAddress={false} />
                     </span>
                   )}
                 </td>

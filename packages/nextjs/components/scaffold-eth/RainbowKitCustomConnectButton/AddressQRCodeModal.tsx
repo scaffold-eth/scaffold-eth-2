@@ -1,6 +1,7 @@
+import { Address } from "addreth";
 import { QRCodeSVG } from "qrcode.react";
 import { Address as AddressType } from "viem";
-import { Address } from "~~/components/scaffold-eth";
+import { AddrethComp } from "~~/components/AddrethComp";
 
 type AddressQRCodeModalProps = {
   address: AddressType;
@@ -22,7 +23,7 @@ export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps
             <div className="space-y-3 py-6">
               <div className="flex space-x-4 flex-col items-center gap-6">
                 <QRCodeSVG value={address} size={256} />
-                <Address address={address} format="long" disableAddressLink />
+                <AddrethComp address={address as Address} shortenAddress={false} actions="copy" />
               </div>
             </div>
           </label>

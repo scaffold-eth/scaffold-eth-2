@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
+import { Address } from "addreth";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress } from "viem";
-import { Address } from "~~/components/scaffold-eth";
+import { AddrethComp } from "~~/components/AddrethComp";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 type DisplayContent =
@@ -35,7 +36,7 @@ export const displayTxResult = (
   }
 
   if (typeof displayContent === "string" && isAddress(displayContent)) {
-    return asText ? displayContent : <Address address={displayContent} />;
+    return asText ? displayContent : <AddrethComp address={displayContent as Address} />;
   }
 
   if (Array.isArray(displayContent)) {
