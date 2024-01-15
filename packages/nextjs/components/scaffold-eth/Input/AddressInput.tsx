@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
 import { blo } from "blo";
 import { useDebounce } from "usehooks-ts";
