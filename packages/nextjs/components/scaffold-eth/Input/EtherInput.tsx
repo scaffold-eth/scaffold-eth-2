@@ -55,18 +55,15 @@ export const EtherInput = ({
 }: CommonInputProps & { usdMode?: boolean }) => {
   const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
-  const [internalUsdMode, setInternalUSDMode] = useState(usdMode || false);
+  const [internalUsdMode, setInternalUSDMode] = useState(nativeCurrencyPrice > 0 ? Boolean(usdMode) : false);
 
   useEffect(() => {
-    setInternalUSDMode(usdMode || false);
-  }, [usdMode]);
+    setInternalUSDMode(nativeCurrencyPrice > 0 ? Boolean(usdMode) : false);
+  }, [usdMode, nativeCurrencyPrice]);
 
   // The displayValue is derived from the ether value that is controlled outside of the component
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
-    if (!nativeCurrencyPrice || nativeCurrencyPrice === 0) {
-      return value;
-    }
     const newDisplayValue = etherValueToDisplayValue(internalUsdMode, value, nativeCurrencyPrice);
     if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
       return transitoryDisplayValue;
@@ -117,13 +114,22 @@ export const EtherInput = ({
       disabled={disabled}
       prefix={<span className="pl-4 -mr-2 text-accent self-center">{internalUsdMode ? "$" : "Ξ"}</span>}
       suffix={
-        <button
-          className={`btn btn-primary h-[2.2rem] min-h-[2.2rem] ${nativeCurrencyPrice > 0 ? "" : "hidden"}`}
-          onClick={toggleMode}
-          disabled={!internalUsdMode && !nativeCurrencyPrice}
+        <div
+          className={`${
+            nativeCurrencyPrice > 0
+              ? ""
+              : "tooltip tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+          }`}
+          data-tip="Unable to fetch price"
         >
-          <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-        </button>
+          <button
+            className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
+            onClick={toggleMode}
+            disabled={!internalUsdMode && !nativeCurrencyPrice}
+          >
+            <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
+          </button>
+        </div>
       }
     />
   );
