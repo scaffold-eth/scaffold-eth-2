@@ -31,8 +31,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  // Get the deployed contract
-  // const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  // Get the deployed contract, type `Contract` comes from ethers
+  // const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
 };
 
 export default deployYourContract;
