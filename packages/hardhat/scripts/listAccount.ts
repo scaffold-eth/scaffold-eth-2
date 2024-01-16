@@ -24,10 +24,10 @@ async function main() {
     try {
       const network = availableNetworks[networkName];
       if (!("url" in network)) continue;
-      const provider = new ethers.providers.JsonRpcProvider(network.url);
+      const provider = new ethers.JsonRpcProvider(network.url);
       const balance = await provider.getBalance(address);
       console.log("--", networkName, "-- 📡");
-      console.log("   balance:", +ethers.utils.formatEther(balance));
+      console.log("   balance:", +ethers.formatEther(balance));
       console.log("   nonce:", +(await provider.getTransactionCount(address)));
     } catch (e) {
       console.log("Can't connect to network", networkName);
