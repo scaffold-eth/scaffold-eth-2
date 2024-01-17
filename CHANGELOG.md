@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.32
+
+### Patch Changes
+
+- 10cfcd8: - App router migration (#535)
+  - Update hardhat package plugins and add hardhat-verify (#637)
+  - Update homepage file route and add Viem to README tech stack (#691)
+  - Ethers v6 migration in hardhat (#692)
+
 ## 0.0.31
 
 ### Patch Changes
