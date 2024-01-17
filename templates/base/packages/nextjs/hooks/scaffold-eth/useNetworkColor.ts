@@ -1,5 +1,5 @@
+import { useDarkMode } from "./useDarkMode";
 import { useTargetNetwork } from "./useTargetNetwork";
-import { useDarkMode } from "usehooks-ts";
 import { ChainWithAttributes } from "~~/utils/scaffold-eth";
 
 export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];

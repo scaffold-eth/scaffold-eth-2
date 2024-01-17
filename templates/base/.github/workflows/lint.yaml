@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [16.x]
+        node: [lts/*]
 
     steps:
       - name: Checkout
@@ -25,13 +25,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          cache : yarn
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-        run: yarn chain & yarn deploy 
+        run: yarn chain & yarn deploy
 
       - name: Run nextjs lint
         run: yarn next:lint --max-warnings=0
