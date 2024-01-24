@@ -13,7 +13,6 @@ import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useDarkMode } from "~~/hooks/scaffold-eth/useDarkMode";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-import { appChains } from "~~/services/web3/wagmiConnectors";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
@@ -46,11 +45,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <ProgressBar />
-        <RainbowKitProvider
-          chains={appChains.chains}
-          avatar={BlockieAvatar}
-          theme={isDarkMode ? darkTheme() : lightTheme()}
-        >
+        <RainbowKitProvider avatar={BlockieAvatar} theme={isDarkMode ? darkTheme() : lightTheme()}>
           <ScaffoldEthApp>{children}</ScaffoldEthApp>
         </RainbowKitProvider>
       </QueryClientProvider>
