@@ -1,8 +1,22 @@
+import { enabledChains } from "./wagmiConnectors";
+import { createClient, http } from "viem";
+import { hardhat } from "viem/chains";
 import { createConfig } from "wagmi";
-import { appChains, wagmiConnectors } from "~~/services/web3/wagmiConnectors";
+import scaffoldConfig from "~~/scaffold.config";
 
 export const wagmiConfig = createConfig({
-  autoConnect: false,
-  connectors: wagmiConnectors,
-  publicClient: appChains.publicClient,
+  // TODO: Maybe we should get literal value here currently TS has widened the types because of ensabledChains logic
+  chains: enabledChains,
+  client({ chain }) {
+    return createClient({
+      chain,
+      // TODO: Create a file for alchmey links mapping and use fallback transport array so if alchmey fails fallbakc to default chain rpc
+      transport: http(),
+      ...(chain.id === hardhat.id
+        ? {
+            pollingInterval: scaffoldConfig.pollingInterval,
+          }
+        : {}),
+    });
+  },
 });
