@@ -1,6 +1,6 @@
-import { Account, Address, Chain, Transport, getContract } from "viem";
-import { PublicClient, usePublicClient } from "wagmi";
-import { GetWalletClientResult } from "wagmi/actions";
+import { Account, Address, Chain, Client, Transport, getContract } from "viem";
+import { usePublicClient } from "wagmi";
+import { GetWalletClientReturnType } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
@@ -13,7 +13,7 @@ import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
  */
 export const useScaffoldContract = <
   TContractName extends ContractName,
-  TWalletClient extends Exclude<GetWalletClientResult, null> | undefined,
+  TWalletClient extends Exclude<GetWalletClientReturnType, null> | undefined,
 >({
   contractName,
   walletClient,
@@ -30,13 +30,16 @@ export const useScaffoldContract = <
       Transport,
       Address,
       Contract<TContractName>["abi"],
+      {
+        public: Client<Transport, Chain>;
+        wallet?: Client<Transport, Chain, Account>;
+      },
       Chain,
-      Account,
-      PublicClient,
-      TWalletClient
+      Account
     >({
       address: deployedContractData.address,
       abi: deployedContractData.abi as Contract<TContractName>["abi"],
+      // @ts-expect-error TODO: fix this type
       walletClient: walletClient ? walletClient : undefined,
       publicClient,
     });
