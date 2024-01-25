@@ -1,18 +1,15 @@
-import { TransactionReceipt, TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
-import { SendTransactionResult } from "@wagmi/core";
-import { Signer } from "ethers";
-import { Deferrable } from "ethers/lib/utils";
-import { useSigner } from "wagmi";
-import { getParsedEthersError } from "~~/components/scaffold-eth";
-import { getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
+import { WriteContractResult, getPublicClient } from "@wagmi/core";
+import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
+import { useWalletClient } from "wagmi";
+import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
 
-type TTransactionFunc = (
-  tx: Promise<SendTransactionResult> | Deferrable<TransactionRequest> | undefined,
+type TransactionFunc = (
+  tx: (() => Promise<WriteContractResult>) | (() => Promise<Hash>) | SendTransactionParameters,
   options?: {
     onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
     blockConfirmations?: number;
   },
-) => Promise<Record<string, any> | undefined>;
+) => Promise<Hash | undefined>;
 
 /**
  * Custom notification content for TXs.
@@ -22,7 +19,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block underline text-md">
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
           check out transaction
         </a>
       ) : null}
@@ -31,48 +28,57 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
 };
 
 /**
- * Runs TXs showing UI feedback.
- * @param _signer
- * @dev If signer is provided => dev wants to send a raw tx.
+ * Runs Transaction passed in to returned function showing UI feedback.
+ * @param _walletClient - Optional wallet client to use. If not provided, will use the one from useWalletClient.
+ * @returns function that takes in transaction function as callback, shows UI feedback for transaction and returns a promise of the transaction hash
  */
-export const useTransactor = (_signer?: Signer): TTransactionFunc => {
-  let signer = _signer;
-  const { data } = useSigner();
-  if (signer === undefined && data) {
-    signer = data;
+export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => {
+  let walletClient = _walletClient;
+  const { data } = useWalletClient();
+  if (walletClient === undefined && data) {
+    walletClient = data;
   }
 
-  const result: TTransactionFunc = async (tx, options) => {
-    if (!signer) {
-      notification.error("Wallet/Signer not connected");
+  const result: TransactionFunc = async (tx, options) => {
+    if (!walletClient) {
+      notification.error("Cannot access account");
       console.error("⚡️ ~ file: useTransactor.tsx ~ error");
       return;
     }
 
     let notificationId = null;
-    let transactionResponse: SendTransactionResult | TransactionResponse | undefined;
+    let transactionHash: Awaited<WriteContractResult>["hash"] | undefined = undefined;
     try {
-      const provider = signer.provider;
-      const network = await provider?.getNetwork();
+      const network = await walletClient.getChainId();
+      // Get full transaction from public client
+      const publicClient = getPublicClient();
 
       notificationId = notification.loading(<TxnNotification message="Awaiting for user confirmation" />);
-      if (tx instanceof Promise) {
+      if (typeof tx === "function") {
         // Tx is already prepared by the caller
-        transactionResponse = await tx;
+        const result = await tx();
+        if (typeof result === "string") {
+          transactionHash = result;
+        } else {
+          transactionHash = result.hash;
+        }
       } else if (tx != null) {
-        transactionResponse = await signer.sendTransaction(tx);
+        transactionHash = await walletClient.sendTransaction(tx);
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }
       notification.remove(notificationId);
 
-      const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionResponse.hash) : "";
+      const blockExplorerTxURL = network ? getBlockExplorerTxLink(network, transactionHash) : "";
 
       notificationId = notification.loading(
         <TxnNotification message="Waiting for transaction to complete." blockExplorerLink={blockExplorerTxURL} />,
       );
 
-      const transactionReceipt = await transactionResponse.wait(options?.blockConfirmations);
+      const transactionReceipt = await publicClient.waitForTransactionReceipt({
+        hash: transactionHash,
+        confirmations: options?.blockConfirmations,
+      });
       notification.remove(notificationId);
 
       notification.success(
@@ -87,13 +93,12 @@ export const useTransactor = (_signer?: Signer): TTransactionFunc => {
       if (notificationId) {
         notification.remove(notificationId);
       }
-      // TODO handle error properly
       console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
-      const message = getParsedEthersError(error);
+      const message = getParsedError(error);
       notification.error(message);
     }
 
-    return transactionResponse;
+    return transactionHash;
   };
 
   return result;

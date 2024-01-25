@@ -6,7 +6,6 @@ const envFilePath = "./.env";
 
 /**
  * Generate a new random private key and write it to the .env file
- * @param existingEnvConfig
  */
 const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");
@@ -20,6 +19,7 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
   console.log("📄 Private Key saved to packages/hardhat/.env file");
+  console.log("🪄 Generated wallet address:", randomWallet.address);
 };
 
 async function main() {
