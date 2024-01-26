@@ -33,7 +33,7 @@ export function useAccountBalance(address?: Address) {
   }, [isEthBalance, price]);
 
   useEffect(() => {
-    if (fetchedBalanceData?.value && fetchedBalanceData?.decimals) {
+    if (fetchedBalanceData?.value !== undefined && fetchedBalanceData?.decimals) {
       setBalance(Number(formatUnits(fetchedBalanceData.value, fetchedBalanceData.decimals)));
     }
   }, [fetchedBalanceData, targetNetwork]);
