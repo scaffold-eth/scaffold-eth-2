@@ -7,6 +7,7 @@ import scaffoldConfig from "~~/scaffold.config";
 export const wagmiConfig = createConfig({
   // TODO: Maybe we should get literal value here currently TS has widened the types because of ensabledChains logic
   chains: enabledChains,
+  ssr: true,
   client({ chain }) {
     return createClient({
       chain,

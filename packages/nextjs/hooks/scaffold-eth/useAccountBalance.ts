@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
-import { Address } from "viem";
-import { useBalance } from "wagmi";
+import { Address, formatUnits } from "viem";
+import { useBalance, useBlockNumber } from "wagmi";
+import { queryClient } from "~~/components/ScaffoldEthAppWithProviders";
 import { useGlobalState } from "~~/services/store/store";
 
 export function useAccountBalance(address?: Address) {
@@ -10,15 +11,20 @@ export function useAccountBalance(address?: Address) {
   const price = useGlobalState(state => state.nativeCurrencyPrice);
   const { targetNetwork } = useTargetNetwork();
 
+  const { data: blockNumber } = useBlockNumber({ watch: true });
   const {
     data: fetchedBalanceData,
     isError,
     isLoading,
+    queryKey,
   } = useBalance({
     address,
-    watch: true,
     chainId: targetNetwork.id,
   });
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey });
+  }, [blockNumber, queryKey]);
 
   const onToggleBalance = useCallback(() => {
     if (price > 0) {
@@ -27,8 +33,8 @@ export function useAccountBalance(address?: Address) {
   }, [isEthBalance, price]);
 
   useEffect(() => {
-    if (fetchedBalanceData?.formatted) {
-      setBalance(Number(fetchedBalanceData.formatted));
+    if (fetchedBalanceData?.value && fetchedBalanceData?.decimals) {
+      setBalance(Number(formatUnits(fetchedBalanceData.value, fetchedBalanceData.decimals)));
     }
   }, [fetchedBalanceData, targetNetwork]);
 
