@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
-import { useAccount, useContractWrite, useWaitForTransaction } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import {
   ContractInput,
   TxReceipt,
@@ -39,21 +39,21 @@ export const WriteOnlyFunctionForm = ({
   const { targetNetwork } = useTargetNetwork();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
-  const {
-    data: result,
-    isLoading,
-    writeAsync,
-  } = useContractWrite({
-    address: contractAddress,
-    functionName: abiFunction.name,
-    abi: abi,
-    args: getParsedContractFunctionArgs(form),
-  });
+  const { data: result, status, writeContractAsync } = useWriteContract();
+
+  const isLoading = status === "pending";
 
   const handleWrite = async () => {
-    if (writeAsync) {
+    if (writeContractAsync) {
       try {
-        const makeWriteWithParams = () => writeAsync({ value: BigInt(txValue) });
+        const makeWriteWithParams = () =>
+          writeContractAsync({
+            address: contractAddress,
+            functionName: abiFunction.name,
+            abi: abi,
+            args: getParsedContractFunctionArgs(form),
+            value: BigInt(txValue),
+          });
         await writeTxn(makeWriteWithParams);
         onChange();
       } catch (e: any) {
@@ -64,8 +64,8 @@ export const WriteOnlyFunctionForm = ({
   };
 
   const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
-  const { data: txResult } = useWaitForTransaction({
-    hash: result?.hash,
+  const { data: txResult } = useWaitForTransactionReceipt({
+    hash: result,
   });
   useEffect(() => {
     setDisplayedTxResult(txResult);
