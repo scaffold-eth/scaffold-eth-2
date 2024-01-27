@@ -41,6 +41,7 @@ export const WriteOnlyFunctionForm = ({
 
   const { data: result, status, writeContractAsync } = useWriteContract();
 
+  // TODO: Check if this is the correct way to handle this
   const isLoading = status === "pending";
 
   const handleWrite = async () => {
