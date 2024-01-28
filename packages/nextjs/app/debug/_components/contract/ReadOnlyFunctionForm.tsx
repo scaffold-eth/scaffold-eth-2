@@ -21,7 +21,6 @@ type ReadOnlyFunctionFormProps = {
   abi: Abi;
 };
 
-// TODO: For some reason the if there's error, it takes lot of time to show up
 export const ReadOnlyFunctionForm = ({
   contractAddress,
   abiFunction,
@@ -38,6 +37,7 @@ export const ReadOnlyFunctionForm = ({
     args: getParsedContractFunctionArgs(form),
     query: {
       enabled: false,
+      retry: false,
     },
   });
 
