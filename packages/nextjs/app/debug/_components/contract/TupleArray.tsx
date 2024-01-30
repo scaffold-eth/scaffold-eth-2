@@ -99,7 +99,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
               return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
             })}
           </div>
-          <div></div>
           {additionalInputs.map((additionalInput, additionalIndex) => (
             <div key={additionalIndex} className="space-y-2">
               <p className="m-0 ml-2">{additionalIndex + 1}</p>
