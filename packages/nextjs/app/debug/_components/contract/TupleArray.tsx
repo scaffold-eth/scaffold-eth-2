@@ -87,8 +87,8 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
   return (
     <div>
       <div className="collapse collapse-arrow">
-        <input type="checkbox" className="min-h-fit" />
-        <div className="collapse-title p-0 min-h-fit">
+        <input type="checkbox" className="min-h-fit peer" />
+        <div className="collapse-title p-0 min-h-fit peer-checked:mb-2">
           <p className="m-0">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2 collapse-content">
