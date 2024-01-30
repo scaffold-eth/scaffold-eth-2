@@ -25,12 +25,17 @@ export const Tuple = ({ abiTupleParameter, setParentForm, parentStateObjectKey }
   }, [JSON.stringify(form, replacer)]);
   return (
     <div>
-      <p className="m-0">{abiTupleParameter.internalType}</p>
-      <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2">
-        {abiTupleParameter?.components?.map((param, index) => {
-          const key = getFunctionInputKey(abiTupleParameter.name || "tuple", param, index);
-          return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
-        })}
+      <div className="collapse collapse-arrow">
+        <input type="checkbox" className="min-h-fit" />
+        <div className="collapse-title p-0 min-h-fit">
+          <p className="m-0 p-0">{abiTupleParameter.internalType}</p>
+        </div>
+        <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2 collapse-content">
+          {abiTupleParameter?.components?.map((param, index) => {
+            const key = getFunctionInputKey(abiTupleParameter.name || "tuple", param, index);
+            return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
+          })}
+        </div>
       </div>
     </div>
   );
