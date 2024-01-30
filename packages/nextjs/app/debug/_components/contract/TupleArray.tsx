@@ -92,20 +92,27 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
           <p className="m-0">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2 collapse-content">
-          {abiTupleParameter?.components?.map((param, index) => {
-            const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", param, index);
-            return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
-          })}
-          {additionalInputs.map((additionalInput, additionalIndex) =>
-            additionalInput.map((param, index) => {
-              const key = getFunctionInputKey(
-                `${additionalIndex + 1}_${abiTupleParameter.name || "tuple"}`,
-                param,
-                index,
-              );
+          <div className="space-y-2">
+            <p className="m-0 ml-2">0</p>
+            {abiTupleParameter?.components?.map((param, index) => {
+              const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", param, index);
               return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
-            }),
-          )}
+            })}
+          </div>
+          <div></div>
+          {additionalInputs.map((additionalInput, additionalIndex) => (
+            <div key={additionalIndex} className="space-y-2">
+              <p className="m-0 ml-2">{additionalIndex + 1}</p>
+              {additionalInput.map((param, index) => {
+                const key = getFunctionInputKey(
+                  `${additionalIndex + 1}_${abiTupleParameter.name || "tuple"}`,
+                  param,
+                  index,
+                );
+                return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
+              })}
+            </div>
+          ))}
           <div className="flex space-x-2">
             <button className="btn btn-sm" onClick={addInput}>
               +
