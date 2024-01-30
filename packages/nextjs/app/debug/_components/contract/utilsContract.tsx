@@ -49,4 +49,15 @@ const getInitialFormState = (abiFunction: AbiFunction) => {
   return initialForm;
 };
 
-export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs };
+const getInitalTupleFormState = (abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>) => {
+  const initialForm: Record<string, any> = {};
+  if (abiTupleParameter.components.length === 0) return initialForm;
+
+  abiTupleParameter.components.forEach((component, componentIndex) => {
+    const key = getFunctionInputKey(abiTupleParameter.name || "tuple", component, componentIndex);
+    initialForm[key] = "";
+  });
+  return initialForm;
+};
+
+export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getInitalTupleFormState };
