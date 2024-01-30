@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ContractInput } from "./ContractInput";
 import { getFunctionInputKey, getInitalTupleFormState } from "./utilsContract";
 import { AbiParameter } from "abitype";
+import { replacer } from "~~/utils/scaffold-eth/common";
 
 type TupleProps = {
   abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
@@ -19,9 +20,9 @@ export const Tuple = ({ abiTupleParameter, setParentForm, parentStateObjectKey }
       argsStruct[component.name || `input_${componentIndex}_`] = values[componentIndex];
     });
 
-    setParentForm(parentForm => ({ ...parentForm, [parentStateObjectKey]: JSON.stringify(argsStruct) }));
+    setParentForm(parentForm => ({ ...parentForm, [parentStateObjectKey]: JSON.stringify(argsStruct, replacer) }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(form)]);
+  }, [JSON.stringify(form, replacer)]);
   return (
     <div>
       <p className="m-0">{abiTupleParameter.internalType}</p>

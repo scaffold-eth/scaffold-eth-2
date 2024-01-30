@@ -2,6 +2,7 @@
 
 import { Dispatch, SetStateAction } from "react";
 import { Tuple } from "./Tuple";
+import { TupleArray } from "./TupleArray";
 import { AbiParameter } from "abitype";
 import {
   AddressInput,
@@ -42,9 +43,18 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
     return <InputBase {...inputProps} />;
   } else if (paramType.type.includes("int") && !paramType.type.includes("[")) {
     return <IntegerInput {...inputProps} variant={paramType.type as IntegerVariant} />;
-  } else if (paramType.type === "tuple" || paramType.type.startsWith("tuple[")) {
+  } else if (paramType.type === "tuple") {
     return (
       <Tuple
+        setParentForm={setForm}
+        parentForm={form}
+        abiTupleParameter={paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>}
+        parentStateObjectKey={stateObjectKey}
+      />
+    );
+  } else if (paramType.type.startsWith("tuple[")) {
+    return (
+      <TupleArray
         setParentForm={setForm}
         parentForm={form}
         abiTupleParameter={paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>}

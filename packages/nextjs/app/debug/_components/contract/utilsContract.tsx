@@ -24,6 +24,14 @@ const getParsedContractFunctionArgs = (form: Record<string, any>) => {
 
       if (ARRAY_TYPE_REGEX.test(baseTypeOfArg) || baseTypeOfArg === "tuple") {
         valueOfArg = JSON.parse(valueOfArg);
+        Object.keys(valueOfArg).forEach(key => {
+          try {
+            // Attempt to parse each property in case it's a JSON string
+            valueOfArg[key] = JSON.parse(valueOfArg[key]);
+          } catch (error) {
+            // If parsing fails, it means the property is not a JSON string, so leave it as is
+          }
+        });
       } else if (baseTypeOfArg === "bool") {
         if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
           valueOfArg = 1;
@@ -60,4 +68,22 @@ const getInitalTupleFormState = (abiTupleParameter: Extract<AbiParameter, { type
   return initialForm;
 };
 
-export { getFunctionInputKey, getInitialFormState, getParsedContractFunctionArgs, getInitalTupleFormState };
+const getInitalTupleArrayFormState = (
+  abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>,
+) => {
+  const initialForm: Record<string, any> = {};
+  if (abiTupleParameter.components.length === 0) return initialForm;
+  abiTupleParameter.components.forEach((component, componentIndex) => {
+    const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", component, componentIndex);
+    initialForm[key] = "";
+  });
+  return initialForm;
+};
+
+export {
+  getFunctionInputKey,
+  getInitialFormState,
+  getParsedContractFunctionArgs,
+  getInitalTupleFormState,
+  getInitalTupleArrayFormState,
+};
