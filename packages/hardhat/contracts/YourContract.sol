@@ -5,8 +5,7 @@ pragma abicoder v2;
 contract YourContract {
 	struct NestedStruct {
 		uint a;
-		uint[] b;
-		SimpleStruct[] c;
+		SimpleStruct[][] c;
 	}
 	struct SimpleStruct {
 		uint x;
@@ -19,19 +18,9 @@ contract YourContract {
 	uint public valueData;
 
 	// Function to update the data
-	function updateData(
-		NestedStruct calldata _nestedStruct,
-		SimpleStruct calldata _simpleStruct,
-		uint value
-	) public {
+	function updateData(NestedStruct calldata _nestedStruct) public {
 		// Update state variables
 		sData = _nestedStruct; // Assigns the entire struct. For dynamic arrays, you might need more complex logic.
-		tData = _simpleStruct; // Assigns the entire struct.
-		valueData = value;
-	}
-
-	function updateSimpleStruct(SimpleStruct calldata _simpleStruct) public {
-		tData = _simpleStruct;
 	}
 
 	// Function to get the current data
@@ -44,12 +33,8 @@ contract YourContract {
 	}
 
 	// Function list all variables in S struct
-	function listS()
-		public
-		view
-		returns (uint, uint[] memory, SimpleStruct[] memory)
-	{
-		return (sData.a, sData.b, sData.c);
+	function listS() public view returns (uint, SimpleStruct[] memory) {
+		return (sData.a, sData.c[0]);
 	}
 
 	// Function list L variable in T struct
