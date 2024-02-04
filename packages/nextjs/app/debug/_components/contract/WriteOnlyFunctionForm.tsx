@@ -52,6 +52,7 @@ export const WriteOnlyFunctionForm = ({
   });
 
   const handleWrite = async () => {
+    console.log("The form is", form);
     console.log("The constructed args are", getParsedContractFunctionArgs(form));
     if (writeAsync) {
       try {

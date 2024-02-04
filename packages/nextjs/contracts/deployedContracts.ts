@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
       abi: [
         {
           inputs: [],
@@ -19,11 +19,6 @@ const deployedContracts = {
                   internalType: "uint256",
                   name: "a",
                   type: "uint256",
-                },
-                {
-                  internalType: "uint256[]",
-                  name: "b",
-                  type: "uint256[]",
                 },
                 {
                   components: [
@@ -38,9 +33,9 @@ const deployedContracts = {
                       type: "uint256",
                     },
                   ],
-                  internalType: "struct YourContract.SimpleStruct[]",
+                  internalType: "struct YourContract.SimpleStruct[][][]",
                   name: "c",
-                  type: "tuple[]",
+                  type: "tuple[][][]",
                 },
               ],
               internalType: "struct YourContract.NestedStruct",
@@ -81,11 +76,6 @@ const deployedContracts = {
               internalType: "uint256",
               name: "",
               type: "uint256",
-            },
-            {
-              internalType: "uint256[]",
-              name: "",
-              type: "uint256[]",
             },
             {
               components: [
@@ -167,11 +157,6 @@ const deployedContracts = {
                   type: "uint256",
                 },
                 {
-                  internalType: "uint256[]",
-                  name: "b",
-                  type: "uint256[]",
-                },
-                {
                   components: [
                     {
                       internalType: "uint256",
@@ -184,64 +169,17 @@ const deployedContracts = {
                       type: "uint256",
                     },
                   ],
-                  internalType: "struct YourContract.SimpleStruct[]",
+                  internalType: "struct YourContract.SimpleStruct[][][]",
                   name: "c",
-                  type: "tuple[]",
+                  type: "tuple[][][]",
                 },
               ],
               internalType: "struct YourContract.NestedStruct",
               name: "_nestedStruct",
               type: "tuple",
             },
-            {
-              components: [
-                {
-                  internalType: "uint256",
-                  name: "x",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "y",
-                  type: "uint256",
-                },
-              ],
-              internalType: "struct YourContract.SimpleStruct",
-              name: "_simpleStruct",
-              type: "tuple",
-            },
-            {
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
           ],
           name: "updateData",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              components: [
-                {
-                  internalType: "uint256",
-                  name: "x",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "y",
-                  type: "uint256",
-                },
-              ],
-              internalType: "struct YourContract.SimpleStruct",
-              name: "_simpleStruct",
-              type: "tuple",
-            },
-          ],
-          name: "updateSimpleStruct",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",

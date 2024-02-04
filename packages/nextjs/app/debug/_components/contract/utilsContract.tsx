@@ -9,42 +9,59 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
 };
 
 // This regex is used to identify array types in the form of `type[size]`
-const ARRAY_TYPE_REGEX = /\[.*\]$/;
+// const ARRAY_TYPE_REGEX = /\[.*\]$/;
+
+// Regular expression to detect if a string is JSON
+const isJsonString = (str: string) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+// Recursive function to deeply parse JSON strings, correctly handling nested arrays and encoded JSON strings
+const deepParseValues = (value: any): any => {
+  if (typeof value === "string") {
+    if (isJsonString(value)) {
+      const parsed = JSON.parse(value);
+      return deepParseValues(parsed); // Recursively parse the decoded value
+    } else {
+      // It's a string but not a JSON string, return as is
+      return value;
+    }
+  } else if (Array.isArray(value)) {
+    // If it's an array, recursively parse each element
+    return value.map(element => deepParseValues(element));
+  } else if (typeof value === "object" && value !== null) {
+    // If it's an object, recursively parse each value
+    return Object.entries(value).reduce((acc: any, [key, val]) => {
+      acc[key] = deepParseValues(val);
+      return acc;
+    }, {});
+  }
+
+  // Handle boolean values represented as strings
+  if (value === "true" || value === "1" || value === "0x1" || value === "0x01" || value === "0x0001") {
+    return true;
+  } else if (value === "false" || value === "0" || value === "0x0" || value === "0x00" || value === "0x0000") {
+    return false;
+  }
+  // If none of the above, return the value as is (covers numbers, booleans, etc.)
+  return value;
+};
 
 /**
- * Parses form input with array support
+ * parses form input with array support
  */
 const getParsedContractFunctionArgs = (form: Record<string, any>) => {
-  const keys = Object.keys(form);
-  const parsedArguments = keys.map(key => {
-    try {
-      const keySplitArray = key.split("_");
-      const baseTypeOfArg = keySplitArray[keySplitArray.length - 1];
-      let valueOfArg = form[key];
+  return Object.keys(form).map(key => {
+    const valueOfArg = form[key];
 
-      if (ARRAY_TYPE_REGEX.test(baseTypeOfArg) || baseTypeOfArg === "tuple") {
-        valueOfArg = JSON.parse(valueOfArg);
-        Object.keys(valueOfArg).forEach(key => {
-          try {
-            // Attempt to parse each property in case it's a JSON string
-            valueOfArg[key] = JSON.parse(valueOfArg[key]);
-          } catch (error) {
-            // If parsing fails, it means the property is not a JSON string, so leave it as is
-          }
-        });
-      } else if (baseTypeOfArg === "bool") {
-        if (["true", "1", "0x1", "0x01", "0x0001"].includes(valueOfArg)) {
-          valueOfArg = 1;
-        } else {
-          valueOfArg = 0;
-        }
-      }
-      return valueOfArg;
-    } catch (error: any) {
-      // ignore error, it will be handled when sending/reading from a function
-    }
+    // Attempt to deeply parse JSON strings
+    return deepParseValues(valueOfArg);
   });
-  return parsedArguments;
 };
 
 const getInitialFormState = (abiFunction: AbiFunction) => {

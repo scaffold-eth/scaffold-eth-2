@@ -5,7 +5,7 @@ pragma abicoder v2;
 contract YourContract {
 	struct NestedStruct {
 		uint a;
-		SimpleStruct[][] c;
+		SimpleStruct[][][] c;
 	}
 	struct SimpleStruct {
 		uint x;
@@ -34,7 +34,7 @@ contract YourContract {
 
 	// Function list all variables in S struct
 	function listS() public view returns (uint, SimpleStruct[] memory) {
-		return (sData.a, sData.c[0]);
+		return (sData.a, sData.c[0][0]);
 	}
 
 	// Function list L variable in T struct
