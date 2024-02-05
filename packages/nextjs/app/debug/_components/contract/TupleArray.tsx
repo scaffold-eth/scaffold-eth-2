@@ -16,7 +16,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
   const [additionalInputs, setAdditionalInputs] = useState<Array<typeof abiTupleParameter.components>>([]);
 
   useEffect(() => {
-    console.log("The form is", form);
     // Extract and group fields based on index prefix
     const groupedFields = Object.keys(form).reduce((acc, key) => {
       const [indexPrefix, ...restArray] = key.split("_");
@@ -27,9 +26,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       acc[indexPrefix][componentName] = form[key];
       return acc;
     }, {} as Record<string, Record<string, any>>);
-
-    console.log("The groupedFields is", groupedFields);
-    console.log("The abiTupleParameter is", abiTupleParameter);
 
     let argsArray: Array<Record<string, any>> = [];
 
@@ -43,19 +39,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       });
 
       argsArray.push(argsStruct);
-
-      /* if (depth > 1) {
-        console.log("The currentKeyValues is", currentKeyValues);
-        console.log("The abiTupleParameter.components is", abiTupleParameter.type);
-        argsArray.push(currentKeyValues);
-      } else {
-        const argsStruct: Record<string, any> = {};
-        abiTupleParameter.components.forEach((component, componentIndex) => {
-          argsStruct[component.name || `input_${componentIndex}_`] = currentKeyValues[componentIndex];
-        });
-
-        argsArray.push(argsStruct);
-      } */
     });
 
     const depth = (abiTupleParameter.type.match(/\[\]/g) || []).length;
@@ -65,8 +48,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
         return args[abiTupleParameter.components[0].name || "tuple"];
       });
     }
-
-    console.log("The argsArray is", argsArray);
 
     setParentForm(parentForm => {
       return { ...parentForm, [parentStateObjectKey]: JSON.stringify(argsArray, replacer) };

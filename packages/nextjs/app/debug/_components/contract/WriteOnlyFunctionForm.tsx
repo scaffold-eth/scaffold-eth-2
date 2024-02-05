@@ -117,7 +117,6 @@ export const WriteOnlyFunctionForm = ({
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
   const transformedFunction = transformAbiFunction(abiFunction);
-  console.log("The transformed function is", transformedFunction);
   const inputs = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
