@@ -20,37 +20,6 @@ type ContractInputProps = {
   paramType: AbiParameter;
 };
 
-const convertToMultiDimensionalComponents = (
-  param: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>,
-): Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }> & { isVirtual?: true } => {
-  // Determine the depth of the array based on the number of brackets in the type
-  const depth = (param.type.match(/\[\]/g) || []).length;
-
-  if (depth <= 1) {
-    // No conversion needed if it's not at least a two-dimensional array
-    return param;
-  } else {
-    // Start conversion for 2 or more dimensions
-    const modifiedParam = { ...param }; // Shallow copy for modification
-    let currentComponents = modifiedParam.components;
-
-    for (let i = 1; i < depth; i++) {
-      // Start from 1 since the original already represents the first level
-      const wrapperComponent = {
-        components: currentComponents,
-        internalType: modifiedParam.internalType,
-        name: `nested_${i}`, // You can customize the naming logic here
-        type: `tuple${"[]".repeat(depth - i)}`, // Adjust type to match the current nesting level
-        isVirtual: true,
-      };
-      currentComponents = [wrapperComponent]; // Wrap the current components
-    }
-
-    modifiedParam.components = currentComponents;
-    return modifiedParam;
-  }
-};
-
 /**
  * Generic Input component to handle input's based on their function param type
  */
@@ -84,15 +53,11 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
       />
     );
   } else if (paramType.type.startsWith("tuple[")) {
-    const modifiedParam = convertToMultiDimensionalComponents(
-      paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>,
-    );
-
     return (
       <TupleArray
         setParentForm={setForm}
         parentForm={form}
-        abiTupleParameter={modifiedParam}
+        abiTupleParameter={paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>}
         parentStateObjectKey={stateObjectKey}
       />
     );
