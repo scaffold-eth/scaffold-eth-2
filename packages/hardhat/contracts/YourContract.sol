@@ -24,11 +24,7 @@ contract YourContract {
 	}
 
 	// Function to get the current data
-	function geAlltData()
-		public
-		view
-		returns (NestedStruct memory, SimpleStruct memory, uint)
-	{
-		return (sData, tData, valueData);
+	function geAllSData() public view returns (NestedStruct memory) {
+		return (sData);
 	}
 }
