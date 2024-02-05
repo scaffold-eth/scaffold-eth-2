@@ -97,7 +97,10 @@ const adjustInput = (input: AbiParameterTuple): AbiParameter => {
     const depth = (input.type.match(/\[\]/g) || []).length;
     return {
       ...input,
-      components: transformComponents(input.components, depth),
+      components: transformComponents(input.components, depth, {
+        internalType: input.internalType || "struct",
+        name: input.name,
+      }),
     };
   } else if (input.components) {
     return {
@@ -108,7 +111,11 @@ const adjustInput = (input: AbiParameterTuple): AbiParameter => {
   return input;
 };
 
-const transformComponents = (components: readonly AbiParameter[], depth: number): AbiParameter[] => {
+const transformComponents = (
+  components: readonly AbiParameter[],
+  depth: number,
+  parentComponentData: { internalType?: string; name?: string },
+): AbiParameter[] => {
   // Base case: if depth is 1 or no components, return the original components
   if (depth === 1 || !components) {
     return [...components];
@@ -116,10 +123,10 @@ const transformComponents = (components: readonly AbiParameter[], depth: number)
 
   // Recursive case: wrap components in an additional tuple layer
   const wrappedComponents: AbiParameter = {
-    internalType: `struct[]${depth > 2 ? "[]".repeat(depth - 1) : ""}`,
-    name: `nested_${depth - 1}`,
+    internalType: `${parentComponentData.internalType || "struct"}`.replace(/\[\]/g, "") + "[]".repeat(depth - 1),
+    name: `${parentComponentData.name || "tuple"}`,
     type: `tuple${"[]".repeat(depth - 1)}`,
-    components: transformComponents(components, depth - 1),
+    components: transformComponents(components, depth - 1, parentComponentData),
   };
 
   return [wrappedComponents];

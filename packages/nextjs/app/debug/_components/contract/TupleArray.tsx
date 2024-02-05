@@ -98,27 +98,33 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       <div className="collapse collapse-arrow">
         <input type="checkbox" className="min-h-fit peer" />
         <div className="collapse-title p-0 min-h-fit peer-checked:mb-2">
-          <p className="m-0">{abiTupleParameter.internalType}</p>
+          <p className="m-0 text-[1rem]">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2 collapse-content">
-          <div className="space-y-2">
+          <div className="space-y-1">
             <p className="m-0 ml-2">0</p>
-            {abiTupleParameter?.components?.map((param, index) => {
-              const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", param, index);
-              return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
-            })}
-          </div>
-          {additionalInputs.map((additionalInput, additionalIndex) => (
-            <div key={additionalIndex} className="space-y-2">
-              <p className="m-0 ml-2">{additionalIndex + 1}</p>
-              {additionalInput.map((param, index) => {
-                const key = getFunctionInputKey(
-                  `${additionalIndex + 1}_${abiTupleParameter.name || "tuple"}`,
-                  param,
-                  index,
-                );
+            <div className="space-y-4">
+              {abiTupleParameter?.components?.map((param, index) => {
+                const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", param, index);
                 return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
               })}
+            </div>
+          </div>
+          {additionalInputs.map((additionalInput, additionalIndex) => (
+            <div key={additionalIndex} className="space-y-1">
+              <p className="m-0 ml-2">{additionalIndex + 1}</p>
+              <div className="space-y-4">
+                {additionalInput.map((param, index) => {
+                  const key = getFunctionInputKey(
+                    `${additionalIndex + 1}_${abiTupleParameter.name || "tuple"}`,
+                    param,
+                    index,
+                  );
+                  return (
+                    <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />
+                  );
+                })}
+              </div>
             </div>
           ))}
           <div className="flex space-x-2">
