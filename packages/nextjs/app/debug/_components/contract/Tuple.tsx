@@ -13,6 +13,7 @@ type TupleProps = {
 
 export const Tuple = ({ abiTupleParameter, setParentForm, parentStateObjectKey }: TupleProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitalTupleFormState(abiTupleParameter));
+
   useEffect(() => {
     const values = Object.values(form);
     const argsStruct: Record<string, any> = {};
@@ -23,6 +24,7 @@ export const Tuple = ({ abiTupleParameter, setParentForm, parentStateObjectKey }
     setParentForm(parentForm => ({ ...parentForm, [parentStateObjectKey]: JSON.stringify(argsStruct, replacer) }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(form, replacer)]);
+
   return (
     <div>
       <div className="collapse collapse-arrow">

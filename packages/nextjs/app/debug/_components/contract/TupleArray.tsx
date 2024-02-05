@@ -31,7 +31,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
 
     Object.keys(groupedFields).forEach(key => {
       const currentKeyValues = Object.values(groupedFields[key]);
-      // Determine the depth of the array based on the number of brackets in the type
 
       const argsStruct: Record<string, any> = {};
       abiTupleParameter.components.forEach((component, componentIndex) => {
@@ -42,7 +41,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
     });
 
     const depth = (abiTupleParameter.type.match(/\[\]/g) || []).length;
-
     if (depth > 1) {
       argsArray = argsArray.map(args => {
         return args[abiTupleParameter.components[0].name || "tuple"];

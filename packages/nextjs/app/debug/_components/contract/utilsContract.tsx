@@ -9,10 +9,6 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
   return functionName + "_" + name + "_" + input.internalType + "_" + input.type;
 };
 
-// This regex is used to identify array types in the form of `type[size]`
-// const ARRAY_TYPE_REGEX = /\[.*\]$/;
-
-// Regular expression to detect if a string is JSON
 const isJsonString = (str: string) => {
   try {
     JSON.parse(str);
@@ -27,7 +23,7 @@ const deepParseValues = (value: any): any => {
   if (typeof value === "string") {
     if (isJsonString(value)) {
       const parsed = JSON.parse(value);
-      return deepParseValues(parsed); // Recursively parse the decoded value
+      return deepParseValues(parsed);
     } else {
       // It's a string but not a JSON string, return as is
       return value;
@@ -49,7 +45,7 @@ const deepParseValues = (value: any): any => {
   } else if (value === "false" || value === "0" || value === "0x0" || value === "0x00" || value === "0x0000") {
     return false;
   }
-  // If none of the above, return the value as is (covers numbers, booleans, etc.)
+
   return value;
 };
 
