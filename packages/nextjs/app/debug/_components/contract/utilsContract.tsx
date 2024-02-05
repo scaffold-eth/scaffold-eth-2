@@ -1,4 +1,5 @@
 import { AbiFunction, AbiParameter } from "abitype";
+import { AbiParameterTuple } from "~~/utils/scaffold-eth/contract";
 
 /**
  * Generates a key based on function metadata
@@ -74,7 +75,7 @@ const getInitialFormState = (abiFunction: AbiFunction) => {
   return initialForm;
 };
 
-const getInitalTupleFormState = (abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>) => {
+const getInitalTupleFormState = (abiTupleParameter: AbiParameterTuple) => {
   const initialForm: Record<string, any> = {};
   if (abiTupleParameter.components.length === 0) return initialForm;
 
@@ -85,9 +86,7 @@ const getInitalTupleFormState = (abiTupleParameter: Extract<AbiParameter, { type
   return initialForm;
 };
 
-const getInitalTupleArrayFormState = (
-  abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>,
-) => {
+const getInitalTupleArrayFormState = (abiTupleParameter: AbiParameterTuple) => {
   const initialForm: Record<string, any> = {};
   if (abiTupleParameter.components.length === 0) return initialForm;
   abiTupleParameter.components.forEach((component, componentIndex) => {
@@ -97,10 +96,51 @@ const getInitalTupleArrayFormState = (
   return initialForm;
 };
 
+const adjustInput = (input: AbiParameterTuple): AbiParameter => {
+  if (input.type.startsWith("tuple[")) {
+    const depth = (input.type.match(/\[\]/g) || []).length;
+    return {
+      ...input,
+      components: transformComponents(input.components, depth),
+    };
+  } else if (input.components) {
+    return {
+      ...input,
+      components: input.components.map(value => adjustInput(value as AbiParameterTuple)),
+    };
+  }
+  return input;
+};
+
+const transformComponents = (components: readonly AbiParameter[], depth: number): AbiParameter[] => {
+  // Base case: if depth is 1 or no components, return the original components
+  if (depth === 1 || !components) {
+    return [...components];
+  }
+
+  // Recursive case: wrap components in an additional tuple layer
+  const wrappedComponents: AbiParameter = {
+    internalType: `struct[]${depth > 2 ? "[]".repeat(depth - 1) : ""}`,
+    name: `nested_${depth - 1}`,
+    type: `tuple${"[]".repeat(depth - 1)}`,
+    components: transformComponents(components, depth - 1),
+  };
+
+  return [wrappedComponents];
+};
+
+const transformAbiFunction = (abiFunction: AbiFunction): AbiFunction => {
+  return {
+    ...abiFunction,
+    inputs: abiFunction.inputs.map(value => adjustInput(value as AbiParameterTuple)),
+  };
+};
+
 export {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
   getInitalTupleFormState,
   getInitalTupleArrayFormState,
+  transformAbiFunction,
 };

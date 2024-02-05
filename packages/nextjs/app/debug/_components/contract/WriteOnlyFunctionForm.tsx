@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
-import { AbiParameter } from "abitype";
 import { Address, TransactionReceipt } from "viem";
 import { useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import {
@@ -12,6 +11,7 @@ import {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
+  transformAbiFunction,
 } from "~~/app/debug/_components/contract";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -24,46 +24,6 @@ type WriteOnlyFunctionFormProps = {
   onChange: () => void;
   contractAddress: Address;
   inheritedFrom?: string;
-};
-
-const transformAbiFunction = (abiFunction: AbiFunction): AbiFunction => {
-  const transformComponents = (components: AbiParameter[], depth: number): AbiParameter[] => {
-    // Base case: if depth is 1 or no components, return the original components
-    if (depth === 1 || !components) {
-      return components;
-    }
-
-    // Recursive case: wrap components in an additional tuple layer
-    const wrappedComponents: AbiParameter = {
-      internalType: `struct[]${depth > 2 ? "[]".repeat(depth - 1) : ""}`,
-      name: `nested_${depth - 1}`,
-      type: `tuple${"[]".repeat(depth - 1)}`,
-      components: transformComponents(components, depth - 1),
-    };
-
-    return [wrappedComponents];
-  };
-
-  const adjustInput = (input: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>): AbiParameter => {
-    if (input.type.startsWith("tuple[")) {
-      const depth = (input.type.match(/\[\]/g) || []).length;
-      return {
-        ...input,
-        components: transformComponents(input.components, depth),
-      };
-    } else if (input.components) {
-      return {
-        ...input,
-        components: input.components.map(adjustInput),
-      };
-    }
-    return input;
-  };
-
-  return {
-    ...abiFunction,
-    inputs: abiFunction.inputs.map(adjustInput),
-  };
 };
 
 export const WriteOnlyFunctionForm = ({

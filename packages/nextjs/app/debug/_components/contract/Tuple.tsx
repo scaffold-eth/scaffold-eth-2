@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ContractInput } from "./ContractInput";
 import { getFunctionInputKey, getInitalTupleFormState } from "./utilsContract";
-import { AbiParameter } from "abitype";
 import { replacer } from "~~/utils/scaffold-eth/common";
+import { AbiParameterTuple } from "~~/utils/scaffold-eth/contract";
 
 type TupleProps = {
-  abiTupleParameter: Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
+  abiTupleParameter: AbiParameterTuple;
   setParentForm: Dispatch<SetStateAction<Record<string, any>>>;
   parentStateObjectKey: string;
   parentForm: Record<string, any> | undefined;

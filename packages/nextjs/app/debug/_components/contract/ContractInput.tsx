@@ -12,6 +12,7 @@ import {
   IntegerInput,
   IntegerVariant,
 } from "~~/components/scaffold-eth";
+import { AbiParameterTuple } from "~~/utils/scaffold-eth/contract";
 
 type ContractInputProps = {
   setForm: Dispatch<SetStateAction<Record<string, any>>>;
@@ -48,7 +49,7 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
       <Tuple
         setParentForm={setForm}
         parentForm={form}
-        abiTupleParameter={paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>}
+        abiTupleParameter={paramType as AbiParameterTuple}
         parentStateObjectKey={stateObjectKey}
       />
     );
@@ -57,7 +58,7 @@ export const ContractInput = ({ setForm, form, stateObjectKey, paramType }: Cont
       <TupleArray
         setParentForm={setForm}
         parentForm={form}
-        abiTupleParameter={paramType as Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>}
+        abiTupleParameter={paramType as AbiParameterTuple}
         parentStateObjectKey={stateObjectKey}
       />
     );
