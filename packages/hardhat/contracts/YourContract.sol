@@ -5,7 +5,7 @@ pragma abicoder v2;
 contract YourContract {
 	struct NestedStruct {
 		uint a;
-		SimpleStruct[][][] c;
+		SimpleStruct[][][] b;
 	}
 	struct SimpleStruct {
 		uint x;
