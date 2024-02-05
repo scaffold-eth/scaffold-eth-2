@@ -7,11 +7,11 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       abi: [
         {
           inputs: [],
-          name: "getData",
+          name: "geAlltData",
           outputs: [
             {
               components: [
@@ -58,54 +58,6 @@ const deployedContracts = {
               internalType: "struct YourContract.SimpleStruct",
               name: "",
               type: "tuple",
-            },
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "listS",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-            {
-              components: [
-                {
-                  internalType: "uint256",
-                  name: "x",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "y",
-                  type: "uint256",
-                },
-              ],
-              internalType: "struct YourContract.SimpleStruct[]",
-              name: "",
-              type: "tuple[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "listT",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
             },
             {
               internalType: "uint256",

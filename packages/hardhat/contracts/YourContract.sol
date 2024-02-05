@@ -24,21 +24,11 @@ contract YourContract {
 	}
 
 	// Function to get the current data
-	function getData()
+	function geAlltData()
 		public
 		view
 		returns (NestedStruct memory, SimpleStruct memory, uint)
 	{
 		return (sData, tData, valueData);
-	}
-
-	// Function list all variables in S struct
-	function listS() public view returns (uint, SimpleStruct[] memory) {
-		return (sData.a, sData.c[0][0]);
-	}
-
-	// Function list L variable in T struct
-	function listT() public view returns (uint, uint) {
-		return (tData.x, tData.y);
 	}
 }
