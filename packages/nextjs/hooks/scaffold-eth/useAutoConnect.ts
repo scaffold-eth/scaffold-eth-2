@@ -57,7 +57,7 @@ const getInitialConnector = (
  * Automatically connect to a wallet/connector based on config and prior wallet
  */
 export const useAutoConnect = (): void => {
-  const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY, { initializeWithValue: false });
+  const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY);
   const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STORAGE_KEY, wagmiWalletValue ?? "", {
     initializeWithValue: false,
   });
