@@ -1,7 +1,7 @@
+import { useDarkMode } from "usehooks-ts";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
 import { getNetworkColor } from "~~/hooks/scaffold-eth";
-import { useDarkMode } from "~~/hooks/scaffold-eth/useDarkMode";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
@@ -11,7 +11,7 @@ type NetworkOptionsProps = {
 };
 
 export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
-  const { isDarkMode } = useDarkMode();
+  const { isDarkMode } = useDarkMode({ initializeWithValue: false });
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
 

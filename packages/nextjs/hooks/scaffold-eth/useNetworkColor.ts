@@ -1,5 +1,5 @@
-import { useDarkMode } from "./useDarkMode";
 import { useTargetNetwork } from "./useTargetNetwork";
+import { useDarkMode } from "usehooks-ts";
 import { ChainWithAttributes } from "~~/utils/scaffold-eth";
 
 export const DEFAULT_NETWORK_COLOR: [string, string] = ["#666666", "#bbbbbb"];
@@ -13,7 +13,7 @@ export function getNetworkColor(network: ChainWithAttributes, isDarkMode: boolea
  * Gets the color of the target network
  */
 export const useNetworkColor = () => {
-  const { isDarkMode } = useDarkMode();
+  const { isDarkMode } = useDarkMode({ initializeWithValue: false });
   const { targetNetwork } = useTargetNetwork();
 
   return getNetworkColor(targetNetwork, isDarkMode);
