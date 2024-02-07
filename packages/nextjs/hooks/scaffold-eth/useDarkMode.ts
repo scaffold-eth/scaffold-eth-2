@@ -16,8 +16,12 @@ export function useDarkMode(defaultValue?: boolean): UseDarkModeOutput {
   const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
   const [prevIsDarkOs, setPrevIsDarkOs] = useState(isDarkOS);
 
-  const initialStorageValue: boolean | null = useReadLocalStorage(LOCAL_STORAGE_THEME_KEY);
-  const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>(LOCAL_STORAGE_THEME_KEY, Boolean(defaultValue));
+  const initialStorageValue: boolean | null | undefined = useReadLocalStorage(LOCAL_STORAGE_THEME_KEY, {
+    initializeWithValue: false,
+  });
+  const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>(LOCAL_STORAGE_THEME_KEY, Boolean(defaultValue), {
+    initializeWithValue: false,
+  });
 
   // set if no init value
   useEffect(() => {
