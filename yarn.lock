@@ -1890,7 +1890,7 @@ __metadata:
     type-fest: ^4.6.0
     typescript: ^5.1.6
     use-debounce: ^8.0.4
-    usehooks-ts: ^2.7.2
+    usehooks-ts: ^2.13.0
     vercel: ^32.4.1
     viem: 1.19.9
     wagmi: 1.4.12
@@ -9588,6 +9588,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
+  languageName: node
+  linkType: hard
+
 "lodash.defaults@npm:^4.2.0":
   version: 4.2.0
   resolution: "lodash.defaults@npm:4.2.0"
@@ -14036,13 +14043,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.7.2":
-  version: 2.9.1
-  resolution: "usehooks-ts@npm:2.9.1"
+"usehooks-ts@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "usehooks-ts@npm:2.13.0"
+  dependencies:
+    lodash.debounce: ^4.0.8
   peerDependencies:
-    react: ^16.8.0  || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: 36f1e4142ce23bc019b81d2e93aefd7f2c350abcf255598c21627114a69a2f2f116b35dc3a353375f09c6e4c9b704a04f104e3d10e98280545c097feca66c30a
+    react: ^16.8.0  || ^17 || ^18
+  checksum: ad07930e1b5c70392603eb8b3f199f44349c75406fe31013f79b0fb7fdece59f47f8dba09b6f1fafaa00d68f43240dbb13cdc1afb89b647f1d53504599a51ca0
   languageName: node
   linkType: hard
 
