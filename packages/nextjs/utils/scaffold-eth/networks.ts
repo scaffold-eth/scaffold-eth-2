@@ -38,9 +38,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.optimismSepolia.id]: {
     color: "#f01a37",
   },
-  [chains.optimismGoerli.id]: {
-    color: "#f01a37",
-  },
   [chains.optimism.id]: {
     color: "#f01a37",
   },
