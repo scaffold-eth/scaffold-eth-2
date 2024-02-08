@@ -1,30 +1,32 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
-// import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { MagnifyingGlassIcon, PlusIcon, PowerIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 
-// const GREETINGS_GRAPHQL = `
-// {
-//   greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-//     id
-//     greeting
-//     premium
-//     value
-//     createdAt
-//     sender {
-//       address
-//       greetingCount
-//     }
-//   }
-// }
-// `;
-
-// const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-// const greetingsData = useQuery(GREETINGS_GQL, { pollInterval: 1000 });
-
-// console.log("greetingsData: ", greetingsData);
-
 const Home: NextPage = () => {
+  const GREETINGS_GRAPHQL = `
+{
+  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+    id
+    greeting
+    premium
+    value
+    createdAt
+    sender {
+      address
+      greetingCount
+    }
+  }
+}
+`;
+
+  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
+  const greetingsData = useQuery(GREETINGS_GQL, { pollInterval: 1000 });
+
+  console.log("greetingsData: ", greetingsData);
   return (
     <>
       <div>
