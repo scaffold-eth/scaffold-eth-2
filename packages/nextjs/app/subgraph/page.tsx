@@ -1,32 +1,10 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { gql, useQuery } from "@apollo/client";
+import GreetingsTable from "./_components/GreetingsTable";
 import type { NextPage } from "next";
 import { MagnifyingGlassIcon, PlusIcon, PowerIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 
-const Home: NextPage = () => {
-  const GREETINGS_GRAPHQL = `
-{
-  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-    id
-    greeting
-    premium
-    value
-    createdAt
-    sender {
-      address
-      greetingCount
-    }
-  }
-}
-`;
-
-  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-  const greetingsData = useQuery(GREETINGS_GQL, { pollInterval: 1000 });
-
-  console.log("greetingsData: ", greetingsData);
+const Subgraph: NextPage = () => {
   return (
     <>
       <div>
@@ -87,28 +65,25 @@ const Home: NextPage = () => {
                 </code>
               </p>
             </div>
-          </div>{" "}
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
+              <p className="mb-0">Explore data in your local graph-node using the built in </p>
+              <Link
+                href="http://localhost:8000/subgraphs/name/scaffold-eth/your-contract/graphql"
+                passHref
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GraphiQL tool.
+              </Link>{" "}
+            </div>
+          </div>
         </div>
-
-        <div className="flex items-center flex-col flex-grow pt-10">
-          <p>
-            Explore data in your local graph-node using the built in{" "}
-            <Link
-              href="http://localhost:8000/subgraphs/name/scaffold-eth/your-contract/graphql"
-              passHref
-              className="link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GraphiQL
-            </Link>{" "}
-            tool.
-          </p>
-          <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-        </div>
+        <GreetingsTable />
       </div>
     </>
   );
 };
 
-export default Home;
+export default Subgraph;

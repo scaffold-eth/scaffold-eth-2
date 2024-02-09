@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 import chalk from "chalk";
 
 const graphDir = "./";
@@ -27,9 +27,13 @@ function publishContract(contractName: string, networkName: string) {
     if (!(contractName in graphConfigObject[networkName])) {
       graphConfigObject[networkName][contractName] = {};
     }
-    graphConfigObject[networkName][contractName].address = contractObject.address;
+    graphConfigObject[networkName][contractName].address =
+      contractObject.address;
 
-    fs.writeFileSync(graphConfigPath, JSON.stringify(graphConfigObject, null, 2));
+    fs.writeFileSync(
+      graphConfigPath,
+      JSON.stringify(graphConfigObject, null, 2)
+    );
     if (!fs.existsSync(`${graphDir}/abis`)) fs.mkdirSync(`${graphDir}/abis`);
     fs.writeFileSync(
       `${graphDir}/abis/${networkName}_${contractName}.json`,
@@ -48,9 +52,9 @@ function publishContract(contractName: string, networkName: string) {
 
 async function main() {
   const directories = fs.readdirSync(deploymentsDir);
-  directories.forEach(function (directory) {
+  directories.forEach(function(directory) {
     const files = fs.readdirSync(`${deploymentsDir}/${directory}`);
-    files.forEach(function (file) {
+    files.forEach(function(file) {
       if (file.indexOf(".json") >= 0) {
         const contractName = file.replace(".json", "");
         publishContract(contractName, directory);
@@ -61,7 +65,7 @@ async function main() {
 }
 main()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(error => {
     console.error(error);
     process.exit(1);
   });
