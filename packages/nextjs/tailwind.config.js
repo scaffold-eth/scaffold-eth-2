@@ -7,7 +7,7 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        scaffoldEth: {
+        light: {
           primary: "#93BBFB",
           "primary-content": "#212638",
           secondary: "#DAE8FF",
@@ -39,7 +39,7 @@ module.exports = {
         },
       },
       {
-        scaffoldEthDark: {
+        dark: {
           primary: "#212638",
           "primary-content": "#F9FBFF",
           secondary: "#323f61",
