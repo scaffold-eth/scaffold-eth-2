@@ -67,7 +67,7 @@ const Subgraph: NextPage = () => {
             </div>
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p className="mb-0">Explore data in your local graph-node using the built in </p>
+              <p className="mb-0">Explore data using the</p>
               <Link
                 href="http://localhost:8000/subgraphs/name/scaffold-eth/your-contract/graphql"
                 passHref
@@ -77,6 +77,10 @@ const Subgraph: NextPage = () => {
               >
                 GraphiQL tool.
               </Link>{" "}
+              Clean up any stale data using{" "}
+              <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
+                yarn clean-node
+              </code>
             </div>
           </div>
         </div>
