@@ -2242,6 +2242,8 @@ __metadata:
   dependencies:
     "@graphprotocol/graph-cli": ^0.55.0
     "@graphprotocol/graph-ts": ^0.31.0
+    "@types/chalk": ^2.2.0
+    "@types/node": ^20.11.17
     ts-node: ^10.9.1
     typescript: ^5.0.4
   languageName: unknown
@@ -2765,6 +2767,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chalk@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@types/chalk@npm:2.2.0"
+  dependencies:
+    chalk: "*"
+  checksum: 846437590d0bf0026d8c2f454e5d91a486becfabde61c0441025e791a0fed75304e143717bc4d025569394dcce5a32f2c53d97253d0c735ac1abae63f1b25c3e
+  languageName: node
+  linkType: hard
+
 "@types/cli-progress@npm:^3.11.0":
   version: 3.11.5
   resolution: "@types/cli-progress@npm:3.11.5"
@@ -2914,7 +2925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:>=13.7.0":
+"@types/node@npm:>=13.7.0, @types/node@npm:^20.11.17":
   version: 20.11.17
   resolution: "@types/node@npm:20.11.17"
   dependencies:
@@ -5553,6 +5564,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:*, chalk@npm:5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
+  languageName: node
+  linkType: hard
+
 "chalk@npm:3.0.0":
   version: 3.0.0
   resolution: "chalk@npm:3.0.0"
@@ -5560,13 +5578,6 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 8e3ddf3981c4da405ddbd7d9c8d91944ddf6e33d6837756979f7840a29272a69a5189ecae0ff84006750d6d1e92368d413335eab4db5476db6e6703a1d1e0505
-  languageName: node
-  linkType: hard
-
-"chalk@npm:5.3.0":
-  version: 5.3.0
-  resolution: "chalk@npm:5.3.0"
-  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
   languageName: node
   linkType: hard
 
