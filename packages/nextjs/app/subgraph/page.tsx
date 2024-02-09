@@ -1,32 +1,10 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { gql, useQuery } from "@apollo/client";
+import GreetingsTable from "./_components/GreetingsTable";
 import type { NextPage } from "next";
 import { MagnifyingGlassIcon, PlusIcon, PowerIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 
-const Home: NextPage = () => {
-  const GREETINGS_GRAPHQL = `
-{
-  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-    id
-    greeting
-    premium
-    value
-    createdAt
-    sender {
-      address
-      greetingCount
-    }
-  }
-}
-`;
-
-  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-  const greetingsData = useQuery(GREETINGS_GQL, { pollInterval: 1000 });
-
-  console.log("greetingsData: ", greetingsData);
+const Subgraph: NextPage = () => {
   return (
     <>
       <div>
@@ -102,9 +80,10 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
+        <GreetingsTable />
       </div>
     </>
   );
 };
 
-export default Home;
+export default Subgraph;
