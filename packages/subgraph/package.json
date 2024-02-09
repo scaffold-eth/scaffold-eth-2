@@ -1,0 +1,28 @@
+{
+  "name": "@se-2/subgraph",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "abi-copy": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/abi_copy.ts",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
+    "local-create": "graph create --node http://localhost:8020/ scaffold-eth/your-contract",
+    "local-remove": "graph remove --node http://localhost:8020/ scaffold-eth/your-contract",
+    "local-deploy": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scaffold-eth/your-contract",
+    "local-ship": "yarn abi-copy && yarn codegen && yarn build --network localhost && yarn local-deploy",
+    "run-node": "cd graph-node && docker-compose up",
+    "stop-node": "cd graph-node && docker-compose down",
+    "clean-node": "rm -rf graph-node/data/"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.55.0",
+    "@graphprotocol/graph-ts": "^0.31.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/node": "^20.11.17"
+  }
+}

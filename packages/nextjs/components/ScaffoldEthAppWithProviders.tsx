@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { Toaster } from "react-hot-toast";
 import { WagmiConfig } from "wagmi";
@@ -39,16 +40,24 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { isDarkMode } = useDarkMode();
 
+  const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
+  const apolloClient = new ApolloClient({
+    uri: subgraphUri,
+    cache: new InMemoryCache(),
+  });
+
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <ProgressBar />
-      <RainbowKitProvider
-        chains={appChains.chains}
-        avatar={BlockieAvatar}
-        theme={isDarkMode ? darkTheme() : lightTheme()}
-      >
-        <ScaffoldEthApp>{children}</ScaffoldEthApp>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <ApolloProvider client={apolloClient}>
+      <WagmiConfig config={wagmiConfig}>
+        <ProgressBar />
+        <RainbowKitProvider
+          chains={appChains.chains}
+          avatar={BlockieAvatar}
+          theme={isDarkMode ? darkTheme() : lightTheme()}
+        >
+          <ScaffoldEthApp>{children}</ScaffoldEthApp>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </ApolloProvider>
   );
 };
