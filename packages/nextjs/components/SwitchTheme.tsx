@@ -25,7 +25,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
   if (!mounted) return null;
 
   return (
-    <div className={`flex space-x-2 text-sm ${className}`}>
+    <div className={`flex space-x-2 h-8 items-center justify-center text-sm ${className}`}>
       <input
         id="theme-toggle"
         type="checkbox"
