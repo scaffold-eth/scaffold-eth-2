@@ -13,7 +13,9 @@ type TupleArrayProps = {
 
 export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObjectKey }: TupleArrayProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitalTupleArrayFormState(abiTupleParameter));
-  const [additionalInputs, setAdditionalInputs] = useState<Array<typeof abiTupleParameter.components>>([]);
+  const [additionalInputs, setAdditionalInputs] = useState<Array<typeof abiTupleParameter.components>>([
+    abiTupleParameter.components,
+  ]);
 
   useEffect(() => {
     // Extract and group fields based on index prefix
@@ -61,9 +63,8 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       setForm(form => {
         const newForm = { ...form };
         abiTupleParameter.components.forEach((component, componentIndex) => {
-          console.log("The additionalInputs are", additionalInputs.length);
           const key = getFunctionInputKey(
-            `${newAdditionalInputs.length}_${abiTupleParameter.name || "tuple"}`,
+            `${newAdditionalInputs.length - 1}_${abiTupleParameter.name || "tuple"}`,
             component,
             componentIndex,
           );
@@ -82,7 +83,7 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       const newForm = { ...form };
       abiTupleParameter.components.forEach((component, componentIndex) => {
         const key = getFunctionInputKey(
-          `${additionalInputs.length}_${abiTupleParameter.name || "tuple"}`,
+          `${additionalInputs.length - 1}_${abiTupleParameter.name || "tuple"}`,
           component,
           componentIndex,
         );
@@ -101,22 +102,13 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
           <p className="m-0 text-[1rem]">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-gray-100 border-l-2 pl-2 collapse-content">
-          <div className="space-y-1">
-            <p className="m-0 ml-2">0</p>
-            <div className="space-y-4">
-              {abiTupleParameter?.components?.map((param, index) => {
-                const key = getFunctionInputKey("0_" + abiTupleParameter.name || "tuple", param, index);
-                return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
-              })}
-            </div>
-          </div>
           {additionalInputs.map((additionalInput, additionalIndex) => (
             <div key={additionalIndex} className="space-y-1">
-              <p className="m-0 ml-2">{additionalIndex + 1}</p>
+              <p className="m-0 ml-2">{additionalIndex}</p>
               <div className="space-y-4">
                 {additionalInput.map((param, index) => {
                   const key = getFunctionInputKey(
-                    `${additionalIndex + 1}_${abiTupleParameter.name || "tuple"}`,
+                    `${additionalIndex}_${abiTupleParameter.name || "tuple"}`,
                     param,
                     index,
                   );
