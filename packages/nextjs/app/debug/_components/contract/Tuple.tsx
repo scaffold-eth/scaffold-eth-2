@@ -32,7 +32,7 @@ export const Tuple = ({ abiTupleParameter, setParentForm, parentStateObjectKey }
         <div className="collapse-title p-0 min-h-fit peer-checked:mb-2">
           <p className="m-0 p-0 text-[1rem]">{abiTupleParameter.internalType}</p>
         </div>
-        <div className="ml-3 flex-col space-y-4 border-gray-100 border-l-2 pl-2 collapse-content">
+        <div className="ml-3 flex-col space-y-4 border-secondary/80 border-l-2 pl-2 collapse-content">
           {abiTupleParameter?.components?.map((param, index) => {
             const key = getFunctionInputKey(abiTupleParameter.name || "tuple", param, index);
             return <ContractInput setForm={setForm} form={form} key={key} stateObjectKey={key} paramType={param} />;
