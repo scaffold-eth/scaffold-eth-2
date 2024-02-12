@@ -2060,15 +2060,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:beta":
-  version: 2.0.0-beta.2
-  resolution: "@rainbow-me/rainbowkit@npm:2.0.0-beta.2"
+"@rainbow-me/rainbowkit@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@rainbow-me/rainbowkit@npm:2.0.0"
   dependencies:
     "@vanilla-extract/css": 1.14.0
     "@vanilla-extract/dynamic": 2.1.0
     "@vanilla-extract/sprinkles": 1.6.1
     clsx: 2.1.0
-    i18n-js: ^4.3.2
     qrcode: 1.5.3
     react-remove-scroll: 2.5.7
     ua-parser-js: ^1.0.37
@@ -2077,7 +2076,7 @@ __metadata:
     react-dom: ">=17"
     viem: 2.x
     wagmi: 2.x
-  checksum: bda804f04fa18106a49f964d9714b950b34280dc20cc37c50fadfcb9072757b8f8c3c327dc0cfa0276bb107b55691d0e0c3e01512bbb0cb9b3229dcc8a65a85e
+  checksum: 7c7750516437a25366d33e853fcec4967ca81b6944905118fe1450b210b0196422b0b75340bb014da54c2f8933b5d7ca8ec9bfe7f75f570439d95fadfb6d0b40
   languageName: node
   linkType: hard
 
@@ -2249,7 +2248,7 @@ __metadata:
   dependencies:
     "@ethersproject/providers": ^5.7.2
     "@heroicons/react": ^2.0.11
-    "@rainbow-me/rainbowkit": beta
+    "@rainbow-me/rainbowkit": ^2.0.0
     "@tanstack/react-query": ^5.17.19
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^17.0.35
@@ -4680,13 +4679,6 @@ __metadata:
   version: 3.3.0
   resolution: "bigint-crypto-utils@npm:3.3.0"
   checksum: 9598ce57b23f776c8936d44114c9f051e62b5fa654915b664784cbcbacc5aa0485f4479571c51ff58008abb1210c0d6a234853742f07cf84bda890f2a1e01000
-  languageName: node
-  linkType: hard
-
-"bignumber.js@npm:*":
-  version: 9.1.2
-  resolution: "bignumber.js@npm:9.1.2"
-  checksum: 582c03af77ec9cb0ebd682a373ee6c66475db94a4325f92299621d544aa4bd45cb45fd60001610e94aef8ae98a0905fa538241d9638d4422d57abbeeac6fadaf
   languageName: node
   linkType: hard
 
@@ -8680,17 +8672,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-js@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "i18n-js@npm:4.3.2"
-  dependencies:
-    bignumber.js: "*"
-    lodash: "*"
-    make-plural: "*"
-  checksum: 08a051dba75d93447e2021c1feb92f34c9034b5a818957885ea19ac58954d764c848c4deaaf46ada3e15d51f61ad9f7e0bf4ddffa3c765871ff1b26638ca0a8f
-  languageName: node
-  linkType: hard
-
 "i18next-browser-languagedetector@npm:^7.1.0":
   version: 7.2.0
   resolution: "i18next-browser-languagedetector@npm:7.2.0"
@@ -9901,7 +9882,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:*, lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -10042,13 +10023,6 @@ __metadata:
     socks-proxy-agent: ^7.0.0
     ssri: ^10.0.0
   checksum: 7268bf274a0f6dcf0343829489a4506603ff34bd0649c12058753900b0eb29191dce5dba12680719a5d0a983d3e57810f594a12f3c18494e93a1fbc6348a4540
-  languageName: node
-  linkType: hard
-
-"make-plural@npm:*":
-  version: 7.3.0
-  resolution: "make-plural@npm:7.3.0"
-  checksum: bb39b4b77533f0d5fb94eec128340b54dda8c1707d6b0a98c148e5d7bc23094e123f88275a61573fa31dc2f5d7352215cee0df523cd69b5d8fcb3969a2bcf8f8
   languageName: node
   linkType: hard
 
