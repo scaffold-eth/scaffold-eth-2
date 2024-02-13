@@ -17,6 +17,8 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
     abiTupleParameter.components,
   ]);
 
+  const depth = (abiTupleParameter.type.match(/\[\]/g) || []).length;
+
   useEffect(() => {
     // Extract and group fields based on index prefix
     const groupedFields = Object.keys(form).reduce((acc, key) => {
@@ -42,7 +44,6 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
       argsArray.push(argsStruct);
     });
 
-    const depth = (abiTupleParameter.type.match(/\[\]/g) || []).length;
     if (depth > 1) {
       argsArray = argsArray.map(args => {
         return args[abiTupleParameter.components[0].name || "tuple"];
@@ -98,13 +99,15 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
     <div>
       <div className="collapse collapse-arrow">
         <input type="checkbox" className="min-h-fit peer" />
-        <div className="collapse-title p-0 min-h-fit peer-checked:mb-2">
+        <div className="collapse-title p-0 min-h-fit peer-checked:mb-1">
           <p className="m-0 text-[1rem]">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-secondary/70 border-l-2 pl-2 collapse-content">
           {additionalInputs.map((additionalInput, additionalIndex) => (
             <div key={additionalIndex} className="space-y-1">
-              <p className="m-0 ml-2">{additionalIndex}</p>
+              <p className="m-0 ml-2 text-[0.95rem]">
+                {depth > 1 ? `${additionalIndex}` : `tuple[${additionalIndex}]`}
+              </p>
               <div className="space-y-4">
                 {additionalInput.map((param, index) => {
                   const key = getFunctionInputKey(
