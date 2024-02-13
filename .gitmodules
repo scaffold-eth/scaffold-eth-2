@@ -1,0 +1,3 @@
+[submodule "packages/hardhat/lib/forge-std"]
+	path = packages/hardhat/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
