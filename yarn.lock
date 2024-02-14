@@ -1877,6 +1877,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     next: ^14.0.4
+    next-themes: ^0.2.1
     nprogress: ^0.2.0
     postcss: ^8.4.16
     prettier: ^2.8.4
@@ -1889,7 +1890,7 @@ __metadata:
     type-fest: ^4.6.0
     typescript: ^5.1.6
     use-debounce: ^8.0.4
-    usehooks-ts: ^2.7.2
+    usehooks-ts: ^2.13.0
     vercel: ^32.4.1
     viem: 1.19.9
     wagmi: 1.4.12
@@ -9562,6 +9563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.debounce@npm:^4.0.8":
+  version: 4.0.8
+  resolution: "lodash.debounce@npm:4.0.8"
+  checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
+  languageName: node
+  linkType: hard
+
 "lodash.defaults@npm:^4.2.0":
   version: 4.2.0
   resolution: "lodash.defaults@npm:4.2.0"
@@ -10304,6 +10312,17 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"next-themes@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "next-themes@npm:0.2.1"
+  peerDependencies:
+    next: "*"
+    react: "*"
+    react-dom: "*"
+  checksum: ebc248b956138e73436c4ed0a0f0a877a0a48a33156db577029b8b8469e48b5c777d61abf2baeb75953378febea74e067a4869ff90b4a3e94fce123289b862ba
   languageName: node
   linkType: hard
 
@@ -13996,23 +14015,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.7.2":
-  version: 2.9.1
-  resolution: "usehooks-ts@npm:2.9.1"
+"usehooks-ts@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "usehooks-ts@npm:2.13.0"
+  dependencies:
+    lodash.debounce: ^4.0.8
   peerDependencies:
-    react: ^16.8.0  || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: 36f1e4142ce23bc019b81d2e93aefd7f2c350abcf255598c21627114a69a2f2f116b35dc3a353375f09c6e4c9b704a04f104e3d10e98280545c097feca66c30a
-  languageName: node
-  linkType: hard
-
-"usehooks-ts@patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::locator=se-2%40workspace%3A.":
-  version: 2.9.1
-  resolution: "usehooks-ts@patch:usehooks-ts@npm%3A2.9.1#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch::version=2.9.1&hash=68bde7&locator=se-2%40workspace%3A."
-  peerDependencies:
-    react: ^16.8.0  || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: 6807ae0e6ffd158790e5018d3a322efd0fe97853b6b83751725e5e81d0962cb6230ca65a24341bb5cee3f1bc330721611440c399fc950723153c5cc61eb74b04
+    react: ^16.8.0  || ^17 || ^18
+  checksum: ad07930e1b5c70392603eb8b3f199f44349c75406fe31013f79b0fb7fdece59f47f8dba09b6f1fafaa00d68f43240dbb13cdc1afb89b647f1d53504599a51ca0
   languageName: node
   linkType: hard
 
