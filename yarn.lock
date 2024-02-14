@@ -1871,7 +1871,7 @@ __metadata:
     "@uniswap/v2-sdk": ^3.0.1
     autoprefixer: ^10.4.12
     blo: ^1.0.1
-    daisyui: ^4.4.19
+    daisyui: 4.5.0
     eslint: ^8.15.0
     eslint-config-next: ^14.0.4
     eslint-config-prettier: ^8.5.0
@@ -5448,7 +5448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daisyui@npm:^4.4.19":
+"daisyui@npm:4.5.0":
   version: 4.5.0
   resolution: "daisyui@npm:4.5.0"
   dependencies:
