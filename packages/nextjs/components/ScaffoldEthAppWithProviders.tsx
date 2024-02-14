@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
+import { useTheme } from "next-themes";
 import { Toaster } from "react-hot-toast";
-import { useDarkMode } from "usehooks-ts";
 import { WagmiConfig } from "wagmi";
 import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
@@ -37,7 +37,13 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
-  const { isDarkMode } = useDarkMode({ initializeWithValue: false });
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -45,7 +51,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
       <RainbowKitProvider
         chains={appChains.chains}
         avatar={BlockieAvatar}
-        theme={isDarkMode ? darkTheme() : lightTheme()}
+        theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
       >
         <ScaffoldEthApp>{children}</ScaffoldEthApp>
       </RainbowKitProvider>
