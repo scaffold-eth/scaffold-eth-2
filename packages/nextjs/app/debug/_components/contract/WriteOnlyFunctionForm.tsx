@@ -11,6 +11,7 @@ import {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
+  transformAbiFunction,
 } from "~~/app/debug/_components/contract";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -72,7 +73,8 @@ export const WriteOnlyFunctionForm = ({
   }, [txResult]);
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
-  const inputs = abiFunction.inputs.map((input, inputIndex) => {
+  const transformedFunction = transformAbiFunction(abiFunction);
+  const inputs = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
       <ContractInput
