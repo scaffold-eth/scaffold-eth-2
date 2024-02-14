@@ -11,3 +11,6 @@ node_modules
 .eslintcache
 .vscode/**
 .DS_Store
+subgraph/build/*
+subgraph/generated/*
+subgraph/graph-node/data/*
