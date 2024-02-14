@@ -61,7 +61,10 @@ export const FaucetButton = () => {
     >
       <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
         {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
+          <>
+            <BanknotesIcon className="h-4 w-4" />
+            Local Faucet
+          </>
         ) : (
           <span className="loading loading-spinner loading-xs"></span>
         )}

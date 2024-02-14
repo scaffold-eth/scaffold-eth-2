@@ -1383,6 +1383,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nomicfoundation/hardhat-foundry@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@nomicfoundation/hardhat-foundry@npm:1.1.1"
+  dependencies:
+    chalk: ^2.4.2
+  peerDependencies:
+    hardhat: ^2.17.2
+  checksum: 35d241638c1dbcfd14ed2006d4d7bee4e40d50bd866fcf4f02cb06084d5220182bcaf3f57ea5e99ee40335dd15a9392e106a29e9fd3cf74ab87e9215573ce787
+  languageName: node
+  linkType: hard
+
 "@nomicfoundation/hardhat-network-helpers@npm:^1.0.6":
   version: 1.0.9
   resolution: "@nomicfoundation/hardhat-network-helpers@npm:1.0.9"
@@ -1822,6 +1833,7 @@ __metadata:
     "@ethersproject/providers": ^5.7.1
     "@nomicfoundation/hardhat-chai-matchers": ^2.0.3
     "@nomicfoundation/hardhat-ethers": ^3.0.5
+    "@nomicfoundation/hardhat-foundry": ^1.1.1
     "@nomicfoundation/hardhat-network-helpers": ^1.0.6
     "@nomicfoundation/hardhat-verify": ^2.0.3
     "@openzeppelin/contracts": ^4.8.1
