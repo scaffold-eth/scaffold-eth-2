@@ -33,7 +33,6 @@ export const WriteOnlyFunctionForm = ({
   contractAddress,
   inheritedFrom,
 }: WriteOnlyFunctionFormProps) => {
-  console.log("The inital getInitalFormState", getInitialFormState(abiFunction));
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [txValue, setTxValue] = useState<string | bigint>("");
   const { chain } = useNetwork();
@@ -53,8 +52,6 @@ export const WriteOnlyFunctionForm = ({
   });
 
   const handleWrite = async () => {
-    console.log("The form is", form);
-    console.log("The constructed args are", getParsedContractFunctionArgs(form));
     if (writeAsync) {
       try {
         const makeWriteWithParams = () => writeAsync({ value: BigInt(txValue) });
