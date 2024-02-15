@@ -3,6 +3,7 @@
 ---
 
 - Feat: Better complex struct inputs (#702)
+- improve debug struct UI (#726)
 - use next-themes to handle theme and update usehooks-ts (#707)
 - up rainbowkit version to 1.3.5 (#719)
 - Use arbitrumSepolia instead of Goerli (#716)
