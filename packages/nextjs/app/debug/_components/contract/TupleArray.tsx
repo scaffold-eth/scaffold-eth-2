@@ -105,7 +105,7 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
         <div className="ml-3 flex-col space-y-2 border-secondary/70 border-l-2 pl-4 collapse-content">
           {additionalInputs.map((additionalInput, additionalIndex) => (
             <div key={additionalIndex} className="space-y-1">
-              <span className="badge badge-secondary badge-sm">
+              <span className="badge bg-base-300 badge-sm">
                 {depth > 1 ? `${additionalIndex}` : `tuple[${additionalIndex}]`}
               </span>
               <div className="space-y-4">
