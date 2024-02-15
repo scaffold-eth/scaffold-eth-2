@@ -35,13 +35,13 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
     color: "#92D9FA",
     nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
-  [chains.optimismGoerli.id]: {
+  [chains.optimismSepolia.id]: {
     color: "#f01a37",
   },
   [chains.optimism.id]: {
     color: "#f01a37",
   },
-  [chains.arbitrumGoerli.id]: {
+  [chains.arbitrumSepolia.id]: {
     color: "#28a0f0",
   },
   [chains.arbitrum.id]: {
