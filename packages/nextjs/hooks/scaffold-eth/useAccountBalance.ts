@@ -11,7 +11,7 @@ export function useAccountBalance(address?: Address) {
   const price = useGlobalState(state => state.nativeCurrencyPrice);
   const { targetNetwork } = useTargetNetwork();
 
-  const { data: blockNumber } = useBlockNumber({ watch: true });
+  const { data: blockNumber } = useBlockNumber({ watch: true, chainId: targetNetwork.id });
   const {
     data: fetchedBalanceData,
     isError,

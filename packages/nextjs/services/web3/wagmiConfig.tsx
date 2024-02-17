@@ -1,4 +1,4 @@
-import { enabledChains } from "./wagmiConnectors";
+import { enabledChains, wagmiConnectors } from "./wagmiConnectors";
 import { createClient, http } from "viem";
 import { hardhat } from "viem/chains";
 import { createConfig } from "wagmi";
@@ -7,6 +7,7 @@ import scaffoldConfig from "~~/scaffold.config";
 export const wagmiConfig = createConfig({
   // TODO: Maybe we should get literal value here currently TS has widened the types because of ensabledChains logic
   chains: enabledChains,
+  connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
     return createClient({
