@@ -11,3 +11,6 @@ node_modules
 .eslintcache
 .vscode/**
 .DS_Store
+
+# Ignore JetBrains IDE settings file
+.idea
