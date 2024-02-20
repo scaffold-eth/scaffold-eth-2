@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { getAddress } from "viem";
 import { Address, useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
@@ -31,6 +32,7 @@ export const AddressInfoDropdown = ({
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
   const { disconnect } = useDisconnect();
+  const checkSumAddress = getAddress(address);
 
   const [addressCopied, setAddressCopied] = useState(false);
 
@@ -46,9 +48,9 @@ export const AddressInfoDropdown = ({
     <>
       <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
         <summary tabIndex={0} className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 !h-auto">
-          <BlockieAvatar address={address} size={30} ensImage={ensAvatar} />
+          <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
           <span className="ml-2 mr-1">
-            {isENS(displayName) ? displayName : address?.slice(0, 6) + "..." + address?.slice(-4)}
+            {isENS(displayName) ? displayName : checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4)}
           </span>
           <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
         </summary>
@@ -68,7 +70,7 @@ export const AddressInfoDropdown = ({
               </div>
             ) : (
               <CopyToClipboard
-                text={address}
+                text={checkSumAddress}
                 onCopy={() => {
                   setAddressCopied(true);
                   setTimeout(() => {
