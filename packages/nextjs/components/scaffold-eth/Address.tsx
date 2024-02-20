@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Address as AddressType, isAddress } from "viem";
+import { Address as AddressType, getAddress, isAddress } from "viem";
 import { hardhat } from "viem/chains";
 import { useEnsAvatar, useEnsName } from "wagmi";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
@@ -35,10 +35,15 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
+  const checkSumAddress = address ? getAddress(address) : undefined;
 
   const { targetNetwork } = useTargetNetwork();
 
-  const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
+  const { data: fetchedEns } = useEnsName({
+    address: checkSumAddress,
+    enabled: isAddress(checkSumAddress ?? ""),
+    chainId: 1,
+  });
   const { data: fetchedEnsAvatar } = useEnsAvatar({
     name: fetchedEns,
     enabled: Boolean(fetchedEns),
@@ -56,7 +61,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   }, [fetchedEnsAvatar]);
 
   // Skeleton UI
-  if (!address) {
+  if (!checkSumAddress) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
@@ -67,24 +72,24 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     );
   }
 
-  if (!isAddress(address)) {
+  if (!isAddress(checkSumAddress)) {
     return <span className="text-error">Wrong address</span>;
   }
 
-  const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, address);
-  let displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
+  const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
+  let displayAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
 
   if (ens) {
     displayAddress = ens;
   } else if (format === "long") {
-    displayAddress = address;
+    displayAddress = checkSumAddress;
   }
 
   return (
     <div className="flex items-center">
       <div className="flex-shrink-0">
         <BlockieAvatar
-          address={address}
+          address={checkSumAddress}
           ensImage={ensAvatar}
           size={(blockieSizeMap[size] * 24) / blockieSizeMap["base"]}
         />
@@ -112,7 +117,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
         />
       ) : (
         <CopyToClipboard
-          text={address}
+          text={checkSumAddress}
           onCopy={() => {
             setAddressCopied(true);
             setTimeout(() => {
