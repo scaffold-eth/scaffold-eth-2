@@ -39,7 +39,6 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   // at the end of the input. Example AddressInput
   const onFocus = (e: FocusEvent<HTMLInputElement, Element>) => {
     if (reFocus !== undefined) {
-      console.log("Running OnFocus", reFocus);
       e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length);
     }
   };
