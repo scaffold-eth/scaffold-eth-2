@@ -11,22 +11,30 @@ import { CommonInputProps, InputBase, isENS } from "~~/components/scaffold-eth";
 export const AddressInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps<Address | string>) => {
   // Debounce the input to keep clean RPC calls when resolving ENS names
   // If the input is an address, we don't need to debounce it
-  const _debouncedValue = useDebounce(value, 500);
+  const _debouncedValue = useDebounce(value, 900);
   const debouncedValue = isAddress(value) ? value : _debouncedValue;
   const isDebouncedValueLive = debouncedValue === value;
 
   // If the user changes the input after an ENS name is already resolved, we want to remove the stale result
   const settledValue = isDebouncedValueLive ? debouncedValue : undefined;
 
-  const { data: ensAddress, isLoading: isEnsAddressLoading } = useEnsAddress({
+  const {
+    data: ensAddress,
+    isLoading: isEnsAddressLoading,
+    isError: ensAddressError,
+  } = useEnsAddress({
     name: settledValue,
-    enabled: isENS(debouncedValue),
+    enabled: isDebouncedValueLive && isENS(debouncedValue),
     chainId: 1,
     cacheTime: 30_000,
   });
 
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
-  const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
+  const {
+    data: ensName,
+    isLoading: isEnsNameLoading,
+    isError: ensNameError,
+  } = useEnsName({
     address: settledValue as Address,
     enabled: isAddress(debouncedValue),
     chainId: 1,
@@ -57,6 +65,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     [onChange],
   );
 
+  const reFocus = ensAddressError || ensNameError || ensName === null || ensAddress === null;
   return (
     <InputBase<Address>
       name={name}
@@ -65,8 +74,9 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       value={value as Address}
       onChange={handleChange}
       disabled={isEnsAddressLoading || isEnsNameLoading || disabled}
+      reFocus={reFocus}
       prefix={
-        ensName && (
+        ensName ? (
           <div className="flex bg-base-300 rounded-l-full items-center">
             {ensAvatar ? (
               <span className="w-[35px]">
@@ -78,6 +88,18 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
             ) : null}
             <span className="text-accent px-2">{enteredEnsName ?? ensName}</span>
           </div>
+        ) : (
+          (isEnsAddressLoading || isEnsNameLoading) && (
+            <div className="flex bg-base-300 rounded-l-full items-center">
+              <div className="w-[35px]">
+                <div className="h-[35px] w-[35px] rounded-full bg-gray-500 animate-pulse"></div>
+              </div>
+              <div className="text-accent px-2 flex items-end space-x-1">
+                <span>Resolving</span>
+                <span className="loading loading-dots loading-xs"></span>
+              </div>
+            </div>
+          )
         )
       }
       suffix={
