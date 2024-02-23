@@ -1,10 +1,11 @@
-import { ChangeEvent, ReactNode, useCallback } from "react";
+import { ChangeEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 import { CommonInputProps } from "~~/components/scaffold-eth";
 
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  reFocus?: boolean;
 };
 
 export const InputBase = <T extends { toString: () => string } | undefined = string>({
@@ -16,7 +17,10 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   disabled,
   prefix,
   suffix,
+  reFocus,
 }: InputBaseProps<T>) => {
+  const inputReft = useRef<HTMLInputElement>(null);
+
   let modifier = "";
   if (error) {
     modifier = "border-error";
@@ -31,6 +35,10 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
     [onChange],
   );
 
+  useEffect(() => {
+    if (reFocus) inputReft.current?.focus();
+  }, [reFocus]);
+
   return (
     <div className={`flex border-2 border-base-300 bg-base-200 rounded-full text-accent ${modifier}`}>
       {prefix}
@@ -42,6 +50,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
         onChange={handleChange}
         disabled={disabled}
         autoComplete="off"
+        ref={inputReft}
       />
       {suffix}
     </div>
