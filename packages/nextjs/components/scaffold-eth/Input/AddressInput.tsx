@@ -21,8 +21,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
   const {
     data: ensAddress,
     isLoading: isEnsAddressLoading,
-    isError: ensAddressError,
-    isSuccess: ensAddressSuccess,
+    isError: isEnsAddressError,
+    isSuccess: isEnsAddressSuccess,
   } = useEnsAddress({
     name: settledValue,
     enabled: isDebouncedValueLive && isENS(debouncedValue),
@@ -34,8 +34,8 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
   const {
     data: ensName,
     isLoading: isEnsNameLoading,
-    isError: ensNameError,
-    isSuccess: ensNameSuccess,
+    isError: isEnsNameError,
+    isSuccess: isEnsNameSuccess,
   } = useEnsName({
     address: settledValue as Address,
     enabled: isAddress(debouncedValue),
@@ -68,7 +68,13 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
   );
 
   const reFocus =
-    ensAddressError || ensNameError || ensNameSuccess || ensAddressSuccess || ensName === null || ensAddress === null;
+    isEnsAddressError ||
+    isEnsNameError ||
+    isEnsNameSuccess ||
+    isEnsAddressSuccess ||
+    ensName === null ||
+    ensAddress === null;
+
   return (
     <InputBase<Address>
       name={name}
