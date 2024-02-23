@@ -11,7 +11,7 @@ import { CommonInputProps, InputBase, isENS } from "~~/components/scaffold-eth";
 export const AddressInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps<Address | string>) => {
   // Debounce the input to keep clean RPC calls when resolving ENS names
   // If the input is an address, we don't need to debounce it
-  const [_debouncedValue] = useDebounceValue(value, 900);
+  const [_debouncedValue] = useDebounceValue(value, 500);
   const debouncedValue = isAddress(value) ? value : _debouncedValue;
   const isDebouncedValueLive = debouncedValue === value;
 
