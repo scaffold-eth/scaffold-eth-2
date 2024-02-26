@@ -46,7 +46,7 @@ const Home: NextPage = () => {
               <p>
                 Tinker with your smart contract using the{" "}
                 <Link href="/debug" passHref className="link">
-                  Debug Contract
+                  Debug Contracts
                 </Link>{" "}
                 tab.
               </p>
