@@ -1,3 +1,4 @@
+import { burnerWalletConfig } from "./wagmi-burner/burnerWalletConfig";
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
   coinbaseWallet,
@@ -20,7 +21,7 @@ export const enabledChains = targetNetworks.find((network: chains.Chain) => netw
   : ([...targetNetworks, chains.mainnet] as const);
 
 // TODO: Get add burner wallet and get it working
-const wallets = [metaMaskWallet, walletConnectWallet, ledgerWallet, coinbaseWallet, rainbowWallet];
+const wallets = [metaMaskWallet, walletConnectWallet, ledgerWallet, coinbaseWallet, rainbowWallet, burnerWalletConfig];
 
 /**
  * wagmi connectors for the wagmi context
