@@ -1,13 +1,15 @@
-node_modules
+/dist
 
-# dependencies, yarn, etc
-# yarn / eslint
+# Dependency directories
+node_modules/
+
+# yarn
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.eslintcache
-.vscode/**
+
+# macos files
 .DS_Store
