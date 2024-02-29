@@ -18,7 +18,7 @@ import {
   Log,
   TransactionReceipt,
 } from "viem";
-import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
+import { UseContractEventConfig, UseContractWriteConfig, UseReadContractParameters } from "wagmi";
 import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -163,11 +163,11 @@ export type UseScaffoldReadConfig<
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  Partial<UseContractReadConfig>,
+  Partial<UseReadContractParameters>,
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
+    Omit<UseReadContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
 
 export type UseScaffoldWriteConfig<
