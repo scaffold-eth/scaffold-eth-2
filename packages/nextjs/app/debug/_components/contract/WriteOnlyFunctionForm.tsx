@@ -11,6 +11,7 @@ import {
   getFunctionInputKey,
   getInitialFormState,
   getParsedContractFunctionArgs,
+  transformAbiFunction,
 } from "~~/app/debug/_components/contract";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -73,7 +74,8 @@ export const WriteOnlyFunctionForm = ({
   }, [txResult]);
 
   // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
-  const inputs = abiFunction.inputs.map((input, inputIndex) => {
+  const transformedFunction = transformAbiFunction(abiFunction);
+  const inputs = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
       <ContractInput
@@ -99,14 +101,20 @@ export const WriteOnlyFunctionForm = ({
         </p>
         {inputs}
         {abiFunction.stateMutability === "payable" ? (
-          <IntegerInput
-            value={txValue}
-            onChange={updatedTxValue => {
-              setDisplayedTxResult(undefined);
-              setTxValue(updatedTxValue);
-            }}
-            placeholder="value (wei)"
-          />
+          <div className="flex flex-col gap-1.5 w-full">
+            <div className="flex items-center ml-2">
+              <span className="text-xs font-medium mr-2 leading-none">payable value</span>
+              <span className="block text-xs font-extralight leading-none">wei</span>
+            </div>
+            <IntegerInput
+              value={txValue}
+              onChange={updatedTxValue => {
+                setDisplayedTxResult(undefined);
+                setTxValue(updatedTxValue);
+              }}
+              placeholder="value (wei)"
+            />
+          </div>
         ) : null}
         <div className="flex justify-between gap-2">
           {!zeroInputs && (

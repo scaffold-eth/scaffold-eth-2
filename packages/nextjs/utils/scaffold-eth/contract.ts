@@ -1,5 +1,6 @@
 import {
   Abi,
+  AbiParameter,
   AbiParameterToPrimitiveType,
   AbiParametersToPrimitiveTypes,
   ExtractAbiEvent,
@@ -290,3 +291,5 @@ export type UseScaffoldEventHistoryData<
       }[]
     >
   | undefined;
+
+export type AbiParameterTuple = Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
