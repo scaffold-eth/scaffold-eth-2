@@ -8,7 +8,7 @@
     "deploy": "hardhat deploy",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "generate": "hardhat run scripts/generateAccount.ts",
-    "flatten": "hardhat flatten > FlattenedContracts.sol && echo '📄 Flattened contracts exported to packages/hardhat/FlattenedContracts.sol'",
+    "flatten": "hardhat flatten",
     "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
