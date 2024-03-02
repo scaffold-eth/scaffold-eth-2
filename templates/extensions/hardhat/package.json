@@ -10,7 +10,9 @@
     "generate": "yarn workspace @se-2/hardhat generate",
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
+    "hardhat:format": "yarn workspace @se-2/hardhat format",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
-    "test": "yarn hardhat:test"
+    "test": "yarn hardhat:test",
+    "format": "yarn next:format && yarn hardhat:format"
   }
 }
