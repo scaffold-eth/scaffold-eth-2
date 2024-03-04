@@ -21,6 +21,11 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
         setStatus(ContractCodeStatus.NOT_FOUND);
         return;
       }
+
+      // TODO: Handle this properly
+      if (!publicClient) {
+        return;
+      }
       const code = await publicClient.getBytecode({
         address: deployedContract.address,
       });

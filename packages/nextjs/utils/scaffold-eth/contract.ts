@@ -19,7 +19,9 @@ import {
   Log,
   TransactionReceipt,
 } from "viem";
-import { UseContractEventConfig, UseContractWriteConfig, UseReadContractParameters } from "wagmi";
+import { UseContractEventConfig, UseReadContractParameters, UseWriteContractParameters } from "wagmi";
+import { WriteContractParameters } from "wagmi/actions";
+import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -171,20 +173,19 @@ export type UseScaffoldReadConfig<
     Omit<UseReadContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
 
-export type UseScaffoldWriteConfig<
+/*
+ *{
+  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
+  blockConfirmations?: number;
+}
+ * */
+export type scaffoldWriteContractVariables<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
 > = {
-  contractName: TContractName;
-  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
-  blockConfirmations?: number;
-} & IsContractDeclarationMissing<
-  Partial<UseContractWriteConfig>,
-  {
-    functionName: TFunctionName;
-  } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "mode">
->;
+  functionName: TFunctionName;
+} & UseScaffoldArgsParam<TContractName, TFunctionName> &
+  Omit<WriteContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">;
 
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
