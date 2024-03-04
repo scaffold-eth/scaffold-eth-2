@@ -1,3 +1,4 @@
+import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
   AbiParameter,
@@ -17,10 +18,10 @@ import {
   GetTransactionReceiptReturnType,
   GetTransactionReturnType,
   Log,
-  TransactionReceipt,
+  WriteContractErrorType,
 } from "viem";
-import { UseContractEventConfig, UseReadContractParameters, UseWriteContractParameters } from "wagmi";
-import { WriteContractParameters } from "wagmi/actions";
+import { Config, UseContractEventConfig, UseReadContractParameters, useWriteContract } from "wagmi";
+import { WriteContractParameters, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
@@ -186,6 +187,14 @@ export type scaffoldWriteContractVariables<
   functionName: TFunctionName;
 } & UseScaffoldArgsParam<TContractName, TFunctionName> &
   Omit<WriteContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">;
+
+type WriteVariables = WriteContractVariables<Abi, string, any[], Config, number>;
+export type scaffoldWriteContractOptions = MutateOptions<
+  WriteContractReturnType,
+  WriteContractErrorType,
+  WriteVariables,
+  unknown
+>;
 
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,

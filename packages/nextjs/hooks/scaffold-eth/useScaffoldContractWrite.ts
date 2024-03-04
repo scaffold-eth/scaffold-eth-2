@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
+import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
+import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
-import { ContractAbi, ContractName, scaffoldWriteContractVariables } from "~~/utils/scaffold-eth/contract";
+import {
+  ContractAbi,
+  ContractName,
+  scaffoldWriteContractOptions,
+  scaffoldWriteContractVariables,
+} from "~~/utils/scaffold-eth/contract";
 
-// TODO: Update comment and handle value autocompleteion
+// TODO: Update comment and handle `value` error
 /**
  * Wrapper around wagmi's useContractWrite hook which automatically loads (by name) the contract ABI and address from
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
@@ -31,11 +38,11 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  // TODO: Pass in second arg option to it
   const sendContractWriteTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
     variables: scaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: scaffoldWriteContractOptions,
   ) => {
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
@@ -53,11 +60,20 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
     try {
       setIsMining(true);
       const makeWriteWithParams = () =>
-        wagmiContractWrite.writeContractAsync({
-          abi: deployedContractData.abi as Abi,
-          address: deployedContractData.address,
-          ...variables,
-        } as WriteContractVariables<Abi, TFunctionName, any[], Config, number>);
+        wagmiContractWrite.writeContractAsync(
+          {
+            abi: deployedContractData.abi as Abi,
+            address: deployedContractData.address,
+            ...variables,
+          } as WriteContractVariables<Abi, string, any[], Config, number>,
+          options as
+            | MutateOptions<
+                WriteContractReturnType,
+                WriteContractErrorType,
+                WriteContractVariables<Abi, string, any[], Config, number>
+              >
+            | undefined,
+        );
       const writeTxResult = await writeTx(makeWriteWithParams);
 
       return writeTxResult;
