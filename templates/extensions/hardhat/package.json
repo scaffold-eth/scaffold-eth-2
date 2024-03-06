@@ -13,6 +13,7 @@
     "hardhat:format": "yarn workspace @se-2/hardhat format",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "test": "yarn hardhat:test",
+    "flatten": "yarn workspace @se-2/hardhat flatten",
     "format": "yarn next:format && yarn hardhat:format"
   }
 }
