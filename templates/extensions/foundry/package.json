@@ -12,6 +12,7 @@
     "test": "yarn foundry:test",
     "verify": "yarn workspace @se-2/foundry verify",
     "generate": "yarn workspace @se-2/foundry generate",
+    "flatten": "yarn workspace @se-1/foundry flatten",
     "format": "yarn next:format && yarn foundry:format"
   }
 }
