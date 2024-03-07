@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { formatEther } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
@@ -10,7 +10,7 @@ type TokenAmountProps = {
 
 /**
  * Display a token amount with a custom amount of decimals.
- * If it's marked as ETH, allow for showing its USD value with a button push.
+ * If it's ETH, allow for showing its USD value with a button push.
  */
 export const TokenAmount = ({ amount, decimals = 4, isEth = false }: TokenAmountProps) => {
   const { targetNetwork } = useTargetNetwork();
@@ -40,13 +40,13 @@ export const TokenAmount = ({ amount, decimals = 4, isEth = false }: TokenAmount
                 <div className="w-full flex items-center justify-center">
                   {isEthBalance ? (
                     <>
-                      <span>{parseFloat(ethers.formatEther(amount.toString())).toFixed(decimals)}</span>
+                      <span>{parseFloat(formatEther(BigInt(amount))).toFixed(decimals)}</span>
                       <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>
                     </>
                   ) : (
                     <>
                       <span className="text-[0.8em] font-bold mr-1">$</span>
-                      <span>{parseFloat(ethers.formatEther((amount * price).toString())).toFixed(2)}</span>
+                      <span>{parseFloat(formatEther(BigInt(amount * price))).toFixed(2)}</span>
                     </>
                   )}
                 </div>
@@ -56,7 +56,7 @@ export const TokenAmount = ({ amount, decimals = 4, isEth = false }: TokenAmount
         </>
       ) : (
         <div className="w-full flex items-center justify-center">
-          <strong>{parseFloat(ethers.formatEther(amount.toString())).toFixed(decimals)} ETH</strong>
+          <strong>{parseFloat(formatEther(BigInt(amount))).toFixed(decimals)}</strong>
         </div>
       )}
     </>
