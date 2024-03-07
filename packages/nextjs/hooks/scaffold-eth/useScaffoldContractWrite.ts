@@ -85,6 +85,7 @@ export const useScaffoldContractWrite = <
       } catch (e: any) {
         const message = getParsedError(e);
         notification.error(message);
+        throw new Error(e);
       } finally {
         setIsMining(false);
       }
