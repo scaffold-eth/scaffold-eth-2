@@ -66,9 +66,4 @@ describe("Asserts", () => {
         assert.entityCount("Sender", 2); // Assuming there are 2 Sender entities now
         assert.entityCount("Greeting", 2); // Assuming there are 2 Greeting entities now
     });
-
-    // The remaining tests are generic and seem to be okay except for the entity names. If they are meant to test generic features,
-    // then they should be kept as is, but ensure the entity names and fields correspond to the actual entities you have,
-    // like changing "Gravatar" to "Greeting" or "Sender" as needed.
-    // Note: Make sure to replace "Gravatar" with "Greeting" or "Sender" depending on the context of the test.
 });
