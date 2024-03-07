@@ -1,6 +1,6 @@
 import { useEffectOnce, useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { Chain, hardhat } from "viem/chains";
-import { Connector, useAccount, useConnect } from "wagmi";
+import { Connector, useAccountEffect, useConnect, useConnectors } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { burnerWalletId } from "~~/services/web3/wagmi-burner/BurnerConnector";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
@@ -24,7 +24,7 @@ const getInitialConnector = (
   connectors: Connector[],
 ): { connector: Connector | undefined; chainId?: number } | undefined => {
   // Look for the SAFE connector instance and connect to it instantly if loaded in SAFE frame
-  const safeConnectorInstance = connectors.find(connector => connector.id === SAFE_ID && connector.ready);
+  const safeConnectorInstance = connectors.find(connector => connector.id === SAFE_ID && connector);
 
   if (safeConnectorInstance) {
     return { connector: safeConnectorInstance };
@@ -58,11 +58,11 @@ const getInitialConnector = (
  */
 export const useAutoConnect = (): void => {
   const wagmiWalletValue = useReadLocalStorage<string>(WAGMI_WALLET_STORAGE_KEY);
-  const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STORAGE_KEY, wagmiWalletValue ?? "", {
-    initializeWithValue: false,
-  });
-  const connectState = useConnect();
-  useAccount({
+  const [walletId, setWalletId] = useLocalStorage<string>(SCAFFOLD_WALLET_STORAGE_KEY, wagmiWalletValue ?? "");
+
+  const connectors = useConnectors();
+  const { connect } = useConnect();
+  useAccountEffect({
     onConnect({ connector }) {
       setWalletId(connector?.id ?? "");
     },
@@ -73,10 +73,10 @@ export const useAutoConnect = (): void => {
   });
 
   useEffectOnce(() => {
-    const initialConnector = getInitialConnector(getTargetNetworks()[0], walletId, connectState.connectors);
+    const initialConnector = getInitialConnector(getTargetNetworks()[0], walletId, [...connectors]);
 
     if (initialConnector?.connector) {
-      connectState.connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
+      connect({ connector: initialConnector.connector, chainId: initialConnector.chainId });
     }
   });
 };

@@ -74,7 +74,6 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   }
 
   const targetChain = targetChainArr[0] as keyof typeof chains;
-  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present on some chains
   const blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url;
 
   if (!blockExplorerTxURL) {
