@@ -95,7 +95,8 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       }
       console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
       const message = getParsedError(error);
-      throw new Error(message);
+      notification.error(message);
+      throw error;
     }
 
     return transactionHash;
