@@ -20,7 +20,7 @@ import {
   Log,
   WriteContractErrorType,
 } from "viem";
-import { Config, UseContractEventConfig, UseReadContractParameters, useWriteContract } from "wagmi";
+import { Config, UseReadContractParameters, UseWatchContractEventParameters } from "wagmi";
 import { WriteContractParameters, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
@@ -206,7 +206,7 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  Omit<UseContractEventConfig, "listener"> & {
+  Omit<UseWatchContractEventParameters, "listener" | "address" | "abi"> & {
     listener: (
       logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
@@ -216,7 +216,7 @@ export type UseScaffoldEventConfig<
       >[],
     ) => void;
   },
-  Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
+  Omit<UseWatchContractEventParameters<ContractAbi<TContractName>>, "listener" | "address" | "abi"> & {
     listener: (
       logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
