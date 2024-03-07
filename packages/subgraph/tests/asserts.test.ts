@@ -2,10 +2,9 @@ import { describe, test, assert, beforeAll } from "matchstick-as";
 import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Greeting, Sender } from "../generated/schema";
 
-// Correcting the tests to match the Greeting and Sender mock
 describe("Asserts", () => {
     beforeAll(() => {
-        // Setting up the testing environment
+        // Mocking the Sender
         let sender = new Sender("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
         sender.address = Bytes.fromHexString(
             "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
@@ -14,6 +13,7 @@ describe("Asserts", () => {
         sender.greetingCount = BigInt.fromI32(1);
         sender.save();
 
+        // Mocking Greeting
         let greeting = new Greeting(
             "0x1909fcb0b41989e28308afcb0cf55adb6faba28e14fcbf66c489c69b8fe95dd6"
         );
