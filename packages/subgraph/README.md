@@ -131,6 +131,50 @@ sudo ufw allow 8545/tcp
 
 &nbsp;
 
+#### ✅ Side Quest: Run a Matchstick Test ✅
+
+Matchstick is a [unit testing framework](https://thegraph.com/docs/en/developing/unit-testing-framework/), developed by [LimeChain](https://limechain.tech/), that enables subgraph developers to test their mapping logic in a sandboxed environment and deploy their subgraphs with confidence!
+
+The project comes with a pre-written test located in `packages/subgraph/tests/asserts.test.ts`
+
+To test simply type....
+
+```
+yarn subgraph:test
+```
+
+> This will run `graph test` and automatically download the needed files for testing.
+
+You should receive the following output.
+
+```
+Fetching latest version tag...
+Downloading release from https://github.com/LimeChain/matchstick/releases/download/0.6.0/binary-macos-11-m1
+binary-macos-11-m1 has been installed!
+
+___  ___      _       _         _   _      _
+|  \/  |     | |     | |       | | (_)    | |
+| .  . | __ _| |_ ___| |__  ___| |_ _  ___| | __
+| |\/| |/ _` | __/ __| '_ \/ __| __| |/ __| |/ /
+| |  | | (_| | || (__| | | \__ \ |_| | (__|   <
+\_|  |_/\__,_|\__\___|_| |_|___/\__|_|\___|_|\_\
+
+Compiling...
+
+💬 Compiling asserts...
+
+Igniting tests 🔥
+
+asserts
+--------------------------------------------------
+  Asserts:
+    √ Greeting and Sender entities - 0.102ms
+
+All 1 tests passed! 😎
+
+[Thu, 07 Mar 2024 15:10:26 -0800] Program executed in: 1.838s.
+```
+
 #### ✅ Step 2: Create and ship our Subgraph ✅
 
 Now we can open up a fourth window to finish setting up The Graph. 😅 In this forth window we will create our local subgraph!
