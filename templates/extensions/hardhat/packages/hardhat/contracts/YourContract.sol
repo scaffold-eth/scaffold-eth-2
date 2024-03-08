@@ -68,7 +68,7 @@ contract YourContract {
 		}
 
 		// emit: keyword used to trigger an event
-		emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, 0);
+		emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, msg.value);
 	}
 
 	/**
