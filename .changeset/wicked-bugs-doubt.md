@@ -2,5 +2,8 @@
 "create-eth": patch
 ---
 
-- yarn flatten (#745)
-- fix local next build (#749)
+- Yarn flatten (#745)
+- Fix local next build (#749)
+- Fix emit event value in contract (#765, 833d09b)
+- Fix useScaffoldContractWrite so it properly throws errors (#758)
+- Fix vercel deployment mismatch (#757)
