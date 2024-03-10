@@ -1891,7 +1891,6 @@ __metadata:
     typescript: ^5.1.6
     use-debounce: ^8.0.4
     usehooks-ts: ^2.13.0
-    vercel: ^32.4.1
     viem: 1.19.9
     wagmi: 1.4.12
     zustand: ^4.1.2
@@ -12274,6 +12273,8 @@ __metadata:
   dependencies:
     husky: ^8.0.1
     lint-staged: ^13.0.3
+    next: ^14.0.4
+    vercel: ^32.4.1
   languageName: unknown
   linkType: soft
 
