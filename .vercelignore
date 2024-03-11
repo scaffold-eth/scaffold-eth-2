@@ -31,9 +31,6 @@ packages/nextjs/.env.development.local
 packages/nextjs/.env.test.local
 packages/nextjs/.env.production.local
 
-# vercel
-packages/nextjs/.vercel
-
 # typescript
 packages/nextjs/*.tsbuildinfo
 
