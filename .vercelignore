@@ -34,7 +34,6 @@ packages/nextjs/.env.production.local
 # typescript
 packages/nextjs/*.tsbuildinfo
 
-
 # --- Hardhat files ---
 
 packages/hardhat/node_modules
