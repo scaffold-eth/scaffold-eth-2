@@ -9,3 +9,4 @@
 - Fix vercel deployment mismatch (#757)
 - Remove extra notifications when using useTransactor (#766)
 - Ignore JetBrains IDE settings file (#732)
+- Fix hardhat lint errors (ac1d2ac)
