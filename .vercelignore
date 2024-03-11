@@ -1,4 +1,4 @@
-# Next.js files
+# --- Next.js files ---
 
 # dependencies
 packages/nextjs/node_modules
@@ -35,10 +35,7 @@ packages/nextjs/.env.production.local
 packages/nextjs/*.tsbuildinfo
 
 
-# -------------------------
-
-
-#Hardhat files
+# --- Hardhat files ---
 
 packages/hardhat/node_modules
 packages/hardhat/.env
