@@ -12,6 +12,8 @@ const contents = () =>
 .eslintcache
 .vscode/**
 .DS_Store
-.vercel`
+.vscode
+.idea
+.vercel`;
 
 export default contents
