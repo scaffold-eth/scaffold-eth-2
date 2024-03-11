@@ -1,3 +1,16 @@
+# --- Monorepo files ---
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.eslintcache
+.DS_Store
+.vscode
+.idea
+.vercel
+
 # --- Next.js files ---
 
 # dependencies
