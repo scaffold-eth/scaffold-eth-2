@@ -1,5 +1,19 @@
 # create-eth
 
+## 0.0.35
+
+### Patch Changes
+
+- Yarn flatten (#745, 62553fd)
+- Add format with prettier task (b03c011)
+- Fix local next build (#749)
+- Fix emit event value in contract (#765, 833d09b)
+- Fix useScaffoldContractWrite so it properly throws errors (#758)
+- Fix vercel deployment mismatch (#757)
+- Remove extra notifications when using useTransactor (#766)
+- Ignore JetBrains IDE settings file (#732)
+- Fix hardhat lint errors (ac1d2ac)
+
 ## 0.0.34
 
 ### Patch Changes
