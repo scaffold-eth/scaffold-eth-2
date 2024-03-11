@@ -40,7 +40,7 @@ export const Address = ({
   format,
   size = "base",
   textClasses = "ml-1.5 text-base font-normal",
-  cardClasses = "flex items-center rounded-lg my-5 flex items-center justify-center bg-base-300",
+  cardClasses = "flex items-center",
 }: AddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
