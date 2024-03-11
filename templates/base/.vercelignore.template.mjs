@@ -1,7 +1,21 @@
 import { withDefaults } from "../utils.js";
 
 const contents = ({ packageVercelIgnoreContent }) =>
-  `# --- Next.js files ---
+  `# --- Monorepo files ---
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.eslintcache
+.DS_Store
+.vscode
+.idea
+.vercel
+
+# --- Next.js files ---
 
 # dependencies
 packages/nextjs/node_modules
