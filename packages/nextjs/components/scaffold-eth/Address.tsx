@@ -16,6 +16,8 @@ type AddressProps = {
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  textClasses?: string;
+  cardClasses?: string;
 };
 
 const blockieSizeMap = {
@@ -31,7 +33,15 @@ const blockieSizeMap = {
 /**
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
-export const Address = ({ address, disableAddressLink, format, size = "base" }: AddressProps) => {
+
+export const Address = ({
+  address,
+  disableAddressLink,
+  format,
+  size = "base",
+  textClasses = "ml-1.5 text-base font-normal",
+  cardClasses = "flex items-center rounded-lg my-5 flex items-center justify-center bg-base-300",
+}: AddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
@@ -86,7 +96,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   }
 
   return (
-    <div className="flex items-center">
+    <div className={`${cardClasses} `}>
       <div className="flex-shrink-0">
         <BlockieAvatar
           address={checkSumAddress}
@@ -95,18 +105,13 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
         />
       </div>
       {disableAddressLink ? (
-        <span className={`ml-1.5 text-${size} font-normal`}>{displayAddress}</span>
+        <span className={textClasses}>{displayAddress}</span>
       ) : targetNetwork.id === hardhat.id ? (
-        <span className={`ml-1.5 text-${size} font-normal`}>
+        <span className={textClasses}>
           <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
         </span>
       ) : (
-        <a
-          className={`ml-1.5 text-${size} font-normal`}
-          target="_blank"
-          href={blockExplorerAddressLink}
-          rel="noopener noreferrer"
-        >
+        <a className={textClasses} target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
           {displayAddress}
         </a>
       )}
