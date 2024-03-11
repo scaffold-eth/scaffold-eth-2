@@ -9,8 +9,7 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 .eslintcache
-.vscode/**
 .DS_Store
-
-# Ignore JetBrains IDE settings file
+.vscode
 .idea
+.vercel
