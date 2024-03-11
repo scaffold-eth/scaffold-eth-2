@@ -1,0 +1,58 @@
+#Hardhat files
+
+packages/hardhat/node_modules
+packages/hardhat/.env
+packages/hardhat/coverage
+packages/hardhat/coverage.json
+packages/hardhat/typechain
+packages/hardhat/typechain-types
+packages/hardhat/temp
+
+packages/hardhat/cache
+packages/hardhat/artifacts
+
+packages/hardhat/artifacts-zk
+packages/hardhat/cache-zk
+
+packages/hardhat/deployments
+
+# -------------------------
+
+# Next.js files
+
+# dependencies
+packages/nextjs/node_modules
+packages/nextjs/.pnp
+packages/nextjs/.pnp.js
+
+# testing
+packages/nextjs/coverage
+
+# next.js
+packages/nextjs/.next/
+packages/nextjs/out/
+
+# production
+packages/nextjs/build
+
+# misc
+packages/nextjs/.DS_Store
+packages/nextjs/*.pem
+
+# debug
+packages/nextjs/npm-debug.log*
+packages/nextjs/yarn-debug.log*
+packages/nextjs/yarn-error.log*
+packages/nextjs/.pnpm-debug.log*
+
+# local env files
+packages/nextjs/.env.local
+packages/nextjs/.env.development.local
+packages/nextjs/.env.test.local
+packages/nextjs/.env.production.local
+
+# vercel
+packages/nextjs/.vercel
+
+# typescript
+packages/nextjs/*.tsbuildinfo
