@@ -13,6 +13,7 @@
     "next:lint": "yarn workspace @se-2/nextjs lint",
     "next:format": "yarn workspace @se-2/nextjs format",
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
+    "next:build": "yarn workspace @se-2/nextjs build",
     "format": "yarn next:format",
     "postinstall": "husky install",
     "precommit": "lint-staged",
