@@ -21,17 +21,19 @@ const Home: NextPage = () => {
 
           <div className="flex justify-center items-center space-x-2">
             <p className="my-2 font-medium">Connected Address:</p>
-            <ScaffoldAddress address={connectedAddress} />
+            <ScaffoldAddress address={connectedAddress} disableAddressLink={false} format={"short"} size="base" />
           </div>
 
           <div className="flex justify-center items-center space-x-2">
             <div className="bg-base-300">
               <BaseAddress
                 address={connectedAddress}
+                disableAddressLink={false}
+                format={"short"}
                 blockieSize="3xl"
                 wrapperClassName="flex flex-col items-center"
-                duplicateIconSize={10}
                 textClassName={`ml-1.5 text-4xl font-normal`}
+                duplicateIconSize={10}
               />
             </div>
           </div>
