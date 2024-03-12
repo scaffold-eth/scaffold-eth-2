@@ -30,7 +30,7 @@ const Home: NextPage = () => {
                 address={connectedAddress}
                 disableAddressLink={false}
                 format={"short"}
-                blockieSize="3xl"
+                blockieSize={128}
                 wrapperClassName="flex flex-col items-center"
                 textClassName={`ml-1.5 text-4xl font-normal`}
                 duplicateIconSize={10}

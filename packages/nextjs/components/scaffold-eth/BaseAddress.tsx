@@ -15,20 +15,10 @@ export type BaseAddressProps = {
   address?: AddressType;
   disableAddressLink?: boolean;
   format?: "short" | "long";
-  blockieSize?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  blockieSize: number;
   textClassName?: string;
   wrapperClassName?: string;
   duplicateIconSize?: number;
-};
-
-const blockieSizeMap = {
-  xs: 6,
-  sm: 7,
-  base: 8,
-  lg: 9,
-  xl: 10,
-  "2xl": 12,
-  "3xl": 15,
 };
 
 /**
@@ -39,7 +29,7 @@ export const BaseAddress = ({
   address,
   disableAddressLink,
   format,
-  blockieSize = "base",
+  blockieSize,
   textClassName,
   wrapperClassName,
   duplicateIconSize,
@@ -100,11 +90,7 @@ export const BaseAddress = ({
   return (
     <div className={`${wrapperClassName} `}>
       <div className="flex-shrink-0">
-        <BlockieAvatar
-          address={checkSumAddress}
-          ensImage={ensAvatar}
-          size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
-        />
+        <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={blockieSize} />
       </div>
       {disableAddressLink ? (
         <span className={textClassName}>{displayAddress}</span>
