@@ -16,8 +16,8 @@ type AddressProps = {
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
-  textClasses?: string;
-  cardClasses?: string;
+  textClassName?: string;
+  wrapperClassName?: string;
 };
 
 const blockieSizeMap = {
@@ -39,8 +39,8 @@ export const Address = ({
   disableAddressLink,
   format,
   size = "base",
-  textClasses = "ml-1.5 text-base font-normal",
-  cardClasses = "flex items-center",
+  textClassName = "ml-1.5 text-base font-normal",
+  wrapperClassName = "flex items-center",
 }: AddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
@@ -96,7 +96,7 @@ export const Address = ({
   }
 
   return (
-    <div className={`${cardClasses} `}>
+    <div className={`${wrapperClassName} `}>
       <div className="flex-shrink-0">
         <BlockieAvatar
           address={checkSumAddress}
@@ -105,13 +105,13 @@ export const Address = ({
         />
       </div>
       {disableAddressLink ? (
-        <span className={textClasses}>{displayAddress}</span>
+        <span className={textClassName}>{displayAddress}</span>
       ) : targetNetwork.id === hardhat.id ? (
-        <span className={textClasses}>
+        <span className={textClassName}>
           <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
         </span>
       ) : (
-        <a className={textClasses} target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
+        <a className={textClassName} target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
           {displayAddress}
         </a>
       )}
