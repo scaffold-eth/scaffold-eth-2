@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress } from "viem";
-import { Address } from "~~/components/scaffold-eth";
+import { ScaffoldAddress } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 type DisplayContent =
@@ -35,7 +35,7 @@ export const displayTxResult = (
   }
 
   if (typeof displayContent === "string" && isAddress(displayContent)) {
-    return asText ? displayContent : <Address address={displayContent} />;
+    return asText ? displayContent : <ScaffoldAddress address={displayContent} />;
   }
 
   if (Array.isArray(displayContent)) {

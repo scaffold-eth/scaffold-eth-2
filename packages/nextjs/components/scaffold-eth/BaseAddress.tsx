@@ -11,13 +11,14 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
-type AddressProps = {
+export type BaseAddressProps = {
   address?: AddressType;
   disableAddressLink?: boolean;
   format?: "short" | "long";
-  size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  blockieSize?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
   textClassName?: string;
   wrapperClassName?: string;
+  duplicateIconSize?: number;
 };
 
 const blockieSizeMap = {
@@ -34,14 +35,15 @@ const blockieSizeMap = {
  * Displays an address (or ENS) with a Blockie image and option to copy address.
  */
 
-export const Address = ({
+export const BaseAddress = ({
   address,
   disableAddressLink,
   format,
-  size = "base",
-  textClassName = "ml-1.5 text-base font-normal",
-  wrapperClassName = "flex items-center",
-}: AddressProps) => {
+  blockieSize = "base",
+  textClassName,
+  wrapperClassName,
+  duplicateIconSize,
+}: BaseAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const [addressCopied, setAddressCopied] = useState(false);
@@ -101,7 +103,7 @@ export const Address = ({
         <BlockieAvatar
           address={checkSumAddress}
           ensImage={ensAvatar}
-          size={(blockieSizeMap[size] * 24) / blockieSizeMap["base"]}
+          size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
         />
       </div>
       {disableAddressLink ? (
@@ -131,7 +133,7 @@ export const Address = ({
           }}
         >
           <DocumentDuplicateIcon
-            className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+            className={`ml-1.5 text-xl font-normal text-sky-600 h-${duplicateIconSize} w-${duplicateIconSize} cursor-pointer`}
             aria-hidden="true"
           />
         </CopyToClipboard>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { BaseAddress } from "~~/components/scaffold-eth";
+import { ScaffoldAddress } from "~~/components/scaffold-eth/ScaffoldAddress";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -17,10 +18,24 @@ const Home: NextPage = () => {
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
           </h1>
+
           <div className="flex justify-center items-center space-x-2">
             <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
+            <ScaffoldAddress address={connectedAddress} />
           </div>
+
+          <div className="flex justify-center items-center space-x-2">
+            <div className="bg-base-300">
+              <BaseAddress
+                address={connectedAddress}
+                blockieSize="3xl"
+                wrapperClassName="flex flex-col items-center"
+                duplicateIconSize={10}
+                textClassName={`ml-1.5 text-4xl font-normal`}
+              />
+            </div>
+          </div>
+
           <p className="text-center text-lg">
             Get started by editing{" "}
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
