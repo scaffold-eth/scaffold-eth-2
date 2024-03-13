@@ -34,6 +34,7 @@ const Home: NextPage = () => {
                 wrapperClassName="flex flex-col items-center"
                 textClassName={`ml-1.5 text-4xl font-normal`}
                 duplicateIconSize={10}
+                renderOrder={["address", "blockie", "copy"]}
               />
             </div>
           </div>

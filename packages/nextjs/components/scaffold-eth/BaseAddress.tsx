@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ReactElement } from "react";
 import Link from "next/link";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Address as AddressType, getAddress, isAddress } from "viem";
@@ -19,6 +20,7 @@ export type BaseAddressProps = {
   textClassName?: string;
   wrapperClassName?: string;
   duplicateIconSize?: number;
+  renderOrder?: ("blockie" | "address" | "copy")[];
 };
 
 /**
@@ -33,6 +35,7 @@ export const BaseAddress = ({
   textClassName,
   wrapperClassName,
   duplicateIconSize,
+  renderOrder,
 }: BaseAddressProps) => {
   const [ens, setEns] = useState<string | null>();
   const [ensAvatar, setEnsAvatar] = useState<string | null>();
@@ -87,9 +90,66 @@ export const BaseAddress = ({
     displayAddress = checkSumAddress;
   }
 
+  const renderComponents: ReactElement[] = [];
+
+  if (renderOrder) {
+    for (let i = 0; i < renderOrder?.length; i++) {
+      if (renderOrder[i] === "blockie") {
+        renderComponents.push(
+          <div className="flex-shrink-0">
+            <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={blockieSize} />
+          </div>,
+        );
+      } else if (renderOrder[i] === "address") {
+        renderComponents.push(
+          <div>
+            {disableAddressLink ? (
+              <span className={textClassName}>{displayAddress}</span>
+            ) : targetNetwork.id === hardhat.id ? (
+              <span className={textClassName}>
+                <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
+              </span>
+            ) : (
+              <a className={textClassName} target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
+                {displayAddress}
+              </a>
+            )}
+          </div>,
+        );
+      } else if (renderOrder[i] === "copy") {
+        renderComponents.push(
+          <div>
+            {addressCopied ? (
+              <CheckCircleIcon
+                className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+                aria-hidden="true"
+              />
+            ) : (
+              <CopyToClipboard
+                text={checkSumAddress}
+                onCopy={() => {
+                  setAddressCopied(true);
+                  setTimeout(() => {
+                    setAddressCopied(false);
+                  }, 800);
+                }}
+              >
+                <DocumentDuplicateIcon
+                  className={`ml-1.5 text-xl font-normal text-sky-600 h-${duplicateIconSize} w-${duplicateIconSize} cursor-pointer`}
+                  aria-hidden="true"
+                />
+              </CopyToClipboard>
+            )}
+          </div>,
+        );
+      }
+    }
+  }
+
   return (
     <div className={`${wrapperClassName} `}>
-      <div className="flex-shrink-0">
+      {renderComponents}
+      {/* <div className="flex-shrink-0">
         <BlockieAvatar address={checkSumAddress} ensImage={ensAvatar} size={blockieSize} />
       </div>
       {disableAddressLink ? (
@@ -123,7 +183,7 @@ export const BaseAddress = ({
             aria-hidden="true"
           />
         </CopyToClipboard>
-      )}
+      )} */}
     </div>
   );
 };

@@ -12,6 +12,7 @@ export type ScaffoldAddressProps = {
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  renderOrder?: ("blockie" | "address" | "copy")[];
 };
 
 const blockieSizeMap = {
@@ -24,12 +25,19 @@ const blockieSizeMap = {
   "3xl": 15,
 };
 
-export const ScaffoldAddress = ({ address, disableAddressLink, format, size = "base" }: ScaffoldAddressProps) => {
+export const ScaffoldAddress = ({
+  address,
+  disableAddressLink,
+  format,
+  size = "base",
+  renderOrder = ["blockie", "address", "copy"],
+}: ScaffoldAddressProps) => {
   const wrapperClassName = "flex items-center";
   const textClassName = `ml-1.5 text-${size} font-normal`;
   const duplicateIconSize = 5;
 
   const blockieSize = (blockieSizeMap[size] * 24) / blockieSizeMap["base"];
+  // const renderOrder: any[] = ["blockie", "address", "copy"];
 
   return (
     <BaseAddress
@@ -40,6 +48,7 @@ export const ScaffoldAddress = ({ address, disableAddressLink, format, size = "b
       textClassName={textClassName}
       wrapperClassName={wrapperClassName}
       duplicateIconSize={duplicateIconSize}
+      renderOrder={renderOrder}
     />
   );
 };
