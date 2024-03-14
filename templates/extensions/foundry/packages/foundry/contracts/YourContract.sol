@@ -65,7 +65,7 @@ contract YourContract {
         }
 
         // emit: keyword used to trigger an event
-        emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, 0);
+        emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, msg.value);
     }
 
     /**
@@ -73,7 +73,7 @@ contract YourContract {
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
     function withdraw() public isOwner {
-        (bool success, ) = owner.call{value: address(this).balance}("");
+        (bool success,) = owner.call{value: address(this).balance}("");
         require(success, "Failed to send Ether");
     }
 

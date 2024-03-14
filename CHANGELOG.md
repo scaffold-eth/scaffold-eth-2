@@ -1,5 +1,40 @@
 # create-eth
 
+## 0.0.35
+
+### Patch Changes
+
+- Yarn flatten (#745, 62553fd)
+- Add format with prettier task (b03c011)
+- Fix local next build (#749)
+- Fix emit event value in contract (#765, 833d09b)
+- Fix useScaffoldContractWrite so it properly throws errors (#758)
+- Fix vercel deployment mismatch (#757)
+- Remove extra notifications when using useTransactor (#766)
+- Ignore JetBrains IDE settings file (#732)
+- Fix hardhat lint errors (ac1d2ac)
+
+## 0.0.34
+
+### Patch Changes
+
+- 092f2ad: 1. basic example to show connected address (#721) 2. Standardize displaying of address and follow ERC-55 (#734) 3. fix contract balance hot reload balance issue (#739) 4. Fix cursor stealing & display loading for AddressInput (#738) 5. Fix blockexplorer code tab (#741) 6. Match link name with actual tab name for Debug Contracts (#743)
+
+## 0.0.33
+
+### Patch Changes
+
+- Feat: Better complex struct inputs (#702)
+- improve debug struct UI (#726)
+- use next-themes to handle theme and update usehooks-ts (#707)
+- up rainbowkit version to 1.3.5 (#719)
+- Use arbitrumSepolia instead of Goerli (#716)
+- Add Optimism Sepolia config (#711)
+- Update screenshot example on Readme (#705)
+- add use client to inputs barrel file (#699)
+- add baseSepolia in hardhat.config (#696)
+- removed "use client" from EtherInput, IntergerInput and AddessInput (#688)
+
 ## 0.0.32
 
 ### Patch Changes
