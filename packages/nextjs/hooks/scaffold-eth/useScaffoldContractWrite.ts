@@ -3,7 +3,7 @@ import { useTargetNetwork } from "./useTargetNetwork";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { useContractWrite, useNetwork } from "wagmi";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { getParsedError, notification } from "~~/utils/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "~~/utils/scaffold-eth/contract";
 
 type UpdatedArgs = Parameters<ReturnType<typeof useContractWrite<Abi, string, undefined>>["writeAsync"]>[0];
@@ -83,8 +83,7 @@ export const useScaffoldContractWrite = <
 
         return writeTxResult;
       } catch (e: any) {
-        const message = getParsedError(e);
-        notification.error(message);
+        throw e;
       } finally {
         setIsMining(false);
       }
