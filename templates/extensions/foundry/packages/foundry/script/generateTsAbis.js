@@ -36,15 +36,19 @@ function getArtifactOfContract(contractName) {
 
 function getInheritedFromContracts(artifact) {
   let inheritedFromContracts = [];
-  for (const astNode of artifact.ast.nodes) {
-    if (astNode.nodeType == "ContractDefinition") {
-      if (astNode.baseContracts.length > 0) {
-        inheritedFromContracts = astNode.baseContracts.map(
-          ({ baseName }) => baseName.name
-        );
+
+  if (artifact.ast) {
+    for (const astNode of artifact.ast.nodes) {
+      if (astNode.nodeType == "ContractDefinition") {
+        if (astNode.baseContracts.length > 0) {
+          inheritedFromContracts = astNode.baseContracts.map(
+            ({ baseName }) => baseName.name
+          );
+        }
       }
     }
   }
+  
   return inheritedFromContracts;
 }
 
