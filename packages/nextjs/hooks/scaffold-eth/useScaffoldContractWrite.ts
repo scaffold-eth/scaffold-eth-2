@@ -6,7 +6,7 @@ import { Config, UseWriteContractParameters, useAccount, useWriteContract } from
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { getParsedError, notification } from "~~/utils/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
@@ -78,13 +78,11 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
 
       return writeTxResult;
     } catch (e: any) {
-      const message = getParsedError(e);
-      notification.error(message);
+      throw e;
     } finally {
       setIsMining(false);
     }
   };
-
   return {
     ...wagmiContractWrite,
     isMining,
