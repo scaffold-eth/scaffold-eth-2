@@ -16,8 +16,8 @@
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@heroicons/react": "^2.0.11",
-    "@rainbow-me/rainbowkit": "^2.0.0",
-    "@tanstack/react-query": "^5.17.19",
+    "@rainbow-me/rainbowkit": "^2.0.2",
+    "@tanstack/react-query": "^5.28.6",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
     "blo": "^1.0.1",
@@ -32,8 +32,8 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.13.0",
-    "viem": "^2.7.10",
-    "wagmi": "^2.5.7",
+    "viem": "^2.8.16",
+    "wagmi": "^2.5.12",
     "zustand": "^4.1.2"
   },
   "devDependencies": {
