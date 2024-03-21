@@ -10,7 +10,6 @@ import "solidity-bytes-utils/BytesLib.sol";
  * @notice calls the tryffi function on the Vm contract
  * @notice will be deleted once the forge/std is updated
  */
-
 struct FfiResult {
     int32 exit_code;
     bytes stdout;
@@ -46,8 +45,7 @@ contract VerifyAll is Script {
     function _verifyIfContractDeployment(string memory content) internal {
         string memory txType = abi.decode(
             vm.parseJson(
-                content,
-                searchStr(currTransactionIdx, "transactionType")
+                content, searchStr(currTransactionIdx, "transactionType")
             ),
             (string)
         );
@@ -58,31 +56,23 @@ contract VerifyAll is Script {
 
     function _verifyContract(string memory content) internal {
         string memory contractName = abi.decode(
-            vm.parseJson(
-                content,
-                searchStr(currTransactionIdx, "contractName")
-            ),
+            vm.parseJson(content, searchStr(currTransactionIdx, "contractName")),
             (string)
         );
         address contractAddr = abi.decode(
             vm.parseJson(
-                content,
-                searchStr(currTransactionIdx, "contractAddress")
+                content, searchStr(currTransactionIdx, "contractAddress")
             ),
             (address)
         );
         bytes memory deployedBytecode = abi.decode(
             vm.parseJson(
-                content,
-                searchStr(currTransactionIdx, "transaction.data")
+                content, searchStr(currTransactionIdx, "transaction.data")
             ),
             (bytes)
         );
         bytes memory compiledBytecode = abi.decode(
-            vm.parseJson(
-                _getCompiledBytecode(contractName),
-                ".bytecode.object"
-            ),
+            vm.parseJson(_getCompiledBytecode(contractName), ".bytecode.object"),
             (bytes)
         );
         bytes memory constructorArgs = BytesLib.slice(
@@ -118,9 +108,11 @@ contract VerifyAll is Script {
         return;
     }
 
-    function nextTransaction(
-        string memory content
-    ) external view returns (bool) {
+    function nextTransaction(string memory content)
+        external
+        view
+        returns (bool)
+    {
         try this.getTransactionFromRaw(content, currTransactionIdx) {
             return true;
         } catch {
@@ -128,17 +120,14 @@ contract VerifyAll is Script {
         }
     }
 
-    function _getCompiledBytecode(
-        string memory contractName
-    ) internal view returns (string memory compiledBytecode) {
+    function _getCompiledBytecode(string memory contractName)
+        internal
+        view
+        returns (string memory compiledBytecode)
+    {
         string memory root = vm.projectRoot();
         string memory path = string.concat(
-            root,
-            "/out/",
-            contractName,
-            ".sol/",
-            contractName,
-            ".json"
+            root, "/out/", contractName, ".sol/", contractName, ".json"
         );
         compiledBytecode = vm.readFile(path);
     }
