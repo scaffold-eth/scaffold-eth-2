@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TokenAmount } from "./TokenAmount";
 import { Address } from "viem";
 import { useAccountBalance } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -52,13 +53,16 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
       <div className="w-full flex items-center justify-center">
         {displayUsdMode ? (
           <>
-            <span className="text-[0.8em] font-bold mr-1">$</span>
-            <span>{(balance * price).toFixed(2)}</span>
+            <TokenAmount amount={balance * price} precision={2} currencyPosition="left" currency={"$"} />
           </>
         ) : (
           <>
-            <span>{balance?.toFixed(4)}</span>
-            <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>
+            <TokenAmount
+              amount={balance || 0}
+              precision={4}
+              currencyPosition="right"
+              currency={targetNetwork.nativeCurrency.symbol}
+            />
           </>
         )}
       </div>
