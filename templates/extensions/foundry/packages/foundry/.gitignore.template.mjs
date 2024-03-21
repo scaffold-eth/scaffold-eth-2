@@ -4,7 +4,7 @@ cache/
 out/
 
 # Ignores development broadcast logs
-
+broadcast
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
