@@ -64,11 +64,14 @@ function getInheritedFunctions(mainArtifact) {
 }
 
 function main() {
+  var args = process.argv.slice(2);
+
   const current_path_to_broadcast = path.join(
     __dirname,
     "..",
-    "broadcast/Deploy.s.sol"
+    `broadcast/${args[0]}`
   );
+  
   const current_path_to_deployments = path.join(__dirname, "..", "deployments");
 
   const chains = getDirectories(current_path_to_broadcast);

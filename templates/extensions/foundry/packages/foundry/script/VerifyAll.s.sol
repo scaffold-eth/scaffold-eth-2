@@ -24,11 +24,14 @@ interface tempVm {
 contract VerifyAll is Script {
     uint96 currTransactionIdx;
 
-    function run() external {
+    function run(string memory deploymentContractName) external {
         string memory root = vm.projectRoot();
         string memory path = string.concat(
             root,
-            "/broadcast/Deploy.s.sol/",
+            "/broadcast",
+            "/",
+            deploymentContractName,
+            "/",
             vm.toString(block.chainid),
             "/run-latest.json"
         );
