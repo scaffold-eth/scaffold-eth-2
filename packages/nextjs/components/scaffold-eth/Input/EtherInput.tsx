@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
 import { CommonInputProps, InputBase, SIGNED_NUMBER_REGEX } from "~~/components/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
@@ -43,22 +43,33 @@ function displayValueToEtherValue(usdMode: boolean, displayValue: string, native
  *
  * onChange will always be called with the value in ETH
  */
-export const EtherInput = ({ value, name, placeholder, onChange, disabled }: CommonInputProps) => {
+export const EtherInput = ({
+  value,
+  name,
+  placeholder,
+  onChange,
+  disabled,
+  usdMode,
+}: CommonInputProps & { usdMode?: boolean }) => {
   const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
-  const [usdMode, setUSDMode] = useState(false);
+  const [internalUsdMode, setInternalUSDMode] = useState(nativeCurrencyPrice > 0 ? Boolean(usdMode) : false);
+
+  useEffect(() => {
+    setInternalUSDMode(nativeCurrencyPrice > 0 ? Boolean(usdMode) : false);
+  }, [usdMode, nativeCurrencyPrice]);
 
   // The displayValue is derived from the ether value that is controlled outside of the component
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
-    const newDisplayValue = etherValueToDisplayValue(usdMode, value, nativeCurrencyPrice);
+    const newDisplayValue = etherValueToDisplayValue(internalUsdMode, value, nativeCurrencyPrice);
     if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
       return transitoryDisplayValue;
     }
     // Clear any transitory display values that might be set
     setTransitoryDisplayValue(undefined);
     return newDisplayValue;
-  }, [nativeCurrencyPrice, transitoryDisplayValue, usdMode, value]);
+  }, [nativeCurrencyPrice, transitoryDisplayValue, internalUsdMode, value]);
 
   const handleChangeNumber = (newValue: string) => {
     if (newValue && !SIGNED_NUMBER_REGEX.test(newValue)) {
@@ -67,7 +78,7 @@ export const EtherInput = ({ value, name, placeholder, onChange, disabled }: Com
 
     // Following condition is a fix to prevent usdMode from experiencing different display values
     // than what the user entered. This can happen due to floating point rounding errors that are introduced in the back and forth conversion
-    if (usdMode) {
+    if (internalUsdMode) {
       const decimals = newValue.split(".")[1];
       if (decimals && decimals.length > MAX_DECIMALS_USD) {
         return;
@@ -82,12 +93,14 @@ export const EtherInput = ({ value, name, placeholder, onChange, disabled }: Com
       setTransitoryDisplayValue(undefined);
     }
 
-    const newEthValue = displayValueToEtherValue(usdMode, newValue, nativeCurrencyPrice);
+    const newEthValue = displayValueToEtherValue(internalUsdMode, newValue, nativeCurrencyPrice);
     onChange(newEthValue);
   };
 
   const toggleMode = () => {
-    setUSDMode(!usdMode);
+    if (nativeCurrencyPrice > 0) {
+      setInternalUSDMode(!internalUsdMode);
+    }
   };
 
   return (
@@ -97,15 +110,24 @@ export const EtherInput = ({ value, name, placeholder, onChange, disabled }: Com
       placeholder={placeholder}
       onChange={handleChangeNumber}
       disabled={disabled}
-      prefix={<span className="pl-4 -mr-2 text-accent self-center">{usdMode ? "$" : "Ξ"}</span>}
+      prefix={<span className="pl-4 -mr-2 text-accent self-center">{internalUsdMode ? "$" : "Ξ"}</span>}
       suffix={
-        <button
-          className={`btn btn-primary h-[2.2rem] min-h-[2.2rem] ${nativeCurrencyPrice > 0 ? "" : "hidden"}`}
-          onClick={toggleMode}
-          disabled={!usdMode && !nativeCurrencyPrice}
+        <div
+          className={`${
+            nativeCurrencyPrice > 0
+              ? ""
+              : "tooltip tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+          }`}
+          data-tip="Unable to fetch price"
         >
-          <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-        </button>
+          <button
+            className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
+            onClick={toggleMode}
+            disabled={!internalUsdMode && !nativeCurrencyPrice}
+          >
+            <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
+          </button>
+        </div>
       }
     />
   );

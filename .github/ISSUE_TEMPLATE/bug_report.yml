@@ -15,6 +15,17 @@ body:
         - label: I have looked through the [existing issues](https://github.com/scaffold-eth/scaffold-eth-2/issues)
           required: true
 
+  - type: dropdown
+    attributes:
+      label: Which method was used to setup Scaffold-ETH 2 ?
+      description: You may select both, if the bug is present in both the methods.
+      multiple: true
+      options:
+        - git clone
+        - npx create-eth@latest
+    validations:
+      required: true
+
   - type: textarea
     attributes:
       label: Current Behavior

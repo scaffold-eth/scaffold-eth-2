@@ -1,3 +1,5 @@
+"use client";
+
 export * from "./AddressInput";
 export * from "./Bytes32Input";
 export * from "./BytesInput";

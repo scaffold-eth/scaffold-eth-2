@@ -1,14 +1,15 @@
-import { Account, Address, Transport, getContract } from "viem";
-import { Chain, PublicClient, usePublicClient } from "wagmi";
+import { Account, Address, Chain, Transport, getContract } from "viem";
+import { PublicClient, usePublicClient } from "wagmi";
 import { GetWalletClientResult } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Gets a deployed contract by contract name and returns a contract instance
- * @param config - The config settings
- * @param config.contractName - Deployed contract name
- * @param config.walletClient - An viem wallet client instance (optional)
+ * Gets a viem instance of the contract present in deployedContracts.ts or externalContracts.ts corresponding to
+ * targetNetworks configured in scaffold.config.ts. Optional walletClient can be passed for doing write transactions.
+ * @param config - The config settings for the hook
+ * @param config.contractName - deployed contract name
+ * @param config.walletClient - optional walletClient from wagmi useWalletClient hook can be passed for doing write transactions
  */
 export const useScaffoldContract = <
   TContractName extends ContractName,

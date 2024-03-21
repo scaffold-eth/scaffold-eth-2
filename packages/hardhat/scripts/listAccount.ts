@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import { config } from "hardhat";
 import { privateKeyToAccount } from "viem/accounts";
 import * as chains from "viem/chains";
-import { Chain, createPublicClient, formatEther, http } from "viem";
+import { createPublicClient, formatEther, http } from "viem";
 import { HttpNetworkConfig } from "hardhat/types";
 
 async function main() {
@@ -28,8 +28,7 @@ async function main() {
     try {
       const hardhatConfigNetwork = availableNetworks[networkName];
       if (!("url" in hardhatConfigNetwork)) continue;
-      // @ts-expect-error: TODO: fix types
-      const viemChain = chains[networkName] as Chain;
+      const viemChain = chains[networkName as keyof typeof chains];
       const publicClient = createPublicClient({
         chain: viemChain,
         transport: http((availableNetworks[networkName] as HttpNetworkConfig).url),

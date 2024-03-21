@@ -1,16 +1,18 @@
+"use client";
+
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { Bars3Icon, BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { usePathname } from "next/navigation";
+import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
-interface HeaderMenuLink {
+type HeaderMenuLink = {
   label: string;
   href: string;
   icon?: React.ReactNode;
-}
+};
 
 export const menuLinks: HeaderMenuLink[] = [
   {
@@ -22,20 +24,15 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  {
-    label: "Example UI",
-    href: "/example-ui",
-    icon: <SparklesIcon className="h-4 w-4" />,
-  },
 ];
 
 export const HeaderMenuLinks = () => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <>
       {menuLinks.map(({ label, href, icon }) => {
-        const isActive = router.pathname === href;
+        const isActive = pathname === href;
         return (
           <li key={href}>
             <Link

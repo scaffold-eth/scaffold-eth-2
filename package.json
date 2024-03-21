@@ -14,16 +14,21 @@
     "fork": "yarn workspace @se-2/hardhat fork",
     "deploy": "yarn workspace @se-2/hardhat deploy",
     "verify": "yarn workspace @se-2/hardhat verify",
+    "hardhat-verify": "yarn workspace @se-2/hardhat hardhat-verify",
     "compile": "yarn workspace @se-2/hardhat compile",
     "generate": "yarn workspace @se-2/hardhat generate",
+    "flatten": "yarn workspace @se-2/hardhat flatten",
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
+    "hardhat:format": "yarn workspace @se-2/hardhat format",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "test": "yarn hardhat:test",
+    "format": "yarn next:format && yarn hardhat:format",
     "start": "yarn workspace @se-2/nextjs dev",
     "next:lint": "yarn workspace @se-2/nextjs lint",
     "next:format": "yarn workspace @se-2/nextjs format",
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
+    "next:build": "yarn workspace @se-2/nextjs build",
     "postinstall": "husky install",
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
@@ -33,8 +38,5 @@
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3"
-  },
-  "resolutions": {
-    "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
   }
 }
