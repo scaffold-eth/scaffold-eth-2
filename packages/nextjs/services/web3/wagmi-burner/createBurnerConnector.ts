@@ -60,10 +60,9 @@ export const createBurnerConnector = () => {
       const accounts = await provider.request({
         method: "eth_accounts",
       });
-      console.log("The account is", accounts);
       let currentChainId = await this.getChainId();
-      if (chainId && currentChainId !== chainId) {
-        const chain = await this.switchChain!({ chainId });
+      if (chainId && currentChainId !== chainId && this.switchChain) {
+        const chain = await this.switchChain({ chainId });
         currentChainId = chain.id;
       }
       connected = true;
@@ -82,11 +81,8 @@ export const createBurnerConnector = () => {
 
       const request: EIP1193RequestFn = async ({ method, params }) => {
         if (method === "eth_sendTransaction") {
-          console.log("eth_sendTransaction the params are", params);
           const actualParams = (params as SendTransactionParameters[])[0];
           const value = actualParams.value ? hexToBigInt(actualParams.value as unknown as Hex) : undefined;
-          const bigIntVal = value ? value : undefined;
-          console.log("The value is", bigIntVal);
           const hash = await client.sendTransaction({
             ...(params as SendTransactionParameters[])[0],
             value,
@@ -120,32 +116,26 @@ export const createBurnerConnector = () => {
       config.emitter.emit("change", { chainId });
     },
     async getAccounts() {
-      console.log("getAccounts");
       if (!connected) throw new ConnectorNotConnectedError();
       const provider = await this.getProvider();
       const accounts = await provider.request({ method: "eth_accounts" });
-      console.log("accounts", accounts);
       return [accounts.map(x => getAddress(x))[0]];
     },
     async onDisconnect() {
-      console.log("disconnect from burnerwallet");
       config.emitter.emit("disconnect");
       connected = false;
     },
     async getChainId() {
-      console.log("getChainId");
       const provider = await this.getProvider();
       const hexChainId = await provider.request({ method: "eth_chainId" });
       return fromHex(hexChainId, "number");
     },
     async isAuthorized() {
-      console.log("isAuthorized");
       if (!connected) return false;
       const accounts = await this.getAccounts();
       return !!accounts.length;
     },
     onAccountsChanged(accounts) {
-      console.log("onAccountsChanged", accounts);
       if (accounts.length === 0) this.onDisconnect();
       else
         config.emitter.emit("change", {
@@ -165,43 +155,8 @@ export const createBurnerConnector = () => {
     },
     disconnect() {
       console.log("disconnect from burnerwallet");
-      console.log("disconnect from burnerwallet");
       connected = false;
       return Promise.resolve();
     },
   }));
 };
-
-/* {
-    readonly icon?: string | undefined
-    readonly id: string
-    readonly name: string
-    readonly type: string
-
-    setup?(): Promise<void>
-    connect(
-      parameters?:
-        | { chainId?: number | undefined; isReconnecting?: boolean | undefined }
-        | undefined,
-    ): Promise<{
-      accounts: readonly Address[]
-      chainId: number
-    }>
-    disconnect(): Promise<void>
-    getAccounts(): Promise<readonly Address[]>
-    getChainId(): Promise<number>
-    getProvider(
-      parameters?: { chainId?: number | undefined } | undefined,
-    ): Promise<provider>
-    getClient?(
-      parameters?: { chainId?: number | undefined } | undefined,
-    ): Promise<Client>
-    isAuthorized(): Promise<boolean>
-    switchChain?(parameters: { chainId: number }): Promise<Chain>
-
-    onAccountsChanged(accounts: string[]): void
-    onChainChanged(chainId: string): void
-    onConnect?(connectInfo: ProviderConnectInfo): void
-    onDisconnect(error?: Error | undefined): void
-    onMessage?(message: ProviderMessage): void
-  } & properties */
