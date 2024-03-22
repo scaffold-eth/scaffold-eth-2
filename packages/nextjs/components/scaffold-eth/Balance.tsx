@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { TokenAmount } from "./TokenAmount";
 import { Address } from "viem";
-import { useAccountBalance } from "~~/hooks/scaffold-eth";
+import { useBalance } from "wagmi";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useGlobalState } from "~~/services/store/store";
 
 type BalanceProps = {
   address?: Address;
@@ -17,7 +18,19 @@ type BalanceProps = {
  */
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-  const { balance, price, isError, isLoading } = useAccountBalance(address);
+  const price = useGlobalState(state => state.nativeCurrencyPrice);
+  const {
+    data: fetchedBalanceData,
+    isError,
+    isLoading,
+  } = useBalance({
+    address,
+    watch: true,
+    chainId: targetNetwork.id,
+  });
+
+  const formattedBalance = Number(fetchedBalanceData?.formatted) || 0;
+
   const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
 
   const toggleBalanceMode = () => {
@@ -26,7 +39,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     }
   };
 
-  if (!address || isLoading || balance === null) {
+  if (!address || isLoading) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
@@ -52,18 +65,14 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     >
       <div className="w-full flex items-center justify-center">
         {displayUsdMode ? (
-          <>
-            <TokenAmount amount={balance * price} precision={2} currencyPosition="left" currency={"$"} />
-          </>
+          <TokenAmount amount={formattedBalance * price} precision={2} currencyPosition="left" currency={"$"} />
         ) : (
-          <>
-            <TokenAmount
-              amount={balance || 0}
-              precision={4}
-              currencyPosition="right"
-              currency={targetNetwork.nativeCurrency.symbol}
-            />
-          </>
+          <TokenAmount
+            amount={formattedBalance}
+            precision={4}
+            currencyPosition="right"
+            currency={targetNetwork.nativeCurrency.symbol}
+          />
         )}
       </div>
     </button>

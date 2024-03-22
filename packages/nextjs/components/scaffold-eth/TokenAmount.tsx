@@ -1,5 +1,5 @@
 type TokenAmountProps = {
-  amount: number;
+  amount?: number;
   precision?: number;
   currencyPosition?: "left" | "right";
   currency?: string;
@@ -8,7 +8,7 @@ type TokenAmountProps = {
 /**
  * Display a token amount with a custom precision.
  */
-export const TokenAmount = ({ amount, precision = 4, currencyPosition = "left", currency }: TokenAmountProps) => {
+export const TokenAmount = ({ amount = 0, precision = 4, currencyPosition = "left", currency }: TokenAmountProps) => {
   const displayAmount = parseFloat(amount.toString()).toFixed(precision);
   const currencySymbol = <span className="text-[0.8em] font-bold">{currency}</span>;
 
