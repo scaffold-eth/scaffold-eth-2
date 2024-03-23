@@ -2,11 +2,10 @@ export const quickStart = `## Quickstart
 
 To get started with Scaffold-ETH 2, follow the steps below:
 
-1. Clone this repo & install dependencies
+1. Install dependencies if it was skipped in CLI:
 
 \`\`\`
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
+cd my-dapp-example
 yarn install
 \`\`\`
 
