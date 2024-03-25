@@ -48,6 +48,11 @@ export async function createProject(options: Options) {
     {
       title: "🪄 Formatting files with prettier",
       task: () => prettierFormat(targetDirectory),
+      skip: () => {
+        if (!options.install) {
+          return "Skipping because prettier install was skipped";
+        }
+      },
     },
     {
       title: `📡 Initializing Git repository ${
