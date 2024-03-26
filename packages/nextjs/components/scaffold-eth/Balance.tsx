@@ -55,7 +55,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     );
   }
 
-  const formattedBalance = Number(balance?.formatted);
+  const formattedBalance = balance ? Number(balance.formatted) : 0;
 
   return (
     <button
