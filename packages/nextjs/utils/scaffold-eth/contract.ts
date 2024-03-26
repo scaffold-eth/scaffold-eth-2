@@ -156,6 +156,9 @@ type UseScaffoldArgsParam<
 > = TFunctionName extends FunctionNamesWithInputs<TContractName>
   ? {
       args: OptionalTupple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
+      value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
+        ? bigint | undefined
+        : undefined;
     }
   : {
       args?: never;
@@ -183,10 +186,13 @@ export type UseScaffoldReadConfig<
 export type scaffoldWriteContractVariables<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
-> = {
-  functionName: TFunctionName;
-} & UseScaffoldArgsParam<TContractName, TFunctionName> &
-  Omit<WriteContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">;
+> = IsContractDeclarationMissing<
+  Partial<WriteContractParameters>,
+  {
+    functionName: TFunctionName;
+  } & UseScaffoldArgsParam<TContractName, TFunctionName> &
+    Omit<WriteContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
+>;
 
 type WriteVariables = WriteContractVariables<Abi, string, any[], Config, number>;
 export type scaffoldWriteContractOptions = MutateOptions<

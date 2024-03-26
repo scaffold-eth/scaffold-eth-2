@@ -14,7 +14,6 @@ import {
   scaffoldWriteContractVariables,
 } from "~~/utils/scaffold-eth/contract";
 
-// TODO: Update comment and handle `value` error
 /**
  * Wrapper around wagmi's useContractWrite hook which automatically loads (by name) the contract ABI and address from
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
