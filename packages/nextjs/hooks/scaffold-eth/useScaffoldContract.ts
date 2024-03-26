@@ -1,3 +1,4 @@
+import { useTargetNetwork } from "./useTargetNetwork";
 import { Account, Address, Chain, Client, Transport, getContract } from "viem";
 import { usePublicClient } from "wagmi";
 import { GetWalletClientReturnType } from "wagmi/actions";
@@ -22,26 +23,30 @@ export const useScaffoldContract = <
   walletClient?: TWalletClient | null;
 }) => {
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
-  const publicClient = usePublicClient();
+  const { targetNetwork } = useTargetNetwork();
+  const publicClient = usePublicClient({ chainId: targetNetwork.id });
 
   let contract = undefined;
-  if (deployedContractData) {
+  if (deployedContractData && publicClient) {
     contract = getContract<
       Transport,
       Address,
       Contract<TContractName>["abi"],
-      {
-        public: Client<Transport, Chain>;
-        wallet?: Client<Transport, Chain, Account>;
-      },
+      TWalletClient extends Exclude<GetWalletClientReturnType, null>
+        ? {
+            public: Client<Transport, Chain>;
+            wallet: TWalletClient;
+          }
+        : { public: Client<Transport, Chain> },
       Chain,
       Account
     >({
       address: deployedContractData.address,
       abi: deployedContractData.abi as Contract<TContractName>["abi"],
-      // @ts-expect-error TODO: fix this type
-      walletClient: walletClient ? walletClient : undefined,
-      publicClient,
+      client: {
+        public: publicClient,
+        wallet: walletClient ? walletClient : undefined,
+      } as any,
     });
   }
 
