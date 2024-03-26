@@ -26,7 +26,6 @@ export const decodeTransactionData = (tx: TransactionWithFunction) => {
         });
         tx.functionName = functionName;
         tx.functionArgs = args as any[];
-        // TODO: Maybe find better way instead of assertsing
         tx.functionArgNames = getAbiItem<AbiFunction[], string>({
           abi: contractAbi as AbiFunction[],
           name: functionName,
