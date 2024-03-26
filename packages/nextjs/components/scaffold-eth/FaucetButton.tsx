@@ -25,6 +25,7 @@ export const FaucetButton = () => {
 
   const { data: balance } = useBalance({
     address,
+    watch: true,
   });
 
   const { chain: ConnectedChain } = useNetwork();
