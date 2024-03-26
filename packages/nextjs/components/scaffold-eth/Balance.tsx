@@ -55,6 +55,8 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     );
   }
 
+  const formattedBalance = Number(balance?.formatted);
+
   return (
     <button
       className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}
@@ -64,11 +66,11 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
         {displayUsdMode ? (
           <>
             <span className="text-[0.8em] font-bold mr-1">$</span>
-            <span>{(Number(balance?.formatted) * price).toFixed(2)}</span>
+            <span>{(formattedBalance * price).toFixed(2)}</span>
           </>
         ) : (
           <>
-            <span>{Number(balance?.formatted).toFixed(4)}</span>
+            <span>{formattedBalance.toFixed(4)}</span>
             <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>
           </>
         )}
