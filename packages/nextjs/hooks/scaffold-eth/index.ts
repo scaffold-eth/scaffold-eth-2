@@ -1,4 +1,3 @@
-export * from "./useAccountBalance";
 export * from "./useAnimationConfig";
 export * from "./useBurnerWallet";
 export * from "./useDeployedContractInfo";

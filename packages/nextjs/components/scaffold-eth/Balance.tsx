@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Address } from "viem";
-import { useAccountBalance } from "~~/hooks/scaffold-eth";
+import { useBalance } from "wagmi";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useGlobalState } from "~~/services/store/store";
 
 type BalanceProps = {
   address?: Address;
@@ -16,7 +17,17 @@ type BalanceProps = {
  */
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-  const { balance, price, isError, isLoading } = useAccountBalance(address);
+
+  const price = useGlobalState(state => state.nativeCurrencyPrice);
+  const {
+    data: balance,
+    isError,
+    isLoading,
+  } = useBalance({
+    address,
+    watch: true,
+  });
+
   const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
 
   const toggleBalanceMode = () => {
@@ -53,11 +64,11 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
         {displayUsdMode ? (
           <>
             <span className="text-[0.8em] font-bold mr-1">$</span>
-            <span>{(balance * price).toFixed(2)}</span>
+            <span>{(Number(balance?.formatted) * price).toFixed(2)}</span>
           </>
         ) : (
           <>
-            <span>{balance?.toFixed(4)}</span>
+            <span>{Number(balance?.formatted).toFixed(4)}</span>
             <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>
           </>
         )}
