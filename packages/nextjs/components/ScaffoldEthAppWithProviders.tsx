@@ -49,6 +49,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
   return (
     <WagmiProvider config={wagmiConfig}>
+      {/* TODO: turn off refetch when tab focus is lost  */}
       <QueryClientProvider client={queryClient}>
         <ProgressBar />
         <RainbowKitProvider
