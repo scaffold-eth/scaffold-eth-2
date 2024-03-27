@@ -15,8 +15,6 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
 export const RainbowKitCustomConnectButton = () => {
-  // TODO: Add back autoconnect or use wagmi default autconnect should work
-  // useAutoConnect();
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
 
