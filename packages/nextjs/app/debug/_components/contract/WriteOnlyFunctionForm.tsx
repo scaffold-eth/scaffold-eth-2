@@ -39,10 +39,7 @@ export const WriteOnlyFunctionForm = ({
   const { targetNetwork } = useTargetNetwork();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
-  const { data: result, status, writeContractAsync } = useWriteContract();
-
-  // TODO: Check if this is the correct way to handle this
-  const isLoading = status === "pending";
+  const { data: result, isPending, writeContractAsync } = useWriteContract();
 
   const handleWrite = async () => {
     if (writeContractAsync) {
@@ -127,8 +124,8 @@ export const WriteOnlyFunctionForm = ({
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isLoading} onClick={handleWrite}>
-              {isLoading && <span className="loading loading-spinner loading-xs"></span>}
+            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
+              {isPending && <span className="loading loading-spinner loading-xs"></span>}
               Send 💸
             </button>
           </div>
