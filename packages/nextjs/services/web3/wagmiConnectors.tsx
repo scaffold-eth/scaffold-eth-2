@@ -20,7 +20,6 @@ export const enabledChains = targetNetworks.find((network: chains.Chain) => netw
   ? targetNetworks
   : ([...targetNetworks, chains.mainnet] as const);
 
-// TODO: Get add burner wallet and get it working
 const wallets = [metaMaskWallet, walletConnectWallet, ledgerWallet, coinbaseWallet, rainbowWallet, burnerWalletConfig];
 
 /**
