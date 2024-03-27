@@ -1,9 +1,23 @@
-# 🏗 Scaffold-ETH 2
+<div align="center">
+  <a href="https://optimism.io"><img alt="Optimism" src="https://github.com/damianmarti/se-2/assets/466652/da205d35-fcd1-4369-9de6-35c819d1cb33" width=320></a>
+  <br />
+  <br />
+</div>
+
+# <img src="https://github.com/damianmarti/se-2/assets/466652/a795d1f3-980b-4e53-9784-ac53b6dd980e" width="35"> Scaffold-Base
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
   <a href="https://scaffoldeth.io">Website</a>
 </h4>
+
+Scaffold-Base is a fork of Scaffold-ETH2 ready to ship to Base. This fork provides native support for Base and Base Sepolia testnet, and direct access to the Base faucets. 
+
+![Scaffold-Base)](https://github.com/damianmarti/se-2/assets/466652/eac667a7-68fb-4f69-a427-126f7de4114d)
+
+We highly recommend the Scaffold-ETH2 docs as the primary guideline.
+
+# 🏗 Scaffold-ETH2
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
@@ -15,7 +29,7 @@
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+![Debug Contracts tab](https://github.com/damianmarti/se-2/assets/466652/672d178c-38c9-4c9a-953d-d36acf08f3cd)
 
 ## Requirements
 
