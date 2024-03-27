@@ -2,13 +2,11 @@ import { CurrencyAmount, Token } from "@uniswap/sdk-core";
 import { Pair, Route } from "@uniswap/v2-sdk";
 import { Address, createPublicClient, http, parseAbi } from "viem";
 import { mainnet } from "viem/chains";
-import scaffoldConfig from "~~/scaffold.config";
-import { ChainWithAttributes } from "~~/utils/scaffold-eth";
+import { ChainWithAttributes, getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
 const publicClient = createPublicClient({
   chain: mainnet,
-  // TODO: Since viem/chains removed alchemy links find a better way to handle this
-  transport: http(`https://eth-mainnet.g.alchemy.com/v2/${scaffoldConfig.alchemyApiKey}`),
+  transport: http(getAlchemyHttpUrl(mainnet.id)),
 });
 
 const ABI = parseAbi([
