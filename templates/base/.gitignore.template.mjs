@@ -11,6 +11,9 @@ const contents = () =>
 !.yarn/versions
 .eslintcache
 .vscode/**
-.DS_Store`
+.DS_Store
+.vscode
+.idea
+.vercel`;
 
 export default contents

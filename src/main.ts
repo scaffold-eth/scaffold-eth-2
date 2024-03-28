@@ -3,6 +3,7 @@ import {
   createProjectDirectory,
   installPackages,
   createFirstGitCommit,
+  prettierFormat,
 } from "./tasks";
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
@@ -41,6 +42,15 @@ export async function createProject(options: Options) {
       skip: () => {
         if (!options.install) {
           return "Manually skipped";
+        }
+      },
+    },
+    {
+      title: "🪄 Formatting files with prettier",
+      task: () => prettierFormat(targetDirectory),
+      skip: () => {
+        if (!options.install) {
+          return "Skipping because prettier install was skipped";
         }
       },
     },
