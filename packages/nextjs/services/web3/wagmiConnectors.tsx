@@ -10,17 +10,18 @@ import {
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
-// import { burnerWalletConfig } from "~~/services/web3/wagmi-burner/burnerWalletConfig";
+const { onlyLocalBurnerWallet, targetNetworks } = scaffoldConfig;
 
-// const { targetNetworks, onlyLocalBurnerWallet } = scaffoldConfig;
-const { targetNetworks } = scaffoldConfig;
-
-// We always want to have mainnet enabled (ENS resolution, ETH price, etc). But only once.
-export const enabledChains = targetNetworks.find((network: chains.Chain) => network.id === 1)
-  ? targetNetworks
-  : ([...targetNetworks, chains.mainnet] as const);
-
-const wallets = [metaMaskWallet, walletConnectWallet, ledgerWallet, coinbaseWallet, rainbowWallet, burnerWalletConfig];
+const wallets = [
+  metaMaskWallet,
+  walletConnectWallet,
+  ledgerWallet,
+  coinbaseWallet,
+  rainbowWallet,
+  ...(!targetNetworks.some(network => network.id !== (chains.hardhat as chains.Chain).id) || !onlyLocalBurnerWallet
+    ? [burnerWalletConfig]
+    : []),
+];
 
 /**
  * wagmi connectors for the wagmi context
