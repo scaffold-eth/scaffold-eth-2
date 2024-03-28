@@ -8,6 +8,7 @@ export const useContractLogs = (address: Address) => {
 
   useEffect(() => {
     const fetchLogs = async () => {
+      if (!client) return console.error("Client not found");
       try {
         const existingLogs = await client.getLogs({
           address: address,
@@ -21,8 +22,8 @@ export const useContractLogs = (address: Address) => {
     };
     fetchLogs();
 
-    return client.watchBlockNumber({
-      onBlockNumber: async (blockNumber, prevBlockNumber) => {
+    return client?.watchBlockNumber({
+      onBlockNumber: async (_blockNumber, prevBlockNumber) => {
         const newLogs = await client.getLogs({
           address: address,
           fromBlock: prevBlockNumber,

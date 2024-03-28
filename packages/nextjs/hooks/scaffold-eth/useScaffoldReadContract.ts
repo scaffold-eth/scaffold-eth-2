@@ -1,6 +1,8 @@
 import { useTargetNetwork } from "./useTargetNetwork";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
-import { useContractRead } from "wagmi";
+import { ReadContractErrorType } from "viem";
+import { useReadContract } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import {
   AbiFunctionReturnType,
@@ -17,7 +19,7 @@ import {
  * @param config.functionName - name of the function to be called
  * @param config.args - args to be passed to the function call
  */
-export const useScaffoldContractRead = <
+export const useScaffoldReadContract = <
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
 >({
@@ -29,7 +31,7 @@ export const useScaffoldContractRead = <
   const { data: deployedContract } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
 
-  return useContractRead({
+  return useReadContract({
     chainId: targetNetwork.id,
     functionName,
     address: deployedContract?.address,
@@ -38,11 +40,10 @@ export const useScaffoldContractRead = <
     args,
     enabled: !Array.isArray(args) || !args.some(arg => arg === undefined),
     ...(readConfig as any),
-  }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
+  }) as Omit<ReturnType<typeof useReadContract>, "data" | "refetch"> & {
     data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
-    refetch: (options?: {
-      throwOnError: boolean;
-      cancelRefetch: boolean;
-    }) => Promise<AbiFunctionReturnType<ContractAbi, TFunctionName>>;
+    refetch: (
+      options?: RefetchOptions | undefined,
+    ) => Promise<QueryObserverResult<AbiFunctionReturnType<ContractAbi, TFunctionName>, ReadContractErrorType>>;
   };
 };

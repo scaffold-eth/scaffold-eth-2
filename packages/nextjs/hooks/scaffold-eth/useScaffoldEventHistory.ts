@@ -65,6 +65,10 @@ export const useScaffoldEventHistory = <
         throw new Error("Hook disabled");
       }
 
+      if (!publicClient) {
+        throw new Error("Public client not found");
+      }
+
       const event = (deployedContractData.abi as Abi).find(
         part => part.type === "event" && part.name === eventName,
       ) as AbiEvent;
@@ -75,7 +79,7 @@ export const useScaffoldEventHistory = <
         const logs = await publicClient.getLogs({
           address: deployedContractData?.address,
           event,
-          args: filters as any, // TODO: check if it works and fix type
+          args: filters as any,
           fromBlock: fromBlock || fromBlockUpdated,
           toBlock: blockNumber,
         });

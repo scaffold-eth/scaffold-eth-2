@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { blo } from "blo";
 import { useDebounceValue } from "usehooks-ts";
 import { Address, isAddress } from "viem";
+import { normalize } from "viem/ens";
 import { useEnsAddress, useEnsAvatar, useEnsName } from "wagmi";
 import { CommonInputProps, InputBase, isENS } from "~~/components/scaffold-eth";
 
@@ -25,9 +26,11 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     isSuccess: isEnsAddressSuccess,
   } = useEnsAddress({
     name: settledValue,
-    enabled: isDebouncedValueLive && isENS(debouncedValue),
     chainId: 1,
-    cacheTime: 30_000,
+    query: {
+      gcTime: 30_000,
+      enabled: isDebouncedValueLive && isENS(debouncedValue),
+    },
   });
 
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
@@ -38,16 +41,20 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     isSuccess: isEnsNameSuccess,
   } = useEnsName({
     address: settledValue as Address,
-    enabled: isAddress(debouncedValue),
     chainId: 1,
-    cacheTime: 30_000,
+    query: {
+      enabled: isAddress(debouncedValue),
+      gcTime: 30_000,
+    },
   });
 
   const { data: ensAvatar, isLoading: isEnsAvtarLoading } = useEnsAvatar({
-    name: ensName,
-    enabled: Boolean(ensName),
+    name: ensName ? normalize(ensName) : undefined,
     chainId: 1,
-    cacheTime: 30_000,
+    query: {
+      enabled: Boolean(ensName),
+      gcTime: 30_000,
+    },
   });
 
   // ens => address
