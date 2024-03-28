@@ -1,14 +1,11 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
-import { Contract } from "ethers";
+import hre from "hardhat";
+import { generateDeployments } from "../utils";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
  * constructor arguments set to the deployer address
- *
- * @param hre HardhatRuntimeEnvironment object.
  */
-const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployYourContract = async function () {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
@@ -20,21 +17,25 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     You can run the `yarn account` command to check your balance in every network.
   */
   const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
+  const [deployerClient] = await hre.viem.getWalletClients();
 
-  await deploy("YourContract", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [deployer],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
+  // @ts-expect-error: artifacts is not defined
+  const yourContract = await hre.viem.deployContract("YourContract", [deployer], {
+    walletClient: deployerClient,
   });
 
-  // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  const chainId = await deployerClient.getChainId();
+  // @ts-expect-error: artifacts is not defined
+  const yourContractArtifact = artifacts.readArtifactSync("YourContract");
+
+  await generateDeployments({
+    address: yourContract.address,
+    contractData: yourContractArtifact,
+    chainId,
+  });
+
+  // Get the deployed contract
+  // const yourContract = await hre.viem.getContractAt("YourContract", yourContract.address);
 };
 
 export default deployYourContract;
