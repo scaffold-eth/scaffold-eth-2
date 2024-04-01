@@ -33,7 +33,5 @@ export const burnerWalletConfig = (): Wallet => ({
 
     return false;
   },
-  createConnector: () => {
-    return createBurnerConnector();
-  },
+  createConnector: createBurnerConnector,
 });

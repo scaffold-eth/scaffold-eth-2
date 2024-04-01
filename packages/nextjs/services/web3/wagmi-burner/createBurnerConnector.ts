@@ -9,6 +9,7 @@
  * const provider = new EIP1193ProviderBridge(wallet, provider);
  * ```
  */
+import { WalletDetailsParams } from "@rainbow-me/rainbowkit";
 import { createConnector, normalizeChainId } from "@wagmi/core";
 import {
   EIP1193RequestFn,
@@ -48,7 +49,7 @@ export class ChainNotConfiguredError extends BaseError {
 
 type Provider = ReturnType<Transport<"custom", Record<any, any>, EIP1193RequestFn<WalletRpcSchema>>>;
 
-export const createBurnerConnector = () => {
+export const createBurnerConnector = (walletDetails: WalletDetailsParams) => {
   let connected = true;
   let connectedChainId: number;
   return createConnector<Provider>(config => ({
@@ -158,5 +159,6 @@ export const createBurnerConnector = () => {
       connected = false;
       return Promise.resolve();
     },
+    ...walletDetails,
   }));
 };
