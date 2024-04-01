@@ -43,6 +43,7 @@
     "@types/react": "^18.0.9",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "abitype": "^1.0.2",
     "autoprefixer": "^10.4.12",
     "eslint": "^8.15.0",
     "eslint-config-next": "^14.0.4",
