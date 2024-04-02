@@ -18,6 +18,7 @@ import {
   GetTransactionReceiptReturnType,
   GetTransactionReturnType,
   Log,
+  TransactionReceipt,
   WriteContractErrorType,
 } from "viem";
 import { Config, UseReadContractParameters, UseWatchContractEventParameters } from "wagmi";
@@ -195,12 +196,19 @@ export type scaffoldWriteContractVariables<
 >;
 
 type WriteVariables = WriteContractVariables<Abi, string, any[], Config, number>;
+
+export type TrasactorFuncOptions = {
+  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
+  blockConfirmations?: number;
+};
+
 export type scaffoldWriteContractOptions = MutateOptions<
   WriteContractReturnType,
   WriteContractErrorType,
   WriteVariables,
   unknown
->;
+> &
+  TrasactorFuncOptions;
 
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
