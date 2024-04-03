@@ -3,11 +3,11 @@ import { Hash, SendTransactionParameters, WalletClient } from "viem";
 import { useWalletClient } from "wagmi";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
-import { TrasactorFuncOptions } from "~~/utils/scaffold-eth/contract";
+import { TransactorFuncOptions } from "~~/utils/scaffold-eth/contract";
 
 type TransactionFunc = (
   tx: (() => Promise<Hash>) | SendTransactionParameters,
-  options?: TrasactorFuncOptions,
+  options?: TransactorFuncOptions,
 ) => Promise<Hash | undefined>;
 
 /**

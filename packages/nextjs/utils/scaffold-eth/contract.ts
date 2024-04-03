@@ -197,7 +197,7 @@ export type scaffoldWriteContractVariables<
 
 type WriteVariables = WriteContractVariables<Abi, string, any[], Config, number>;
 
-export type TrasactorFuncOptions = {
+export type TransactorFuncOptions = {
   onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
   blockConfirmations?: number;
 };
@@ -208,7 +208,7 @@ export type scaffoldWriteContractOptions = MutateOptions<
   WriteVariables,
   unknown
 > &
-  TrasactorFuncOptions;
+  TransactorFuncOptions;
 
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
