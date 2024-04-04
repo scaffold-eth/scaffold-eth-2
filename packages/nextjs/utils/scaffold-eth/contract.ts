@@ -178,16 +178,10 @@ export type UseScaffoldReadConfig<
     Omit<UseReadContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
 
-/*
- *{
-  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
-  blockConfirmations?: number;
-}
- * */
 export type scaffoldWriteContractVariables<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
-> = IsContractDeclarationMissing<
+> = { contractName: TContractName } & IsContractDeclarationMissing<
   Partial<WriteContractParameters>,
   {
     functionName: TFunctionName;

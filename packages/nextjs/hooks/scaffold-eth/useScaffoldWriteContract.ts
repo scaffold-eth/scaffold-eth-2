@@ -5,11 +5,12 @@ import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
-import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
+import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
+  contracts,
   scaffoldWriteContractOptions,
   scaffoldWriteContractVariables,
 } from "~~/utils/scaffold-eth/contract";
@@ -20,11 +21,7 @@ import {
  * @param contractName - contract name
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
-export const useScaffoldWriteContract = <TContractName extends ContractName>(
-  contractName: TContractName,
-  writeContractParams?: UseWriteContractParameters,
-) => {
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+export const useScaffoldWriteContract = (writeContractParams?: UseWriteContractParameters) => {
   const { chain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
@@ -33,11 +30,15 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
   const sendContractWriteTx = async <
+    TContractName extends ContractName,
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
     variables: scaffoldWriteContractVariables<TContractName, TFunctionName>,
     options?: scaffoldWriteContractOptions,
   ) => {
+    const { contractName, ...wagmiVariables } = variables;
+    const deployedContractData = contracts?.[targetNetwork.id]?.[contractName];
+
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
       return;
@@ -59,7 +60,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
           {
             abi: deployedContractData.abi as Abi,
             address: deployedContractData.address,
-            ...variables,
+            ...wagmiVariables,
           } as WriteContractVariables<Abi, string, any[], Config, number>,
           mutateOptions as
             | MutateOptions<
