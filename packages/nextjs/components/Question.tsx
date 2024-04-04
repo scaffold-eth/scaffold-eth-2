@@ -1,28 +1,7 @@
-// Question.tsx
 "use client";
 
 import React from "react";
 import { Question } from "~~/utils/scaffold-eth/quiz";
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
-
-// Question.tsx
 
 interface QuestionProps {
   question: Question;
@@ -33,20 +12,23 @@ interface QuestionProps {
 
 const QuestionComponent: React.FC<QuestionProps> = ({ question, questionIndex, handleOptionChange, currentAnswer }) => {
   return (
-    <div>
-      <h3>{question.question}</h3>
-      {question.options.map((option, index) => (
-        <label key={index}>
-          <input
-            type="radio"
-            name={`question-${questionIndex}`}
-            value={option}
-            checked={currentAnswer === option}
-            onChange={() => handleOptionChange(questionIndex, option)}
-          />
-          {option}
-        </label>
-      ))}
+    <div className="p-6 border rounded-lg mb-6">
+      <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
+      <div className="space-y-2">
+        {question.options.map((option, index) => (
+          <label key={index} className="flex items-center">
+            <input
+              type="radio"
+              className="mr-2"
+              name={`question-${questionIndex}`}
+              value={option}
+              checked={currentAnswer === option}
+              onChange={() => handleOptionChange(questionIndex, option)}
+            />
+            {option}
+          </label>
+        ))}
+      </div>
     </div>
   );
 };

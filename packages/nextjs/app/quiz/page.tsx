@@ -47,8 +47,8 @@ const Quiz = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-4 m-4">
+      <div className="space-y-4">
         {questions.map((question, index) => (
           <QuestionComponent
             key={index}
@@ -58,10 +58,12 @@ const Quiz = () => {
             currentAnswer={answers[index]}
           />
         ))}
-        <button type="submit">Submit</button>
-      </form>
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded" disabled>
+          Submit
+        </button>
+      </div>
       {result && <p>{result}</p>}
-    </div>
+    </form>
   );
 };
 export default Quiz;
