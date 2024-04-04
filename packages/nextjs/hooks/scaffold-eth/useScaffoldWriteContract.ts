@@ -18,7 +18,6 @@ import {
 /**
  * Wrapper around wagmi's useWriteContract hook which automatically loads (by name) the contract ABI and address from
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
- * @param contractName - contract name
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
 export const useScaffoldWriteContract = (writeContractParams?: UseWriteContractParameters) => {
