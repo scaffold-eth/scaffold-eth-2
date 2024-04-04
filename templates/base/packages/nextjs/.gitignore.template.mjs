@@ -33,6 +33,7 @@ yarn-error.log*
 .env.production.local
 
 # typescript
-*.tsbuildinfo`
+*.tsbuildinfo
+.vercel`
 
 export default contents
