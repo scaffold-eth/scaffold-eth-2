@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuestionComponent from "~~/components/Question";
 // import Question from "~/components/Question";
 import { Answers, Question } from "~~/utils/scaffold-eth/quiz";
 
-// We will create this component next
 const questions: Question[] = [
   {
     question: "What is the capital of France?",
@@ -17,22 +16,23 @@ const questions: Question[] = [
     options: ["Jeff Bezos", "Elon Musk", "Bill Gates", "Steve Jobs"],
     answer: "Elon Musk",
   },
-  // Add more questions as needed
 ];
-// interface QuizProps {
-//   questions: Question[];
-// }
 
 const Quiz = () => {
   const [answers, setAnswers] = useState<Answers>({});
   const [result, setResult] = useState<string | null>(null);
-
+  const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
   const handleOptionChange = (questionIndex: number, option: string) => {
     setAnswers({
       ...answers,
       [questionIndex]: option,
     });
   };
+
+  useEffect(() => {
+    const answeredQuestionsCount = Object.keys(answers).length;
+    setAllQuestionsAnswered(answeredQuestionsCount === questions.length);
+  }, [answers]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -58,7 +58,13 @@ const Quiz = () => {
             currentAnswer={answers[index]}
           />
         ))}
-        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded" disabled>
+        <button
+          type="submit"
+          className={`${
+            allQuestionsAnswered ? "bg-green-500 text-white" : "bg-gray-300 text-gray-600"
+          } px-4 py-2 rounded ${allQuestionsAnswered ? "" : "pointer-events-none"}`}
+          disabled={!allQuestionsAnswered}
+        >
           Submit
         </button>
       </div>
