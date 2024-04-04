@@ -29,7 +29,7 @@ export const useScaffoldWriteContract = (writeContractParams?: UseWriteContractP
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const sendContractWriteTx = async <
+  const sendContractWriteAsyncTx = async <
     TContractName extends ContractName,
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
@@ -80,10 +80,53 @@ export const useScaffoldWriteContract = (writeContractParams?: UseWriteContractP
       setIsMining(false);
     }
   };
+
+  const sendContractWriteTx = <
+    TContractName extends ContractName,
+    TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
+  >(
+    variables: scaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: Omit<scaffoldWriteContractOptions, "onBlockConfirmation" | "blockConfirmations">,
+  ) => {
+    const { contractName, ...wagmiVariables } = variables;
+    const deployedContractData = contracts?.[targetNetwork.id]?.[contractName];
+
+    if (!deployedContractData) {
+      notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
+      return;
+    }
+    if (!chain?.id) {
+      notification.error("Please connect your wallet");
+      return;
+    }
+    if (chain?.id !== targetNetwork.id) {
+      notification.error("You are on the wrong network");
+      return;
+    }
+
+    wagmiContractWrite.writeContract(
+      {
+        abi: deployedContractData.abi as Abi,
+        address: deployedContractData.address,
+        ...wagmiVariables,
+      } as WriteContractVariables<Abi, string, any[], Config, number>,
+      options as
+        | MutateOptions<
+            WriteContractReturnType,
+            WriteContractErrorType,
+            WriteContractVariables<Abi, string, any[], Config, number>,
+            unknown
+          >
+        | undefined,
+    );
+  };
+
   return {
     ...wagmiContractWrite,
     isMining,
-    // Overwrite wagmi's write async
-    writeContractAsync: sendContractWriteTx,
+    // Overwrite wagmi's writeContactAsync
+    writeContractAsync: sendContractWriteAsyncTx,
+    // Overwrite wagmi's writeContract
+    writeContract: sendContractWriteTx,
   };
 };
