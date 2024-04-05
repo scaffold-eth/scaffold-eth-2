@@ -40,7 +40,6 @@ export const useScaffoldReadContract = <
     functionName,
     address: deployedContract?.address,
     abi: deployedContract?.abi,
-    watch: true,
     args,
     ...(readContractConfig as any),
     query: {
@@ -67,7 +66,8 @@ export const useScaffoldReadContract = <
     if (defaultWatch) {
       queryClient.invalidateQueries({ queryKey: readContractHookRes.queryKey });
     }
-  }, [blockNumber, queryClient, readContractHookRes.queryKey, defaultWatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber]);
 
   return readContractHookRes;
 };

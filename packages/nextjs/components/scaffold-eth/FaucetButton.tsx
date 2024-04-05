@@ -38,7 +38,8 @@ export const FaucetButton = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey });
-  }, [blockNumber, queryClient, queryKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber]);
 
   const sendETH = async () => {
     try {

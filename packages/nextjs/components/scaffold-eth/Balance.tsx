@@ -41,7 +41,8 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey });
-  }, [blockNumber, queryClient, queryKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber]);
 
   if (!address || isLoading || balance === null) {
     return (
