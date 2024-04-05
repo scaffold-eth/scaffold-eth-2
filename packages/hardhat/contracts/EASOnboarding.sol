@@ -36,6 +36,15 @@ contract EASOnboarding is EASOnboardingStorage {
         return true;
     }
 
+    function addAttestation(bytes32 _attestation, address _studentAddress) public {
+        require(msg.sender == deployer);
+        attestationProfile[_studentAddress].attestations.push(_attestation);
+    }
+
+    function toggleOverrideEventFlag(uint256 _eventId, bool _res) public isMentorAddress(msg.sender) {
+        events[_eventId].overrideClosingTimestamp = _res;
+    }
+
     function createEvent(
         uint256 _closingTimestamp,
         string memory _eventName,
