@@ -30,6 +30,7 @@ export const useScaffoldReadContract = <
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const { data: deployedContract } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
+  const { query: queryOptions, ...readContractConfig } = readConfig;
 
   return useReadContract({
     chainId: targetNetwork.id,
@@ -38,8 +39,11 @@ export const useScaffoldReadContract = <
     abi: deployedContract?.abi,
     watch: true,
     args,
-    enabled: !Array.isArray(args) || !args.some(arg => arg === undefined),
-    ...(readConfig as any),
+    ...(readContractConfig as any),
+    query: {
+      enabled: !Array.isArray(args) || !args.some(arg => arg === undefined),
+      ...queryOptions,
+    },
   }) as Omit<ReturnType<typeof useReadContract>, "data" | "refetch"> & {
     data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
     refetch: (
