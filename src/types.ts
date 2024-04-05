@@ -2,22 +2,30 @@ import type { Question } from "inquirer";
 
 export type Args = string[];
 
-export type RawOptions = {
+type BaseOptions = {
   project: string | null;
   install: boolean | null;
   dev: boolean;
-  extensions: Extension[] | null;
 };
 
-type NonNullableRawOptions = {
-  [Prop in keyof RawOptions]: NonNullable<RawOptions[Prop]>;
+export type RawOptions = BaseOptions & {
+  solidityFramework: SolidityFramework | "none" | null;
 };
 
-export type Options = NonNullableRawOptions;
+type MergedOptions = BaseOptions & {
+  extensions: Extension[];
+};
 
-export type Extension =
-  | "hardhat"
-  | "foundry"
+type NonNullableMergedOptions = {
+  [Prop in keyof MergedOptions]: NonNullable<MergedOptions[Prop]>;
+};
+
+export type Options = NonNullableMergedOptions;
+
+export type SolidityFramework = "hardhat" | "foundry";
+
+export type Extension = SolidityFramework;
+
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:
