@@ -31,6 +31,7 @@ contract EASOnboarding is EASOnboardingStorage {
 
         events[_eventId].attendees.push(msg.sender);
         attestationProfile[msg.sender].eventsCompleted++;
+        attestationProfile[msg.sender].studentLevel = _level;
         studentEventMap[msg.sender][_eventId] = true;
         return true;
     }
