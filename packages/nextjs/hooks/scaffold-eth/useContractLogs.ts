@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTargetNetwork } from "./useTargetNetwork";
 import { Address, Log } from "viem";
 import { usePublicClient } from "wagmi";
 
 export const useContractLogs = (address: Address) => {
   const [logs, setLogs] = useState<Log[]>([]);
-  const client = usePublicClient();
+  const { targetNetwork } = useTargetNetwork();
+  const client = usePublicClient({ chainId: targetNetwork.id });
 
   useEffect(() => {
     const fetchLogs = async () => {
