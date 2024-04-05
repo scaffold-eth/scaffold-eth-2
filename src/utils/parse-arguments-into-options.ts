@@ -21,6 +21,13 @@ export function parseArgumentsIntoOptions(rawArgs: Args): RawOptions {
 
   const install = args["--install"] ?? null;
   const skipInstall = args["--skip-install"] ?? null;
+
+  if (install && skipInstall) {
+    throw new Error(
+      'Please select only one of the options: "--install" or "--skip-install".'
+    );
+  }
+
   const hasInstallRelatedFlag = install || skipInstall;
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
