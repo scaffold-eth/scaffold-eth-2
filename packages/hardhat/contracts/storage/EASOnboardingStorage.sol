@@ -8,7 +8,7 @@ contract EASOnboardingStorage {
 
     mapping(address => Structs.AttestationProfile) public attestationProfile;
     mapping(uint256 => Structs.Event) public events;
-    mapping(address => mapping(uint256 => Structs.Event)) public studentEventMap;
+    mapping(address => mapping(uint256 => bool)) public studentEventMap;
     mapping(address => bool) isMentor;
     uint256 public eventIdCounter = 1;
 }

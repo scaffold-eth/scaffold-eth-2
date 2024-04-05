@@ -12,13 +12,26 @@ contract EASOnboarding is EASOnboardingStorage {
 
     modifier isMentorAddress(address _mentorAddress) {
         require(
-            !isMentor[_mentorAddress] || _mentorAddress == deployer, "Only selected mentor addresses can create quiz"
+            isMentor[_mentorAddress] || _mentorAddress == deployer, "Only selected mentor addresses can create quiz"
         );
         _;
     }
 
     // Function to get attested, with checks and storing attestation data
-    function getAttested(uint256 _eventId, bytes32 _msgHash, bytes memory _signature) public returns (bool) {
+    function getAttested(uint256 _eventId, uint256 _level, bytes32 _msgHash, bytes memory _signature)
+        public
+        returns (bool)
+    {
+        require(isVerified(_msgHash, _signature), "Invalid Txn Source");
+        require(events[_eventId].isActive || !events[_eventId].overrideClosingTimestamp, "Event is no longer active");
+        require(
+            (events[_eventId].closingTimestamp > block.timestamp) || !events[_eventId].overrideClosingTimestamp,
+            "Event is past closing timestamp"
+        );
+
+        events[_eventId].attendees.push(msg.sender);
+        attestationProfile[msg.sender].eventsCompleted++;
+        studentEventMap[msg.sender][_eventId] = true;
         return true;
     }
 
@@ -27,7 +40,7 @@ contract EASOnboarding is EASOnboardingStorage {
         string memory _eventName,
         string memory _eventDescription,
         string memory _mentorName
-    ) public isMentorAddress(msg.sender) returns (bool) {
+    ) public isMentorAddress(msg.sender) {
         require(_closingTimestamp > block.timestamp, "Closing timestamp cannot be in the past.");
 
         events[eventIdCounter].eventId = eventIdCounter;
@@ -40,6 +53,7 @@ contract EASOnboarding is EASOnboardingStorage {
         events[eventIdCounter].attendees.push(msg.sender);
         events[eventIdCounter].isActive = true;
         events[eventIdCounter].overrideClosingTimestamp = false;
+        eventIdCounter++;
     }
 
     function isVerified(bytes32 _messageHash, bytes memory _signature) public view returns (bool) {

@@ -17,6 +17,7 @@ library Structs {
 
     struct AttestationProfile {
         uint256 studentLevel;
+        uint256 eventsCompleted;
         bytes32[] attestations;
     }
 }
