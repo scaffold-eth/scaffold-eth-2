@@ -215,8 +215,8 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  Omit<UseWatchContractEventParameters, "listener" | "address" | "abi"> & {
-    listener: (
+  Omit<UseWatchContractEventParameters, "onLogs" | "address" | "abi"> & {
+    onLogs: (
       logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
           args: Record<string, unknown>;
@@ -225,8 +225,8 @@ export type UseScaffoldEventConfig<
       >[],
     ) => void;
   },
-  Omit<UseWatchContractEventParameters<ContractAbi<TContractName>>, "listener" | "address" | "abi"> & {
-    listener: (
+  Omit<UseWatchContractEventParameters<ContractAbi<TContractName>>, "onLogs" | "address" | "abi"> & {
+    onLogs: (
       logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
           args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &

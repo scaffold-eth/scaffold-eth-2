@@ -11,7 +11,7 @@ import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaf
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
- * @param config.listener - the callback that receives events. If only interested in 1 event, call `unwatch` inside of the listener
+ * @param config.onLogs - the callback that receives events.
  */
 export const useScaffoldEventSubscriber = <
   TContractName extends ContractName,
@@ -19,14 +19,13 @@ export const useScaffoldEventSubscriber = <
 >({
   contractName,
   eventName,
-  listener,
+  onLogs,
 }: UseScaffoldEventConfig<TContractName, TEventName>) => {
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
 
   const addIndexedArgsToLogs = (logs: Log[]) => logs.map(addIndexedArgsToEvent);
-  const listenerWithIndexedArgs = (logs: Log[]) =>
-    listener(addIndexedArgsToLogs(logs) as Parameters<typeof listener>[0]);
+  const listenerWithIndexedArgs = (logs: Log[]) => onLogs(addIndexedArgsToLogs(logs) as Parameters<typeof onLogs>[0]);
 
   return useWatchContractEvent({
     address: deployedContractData?.address,
