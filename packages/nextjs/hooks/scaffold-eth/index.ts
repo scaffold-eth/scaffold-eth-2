@@ -7,7 +7,7 @@ export * from "./useOutsideClick";
 export * from "./useScaffoldContract";
 export * from "./useScaffoldReadContract";
 export * from "./useScaffoldWriteContract";
-export * from "./useScaffoldEventSubscriber";
+export * from "./useScaffoldWatchContractEvent";
 export * from "./useScaffoldEventHistory";
 export * from "./useTransactor";
 export * from "./useFetchBlocks";

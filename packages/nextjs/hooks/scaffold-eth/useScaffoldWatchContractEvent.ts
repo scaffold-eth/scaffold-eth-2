@@ -13,7 +13,7 @@ import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaf
  * @param config.eventName - name of the event to listen for
  * @param config.onLogs - the callback that receives events.
  */
-export const useScaffoldEventSubscriber = <
+export const useScaffoldWatchContractEvent = <
   TContractName extends ContractName,
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 >({
