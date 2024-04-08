@@ -16,7 +16,7 @@ typechain-types
 cache
 artifacts
 
-#zkSync files
+# zkSync files
 artifacts-zk
 cache-zk
 
