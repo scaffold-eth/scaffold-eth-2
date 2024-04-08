@@ -19,8 +19,5 @@ node_modules
 .vscode
 .idea
 
-# next.js
-.vercel
-
 # cli
 dist
