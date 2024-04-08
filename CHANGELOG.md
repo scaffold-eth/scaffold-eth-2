@@ -4,14 +4,14 @@
 
 ### Patch Changes
 
-- c19f286: - Extract metadata title and description (#770)
-  - Remove Goerli from supported networks (#771)
-  - fix: redundant error notifications on block explorer (#775)
-  - chore: fix typo (#777)
-  - fix: vercel deployment linking from github (#780)
-  - Remove useAccountBalance (#788)
-  - Templatise README in CLI (#790, #782)
-  - Add .env to .gitignore in nextjs package (#798)
+- Extract metadata title and description (#770)
+- Remove Goerli from supported networks (#771)
+- fix: redundant error notifications on block explorer (#775)
+- chore: fix typo (#777)
+- fix: vercel deployment linking from github (#780)
+- Remove useAccountBalance (#788)
+- Templatise README in CLI (#790, #782)
+- Add .env to .gitignore in nextjs package (#798)
 
 ## 0.0.35
 
