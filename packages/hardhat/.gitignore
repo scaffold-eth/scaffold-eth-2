@@ -1,12 +1,18 @@
+# dependencies
 node_modules
+
+# env files
 .env
+
+# coverage
 coverage
 coverage.json
+
+# typechain
 typechain
 typechain-types
-temp
 
-#Hardhat files
+# hardhat files
 cache
 artifacts
 
@@ -14,4 +20,8 @@ artifacts
 artifacts-zk
 cache-zk
 
+# deployments
 deployments/localhost
+
+# other
+temp
