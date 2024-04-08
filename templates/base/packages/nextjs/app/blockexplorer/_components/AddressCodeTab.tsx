@@ -4,7 +4,9 @@ type AddressCodeTabProps = {
 };
 
 export const AddressCodeTab = ({ bytecode, assembly }: AddressCodeTabProps) => {
-  const formattedAssembly = assembly.split(" ").join("\n");
+  const formattedAssembly = Array.from(assembly.matchAll(/\w+( 0x[a-fA-F0-9]+)?/g))
+    .map(it => it[0])
+    .join("\n");
 
   return (
     <div className="flex flex-col gap-3 p-4">

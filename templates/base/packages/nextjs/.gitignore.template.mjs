@@ -27,12 +27,14 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
 # typescript
-*.tsbuildinfo`
+*.tsbuildinfo
+.vercel`
 
 export default contents
