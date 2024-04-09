@@ -182,7 +182,7 @@ export type UseScaffoldReadConfig<
 export type scaffoldWriteContractVariables<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
-> = { contractName: TContractName } & IsContractDeclarationMissing<
+> = IsContractDeclarationMissing<
   Partial<WriteContractParameters>,
   {
     functionName: TFunctionName;
