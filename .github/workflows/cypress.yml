@@ -61,7 +61,7 @@ jobs:
 
       - name: Run Cypress tests for apps without solidity frameworks
         uses: cypress-io/github-action@v6
-        if: matrix.config == 'none'
+        if: matrix.config == 'no_solidity_framework'
         with:
           start: yarn start
           wait-on: "http://localhost:3000"
