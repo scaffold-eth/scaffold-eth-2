@@ -43,6 +43,7 @@
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "~5.40.0",
     "autoprefixer": "~10.4.12",
+    "cypress": "^13.7.2",
     "eslint": "~8.24.0",
     "eslint-config-next": "~14.0.4",
     "eslint-config-prettier": "~8.5.0",

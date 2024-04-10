@@ -1,0 +1,69 @@
+name: Cypress Tests on Multiple Configurations
+
+on:
+  push:
+    branches:
+      - cli
+  pull_request:
+    branches:
+      - cli-solidity-frameworks
+      # TODO change to cli
+      # - cli
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config: [hardhat, foundry, no_solidity_framework]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Start dev
+        run: yarn dev &
+
+      - name: Install application (Hardhat configuration)
+        if: matrix.config == 'hardhat'
+        run: yarn cli new_project --install -f hardhat
+
+      - name: Install Foundry
+        if: matrix.config == 'foundry'
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install application (Foundry configuration)
+        if: matrix.config == 'foundry'
+        run: yarn cli new_project --install -f foundry
+
+      - name: Install application (No solidity framework configuration)
+        if: matrix.config == 'no_solidity_framework'
+        run: yarn cli new_project --install -f none
+
+      - name: Run chain and deploy
+        working-directory: new_project
+        if: matrix.config == 'hardhat' || matrix.config == 'foundry'
+        run: yarn install & yarn chain & yarn deploy
+
+      - name: Run Cypress tests for apps with solidity frameworks
+        uses: cypress-io/github-action@v6
+        if: matrix.config == 'hardhat' || matrix.config == 'foundry'
+        with:
+          start: yarn start
+          wait-on: "http://localhost:3000"
+          working-directory: new_project/packages/nextjs
+
+      - name: Run Cypress tests for apps without solidity frameworks
+        uses: cypress-io/github-action@v6
+        if: matrix.config == 'none'
+        with:
+          start: yarn start
+          wait-on: "http://localhost:3000"
+          working-directory: new_project/packages/nextjs
+          spec: cypress/e2e/base.cy.ts
