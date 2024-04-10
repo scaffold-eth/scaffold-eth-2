@@ -66,4 +66,4 @@ jobs:
           start: yarn start
           wait-on: "http://localhost:3000"
           working-directory: new_project/packages/nextjs
-          spec: cypress/e2e/base.cy.ts
+          spec: cypress/e2e/base/base.cy.ts
