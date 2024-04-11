@@ -58,6 +58,7 @@ jobs:
           start: yarn start
           wait-on: "http://localhost:3000"
           working-directory: new_project/packages/nextjs
+          browser: chrome
 
       - name: Run Cypress tests for apps without solidity frameworks
         uses: cypress-io/github-action@v6
@@ -67,3 +68,4 @@ jobs:
           wait-on: "http://localhost:3000"
           working-directory: new_project/packages/nextjs
           spec: cypress/e2e/base/base.cy.ts
+          browser: chrome
