@@ -44,6 +44,13 @@ export const metadata: Metadata = {
   icons: {
     icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
   },
+  other: {
+    "fc:frame": "vNext",
+    "fc:frame:image": imageUrl,
+    "fc:frame:button:1": "Open my 🏗️ Scaffold-ETH 2 dApp",
+    "fc:frame:button:1:action": "link",
+    "fc:frame:button:1:target": baseUrl,
+  },
 };
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
