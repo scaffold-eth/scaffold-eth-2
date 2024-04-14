@@ -4,9 +4,8 @@ import { useState } from "react";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount, useNetwork } from "wagmi";
-import { useBalance } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useAccountBalance, useTransactor } from "~~/hooks/scaffold-eth";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -22,11 +21,7 @@ const localWalletClient = createWalletClient({
  */
 export const FaucetButton = () => {
   const { address } = useAccount();
-
-  const { data: balance } = useBalance({
-    address,
-    watch: true,
-  });
+  const { balance } = useAccountBalance(address);
 
   const { chain: ConnectedChain } = useNetwork();
 
@@ -55,12 +50,10 @@ export const FaucetButton = () => {
     return null;
   }
 
-  const isBalanceZero = balance && balance.value === 0n;
-
   return (
     <div
       className={
-        !isBalanceZero
+        balance
           ? "ml-1"
           : "ml-1 tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
       }
