@@ -1,6 +1,7 @@
 const ethers = require("ethers");
 const { parse, stringify } = require("envfile");
 const fs = require("fs");
+const { execSync } = require("node:child_process");
 
 const envFilePath = "./.env";
 
@@ -12,20 +13,24 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");
   const randomWallet = ethers.Wallet.createRandom();
 
+  const output = execSync(
+    `cast wallet import ${randomWallet.address} --private-key ${randomWallet.privateKey}`
+  );
+
   const newEnvConfig = {
     ...existingEnvConfig,
-    DEPLOYER_PRIVATE_KEY: randomWallet.privateKey,
+    DEPLOYER_PUBLIC_KEY: randomWallet.address,
   };
+
+  console.log("Output: \n", output.toString());
 
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
-  console.log("📄 Private Key saved to packages/foundry/.env file");
-  console.log("🪄 Generated wallet address:", randomWallet.address);
+  console.log("📄 Public key saved to packages/foundry/.env file");
 };
 
 async function main() {
   if (!fs.existsSync(envFilePath)) {
-    console.log("entered here");
     // No .env file yet.
     setNewEnvConfig();
     return;
