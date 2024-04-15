@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import { useBalance } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -21,18 +23,23 @@ const localWalletClient = createWalletClient({
  * FaucetButton button which lets you grab eth.
  */
 export const FaucetButton = () => {
-  const { address } = useAccount();
+  const { address, chain: ConnectedChain } = useAccount();
+  const { targetNetwork } = useTargetNetwork();
 
-  const { data: balance } = useBalance({
+  const queryClient = useQueryClient();
+  const { data: blockNumber } = useBlockNumber({ watch: true, chainId: targetNetwork.id });
+  const { data: balance, queryKey } = useBalance({
     address,
-    watch: true,
   });
-
-  const { chain: ConnectedChain } = useNetwork();
 
   const [loading, setLoading] = useState(false);
 
   const faucetTxn = useTransactor(localWalletClient);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber]);
 
   const sendETH = async () => {
     try {
