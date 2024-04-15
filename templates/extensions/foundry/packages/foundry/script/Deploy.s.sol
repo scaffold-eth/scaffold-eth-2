@@ -8,22 +8,7 @@ contract DeployScript is ScaffoldETHDeploy {
     error InvalidPrivateKey(string);
 
     function run() external {
-        address owner;
-
-        if (msg.sender == 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38) {
-            uint256 deployerPrivateKey = setupLocalhostEnv();
-            if (deployerPrivateKey == 0) {
-                revert InvalidPrivateKey(
-                    "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use `yarn generate` to generate a new random account"
-                );
-            }
-
-            owner = vm.addr(deployerPrivateKey);
-            vm.startBroadcast(deployerPrivateKey);
-        } else {
-            owner = msg.sender;
-            vm.startBroadcast();
-        }
+        address owner = setupAndStartBroadcast();
 
         YourContract yourContract = new YourContract(owner);
         console.logString(
