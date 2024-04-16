@@ -1,19 +1,26 @@
 const contents = () => 
-`node_modules
+`# dependencies
+node_modules
 
-# dependencies, yarn, etc
-# yarn / eslint
+# yarn
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# eslint
 .eslintcache
-.vscode/**
+
+# misc
 .DS_Store
+
+# IDE
 .vscode
 .idea
-.vercel`;
+
+# cli
+dist`;
 
 export default contents
