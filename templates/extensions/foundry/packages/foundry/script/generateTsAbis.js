@@ -36,7 +36,7 @@ function getArtifactOfContract(contractName) {
 
 function getInheritedFromContracts(artifact) {
   let inheritedFromContracts = [];
-  if('ast' in artifact) {
+  if (artifact?.ast) {
     for (const astNode of artifact.ast.nodes) {
       if (astNode.nodeType == "ContractDefinition") {
         if (astNode.baseContracts.length > 0) {
