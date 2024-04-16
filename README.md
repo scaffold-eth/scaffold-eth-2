@@ -61,8 +61,6 @@ yarn start
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
-Run smart contract test with `yarn hardhat:test`
-
 **What's next**:
 
 - Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
