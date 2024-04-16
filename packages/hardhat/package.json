@@ -2,6 +2,7 @@
   "name": "@se-2/hardhat",
   "version": "0.0.1",
   "scripts": {
+    "setup": "cp .env.example .env",
     "account": "hardhat run scripts/listAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
     "compile": "hardhat compile",

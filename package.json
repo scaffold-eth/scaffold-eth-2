@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "setup": "yarn workspace @se-2/hardhat setup",
     "account": "yarn workspace @se-2/hardhat account",
     "chain": "yarn workspace @se-2/hardhat chain",
     "fork": "yarn workspace @se-2/hardhat fork",
