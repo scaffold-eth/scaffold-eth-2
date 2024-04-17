@@ -68,6 +68,22 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   // Get the deployed contract to interact with it after deploying.
   const etherWallet = await hre.ethers.getContract<Contract>("EtherWallet", deployer);
   console.log("👋 Initial greeting:", await etherWallet.greeting());
+
+  // SEND ETHER
+
+  await deploy("SendEther", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
+  // Get the deployed contract to interact with it after deploying.
+  const sendEther = await hre.ethers.getContract<Contract>("SendEther", deployer);
+  console.log("👋 Initial greeting:", await sendEther.greeting());
 };
 
 export default deployYourContract;
