@@ -32,6 +32,7 @@ const TokenListing = ({
       onClick={() => onClick(token)}
     >
       {token.logoURI ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img src={token.logoURI} alt={token.name} className="h-6 w-6 rounded-full" />
       ) : (
         <div className="avatar placeholder">
@@ -224,6 +225,7 @@ export const TokenSelector = ({
                   onClick={() => selectToken(token)}
                 >
                   {token.logoURI ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={token.logoURI} alt={token.name} className="h-6 w-6 rounded-full" />
                   ) : (
                     <div className="avatar placeholder">
