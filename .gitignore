@@ -1,16 +1,28 @@
+# dependencies
 node_modules
 
-# dependencies, yarn, etc
-# yarn / eslint
+# yarn
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# eslint
 .eslintcache
-.vscode/**
+
+# misc
 .DS_Store
+
+# IDE
+.vscode
+.idea
+
+# cli
+dist
+
+# subgraph
 subgraph/build/*
 subgraph/generated/*
 subgraph/graph-node/data/*

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+import { useTargetNetwork } from "./useTargetNetwork";
 import { Address, Log } from "viem";
 import { usePublicClient } from "wagmi";
 
 export const useContractLogs = (address: Address) => {
   const [logs, setLogs] = useState<Log[]>([]);
-  const client = usePublicClient();
+  const { targetNetwork } = useTargetNetwork();
+  const client = usePublicClient({ chainId: targetNetwork.id });
 
   useEffect(() => {
     const fetchLogs = async () => {
+      if (!client) return console.error("Client not found");
       try {
         const existingLogs = await client.getLogs({
           address: address,
@@ -21,8 +24,8 @@ export const useContractLogs = (address: Address) => {
     };
     fetchLogs();
 
-    return client.watchBlockNumber({
-      onBlockNumber: async (blockNumber, prevBlockNumber) => {
+    return client?.watchBlockNumber({
+      onBlockNumber: async (_blockNumber, prevBlockNumber) => {
         const newLogs = await client.getLogs({
           address: address,
           fromBlock: prevBlockNumber,
