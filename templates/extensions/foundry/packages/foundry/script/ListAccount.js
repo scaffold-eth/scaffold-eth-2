@@ -51,18 +51,15 @@ async function getBalanceForEachNetwork(address) {
   }
 }
 async function main() {
-  const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
+  const address = process.env.DEPLOYER_PUBLIC_KEY;
 
-  if (!privateKey) {
+  if (!address) {
     console.log(
       "🚫️ You don't have a deployer account. Run `yarn generate` first"
     );
     return;
   }
 
-  // Get account from private key.
-  const wallet = new Wallet(privateKey);
-  const address = wallet.address;
   console.log(
     await QRCode.toString(address, { type: "terminal", small: true })
   );

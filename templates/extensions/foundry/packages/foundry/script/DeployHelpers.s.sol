@@ -16,6 +16,23 @@ contract ScaffoldETHDeploy is Script {
     string path;
     Deployment[] public deployments;
 
+    function setupAndStartBroadcast() internal returns (address memory owner) {
+        if (msg.sender == 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38) {
+            uint256 deployerPrivateKey = setupLocalhostEnv();
+            if (deployerPrivateKey == 0) {
+                revert InvalidPrivateKey(
+                    "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use `yarn generate` to generate a new random account"
+                );
+            }
+
+            owner = vm.addr(deployerPrivateKey);
+            vm.startBroadcast(deployerPrivateKey);
+        } else {
+            owner = msg.sender;
+            vm.startBroadcast();
+        }
+    }
+
     function setupLocalhostEnv()
         internal
         returns (uint256 localhostPrivateKey)
@@ -27,8 +44,6 @@ contract ScaffoldETHDeploy is Script {
             bytes memory mnemonicBytes = vm.parseJson(json, ".wallet.mnemonic");
             string memory mnemonic = abi.decode(mnemonicBytes, (string));
             return vm.deriveKey(mnemonic, 0);
-        } else {
-            return vm.envUint("DEPLOYER_PRIVATE_KEY");
         }
     }
 
