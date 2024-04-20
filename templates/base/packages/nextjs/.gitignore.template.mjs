@@ -12,6 +12,7 @@ const contents = () =>
 # next.js
 /.next/
 /out/
+.vercel
 
 # production
 /build
@@ -34,7 +35,6 @@ yarn-error.log*
 .env.production.local
 
 # typescript
-*.tsbuildinfo
-.vercel`
+*.tsbuildinfo`
 
 export default contents

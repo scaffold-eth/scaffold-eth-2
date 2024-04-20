@@ -11,6 +11,34 @@ type ChainAttributes = {
 
 export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
 
+// Mapping of chainId to RPC chain name an format followed by alchemy and infura
+export const RPC_CHAIN_NAMES: Record<number, string> = {
+  [chains.mainnet.id]: "eth-mainnet",
+  [chains.goerli.id]: "eth-goerli",
+  [chains.sepolia.id]: "eth-sepolia",
+  [chains.optimism.id]: "opt-mainnet",
+  [chains.optimismGoerli.id]: "opt-goerli",
+  [chains.optimismSepolia.id]: "opt-sepolia",
+  [chains.arbitrum.id]: "arb-mainnet",
+  [chains.arbitrumGoerli.id]: "arb-goerli",
+  [chains.arbitrumSepolia.id]: "arb-sepolia",
+  [chains.polygon.id]: "polygon-mainnet",
+  [chains.polygonMumbai.id]: "polygon-mumbai",
+  [chains.polygonAmoy.id]: "polygon-amoy",
+  [chains.astar.id]: "astar-mainnet",
+  [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
+  [chains.polygonZkEvmTestnet.id]: "polygonzkevm-testnet",
+  [chains.base.id]: "base-mainnet",
+  [chains.baseGoerli.id]: "base-goerli",
+  [chains.baseSepolia.id]: "base-sepolia",
+};
+
+export const getAlchemyHttpUrl = (chainId: number) => {
+  return RPC_CHAIN_NAMES[chainId]
+    ? `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${scaffoldConfig.alchemyApiKey}`
+    : undefined;
+};
+
 export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.hardhat.id]: {
     color: "#b8af0c",
@@ -71,7 +99,6 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
   }
 
   const targetChain = targetChainArr[0] as keyof typeof chains;
-  // @ts-expect-error : ignoring error since `blockExplorers` key may or may not be present on some chains
   const blockExplorerTxURL = chains[targetChain]?.blockExplorers?.default?.url;
 
   if (!blockExplorerTxURL) {

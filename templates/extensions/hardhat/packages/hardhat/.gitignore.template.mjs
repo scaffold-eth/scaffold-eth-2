@@ -1,20 +1,30 @@
 const contents = () => 
-`node_modules
+`# dependencies
+node_modules
+
+# env files
 .env
+
+# coverage
 coverage
 coverage.json
+
+# typechain
 typechain
 typechain-types
-temp
 
-#Hardhat files
+# hardhat files
 cache
 artifacts
 
-#zkSync files
+# zkSync files
 artifacts-zk
 cache-zk
 
-deployments/localhost`
+# deployments
+deployments/localhost
+
+# other
+temp`
 
 export default contents

@@ -16,7 +16,7 @@ export const SearchBar = () => {
     event.preventDefault();
     if (isHex(searchInput)) {
       try {
-        const tx = await client.getTransaction({ hash: searchInput });
+        const tx = await client?.getTransaction({ hash: searchInput });
         if (tx) {
           router.push(`/blockexplorer/transaction/${searchInput}`);
           return;

@@ -1,3 +1,4 @@
+import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
   AbiParameter,
@@ -18,8 +19,11 @@ import {
   GetTransactionReturnType,
   Log,
   TransactionReceipt,
+  WriteContractErrorType,
 } from "viem";
-import { UseContractEventConfig, UseContractReadConfig, UseContractWriteConfig } from "wagmi";
+import { Config, UseReadContractParameters, UseWatchContractEventParameters } from "wagmi";
+import { WriteContractParameters, WriteContractReturnType } from "wagmi/actions";
+import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -153,6 +157,9 @@ type UseScaffoldArgsParam<
 > = TFunctionName extends FunctionNamesWithInputs<TContractName>
   ? {
       args: OptionalTupple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
+      value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
+        ? bigint | undefined
+        : undefined;
     }
   : {
       args?: never;
@@ -163,28 +170,40 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
+  watch?: boolean;
 } & IsContractDeclarationMissing<
-  Partial<UseContractReadConfig>,
+  Partial<UseReadContractParameters>,
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractReadConfig, "chainId" | "abi" | "address" | "functionName" | "args">
+    Omit<UseReadContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
 
-export type UseScaffoldWriteConfig<
+export type scaffoldWriteContractVariables<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, WriteAbiStateMutability>,
-> = {
-  contractName: TContractName;
-  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
-  blockConfirmations?: number;
-} & IsContractDeclarationMissing<
-  Partial<UseContractWriteConfig>,
+> = IsContractDeclarationMissing<
+  Partial<WriteContractParameters>,
   {
     functionName: TFunctionName;
   } & UseScaffoldArgsParam<TContractName, TFunctionName> &
-    Omit<UseContractWriteConfig, "chainId" | "abi" | "address" | "functionName" | "args" | "mode">
+    Omit<WriteContractParameters, "chainId" | "abi" | "address" | "functionName" | "args">
 >;
+
+type WriteVariables = WriteContractVariables<Abi, string, any[], Config, number>;
+
+export type TransactorFuncOptions = {
+  onBlockConfirmation?: (txnReceipt: TransactionReceipt) => void;
+  blockConfirmations?: number;
+};
+
+export type scaffoldWriteContractOptions = MutateOptions<
+  WriteContractReturnType,
+  WriteContractErrorType,
+  WriteVariables,
+  unknown
+> &
+  TransactorFuncOptions;
 
 export type UseScaffoldEventConfig<
   TContractName extends ContractName,
@@ -196,8 +215,8 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
 } & IsContractDeclarationMissing<
-  Omit<UseContractEventConfig, "listener"> & {
-    listener: (
+  Omit<UseWatchContractEventParameters, "onLogs" | "address" | "abi"> & {
+    onLogs: (
       logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
           args: Record<string, unknown>;
@@ -206,8 +225,8 @@ export type UseScaffoldEventConfig<
       >[],
     ) => void;
   },
-  Omit<UseContractEventConfig<ContractAbi<TContractName>, TEventName>, "listener"> & {
-    listener: (
+  Omit<UseWatchContractEventParameters<ContractAbi<TContractName>>, "onLogs" | "address" | "abi"> & {
+    onLogs: (
       logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
           args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
