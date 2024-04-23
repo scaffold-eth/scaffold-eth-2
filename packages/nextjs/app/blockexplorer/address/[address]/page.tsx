@@ -82,6 +82,8 @@ export function generateStaticParams() {
 
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
+  if (address === "0x0000000000000000000000000000000000000000") return null;
+
   const contractData: { bytecode: string; assembly: string } | null = await getContractData(address);
   return <AddressComponent address={address} contractData={contractData} />;
 };

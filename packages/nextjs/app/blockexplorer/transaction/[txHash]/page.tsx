@@ -11,6 +11,8 @@ export function generateStaticParams() {
 }
 const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {
   const txHash = params?.txHash as Hash;
+
+  if (txHash === "0x0000000000000000000000000000000000000000") return null;
   return <TransactionComp txHash={txHash} />;
 };
 
