@@ -76,6 +76,10 @@ const getContractData = async (address: string) => {
   return { bytecode, assembly };
 };
 
+export function generateStaticParams() {
+  return [{ address: "0x0000000000000000000000000000000000000000" }];
+}
+
 const AddressPage = async ({ params }: PageProps) => {
   const address = params?.address as string;
   const contractData: { bytecode: string; assembly: string } | null = await getContractData(address);
