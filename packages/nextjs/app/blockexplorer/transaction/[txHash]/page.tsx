@@ -7,6 +7,7 @@ type PageProps = {
 };
 
 export function generateStaticParams() {
+  // An workaround to enable static exports in Next.js
   return [{ txHash: "0x0000000000000000000000000000000000000000" }];
 }
 const TransactionPage: NextPage<PageProps> = ({ params }: PageProps) => {

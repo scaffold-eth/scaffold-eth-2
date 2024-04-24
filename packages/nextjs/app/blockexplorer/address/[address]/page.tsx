@@ -77,6 +77,7 @@ const getContractData = async (address: string) => {
 };
 
 export function generateStaticParams() {
+  // An workaround to enable static exports in Next.js
   return [{ address: "0x0000000000000000000000000000000000000000" }];
 }
 
