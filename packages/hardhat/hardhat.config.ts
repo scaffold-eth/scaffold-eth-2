@@ -118,6 +118,10 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
+    magmaTestnet: {
+      url: "https://turbo.magma-rpc.com/",
+      accounts: [deployerPrivateKey],
+    }
   },
   // configuration for harhdat-verify plugin
   etherscan: {
