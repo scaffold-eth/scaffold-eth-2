@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.38
+
+### Patch Changes
+
+- c021277: Testing the publishing to npm with new repo
+
 ## 0.0.37
 
 ### Patch Changes
