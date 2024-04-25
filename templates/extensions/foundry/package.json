@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "account": "yarn workspace @se-2/foundry account",
+    "fork": "yarn workspace @se-2/foundry fork",
+    "compile": "yarn workspace @se-2/foundry compile",
+    "chain": "yarn workspace @se-2/foundry chain",
+    "deploy": "yarn workspace @se-2/foundry deploy",
+    "deploy:verify": "yarn workspace @se-2/foundry deploy:verify",
+    "foundry:lint": "yarn workspace @se-2/foundry lint",
+    "foundry:test": "yarn workspace @se-2/foundry test",
+    "foundry:format": "yarn workspace @se-2/foundry format",
+    "test": "yarn foundry:test",
+    "verify": "yarn workspace @se-2/foundry verify",
+    "generate": "yarn workspace @se-2/foundry generate",
+    "flatten": "yarn workspace @se-2/foundry flatten",
+    "format": "yarn next:format && yarn foundry:format"
+  }
+}
