@@ -135,6 +135,12 @@ export const useScaffoldEventHistory = <
   );
 
   useEffect(() => {
+    if (!deployedContractLoading) {
+      readEvents();
+    }
+  }, [readEvents, deployedContractLoading]);
+
+  useEffect(() => {
     // Reset the internal state when target network or fromBlock changed
     setEvents([]);
     setFromBlockUpdated(fromBlock);
