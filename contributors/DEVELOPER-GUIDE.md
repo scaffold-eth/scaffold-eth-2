@@ -55,7 +55,7 @@ Once you're happy with the file contents, you'd need to reverse-engineer the cha
 
 For example, `generated.txt` would have a sibling `generated.txt.dev` file with information about the "template" and "args" files that contributed to the current result.
 
-## Back-merging main branch / Publishing to NPM
+## Back-merging main branch / Publishing to NPM (TODO: Update to main branch workflow)
 
 1. Make sure you have the latest changes from `main` branch
 2. Checkout to `cli` branch and create a new branch from it eg: `cli-backmerge`
