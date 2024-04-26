@@ -111,9 +111,11 @@ export const useScaffoldEventHistory = <
           setError(undefined);
         }
       } catch (e: any) {
-        console.error(e);
-        setEvents([]);
+        if (events.length > 0) {
+          setEvents([]);
+        }
         setError(e);
+        console.error(e);
       } finally {
         setIsLoading(false);
       }
@@ -153,7 +155,7 @@ export const useScaffoldEventHistory = <
         readEvents();
       }
     },
-    watch ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
+    watch && enabled ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
   );
 
   const eventHistoryData = useMemo(
