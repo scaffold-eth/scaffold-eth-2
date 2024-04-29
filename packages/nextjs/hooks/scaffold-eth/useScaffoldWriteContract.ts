@@ -10,8 +10,8 @@ import { notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
-  scaffoldWriteContractOptions,
-  scaffoldWriteContractVariables,
+  ScaffoldWriteContractOptions,
+  ScaffoldWriteContractVariables,
 } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -36,8 +36,8 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
-    variables: scaffoldWriteContractVariables<TContractName, TFunctionName>,
-    options?: scaffoldWriteContractOptions,
+    variables: ScaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: ScaffoldWriteContractOptions,
   ) => {
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
@@ -86,8 +86,8 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
     TContractName extends ContractName,
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
-    variables: scaffoldWriteContractVariables<TContractName, TFunctionName>,
-    options?: Omit<scaffoldWriteContractOptions, "onBlockConfirmation" | "blockConfirmations">,
+    variables: ScaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: Omit<ScaffoldWriteContractOptions, "onBlockConfirmation" | "blockConfirmations">,
   ) => {
     if (!deployedContractData) {
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
