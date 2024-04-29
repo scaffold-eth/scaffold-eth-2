@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.39
+
+### Patch Changes
+
+- 812e9fc: Add generateStaticParams to blockexplorer address and txHash page
+
 ## 0.0.38
 
 ### Patch Changes
