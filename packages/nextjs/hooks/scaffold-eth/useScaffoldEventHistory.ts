@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { useInterval } from "usehooks-ts";
@@ -45,100 +45,102 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const [events, setEvents] = useState<any[]>();
+  const [events, setEvents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [fromBlockUpdated, setFromBlockUpdated] = useState<bigint>(fromBlock);
 
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
-  const publicClient = usePublicClient();
   const { targetNetwork } = useTargetNetwork();
+  const publicClient = usePublicClient({
+    chainId: targetNetwork.id,
+  });
 
-  const readEvents = async (fromBlock?: bigint) => {
-    setIsLoading(true);
-    try {
-      if (!deployedContractData) {
-        throw new Error("Contract not found");
-      }
+  const readEvents = useCallback(
+    async () => {
+      setIsLoading(true);
+      try {
+        if (!deployedContractData) {
+          throw new Error("Contract not found");
+        }
 
-      if (!enabled) {
-        throw new Error("Hook disabled");
-      }
+        if (!enabled) {
+          throw new Error("Hook disabled");
+        }
 
-      const event = (deployedContractData.abi as Abi).find(
-        part => part.type === "event" && part.name === eventName,
-      ) as AbiEvent;
+        if (!publicClient) {
+          throw new Error("Public client not found");
+        }
 
-      const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
+        const event = (deployedContractData.abi as Abi).find(
+          part => part.type === "event" && part.name === eventName,
+        ) as AbiEvent;
 
-      if ((fromBlock && blockNumber >= fromBlock) || blockNumber >= fromBlockUpdated) {
-        const logs = await publicClient.getLogs({
-          address: deployedContractData?.address,
-          event,
-          args: filters as any, // TODO: check if it works and fix type
-          fromBlock: fromBlock || fromBlockUpdated,
-          toBlock: blockNumber,
-        });
-        setFromBlockUpdated(blockNumber + 1n);
+        const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
 
-        const newEvents = [];
-        for (let i = logs.length - 1; i >= 0; i--) {
-          newEvents.push({
-            log: logs[i],
-            args: logs[i].args,
-            block:
-              blockData && logs[i].blockHash === null
-                ? null
-                : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
-            transaction:
-              transactionData && logs[i].transactionHash !== null
-                ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
-                : null,
-            receipt:
-              receiptData && logs[i].transactionHash !== null
-                ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
-                : null,
+        if (blockNumber >= fromBlockUpdated) {
+          const logs = await publicClient.getLogs({
+            address: deployedContractData?.address,
+            event,
+            args: filters as any,
+            fromBlock: fromBlockUpdated,
+            toBlock: blockNumber,
           });
-        }
-        if (events && typeof fromBlock === "undefined") {
-          setEvents([...newEvents, ...events]);
-        } else {
-          setEvents(newEvents);
-        }
-        setError(undefined);
-      }
-    } catch (e: any) {
-      console.error(e);
-      setEvents(undefined);
-      setError(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+          setFromBlockUpdated(blockNumber + 1n);
 
-  useEffect(() => {
-    readEvents(fromBlock);
+          const newEvents = [];
+          for (let i = logs.length - 1; i >= 0; i--) {
+            newEvents.push({
+              log: logs[i],
+              args: logs[i].args,
+              block:
+                blockData && logs[i].blockHash === null
+                  ? null
+                  : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
+              transaction:
+                transactionData && logs[i].transactionHash !== null
+                  ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
+                  : null,
+              receipt:
+                receiptData && logs[i].transactionHash !== null
+                  ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
+                  : null,
+            });
+          }
+          setEvents([...newEvents, ...events]);
+          setError(undefined);
+        }
+      } catch (e: any) {
+        if (events.length > 0) {
+          setEvents([]);
+        }
+        setError(e);
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromBlock, enabled]);
+    [
+      blockData,
+      deployedContractData,
+      enabled,
+      eventName,
+      events,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      JSON.stringify(filters, replacer),
+      fromBlockUpdated,
+      publicClient,
+      receiptData,
+      transactionData,
+    ],
+  );
 
   useEffect(() => {
     if (!deployedContractLoading) {
       readEvents();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    publicClient,
-    contractName,
-    eventName,
-    deployedContractLoading,
-    deployedContractData?.address,
-    deployedContractData,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(filters, replacer),
-    blockData,
-    transactionData,
-    receiptData,
-  ]);
+  }, [readEvents, deployedContractLoading]);
 
   useEffect(() => {
     // Reset the internal state when target network or fromBlock changed
@@ -153,7 +155,7 @@ export const useScaffoldEventHistory = <
         readEvents();
       }
     },
-    watch ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
+    watch && enabled ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
   );
 
   const eventHistoryData = useMemo(
