@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.40
+
+### Patch Changes
+
+- use burner-connector package
+- Update useScaffoldEventHistory hook
+- fix: types typo
+- add useWatchBalance hook
+
 ## 0.0.39
 
 ### Patch Changes
