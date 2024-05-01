@@ -2060,7 +2060,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^2.0.2":
+"@rainbow-me/rainbowkit@npm:2.0.2, @rainbow-me/rainbowkit@npm:^2.0.2":
   version: 2.0.2
   resolution: "@rainbow-me/rainbowkit@npm:2.0.2"
   dependencies:
@@ -2260,6 +2260,7 @@ __metadata:
     abitype: ^1.0.2
     autoprefixer: ^10.4.12
     blo: ^1.0.1
+    burner-connector: ^0.0.3
     daisyui: 4.5.0
     eslint: ^8.15.0
     eslint-config-next: ^14.0.4
@@ -4896,6 +4897,17 @@ __metadata:
     node-gyp: latest
     node-gyp-build: ^4.3.0
   checksum: 7e9a46f1867dca72fda350966eb468eca77f4d623407b0650913fadf73d5750d883147d6e5e21c56f9d3b0bdc35d5474e80a600b9f31ec781315b4d2469ef087
+  languageName: node
+  linkType: hard
+
+"burner-connector@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "burner-connector@npm:0.0.3"
+  dependencies:
+    "@rainbow-me/rainbowkit": 2.0.2
+    "@wagmi/core": 2.6.9
+    viem: 2.8.16
+  checksum: 6041e4aab56af02a01ab211cf278d8babd047db43f4ab43fdb7b9dfd8704d35cbb7da2af240de8b9c782b805031ef43c5788bd0594191b2508f2679dd3ff5041
   languageName: node
   linkType: hard
 
@@ -14633,6 +14645,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"viem@npm:2.8.16, viem@npm:^2.8.16":
+  version: 2.8.16
+  resolution: "viem@npm:2.8.16"
+  dependencies:
+    "@adraffy/ens-normalize": 1.10.0
+    "@noble/curves": 1.2.0
+    "@noble/hashes": 1.3.2
+    "@scure/bip32": 1.3.2
+    "@scure/bip39": 1.2.1
+    abitype: 1.0.0
+    isows: 1.0.3
+    ws: 8.13.0
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: f58029cf1f39d662c51f4ebc9c71dc407522161bac2de1112170061d5bfe90ce1802bde701d567022dc1fd83d22ec4df031bcf55d943481159e50acf984292ae
+  languageName: node
+  linkType: hard
+
 "viem@npm:^1.0.0":
   version: 1.12.2
   resolution: "viem@npm:1.12.2"
@@ -14673,27 +14706,6 @@ __metadata:
     typescript:
       optional: true
   checksum: c351fdea2d53d2d781ac73c964348b3b9fc5dd46f9eb53903e867705fc9e30a893cb9f2c8d7a00acdcdeca27d14eeebf976eed9f948c28c47018dc9211369117
-  languageName: node
-  linkType: hard
-
-"viem@npm:^2.8.16":
-  version: 2.8.16
-  resolution: "viem@npm:2.8.16"
-  dependencies:
-    "@adraffy/ens-normalize": 1.10.0
-    "@noble/curves": 1.2.0
-    "@noble/hashes": 1.3.2
-    "@scure/bip32": 1.3.2
-    "@scure/bip39": 1.2.1
-    abitype: 1.0.0
-    isows: 1.0.3
-    ws: 8.13.0
-  peerDependencies:
-    typescript: ">=5.0.4"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: f58029cf1f39d662c51f4ebc9c71dc407522161bac2de1112170061d5bfe90ce1802bde701d567022dc1fd83d22ec4df031bcf55d943481159e50acf984292ae
   languageName: node
   linkType: hard
 
