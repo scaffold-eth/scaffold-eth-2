@@ -6,7 +6,7 @@ import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
+import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -23,7 +23,7 @@ const localWalletClient = createWalletClient({
 export const FaucetButton = () => {
   const { address, chain: ConnectedChain } = useAccount();
 
-  const { data: balance } = useAccountBalance({ address });
+  const { data: balance } = useWatchBalance({ address });
 
   const [loading, setLoading] = useState(false);
 

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Address, formatEther } from "viem";
-import { useAccountBalance } from "~~/hooks/scaffold-eth/useAccountBalance";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 import { useGlobalState } from "~~/services/store/store";
 
 type BalanceProps = {
@@ -22,7 +22,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
     data: balance,
     isError,
     isLoading,
-  } = useAccountBalance({
+  } = useWatchBalance({
     address,
   });
 
