@@ -5,6 +5,9 @@ import { UseBalanceParameters, useBalance, useBlockNumber } from "wagmi";
 
 type UseWatchBalanceParameters = UseBalanceParameters;
 
+/**
+ * Wrapper around wagmi's useBalance hook. Updates data on every block change.
+ */
 export const useWatchBalance = (useBalanceParameters: UseWatchBalanceParameters) => {
   const { targetNetwork } = useTargetNetwork();
   const queryClient = useQueryClient();
