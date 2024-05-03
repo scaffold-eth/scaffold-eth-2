@@ -14,6 +14,7 @@ import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
+  ContractEventName,
   GetEventArgs,
   GetTransactionReceiptReturnType,
   GetTransactionReturnType,
@@ -220,12 +221,18 @@ export type UseScaffoldEventConfig<
       logs: Simplify<
         Omit<Log<bigint, number, any>, "args" | "eventName"> & {
           args: Record<string, unknown>;
-          eventName: string;
+          eventName: TEventName;
         }
       >[],
     ) => void;
   },
-  Omit<UseWatchContractEventParameters<ContractAbi<TContractName>>, "onLogs" | "address" | "abi"> & {
+  Omit<
+    UseWatchContractEventParameters<
+      ContractAbi<TContractName>,
+      TEventName extends ContractEventName<ContractAbi<TContractName>> ? TEventName : never
+    >,
+    "onLogs" | "address" | "abi"
+  > & {
     onLogs: (
       logs: Simplify<
         Omit<Log<bigint, number, false, TEvent, false, [TEvent], TEventName>, "args"> & {
