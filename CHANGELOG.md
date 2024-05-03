@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.41
+
+### Patch Changes
+
+- c46b006: fix dir of TransactionComp in [txHash] page
+- c46b006: add engines fields in package.json
+
 ## 0.0.40
 
 ### Patch Changes
