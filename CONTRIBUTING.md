@@ -1,18 +1,18 @@
-# Welcome to Scaffold-ETH 2 Contributing Guide
+# Welcome to create-eth Contributing Guide
 
-Thank you for investing your time in contributing to Scaffold-ETH 2!
+Thank you for investing your time in contributing to create-eth!
 
 This guide aims to provide an overview of the contribution workflow to help us make the contribution process effective for everyone involved.
 
 ## About the Project
 
-Scaffold-ETH 2 is CLI tool to create a minimal repo providing builders with a starter kit to build decentralized applications on Ethereum.
+create-eth is a CLI tool to create a minimal repo to build decentralized applications on Ethereum, providing builders with a starter kit based on Scaffold-ETH 2.
 
 Read the [README](README.md) to get an overview of the project.
 
 ### Vision
 
-The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application.
+The goal of create-eth is to be a "toolkit creator", using Scaffold-ETH 2 as a base to provide the primary building blocks for a decentralized application. In the future we plan to add "curated" packages to it, and open the possibility to import 3rd party packages (that follow our standard).
 
 The repo can be forked to include integrations and more features.
 
@@ -44,7 +44,7 @@ Issues should be used to report problems, request a new feature, or discuss pote
 
 #### Solve an issue
 
-Scan through our [existing issues](https://github.com/scaffold-eth/scaffold-eth-2/issues) to find one that interests you.
+Scan through our [existing issues](https://github.com/scaffold-eth/create-eth/issues) to find one that interests you.
 
 If a contributor is working on the issue, they will be assigned to the individual. If you find an issue to work on, you are welcome to assign it to yourself and open a PR with a fix for it.
 
@@ -66,11 +66,15 @@ We follow the ["fork-and-pull" Git workflow](https://github.com/susam/gitpr)
 
 1. Fork the repo
 2. Clone the project
-3. Create a new branch with a descriptive name
+3. Create a new branch (based in create-eth main branch) with a descriptive name
 4. Commit your changes to the new branch
 5. Add [changeset](#changeset) if applicable
 6. Push changes to your fork
 7. Open a PR in our repository and tag one of the maintainers to review your PR
+
+> ⚠️ **Important.** Please make sure to choose **create-eth** repo when you create your branch and compare your changes.
+>
+> This repo is a fork of Scaffold-ETH 2, and it may appear as default repo when creating a branch or PR.
 
 Here are some tips for a high-quality pull request:
 
