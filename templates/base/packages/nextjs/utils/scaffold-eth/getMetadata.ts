@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : `http://localhost:${process.env.PORT || 3000}`;
+const titleTemplate = "%s | Scaffold-ETH 2";
+
 export const getMetadata = ({
   title,
   description,
@@ -9,15 +14,19 @@ export const getMetadata = ({
   description: string;
   imageRelativePath?: string;
 }): Metadata => {
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : `http://localhost:${process.env.PORT || 3000}`;
   const imageUrl = `${baseUrl}${imageRelativePath}`;
+
   return {
-    title: title,
+    title: {
+      default: title,
+      template: titleTemplate,
+    },
     description: description,
     openGraph: {
-      title: title,
+      title: {
+        default: title,
+        template: titleTemplate,
+      },
       description: description,
       images: [
         {
@@ -26,7 +35,10 @@ export const getMetadata = ({
       ],
     },
     twitter: {
-      title: title,
+      title: {
+        default: title,
+        template: titleTemplate,
+      },
       description: description,
       images: [imageUrl],
     },
