@@ -1,5 +1,15 @@
 # create-eth
 
+## 0.0.42
+
+### Patch Changes
+
+- AddressInfoModal fix copy icon size on bigger fonts (scaffold-eth#836)
+- bump burner-connector version (scaffold-eth#842)
+- export useWatchBalance & useTargetNetwork form hooks index file (scaffold-eth#840)
+- improve meta handling (scaffold-eth#811)
+- fix: useScaffoldWatchContractEvent logs args types (scaffold-eth#837)
+
 ## 0.0.41
 
 ### Patch Changes
