@@ -30,10 +30,10 @@ export const FaucetButton = () => {
   const faucetTxn = useTransactor(localWalletClient);
 
   const sendETH = async () => {
+    if (!address) return;
     try {
       setLoading(true);
       await faucetTxn({
-        chain: hardhat,
         account: FAUCET_ADDRESS,
         to: address,
         value: parseEther(NUM_OF_ETH),
