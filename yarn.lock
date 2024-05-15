@@ -2260,7 +2260,7 @@ __metadata:
     abitype: ^1.0.2
     autoprefixer: ^10.4.12
     blo: ^1.0.1
-    burner-connector: ^0.0.5
+    burner-connector: ^0.0.6
     daisyui: 4.5.0
     eslint: ^8.15.0
     eslint-config-next: ^14.0.4
@@ -4900,14 +4900,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burner-connector@npm:^0.0.5":
-  version: 0.0.5
-  resolution: "burner-connector@npm:0.0.5"
+"burner-connector@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "burner-connector@npm:0.0.6"
   dependencies:
     "@rainbow-me/rainbowkit": 2.0.2
     "@wagmi/core": 2.6.9
     viem: 2.8.16
-  checksum: 39ef1af3c80c84a2da891682496d86b5092cc3d8ea0524095323bc6e40e651fb1db1697b6c7e6d260b39df77ca1cbd81dc89e919b713d8de2b7bef082581647d
+  checksum: 7efaf10ee64032092af0d752836829466c9f0ca736b5655b3b1cf195c1c56b07c1fd5aac62f4bef30d266e8477a55b7a97afd587ad9cc71598bb94006899ec65
   languageName: node
   linkType: hard
 
