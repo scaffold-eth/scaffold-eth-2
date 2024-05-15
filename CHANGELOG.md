@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.43
+
+### Patch Changes
+
+- 4aba9ad: update useTransactor parameter types (scaffold-eth#846)
+- 20b9886: bump burner-connector version
+
 ## 0.0.42
 
 ### Patch Changes
