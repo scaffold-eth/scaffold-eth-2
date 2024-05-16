@@ -7,6 +7,10 @@ export type RawOptions = {
   install: boolean | null;
   dev: boolean;
   extensions: Extension[] | null;
+  template: {
+    repository: string;
+    branch?: string | null;
+  } | null;
 };
 
 type NonNullableRawOptions = {
@@ -15,9 +19,7 @@ type NonNullableRawOptions = {
 
 export type Options = NonNullableRawOptions;
 
-export type Extension =
-  | "hardhat"
-  | "foundry"
+export type Extension = "hardhat" | "foundry";
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:
