@@ -1963,7 +1963,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^2.1.0":
+"@rainbow-me/rainbowkit@npm:2.1.0":
   version: 2.1.0
   resolution: "@rainbow-me/rainbowkit@npm:2.1.0"
   dependencies:
@@ -2140,7 +2140,7 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": ^2.0.11
-    "@rainbow-me/rainbowkit": ^2.1.0
+    "@rainbow-me/rainbowkit": 2.1.0
     "@tanstack/react-query": ^5.28.6
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^17.0.35
@@ -2175,8 +2175,8 @@ __metadata:
     use-debounce: ^8.0.4
     usehooks-ts: ^2.13.0
     vercel: ^32.4.1
-    viem: ^2.10.9
-    wagmi: ^2.9.2
+    viem: 2.10.9
+    wagmi: 2.9.2
     zustand: ^4.1.2
   languageName: unknown
   linkType: soft
@@ -14409,6 +14409,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"viem@npm:2.10.9":
+  version: 2.10.9
+  resolution: "viem@npm:2.10.9"
+  dependencies:
+    "@adraffy/ens-normalize": 1.10.0
+    "@noble/curves": 1.2.0
+    "@noble/hashes": 1.3.2
+    "@scure/bip32": 1.3.2
+    "@scure/bip39": 1.2.1
+    abitype: 1.0.0
+    isows: 1.0.4
+    ws: 8.13.0
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 6d82e325c889717d64829000e560f6b59db721078f25e4692664a92ee8fec896542eb6757d5f7081d06edf891936ab9cd5f9de1a7f15ce7426ca464dd8b545ee
+  languageName: node
+  linkType: hard
+
 "viem@npm:2.8.16":
   version: 2.8.16
   resolution: "viem@npm:2.8.16"
@@ -14473,28 +14494,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^2.10.9":
-  version: 2.10.9
-  resolution: "viem@npm:2.10.9"
-  dependencies:
-    "@adraffy/ens-normalize": 1.10.0
-    "@noble/curves": 1.2.0
-    "@noble/hashes": 1.3.2
-    "@scure/bip32": 1.3.2
-    "@scure/bip39": 1.2.1
-    abitype: 1.0.0
-    isows: 1.0.4
-    ws: 8.13.0
-  peerDependencies:
-    typescript: ">=5.0.4"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 6d82e325c889717d64829000e560f6b59db721078f25e4692664a92ee8fec896542eb6757d5f7081d06edf891936ab9cd5f9de1a7f15ce7426ca464dd8b545ee
-  languageName: node
-  linkType: hard
-
-"wagmi@npm:^2.9.2":
+"wagmi@npm:2.9.2":
   version: 2.9.2
   resolution: "wagmi@npm:2.9.2"
   dependencies:
