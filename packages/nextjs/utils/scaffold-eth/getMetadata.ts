@@ -17,6 +17,7 @@ export const getMetadata = ({
   const imageUrl = `${baseUrl}${imageRelativePath}`;
 
   return {
+    metadataBase: new URL(baseUrl),
     title: {
       default: title,
       template: titleTemplate,
