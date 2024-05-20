@@ -43,5 +43,8 @@ export const getMetadata = ({
       description: description,
       images: [imageUrl],
     },
+    icons: {
+      icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+    },
   };
 };
