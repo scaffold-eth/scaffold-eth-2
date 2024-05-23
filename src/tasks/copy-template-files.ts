@@ -10,7 +10,7 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
-import {getArgumentFromExternalExtensionOption} from "../utils/external-extensions";
+import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 
 const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);

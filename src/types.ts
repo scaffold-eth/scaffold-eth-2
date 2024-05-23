@@ -7,10 +7,12 @@ export type RawOptions = {
   install: boolean | null;
   dev: boolean;
   extensions: Extension[] | null;
-  externalExtension: {
-    repository: string;
-    branch?: string | null;
-  } | null;
+  externalExtension: ExternalExtension | null;
+};
+
+export type ExternalExtension = {
+  repository: string;
+  branch?: string | null;
 };
 
 type NonNullableRawOptions = {

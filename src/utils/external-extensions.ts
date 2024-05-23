@@ -1,8 +1,13 @@
 import { RawOptions } from "../types";
+import { CURATED_EXTENSIONS } from "../config";
 
 // Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
+  if (CURATED_EXTENSIONS[externalExtension]) {
+    externalExtension = getArgumentFromExternalExtensionOption(CURATED_EXTENSIONS[externalExtension]);
+  }
+
   // Check format: owner/project:branch (branch is optional)
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
   if (!regex.test(externalExtension)) {

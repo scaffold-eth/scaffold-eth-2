@@ -1,4 +1,4 @@
-import { Config, typedQuestion } from "./types";
+import { Config, ExternalExtension, typedQuestion } from "./types";
 
 const config: Config = {
   questions: [
@@ -11,4 +11,12 @@ const config: Config = {
     }),
   ],
 };
-export default config;
+
+const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
+  subgraph: {
+    repository: "https://github.com/scaffold-eth/create-eth-extensions",
+    branch: "subgraph",
+  }
+}
+
+export { config, CURATED_EXTENSIONS };
