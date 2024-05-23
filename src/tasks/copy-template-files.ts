@@ -1,18 +1,21 @@
 import { execa } from "execa";
-import { Extension, Options, TemplateDescriptor, isDefined } from "../types";
+import { Extension, isDefined, Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-tree";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
-import url from 'url'
+import url from "url";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
+import {getArgumentFromExternalExtensionOption} from "../utils/external-extensions";
 
+const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
-let copyOrLink = copy
+let copyOrLink = copy;
+
 
 const expandExtensions = (options: Options): Extension[] => {
   const expandedExtensions = options.extensions
@@ -93,73 +96,72 @@ const copyBaseFiles = async (
 }
 
 const copyExtensionsFiles = async (
-  { extensions, dev: isDev }: Options,
+  { dev: isDev }: Options,
+  extensionPath: string,
   targetDir: string
 ) => {
-  await Promise.all(extensions.map(async (extension) => {
-    const extensionPath = extensionDict[extension].path;
-    // copy (or link if dev) root files
-    await copyOrLink(extensionPath, path.join(targetDir), {
+  // copy (or link if dev) root files
+  await copyOrLink(extensionPath, path.join(targetDir), {
+    clobber: false,
+    filter: (path) => {
+      const isConfig = isConfigRegex.test(path);
+      const isArgs = isArgsRegex.test(path);
+      const isExtensionFolder =
+        isExtensionFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
+      const isPackagesFolder =
+        isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
+      const isTemplate = isTemplateRegex.test(path);
+      // PR NOTE: this wasn't needed before because ncp had the clobber: false
+      const isPackageJson = isPackageJsonRegex.test(path);
+      const shouldSkip =
+        isConfig ||
+        isArgs ||
+        isTemplate ||
+        isPackageJson ||
+        isExtensionFolder ||
+        isPackagesFolder;
+      return !shouldSkip;
+    },
+  });
+
+  // merge root package.json
+  mergePackageJson(
+    path.join(targetDir, "package.json"),
+    path.join(extensionPath, "package.json"),
+    isDev
+  );
+
+  const extensionPackagesPath = path.join(extensionPath, "packages");
+  const hasPackages = fs.existsSync(extensionPackagesPath);
+  if (hasPackages) {
+    // copy extension packages files
+    await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
       clobber: false,
       filter: (path) => {
-        const isConfig = isConfigRegex.test(path);
         const isArgs = isArgsRegex.test(path);
-        const isExtensionFolder =
-          isExtensionFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
-        const isPackagesFolder =
-          isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
         const isTemplate = isTemplateRegex.test(path);
-        // PR NOTE: this wasn't needed before because ncp had the clobber: false
         const isPackageJson = isPackageJsonRegex.test(path);
-        const shouldSkip =
-          isConfig ||
-          isArgs ||
-          isTemplate ||
-          isPackageJson ||
-          isExtensionFolder ||
-          isPackagesFolder;
+        const shouldSkip = isArgs || isTemplate || isPackageJson;
+
         return !shouldSkip;
       },
     });
 
-    // merge root package.json
-    mergePackageJson(
-      path.join(targetDir, "package.json"),
-      path.join(extensionPath, "package.json"),
-      isDev
-    );
+    // copy each package's package.json
+    const extensionPackages = fs.readdirSync(extensionPackagesPath);
+    extensionPackages.forEach((packageName) => {
+      mergePackageJson(
+        path.join(targetDir, "packages", packageName, "package.json"),
+        path.join(extensionPath, "packages", packageName, "package.json"),
+        isDev
+      );
+    });
+  }
 
-    const extensionPackagesPath = path.join(extensionPath, "packages");
-    const hasPackages = fs.existsSync(extensionPackagesPath);
-    if (hasPackages) {
-      // copy extension packages files
-      await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
-        clobber: false,
-        filter: (path) => {
-          const isArgs = isArgsRegex.test(path);
-          const isTemplate = isTemplateRegex.test(path);
-          const isPackageJson = isPackageJsonRegex.test(path);
-          const shouldSkip = isArgs || isTemplate || isPackageJson;
-
-          return !shouldSkip;
-        },
-      });
-
-      // copy each package's package.json
-      const extensionPackages = fs.readdirSync(extensionPackagesPath);
-      extensionPackages.forEach((packageName) => {
-        mergePackageJson(
-          path.join(targetDir, "packages", packageName, "package.json"),
-          path.join(extensionPath, "packages", packageName, "package.json"),
-          isDev
-        );
-      });
-    }
-  }));
 };
 
 const processTemplatedFiles = async (
-  { extensions, dev: isDev }: Options,
+  { extensions, externalExtension, dev: isDev }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -186,10 +188,22 @@ const processTemplatedFiles = async (
     )
     .flat();
 
+  const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
+    ? findFilesRecursiveSync(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"), (filePath) =>
+      isTemplateRegex.test(filePath)
+    ).map((extensionTemplatePath) => ({
+      path: extensionTemplatePath,
+      fileUrl: url.pathToFileURL(extensionTemplatePath).href,
+      relativePath: extensionTemplatePath.split(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"))[1],
+      source: `external extension ${getArgumentFromExternalExtensionOption(externalExtension)}`,
+    }))
+    : [];
+
   await Promise.all(
     [
       ...baseTemplatedFileDescriptors,
       ...extensionsTemplatedFileDescriptors,
+      ...externalExtensionTemplatedFileDescriptors,
     ].map(async (templateFileDescriptor) => {
       const templateTargetName =
         templateFileDescriptor.path.match(isTemplateRegex)?.[1]!;
@@ -213,23 +227,33 @@ const processTemplatedFiles = async (
         })
         .flat();
 
+      if (externalExtension) {
+        const argsFilePath = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
+
+        const fileExists = fs.existsSync(argsFilePath);
+        if (fileExists) {
+          argsFileUrls?.push(url.pathToFileURL(argsFilePath).href);
+        }
+      }
+
       const args = await Promise.all(
         argsFileUrls.map(async (argsFileUrl) => await import(argsFileUrl))
       );
 
-      const template = (await import(templateFileDescriptor.fileUrl)).default;
+      const fileTemplate = (await import(templateFileDescriptor.fileUrl)).default;
 
-      if (!template) {
+      if (!fileTemplate) {
         throw new Error(
           `Template ${templateTargetName} from ${templateFileDescriptor.source} doesn't have a default export`
         );
       }
-      if (typeof template !== "function") {
+      if (typeof fileTemplate !== "function") {
         throw new Error(
           `Template ${templateTargetName} from ${templateFileDescriptor.source} is not exporting a function by default`
         );
       }
 
+      // ToDo. Bug, if arg not present in arg[0], but present in arg[1], it will not be added.
       const freshArgs: { [key: string]: string[] } = Object.fromEntries(
         Object.keys(args[0] ?? {}).map((key) => [
           key, // INFO: key for the freshArgs object
@@ -239,7 +263,7 @@ const processTemplatedFiles = async (
       const combinedArgs: { [key: string]: string[] } = args.reduce(
         (accumulated, arg) => {
           Object.entries(arg).map(([key, value]) => {
-            accumulated[key].push(value);
+            accumulated[key]?.push(value);
           });
           return accumulated;
         },
@@ -248,7 +272,7 @@ const processTemplatedFiles = async (
 
       // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
 
-      const output = template(combinedArgs);
+      const output = fileTemplate(combinedArgs);
 
       const targetPath = path.join(
         targetDir,
@@ -286,28 +310,62 @@ ${hasCombinedArgs
   );
 };
 
+const setUpExternalExtensionFiles = async (
+  options: Options,
+  tmpDir: string,
+) => {
+  // 1. Create tmp directory to clone external extension
+  await fs.promises.mkdir(tmpDir);
+
+  const repository = options.externalExtension!.repository;
+  const branch = options.externalExtension!.branch;
+
+  // 2. Clone external extension
+  if (branch) {
+    await execa("git", ["clone", "--branch", branch, repository, tmpDir], {
+      cwd: tmpDir,
+    });
+  } else {
+    await execa("git", ["clone", repository, tmpDir], { cwd: tmpDir });
+  }
+};
+
 export async function copyTemplateFiles(
   options: Options,
   templateDir: string,
   targetDir: string
 ) {
-  copyOrLink = options.dev ? link : copy
+  copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, baseDir);
+  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
 
   // 1. Copy base template to target directory
-  await copyBaseFiles(options, basePath, targetDir)
+  await copyBaseFiles(options, basePath, targetDir);
 
   // 2. Add "parent" extensions (set via config.json#extend field)
-  const expandedExtension = expandExtensions(options);
-  options.extensions = expandedExtension;
+  options.extensions = expandExtensions(options);
 
   // 3. Copy extensions folders
-  await copyExtensionsFiles(options, targetDir);
+  await Promise.all(options.extensions.map(async (extension) => {
+    const extensionPath = extensionDict[extension].path;
+    await copyExtensionsFiles(options, extensionPath, targetDir);
+  }));
 
-  // 4. Process templated files and generate output
+  // 4. Set up external extension if needed
+  if (options.externalExtension) {
+    await setUpExternalExtensionFiles(options, tmpDir);
+    await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
+  }
+
+  // 5. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 5. Initialize git repo to avoid husky error
+  // 6. Delete tmp directory
+  if (options.externalExtension) {
+    await fs.promises.rm(tmpDir, { recursive: true });
+  }
+
+  // 7. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }

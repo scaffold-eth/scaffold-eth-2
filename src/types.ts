@@ -7,17 +7,21 @@ export type RawOptions = {
   install: boolean | null;
   dev: boolean;
   extensions: Extension[] | null;
+  externalExtension: {
+    repository: string;
+    branch?: string | null;
+  } | null;
 };
 
 type NonNullableRawOptions = {
-  [Prop in keyof RawOptions]: NonNullable<RawOptions[Prop]>;
+  [Prop in keyof Omit<RawOptions, "externalExtension">]: NonNullable<RawOptions[Prop]>;
+} & {
+  externalExtension: RawOptions["externalExtension"];
 };
 
 export type Options = NonNullableRawOptions;
 
-export type Extension =
-  | "hardhat"
-  | "foundry"
+export type Extension = "hardhat" | "foundry";
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:

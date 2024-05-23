@@ -1,4 +1,12 @@
-"use client";
+import { withDefaults } from "../../../../utils.js";
+
+const contents = ({ providerNames, providerSetups, providerImports, providerProps }) => {
+  // filter out empty strings
+  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
+
+  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`);
+
+  return `"use client";
 
 import { useEffect, useState } from "react";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
@@ -13,6 +21,7 @@ import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+${providerImports.filter(Boolean).join("\n")}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
@@ -44,6 +53,8 @@ export const queryClient = new QueryClient({
   },
 });
 
+${providerSetups.filter(Boolean).join("\n")}
+
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
@@ -61,9 +72,19 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
           avatar={BlockieAvatar}
           theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
         >
+          ${providerOpeningTags.join("\n")}
           <ScaffoldEthApp>{children}</ScaffoldEthApp>
+          ${providerClosingTags.join("\n")}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
+};`;
 };
+
+export default withDefaults(contents, {
+  providerNames: "",
+  providerSetups: "",
+  providerImports: "",
+  providerProps: "",
+});

@@ -1,4 +1,6 @@
-"use client";
+import { withDefaults } from "../../../../utils.js";
+const contents = ({ menuIconImports, menuObjects }) => {
+  return `"use client";
 
 import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
@@ -7,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
+${menuIconImports.filter(Boolean).join("\n")}
 
 type HeaderMenuLink = {
   label: string;
@@ -24,6 +27,7 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
+  ${menuObjects.filter(Boolean).join(",\n")}
 ];
 
 export const HeaderMenuLinks = () => {
@@ -38,9 +42,9 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={`${
+              className={\`\${
                 isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col\`}
             >
               {icon}
               <span>{label}</span>
@@ -69,7 +73,7 @@ export const Header = () => {
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
+            className={\`ml-1 btn btn-ghost \${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}\`}
             onClick={() => {
               setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
             }}
@@ -107,4 +111,10 @@ export const Header = () => {
       </div>
     </div>
   );
+};`;
 };
+
+export default withDefaults(contents, {
+  menuIconImports: "",
+  menuObjects: "",
+});

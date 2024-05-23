@@ -11,6 +11,7 @@ import chalk from "chalk";
 import Listr from "listr";
 import path from "path";
 import { fileURLToPath } from "url";
+import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -32,7 +33,7 @@ export async function createProject(options: Options) {
     {
       title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
         options.project
-      )}`,
+      )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
       task: () =>
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },

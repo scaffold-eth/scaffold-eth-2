@@ -62,6 +62,7 @@ const contents = ({
   contractsPath,
   scriptsPath,
   testCommand,
+  extraContents,
 }) =>
   `# 🏗 Scaffold-ETH 2
 
@@ -102,6 +103,7 @@ ${getQuickStart({
   scriptsPath,
   testCommand,
 })}
+${extraContents.filter(Boolean).join("\n")}
 ## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
@@ -120,4 +122,5 @@ export default withDefaults(contents, {
   contractsPath: "",
   scriptsPath: "",
   testCommand: "",
+  extraContents: "",
 });
