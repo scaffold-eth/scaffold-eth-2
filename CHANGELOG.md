@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.44
+
+### Patch Changes
+
+- bec8b09: Bump wagmi, viem and rainbowkit versions (scaffold-eth#849)
+- e0c3546: Support for external extensions with -e
+- bec8b09: Add default favicon (scaffold-eth#851)
+
 ## 0.0.43
 
 ### Patch Changes
