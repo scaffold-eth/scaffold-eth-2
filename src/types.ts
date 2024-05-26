@@ -38,8 +38,7 @@ interface ExtensionQuestion<T extends ExtensionOrNull[] = ExtensionOrNull[]> {
   default?: T[number];
 }
 
-export const isExtension = (item: ExtensionOrNull): item is Extension =>
-  item !== null;
+export const isExtension = (item: ExtensionOrNull): item is Extension => item !== null;
 
 /**
  * This function makes sure that the `T` generic type is narrowed down to
@@ -50,15 +49,12 @@ export const isExtension = (item: ExtensionOrNull): item is Extension =>
  * Questions can be created without this function, just using a normal object,
  * but `default` type will be any valid Extension.
  */
-export const typedQuestion = <T extends ExtensionOrNull[]>(
-  question: ExtensionQuestion<T>
-) => question;
+export const typedQuestion = <T extends ExtensionOrNull[]>(question: ExtensionQuestion<T>) => question;
 export type Config = {
   questions: ExtensionQuestion[];
 };
 
-export const isDefined = <T>(item: T | undefined | null): item is T =>
-  item !== undefined && item !== null;
+export const isDefined = <T>(item: T | undefined | null): item is T => item !== undefined && item !== null;
 
 export type ExtensionDescriptor = {
   name: string;
@@ -76,7 +72,7 @@ export type ExtensionDict = {
 };
 
 export const extensionWithSubextensions = (
-  extension: ExtensionDescriptor | undefined
+  extension: ExtensionDescriptor | undefined,
 ): extension is ExtensionBranch => {
   return Object.prototype.hasOwnProperty.call(extension, "extensions");
 };

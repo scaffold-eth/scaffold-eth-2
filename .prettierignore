@@ -1,0 +1,10 @@
+# yarn
+.yarn
+.yarnrc
+.yarnrc.yml
+
+# Changelog
+CHANGELOG.md
+
+# Templates dir
+templates

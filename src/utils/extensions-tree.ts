@@ -7,10 +7,7 @@ export const extensionDict: ExtensionDict = {} as ExtensionDict;
 
 const currentFileUrl = import.meta.url;
 
-const templatesDirectory = path.resolve(
-  decodeURI(fileURLToPath(currentFileUrl)),
-  "../../templates"
-);
+const templatesDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
 
 /**
  * This function has side effects. It generates the extensionDict.
@@ -28,24 +25,24 @@ const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
   }
 
   await Promise.all(
-    extensions.map(async (ext) => {
+    extensions.map(async ext => {
       const extPath = path.resolve(extensionsPath, ext);
       const configPath = path.resolve(extPath, "config.json");
 
       let config: Record<string, string> = {};
       try {
-        config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+        config = JSON.parse(fs.readFileSync(configPath, "utf8")) as Record<string, string>;
       } catch (error) {
         if (fs.existsSync(configPath)) {
           throw new Error(
             `Couldn't parse existing config.json file.
   Extension: ${ext};
-  Config file path: ${configPath}`
+  Config file path: ${configPath}`,
           );
         }
       }
-      let name = config.name ?? ext;
-      let value = ext;
+      const name = config.name ?? ext;
+      const value = ext;
 
       const subExtensions = await traverseExtensions(extPath);
       const hasSubExtensions = subExtensions.length !== 0;
@@ -62,7 +59,7 @@ const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
       extensionDict[ext] = extDescriptor;
 
       return subExtensions;
-    })
+    }),
   );
 
   return extensions;

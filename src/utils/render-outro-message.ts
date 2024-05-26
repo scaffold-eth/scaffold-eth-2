@@ -12,10 +12,7 @@ export async function renderOutroMessage(options: Options) {
   ${chalk.dim("cd")} ${options.project}
   `;
 
-  if (
-    options.extensions.includes("hardhat") ||
-    options.extensions.includes("foundry")
-  ) {
+  if (options.extensions.includes("hardhat") || options.extensions.includes("foundry")) {
     message += `
     \t${chalk.bold("Start the local development node")}
     \t${chalk.dim("yarn")} chain
@@ -26,9 +23,7 @@ export async function renderOutroMessage(options: Options) {
         await execa("foundryup", ["-h"]);
       } catch (error) {
         message += `
-      \t${chalk.bold.yellow(
-        "(NOTE: Foundryup is not installed in your system)"
-      )}
+      \t${chalk.bold.yellow("(NOTE: Foundryup is not installed in your system)")}
       \t${chalk.dim("Checkout: https://getfoundry.sh")}
       `;
       }

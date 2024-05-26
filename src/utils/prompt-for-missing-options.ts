@@ -26,12 +26,8 @@ const nullExtensionChoice = {
   value: null,
 };
 
-export async function promptForMissingOptions(
-  options: RawOptions
-): Promise<Options> {
-  const cliAnswers = Object.fromEntries(
-    Object.entries(options).filter(([key, value]) => value !== null)
-  );
+export async function promptForMissingOptions(options: RawOptions): Promise<Options> {
+  const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
   const questions = [];
 
   questions.push({
@@ -42,14 +38,9 @@ export async function promptForMissingOptions(
     validate: (value: string) => value.length > 0,
   });
 
-  const recurringAddFollowUps = (
-    extensions: ExtensionDescriptor[],
-    relatedQuestion: string
-  ) => {
-    extensions.filter(extensionWithSubextensions).forEach((ext) => {
-      const nestedExtensions = ext.extensions.map(
-        (nestedExt) => extensionDict[nestedExt]
-      );
+  const recurringAddFollowUps = (extensions: ExtensionDescriptor[], relatedQuestion: string) => {
+    extensions.filter(extensionWithSubextensions).forEach(ext => {
+      const nestedExtensions = ext.extensions.map(nestedExt => extensionDict[nestedExt]);
       questions.push({
         // INFO: assuming nested extensions are all optional. To change this,
         // update ExtensionDescriptor adding type, and update code here.
@@ -60,28 +51,24 @@ export async function promptForMissingOptions(
         when: (answers: Answers) => {
           const relatedResponse = answers[relatedQuestion];
           const wasMultiselectResponse = Array.isArray(relatedResponse);
-          return wasMultiselectResponse
-            ? relatedResponse.includes(ext.value)
-            : relatedResponse === ext.value;
+          return wasMultiselectResponse ? relatedResponse.includes(ext.value) : relatedResponse === ext.value;
         },
       });
       recurringAddFollowUps(nestedExtensions, `${ext.value}-extensions`);
     });
   };
 
-  config.questions.forEach((question) => {
+  config.questions.forEach(question => {
     if (invalidQuestionNames.includes(question.name)) {
       throw new Error(
-        `The name of the question can't be "${
-          question.name
-        }". The invalid names are: ${invalidQuestionNames
-          .map((w) => `"${w}"`)
-          .join(", ")}`
+        `The name of the question can't be "${question.name}". The invalid names are: ${invalidQuestionNames
+          .map(w => `"${w}"`)
+          .join(", ")}`,
       );
     }
     const extensions = question.extensions
       .filter(isExtension)
-      .map((ext) => extensionDict[ext])
+      .map(ext => extensionDict[ext])
       .filter(isDefined);
 
     const hasNoneOption = question.extensions.includes(null);
@@ -90,9 +77,7 @@ export async function promptForMissingOptions(
       type: question.type === "multi-select" ? "checkbox" : "list",
       name: question.name,
       message: question.message,
-      choices: hasNoneOption
-        ? [...extensions, nullExtensionChoice]
-        : extensions,
+      choices: hasNoneOption ? [...extensions, nullExtensionChoice] : extensions,
     });
 
     recurringAddFollowUps(extensions, question.name);
@@ -115,14 +100,14 @@ export async function promptForMissingOptions(
     externalExtension: options.externalExtension,
   };
 
-  config.questions.forEach((question) => {
+  config.questions.forEach(question => {
     const { name } = question;
     const choice: Extension[] = [answers[name]].flat().filter(isDefined);
     mergedOptions.extensions.push(...choice);
   });
 
   const recurringAddNestedExtensions = (baseExtensions: Extension[]) => {
-    baseExtensions.forEach((extValue) => {
+    baseExtensions.forEach(extValue => {
       const nestedExtKey = `${extValue}-extensions`;
       const nestedExtensions = answers[nestedExtKey];
       if (nestedExtensions) {

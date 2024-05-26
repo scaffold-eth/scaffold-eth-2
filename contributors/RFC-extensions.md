@@ -122,7 +122,9 @@ Also, receiving an array instead of strings give the template itself more contro
 Important to note that named arguments could use any arbitrary name. Because of that, we have to provide default values to all those arguments, otherwise missing values would be parsed as the string "undefined". Because we don't know what are the expected names for each template expects.
 
 ## Things to note about Template files
+
 ### `.mjs` extension
+
 It's important to note the file extension should be `.mjs`. The CLI uses es6 modules, but other packages might use commonjs imports, like Hardhat.
 
 When a package enforces commonjs imports, our templates created within those packages wouldn't work unless we explicitly tell node that it should use es6 imports. Using `.mjs` extensions is the best way we've found to do that.
@@ -134,21 +136,22 @@ It's a bit annoying having to define an empty array as a default value for all t
 As a bonus, using this function will throw an error when an [Args file](#args-file-content) is trying to send an argument with a name not expected by the template.
 
 The way it should be used is as follows:
+
 ```js
 // file.ext.template.mjs
-import { withDefaults } from '../path-to/utils.js'
+import { withDefaults } from "../path-to/utils.js";
 
 const contents = ({ foo, bar }) =>
-`blah blah
+  `blah blah
 foo value is ${foo}
 bar value is ${bar}
 blah blah
-`
+`;
 
 export default withDefaults(contents, {
-  foo: 'default foo value',
-  bar: 'default bar value'
-})
+  foo: "default foo value",
+  bar: "default bar value",
+});
 ```
 
 There's an optional 3rd argument that's for debugging purposes, which is `false` by default. If sent `true`, it will print some information about the arguments received.
@@ -157,14 +160,14 @@ There's an optional 3rd argument that's for debugging purposes, which is `false`
 
 ```js
 // file.ext.template.mjs
-import { withDefaults } from '../path-to/utils.js'
+import { withDefaults } from "../path-to/utils.js";
 
-const contents = ({ foo, bar }) => `${foo} and ${bar}`
+const contents = ({ foo, bar }) => `${foo} and ${bar}`;
 
 export default withDefaults(contents, {
-  foo: 'default',
+  foo: "default",
   // bar: 'not defined!'
-})
+});
 
 // result: "default and undefined"
 ```

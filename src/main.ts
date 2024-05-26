@@ -18,10 +18,7 @@ export async function createProject(options: Options) {
 
   const currentFileUrl = import.meta.url;
 
-  const templateDirectory = path.resolve(
-    decodeURI(fileURLToPath(currentFileUrl)),
-    "../../templates"
-  );
+  const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
 
   const targetDirectory = path.resolve(process.cwd(), options.project);
 
@@ -32,10 +29,9 @@ export async function createProject(options: Options) {
     },
     {
       title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
-        options.project
+        options.project,
       )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
-      task: () =>
-        copyTemplateFiles(options, templateDirectory, targetDirectory),
+      task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
     {
       title: `📦 Installing dependencies with yarn, this could take a while`,
@@ -56,16 +52,14 @@ export async function createProject(options: Options) {
       },
     },
     {
-      title: `📡 Initializing Git repository ${
-        options.extensions.includes("foundry") ? "and submodules" : ""
-      }`,
+      title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
       task: () => createFirstGitCommit(targetDirectory, options),
     },
   ]);
 
   try {
     await tasks.run();
-    renderOutroMessage(options);
+    await renderOutroMessage(options);
   } catch (error) {
     console.log("%s Error occurred", chalk.red.bold("ERROR"), error);
     console.log("%s Exiting...", chalk.red.bold("Uh oh! 😕 Sorry about that!"));

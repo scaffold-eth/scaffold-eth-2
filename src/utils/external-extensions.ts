@@ -11,9 +11,7 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
   // Check format: owner/project:branch (branch is optional)
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
   if (!regex.test(externalExtension)) {
-    throw new Error(
-      `Invalid extension format. Use "owner/project" or "owner/project:branch"`
-    );
+    throw new Error(`Invalid extension format. Use "owner/project" or "owner/project:branch"`);
   }
 
   // Extract owner, project and branch
@@ -34,7 +32,7 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
     owner,
     project,
   };
-}
+};
 
 // Parse the externalExtensionOption object into a argument string.
 // e.g. { repository: "owner/project", branch: "branch" } => "owner/project:branch"
@@ -45,4 +43,4 @@ export const getArgumentFromExternalExtensionOption = (externalExtensionOption: 
   const project = repository?.split("/")[4];
 
   return `${owner}/${project}${branch ? `:${branch}` : ""}`;
-}
+};

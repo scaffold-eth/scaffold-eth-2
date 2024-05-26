@@ -21,71 +21,37 @@ async function checkoutLatestTag(submodulePath: string): Promise<void> {
   }
 }
 
-export async function createFirstGitCommit(
-  targetDir: string,
-  options: Options
-) {
+export async function createFirstGitCommit(targetDir: string, options: Options) {
   try {
     // TODO: Move the logic for adding submodules to tempaltes
     if (options.extensions?.includes("foundry")) {
-      const foundryWorkSpacePath = path.resolve(
-        targetDir,
-        "packages",
-        "foundry"
+      const foundryWorkSpacePath = path.resolve(targetDir, "packages", "foundry");
+      await execa("git", ["submodule", "add", "https://github.com/foundry-rs/forge-std", "lib/forge-std"], {
+        cwd: foundryWorkSpacePath,
+      });
+      await execa(
+        "git",
+        ["submodule", "add", "https://github.com/OpenZeppelin/openzeppelin-contracts", "lib/openzeppelin-contracts"],
+        {
+          cwd: foundryWorkSpacePath,
+        },
       );
       await execa(
         "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/foundry-rs/forge-std",
-          "lib/forge-std",
-        ],
+        ["submodule", "add", "https://github.com/gnsps/solidity-bytes-utils", "lib/solidity-bytes-utils"],
         {
           cwd: foundryWorkSpacePath,
-        }
-      );
-      await execa(
-        "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/OpenZeppelin/openzeppelin-contracts",
-          "lib/openzeppelin-contracts",
-        ],
-        {
-          cwd: foundryWorkSpacePath,
-        }
-      );
-      await execa(
-        "git",
-        [
-          "submodule",
-          "add",
-          "https://github.com/gnsps/solidity-bytes-utils",
-          "lib/solidity-bytes-utils",
-        ],
-        {
-          cwd: foundryWorkSpacePath,
-        }
+        },
       );
       await execa("git", ["submodule", "update", "--init", "--recursive"], {
         cwd: foundryWorkSpacePath,
       });
-      await checkoutLatestTag(
-        path.resolve(foundryWorkSpacePath, "lib", "forge-std")
-      );
-      await checkoutLatestTag(
-        path.resolve(foundryWorkSpacePath, "lib", "openzeppelin-contracts")
-      );
+      await checkoutLatestTag(path.resolve(foundryWorkSpacePath, "lib", "forge-std"));
+      await checkoutLatestTag(path.resolve(foundryWorkSpacePath, "lib", "openzeppelin-contracts"));
     }
 
     await execa("git", ["add", "-A"], { cwd: targetDir });
-    await execa(
-      "git",
-      ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"],
-      { cwd: targetDir }
-    );
+    await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
 
     // Update the submodule, since we have checked out the latest tag in the previous step of foundry
     if (options.extensions?.includes("foundry")) {
