@@ -17,6 +17,7 @@ export const getMetadata = ({
   const imageUrl = `${baseUrl}${imageRelativePath}`;
 
   return {
+    metadataBase: new URL(baseUrl),
     title: {
       default: title,
       template: titleTemplate,
@@ -41,6 +42,9 @@ export const getMetadata = ({
       },
       description: description,
       images: [imageUrl],
+    },
+    icons: {
+      icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
     },
   };
 };
