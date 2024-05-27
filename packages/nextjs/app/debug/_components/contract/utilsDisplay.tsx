@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { TransactionBase, TransactionReceipt, formatEther, isAddress } from "viem";
+import { TransactionBase, TransactionReceipt, formatEther, isAddress, isHex } from "viem";
 import { Address } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
@@ -38,8 +38,14 @@ export const displayTxResult = (
     }
   }
 
-  if (typeof displayContent === "string" && isAddress(displayContent)) {
-    return asText ? displayContent : <Address address={displayContent} />;
+  if (typeof displayContent === "string") {
+    if (isAddress(displayContent)) {
+      return asText ? displayContent : <Address address={displayContent} />;
+    }
+
+    if (isHex(displayContent)) {
+      return displayContent; // don't add quotes
+    }
   }
 
   if (Array.isArray(displayContent)) {
