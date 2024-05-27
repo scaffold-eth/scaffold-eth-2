@@ -1,4 +1,7 @@
-name: Lint
+import { withDefaults } from "../../../utils.js";
+
+const contents = ({ solidityEnvSetup }) =>
+  `name: Lint
 
 on:
   push:
@@ -10,7 +13,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
+    runs-on: \${{ matrix.os }}
 
     strategy:
       matrix:
@@ -24,20 +27,18 @@ jobs:
       - name: Setup node env
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: \${{ matrix.node }}
           cache: yarn
 
       - name: Install dependencies
         run: yarn install --immutable
-
-      - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-        run: yarn chain & yarn deploy
-
+      ${solidityEnvSetup.filter(Boolean).join("\n")}
       - name: Run nextjs lint
         run: yarn next:lint --max-warnings=0
 
       - name: Check typings on nextjs
-        run: yarn next:check-types
+        run: yarn next:check-types`;
 
-      - name: Run hardhat lint
-        run: yarn hardhat:lint --max-warnings=0
+export default withDefaults(contents, {
+  solidityEnvSetup: undefined,
+});
