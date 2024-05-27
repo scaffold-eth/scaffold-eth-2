@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress } from "viem";
 import { Address } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
@@ -24,10 +24,14 @@ export const displayTxResult = (
   if (typeof displayContent === "bigint") {
     try {
       const asNumber = Number(displayContent);
-      if (asNumber <= Number.MAX_SAFE_INTEGER && asNumber >= Number.MIN_SAFE_INTEGER) {
-        return asNumber;
+      if (asText) {
+        if (asNumber <= Number.MAX_SAFE_INTEGER && asNumber >= Number.MIN_SAFE_INTEGER) {
+          return asNumber;
+        } else {
+          return "Ξ" + formatEther(displayContent);
+        }
       } else {
-        return "Ξ" + formatEther(displayContent);
+        return <NumberDisplay value={displayContent} />;
       }
     } catch (e) {
       return "Ξ" + formatEther(displayContent);
@@ -54,3 +58,25 @@ export const displayTxResult = (
 };
 
 const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);
+
+const NumberDisplay = ({ value }: { value: bigint }) => {
+  const [isEther, setIsEther] = useState(false);
+
+  const asNumber = Number(value);
+  if (asNumber <= Number.MAX_SAFE_INTEGER && asNumber >= Number.MIN_SAFE_INTEGER) {
+    return String(value);
+  }
+
+  return (
+    <span>
+      {isEther ? "Ξ" + formatEther(value) : String(value)}
+      <button
+        className="btn btn-primary btn-square btn-xs tooltip tooltip-secondary font-sans ml-2"
+        data-tip={isEther ? "Format as number" : "Format as ether"}
+        onClick={() => setIsEther(!isEther)}
+      >
+        /
+      </button>
+    </span>
+  );
+};
