@@ -52,6 +52,10 @@ export const displayTxResult = (
     return asText ? JSON.stringify(displayContent, replacer) : <TupleDisplay value={displayContent} />;
   }
 
+  if (typeof displayContent === "object") {
+    return <StructDisplay value={displayContent} />;
+  }
+
   return JSON.stringify(displayContent, replacer, 2);
 };
 
@@ -82,8 +86,22 @@ const TupleDisplay = ({ value }: { value: DisplayContent[] }) => {
     <div className="flex flex-col">
       tuple
       {value.map((v, i) => (
-        <div key={i} className="flex flex-row ml-2">
+        <div key={i} className="flex flex-row ml-4">
           <span className="text-gray-500 dark:text-gray-400 mr-2">[{i}]:</span>
+          <span className="text-base-content">{displayTxResult(v)}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const StructDisplay = ({ value }: { value: Record<string, any> }) => {
+  return (
+    <div className="flex flex-col">
+      struct
+      {Object.entries(value).map(([k, v]) => (
+        <div key={k} className="flex flex-row ml-4">
+          <span className="text-gray-500 dark:text-gray-400 mr-2">{k}:</span>
           <span className="text-base-content">{displayTxResult(v)}</span>
         </div>
       ))}
