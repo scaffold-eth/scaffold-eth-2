@@ -49,21 +49,11 @@ export const displayTxResult = (
   }
 
   if (Array.isArray(displayContent)) {
-    const mostReadable = (v: DisplayContent) =>
-      ["number", "boolean"].includes(typeof v) ? v : displayTxResultAsText(v);
-    const displayable = JSON.stringify(displayContent.map(mostReadable), replacer);
-
-    return asText ? (
-      displayable
-    ) : (
-      <span style={{ overflowWrap: "break-word", width: "100%" }}>{displayable.replaceAll(",", ",\n")}</span>
-    );
+    return asText ? JSON.stringify(displayContent, replacer) : <TupleDisplay value={displayContent} />;
   }
 
   return JSON.stringify(displayContent, replacer, 2);
 };
-
-const displayTxResultAsText = (displayContent: DisplayContent) => displayTxResult(displayContent, true);
 
 const NumberDisplay = ({ value }: { value: bigint }) => {
   const [isEther, setIsEther] = useState(false);
@@ -84,5 +74,19 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
         /
       </button>
     </span>
+  );
+};
+
+const TupleDisplay = ({ value }: { value: DisplayContent[] }) => {
+  return (
+    <div className="flex flex-col">
+      tuple
+      {value.map((v, i) => (
+        <div key={i} className="flex flex-row ml-2">
+          <span className="text-gray-500 dark:text-gray-400 mr-2">[{i}]:</span>
+          <span className="text-base-content">{displayTxResult(v)}</span>
+        </div>
+      ))}
+    </div>
   );
 };
