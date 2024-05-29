@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Address, formatEther } from "viem";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
@@ -27,6 +27,10 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   });
 
   const [displayUsdMode, setDisplayUsdMode] = useState(price > 0 ? Boolean(usdMode) : false);
+
+  useEffect(() => {
+    setDisplayUsdMode(price > 0 ? Boolean(usdMode) : false);
+  }, [usdMode, price]);
 
   const toggleBalanceMode = () => {
     if (price > 0) {
