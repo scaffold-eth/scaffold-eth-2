@@ -13,34 +13,18 @@ type DisplayContent =
   | undefined
   | unknown;
 
-export const displayTxResult = (
-  displayContent: DisplayContent | DisplayContent[],
-  asText = false,
-): string | ReactElement | number => {
+export const displayTxResult = (displayContent: DisplayContent | DisplayContent[]): string | ReactElement | number => {
   if (displayContent == null) {
     return "";
   }
 
   if (typeof displayContent === "bigint") {
-    try {
-      const asNumber = Number(displayContent);
-      if (asText) {
-        if (asNumber <= Number.MAX_SAFE_INTEGER && asNumber >= Number.MIN_SAFE_INTEGER) {
-          return asNumber;
-        } else {
-          return "Ξ" + formatEther(displayContent);
-        }
-      } else {
-        return <NumberDisplay value={displayContent} />;
-      }
-    } catch (e) {
-      return "Ξ" + formatEther(displayContent);
-    }
+    return <NumberDisplay value={displayContent} />;
   }
 
   if (typeof displayContent === "string") {
     if (isAddress(displayContent)) {
-      return asText ? displayContent : <Address address={displayContent} />;
+      return <Address address={displayContent} />;
     }
 
     if (isHex(displayContent)) {
@@ -49,7 +33,7 @@ export const displayTxResult = (
   }
 
   if (Array.isArray(displayContent)) {
-    return asText ? JSON.stringify(displayContent, replacer) : <TupleDisplay value={displayContent} />;
+    return <TupleDisplay value={displayContent} />;
   }
 
   if (typeof displayContent === "object") {
