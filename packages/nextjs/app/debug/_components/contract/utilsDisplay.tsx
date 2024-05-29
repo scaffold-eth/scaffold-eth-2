@@ -1,5 +1,6 @@
 import { ReactElement, useState } from "react";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress, isHex } from "viem";
+import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
 import { Address } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
@@ -54,13 +55,14 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   return (
     <span>
       {isEther ? "Ξ" + formatEther(value) : String(value)}
-      <button
-        className="btn btn-primary btn-square btn-xs tooltip tooltip-secondary font-sans ml-2"
+      <span
+        className="tooltip tooltip-secondary font-sans ml-2"
         data-tip={isEther ? "Format as number" : "Format as ether"}
-        onClick={() => setIsEther(!isEther)}
       >
-        /
-      </button>
+        <button className="btn btn-primary btn-circle btn-xs" onClick={() => setIsEther(!isEther)}>
+          <ArrowsRightLeftIcon className="h-3 w-3" />
+        </button>
+      </span>
     </span>
   );
 };
