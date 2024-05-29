@@ -33,7 +33,7 @@ export const displayTxResult = (displayContent: DisplayContent | DisplayContent[
   }
 
   if (Array.isArray(displayContent)) {
-    return <TupleDisplay value={displayContent} />;
+    return <ArrayDisplay value={displayContent} />;
   }
 
   if (typeof displayContent === "object") {
@@ -65,7 +65,7 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   );
 };
 
-const TupleDisplay = ({ value }: { value: DisplayContent[] }) => {
+const ArrayDisplay = ({ value }: { value: DisplayContent[] }) => {
   return (
     <div className="flex flex-col">
       tuple
