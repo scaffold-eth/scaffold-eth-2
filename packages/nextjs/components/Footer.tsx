@@ -26,7 +26,7 @@ export const Footer = () => {
               <div>
                 <div className="btn btn-primary btn-sm font-normal gap-1 cursor-auto">
                   <CurrencyDollarIcon className="h-4 w-4" />
-                  <span>{nativeCurrencyPrice}</span>
+                  <span>{nativeCurrencyPrice.toFixed(2)}</span>
                 </div>
               </div>
             )}
