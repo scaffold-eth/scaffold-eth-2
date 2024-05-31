@@ -67,15 +67,21 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   );
 };
 
+export const ObjectFieldDisplay = ({ name, value }: { name: string; value: DisplayContent }) => {
+  return (
+    <div className="flex flex-row ml-4">
+      <span className="text-gray-500 dark:text-gray-400 mr-2">{name}:</span>
+      <span className="text-base-content">{displayTxResult(value)}</span>
+    </div>
+  );
+};
+
 const ArrayDisplay = ({ value }: { value: DisplayContent[] }) => {
   return (
     <div className="flex flex-col">
       tuple
       {value.map((v, i) => (
-        <div key={i} className="flex flex-row ml-4">
-          <span className="text-gray-500 dark:text-gray-400 mr-2">[{i}]:</span>
-          <span className="text-base-content">{displayTxResult(v)}</span>
-        </div>
+        <ObjectFieldDisplay key={i} name={String(i)} value={v} />
       ))}
     </div>
   );
@@ -86,10 +92,7 @@ const StructDisplay = ({ value }: { value: Record<string, any> }) => {
     <div className="flex flex-col">
       struct
       {Object.entries(value).map(([k, v]) => (
-        <div key={k} className="flex flex-row ml-4">
-          <span className="text-gray-500 dark:text-gray-400 mr-2">{k}:</span>
-          <span className="text-base-content">{displayTxResult(v)}</span>
-        </div>
+        <ObjectFieldDisplay key={k} name={k} value={v} />
       ))}
     </div>
   );
