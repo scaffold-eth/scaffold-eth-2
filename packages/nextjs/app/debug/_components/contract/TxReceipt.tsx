@@ -39,7 +39,7 @@ export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
           <strong>Transaction Receipt</strong>
         </div>
         <div className="collapse-content overflow-auto bg-secondary rounded-t-none rounded-3xl">
-          <pre className="text-xs">{displayTxResult(txResult)}</pre>
+          <pre className="text-xs">{displayTxResult(txResult, "xs")}</pre>
         </div>
       </div>
     </div>

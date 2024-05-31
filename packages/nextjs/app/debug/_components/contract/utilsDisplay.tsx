@@ -14,7 +14,12 @@ type DisplayContent =
   | undefined
   | unknown;
 
-export const displayTxResult = (displayContent: DisplayContent | DisplayContent[]): string | ReactElement | number => {
+type ResultFontSize = "sm" | "base" | "xs" | "lg" | "xl" | "2xl" | "3xl";
+
+export const displayTxResult = (
+  displayContent: DisplayContent | DisplayContent[],
+  fontSize: ResultFontSize = "sm",
+): string | ReactElement | number => {
   if (displayContent == null) {
     return "";
   }
@@ -25,7 +30,7 @@ export const displayTxResult = (displayContent: DisplayContent | DisplayContent[
 
   if (typeof displayContent === "string") {
     if (isAddress(displayContent)) {
-      return <Address address={displayContent} />;
+      return <Address address={displayContent} size={fontSize} />;
     }
 
     if (isHex(displayContent)) {
@@ -34,11 +39,11 @@ export const displayTxResult = (displayContent: DisplayContent | DisplayContent[
   }
 
   if (Array.isArray(displayContent)) {
-    return <ArrayDisplay value={displayContent} />;
+    return <ArrayDisplay value={displayContent} size={fontSize} />;
   }
 
   if (typeof displayContent === "object") {
-    return <StructDisplay value={displayContent} />;
+    return <StructDisplay value={displayContent} size={fontSize} />;
   }
 
   return JSON.stringify(displayContent, replacer, 2);
@@ -67,32 +72,40 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   );
 };
 
-export const ObjectFieldDisplay = ({ name, value }: { name: string; value: DisplayContent }) => {
+export const ObjectFieldDisplay = ({
+  name,
+  value,
+  size,
+}: {
+  name: string;
+  value: DisplayContent;
+  size: ResultFontSize;
+}) => {
   return (
     <div className="flex flex-row ml-4">
       <span className="text-gray-500 dark:text-gray-400 mr-2">{name}:</span>
-      <span className="text-base-content">{displayTxResult(value)}</span>
+      <span className="text-base-content">{displayTxResult(value, size)}</span>
     </div>
   );
 };
 
-const ArrayDisplay = ({ value }: { value: DisplayContent[] }) => {
+const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col">
       tuple
       {value.map((v, i) => (
-        <ObjectFieldDisplay key={i} name={String(i)} value={v} />
+        <ObjectFieldDisplay key={i} name={String(i)} value={v} size={size} />
       ))}
     </div>
   );
 };
 
-const StructDisplay = ({ value }: { value: Record<string, any> }) => {
+const StructDisplay = ({ value, size }: { value: Record<string, any>; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col">
       struct
       {Object.entries(value).map(([k, v]) => (
-        <ObjectFieldDisplay key={k} name={k} value={v} />
+        <ObjectFieldDisplay key={k} name={k} value={v} size={size} />
       ))}
     </div>
   );
