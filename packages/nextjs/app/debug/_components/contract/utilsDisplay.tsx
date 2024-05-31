@@ -94,7 +94,7 @@ const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFo
     <div className="flex flex-col gap-y-1">
       tuple
       {value.map((v, i) => (
-        <ObjectFieldDisplay key={i} name={String(i)} value={v} size={size} />
+        <ObjectFieldDisplay key={i} name={`[${i}]`} value={v} size={size} />
       ))}
     </div>
   );
