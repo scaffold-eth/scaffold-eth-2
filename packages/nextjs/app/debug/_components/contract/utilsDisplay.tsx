@@ -91,7 +91,7 @@ export const ObjectFieldDisplay = ({
 
 const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFontSize }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-1">
       tuple
       {value.map((v, i) => (
         <ObjectFieldDisplay key={i} name={String(i)} value={v} size={size} />
@@ -102,7 +102,7 @@ const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFo
 
 const StructDisplay = ({ value, size }: { value: Record<string, any>; size: ResultFontSize }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-y-1">
       struct
       {Object.entries(value).map(([k, v]) => (
         <ObjectFieldDisplay key={k} name={k} value={v} size={size} />
