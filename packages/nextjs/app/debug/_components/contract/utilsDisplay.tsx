@@ -84,7 +84,7 @@ export const ObjectFieldDisplay = ({
   leftPad?: boolean;
 }) => {
   return (
-    <div className={`flex flex-row ${leftPad && "ml-4"}`}>
+    <div className={`flex flex-row ${leftPad ? "ml-4" : ""}`}>
       <span className="text-gray-500 dark:text-gray-400 mr-2">{name}:</span>
       <span className="text-base-content">{displayTxResult(value, size)}</span>
     </div>
