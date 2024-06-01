@@ -94,7 +94,7 @@ export const ObjectFieldDisplay = ({
 const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col gap-y-1">
-      tuple
+      array
       {value.map((v, i) => (
         <ObjectFieldDisplay key={i} name={`[${i}]`} value={v} size={size} />
       ))}
