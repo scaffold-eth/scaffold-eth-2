@@ -39,11 +39,11 @@ export const displayTxResult = (
   }
 
   if (Array.isArray(displayContent)) {
-    return <ArrayDisplay value={displayContent} size={fontSize} />;
+    return <ArrayDisplay values={displayContent} size={fontSize} />;
   }
 
   if (typeof displayContent === "object") {
-    return <StructDisplay value={displayContent} size={fontSize} />;
+    return <StructDisplay struct={displayContent} size={fontSize} />;
   }
 
   return JSON.stringify(displayContent, replacer, 2);
@@ -91,22 +91,22 @@ export const ObjectFieldDisplay = ({
   );
 };
 
-const ArrayDisplay = ({ value, size }: { value: DisplayContent[]; size: ResultFontSize }) => {
+const ArrayDisplay = ({ values, size }: { values: DisplayContent[]; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col gap-y-1">
-      {value.length ? "array" : "[]"}
-      {value.map((v, i) => (
+      {values.length ? "array" : "[]"}
+      {values.map((v, i) => (
         <ObjectFieldDisplay key={i} name={`[${i}]`} value={v} size={size} />
       ))}
     </div>
   );
 };
 
-const StructDisplay = ({ value, size }: { value: Record<string, any>; size: ResultFontSize }) => {
+const StructDisplay = ({ struct, size }: { struct: Record<string, any>; size: ResultFontSize }) => {
   return (
     <div className="flex flex-col gap-y-1">
       struct
-      {Object.entries(value).map(([k, v]) => (
+      {Object.entries(struct).map(([k, v]) => (
         <ObjectFieldDisplay key={k} name={k} value={v} size={size} />
       ))}
     </div>
