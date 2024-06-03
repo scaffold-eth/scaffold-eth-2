@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useInterval } from "usehooks-ts";
 import scaffoldConfig from "~~/scaffold.config";
@@ -11,24 +11,23 @@ const enablePolling = false;
  */
 export const useNativeCurrencyPrice = () => {
   const { targetNetwork } = useTargetNetwork();
+  const [isFetching, setIsFetching] = useState(true);
   const [nativeCurrencyPrice, setNativeCurrencyPrice] = useState(0);
+
+  const fetchPrice = useCallback(async () => {
+    setIsFetching(true);
+    const price = await fetchPriceFromUniswap(targetNetwork);
+    setNativeCurrencyPrice(price);
+    setIsFetching(false);
+  }, [targetNetwork]);
 
   // Get the price of ETH from Uniswap on mount
   useEffect(() => {
-    (async () => {
-      const price = await fetchPriceFromUniswap(targetNetwork);
-      setNativeCurrencyPrice(price);
-    })();
-  }, [targetNetwork]);
+    fetchPrice();
+  }, [fetchPrice]);
 
   // Get the price of ETH from Uniswap at a given interval
-  useInterval(
-    async () => {
-      const price = await fetchPriceFromUniswap(targetNetwork);
-      setNativeCurrencyPrice(price);
-    },
-    enablePolling ? scaffoldConfig.pollingInterval : null,
-  );
+  useInterval(fetchPrice, enablePolling ? scaffoldConfig.pollingInterval : null);
 
-  return nativeCurrencyPrice;
+  return { nativeCurrencyPrice, isFetching };
 };

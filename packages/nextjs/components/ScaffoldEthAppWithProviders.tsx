@@ -15,14 +15,19 @@ import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
-  const price = useNativeCurrencyPrice();
+  const { nativeCurrencyPrice, isFetching } = useNativeCurrencyPrice();
   const setNativeCurrencyPrice = useGlobalState(state => state.setNativeCurrencyPrice);
+  const setIsNativeCurrencyFetching = useGlobalState(state => state.setIsNativeCurrencyFetching);
 
   useEffect(() => {
-    if (price > 0) {
-      setNativeCurrencyPrice(price);
+    setIsNativeCurrencyFetching(isFetching);
+  }, [setIsNativeCurrencyFetching, isFetching]);
+
+  useEffect(() => {
+    if (nativeCurrencyPrice > 0) {
+      setNativeCurrencyPrice(nativeCurrencyPrice);
     }
-  }, [setNativeCurrencyPrice, price]);
+  }, [nativeCurrencyPrice, setNativeCurrencyPrice]);
 
   return (
     <>
