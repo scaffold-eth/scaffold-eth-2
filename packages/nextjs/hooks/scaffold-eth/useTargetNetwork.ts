@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useAccount } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { useGlobalState } from "~~/services/store/store";
@@ -20,10 +20,13 @@ export function useTargetNetwork(): { targetNetwork: ChainWithAttributes } {
     }
   }, [chain?.id, setTargetNetwork, targetNetwork.id]);
 
-  return {
-    targetNetwork: {
-      ...targetNetwork,
-      ...NETWORKS_EXTRA_DATA[targetNetwork.id],
-    },
-  };
+  return useMemo(
+    () => ({
+      targetNetwork: {
+        ...targetNetwork,
+        ...NETWORKS_EXTRA_DATA[targetNetwork.id],
+      },
+    }),
+    [targetNetwork],
+  );
 }

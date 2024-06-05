@@ -13,7 +13,7 @@ import { useGlobalState } from "~~/services/store/store";
  * Site footer
  */
 export const Footer = () => {
-  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrencyPrice);
+  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
   const { targetNetwork } = useTargetNetwork();
   const isLocalNetwork = targetNetwork.id === hardhat.id;
 
