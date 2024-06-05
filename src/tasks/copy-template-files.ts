@@ -29,8 +29,6 @@ const expandExtensions = (options: Options): Extension[] => {
 
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
-const isYarnLockRegex = /yarn\.lock/;
-const isNextGeneratedRegex = /packages\/nextjs\/generated/;
 const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
@@ -40,40 +38,19 @@ const copyBaseFiles = async ({ dev: isDev }: Options, basePath: string, targetDi
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
-      // NOTE: filter IN
       const isTemplate = isTemplateRegex.test(fileName);
       const isPackageJson = isPackageJsonRegex.test(fileName);
-      const isYarnLock = isYarnLockRegex.test(fileName);
-      const isNextGenerated = isNextGeneratedRegex.test(fileName);
-
-      const skipAlways = isTemplate || isPackageJson;
-      const skipDevOnly = isYarnLock || isNextGenerated;
-      const shouldSkip = skipAlways || (isDev && skipDevOnly);
-
+      const shouldSkip = isTemplate || isPackageJson;
+      // filter in files that are not package.json or template files
       return !shouldSkip;
     },
   });
 
   const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
-
   basePackageJsonPaths.forEach(packageJsonPath => {
     const partialPath = packageJsonPath.split(basePath)[1];
     mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
   });
-
-  if (isDev) {
-    const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
-    baseYarnLockPaths.forEach(yarnLockPath => {
-      const partialPath = yarnLockPath.split(basePath)[1];
-      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
-    });
-
-    const nextGeneratedPaths = findFilesRecursiveSync(basePath, path => isNextGeneratedRegex.test(path));
-    nextGeneratedPaths.forEach(nextGeneratedPath => {
-      const partialPath = nextGeneratedPath.split(basePath)[1];
-      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
-    });
-  }
 };
 
 const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: string, targetDir: string) => {
@@ -293,6 +270,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   await copyBaseFiles(options, basePath, targetDir);
 
   // 2. Add "parent" extensions (set via config.json#extend field)
+  // TODO: Revisit
   options.extensions = expandExtensions(options);
 
   // 3. Copy extensions folders
