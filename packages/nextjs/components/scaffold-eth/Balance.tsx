@@ -17,8 +17,8 @@ type BalanceProps = {
  */
 export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const { targetNetwork } = useTargetNetwork();
-  const price = useGlobalState(state => state.nativeCurrency.price);
-  const isPriceFetching = useGlobalState(state => state.nativeCurrency.isFetching);
+  const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
+  const isNativeCurrencyPriceFetching = useGlobalState(state => state.nativeCurrency.isFetching);
 
   const {
     data: balance,
@@ -30,7 +30,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
 
   const { displayUsdMode, toggleDisplayUsdMode } = useDisplayUsdMode({ defaultUsdMode: usdMode });
 
-  if (!address || isLoading || balance === null || (isPriceFetching && price === 0)) {
+  if (!address || isLoading || balance === null || (isNativeCurrencyPriceFetching && nativeCurrencyPrice === 0)) {
     return (
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
@@ -60,7 +60,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
         {displayUsdMode ? (
           <>
             <span className="text-[0.8em] font-bold mr-1">$</span>
-            <span>{(formattedBalance * price).toFixed(2)}</span>
+            <span>{(formattedBalance * nativeCurrencyPrice).toFixed(2)}</span>
           </>
         ) : (
           <>

@@ -54,6 +54,7 @@ export const EtherInput = ({
 }: CommonInputProps & { usdMode?: boolean }) => {
   const [transitoryDisplayValue, setTransitoryDisplayValue] = useState<string>();
   const nativeCurrencyPrice = useGlobalState(state => state.nativeCurrency.price);
+  const isNativeCurrencyPriceFetching = useGlobalState(state => state.nativeCurrency.isFetching);
 
   const { displayUsdMode, toggleDisplayUsdMode } = useDisplayUsdMode({ defaultUsdMode: usdMode });
 
@@ -110,7 +111,7 @@ export const EtherInput = ({
               ? ""
               : "tooltip tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
           }`}
-          data-tip="Unable to fetch price"
+          data-tip={isNativeCurrencyPriceFetching ? "Fetching price" : "Unable to fetch price"}
         >
           <button
             className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
