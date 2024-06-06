@@ -34,22 +34,13 @@ const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
 
-const copyBaseFiles = async ({ dev: isDev }: Options, basePath: string, targetDir: string) => {
+const copyBaseFiles = async (_options: Options, basePath: string, targetDir: string) => {
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
       const isTemplate = isTemplateRegex.test(fileName);
-      const isPackageJson = isPackageJsonRegex.test(fileName);
-      const shouldSkip = isTemplate || isPackageJson;
-      // filter in files that are not package.json or template files
-      return !shouldSkip;
+      return !isTemplate;
     },
-  });
-
-  const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
-  basePackageJsonPaths.forEach(packageJsonPath => {
-    const partialPath = packageJsonPath.split(basePath)[1];
-    mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
   });
 };
 
