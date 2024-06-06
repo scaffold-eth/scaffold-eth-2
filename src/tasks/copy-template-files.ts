@@ -188,13 +188,15 @@ const processTemplatedFiles = async (
         );
       }
 
-      // ToDo. Bug, if arg not present in arg[0], but present in arg[1], it will not be added.
+      const allKeys = [...new Set(args.flatMap(Object.keys))];
+
       const freshArgs: { [key: string]: string[] } = Object.fromEntries(
-        Object.keys(args[0] ?? {}).map(key => [
+        allKeys.map(key => [
           key, // INFO: key for the freshArgs object
           [], // INFO: initial value for the freshArgs object
         ]),
       );
+
       const combinedArgs = args.reduce<typeof freshArgs>((accumulated, arg) => {
         Object.entries(arg).map(([key, value]) => {
           accumulated[key]?.push(value);
