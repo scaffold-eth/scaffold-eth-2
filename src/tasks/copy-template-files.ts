@@ -34,7 +34,7 @@ const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
 
-const copyBaseFiles = async (_options: Options, basePath: string, targetDir: string) => {
+const copyBaseFiles = async (basePath: string, targetDir: string) => {
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
@@ -260,7 +260,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
 
   // 1. Copy base template to target directory
-  await copyBaseFiles(options, basePath, targetDir);
+  await copyBaseFiles(basePath, targetDir);
 
   // 2. Add "parent" extensions (set via config.json#extend field)
   // TODO: Revisit
