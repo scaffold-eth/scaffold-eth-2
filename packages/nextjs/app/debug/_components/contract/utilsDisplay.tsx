@@ -58,7 +58,7 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   }
 
   return (
-    <span>
+    <div className="flex items-baseline">
       {isEther ? "Ξ" + formatEther(value) : String(value)}
       <span
         className="tooltip tooltip-secondary font-sans ml-2"
@@ -68,7 +68,7 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
           <ArrowsRightLeftIcon className="h-3 w-3 opacity-65" />
         </button>
       </span>
-    </span>
+    </div>
   );
 };
 
@@ -84,7 +84,7 @@ export const ObjectFieldDisplay = ({
   leftPad?: boolean;
 }) => {
   return (
-    <div className={`flex flex-row ${leftPad ? "ml-4" : ""}`}>
+    <div className={`flex flex-row items-baseline ${leftPad ? "ml-4" : ""}`}>
       <span className="text-gray-500 dark:text-gray-400 mr-2">{name}:</span>
       <span className="text-base-content">{displayTxResult(value, size)}</span>
     </div>
