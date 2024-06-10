@@ -15,12 +15,12 @@
   },
   "dependencies": {
     "@heroicons/react": "~2.0.11",
-    "@rainbow-me/rainbowkit": "2.1.0",
+    "@rainbow-me/rainbowkit": "2.1.2",
     "@tanstack/react-query": "~5.28.6",
     "@uniswap/sdk-core": "~4.0.1",
     "@uniswap/v2-sdk": "~3.0.1",
     "blo": "~1.0.1",
-    "burner-connector": "~0.0.7",
+    "burner-connector": "~0.0.8",
     "daisyui": "4.5.0",
     "next": "~14.0.4",
     "next-themes": "~0.2.1",
@@ -32,8 +32,8 @@
     "react-hot-toast": "~2.4.0",
     "use-debounce": "~8.0.4",
     "usehooks-ts": "2.13.0",
-    "viem": "2.10.9",
-    "wagmi": "2.9.2",
+    "viem": "2.13.6",
+    "wagmi": "2.9.8",
     "zustand": "~4.1.2"
   },
   "devDependencies": {
