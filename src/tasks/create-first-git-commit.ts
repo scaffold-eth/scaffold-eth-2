@@ -31,7 +31,14 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
       });
       await execa(
         "git",
-        ["submodule", "add", "https://github.com/OpenZeppelin/openzeppelin-contracts", "lib/openzeppelin-contracts"],
+        [
+          "submodule",
+          "add",
+          "-b",
+          "release-v5.0",
+          "https://github.com/OpenZeppelin/openzeppelin-contracts",
+          "lib/openzeppelin-contracts",
+        ],
         {
           cwd: foundryWorkSpacePath,
         },
