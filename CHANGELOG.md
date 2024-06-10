@@ -1,5 +1,22 @@
 # create-eth
 
+## 0.0.45
+
+### Patch Changes
+
+- a2c8bab: foundry: fix untracked OZ lib after inital commit
+- 2425584: fix: add decimals to native currency price (#854)
+
+  fix: add use effect on Balance component for the price (#856)
+
+  feat: bump burner-connector version (#857)
+
+  feat: useDisplayUsdMode hook (#859)
+
+  feat: up wagmi viem rainbowkit (scaffold-eth#862)
+
+- 8365035: fix foundry gh-actions
+
 ## 0.0.44
 
 ### Patch Changes
