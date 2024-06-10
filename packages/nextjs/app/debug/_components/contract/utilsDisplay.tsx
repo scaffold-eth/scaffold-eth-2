@@ -65,7 +65,7 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
         data-tip={isEther ? "Multiply by 1e18" : "Divide by 1e18"}
       >
         <button className="btn btn-ghost btn-circle btn-xs" onClick={() => setIsEther(!isEther)}>
-          <ArrowsRightLeftIcon className="h-3 w-3" />
+          <ArrowsRightLeftIcon className="h-3 w-3 opacity-65" />
         </button>
       </span>
     </span>
