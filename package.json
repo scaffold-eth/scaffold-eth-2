@@ -17,7 +17,9 @@
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "changeset:release": "yarn build && changeset publish",
-    "postinstall": "husky"
+    "postinstall": "husky",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "keywords": [
     "cli",
@@ -42,6 +44,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.4",
+    "pinst": "^3.0.0",
     "prettier": "3.2.5",
     "rollup": "3.21.0",
     "rollup-plugin-auto-external": "2.0.0",
