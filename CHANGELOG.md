@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.46
+
+### Patch Changes
+
+- edf9f23: fix: cli immediately exiting after npx create-eth@latest
+
 ## 0.0.45
 
 ### Patch Changes
