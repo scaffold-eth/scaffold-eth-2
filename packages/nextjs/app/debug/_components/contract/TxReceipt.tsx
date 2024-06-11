@@ -2,11 +2,10 @@ import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { TransactionReceipt } from "viem";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { displayTxResult } from "~~/app/debug/_components/contract";
+import { ObjectFieldDisplay } from "~~/app/debug/_components/contract";
+import { replacer } from "~~/utils/scaffold-eth/common";
 
-export const TxReceipt = (
-  txResult: string | number | bigint | Record<string, any> | TransactionReceipt | undefined,
-) => {
+export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
   const [txResultCopied, setTxResultCopied] = useState(false);
 
   return (
@@ -19,7 +18,7 @@ export const TxReceipt = (
           />
         ) : (
           <CopyToClipboard
-            text={displayTxResult(txResult) as string}
+            text={JSON.stringify(txResult, replacer, 2)}
             onCopy={() => {
               setTxResultCopied(true);
               setTimeout(() => {
@@ -39,8 +38,12 @@ export const TxReceipt = (
         <div className="collapse-title text-sm min-h-0 py-1.5 pl-1">
           <strong>Transaction Receipt</strong>
         </div>
-        <div className="collapse-content overflow-auto bg-secondary rounded-t-none rounded-3xl">
-          <pre className="text-xs pt-4">{displayTxResult(txResult)}</pre>
+        <div className="collapse-content overflow-auto bg-secondary rounded-t-none rounded-3xl !pl-0">
+          <pre className="text-xs">
+            {Object.entries(txResult).map(([k, v]) => (
+              <ObjectFieldDisplay name={k} value={v} size="xs" leftPad={false} key={k} />
+            ))}
+          </pre>
         </div>
       </div>
     </div>
