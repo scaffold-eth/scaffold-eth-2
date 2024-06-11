@@ -91,7 +91,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   }
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center flex-shrink-0">
       <div className="flex-shrink-0">
         <BlockieAvatar
           address={checkSumAddress}
