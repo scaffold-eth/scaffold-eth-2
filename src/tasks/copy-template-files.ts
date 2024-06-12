@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import { Extension, isDefined, Options, TemplateDescriptor } from "../types";
+import { Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-tree";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
@@ -15,17 +15,6 @@ import { getArgumentFromExternalExtensionOption } from "../utils/external-extens
 const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
 let copyOrLink = copy;
-
-const expandExtensions = (options: Options): Extension[] => {
-  const expandedExtensions = options.extensions
-    .map(extension => extensionDict[extension])
-    .map(extDescriptor => [extDescriptor.extends, extDescriptor.value].filter(isDefined))
-    .flat()
-    // this reduce just removes duplications
-    .reduce((exts, ext) => (exts.includes(ext) ? exts : [...exts, ext]), [] as Extension[]);
-
-  return expandedExtensions;
-};
 
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
@@ -262,11 +251,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   // 1. Copy base template to target directory
   await copyBaseFiles(basePath, targetDir);
 
-  // 2. Add "parent" extensions (set via config.json#extend field)
-  // TODO: Revisit
-  options.extensions = expandExtensions(options);
-
-  // 3. Copy extensions folders
+  // 2. Copy extensions folders
   await Promise.all(
     options.extensions.map(async extension => {
       const extensionPath = extensionDict[extension].path;
@@ -274,21 +259,21 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     }),
   );
 
-  // 4. Set up external extension if needed
+  // 3. Set up external extension if needed
   if (options.externalExtension) {
     await setUpExternalExtensionFiles(options, tmpDir);
     await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
   }
 
-  // 5. Process templated files and generate output
+  // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 6. Delete tmp directory
+  // 5. Delete tmp directory
   if (options.externalExtension) {
     await fs.promises.rm(tmpDir, { recursive: true });
   }
 
-  // 7. Initialize git repo to avoid husky error
+  // 6. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }

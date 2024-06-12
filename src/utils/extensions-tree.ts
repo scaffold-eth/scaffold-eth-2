@@ -15,7 +15,7 @@ const templatesDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl))
  * @param basePath the path at which to start the traverse
  * @returns the extensions found in this path. Useful for the recursion
  */
-const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
+const traverseExtensions = (basePath: string): Extension[] => {
   const extensionsPath = path.resolve(basePath, "extensions");
   let extensions: Extension[];
   try {
@@ -24,45 +24,35 @@ const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
     return [];
   }
 
-  await Promise.all(
-    extensions.map(async ext => {
-      const extPath = path.resolve(extensionsPath, ext);
-      const configPath = path.resolve(extPath, "config.json");
+  extensions.forEach(ext => {
+    const extPath = path.resolve(extensionsPath, ext);
+    const configPath = path.resolve(extPath, "config.json");
 
-      let config: Record<string, string> = {};
-      try {
-        config = JSON.parse(fs.readFileSync(configPath, "utf8")) as Record<string, string>;
-      } catch (error) {
-        if (fs.existsSync(configPath)) {
-          throw new Error(
-            `Couldn't parse existing config.json file.
-  Extension: ${ext};
-  Config file path: ${configPath}`,
-          );
-        }
+    let config: Record<string, string> = {};
+    try {
+      config = JSON.parse(fs.readFileSync(configPath, "utf8")) as Record<string, string>;
+    } catch (error) {
+      if (fs.existsSync(configPath)) {
+        throw new Error(
+          `Couldn't parse existing config.json file.
+Extension: ${ext};
+Config file path: ${configPath}`,
+        );
       }
-      const name = config.name ?? ext;
-      const value = ext;
+    }
+    const name = config.name ?? ext;
+    const value = ext;
 
-      const subExtensions = await traverseExtensions(extPath);
-      const hasSubExtensions = subExtensions.length !== 0;
-      const extDescriptor: ExtensionDescriptor = {
-        name,
-        value,
-        path: extPath,
-        extensions: subExtensions,
-        extends: config.extends as Extension | undefined,
-      };
-      if (!hasSubExtensions) {
-        delete extDescriptor.extensions;
-      }
-      extensionDict[ext] = extDescriptor;
+    const extDescriptor: ExtensionDescriptor = {
+      name,
+      value,
+      path: extPath,
+    };
 
-      return subExtensions;
-    }),
-  );
+    extensionDict[ext] = extDescriptor;
+  });
 
   return extensions;
 };
 
-await traverseExtensions(templatesDirectory);
+traverseExtensions(templatesDirectory);
