@@ -1,7 +1,7 @@
 import { config } from "../config";
 import { Extension, Options, RawOptions, isDefined, isExtension } from "../types";
 import inquirer from "inquirer";
-import { extensionDict } from "./extensions-tree";
+import { extensionDict } from "./extensions-dictionary";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {

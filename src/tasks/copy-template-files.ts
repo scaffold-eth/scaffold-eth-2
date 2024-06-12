@@ -1,7 +1,7 @@
 import { execa } from "execa";
 import { Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
-import { extensionDict } from "../utils/extensions-tree";
+import { extensionDict } from "../utils/extensions-dictionary";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";

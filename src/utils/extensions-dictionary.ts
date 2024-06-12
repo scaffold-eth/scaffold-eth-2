@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { Extension, ExtensionDescriptor, ExtensionDict } from "../types";
 
+// global object to store mapping of extension name and its descriptor
 export const extensionDict: ExtensionDict = {} as ExtensionDict;
 
 const currentFileUrl = import.meta.url;
@@ -10,18 +11,16 @@ const currentFileUrl = import.meta.url;
 const templatesDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
 
 /**
- * This function has side effects. It generates the extensionDict.
- *
- * @param basePath the path at which to start the traverse
- * @returns the extensions found in this path. Useful for the recursion
+ * This function has side effects. It initializes the extensionDict.
  */
-const traverseExtensions = (basePath: string): Extension[] => {
+const initializeExtensionsDict = (basePath: string) => {
   const extensionsPath = path.resolve(basePath, "extensions");
   let extensions: Extension[];
   try {
     extensions = fs.readdirSync(extensionsPath) as Extension[];
   } catch (error) {
-    return [];
+    console.error(`Couldn't read the extensions directory: ${extensionsPath}`);
+    return;
   }
 
   extensions.forEach(ext => {
@@ -51,8 +50,8 @@ Config file path: ${configPath}`,
 
     extensionDict[ext] = extDescriptor;
   });
-
-  return extensions;
 };
 
-traverseExtensions(templatesDirectory);
+// This function call will run only once due to Node.js module caching in first import of file
+// it won't run again even if imported in multiple files.
+initializeExtensionsDict(templatesDirectory);
