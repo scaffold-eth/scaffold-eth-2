@@ -1,8 +1,11 @@
-//SPDX-License-Identifier: MIT
+import { withDefaults } from "../../../../../utils.js";
+
+const content = ({ deploymentsScriptsImports, deploymentsLogic }) => `//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 import "../contracts/YourContract.sol";
 import "./DeployHelpers.s.sol";
+${deploymentsScriptsImports.filter(Boolean).join("\n")}
 
 contract DeployScript is ScaffoldETHDeploy {
     error InvalidPrivateKey(string);
@@ -11,18 +14,24 @@ contract DeployScript is ScaffoldETHDeploy {
         uint256 deployerPrivateKey = setupLocalhostEnv();
         if (deployerPrivateKey == 0) {
             revert InvalidPrivateKey(
-                "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use `yarn generate` to generate a new random account"
+                "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use \`yarn generate\` to generate a new random account"
             );
         }
         vm.startBroadcast(deployerPrivateKey);
-        YourContract yourContract =
-            new YourContract(vm.addr(deployerPrivateKey));
+
+        YourContract yourContract = new YourContract(
+            vm.addr(deployerPrivateKey)
+        );
         console.logString(
             string.concat(
-                "YourContract deployed at: ", vm.toString(address(yourContract))
+                "YourContract deployed at: ",
+                vm.toString(address(yourContract))
             )
         );
+
         vm.stopBroadcast();
+
+        ${deploymentsLogic.filter(Boolean).join("\n")}
 
         /**
          * This function generates the file containing the contracts Abi definitions.
@@ -33,4 +42,9 @@ contract DeployScript is ScaffoldETHDeploy {
     }
 
     function test() public {}
-}
+}`;
+
+export default withDefaults(content, {
+  deploymentsScriptsImports: "",
+  deploymentsLogic: "",
+});
