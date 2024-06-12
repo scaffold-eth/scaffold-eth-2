@@ -184,8 +184,6 @@ const processTemplatedFiles = async (
         return accumulated;
       }, freshArgs);
 
-      // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
-
       const output = fileTemplate(combinedArgs);
 
       const targetPath = path.join(
