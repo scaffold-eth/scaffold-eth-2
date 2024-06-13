@@ -59,7 +59,7 @@
     "execa": "7.1.1",
     "handlebars": "^4.7.7",
     "inquirer": "9.2.0",
-    "listr": "0.14.3",
+    "listr2": "^8.2.1",
     "merge-packages": "^0.1.6",
     "ncp": "2.0.0",
     "pkg-install": "1.0.0"

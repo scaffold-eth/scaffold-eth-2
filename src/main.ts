@@ -8,7 +8,7 @@ import {
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
 import chalk from "chalk";
-import Listr from "listr";
+import { Listr } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
@@ -40,6 +40,7 @@ export async function createProject(options: Options) {
         if (!options.install) {
           return "Manually skipped";
         }
+        return false;
       },
     },
     {
@@ -49,6 +50,7 @@ export async function createProject(options: Options) {
         if (!options.install) {
           return "Skipping because prettier install was skipped";
         }
+        return false;
       },
     },
     {
