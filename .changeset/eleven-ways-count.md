@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-update linkr version
+change listr to listr2
