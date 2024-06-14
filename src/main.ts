@@ -8,7 +8,7 @@ import {
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
 import chalk from "chalk";
-import Listr from "listr";
+import { Listr } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
@@ -22,40 +22,45 @@ export async function createProject(options: Options) {
 
   const targetDirectory = path.resolve(process.cwd(), options.project);
 
-  const tasks = new Listr([
-    {
-      title: `📁 Create project directory ${targetDirectory}`,
-      task: () => createProjectDirectory(options.project),
-    },
-    {
-      title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
-        options.project,
-      )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
-      task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
-    },
-    {
-      title: `📦 Installing dependencies with yarn, this could take a while`,
-      task: () => installPackages(targetDirectory),
-      skip: () => {
-        if (!options.install) {
-          return "Manually skipped";
-        }
+  const tasks = new Listr(
+    [
+      {
+        title: `📁 Create project directory ${targetDirectory}`,
+        task: () => createProjectDirectory(options.project),
       },
-    },
-    {
-      title: "🪄 Formatting files with prettier",
-      task: () => prettierFormat(targetDirectory),
-      skip: () => {
-        if (!options.install) {
-          return "Skipping because prettier install was skipped";
-        }
+      {
+        title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
+          options.project,
+        )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
+        task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
-    },
-    {
-      title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
-      task: () => createFirstGitCommit(targetDirectory, options),
-    },
-  ]);
+      {
+        title: `📦 Installing dependencies with yarn, this could take a while`,
+        task: () => installPackages(targetDirectory),
+        skip: () => {
+          if (!options.install) {
+            return "Manually skipped";
+          }
+          return false;
+        },
+      },
+      {
+        title: "🪄 Formatting files with prettier",
+        task: () => prettierFormat(targetDirectory),
+        skip: () => {
+          if (!options.install) {
+            return "Skipping because prettier install was skipped";
+          }
+          return false;
+        },
+      },
+      {
+        title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
+        task: () => createFirstGitCommit(targetDirectory, options),
+      },
+    ],
+    { rendererOptions: { collapseSkips: false, suffixSkips: true } },
+  );
 
   try {
     await tasks.run();
