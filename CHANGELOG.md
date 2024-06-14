@@ -1,5 +1,16 @@
 # create-eth
 
+## 0.0.47
+
+### Patch Changes
+
+- Cleanup unused extensions
+- Fix listr spamming
+- Migrate from husky to lefthook
+- Upgrade dependencies
+- Templatized foundry deploy script
+- Add eip712 curated extension
+
 ## 0.0.46
 
 ### Patch Changes
