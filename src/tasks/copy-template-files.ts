@@ -18,19 +18,31 @@ let copyOrLink = copy;
 
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
+const isYarnLockRegex = /yarn\.lock/;
 const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
 
-const copyBaseFiles = async (basePath: string, targetDir: string) => {
+const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
+      const isYarnLock = isYarnLockRegex.test(fileName);
       const isTemplate = isTemplateRegex.test(fileName);
-      return !isTemplate;
+      const skipDevOnly = isDev && isYarnLock;
+      return !isTemplate || !skipDevOnly;
     },
   });
+
+  if (isDev) {
+    // we don't want to symlink the yarn.lock file
+    const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
+    baseYarnLockPaths.forEach(yarnLockPath => {
+      const partialPath = yarnLockPath.split(basePath)[1];
+      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+    });
+  }
 };
 
 const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: string, targetDir: string) => {
@@ -247,7 +259,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
 
   // 1. Copy base template to target directory
-  await copyBaseFiles(basePath, targetDir);
+  await copyBaseFiles(basePath, targetDir, options);
 
   // 2. Copy extensions folders
   await Promise.all(
