@@ -6,62 +6,6 @@ This change should make it easier to grow the options we provide our users witho
 
 This change requires a new file, `src/config.ts`, where a few things about the extensions are defined, e.g. the sequence of questions about extensions.
 
-## Nested extensions
-
-We can add extensions of extensions, just by adding an `/extensions` folder inside an existing extension. For example, adding [next-auth][1] as an extension for next would look something like the following:
-
-```text
-create-dapp-example/
-├─ src/
-│  ├─ ...
-│
-├─ templates/
-│  ├─ base/
-│  ├─ extensions/
-│  │  ├─nextjs
-│  │  ├─ ...
-│  │  ├─ extensions/
-│  │  │  ├─ next-auth/
-│  │  │  ├─ ...
-```
-
-## Extending extensions
-
-> sorry for the confusing naming
-
-Extensions can also inherit (or extend) another extension. The goal of this feature is that two extensions can share files or nested extensions without duplication. An example of this could be hardhat and foundry, which are two different extensions, but both of them could have a shared UI to debug smart contracts.
-
-The file structure could be like this:
-
-```text
-create-dapp-example/
-├─ src/
-│  ├─ ...
-│
-├─ templates/
-│  ├─ base/
-│  ├─ extensions/
-│  │  ├─ foundry/
-│  │  │  ├─ config.json <- important to declare the `extends` field here
-│  │  │  ├─ ...
-│  │  ├─ hardhat/
-│  │  │  ├─ config.json <- important to declare the `extends` field here
-│  │  │  ├─ ...
-│  │  ├─ common/
-│  │  │  ├─ extensions/
-│  │  │  │  ├─ possible-shared-nested-extension/
-│  │  │  │  ├─ ...
-│  │  │  ├─ shared-file.md
-```
-
-For `foundry` and `hardhat` extensions to inherit from `common`, they need to add the `extends` field to the config.json file.
-
-```json
-{
-  "extends": "common"
-}
-```
-
 # Config files
 
 There's one main `src/config.ts` file to configure the questions shown to the user.
@@ -86,14 +30,12 @@ Those properties are:
 
 - `name`: the string to be used when showing the package name to the user via the cli, as well as for error reporting.
 
-- `extends`: the name of a different extension used as "parent extension". Read more at the [Extending extensions](#extending-extensions) section
-
 Note that all values are optional, as well as the file itself.
 
 | ⚠️ TODO list when new properties are added to config.json:
 | - Update this document
 | - Update the ExtensionDescriptor type at /src/types.ts
-| - Update the src/utils/extensions-tree.ts file so the new field from the config is actually added into the extension descriptor
+| - Update the src/utils/extensions-dictionary.ts file so the new field from the config is actually added into the extension descriptor
 
 # Template files
 
@@ -270,7 +212,7 @@ The special files and folders are:
 
 - [`package.json` file](#merging-packagejson-files)
 - [`config.json` file](#extensionconfigjson)
-- [`extensions/` folder](#nested-extensions)
+- `extensions/` folder
 
 # Things worth mentioning
 

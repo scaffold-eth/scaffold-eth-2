@@ -17,6 +17,10 @@ const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
     repository: "https://github.com/scaffold-eth/create-eth-extensions",
     branch: "subgraph",
   },
+  "eip-712": {
+    repository: "https://github.com/scaffold-eth/create-eth-extensions",
+    branch: "eip-712",
+  },
 };
 
 export { config, CURATED_EXTENSIONS };

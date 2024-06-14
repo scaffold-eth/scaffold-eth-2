@@ -60,21 +60,10 @@ export type ExtensionDescriptor = {
   name: string;
   value: Extension;
   path: string;
-  extensions?: Extension[];
-  extends?: Extension;
 };
 
-export type ExtensionBranch = ExtensionDescriptor & {
-  extensions: Extension[];
-};
 export type ExtensionDict = {
   [extension in Extension]: ExtensionDescriptor;
-};
-
-export const extensionWithSubextensions = (
-  extension: ExtensionDescriptor | undefined,
-): extension is ExtensionBranch => {
-  return Object.prototype.hasOwnProperty.call(extension, "extensions");
 };
 
 export type TemplateDescriptor = {

@@ -1,7 +1,7 @@
 import { execa } from "execa";
-import { Extension, isDefined, Options, TemplateDescriptor } from "../types";
+import { Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
-import { extensionDict } from "../utils/extensions-tree";
+import { extensionDict } from "../utils/extensions-dictionary";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
@@ -16,61 +16,40 @@ const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
 let copyOrLink = copy;
 
-const expandExtensions = (options: Options): Extension[] => {
-  const expandedExtensions = options.extensions
-    .map(extension => extensionDict[extension])
-    .map(extDescriptor => [extDescriptor.extends, extDescriptor.value].filter(isDefined))
-    .flat()
-    // this reduce just removes duplications
-    .reduce((exts, ext) => (exts.includes(ext) ? exts : [...exts, ext]), [] as Extension[]);
-
-  return expandedExtensions;
-};
-
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
-const isNextGeneratedRegex = /packages\/nextjs\/generated/;
 const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
+const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
 
-const copyBaseFiles = async ({ dev: isDev }: Options, basePath: string, targetDir: string) => {
+const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
-      // NOTE: filter IN
       const isTemplate = isTemplateRegex.test(fileName);
-      const isPackageJson = isPackageJsonRegex.test(fileName);
+
       const isYarnLock = isYarnLockRegex.test(fileName);
-      const isNextGenerated = isNextGeneratedRegex.test(fileName);
+      const isDeployedContracts = isDeployedContractsRegex.test(fileName);
+      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts);
 
-      const skipAlways = isTemplate || isPackageJson;
-      const skipDevOnly = isYarnLock || isNextGenerated;
-      const shouldSkip = skipAlways || (isDev && skipDevOnly);
-
-      return !shouldSkip;
+      return !isTemplate && !skipDevOnly;
     },
   });
 
-  const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
-
-  basePackageJsonPaths.forEach(packageJsonPath => {
-    const partialPath = packageJsonPath.split(basePath)[1];
-    mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
-  });
-
   if (isDev) {
+    // we don't want to symlink yarn.lock & deployedContracts.ts file
     const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
     baseYarnLockPaths.forEach(yarnLockPath => {
       const partialPath = yarnLockPath.split(basePath)[1];
       void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
     });
 
-    const nextGeneratedPaths = findFilesRecursiveSync(basePath, path => isNextGeneratedRegex.test(path));
-    nextGeneratedPaths.forEach(nextGeneratedPath => {
-      const partialPath = nextGeneratedPath.split(basePath)[1];
+    const baseDeployedContractsPaths = findFilesRecursiveSync(basePath, path => isDeployedContractsRegex.test(path));
+    baseDeployedContractsPaths.forEach(deployedContractsPath => {
+      const partialPath = deployedContractsPath.split(basePath)[1];
       void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
     });
   }
@@ -211,21 +190,21 @@ const processTemplatedFiles = async (
         );
       }
 
-      // ToDo. Bug, if arg not present in arg[0], but present in arg[1], it will not be added.
+      const allKeys = [...new Set(args.flatMap(Object.keys))];
+
       const freshArgs: { [key: string]: string[] } = Object.fromEntries(
-        Object.keys(args[0] ?? {}).map(key => [
+        allKeys.map(key => [
           key, // INFO: key for the freshArgs object
           [], // INFO: initial value for the freshArgs object
         ]),
       );
+
       const combinedArgs = args.reduce<typeof freshArgs>((accumulated, arg) => {
         Object.entries(arg).map(([key, value]) => {
           accumulated[key]?.push(value);
         });
         return accumulated;
       }, freshArgs);
-
-      // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
 
       const output = fileTemplate(combinedArgs);
 
@@ -290,12 +269,9 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
 
   // 1. Copy base template to target directory
-  await copyBaseFiles(options, basePath, targetDir);
+  await copyBaseFiles(basePath, targetDir, options);
 
-  // 2. Add "parent" extensions (set via config.json#extend field)
-  options.extensions = expandExtensions(options);
-
-  // 3. Copy extensions folders
+  // 2. Copy extensions folders
   await Promise.all(
     options.extensions.map(async extension => {
       const extensionPath = extensionDict[extension].path;
@@ -303,21 +279,21 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     }),
   );
 
-  // 4. Set up external extension if needed
+  // 3. Set up external extension if needed
   if (options.externalExtension) {
     await setUpExternalExtensionFiles(options, tmpDir);
     await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
   }
 
-  // 5. Process templated files and generate output
+  // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 6. Delete tmp directory
+  // 5. Delete tmp directory
   if (options.externalExtension) {
     await fs.promises.rm(tmpDir, { recursive: true });
   }
 
-  // 7. Initialize git repo to avoid husky error
+  // 6. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }
