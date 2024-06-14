@@ -1,0 +1,5 @@
+pre-commit:
+  commands:
+    lint:
+      glob: "*.{js,ts,md}"
+      run: yarn eslint --fix {staged_files}

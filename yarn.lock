@@ -1431,6 +1431,7 @@ __metadata:
     execa: 7.1.1
     handlebars: ^4.7.7
     inquirer: 9.2.0
+    lefthook: ^1.6.16
     lint-staged: ^15.2.4
     listr: 0.14.3
     merge-packages: ^0.1.6
@@ -3241,6 +3242,97 @@ __metadata:
   version: 4.1.5
   resolution: "kleur@npm:4.1.5"
   checksum: 1dc476e32741acf0b1b5b0627ffd0d722e342c1b0da14de3e8ae97821327ca08f9fb944542fb3c126d90ac5f27f9d804edbe7c585bf7d12ef495d115e0f22c12
+  languageName: node
+  linkType: hard
+
+"lefthook-darwin-arm64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-darwin-arm64@npm:1.6.16"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-darwin-x64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-darwin-x64@npm:1.6.16"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-freebsd-arm64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-freebsd-arm64@npm:1.6.16"
+  conditions: os=freebsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-freebsd-x64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-freebsd-x64@npm:1.6.16"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-linux-arm64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-linux-arm64@npm:1.6.16"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-linux-x64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-linux-x64@npm:1.6.16"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-windows-arm64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-windows-arm64@npm:1.6.16"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-windows-x64@npm:1.6.16":
+  version: 1.6.16
+  resolution: "lefthook-windows-x64@npm:1.6.16"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook@npm:^1.6.16":
+  version: 1.6.16
+  resolution: "lefthook@npm:1.6.16"
+  dependencies:
+    lefthook-darwin-arm64: 1.6.16
+    lefthook-darwin-x64: 1.6.16
+    lefthook-freebsd-arm64: 1.6.16
+    lefthook-freebsd-x64: 1.6.16
+    lefthook-linux-arm64: 1.6.16
+    lefthook-linux-x64: 1.6.16
+    lefthook-windows-arm64: 1.6.16
+    lefthook-windows-x64: 1.6.16
+  dependenciesMeta:
+    lefthook-darwin-arm64:
+      optional: true
+    lefthook-darwin-x64:
+      optional: true
+    lefthook-freebsd-arm64:
+      optional: true
+    lefthook-freebsd-x64:
+      optional: true
+    lefthook-linux-arm64:
+      optional: true
+    lefthook-linux-x64:
+      optional: true
+    lefthook-windows-arm64:
+      optional: true
+    lefthook-windows-x64:
+      optional: true
+  bin:
+    lefthook: bin/index.js
+  checksum: a35f505750f121650052d2f164879b803f575483ae3b04272917f8be26772ba76190daba54bf0db56083170688ae3116e72b232c568acb24aa77d018a9f19a71
   languageName: node
   linkType: hard
 
