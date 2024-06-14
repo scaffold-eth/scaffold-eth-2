@@ -23,23 +23,33 @@ const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
+const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
 
 const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
     clobber: false,
     filter: fileName => {
-      const isYarnLock = isYarnLockRegex.test(fileName);
       const isTemplate = isTemplateRegex.test(fileName);
-      const skipDevOnly = isDev && isYarnLock;
-      return !isTemplate || !skipDevOnly;
+
+      const isYarnLock = isYarnLockRegex.test(fileName);
+      const isDeployedContracts = isDeployedContractsRegex.test(fileName);
+      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts);
+
+      return !isTemplate && !skipDevOnly;
     },
   });
 
   if (isDev) {
-    // we don't want to symlink the yarn.lock file
+    // we don't want to symlink yarn.lock & deployedContracts.ts file
     const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
     baseYarnLockPaths.forEach(yarnLockPath => {
       const partialPath = yarnLockPath.split(basePath)[1];
+      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+    });
+
+    const baseDeployedContractsPaths = findFilesRecursiveSync(basePath, path => isDeployedContractsRegex.test(path));
+    baseDeployedContractsPaths.forEach(deployedContractsPath => {
+      const partialPath = deployedContractsPath.split(basePath)[1];
       void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
     });
   }
