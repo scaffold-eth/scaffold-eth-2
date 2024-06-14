@@ -526,16 +526,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/listr@npm:0.14.4":
-  version: 0.14.4
-  resolution: "@types/listr@npm:0.14.4"
-  dependencies:
-    "@types/node": "*"
-    rxjs: ^6.5.1
-  checksum: 4adad4be1218aa91554411f725acee5dd4aaeacfaa07041c1ad7f7e9acf7adb59f6a49f2a2694e197c87659411fa2402de2672bd54baed394050a1cca6eed1ff
-  languageName: node
-  linkType: hard
-
 "@types/minimatch@npm:*":
   version: 5.1.2
   resolution: "@types/minimatch@npm:5.1.2"
@@ -1332,7 +1322,6 @@ __metadata:
     "@eslint/js": ^9.3.0
     "@rollup/plugin-typescript": 11.1.0
     "@types/inquirer": 9.0.3
-    "@types/listr": 0.14.4
     "@types/ncp": 2.0.5
     "@types/node": 18.16.0
     arg: 5.0.2
@@ -4315,15 +4304,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.5.1":
-  version: 6.6.7
-  resolution: "rxjs@npm:6.6.7"
-  dependencies:
-    tslib: ^1.9.0
-  checksum: bc334edef1bb8bbf56590b0b25734ba0deaf8825b703256a93714308ea36dff8a11d25533671adf8e104e5e8f256aa6fdfe39b2e248cdbd7a5f90c260acbbd1b
-  languageName: node
-  linkType: hard
-
 "rxjs@npm:^7.2.0, rxjs@npm:^7.8.0":
   version: 7.8.0
   resolution: "rxjs@npm:7.8.0"
@@ -4923,13 +4903,6 @@ __metadata:
   version: 2.5.0
   resolution: "tslib@npm:2.5.0"
   checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^1.9.0":
-  version: 1.14.1
-  resolution: "tslib@npm:1.14.1"
-  checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
   languageName: node
   linkType: hard
 

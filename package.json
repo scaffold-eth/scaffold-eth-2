@@ -36,7 +36,6 @@
     "@eslint/js": "^9.3.0",
     "@rollup/plugin-typescript": "11.1.0",
     "@types/inquirer": "9.0.3",
-    "@types/listr": "0.14.4",
     "@types/ncp": "2.0.5",
     "@types/node": "18.16.0",
     "eslint": "^9.3.0",
