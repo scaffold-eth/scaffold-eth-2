@@ -1,0 +1,30 @@
+{
+  "name": "@se-2/foundry",
+  "version": "0.0.1",
+  "scripts": {
+    "account": "node script/ListAccount.js",
+    "chain": "anvil --config-out localhost.json",
+    "compile": "forge compile",
+    "deploy": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy && node script/generateTsAbis.js",
+    "deploy:verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node script/generateTsAbis.js",
+    "flatten": "forge flatten",
+    "fork": "anvil --fork-url ${0:-mainnet} --chain-id 31337 --config-out localhost.json",
+    "format": "forge fmt && prettier --write ./script/**/*.js",
+    "generate": "node script/generateAccount.js",
+    "lint": "forge fmt --check && prettier --check ./script/**/*.js",
+    "test": "forge test",
+    "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
+  },
+  "dependencies": {
+    "dotenv": "~16.3.1",
+    "envfile": "~6.18.0",
+    "ethers": "~5.7.1",
+    "prettier": "~2.8.8",
+    "qrcode": "~1.5.3",
+    "toml": "~3.0.0"
+  },
+  "devDependencies": {
+    "@types/prettier": "2",
+    "@types/qrcode": "1"
+  }
+}
