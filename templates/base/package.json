@@ -8,7 +8,6 @@
     ]
   },
   "scripts": {
-    "prepare": "install-self-peers -- --ignore-scripts",
     "start": "yarn workspace @se-2/nextjs dev",
     "next:lint": "yarn workspace @se-2/nextjs lint",
     "next:format": "yarn workspace @se-2/nextjs format",
@@ -24,12 +23,7 @@
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
     "husky": "~8.0.3",
-    "lint-staged": "~13.2.2",
-    "next": "~14.0.4",
-    "vercel": "~32.4.1"
-  },
-  "resolutions": {
-    "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
+    "lint-staged": "~13.2.2"
   },
   "engines": {
     "node": ">=18.17.0"
