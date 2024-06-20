@@ -1,19 +1,41 @@
-import type { Args, RawOptions, SolidityFramework } from "../types";
+import type { Args, ExternalExtension, SolidityFramework, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../config";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const validateTemplate = async (template: string): Promise<{ repository: string; branch?: string }> => {
-  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
+const validateExternalExtension = async (
+  extensionName: string,
+  dev: boolean,
+): Promise<{ repository: string; branch?: string } | string> => {
+  if (dev) {
+    // Check externalExtensions/${extensionName} exists
+    try {
+      const currentFileUrl = import.meta.url;
+      const externalExtensionsDirectory = path.resolve(
+        decodeURI(fileURLToPath(currentFileUrl)),
+        "../../externalExtensions",
+      );
+      await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
+    } catch {
+      throw new Error(`Extesnion not found in "externalExtensions/${extensionName}"`);
+    }
+
+    return extensionName;
+  }
+
+  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(extensionName);
 
   // Check if repository exists
   await new Promise((resolve, reject) => {
     https
       .get(githubBranchUrl, res => {
         if (res.statusCode !== 200) {
-          reject(new Error(`Template not found: ${githubUrl}`));
+          reject(new Error(`Extension not found: ${githubUrl}`));
         } else {
           resolve(null);
         }
@@ -65,13 +87,13 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   const solidityFramework = args["--solidity-framework"] ?? null;
 
   // ToDo. Allow multiple
-  const extension = args["--extension"] ? await validateTemplate(args["--extension"]) : null;
+  const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
-  if (extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
+  if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
     console.log(
       chalk.yellow(
         ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(
-          extension.repository,
+          (extension as ExternalExtension).repository,
         )}\n`,
       ),
     );

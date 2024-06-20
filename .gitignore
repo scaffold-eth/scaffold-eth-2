@@ -13,3 +13,6 @@ node_modules/
 
 # macos files
 .DS_Store
+
+# External extensions development folder
+externalExtensions/

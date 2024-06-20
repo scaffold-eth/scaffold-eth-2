@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import { Options, TemplateDescriptor } from "../types";
+import { ExternalExtension, Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-dictionary";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
@@ -33,18 +33,25 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
 
       const isYarnLock = isYarnLockRegex.test(fileName);
       const isDeployedContracts = isDeployedContractsRegex.test(fileName);
-      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts);
+      const isPackageJson = isPackageJsonRegex.test(fileName);
+      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts || isPackageJson);
 
       return !isTemplate && !skipDevOnly;
     },
   });
 
   if (isDev) {
-    // we don't want to symlink yarn.lock & deployedContracts.ts file
+    // We don't want symlink below files in dev mode
     const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
     baseYarnLockPaths.forEach(yarnLockPath => {
       const partialPath = yarnLockPath.split(basePath)[1];
       void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+    });
+
+    const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
+    basePackageJsonPaths.forEach(packageJsonPath => {
+      const partialPath = packageJsonPath.split(basePath)[1];
+      mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
     });
 
     const baseDeployedContractsPaths = findFilesRecursiveSync(basePath, path => isDeployedContractsRegex.test(path));
@@ -130,15 +137,18 @@ const processTemplatedFiles = async (
     )
     .flat();
 
+  const externalExtensionFolder = isDev
+    ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension")
+    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension");
   const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
-    ? findFilesRecursiveSync(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"), filePath =>
-        isTemplateRegex.test(filePath),
-      ).map(extensionTemplatePath => ({
-        path: extensionTemplatePath,
-        fileUrl: url.pathToFileURL(extensionTemplatePath).href,
-        relativePath: extensionTemplatePath.split(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"))[1],
-        source: `external extension ${getArgumentFromExternalExtensionOption(externalExtension)}`,
-      }))
+    ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
+        extensionTemplatePath => ({
+          path: extensionTemplatePath,
+          fileUrl: url.pathToFileURL(extensionTemplatePath).href,
+          relativePath: extensionTemplatePath.split(externalExtensionFolder)[1],
+          source: `external extension ${isDev ? (externalExtension as string) : getArgumentFromExternalExtensionOption(externalExtension)}`,
+        }),
+      )
     : [];
 
   await Promise.all(
@@ -163,7 +173,9 @@ const processTemplatedFiles = async (
         .flat();
 
       if (externalExtension) {
-        const argsFilePath = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
+        const argsFilePath = isDev
+          ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension", argsPath)
+          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
@@ -225,7 +237,7 @@ templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 --- ARGS FILES
 ${
   hasArgsPaths
-    ? argsFileUrls.map(url => `\t- ${path.join("templates", url.split("templates")[1])}`).join("\n")
+    ? argsFileUrls.map(url => `\t- ${url.split("templates")[1] || url.split("externalExtensions")[1]}`).join("\n")
     : "(no args files writing to the template)"
 }
 
@@ -250,8 +262,7 @@ const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => 
   // 1. Create tmp directory to clone external extension
   await fs.promises.mkdir(tmpDir);
 
-  const repository = options.externalExtension!.repository;
-  const branch = options.externalExtension!.branch;
+  const { repository, branch } = options.externalExtension as ExternalExtension;
 
   // 2. Clone external extension
   if (branch) {
@@ -281,15 +292,26 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
 
   // 3. Set up external extension if needed
   if (options.externalExtension) {
-    await setUpExternalExtensionFiles(options, tmpDir);
-    await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
+    let externalExtensionPath = path.join(tmpDir, "extension");
+    if (options.dev) {
+      externalExtensionPath = path.join(
+        templateDir,
+        "../externalExtensions",
+        options.externalExtension as string,
+        "extension",
+      );
+    } else {
+      await setUpExternalExtensionFiles(options, tmpDir);
+    }
+
+    await copyExtensionsFiles(options, externalExtensionPath, targetDir);
   }
 
   // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
   // 5. Delete tmp directory
-  if (options.externalExtension) {
+  if (options.externalExtension && !options.dev) {
     await fs.promises.rm(tmpDir, { recursive: true });
   }
 

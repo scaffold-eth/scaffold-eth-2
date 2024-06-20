@@ -1,4 +1,4 @@
-import { RawOptions } from "../types";
+import { ExternalExtension, RawOptions } from "../types";
 import { CURATED_EXTENSIONS } from "../config";
 
 // Gets the data from the argument passed to the `--extension` option.
@@ -37,7 +37,7 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
 // Parse the externalExtensionOption object into a argument string.
 // e.g. { repository: "owner/project", branch: "branch" } => "owner/project:branch"
 export const getArgumentFromExternalExtensionOption = (externalExtensionOption: RawOptions["externalExtension"]) => {
-  const { repository, branch } = externalExtensionOption || {};
+  const { repository, branch } = (externalExtensionOption as ExternalExtension) || {};
 
   const owner = repository?.split("/")[3];
   const project = repository?.split("/")[4];
