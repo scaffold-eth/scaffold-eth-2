@@ -2,11 +2,10 @@ import type { Question } from "inquirer";
 
 export type Args = string[];
 
-export type RawOptions = {
+type BaseOptions = {
   project: string | null;
   install: boolean | null;
   dev: boolean;
-  extensions: Extension[] | null;
   externalExtension: ExternalExtension | null;
 };
 
@@ -15,15 +14,26 @@ export type ExternalExtension = {
   branch?: string | null;
 };
 
-type NonNullableRawOptions = {
-  [Prop in keyof Omit<RawOptions, "externalExtension">]: NonNullable<RawOptions[Prop]>;
+export type RawOptions = BaseOptions & {
+  solidityFramework: SolidityFramework | "none" | null;
+};
+
+type MergedOptions = BaseOptions & {
+  extensions: Extension[];
+};
+
+type NonNullableMergedOptions = {
+  [Prop in keyof Omit<MergedOptions, "externalExtension">]: NonNullable<MergedOptions[Prop]>;
 } & {
   externalExtension: RawOptions["externalExtension"];
 };
 
-export type Options = NonNullableRawOptions;
+export type Options = NonNullableMergedOptions;
 
-export type Extension = "hardhat" | "foundry";
+export type SolidityFramework = "hardhat" | "foundry";
+
+export type Extension = SolidityFramework;
+
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:

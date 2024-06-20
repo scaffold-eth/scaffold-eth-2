@@ -55,7 +55,7 @@ export async function createProject(options: Options) {
         },
       },
       {
-        title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
+        title: `📡 Initializing Git repository${options.extensions.includes("foundry") ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
