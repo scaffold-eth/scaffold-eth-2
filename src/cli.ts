@@ -4,11 +4,17 @@ import { promptForMissingOptions } from "./utils/prompt-for-missing-options";
 import { renderIntroMessage } from "./utils/render-intro-message";
 import type { Args } from "./types";
 import chalk from "chalk";
+import { showHelpMessage } from "./utils/show-help-message";
 
 export async function cli(args: Args) {
   try {
     renderIntroMessage();
     const rawOptions = await parseArgumentsIntoOptions(args);
+    if (rawOptions.help) {
+      showHelpMessage();
+      return;
+    }
+
     const options = await promptForMissingOptions(rawOptions);
     await createProject(options);
   } catch (error: any) {

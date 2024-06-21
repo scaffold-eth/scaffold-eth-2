@@ -9,6 +9,7 @@ const defaultOptions: RawOptions = {
   install: true,
   dev: false,
   externalExtension: null,
+  help: false,
   solidityFramework: null,
 };
 

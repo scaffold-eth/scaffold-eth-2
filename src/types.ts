@@ -18,6 +18,7 @@ export type ExternalExtensionNameDev = string;
 
 export type RawOptions = BaseOptions & {
   solidityFramework: SolidityFramework | "none" | null;
+  help: boolean;
 };
 
 type MergedOptions = BaseOptions & {

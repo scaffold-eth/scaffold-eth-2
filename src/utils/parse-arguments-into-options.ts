@@ -65,6 +65,9 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
       "--extension": String,
       "-e": "--extension",
+
+      "--help": Boolean,
+      "-h": "--help",
     },
     {
       argv: rawArgs.slice(2).map(a => a.toLowerCase()),
@@ -81,6 +84,8 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   const hasInstallRelatedFlag = install || skipInstall;
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
+
+  const help = args["--help"] ?? false;
 
   const project = args._[0] ?? null;
 
@@ -104,6 +109,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     install: hasInstallRelatedFlag ? install || !skipInstall : null,
     dev,
     externalExtension: extension,
+    help,
     solidityFramework,
   };
 }
