@@ -4,6 +4,8 @@ import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../config";
+import { SOLIDITY_FRAMEWORKS } from "./consts";
+import { validateFoundryUp } from "./system-validation";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -91,6 +93,10 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   const solidityFramework = args["--solidity-framework"] ?? null;
 
+  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
+    await validateFoundryUp();
+  }
+
   // ToDo. Allow multiple
   const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
@@ -114,8 +120,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   };
 }
 
-const SOLIDITY_FRAMEWORK_OPTIONS = ["hardhat", "foundry", "none"];
-
+const SOLIDITY_FRAMEWORK_OPTIONS = [...Object.values(SOLIDITY_FRAMEWORKS), "none"];
 function solidityFrameworkHandler(value: string) {
   const lowercasedValue = value.toLowerCase();
   if (SOLIDITY_FRAMEWORK_OPTIONS.includes(lowercasedValue)) {
