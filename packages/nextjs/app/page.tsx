@@ -1,27 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { InputBase } from "~~/components/scaffold-eth";
-import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth";
 import { useSCEventHistory } from "~~/hooks/scaffold-eth/useSCEventHistory";
 
 const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
-
-  const [newGreetings, setNewGreetings] = useState<string>("");
-
   const { data: eventHistory } = useSCEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
-    filters: { greetingSetter: connectedAddress },
-    fromBlock: 0n,
+    fromBlock: 4738147n,
+    watch: false,
   });
 
-  const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("YourContract");
-
-  console.log(eventHistory?.pages.flat());
+  console.log("eventHistory", eventHistory?.pages.flat());
 
   return (
     <>
@@ -32,22 +23,6 @@ const Home: NextPage = () => {
             <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
           </h1>
           <div className="overflow-x-auto">
-            <InputBase value={newGreetings} onChange={setNewGreetings} />
-            <button
-              className="btn btn-primary"
-              onClick={async () => {
-                try {
-                  await writeYourContractAsync({
-                    functionName: "setGreeting",
-                    args: [newGreetings],
-                  });
-                } catch (e) {
-                  console.error("Error setting greeting:", e);
-                }
-              }}
-            >
-              Set Greeting
-            </button>
             <table className="table">
               {/* head */}
               <thead>
@@ -57,17 +32,17 @@ const Home: NextPage = () => {
                   <th>greeting</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {eventHistory?.map((event, index) => (
+              <tbody>
+                {eventHistory?.pages?.flat()?.map((event, index) => (
                   <tr key={index}>
                     <th>{index + 1}</th>
                     <td>
-                      <Address address={event.args.greetingSetter} />
+                      <Address address={event?.args.greetingSetter} />
                     </td>
-                    <td>{event.args.newGreeting}</td>
+                    <td>{event?.args.newGreeting}</td>
                   </tr>
                 ))}
-              </tbody> */}
+              </tbody>
             </table>
           </div>
         </div>

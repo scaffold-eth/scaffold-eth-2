@@ -67,7 +67,7 @@ export const useSCEventHistory = <
   });
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { data: blockNumber } = useBlockNumber({ watch: true, chainId: targetNetwork.id });
+  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: targetNetwork.id });
 
   const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
@@ -95,7 +95,7 @@ export const useSCEventHistory = <
 
       return data;
     },
-    enabled: Boolean(deployedContractData?.address) && Boolean(publicClient),
+    enabled: enabled && Boolean(deployedContractData?.address) && Boolean(publicClient),
     initialPageParam: fromBlock,
     getNextPageParam: () => {
       return blockNumber;
@@ -108,6 +108,7 @@ export const useSCEventHistory = <
       setIsFirstRender(false);
       return;
     }
+    if (!watch) return;
     query.fetchNextPage();
   }, [blockNumber]);
 
