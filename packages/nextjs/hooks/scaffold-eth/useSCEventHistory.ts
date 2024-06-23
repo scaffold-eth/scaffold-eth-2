@@ -146,7 +146,13 @@ export const useSCEventHistory = <
     query.fetchNextPage();
   }, [blockNumber]);
 
-  return query;
+  return {
+    data: query.data?.pages,
+    status: query.status,
+    error: query.error,
+    isLoading: query.isLoading,
+    isFetchingNewEvent: query.isFetchingNextPage,
+  };
 };
 
 export const addIndexedArgsToEvent = (event: any) => {
