@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
-import { BlockNumber, GetLogsParameters, Hash } from "viem";
+import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import {
@@ -15,6 +15,11 @@ import {
 const getLogs = async (
   getLogsParams: GetLogsParameters<AbiEvent | undefined, AbiEvent[] | undefined, boolean, BlockNumber, BlockNumber>,
   publicClient?: UsePublicClientReturnType<Config, number>,
+  Options?: {
+    blockData?: boolean;
+    transactionData?: boolean;
+    receiptData?: boolean;
+  },
 ) => {
   const logs = await publicClient?.getLogs({
     address: getLogsParams.address,
@@ -22,8 +27,27 @@ const getLogs = async (
     args: getLogsParams.args,
     event: getLogsParams.event,
   });
+  if (!logs) return undefined;
 
-  return logs;
+  const finalEvents = await Promise.all(
+    logs.map(async log => {
+      return {
+        ...log,
+        blockData:
+          Options?.blockData && log.blockHash ? await publicClient?.getBlock({ blockHash: log.blockHash }) : null,
+        transactionData:
+          Options?.transactionData && log.transactionHash
+            ? await publicClient?.getTransaction({ hash: log.transactionHash })
+            : null,
+        receiptData:
+          Options?.receiptData && log.transactionHash
+            ? await publicClient?.getTransactionReceipt({ hash: log.transactionHash })
+            : null,
+      };
+    }),
+  );
+
+  return finalEvents;
 };
 
 /**
@@ -86,6 +110,7 @@ export const useSCEventHistory = <
       const data = await getLogs(
         { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
         publicClient,
+        { blockData, transactionData, receiptData },
       );
 
       return data;

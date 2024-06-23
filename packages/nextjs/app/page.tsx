@@ -5,14 +5,17 @@ import { Address } from "~~/components/scaffold-eth";
 import { useSCEventHistory } from "~~/hooks/scaffold-eth/useSCEventHistory";
 
 const Home: NextPage = () => {
-  const { data: eventHistory } = useSCEventHistory({
+  const { data } = useSCEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: 4738147n,
     watch: false,
+    blockData: true,
   });
 
-  console.log("eventHistory", eventHistory?.pages.flat());
+  const eventHistory = data?.pages;
+
+  console.log("eventHistory", eventHistory);
 
   return (
     <>
@@ -33,7 +36,7 @@ const Home: NextPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {eventHistory?.pages?.flat()?.map((event, index) => (
+                {eventHistory?.map((event, index) => (
                   <tr key={index}>
                     <th>{index + 1}</th>
                     <td>
