@@ -5,7 +5,11 @@ import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth/useScaffoldEventHistory";
 
 const Home: NextPage = () => {
-  const { data: eventHistory } = useScaffoldEventHistory({
+  const {
+    data: eventHistory,
+    status,
+    isFetchingNewEvent,
+  } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: 4738147n,
@@ -30,13 +34,28 @@ const Home: NextPage = () => {
                 </tr>
               </thead>
               <tbody>
+                {status === "pending" && (
+                  <tr className="animate-pulse">
+                    <th>
+                      <span className="loading loading-dots loading-xs"></span>
+                    </th>
+                    <td>
+                      <span className="loading loading-dots loading-xs"></span>
+                    </td>
+                    <td>
+                      <span className="loading loading-dots loading-xs"></span>
+                    </td>
+                  </tr>
+                )}
                 {eventHistory?.map((event, index) => (
                   <tr key={index}>
-                    <th>{index + 1}</th>
-                    <td>
+                    <th className={`${isFetchingNewEvent ? "animate-pulse opacity-80" : ""}`}>{index + 1}</th>
+                    <td className={`${isFetchingNewEvent ? "animate-pulse opacity-80" : ""}`}>
                       <Address address={event?.args.greetingSetter} />
                     </td>
-                    <td>{event?.args.newGreeting}</td>
+                    <td className={`${isFetchingNewEvent ? "animate-pulse opacity-80" : ""}`}>
+                      {event?.args.newGreeting}
+                    </td>
                   </tr>
                 ))}
               </tbody>
