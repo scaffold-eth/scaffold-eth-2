@@ -130,7 +130,7 @@ export const useScaffoldEventHistory = <
         TReceiptData
       >;
       return {
-        pages: eventHistoryData,
+        pages: eventHistoryData?.reverse(),
         pageParams: data.pageParams,
       };
     },
