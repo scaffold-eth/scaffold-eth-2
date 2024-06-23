@@ -12,7 +12,7 @@ import {
   UseScaffoldEventHistoryData,
 } from "~~/utils/scaffold-eth/contract";
 
-const getLogs = async (
+const getEvents = async (
   getLogsParams: GetLogsParameters<AbiEvent | undefined, AbiEvent[] | undefined, boolean, BlockNumber, BlockNumber>,
   publicClient?: UsePublicClientReturnType<Config, number>,
   Options?: {
@@ -107,7 +107,7 @@ export const useSCEventHistory = <
     ],
     queryFn: async ({ pageParam }) => {
       if (!Boolean(deployedContractData?.address) || !Boolean(publicClient)) return undefined;
-      const data = await getLogs(
+      const data = await getEvents(
         { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
         publicClient,
         { blockData, transactionData, receiptData },
@@ -137,13 +137,16 @@ export const useSCEventHistory = <
   });
 
   useEffect(() => {
-    if (!blockNumber) return;
-    if (isFirstRender) {
-      setIsFirstRender(false);
+    const shouldSkipEffect = !blockNumber || !watch || isFirstRender;
+    if (shouldSkipEffect) {
+      // skipping on first render, since on first render we should call queryFn with
+      // fromBlock value, not blockNumber
+      if (isFirstRender) setIsFirstRender(false);
       return;
     }
-    if (!watch) return;
+
     query.fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockNumber]);
 
   return {
