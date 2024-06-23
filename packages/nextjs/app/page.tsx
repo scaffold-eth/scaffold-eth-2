@@ -2,10 +2,10 @@
 
 import type { NextPage } from "next";
 import { Address } from "~~/components/scaffold-eth";
-import { useSCEventHistory } from "~~/hooks/scaffold-eth/useSCEventHistory";
+import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth/useScaffoldEventHistory";
 
 const Home: NextPage = () => {
-  const { data: eventHistory } = useSCEventHistory({
+  const { data: eventHistory } = useScaffoldEventHistory({
     contractName: "YourContract",
     eventName: "GreetingChange",
     fromBlock: 4738147n,
