@@ -1,15 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
-import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
-import { useInterval } from "usehooks-ts";
 import { BlockNumber, GetLogsParameters, Hash } from "viem";
-import * as chains from "viem/chains";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
-import deployedContracts from "~~/contracts/deployedContracts";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
   ContractName,
@@ -100,6 +95,20 @@ export const useSCEventHistory = <
     getNextPageParam: () => {
       return blockNumber;
     },
+    select: data => {
+      const events = data.pages.flat();
+      const eventHistoryData = events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+        TContractName,
+        TEventName,
+        TBlockData,
+        TTransactionData,
+        TReceiptData
+      >;
+      return {
+        pages: eventHistoryData,
+        pageParams: data.pageParams,
+      };
+    },
   });
 
   useEffect(() => {
@@ -122,16 +131,3 @@ export const addIndexedArgsToEvent = (event: any) => {
 
   return event;
 };
-
-/* return useQuery({
-    queryKey: ["eventHistory", { contractName, eventName, fromBlock: fromBlock.toString(), chainId: targetNetwork.id }],
-    queryFn: async () => {
-      const data = await getLogs(
-        { address: deployedContractData?.address, event, fromBlock, args: filters },
-        publicClient,
-      );
-
-      return data;
-    },
-    enabled: Boolean(deployedContractData) && Boolean(publicClient),
-  }); */
