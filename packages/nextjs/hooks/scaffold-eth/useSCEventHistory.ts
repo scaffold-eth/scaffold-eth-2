@@ -21,7 +21,6 @@ const getLogs = async (
   getLogsParams: GetLogsParameters<AbiEvent | undefined, AbiEvent[] | undefined, boolean, BlockNumber, BlockNumber>,
   publicClient?: UsePublicClientReturnType<Config, number>,
 ) => {
-  console.log("Getting event logs", getLogsParams);
   const logs = await publicClient?.getLogs({
     address: getLogsParams.address,
     fromBlock: getLogsParams.fromBlock,
@@ -66,7 +65,7 @@ export const useSCEventHistory = <
   const publicClient = usePublicClient({
     chainId: targetNetwork.id,
   });
-  const [initalFromBlock, setInitialFromBlock] = useState(fromBlock);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const { data: blockNumber } = useBlockNumber({ watch: true, chainId: targetNetwork.id });
 
@@ -77,10 +76,18 @@ export const useSCEventHistory = <
     ((deployedContractData.abi as Abi).find(part => part.type === "event" && part.name === eventName) as AbiEvent);
 
   const query = useInfiniteQuery({
-    queryKey: ["eventHistory", { contractName, eventName, fromBlock: fromBlock.toString(), chainId: targetNetwork.id }],
+    queryKey: [
+      "eventHistory",
+      {
+        contractName,
+        address: deployedContractData?.address,
+        eventName,
+        fromBlock: fromBlock.toString(),
+        chainId: targetNetwork.id,
+      },
+    ],
     queryFn: async ({ pageParam }) => {
-      console.log("The page param is", pageParam);
-      if (!Boolean(deployedContractData) || !Boolean(publicClient)) return undefined;
+      if (!Boolean(deployedContractData?.address) || !Boolean(publicClient)) return undefined;
       const data = await getLogs(
         { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
         publicClient,
@@ -88,7 +95,7 @@ export const useSCEventHistory = <
 
       return data;
     },
-    enabled: Boolean(deployedContractData) && Boolean(publicClient),
+    enabled: Boolean(deployedContractData?.address) && Boolean(publicClient),
     initialPageParam: fromBlock,
     getNextPageParam: () => {
       return blockNumber;
@@ -97,13 +104,11 @@ export const useSCEventHistory = <
 
   useEffect(() => {
     if (!blockNumber) return;
-    if (initalFromBlock < blockNumber) {
-      console.log("Setting initial from block", initalFromBlock, blockNumber);
-      setInitialFromBlock(blockNumber + 1000n);
+    if (isFirstRender) {
+      setIsFirstRender(false);
       return;
-    } else {
-      query.fetchNextPage();
     }
+    query.fetchNextPage();
   }, [blockNumber]);
 
   return query;
