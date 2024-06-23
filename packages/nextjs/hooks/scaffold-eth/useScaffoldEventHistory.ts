@@ -155,6 +155,7 @@ export const useScaffoldEventHistory = <
     error: query.error,
     isLoading: query.isLoading,
     isFetchingNewEvent: query.isFetchingNextPage,
+    refetch: query.refetch,
   };
 };
 
