@@ -44,7 +44,7 @@ yarn install && forge install --root packages/foundry
 cp packages/foundry/.env.example packages/foundry/.env
 ```
 
-> NOTE: If you are using windows not using git bash or wsl, use `copy packages\foundry\.env.example packages\foundry\.env`
+> NOTE: If you are using windows and not using git bash or wsl, use `copy packages\foundry\.env.example packages\foundry\.env`
 
 3. Run a local network in the first terminal:
 
