@@ -13,6 +13,7 @@
     "format": "forge fmt && prettier --write ./script/**/*.js",
     "generate": "node scripts-js/generateAccount.js",
     "lint": "forge fmt --check && prettier --check ./script/**/*.js",
+    "postinstall": "cpy .env.example . --rename=.env --no-overwrite",
     "test": "forge test",
     "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
   },
@@ -23,5 +24,8 @@
     "prettier": "~2.8.8",
     "qrcode": "~1.5.3",
     "toml": "~3.0.0"
+  },
+  "devDependencies": {
+    "cpy-cli": "^5.0.0"
   }
 }
