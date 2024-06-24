@@ -23,9 +23,5 @@
     "prettier": "~2.8.8",
     "qrcode": "~1.5.3",
     "toml": "~3.0.0"
-  },
-  "devDependencies": {
-    "@types/prettier": "2",
-    "@types/qrcode": "1"
   }
 }
