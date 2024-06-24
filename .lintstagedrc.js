@@ -12,4 +12,6 @@ module.exports = {
     buildNextEslintCommand,
     checkTypesNextCommand,
   ],
+  "packages/foundry/**/*.sol": ["forge fmt --root packages/foundry"],
+  "packages/foundry/**/*.js": ["yarn workspace @se-2/foundry prettier --write"],
 };
