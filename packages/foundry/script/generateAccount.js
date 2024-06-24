@@ -1,6 +1,6 @@
-const ethers = require("ethers");
-const { parse, stringify } = require("envfile");
-const fs = require("fs");
+import { Wallet } from "ethers";
+import { parse, stringify } from "envfile";
+import { writeFileSync, existsSync, readFileSync } from "fs";
 
 const envFilePath = "./.env";
 
@@ -10,7 +10,7 @@ const envFilePath = "./.env";
  */
 const setNewEnvConfig = (existingEnvConfig = {}) => {
   console.log("👛 Generating new Wallet");
-  const randomWallet = ethers.Wallet.createRandom();
+  const randomWallet = Wallet.createRandom();
 
   const newEnvConfig = {
     ...existingEnvConfig,
@@ -18,13 +18,13 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
   };
 
   // Store in .env
-  fs.writeFileSync(envFilePath, stringify(newEnvConfig));
+  writeFileSync(envFilePath, stringify(newEnvConfig));
   console.log("📄 Private Key saved to packages/foundry/.env file");
   console.log("🪄 Generated wallet address:", randomWallet.address);
 };
 
 async function main() {
-  if (!fs.existsSync(envFilePath)) {
+  if (!existsSync(envFilePath)) {
     console.log("entered here");
     // No .env file yet.
     setNewEnvConfig();
@@ -32,7 +32,7 @@ async function main() {
   }
 
   // .env file exists
-  const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
+  const existingEnvConfig = parse(readFileSync(envFilePath).toString());
   if (existingEnvConfig.DEPLOYER_PRIVATE_KEY) {
     console.log(
       "⚠️ You already have a deployer account. Check the packages/foundry/.env file"

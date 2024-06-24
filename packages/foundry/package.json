@@ -1,6 +1,7 @@
 {
   "name": "@se-2/foundry",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "account": "node script/ListAccount.js",
     "chain": "anvil --config-out localhost.json",

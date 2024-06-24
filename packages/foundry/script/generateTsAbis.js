@@ -1,8 +1,16 @@
-const fs = require("fs");
-const path = require("path");
-//@ts-expect-error  This script runs after `forge deploy` therefore its deterministic that it will present
-// const deployments = require("../deployments.json");
-const prettier = require("prettier");
+import {
+  readdirSync,
+  statSync,
+  readFileSync,
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+} from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { format } from "prettier";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const generatedContractComment = `
 /**
@@ -12,23 +20,23 @@ const generatedContractComment = `
 `;
 
 function getDirectories(path) {
-  return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path + "/" + file).isDirectory();
+  return readdirSync(path).filter(function (file) {
+    return statSync(path + "/" + file).isDirectory();
   });
 }
 function getFiles(path) {
-  return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path + "/" + file).isFile();
+  return readdirSync(path).filter(function (file) {
+    return statSync(path + "/" + file).isFile();
   });
 }
 function getArtifactOfContract(contractName) {
-  const current_path_to_artifacts = path.join(
+  const current_path_to_artifacts = join(
     __dirname,
     "..",
     `out/${contractName}.sol`
   );
   const artifactJson = JSON.parse(
-    fs.readFileSync(`${current_path_to_artifacts}/${contractName}.json`)
+    readFileSync(`${current_path_to_artifacts}/${contractName}.json`)
   );
 
   return artifactJson;
@@ -68,12 +76,12 @@ function getInheritedFunctions(mainArtifact) {
 }
 
 function main() {
-  const current_path_to_broadcast = path.join(
+  const current_path_to_broadcast = join(
     __dirname,
     "..",
     "broadcast/Deploy.s.sol"
   );
-  const current_path_to_deployments = path.join(__dirname, "..", "deployments");
+  const current_path_to_deployments = join(__dirname, "..", "deployments");
 
   const chains = getDirectories(current_path_to_broadcast);
   const Deploymentchains = getFiles(current_path_to_deployments);
@@ -84,7 +92,7 @@ function main() {
     if (!chain.endsWith(".json")) return;
     chain = chain.slice(0, -5);
     var deploymentObject = JSON.parse(
-      fs.readFileSync(`${current_path_to_deployments}/${chain}.json`)
+      readFileSync(`${current_path_to_deployments}/${chain}.json`)
     );
     deployments[chain] = deploymentObject;
   });
@@ -94,7 +102,7 @@ function main() {
   chains.forEach((chain) => {
     allGeneratedContracts[chain] = {};
     const broadCastObject = JSON.parse(
-      fs.readFileSync(`${current_path_to_broadcast}/${chain}/run-latest.json`)
+      readFileSync(`${current_path_to_broadcast}/${chain}/run-latest.json`)
     );
     const transactionsCreate = broadCastObject.transactions.filter(
       (transaction) => transaction.transactionType == "CREATE"
@@ -125,12 +133,12 @@ function main() {
     ""
   );
 
-  if (!fs.existsSync(TARGET_DIR)) {
-    fs.mkdirSync(TARGET_DIR);
+  if (!existsSync(TARGET_DIR)) {
+    mkdirSync(TARGET_DIR);
   }
-  fs.writeFileSync(
+  writeFileSync(
     `${TARGET_DIR}deployedContracts.ts`,
-    prettier.format(
+    format(
       `${generatedContractComment} import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract"; \n\n
  const deployedContracts = {${fileContent}} as const; \n\n export default deployedContracts satisfies GenericContractsDeclaration`,
       {

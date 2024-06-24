@@ -1,10 +1,13 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const path = require("path");
-const { ethers, Wallet } = require("ethers");
-const QRCode = require("qrcode");
-const fs = require("fs");
-const toml = require("toml");
+import { config } from "dotenv";
+config();
+import { join, dirname } from "path";
+import { ethers, Wallet } from "ethers";
+import { toString } from "qrcode";
+import { readFileSync } from "fs";
+import { parse } from "toml";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ALCHEMY_API_KEY =
   process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
@@ -12,11 +15,11 @@ const ALCHEMY_API_KEY =
 async function getBalanceForEachNetwork(address) {
   try {
     // Read the foundry.toml file
-    const foundryTomlPath = path.join(__dirname, "..", "foundry.toml");
-    const tomlString = fs.readFileSync(foundryTomlPath, "utf-8");
+    const foundryTomlPath = join(__dirname, "..", "foundry.toml");
+    const tomlString = readFileSync(foundryTomlPath, "utf-8");
 
     // Parse the tomlString to get the JS object representation
-    const parsedToml = toml.parse(tomlString);
+    const parsedToml = parse(tomlString);
 
     // Extract rpc_endpoints from parsedToml
     const rpcEndpoints = parsedToml.rpc_endpoints;
@@ -63,9 +66,7 @@ async function main() {
   // Get account from private key.
   const wallet = new Wallet(privateKey);
   const address = wallet.address;
-  console.log(
-    await QRCode.toString(address, { type: "terminal", small: true })
-  );
+  console.log(await toString(address, { type: "terminal", small: true }));
   console.log("Public address:", address, "\n");
 
   await getBalanceForEachNetwork(address);
