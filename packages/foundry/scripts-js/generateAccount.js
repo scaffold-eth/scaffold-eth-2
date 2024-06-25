@@ -25,7 +25,6 @@ const setNewEnvConfig = (existingEnvConfig = {}) => {
 
 async function main() {
   if (!existsSync(envFilePath)) {
-    console.log("entered here");
     // No .env file yet.
     setNewEnvConfig();
     return;
