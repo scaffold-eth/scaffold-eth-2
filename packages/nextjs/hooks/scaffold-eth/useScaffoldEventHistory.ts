@@ -94,6 +94,8 @@ export const useScaffoldEventHistory = <
     deployedContractData &&
     ((deployedContractData.abi as Abi).find(part => part.type === "event" && part.name === eventName) as AbiEvent);
 
+  const isContractAddressAndClientReady = Boolean(deployedContractData?.address) && Boolean(publicClient);
+
   const query = useInfiniteQuery({
     queryKey: [
       "eventHistory",
@@ -106,7 +108,7 @@ export const useScaffoldEventHistory = <
       },
     ],
     queryFn: async ({ pageParam }) => {
-      if (!Boolean(deployedContractData?.address) || !Boolean(publicClient)) return undefined;
+      if (!isContractAddressAndClientReady) return undefined;
       const data = await getEvents(
         { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
         publicClient,
@@ -115,7 +117,7 @@ export const useScaffoldEventHistory = <
 
       return data;
     },
-    enabled: enabled && Boolean(deployedContractData?.address) && Boolean(publicClient),
+    enabled: enabled && isContractAddressAndClientReady,
     initialPageParam: fromBlock,
     getNextPageParam: () => {
       return blockNumber;
