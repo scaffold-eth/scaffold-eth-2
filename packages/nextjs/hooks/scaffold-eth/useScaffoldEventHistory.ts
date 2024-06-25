@@ -149,7 +149,7 @@ export const useScaffoldEventHistory = <
 
     query.fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockNumber]);
+  }, [blockNumber, watch]);
 
   return {
     data: query.data?.pages,
