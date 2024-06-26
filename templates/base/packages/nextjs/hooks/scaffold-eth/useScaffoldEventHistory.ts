@@ -1,19 +1,54 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
-import { useInterval } from "usehooks-ts";
-import { Hash } from "viem";
-import * as chains from "viem/chains";
-import { usePublicClient } from "wagmi";
+import { BlockNumber, GetLogsParameters } from "viem";
+import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
   ContractName,
   UseScaffoldEventHistoryConfig,
   UseScaffoldEventHistoryData,
 } from "~~/utils/scaffold-eth/contract";
+
+const getEvents = async (
+  getLogsParams: GetLogsParameters<AbiEvent | undefined, AbiEvent[] | undefined, boolean, BlockNumber, BlockNumber>,
+  publicClient?: UsePublicClientReturnType<Config, number>,
+  Options?: {
+    blockData?: boolean;
+    transactionData?: boolean;
+    receiptData?: boolean;
+  },
+) => {
+  const logs = await publicClient?.getLogs({
+    address: getLogsParams.address,
+    fromBlock: getLogsParams.fromBlock,
+    args: getLogsParams.args,
+    event: getLogsParams.event,
+  });
+  if (!logs) return undefined;
+
+  const finalEvents = await Promise.all(
+    logs.map(async log => {
+      return {
+        ...log,
+        blockData:
+          Options?.blockData && log.blockHash ? await publicClient?.getBlock({ blockHash: log.blockHash }) : null,
+        transactionData:
+          Options?.transactionData && log.transactionHash
+            ? await publicClient?.getTransaction({ hash: log.transactionHash })
+            : null,
+        receiptData:
+          Options?.receiptData && log.transactionHash
+            ? await publicClient?.getTransactionReceipt({ hash: log.transactionHash })
+            : null,
+      };
+    }),
+  );
+
+  return finalEvents;
+};
 
 /**
  * Reads events from a deployed contract
@@ -45,135 +80,84 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const [events, setEvents] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
-  const [fromBlockUpdated, setFromBlockUpdated] = useState<bigint>(fromBlock);
-
-  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
   const publicClient = usePublicClient({
     chainId: targetNetwork.id,
   });
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const readEvents = useCallback(
-    async () => {
-      setIsLoading(true);
-      try {
-        if (!deployedContractData) {
-          throw new Error("Contract not found");
-        }
+  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: targetNetwork.id });
 
-        if (!enabled) {
-          throw new Error("Hook disabled");
-        }
+  const { data: deployedContractData } = useDeployedContractInfo(contractName);
 
-        if (!publicClient) {
-          throw new Error("Public client not found");
-        }
+  const event =
+    deployedContractData &&
+    ((deployedContractData.abi as Abi).find(part => part.type === "event" && part.name === eventName) as AbiEvent);
 
-        const event = (deployedContractData.abi as Abi).find(
-          part => part.type === "event" && part.name === eventName,
-        ) as AbiEvent;
+  const isContractAddressAndClientReady = Boolean(deployedContractData?.address) && Boolean(publicClient);
 
-        const blockNumber = await publicClient.getBlockNumber({ cacheTime: 0 });
-
-        if (blockNumber >= fromBlockUpdated) {
-          const logs = await publicClient.getLogs({
-            address: deployedContractData?.address,
-            event,
-            args: filters as any,
-            fromBlock: fromBlockUpdated,
-            toBlock: blockNumber,
-          });
-          setFromBlockUpdated(blockNumber + 1n);
-
-          const newEvents = [];
-          for (let i = logs.length - 1; i >= 0; i--) {
-            newEvents.push({
-              log: logs[i],
-              args: logs[i].args,
-              block:
-                blockData && logs[i].blockHash === null
-                  ? null
-                  : await publicClient.getBlock({ blockHash: logs[i].blockHash as Hash }),
-              transaction:
-                transactionData && logs[i].transactionHash !== null
-                  ? await publicClient.getTransaction({ hash: logs[i].transactionHash as Hash })
-                  : null,
-              receipt:
-                receiptData && logs[i].transactionHash !== null
-                  ? await publicClient.getTransactionReceipt({ hash: logs[i].transactionHash as Hash })
-                  : null,
-            });
-          }
-          setEvents([...newEvents, ...events]);
-          setError(undefined);
-        }
-      } catch (e: any) {
-        if (events.length > 0) {
-          setEvents([]);
-        }
-        setError(e);
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      blockData,
-      deployedContractData,
-      enabled,
-      eventName,
-      events,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      JSON.stringify(filters, replacer),
-      fromBlockUpdated,
-      publicClient,
-      receiptData,
-      transactionData,
+  const query = useInfiniteQuery({
+    queryKey: [
+      "eventHistory",
+      {
+        contractName,
+        address: deployedContractData?.address,
+        eventName,
+        fromBlock: fromBlock.toString(),
+        chainId: targetNetwork.id,
+      },
     ],
-  );
+    queryFn: async ({ pageParam }) => {
+      if (!isContractAddressAndClientReady) return undefined;
+      const data = await getEvents(
+        { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
+        publicClient,
+        { blockData, transactionData, receiptData },
+      );
 
-  useEffect(() => {
-    if (!deployedContractLoading) {
-      readEvents();
-    }
-  }, [readEvents, deployedContractLoading]);
-
-  useEffect(() => {
-    // Reset the internal state when target network or fromBlock changed
-    setEvents([]);
-    setFromBlockUpdated(fromBlock);
-    setError(undefined);
-  }, [fromBlock, targetNetwork.id]);
-
-  useInterval(
-    async () => {
-      if (!deployedContractLoading) {
-        readEvents();
-      }
+      return data;
     },
-    watch && enabled ? (targetNetwork.id !== chains.hardhat.id ? scaffoldConfig.pollingInterval : 4_000) : null,
-  );
-
-  const eventHistoryData = useMemo(
-    () =>
-      events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+    enabled: enabled && isContractAddressAndClientReady,
+    initialPageParam: fromBlock,
+    getNextPageParam: () => {
+      return blockNumber;
+    },
+    select: data => {
+      const events = data.pages.flat();
+      const eventHistoryData = events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
         TContractName,
         TEventName,
         TBlockData,
         TTransactionData,
         TReceiptData
-      >,
-    [events],
-  );
+      >;
+      return {
+        pages: eventHistoryData?.reverse(),
+        pageParams: data.pageParams,
+      };
+    },
+  });
+
+  useEffect(() => {
+    const shouldSkipEffect = !blockNumber || !watch || isFirstRender;
+    if (shouldSkipEffect) {
+      // skipping on first render, since on first render we should call queryFn with
+      // fromBlock value, not blockNumber
+      if (isFirstRender) setIsFirstRender(false);
+      return;
+    }
+
+    query.fetchNextPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber, watch]);
 
   return {
-    data: eventHistoryData,
-    isLoading: isLoading,
-    error: error,
+    data: query.data?.pages,
+    status: query.status,
+    error: query.error,
+    isLoading: query.isLoading,
+    isFetchingNewEvent: query.isFetchingNextPage,
+    refetch: query.refetch,
   };
 };
 
