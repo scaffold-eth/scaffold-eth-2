@@ -64,7 +64,7 @@ contract VerifyAll is Script {
         );
         bytes memory deployedBytecode = abi.decode(
             vm.parseJson(
-                content, searchStr(currTransactionIdx, "transaction.data")
+                content, searchStr(currTransactionIdx, "transaction.input")
             ),
             (bytes)
         );
