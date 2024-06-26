@@ -1,5 +1,21 @@
 # create-eth
 
+## 0.0.48
+
+### Patch Changes
+
+- Allow developing externalExtensions with --dev
+- remove vercelignore from root dir + clean base package.json
+- cli: help command
+- foundry: use forge to setup libraries + do early check for foundryup
+- foundry: fix verification script failing in latest foundry version
+- cli: solidity framework options
+- Better transaction result formatting in debug page (#853)
+- fix: address components copy icon on small screens (#864)
+- lock typescript and abitype version (#871)
+- rewrite useScaffoldEventHistory hook (#869)
+- fix bug foundry gh action fails
+
 ## 0.0.47
 
 ### Patch Changes
