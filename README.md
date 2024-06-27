@@ -38,15 +38,7 @@ cd scaffold-eth-2
 yarn install && forge install --root packages/foundry
 ```
 
-2. Create `packages/foundry/.env` file based of on `packages/foundry/.env.example`
-
-```
-cp packages/foundry/.env.example packages/foundry/.env
-```
-
-> NOTE: If you are using windows and not using git bash or wsl, use `copy packages\foundry\.env.example packages\foundry\.env`
-
-3. Run a local network in the first terminal:
+2. Run a local network in the first terminal:
 
 ```
 yarn chain
