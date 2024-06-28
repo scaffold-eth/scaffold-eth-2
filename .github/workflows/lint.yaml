@@ -30,7 +30,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
+      - name: Install foundry-toolchain
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run foundry node, deploy contracts (& generate contracts typescript output)
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
         run: yarn chain & yarn deploy
 
       - name: Run nextjs lint
@@ -38,6 +45,3 @@ jobs:
 
       - name: Check typings on nextjs
         run: yarn next:check-types
-
-      - name: Run hardhat lint
-        run: yarn hardhat:lint --max-warnings=0
