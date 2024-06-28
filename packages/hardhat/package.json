@@ -40,7 +40,7 @@
     "hardhat-deploy": "^0.11.45",
     "hardhat-deploy-ethers": "^0.4.1",
     "hardhat-gas-reporter": "^1.0.9",
-    "prettier": "^2.8.4",
+    "prettier": "^3.3.2",
     "solidity-coverage": "^0.8.5",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
