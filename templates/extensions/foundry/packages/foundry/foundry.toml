@@ -34,7 +34,11 @@ sepolia = { key = "${ETHERSCAN_API_KEY}" }
 
 
 [fmt]
-line_length = 80
 multiline_func_header = "params_first"
+line_length = 80
+tab_width = 2
+quote_style = "double"
+bracket_spacing = true
+int_types = "long"
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
