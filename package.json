@@ -42,5 +42,8 @@
   },
   "engines": {
     "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "react-hook-form": "^7.52.0"
   }
 }
