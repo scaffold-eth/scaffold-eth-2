@@ -154,16 +154,17 @@ type OptionalTupple<T> = T extends readonly [infer H, ...infer R] ? readonly [H 
 type UseScaffoldArgsParam<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>>,
-> = TFunctionName extends FunctionNamesWithInputs<TContractName>
-  ? {
-      args: OptionalTupple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
-      value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
-        ? bigint | undefined
-        : undefined;
-    }
-  : {
-      args?: never;
-    };
+> =
+  TFunctionName extends FunctionNamesWithInputs<TContractName>
+    ? {
+        args: OptionalTupple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
+        value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
+          ? bigint | undefined
+          : undefined;
+      }
+    : {
+        args?: never;
+      };
 
 export type UseScaffoldReadConfig<
   TContractName extends ContractName,
