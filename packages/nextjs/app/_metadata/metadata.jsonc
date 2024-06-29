@@ -1,0 +1,124 @@
+{
+    "reports": [
+        {
+            "exampleReport": {
+                "hateSpeech": "foo-bar example of hate speech targetting a particular protected characteristic",
+                "ignReporter": "foo-player",
+                "ignOffender": "bar-offender",
+                "walletAddress": "<Pubkey>",
+                "gameName": "gameName",
+                //can be classified or pending, as in if it has already been classified by galadriel
+                "status": "Classified or Pending",
+                //if classifed as not hatespeech but the user puts it up for a vote?
+                "isProposal": true,
+                //not entirely required, we can avoid using this if it doesn't make sense
+                "isHateSpeech": true,
+                //null if classifed as not hate speech by galadriel
+                "protectedCharacteristics": [
+                    {
+                        "A": 1.0,
+                        "B": 2.0,
+                        "C": 3.0,
+                        "D": 10
+                    }
+                ]
+            }
+        },
+        {
+            "exampleReport": {
+                "hateSpeech": "foo-bar example of hate speech targetting a particular protected characteristic",
+                "ignReporter": "foo-player",
+                "ignOffender": "bar-offender",
+                "walletAddress": "<Pubkey>",
+                "gameName": "gameName",
+                //can be classified or pending, as in if it has already been classified by galadriel
+                "status": "Classified or Pending",
+                //if classifed as not hatespeech but the user puts it up for a vote?
+                "isProposal": true,
+                //not entirely required, we can avoid using this if it doesn't make sense
+                "isHateSpeech": true,
+                //null if classifed as not hate speech by galadriel
+                "protectedCharacteristics": [
+                    {
+                        "A": 1.0,
+                        "B": 2.0,
+                        "C": 3.0,
+                        "D": 10
+                    }
+                ]
+            }
+        },
+        {
+            "exampleReport": {
+                "hateSpeech": "foo-bar example of hate speech targetting a particular protected characteristic",
+                "ignReporter": "bar-offender",
+                "ignOffender": "foo-player",
+                "walletAddress": "<Pubkey>",
+                "gameName": "gameName",
+                //can be classified or pending, as in if it has already been classified by galadriel
+                "status": "Classified or Pending",
+                //if classifed as not hatespeech but the user puts it up for a vote?
+                "isProposal": true,
+                //not entirely required, we can avoid using this if it doesn't make sense
+                "isHateSpeech": true,
+                //null if classifed as not hate speech by galadriel
+                "protectedCharacteristics": [
+                    {
+                        "A": 1.0,
+                        "B": 2.0,
+                        "C": 3.0,
+                        "D": 10
+                    }
+                ]
+            }
+        },
+        {
+            "exampleReport": {
+                "hateSpeech": "foo-bar example of hate speech targetting a particular protected characteristic",
+                "ignReporter": "bar-offender",
+                "ignOffender": "foo-player",
+                "walletAddress": "<Pubkey>",
+                "gameName": "gameName",
+                //can be classified or pending, as in if it has already been classified by galadriel
+                "status": "Classified or Pending",
+                //if classifed as not hatespeech but the user puts it up for a vote?
+                "isProposal": true,
+                //not entirely required, we can avoid using this if it doesn't make sense
+                "isHateSpeech": true,
+                //null if classifed as not hate speech by galadriel
+                "protectedCharacteristics": [
+                    {
+                        "A": 1.0,
+                        "B": 2.0,
+                        "C": 3.0,
+                        "D": 10
+                    }
+                ]
+            }
+        },
+        {
+            "exampleReport": {
+                "hateSpeech": "foo-bar example of hate speech targetting a particular protected characteristic",
+                "ignReporter": "bar-offender",
+                "ignOffender": "foo-player",
+                "walletAddress": "<Pubkey>",
+                "gameName": "gameName",
+                //can be classified or pending, as in if it has already been classified by galadriel
+                "status": "Classified or Pending",
+                //if classifed as not hatespeech but the user puts it up for a vote?
+                "isProposal": true,
+                //not entirely required, we can avoid using this if it doesn't make sense
+                "isHateSpeech": true,
+                //null if classifed as not hate speech by galadriel
+                "protectedCharacteristics": [
+                    {
+                        "A": 1.0,
+                        "B": 2.0,
+                        "C": 3.0,
+                        "D": 10
+                    }
+                ]
+            }
+        }
+    ],
+}

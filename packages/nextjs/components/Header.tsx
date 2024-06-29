@@ -27,8 +27,15 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Report Hate Speech",
     href: "/report",
-    // icon: <BugAntIcon className="h-4 w-4" />,
   },
+  {
+    label: "Reports",
+    href: "/report/view",
+  },
+  {
+    label: "Proposals",
+    href: "/proposals"
+  }
 ];
 
 export const HeaderMenuLinks = () => {
