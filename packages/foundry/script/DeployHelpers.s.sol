@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "forge-std/Script.sol";
-import "forge-std/Vm.sol";
+import { Script, console } from "forge-std/Script.sol";
+import { Vm } from "forge-std/Vm.sol";
 
 contract ScaffoldETHDeploy is Script {
   error InvalidChain();
@@ -15,18 +15,33 @@ contract ScaffoldETHDeploy is Script {
   string root;
   string path;
   Deployment[] public deployments;
+  uint256 constant SCAFFOLD_BASE_BALANCE = 9999 * 1e18;
 
-  function setupLocalhostEnv() internal returns (uint256 localhostPrivateKey) {
+  function _startBroadcast() internal returns (address deployer) {
     if (block.chainid == 31337) {
-      root = vm.projectRoot();
-      path = string.concat(root, "/localhost.json");
-      string memory json = vm.readFile(path);
-      bytes memory mnemonicBytes = vm.parseJson(json, ".wallet.mnemonic");
-      string memory mnemonic = abi.decode(mnemonicBytes, (string));
-      return vm.deriveKey(mnemonic, 0);
+      // starts a broadcast and reads the caller
+      vm.startBroadcast();
+      (, deployer,) = vm.readCallers();
+      vm.stopBroadcast();
+      // check balance of first anvil account
+      // if balance is not 0, is the first run
+      uint256 balance = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266.balance;
+      if (balance > 1 ether) {
+        vm.startBroadcast(
+          0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+        );
+        deployer.call{ value: SCAFFOLD_BASE_BALANCE }("");
+        vm.stopBroadcast();
+      }
+      vm.startBroadcast(deployer);
     } else {
-      return vm.envUint("DEPLOYER_PRIVATE_KEY");
+      vm.startBroadcast();
+      (, deployer,) = vm.readCallers();
     }
+  }
+
+  function _stopBroadcast() internal {
+    vm.stopBroadcast();
   }
 
   function exportDeployments() internal {

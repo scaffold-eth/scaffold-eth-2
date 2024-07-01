@@ -4,18 +4,20 @@
   "type": "module",
   "scripts": {
     "account": "node scripts-js/ListAccount.js",
-    "chain": "anvil --config-out localhost.json",
+    "chain": "anvil",
     "compile": "forge compile",
-    "deploy": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
-    "deploy:verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node scripts-js/generateTsAbis.js",
+    "deploy": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
+    "deploy:verify": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node scripts-js/generateTsAbis.js",
     "flatten": "forge flatten",
     "fork": "anvil --fork-url ${0:-mainnet} --chain-id 31337 --config-out localhost.json",
     "format": "forge fmt && prettier --write ./script/**/*.js",
-    "generate": "node scripts-js/generateAccount.js",
+    "account:generate": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-default --private-key $(cast wallet new | grep 'Private key:' | awk '{print $3}')",
+    "account:import" : "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-default --interactive",
     "lint": "forge fmt --check && prettier --check ./script/**/*.js",
     "postinstall": "shx cp -n .env.example .env",
     "test": "forge test",
-    "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
+    "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}",
+    "check-keystore": "shx cat ~/.foundry/keystores/scaffold-eth-default >/dev/null 2>&1 || { echo \"Keystore directory does not exist. Please run 'yarn account:generate' or 'yarn account:import' to create it.\" && exit 1; }"
   },
   "dependencies": {
     "dotenv": "~16.3.1",
