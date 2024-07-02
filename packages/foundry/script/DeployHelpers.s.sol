@@ -26,10 +26,10 @@ contract ScaffoldETHDeploy is Script {
       // check balance of first anvil account
       // if balance is not 0, is the first run
       uint256 balance = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266.balance;
-      if (balance > 1 ether) {
-        vm.startBroadcast(
-          0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-        );
+      uint256 anvilFirstPk =
+        0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
+      if (balance > 1 ether && deployer != vm.addr(anvilFirstPk)) {
+        vm.startBroadcast(anvilFirstPk);
         deployer.call{ value: SCAFFOLD_BASE_BALANCE }("");
         vm.stopBroadcast();
       }

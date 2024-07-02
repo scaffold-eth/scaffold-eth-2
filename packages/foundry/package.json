@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "account": "node scripts-js/ListAccount.js",
-    "chain": "anvil",
+    "chain": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null; cast wallet import --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --unsafe-password '' scaffold-eth-default && anvil",
     "compile": "forge compile",
     "deploy": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
     "deploy:verify": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node scripts-js/generateTsAbis.js",
