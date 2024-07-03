@@ -30,7 +30,10 @@ contract ScaffoldETHDeploy is Script {
         0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
       if (balance > 1 ether && deployer != vm.addr(anvilFirstPk)) {
         vm.startBroadcast(anvilFirstPk);
-        deployer.call{ value: SCAFFOLD_BASE_BALANCE }("");
+        (bool success,) = deployer.call{ value: SCAFFOLD_BASE_BALANCE }("");
+        if (!success) {
+          revert();
+        }
         vm.stopBroadcast();
       }
       vm.startBroadcast(deployer);
