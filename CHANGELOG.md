@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.49
+
+### Patch Changes
+
+- 4db51ac: cli: format instance with prettier from cli
+- a9545d5: up prettier (scaffold-eth#875)
+
 ## 0.0.48
 
 ### Patch Changes
