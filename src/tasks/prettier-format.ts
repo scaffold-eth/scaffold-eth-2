@@ -4,7 +4,6 @@ import { Options } from "../types";
 import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
 
 async function runPrettier(targetPath: string[], prettierConfigPath: string, prettierPlugins: string[]) {
-  console.log("the prettier config path is", prettierConfigPath);
   const result = await execa("yarn", [
     "prettier",
     "--write",
