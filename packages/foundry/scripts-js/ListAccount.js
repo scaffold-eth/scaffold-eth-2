@@ -66,11 +66,9 @@ function verifyAddressFormat(address) {
 async function main() {
   const address = process.argv[2];
 
-  console.log("🔍 Checking account:", address);
-
   if (!verifyAddressFormat(address)) {
     console.log(
-      "🚫️ Invalid account, please run `yarn account:generate` or `yarn account:import`"
+      "🚫️ Invalid account or password, please run `yarn account:generate` or `yarn account:import`"
     );
     return;
   }
