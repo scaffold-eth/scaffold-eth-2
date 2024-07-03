@@ -53,19 +53,28 @@ async function getBalanceForEachNetwork(address) {
     console.error("Error reading foundry.toml:", error);
   }
 }
-async function main() {
-  const privateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
-  if (!privateKey) {
+function verifyAddressFormat(address) {
+  try {
+    ethers.utils.getAddress(address);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function main() {
+  const address = process.argv[2];
+
+  console.log("🔍 Checking account:", address);
+
+  if (!verifyAddressFormat(address)) {
     console.log(
-      "🚫️ You don't have a deployer account. Run `yarn generate` first"
+      "🚫️ Invalid account, please run `yarn account:generate` or `yarn account:import`"
     );
     return;
   }
 
-  // Get account from private key.
-  const wallet = new Wallet(privateKey);
-  const address = wallet.address;
   console.log(await toString(address, { type: "terminal", small: true }));
   console.log("Public address:", address, "\n");
 

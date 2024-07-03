@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "account": "node scripts-js/ListAccount.js",
+    "verify-keystore": "cast wallet address 2>/dev/null ||  echo 'Keystore verified' && exit 1",
+    "account": "yarn verify-keystore | xargs node scripts-js/ListAccount.js",
     "chain": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null; cast wallet import --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --unsafe-password '' scaffold-eth-default && anvil",
     "compile": "forge compile",
     "deploy": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
@@ -17,6 +18,7 @@
     "postinstall": "shx cp -n .env.example .env",
     "test": "forge test",
     "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
+
   },
   "dependencies": {
     "dotenv": "~16.3.1",
