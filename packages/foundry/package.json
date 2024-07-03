@@ -6,18 +6,17 @@
     "account": "node scripts-js/ListAccount.js",
     "chain": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null; cast wallet import --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --unsafe-password '' scaffold-eth-default && anvil",
     "compile": "forge compile",
-    "deploy": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
-    "deploy:verify": "yarn check-keystore && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --account scaffold-eth-default --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node scripts-js/generateTsAbis.js",
+    "deploy": "cast wallet address && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy && node scripts-js/generateTsAbis.js",
+    "deploy:verify": "cast wallet address && forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy --verify ; node scripts-js/generateTsAbis.js",
     "flatten": "forge flatten",
     "fork": "anvil --fork-url ${0:-mainnet} --chain-id 31337 --config-out localhost.json",
     "format": "forge fmt && prettier --write ./script/**/*.js",
-    "account:generate": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-default --private-key $(cast wallet new | grep 'Private key:' | awk '{print $3}')",
-    "account:import": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-default --interactive",
+    "account:generate": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-custom --private-key $(cast wallet new | grep 'Private key:' | awk '{print $3}')",
+    "account:import": "shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null ; cast wallet import scaffold-eth-custom --interactive",
     "lint": "forge fmt --check && prettier --check ./script/**/*.js",
     "postinstall": "shx cp -n .env.example .env",
     "test": "forge test",
-    "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}",
-    "check-keystore": "shx cat ~/.foundry/keystores/scaffold-eth-default >/dev/null 2>&1 || { echo \"Keystore directory does not exist. Please run 'yarn account:generate' or 'yarn account:import' to create it.\" && exit 1; }"
+    "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
   },
   "dependencies": {
     "dotenv": "~16.3.1",
