@@ -10,7 +10,7 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
     await execa("git", ["add", "-A"], { cwd: targetDir });
     await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
 
-    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
+    if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       const foundryWorkSpacePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
       // forge install foundry libraries
       await execa("forge", ["install", ...foundryLibraries], { cwd: foundryWorkSpacePath });

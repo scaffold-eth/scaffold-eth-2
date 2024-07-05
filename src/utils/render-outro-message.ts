@@ -13,8 +13,8 @@ export function renderOutroMessage(options: Options) {
   `;
 
   if (
-    options.extensions.includes(SOLIDITY_FRAMEWORKS.HARDHAT) ||
-    options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)
+    options.solidityFramework === SOLIDITY_FRAMEWORKS.HARDHAT ||
+    options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY
   ) {
     message += `
     \t${chalk.bold("Start the local development node")}

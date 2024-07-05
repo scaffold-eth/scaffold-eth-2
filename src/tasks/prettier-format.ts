@@ -25,7 +25,7 @@ export async function prettierFormat(targetDir: string, options: Options) {
 
     await runPrettier([nextJsPath], nextPrettierConfig, ["--plugin=@trivago/prettier-plugin-sort-imports"]);
 
-    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.HARDHAT)) {
+    if (options.solidityFramework === SOLIDITY_FRAMEWORKS.HARDHAT) {
       const hardhatPackagePath = path.join(targetDir, "packages", SOLIDITY_FRAMEWORKS.HARDHAT);
       const hardhatPrettierConfig = path.join(hardhatPackagePath, ".prettierrc.json");
       const hardhatPaths = [
@@ -39,7 +39,7 @@ export async function prettierFormat(targetDir: string, options: Options) {
       await runPrettier(hardhatPaths, hardhatPrettierConfig, ["--plugin=prettier-plugin-solidity"]);
     }
 
-    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
+    if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       const foundryPackagePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
       const foundryResult = await execa("forge", ["fmt"], { cwd: foundryPackagePath });
       if (foundryResult.failed) {

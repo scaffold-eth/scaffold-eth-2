@@ -23,13 +23,13 @@ yarn cli
 
 This command will run the compiled script inside `bin/`.
 
-You can send any option or flag to the CLI command. For example, a handy command is `yarn cli -s` to tell the CLI to skip installing dependencies or `yarn cli [project_path]` example `yarn cli ../test-cli` this will skip the "Project Name" prompt and use the provided path where project instance will be created in.
+You can send any option or flag to the CLI command. For example, a handy command is `yarn cli --skip` to tell the CLI to skip installing dependencies or `yarn cli [project_path]` example `yarn cli ../test-cli` this will skip the "Project Name" prompt and use the provided path where project instance will be created in.
 
 ## Changes to the Resulting Project
 
-The source files for the instance projects can be found under `templates/`. You'll see there are two folders there: `base/` and `extensions/`. The `base/` folder has the source files that will be present in all instances, whereas `extensions/` hold the source files that will be added or not to the instances based on the user choices within the CLI tool.
+The source files for the instance projects can be found under `templates/`. You'll see there are two folders there: `base/` and `solidity-frameworks/`. The `base/` folder has the source files that will be present in all instances, whereas `solidity-frameworks/` hold the source files that will be added or not to the instances based on the user choices within the CLI tool.
 
-It's highly recommended that you go through [core-extensions.md](core-extensions.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
+It's highly recommended that you go through [TEMPLATING.md](TEMPLATING.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
 
 While you might be tempted to change files straight in the source, we've created a better way to do it with the dev mode. We feel this is worth a separate section in this document.
 

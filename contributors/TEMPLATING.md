@@ -1,42 +1,3 @@
-# Main concepts
-
-I propose we treat anything other than "base" as an extension. That way we don't need to make distinctions between solidity frameworks or any other kind of extension.
-
-This change should make it easier to grow the options we provide our users without having to classify extensions by category.
-
-This change requires a new file, `src/config.ts`, where a few things about the extensions are defined, e.g. the sequence of questions about extensions.
-
-# Config files
-
-There's one main `src/config.ts` file to configure the questions shown to the user.
-
-For each extension there is an optional `templates/extensions/{extensionName}/config.json` file providing information about the specific extension.
-
-| ⚠️ Note how the extension config file is a JSON file
-
-## Config files API
-
-### `src/config.ts`
-
-Have a look at `src/types.ts#Config` or the file itself.
-
-Just a quick note to mention that adding `null` as an item in the `extensions` property will show the "None" option to the user. That option doesn't add any extension for the given question.
-
-### `{extension}/config.json`
-
-Since these files can't be .ts, the API is not typed. However, there are certain properties that are used in the code.
-
-Those properties are:
-
-- `name`: the string to be used when showing the package name to the user via the cli, as well as for error reporting.
-
-Note that all values are optional, as well as the file itself.
-
-| ⚠️ TODO list when new properties are added to config.json:
-| - Update this document
-| - Update the ExtensionDescriptor type at /src/types.ts
-| - Update the src/utils/extensions-dictionary.ts file so the new field from the config is actually added into the extension descriptor
-
 # Template files
 
 A Template file is a file to which extensions can add content. Removing content is out of scope for this experiment.
@@ -191,8 +152,6 @@ I've thought about how the strings should be joined, but an option is to use [ta
 
 # Extension folder anatomy
 
-When creating a new extension, simply create a new folder under `templates/extensions` with the name you want the extension to have.
-
 Inside the folder you will have a mix of normal, templated, and special files and folders.
 
 ## Normal files and folders
@@ -211,8 +170,7 @@ Templated files are both [Template files](#template-files), and [Args files](#ar
 The special files and folders are:
 
 - [`package.json` file](#merging-packagejson-files)
-- [`config.json` file](#extensionconfigjson)
-- `extensions/` folder
+- `solidity-frameworks/` folder
 
 # Things worth mentioning
 

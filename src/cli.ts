@@ -18,7 +18,7 @@ export async function cli(args: Args) {
     }
 
     const options = await promptForMissingOptions(rawOptions);
-    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
+    if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       await validateFoundryUp();
     }
 

@@ -1,18 +1,19 @@
 import { execa } from "execa";
-import { ExternalExtension, Options, TemplateDescriptor } from "../types";
-import { baseDir } from "../utils/consts";
-import { extensionDict } from "../utils/extensions-dictionary";
+import { ExternalExtension, Options, SolidityFramework, TemplateDescriptor } from "../types";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
-import url from "url";
+import { pathToFileURL } from "url";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 
-const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
+const BASE_DIR = "base";
+const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
+const SOLIDITY_FRAMEWORKS_DIR = "solidity-frameworks";
+
 const copy = promisify(ncp);
 let copyOrLink = copy;
 
@@ -21,9 +22,12 @@ const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
 const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
-const isExtensionFolderRegex = /extensions$/;
+const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
 const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
+
+const getSolidityFrameworkPath = (solidityFramework: SolidityFramework, templatesDirectory: string) =>
+  path.resolve(templatesDirectory, SOLIDITY_FRAMEWORKS_DIR, solidityFramework);
 
 const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
@@ -69,12 +73,13 @@ const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: strin
     filter: path => {
       const isConfig = isConfigRegex.test(path);
       const isArgs = isArgsRegex.test(path);
-      const isExtensionFolder = isExtensionFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
+      const isSolidityFrameworkFolder = isSolidityFrameworkFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isPackagesFolder = isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isTemplate = isTemplateRegex.test(path);
       // PR NOTE: this wasn't needed before because ncp had the clobber: false
       const isPackageJson = isPackageJsonRegex.test(path);
-      const shouldSkip = isConfig || isArgs || isTemplate || isPackageJson || isExtensionFolder || isPackagesFolder;
+      const shouldSkip =
+        isConfig || isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
       return !shouldSkip;
     },
   });
@@ -111,40 +116,39 @@ const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: strin
 };
 
 const processTemplatedFiles = async (
-  { extensions, externalExtension, dev: isDev }: Options,
+  { solidityFramework, externalExtension, dev: isDev }: Options,
   basePath: string,
+  solidityFrameworkPath: string | null,
   targetDir: string,
 ) => {
   const baseTemplatedFileDescriptors: TemplateDescriptor[] = findFilesRecursiveSync(basePath, path =>
     isTemplateRegex.test(path),
   ).map(baseTemplatePath => ({
     path: baseTemplatePath,
-    fileUrl: url.pathToFileURL(baseTemplatePath).href,
+    fileUrl: pathToFileURL(baseTemplatePath).href,
     relativePath: baseTemplatePath.split(basePath)[1],
     source: "base",
   }));
 
-  const extensionsTemplatedFileDescriptors: TemplateDescriptor[] = extensions
-    .map(ext =>
-      findFilesRecursiveSync(extensionDict[ext].path, filePath => isTemplateRegex.test(filePath)).map(
-        extensionTemplatePath => ({
-          path: extensionTemplatePath,
-          fileUrl: url.pathToFileURL(extensionTemplatePath).href,
-          relativePath: extensionTemplatePath.split(extensionDict[ext].path)[1],
-          source: `extension ${extensionDict[ext].name}`,
-        }),
-      ),
-    )
-    .flat();
+  const solidityFrameworkTemplatedFileDescriptors: TemplateDescriptor[] = solidityFrameworkPath
+    ? findFilesRecursiveSync(solidityFrameworkPath, filePath => isTemplateRegex.test(filePath))
+        .map(solidityFrameworkTemplatePath => ({
+          path: solidityFrameworkTemplatePath,
+          fileUrl: pathToFileURL(solidityFrameworkTemplatePath).href,
+          relativePath: solidityFrameworkTemplatePath.split(solidityFrameworkPath)[1],
+          source: `extension ${solidityFramework}`,
+        }))
+        .flat()
+    : [];
 
   const externalExtensionFolder = isDev
     ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension")
-    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension");
+    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR, "extension");
   const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
     ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
         extensionTemplatePath => ({
           path: extensionTemplatePath,
-          fileUrl: url.pathToFileURL(extensionTemplatePath).href,
+          fileUrl: pathToFileURL(extensionTemplatePath).href,
           relativePath: extensionTemplatePath.split(externalExtensionFolder)[1],
           source: `external extension ${isDev ? (externalExtension as string) : getArgumentFromExternalExtensionOption(externalExtension)}`,
         }),
@@ -154,32 +158,31 @@ const processTemplatedFiles = async (
   await Promise.all(
     [
       ...baseTemplatedFileDescriptors,
-      ...extensionsTemplatedFileDescriptors,
+      ...solidityFrameworkTemplatedFileDescriptors,
       ...externalExtensionTemplatedFileDescriptors,
     ].map(async templateFileDescriptor => {
       const templateTargetName = templateFileDescriptor.path.match(isTemplateRegex)?.[1] as string;
 
       const argsPath = templateFileDescriptor.relativePath.replace(isTemplateRegex, `${templateTargetName}.args.`);
 
-      const argsFileUrls = extensions
-        .map(extension => {
-          const argsFilePath = path.join(extensionDict[extension].path, argsPath);
-          const fileExists = fs.existsSync(argsFilePath);
-          if (!fileExists) {
-            return [];
-          }
-          return url.pathToFileURL(argsFilePath).href;
-        })
-        .flat();
+      const argsFileUrls = [];
+
+      if (solidityFrameworkPath) {
+        const argsFilePath = path.join(solidityFrameworkPath, argsPath);
+        const fileExists = fs.existsSync(argsFilePath);
+        if (fileExists) {
+          argsFileUrls.push(pathToFileURL(argsFilePath).href);
+        }
+      }
 
       if (externalExtension) {
         const argsFilePath = isDev
           ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension", argsPath)
-          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
+          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
-          argsFileUrls?.push(url.pathToFileURL(argsFilePath).href);
+          argsFileUrls?.push(pathToFileURL(argsFilePath).href);
         }
       }
 
@@ -276,19 +279,19 @@ const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => 
 
 export async function copyTemplateFiles(options: Options, templateDir: string, targetDir: string) {
   copyOrLink = options.dev ? link : copy;
-  const basePath = path.join(templateDir, baseDir);
-  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
+  const basePath = path.join(templateDir, BASE_DIR);
+  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR);
 
   // 1. Copy base template to target directory
   await copyBaseFiles(basePath, targetDir, options);
 
-  // 2. Copy extensions folders
-  await Promise.all(
-    options.extensions.map(async extension => {
-      const extensionPath = extensionDict[extension].path;
-      await copyExtensionsFiles(options, extensionPath, targetDir);
-    }),
-  );
+  // 2. Copy solidity framework folder
+  const solidityFrameworkPath =
+    options.solidityFramework && getSolidityFrameworkPath(options.solidityFramework, templateDir);
+
+  if (solidityFrameworkPath) {
+    await copyExtensionsFiles(options, solidityFrameworkPath, targetDir);
+  }
 
   // 3. Set up external extension if needed
   if (options.externalExtension) {
@@ -308,7 +311,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   }
 
   // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, targetDir);
+  await processTemplatedFiles(options, basePath, solidityFrameworkPath, targetDir);
 
   // 5. Delete tmp directory
   if (options.externalExtension && !options.dev) {

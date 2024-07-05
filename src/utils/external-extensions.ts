@@ -1,5 +1,5 @@
 import { ExternalExtension, RawOptions } from "../types";
-import { CURATED_EXTENSIONS } from "../config";
+import { CURATED_EXTENSIONS } from "../curated-extensions";
 
 // Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
