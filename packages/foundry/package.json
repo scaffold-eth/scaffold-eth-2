@@ -18,7 +18,6 @@
     "postinstall": "shx cp -n .env.example .env",
     "test": "forge test",
     "verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/VerifyAll.s.sol --ffi --rpc-url ${1:-default_network}"
-
   },
   "dependencies": {
     "dotenv": "~16.3.1",
