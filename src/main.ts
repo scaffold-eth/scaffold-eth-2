@@ -36,15 +36,21 @@ export async function createProject(options: Options) {
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
       {
-        title: "🪄 Formatting files",
-        task: () => prettierFormat(targetDirectory, options),
-      },
-      {
         title: `📦 Installing dependencies with yarn, this could take a while`,
         task: () => installPackages(targetDirectory),
         skip: () => {
           if (!options.install) {
             return "Manually skipped";
+          }
+          return false;
+        },
+      },
+      {
+        title: "🪄 Formatting files",
+        task: () => prettierFormat(targetDirectory),
+        skip: () => {
+          if (!options.install) {
+            return "`yarn install` was skipped";
           }
           return false;
         },

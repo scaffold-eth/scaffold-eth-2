@@ -142,18 +142,22 @@ const processTemplatedFiles = async (
     : [];
 
   const externalExtensionFolder = isDev
-    ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension")
+    ? typeof externalExtension === "string"
+      ? path.join(basePath, "../../externalExtensions", externalExtension, "extension")
+      : undefined
     : path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR, "extension");
-  const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
-    ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
-        extensionTemplatePath => ({
-          path: extensionTemplatePath,
-          fileUrl: pathToFileURL(extensionTemplatePath).href,
-          relativePath: extensionTemplatePath.split(externalExtensionFolder)[1],
-          source: `external extension ${isDev ? (externalExtension as string) : getArgumentFromExternalExtensionOption(externalExtension)}`,
-        }),
-      )
-    : [];
+
+  const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] =
+    externalExtension && externalExtensionFolder
+      ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
+          extensionTemplatePath => ({
+            path: extensionTemplatePath,
+            fileUrl: pathToFileURL(extensionTemplatePath).href,
+            relativePath: extensionTemplatePath.split(externalExtensionFolder)[1],
+            source: `external extension ${isDev ? (externalExtension as string) : getArgumentFromExternalExtensionOption(externalExtension)}`,
+          }),
+        )
+      : [];
 
   await Promise.all(
     [

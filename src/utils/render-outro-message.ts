@@ -12,6 +12,13 @@ export function renderOutroMessage(options: Options) {
   ${chalk.dim("cd")} ${options.project}
   `;
 
+  if (!options.install) {
+    message += `
+    \t${chalk.bold("Install dependencies & format files")}
+    \t${chalk.dim("yarn")} install && ${chalk.dim("yarn")} format
+    `;
+  }
+
   if (
     options.solidityFramework === SOLIDITY_FRAMEWORKS.HARDHAT ||
     options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY
