@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.50
+
+### Patch Changes
+
+- 5901f51: cli: prettier formatting error
+
 ## 0.0.49
 
 ### Patch Changes
