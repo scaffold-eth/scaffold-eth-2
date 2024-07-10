@@ -6,6 +6,10 @@ import { Vm } from "forge-std/Vm.sol";
 
 contract ScaffoldETHDeploy is Script {
   error InvalidChain();
+  error FailedAnvilRequest();
+  error DeployerHasNoBalance();
+
+  event AnvilSetBalance(address account, uint256 amount);
 
   struct Deployment {
     string name;
@@ -15,26 +19,30 @@ contract ScaffoldETHDeploy is Script {
   string root;
   string path;
   Deployment[] public deployments;
-  uint256 constant ANVIL_FIRST_PK =
-    0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
-  address constant ANVIL_FIRST_ACCOUNT =
-    0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+  uint256 constant ANVIL_LAST_PK =
+    0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6;
+  address constant ANVIL_LAST_ACCOUNT =
+    0xa0Ee7A142d267C1f36714E4a8F75612F20a79720;
+  uint256 constant ANVIL_BASE_BALANCE = 1000 ether;
 
   function _startBroadcast() internal returns (address deployer) {
     vm.startBroadcast();
     (, deployer,) = vm.readCallers();
 
     if (block.chainid == 31337) {
-      // starts a broadcast and reads the caller
       vm.stopBroadcast();
-      // check balance of first anvil account
-      // if balance is not 0, is the first run
-      uint256 balance = ANVIL_FIRST_ACCOUNT.balance;
-      if (balance > 1 ether && deployer != vm.addr(ANVIL_FIRST_PK)) {
-        vm.startBroadcast(ANVIL_FIRST_PK);
-        (bool success,) = deployer.call{ value: balance - 1 ether }("");
+      uint256 balance = deployer.balance;
+      if (balance == 0) {
+        vm.startBroadcast(ANVIL_LAST_PK);
+        (bool success,) = deployer.call{ value: ANVIL_BASE_BALANCE / 2 }("");
         if (!success) {
-          revert();
+          revert DeployerHasNoBalance();
+        } else {
+          try this.anvil_setBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE) {
+            emit AnvilSetBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE);
+          } catch {
+            revert FailedAnvilRequest();
+          }
         }
         vm.stopBroadcast();
       }
@@ -76,6 +84,30 @@ contract ScaffoldETHDeploy is Script {
 
   function getChain() public returns (Chain memory) {
     return getChain(block.chainid);
+  }
+
+  function anvil_setBalance(address addr, uint256 amount) public {
+    string memory addressString = vm.toString(addr);
+    string memory amountString = vm.toString(amount);
+    string memory requestPayload = string.concat(
+      '{"method":"anvil_setBalance","params":["',
+      addressString,
+      '", ',
+      amountString,
+      '"],"id":1,"jsonrpc":"2.0"}'
+    );
+
+    string[] memory inputs = new string[](8);
+    inputs[0] = "curl";
+    inputs[1] = "-X";
+    inputs[2] = "POST";
+    inputs[3] = "http://localhost:8545";
+    inputs[4] = "-H";
+    inputs[5] = "Content-Type: application/json";
+    inputs[6] = "--data";
+    inputs[7] = requestPayload;
+
+    vm.ffi(inputs);
   }
 
   function findChainName() public returns (string memory) {
