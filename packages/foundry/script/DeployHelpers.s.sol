@@ -29,23 +29,24 @@ contract ScaffoldETHDeploy is Script {
     vm.startBroadcast();
     (, deployer,) = vm.readCallers();
 
-    if (block.chainid == 31337) {
+    if (block.chainid == 31337 && deployer.balance) {
       vm.stopBroadcast();
-      uint256 balance = deployer.balance;
-      if (balance == 0) {
-        vm.startBroadcast(ANVIL_LAST_PK);
-        (bool success,) = deployer.call{ value: ANVIL_BASE_BALANCE / 2 }("");
-        if (!success) {
-          revert DeployerHasNoBalance();
-        } else {
-          try this.anvil_setBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE) {
-            emit AnvilSetBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE);
-          } catch {
-            revert FailedAnvilRequest();
-          }
+
+      // ------------- FUND DEPLOYER ACCOUNT -------------
+      vm.startBroadcast(ANVIL_LAST_PK);
+      (bool success,) = deployer.call{ value: ANVIL_BASE_BALANCE / 2 }("");
+      if (!success) {
+        revert DeployerHasNoBalance();
+      } else {
+        try this.anvil_setBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE) {
+          emit AnvilSetBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE);
+        } catch {
+          revert FailedAnvilRequest();
         }
-        vm.stopBroadcast();
       }
+      vm.stopBroadcast();
+      // ------------------------------------------------
+
       vm.startBroadcast(deployer);
     }
   }
