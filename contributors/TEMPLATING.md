@@ -176,9 +176,19 @@ The special files and folders are:
 
 ## Merging package.json files
 
-The package we use to merge package.json files [merge-packages](3) will use the last version of a dependency given a conflict. For example:
+The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
+
+For example:
 
 ```
+version on file one: ~1.2.3
+version on file two: ^1.0.0
+resulting version: ~1.2.3
+
+version on file one: ^1.0.0
+version on file two: >=1.2.0 <1.3.0
+resulting version: ~1.2.0
+
 version on file one: 1.0.0
 version on file two: 0.1.0
 resulting version: 0.1.0
