@@ -19,10 +19,6 @@ contract ScaffoldETHDeploy is Script {
   string root;
   string path;
   Deployment[] public deployments;
-  uint256 constant ANVIL_LAST_PK =
-    0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6;
-  address constant ANVIL_LAST_ACCOUNT =
-    0xa0Ee7A142d267C1f36714E4a8F75612F20a79720;
   uint256 constant ANVIL_BASE_BALANCE = 10000 ether;
 
   function _startBroadcast() internal returns (address deployer) {
@@ -30,24 +26,11 @@ contract ScaffoldETHDeploy is Script {
     (, deployer,) = vm.readCallers();
 
     if (block.chainid == 31337 && deployer.balance == 0) {
-      vm.stopBroadcast();
-
-      // ------------- FUND DEPLOYER ACCOUNT -------------
-      vm.startBroadcast(ANVIL_LAST_PK);
-      (bool success,) = deployer.call{ value: ANVIL_BASE_BALANCE / 2 }("");
-      if (!success) {
-        revert DeployerHasNoBalance();
-      } else {
-        try this.anvil_setBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE) {
-          emit AnvilSetBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE);
-        } catch {
-          emit FailedAnvilRequest();
-        }
+      try this.anvil_setBalance(deployer, ANVIL_BASE_BALANCE) {
+        emit AnvilSetBalance(deployer, ANVIL_BASE_BALANCE);
+      } catch {
+        emit FailedAnvilRequest();
       }
-      vm.stopBroadcast();
-      // ------------------------------------------------
-
-      vm.startBroadcast(deployer);
     }
   }
 
@@ -93,7 +76,7 @@ contract ScaffoldETHDeploy is Script {
     string memory requestPayload = string.concat(
       '{"method":"anvil_setBalance","params":["',
       addressString,
-      '", ',
+      '","',
       amountString,
       '"],"id":1,"jsonrpc":"2.0"}'
     );
