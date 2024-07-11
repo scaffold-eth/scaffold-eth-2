@@ -6,10 +6,10 @@ import { Vm } from "forge-std/Vm.sol";
 
 contract ScaffoldETHDeploy is Script {
   error InvalidChain();
-  error FailedAnvilRequest();
   error DeployerHasNoBalance();
 
   event AnvilSetBalance(address account, uint256 amount);
+  event FailedAnvilRequest();
 
   struct Deployment {
     string name;
@@ -41,7 +41,7 @@ contract ScaffoldETHDeploy is Script {
         try this.anvil_setBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE) {
           emit AnvilSetBalance(ANVIL_LAST_ACCOUNT, ANVIL_BASE_BALANCE);
         } catch {
-          revert FailedAnvilRequest();
+          emit FailedAnvilRequest();
         }
       }
       vm.stopBroadcast();
