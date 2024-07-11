@@ -29,7 +29,7 @@ contract ScaffoldETHDeploy is Script {
     vm.startBroadcast();
     (, deployer,) = vm.readCallers();
 
-    if (block.chainid == 31337 && deployer.balance) {
+    if (block.chainid == 31337 && deployer.balance == 0) {
       vm.stopBroadcast();
 
       // ------------- FUND DEPLOYER ACCOUNT -------------
