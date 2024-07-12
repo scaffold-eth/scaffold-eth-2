@@ -21,3 +21,5 @@ node_modules
 
 # cli
 dist
+
+.env

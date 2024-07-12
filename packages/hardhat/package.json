@@ -47,7 +47,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.8.1",
+    "@openzeppelin/contracts": "^4.9.6",
     "@typechain/ethers-v6": "^0.5.1",
     "dotenv": "^16.0.3",
     "envfile": "^6.18.0",
