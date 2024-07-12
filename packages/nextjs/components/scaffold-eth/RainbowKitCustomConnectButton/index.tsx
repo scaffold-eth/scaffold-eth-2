@@ -9,6 +9,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Address } from "viem";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { AddressType } from "~~/types/utils";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -23,7 +24,7 @@ export const RainbowKitCustomConnectButton = () => {
       {({ account, chain, openConnectModal, mounted }) => {
         const connected = mounted && account && chain;
         const blockExplorerAddressLink = account
-          ? getBlockExplorerAddressLink(targetNetwork, account.address)
+          ? getBlockExplorerAddressLink(targetNetwork, account.address as AddressType)
           : undefined;
 
         return (

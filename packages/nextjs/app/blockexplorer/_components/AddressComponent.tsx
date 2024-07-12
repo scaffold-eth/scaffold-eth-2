@@ -1,12 +1,13 @@
 import { BackButton } from "./BackButton";
 import { ContractTabs } from "./ContractTabs";
 import { Address, Balance } from "~~/components/scaffold-eth";
+import { AddressType } from "~~/types/utils";
 
 export const AddressComponent = ({
   address,
   contractData,
 }: {
-  address: string;
+  address: AddressType;
   contractData: { bytecode: string; assembly: string } | null;
 }) => {
   return (

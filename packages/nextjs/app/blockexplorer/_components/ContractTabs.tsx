@@ -9,6 +9,7 @@ import { TransactionsTable } from "./TransactionsTable";
 import { createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
+import { AddressType } from "~~/types/utils";
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -16,7 +17,7 @@ type AddressCodeTabProps = {
 };
 
 type PageProps = {
-  address: string;
+  address: AddressType;
   contractData: AddressCodeTabProps | null;
 };
 

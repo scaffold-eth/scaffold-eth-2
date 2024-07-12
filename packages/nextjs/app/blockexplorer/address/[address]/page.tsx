@@ -3,11 +3,12 @@ import path from "path";
 import { hardhat } from "viem/chains";
 import { AddressComponent } from "~~/app/blockexplorer/_components/AddressComponent";
 import deployedContracts from "~~/contracts/deployedContracts";
+import { AddressType } from "~~/types/utils";
 import { isZeroAddress } from "~~/utils/scaffold-eth/common";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type PageProps = {
-  params: { address: string };
+  params: { address: AddressType };
 };
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
@@ -36,7 +37,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
   return { bytecode, assembly };
 }
 
-const getContractData = async (address: string) => {
+const getContractData = async (address: AddressType) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = hardhat.id;
   let contractPath = "";
@@ -83,7 +84,7 @@ export function generateStaticParams() {
 }
 
 const AddressPage = async ({ params }: PageProps) => {
-  const address = params?.address as string;
+  const address = params?.address as `0x${string}`;
 
   if (isZeroAddress(address)) return null;
 

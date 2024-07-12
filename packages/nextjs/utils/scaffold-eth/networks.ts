@@ -1,5 +1,6 @@
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
+import { AddressType } from "~~/types/utils";
 
 type ChainAttributes = {
   // color | [lightThemeColor, darkThemeColor]
@@ -112,7 +113,7 @@ export function getBlockExplorerTxLink(chainId: number, txnHash: string) {
  * Gives the block explorer URL for a given address.
  * Defaults to Etherscan if no (wagmi) block explorer is configured for the network.
  */
-export function getBlockExplorerAddressLink(network: chains.Chain, address: string) {
+export function getBlockExplorerAddressLink(network: chains.Chain, address: AddressType) {
   const blockExplorerBaseURL = network.blockExplorers?.default?.url;
   if (network.id === chains.hardhat.id) {
     return `/blockexplorer/address/${address}`;

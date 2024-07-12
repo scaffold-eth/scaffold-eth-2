@@ -2568,6 +2568,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@t3-oss/env-core@npm:0.10.1, @t3-oss/env-core@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@t3-oss/env-core@npm:0.10.1"
+  peerDependencies:
+    typescript: ">=5.0.0"
+    zod: ^3.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 519add0b4075173aa91aa15f556852305969f1cb6de8cf896de5669267cdab695b2b116b8ddac7cd31d3ba8301171094f3a4f550dad4c0c0ecb193b95ce2b044
+  languageName: node
+  linkType: hard
+
+"@t3-oss/env-nextjs@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "@t3-oss/env-nextjs@npm:0.10.1"
+  dependencies:
+    "@t3-oss/env-core": 0.10.1
+  peerDependencies:
+    typescript: ">=5.0.0"
+    zod: ^3.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: b25907f3e1f5db50f014e9dfd9a6cea1826d5e66d541839c305ec6ba10d2bd8c16ffefc304ccec24781df9fe3024a1a9faedb5f07679275a561e85ae67313f9a
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:5.28.6":
   version: 5.28.6
   resolution: "@tanstack/query-core@npm:5.28.6"
@@ -9292,6 +9320,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jiti@npm:^1.21.6":
+  version: 1.21.6
+  resolution: "jiti@npm:1.21.6"
+  bin:
+    jiti: bin/jiti.js
+  checksum: 9ea4a70a7bb950794824683ed1c632e2ede26949fbd348e2ba5ec8dc5efa54dc42022d85ae229cadaa60d4b95012e80ea07d625797199b688cc22ab0e8891d32
+  languageName: node
+  linkType: hard
+
 "js-sdsl@npm:^4.1.4":
   version: 4.4.2
   resolution: "js-sdsl@npm:4.4.2"
@@ -12607,8 +12644,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@t3-oss/env-core": ^0.10.1
+    "@t3-oss/env-nextjs": ^0.10.1
     husky: ^8.0.1
+    jiti: ^1.21.6
     lint-staged: ^13.0.3
+    zod: ^3.23.8
   languageName: unknown
   linkType: soft
 
@@ -15238,6 +15279,13 @@ __metadata:
   peerDependencies:
     ethers: ^5.7.0
   checksum: f702a3437f48a8d42c4bb35b8dd13671a168aadfc4e23ce723d62959220ccb6bf9c529c60331fe5b91afaa622147c6a37490551474fe3e35c06ac476524b5160
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.23.8":
+  version: 3.23.8
+  resolution: "zod@npm:3.23.8"
+  checksum: 15949ff82118f59c893dacd9d3c766d02b6fa2e71cf474d5aa888570c469dbf5446ac5ad562bb035bf7ac9650da94f290655c194f4a6de3e766f43febd432c5c
   languageName: node
   linkType: hard
 
