@@ -15,5 +15,3 @@ export const env = createEnv({
   //   NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
   // }
 });
-
-console.info("environment: ", env);

@@ -67,6 +67,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.52.1",
     "react-hot-toast": "^2.4.0",
+    "recharts": "^2.12.7",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^8.0.4",

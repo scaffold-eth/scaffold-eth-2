@@ -130,13 +130,13 @@ export const Header = () => {
               Home
             </Link>
             <Link
-              href="/fundsraising"
+              href="/fundraising"
               className={`${
-                pathname === "/fundsraising" ? "text-foreground" : "text-muted-foreground"
+                pathname === "/fundraising" ? "text-foreground" : "text-muted-foreground"
               } flex items-center gap-4 px-2.5  hover:text-foreground`}
             >
               <DollarSignIcon className="h-5 w-5" />
-              Fundsraising
+              Fundraising
             </Link>
             <Link
               href="/holdings"
@@ -188,6 +188,7 @@ export const Header = () => {
         </BreadcrumbList>
       </Breadcrumb> */}
       {/* <RainbowKitCustomConnectButton /> */}
+      <Breadcrumb></Breadcrumb>
       <div className="relative ml-auto flex-1 md:grow-0">
         <ConnectButton></ConnectButton>
       </div>

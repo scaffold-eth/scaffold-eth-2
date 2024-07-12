@@ -66,16 +66,16 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href="/fundsraising"
+                      href="/fundraising"
                       className={`${
-                        pathname === "/fundsraising" ? "bg-accent" : ""
+                        pathname === "/fundraising" ? "bg-accent" : ""
                       }  flex h-9 w-9 items-center justify-center rounded-lg text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                     >
                       <DollarSignIcon className="h-5 w-5" />
-                      <span className="sr-only">Fundsraising</span>
+                      <span className="sr-only">Fundraising</span>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Fundsraising</TooltipContent>
+                  <TooltipContent side="right">Fundraising</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>

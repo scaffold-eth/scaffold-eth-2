@@ -1,229 +1,326 @@
-import { File, ListFilter } from "lucide-react";
+"use client";
+
+import { TrendingUp } from "lucide-react";
 import { NextPage } from "next";
+import { Bar, BarChart, LabelList, XAxis } from "recharts";
+import { Pie, PieChart } from "recharts";
 import { Badge } from "~~/components/ui/badge";
-import { Button } from "~~/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~~/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~~/components/ui/dropdown-menu";
-import { Pagination, PaginationContent, PaginationItem } from "~~/components/ui/pagination";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "~~/components/ui/chart";
 import { Progress } from "~~/components/ui/progress";
-import { Separator } from "~~/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~~/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
+
+const holdingsChartData = [
+  { token: "USDC", value: 100000, fill: "#F4B678" },
+  { token: "DAI", value: 100000, fill: "#EF9234" },
+  { token: "BUIDL", value: 400000, fill: "#EC7A08" },
+  { token: "FOBXX", value: 400000, fill: "#C46100" },
+  { token: "XEVT", value: 200000, fill: "#8F4700" },
+];
+const capChartData = [
+  { type: "founders", percentage: 100000, fill: "#8BC1F7" },
+  { type: "investors", percentage: 100000, fill: "#519DE9" },
+  { type: "team", percentage: 400000, fill: "#06C" },
+  { type: "advisors", percentage: 400000, fill: "#004B95" },
+  { type: "other", percentage: 200000, fill: "#002F5D" },
+];
+
+const holdingsChartConfig = {
+  USDC: {
+    label: "USDC",
+  },
+  DAI: {
+    label: "DAI",
+    color: "hsl(var(--chart-1))",
+  },
+  BUIDL: {
+    label: "Blackrock US Equity",
+    color: "hsl(var(--chart-2))",
+  },
+  FOBXX: {
+    label: "Franklin US Bond",
+    color: "hsl(var(--chart-3))",
+  },
+  XEVT: {
+    label: "OpenTrade EU Bonds",
+    color: "hsl(var(--chart-4))",
+  },
+} satisfies ChartConfig;
+
+const capChartConfig = {
+  founders: {
+    label: "Founders",
+  },
+  investors: {
+    label: "Investors",
+    color: "hsl(var(--chart-1))",
+  },
+  team: {
+    label: "Team Members",
+    color: "hsl(var(--chart-2))",
+  },
+  advisors: {
+    label: "Advisors",
+    color: "hsl(var(--chart-3))",
+  },
+  other: {
+    label: "Other",
+    color: "hsl(var(--chart-4))",
+  },
+} satisfies ChartConfig;
+
+const fundraisingChartData = [
+  { round: "Pre-Seed", size: 1000000, valuation: 8000000 },
+  { round: "Seed", size: 12000000, valuation: 45000000 },
+  { round: "Series A", size: 50000000, valuation: 200000000 },
+];
+
+const fundraisingChartConfig = {
+  size: {
+    label: "Size",
+    color: "#2563eb",
+  },
+  valuation: {
+    label: "Valuation",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig;
 
 const Home: NextPage = () => {
   return (
     <>
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-4">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-          <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+        <div className="grid gap-4 sm:grid-cols-5">
+          <Card className="md:col-span-2" x-chunk="dashboard-05-chunk-0">
             <CardHeader className="pb-3">
-              <CardTitle>Your Orders</CardTitle>
+              <CardTitle>Acme Protocol</CardTitle>
               <CardDescription className="max-w-lg text-balance leading-relaxed">
-                Introducing Our Dynamic Orders Dashboard for Seamless Management and Insightful Analysis.
+                You are thriving! In the last 3 months the TVL has increased by 25%. The payroll has increased by 10%,
+                including one new team member. The public fundraise is on track to reach its goal at current pace. All
+                the private investors has signed the term sheet.
               </CardDescription>
             </CardHeader>
-            <CardFooter>
-              <Button>Create New Order</Button>
-            </CardFooter>
           </Card>
-          <Card x-chunk="dashboard-05-chunk-1">
+          <Card x-chunk="dashboard-05-chunk-1 sm:col-span-1">
             <CardHeader className="pb-2">
-              <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
+              <CardDescription>TVL</CardDescription>
+              <CardTitle className="text-4xl">$31M</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-muted-foreground">+25% from last week</div>
+              <div className="text-xs text-muted-foreground">+25% in the last 3 months</div>
             </CardContent>
-            <CardFooter>
-              <Progress value={25} aria-label="25% increase" />
-            </CardFooter>
           </Card>
-          <Card x-chunk="dashboard-05-chunk-2">
+          <Card x-chunk="dashboard-05-chunk-2 sm:col-span-1">
             <CardHeader className="pb-2">
-              <CardDescription>This Month</CardDescription>
-              <CardTitle className="text-4xl">$5,329</CardTitle>
+              <CardDescription>Holdings</CardDescription>
+              <CardTitle className="text-4xl">$1.2M</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-xs text-muted-foreground">+10% from last month</div>
+              <div className="text-xs text-muted-foreground">-2% from last month</div>
             </CardContent>
-            <CardFooter>
-              <Progress value={12} aria-label="12% increase" />
-            </CardFooter>
+          </Card>
+          <Card x-chunk="dashboard-05-chunk-2 sm:col-span-1">
+            <CardHeader className="pb-2">
+              <CardDescription>Next Payroll</CardDescription>
+              <CardTitle className="text-4xl">$153k</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xs text-muted-foreground">July 27th</div>
+            </CardContent>
           </Card>
         </div>
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>Fulfilled</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
-          </div>
-          <TabsContent value="week">
-            <Card x-chunk="dashboard-05-chunk-3">
+        <div className="grid sm:grid-cols-5 gap-4">
+          <div className="md:col-span-2 h-full min-h-full ">
+            <Card x-chunk="dashboard-05-chunk-3 min-h-full h-full sm:col-span-2">
               <CardHeader className="px-7">
-                <CardTitle>Orders</CardTitle>
-                <CardDescription>Recent orders from your store.</CardDescription>
+                <CardTitle>Fundraising</CardTitle>
+                <CardDescription>
+                  <div className="text-sm">An overview of your fundraising status across all sources.</div>
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead className="hidden sm:table-cell">Type</TableHead>
-                      <TableHead className="hidden sm:table-cell">Status</TableHead>
-                      <TableHead className="hidden md:table-cell">Date</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="bg-accent">
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">olivia@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Refund</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-24</TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">noah@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Subscription</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-25</TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">emma@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-26</TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">olivia@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Refund</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-24</TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">emma@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-26</TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                {" "}
+                <div className="text-md bold">Rounds</div>
+                <ChartContainer config={fundraisingChartConfig} className="min-h-[200px] w-full">
+                  <BarChart data={fundraisingChartData}>
+                    <XAxis dataKey="round" tickLine={false} tickMargin={10} axisLine={false} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+
+                    <Bar dataKey="size" fill="var(--color-size)" radius={4} />
+                    <Bar dataKey="valuation" fill="var(--color-valuation)" radius={4} />
+                  </BarChart>
+                </ChartContainer>
+                <div className="text-md bold">CAP Table</div>
+                <ChartContainer
+                  config={capChartConfig}
+                  className="mx-auto min-h-full w-full aspect-square max-h-[250px]"
+                >
+                  <PieChart>
+                    <ChartTooltip content={<ChartTooltipContent nameKey="type" hideLabel />} />
+                    <Pie data={capChartData} dataKey="percentage">
+                      <LabelList
+                        dataKey="type"
+                        className="fill-background"
+                        color="black"
+                        fontSize={12}
+                        formatter={(token: keyof typeof capChartConfig) => capChartConfig[token]?.label}
+                      />
+                    </Pie>
+                  </PieChart>
+                </ChartContainer>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+          <div className="md:col-span-3">
+            <div className="grid grid-rows-2 gap-4">
+              <Card x-chunk="dashboard-05-chunk-3">
+                <CardHeader className="px-7">
+                  <CardTitle>Holdings</CardTitle>
+                  <CardDescription>
+                    <div className="text-sm">An overview of your holdings and investments.</div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid col-span-1">
+                      <div className="grid grid-rows-3 gap-4">
+                        <div className="row-span-1 grid grid-cols-2">
+                          <div className="col-span-1">
+                            <div className="text-md">Total holdings</div>
+                            <div className="text-2xl">$1.2M</div>
+                          </div>
+                          <div className="col-span-1 grid grid-rows-2  content-between ">
+                            <div className="text-md">Runway</div>
+                            <Progress value={65} color="black"></Progress>
+                          </div>
+                        </div>
+
+                        <div className="row-span-1 grid grid-cols-2">
+                          <div className="col-span-1">
+                            <div className="text-md">Liquid</div>
+                            <div className="text-2xl">$200k</div>
+                          </div>
+                          <div className="col-span-1">
+                            <div className="text-md">Principal Chain</div>
+                            <div className="text-2xl">Ethereum</div>
+                          </div>
+                        </div>
+
+                        <div className="row-span-1  grid grid-cols-2">
+                          <div className="col-span-1">
+                            <div className="text-md">Invested</div>
+                            <div className="text-2xl">$1M</div>
+                          </div>
+                          <div className="col-span-1">
+                            <div className="text-md">APY</div>
+                            <div className="text-2xl">4.5%</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid col-span-1 min-h-[100px]">
+                      <ChartContainer
+                        config={holdingsChartConfig}
+                        className="mx-auto min-h-full w-full aspect-square max-h-[250px]"
+                      >
+                        <PieChart>
+                          <ChartTooltip content={<ChartTooltipContent nameKey="token" hideLabel />} />
+                          <Pie data={holdingsChartData} dataKey="value" color="black">
+                            <LabelList
+                              dataKey="token"
+                              className="fill-background"
+                              color="black"
+                              fontSize={12}
+                              formatter={(token: keyof typeof holdingsChartConfig) => holdingsChartConfig[token]?.label}
+                            />
+                          </Pie>
+                        </PieChart>
+                      </ChartContainer>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card x-chunk="dashboard-05-chunk-3">
+                <CardHeader className="px-7">
+                  <CardTitle>Payroll</CardTitle>
+                  <CardDescription>
+                    <div className="text-sm">An overview of your payroll and team.</div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid col-span-1">
+                      <div className="text-md text-center">Recent</div>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Date</TableHead>
+                            <TableHead className="hidden sm:table-cell">Members</TableHead>
+                            <TableHead className="hidden sm:table-cell">Amount</TableHead>
+                            <TableHead className="hidden md:table-cell">Paid</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-06-23</TableCell>
+                            <TableCell className="hidden md:table-cell">24</TableCell>
+                            <TableCell className="hidden md:table-cell">$126k</TableCell>
+                            <TableCell className="hidden md:table-cell">100%</TableCell>
+                          </TableRow>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-05-23</TableCell>
+                            <TableCell className="hidden md:table-cell">23</TableCell>
+                            <TableCell className="hidden md:table-cell">$120k</TableCell>
+                            <TableCell className="hidden md:table-cell">100%</TableCell>
+                          </TableRow>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-04-23</TableCell>
+                            <TableCell className="hidden md:table-cell">22</TableCell>
+                            <TableCell className="hidden md:table-cell">$110k</TableCell>
+                            <TableCell className="hidden md:table-cell">100%</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                    <div className="grid col-span-1">
+                      <div className="text-md text-center">Next</div>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Date</TableHead>
+                            <TableHead className="hidden sm:table-cell">Members</TableHead>
+                            <TableHead className="hidden sm:table-cell">Amount</TableHead>
+                            <TableHead className="hidden md:table-cell">Paid</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-07-23</TableCell>
+                            <TableCell className="hidden md:table-cell">26</TableCell>
+                            <TableCell className="hidden md:table-cell">$145k</TableCell>
+                            <TableCell className="hidden md:table-cell">Pending</TableCell>
+                          </TableRow>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-08-23</TableCell>
+                            <TableCell className="hidden md:table-cell">26</TableCell>
+                            <TableCell className="hidden md:table-cell">$145k</TableCell>
+                            <TableCell className="hidden md:table-cell">Pending</TableCell>
+                          </TableRow>
+                          <TableRow className="">
+                            <TableCell className="hidden md:table-cell">2024-09-23</TableCell>
+                            <TableCell className="hidden md:table-cell">26</TableCell>
+                            <TableCell className="hidden md:table-cell">$145k</TableCell>
+                            <TableCell className="hidden md:table-cell">Pending</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
