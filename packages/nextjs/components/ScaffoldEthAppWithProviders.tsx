@@ -2,10 +2,25 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Home, LineChart, Package, Package2, Settings, ShoppingCart, Users2 } from "lucide-react";
+import {
+  BuildingIcon,
+  DollarSignIcon,
+  GitGraphIcon,
+  GroupIcon,
+  Home,
+  LineChart,
+  Package,
+  Package2,
+  Settings,
+  ShoppingCart,
+  Users2,
+  UsersIcon,
+  WalletIcon,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { WagmiProvider } from "wagmi";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
@@ -16,6 +31,9 @@ import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
+
+  // Get current page
+  const pathname = usePathname();
 
   return (
     <>
@@ -28,58 +46,66 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
                   href="#"
                   className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
                 >
-                  <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
+                  <BuildingIcon className="h-4 w-4 transition-all group-hover:scale-110" />
                   <span className="sr-only">Acme Inc</span>
                 </Link>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href="#"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                      href="/"
+                      className={`${
+                        pathname === "/" ? "bg-accent" : ""
+                      }  flex h-9 w-9 items-center justify-center rounded-lg text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                     >
                       <Home className="h-5 w-5" />
-                      <span className="sr-only">Dashboard</span>
+                      <span className="sr-only">Home</span>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Dashboard</TooltipContent>
+                  <TooltipContent side="right">Home</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href="#"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                      href="/fundsraising"
+                      className={`${
+                        pathname === "/fundsraising" ? "bg-accent" : ""
+                      }  flex h-9 w-9 items-center justify-center rounded-lg text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                     >
-                      <ShoppingCart className="h-5 w-5" />
-                      <span className="sr-only">Orders</span>
+                      <DollarSignIcon className="h-5 w-5" />
+                      <span className="sr-only">Fundsraising</span>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Orders</TooltipContent>
+                  <TooltipContent side="right">Fundsraising</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href="#"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                      href="/holdings"
+                      className={`${
+                        pathname === "/holdings" ? "bg-accent" : ""
+                      }  flex h-9 w-9 items-center justify-center rounded-lg text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                     >
-                      <Package className="h-5 w-5" />
-                      <span className="sr-only">Products</span>
+                      <WalletIcon className="h-5 w-5" />
+                      <span className="sr-only">Holdings</span>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Products</TooltipContent>
+                  <TooltipContent side="right">Holdings</TooltipContent>
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href="#"
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                      href="/payroll"
+                      className={`${
+                        pathname === "/payroll" ? "bg-accent" : ""
+                      }  flex h-9 w-9 items-center justify-center rounded-lg text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8`}
                     >
-                      <Users2 className="h-5 w-5" />
-                      <span className="sr-only">Customers</span>
+                      <UsersIcon className="h-5 w-5" />
+                      <span className="sr-only">Payroll</span>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">Customers</TooltipContent>
+                  <TooltipContent side="right">Payroll</TooltipContent>
                 </Tooltip>
-                <Tooltip>
+                {/* <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
                       href="#"
@@ -90,7 +116,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right">Analytics</TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
               </nav>
               <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
                 <Tooltip>
