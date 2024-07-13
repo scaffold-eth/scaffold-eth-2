@@ -119,9 +119,28 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
   },
-  // configuration for harhdat-verify plugin
+  // configuration for hardhat-verify plugin
+  // look for more blockscout endpoints at https://docs.blockscout.com/about/projects
   etherscan: {
     apiKey: `${etherscanApiKey}`,
+    customChains: [
+      {
+        network: "mainnet",
+        chainId: 1,
+        urls: {
+          apiURL: "https://eth.blockscout.com/api",
+          browserURL: "https://eth.blockscout.com/",
+        },
+      },
+      {
+        network: "sepolia",
+        chainId: 11155111,
+        urls: {
+          apiURL: "https://eth-sepolia.blockscout.com/api",
+          browserURL: "https://eth-sepolia.blockscout.com/",
+        },
+      },
+    ],
   },
   // configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
