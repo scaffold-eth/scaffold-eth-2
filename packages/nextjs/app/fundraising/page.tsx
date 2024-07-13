@@ -22,7 +22,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-4">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+        {/* <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
           <Card className="sm:col-span-12" x-chunk="dashboard-05-chunk-0">
             <CardHeader className="pb-3">
               <CardTitle>Fundraising Overview</CardTitle>
@@ -34,165 +34,354 @@ const Home: NextPage = () => {
               <Button>Create New Order</Button>
             </CardFooter>
           </Card>
-        </div>
-        <Tabs defaultValue="week">
+        </div> */}
+        <Tabs defaultValue="private">
           <div className="flex items-center">
             <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
+              <TabsTrigger value="private">Private</TabsTrigger>
+              <TabsTrigger value="public">Public</TabsTrigger>
+              <TabsTrigger value="grant">Grant</TabsTrigger>
             </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>Fulfilled</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Declined</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Refunded</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
           </div>
-          <TabsContent value="week">
+          <TabsContent value="private">
             <Card x-chunk="dashboard-05-chunk-3">
               <CardHeader className="px-7">
-                <CardTitle>Orders</CardTitle>
-                <CardDescription>Recent orders from your store.</CardDescription>
+                <CardTitle>Investors</CardTitle>
+                <CardDescription>The list of investors you have invited.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Customer</TableHead>
-                      <TableHead className="hidden sm:table-cell">Type</TableHead>
-                      <TableHead className="hidden sm:table-cell">Status</TableHead>
-                      <TableHead className="hidden md:table-cell">Date</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead className="hidden md:table-cell">Last Round</TableHead>
+                      <TableHead className="hidden sm:table-cell">Ownership</TableHead>
+                      <TableHead className="hidden md:table-cell">Last Invested</TableHead>
+                      <TableHead className="text-right">Contracts</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow className="bg-accent">
                       <TableCell>
                         <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">liam@capitalvc.com</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
+                      <TableCell className="hidden sm:table-cell">Seed</TableCell>
+                      <TableCell className="hidden sm:table-cell">4%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                      <TableCell className="text-right">
                         <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                          Signed
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
                     </TableRow>
-                    <TableRow>
+
+                    <TableRow className="bg-accent">
                       <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">olivia@example.com</div>
+                        <div className="font-medium">Sarah Davies</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">sarah@less.com</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Refund</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-24</TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">noah@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Subscription</TableCell>
-                      <TableCell className="hidden sm:table-cell">
+                      <TableCell className="hidden sm:table-cell">Seed</TableCell>
+                      <TableCell className="hidden sm:table-cell">3.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                      <TableCell className="text-right">
                         <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                          Signed
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-25</TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
                     </TableRow>
-                    <TableRow>
+
+                    <TableRow className="bg-accent">
                       <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">emma@example.com</div>
+                        <div className="font-medium">William Morris</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">will@web3c.com</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
+                      <TableCell className="hidden sm:table-cell">Seed</TableCell>
+                      <TableCell className="hidden sm:table-cell">2.3%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                      <TableCell className="text-right">
                         <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                          Signed
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-26</TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
                     </TableRow>
-                    <TableRow>
+
+                    <TableRow className="bg-accent">
                       <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
+                        <div className="font-medium">Jhan Kalins</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">johan@exxagerated.com</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
+                      <TableCell className="hidden sm:table-cell">Seed</TableCell>
+                      <TableCell className="hidden sm:table-cell">1.24%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                      <TableCell className="text-right">
                         <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                          Signed
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
                     </TableRow>
-                    <TableRow>
+                    <TableRow className="bg-accent">
                       <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">liam@example.com</div>
+                        <div className="font-medium">Mike Logan</div>
+                        <div className="hidden text-sm text-muted-foreground md:inline">mike@scc.com</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
-                      <TableCell className="hidden sm:table-cell">
+                      <TableCell className="hidden sm:table-cell">Seed</TableCell>
+                      <TableCell className="hidden sm:table-cell">2.3%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                      <TableCell className="text-right">
                         <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                          Signed
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-23</TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
                     </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+              <CardFooter>
+                <Button disabled>Invite Investor (coming soon)</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="public">
+            <Card x-chunk="dashboard-05-chunk-3">
+              <CardHeader className="px-7">
+                <CardTitle>Crowdfunding</CardTitle>
+                <CardDescription>The list of anons have invested in Acme.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
                     <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">olivia@example.com</div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">Refund</TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-24</TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
+                      <TableHead>Wallet</TableHead>
+                      <TableHead className="hidden sm:table-cell">Ownership</TableHead>
+                      <TableHead className="hidden md:table-cell">Last Invested</TableHead>
                     </TableRow>
-                    <TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow className="bg-accent">
                       <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">emma@example.com</div>
+                        <div className="font-medium">0x13jd...34d9</div>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell">Sale</TableCell>
+                      <TableCell className="hidden sm:table-cell">0.2%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-10-23</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x24kc...12fa</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">0.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-11-01</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x57hd...89ab</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">0.8%</TableCell>
+                      <TableCell className="hidden md:table-cell">2023-12-15</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x66eg...45cd</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">1.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-01-05</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x78hf...67ef</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">1.2%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-02-10</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x88jd...23ba</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">1.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-03-12</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0x92kl...34mn</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">1.8%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-04-18</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xa3jd...56op</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">2.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-05-20</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xb4kc...78qr</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">2.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-06-25</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xc5hd...89st</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">3.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-07-28</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xd6eg...90uv</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">3.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-08-30</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xe7hf...12wx</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">4.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-09-22</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xf8jd...34yz</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">4.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-10-25</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xg9kc...56ab</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">5.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-11-27</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xh1hd...78cd</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">5.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2024-12-29</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xj2eg...90ef</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">6.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2025-01-31</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xk3hf...12gh</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">6.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2025-02-28</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xl4jd...34ij</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">7.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2025-03-30</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xm5kc...56kl</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">7.5%</TableCell>
+                      <TableCell className="hidden md:table-cell">2025-04-27</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">0xn6hd...78mn</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">8.0%</TableCell>
+                      <TableCell className="hidden md:table-cell">2025-05-25</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="grant">
+            <Card x-chunk="dashboard-05-chunk-3">
+              <CardHeader className="px-7">
+                <CardTitle>Grants</CardTitle>
+                <CardDescription>The list of available grants.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Protocol</TableHead>
+                      <TableHead className="hidden sm:table-cell">Max amount</TableHead>
+                      <TableHead className="hidden md:table-cell">Requirements</TableHead>
+                      <TableHead className="hidden md:table-cell">Due Date</TableHead>
+                      <TableHead className="text-right"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">Polygon</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">$30,000</TableCell>
                       <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
+                        <div className="text-sm text-muted-foreground">- Deploy on Polygon</div>
+                        <div className="text-sm text-muted-foreground">- Use Polygon ID</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">2024-10-01</TableCell>
+                      <TableCell className="text-right cursor-pointer">
+                        <Badge className="text-xs" variant="default">
+                          Request
                         </Badge>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell">2023-06-26</TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">Arbitrum</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">$35,000</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <div className="text-sm text-muted-foreground">- Deploy on Arbitrum</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">2024-10-01</TableCell>
+                      <TableCell className="text-right cursor-pointer">
+                        <Badge className="text-xs" variant="default">
+                          Request
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">Worldcoin</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">$15,000</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <div className="text-sm text-muted-foreground">- Use Worldcoin Login</div>
+                        <div className="text-sm text-muted-foreground">- Verify identity on-chain</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">2024-08-15</TableCell>
+                      <TableCell className="text-right cursor-pointer">
+                        <Badge className="text-xs" variant="default">
+                          Request
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="bg-accent">
+                      <TableCell>
+                        <div className="font-medium">Uniswap</div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">$20,000</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <div className="text-sm text-muted-foreground">- Use pools</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">2024-05-10</TableCell>
+                      <TableCell className="text-right cursor-pointer">
+                        <Badge className="text-xs" variant="default">
+                          Request
+                        </Badge>
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

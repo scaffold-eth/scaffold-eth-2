@@ -4,6 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Badge } from "./ui/badge";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   BarChart,
@@ -168,29 +169,12 @@ export const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
-      {/* <Breadcrumb className="hidden md:flex">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Dashboard</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="#">Orders</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Recent Orders</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb> */}
-      {/* <RainbowKitCustomConnectButton /> */}
+        <Badge variant="outline">Founder</Badge>
       <Breadcrumb></Breadcrumb>
-      <div className="relative ml-auto flex-1 md:grow-0">
-        <ConnectButton></ConnectButton>
+      <div className="w-full flex items-center justify-end">
+        <div className="relative ml-auto flex-1 md:grow-0">
+          <ConnectButton></ConnectButton>
+        </div>
       </div>
     </header>
   );
