@@ -54,9 +54,6 @@ const validateExternalExtension = async (
 export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptions> {
   const args = arg(
     {
-      "--install": Boolean,
-      "-i": "--install",
-
       "--skip-install": Boolean,
       "--skip": "--skip-install",
 
@@ -76,14 +73,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     },
   );
 
-  const install = args["--install"] ?? null;
   const skipInstall = args["--skip-install"] ?? null;
-
-  if (install && skipInstall) {
-    throw new Error('Please select only one of the options: "--install" or "--skip-install".');
-  }
-
-  const hasInstallRelatedFlag = install || skipInstall;
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
@@ -112,7 +102,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   return {
     project,
-    install: hasInstallRelatedFlag ? install || !skipInstall : null,
+    install: !skipInstall,
     dev,
     externalExtension: extension,
     help,

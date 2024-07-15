@@ -9,7 +9,7 @@ export type ExternalExtension = {
 
 type BaseOptions = {
   project: string | null;
-  install: boolean | null;
+  install: boolean;
   dev: boolean;
   externalExtension: ExternalExtension | ExternalExtensionNameDev | null;
   solidityFramework: SolidityFramework | "none" | null;

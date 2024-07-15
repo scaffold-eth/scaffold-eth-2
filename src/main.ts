@@ -40,7 +40,7 @@ export async function createProject(options: Options) {
         task: () => installPackages(targetDirectory),
         skip: () => {
           if (!options.install) {
-            return "Manually skipped";
+            return "Manually skipped, since `--skip-install` flag was passed";
           }
           return false;
         },
@@ -50,7 +50,7 @@ export async function createProject(options: Options) {
         task: () => prettierFormat(targetDirectory),
         skip: () => {
           if (!options.install) {
-            return "`yarn install` was skipped";
+            return "Can't use source prettier, since `yarn install` was skipped";
           }
           return false;
         },

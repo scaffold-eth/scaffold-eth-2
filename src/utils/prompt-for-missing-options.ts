@@ -34,19 +34,13 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
       choices: [SOLIDITY_FRAMEWORKS.HARDHAT, SOLIDITY_FRAMEWORKS.FOUNDRY, nullExtensionChoice],
       default: SOLIDITY_FRAMEWORKS.HARDHAT,
     },
-    {
-      type: "confirm",
-      name: "install",
-      message: "Install packages?",
-      default: defaultOptions.install,
-    },
   ];
 
   const answers = await inquirer.prompt(questions, cliAnswers);
 
   const mergedOptions: Options = {
     project: options.project ?? answers.project,
-    install: options.install ?? answers.install,
+    install: options.install,
     dev: options.dev ?? defaultOptions.dev,
     solidityFramework: options.solidityFramework ?? answers.solidityFramework,
     externalExtension: options.externalExtension,
