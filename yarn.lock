@@ -2244,7 +2244,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.39.0
     "@uniswap/sdk-core": ^4.0.1
     "@uniswap/v2-sdk": ^3.0.1
-    abitype: 1.0.2
+    abitype: 1.0.5
     autoprefixer: ^10.4.12
     blo: ^1.0.1
     burner-connector: ^0.0.8
@@ -3940,9 +3940,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abitype@npm:1.0.2":
-  version: 1.0.2
-  resolution: "abitype@npm:1.0.2"
+"abitype@npm:1.0.5":
+  version: 1.0.5
+  resolution: "abitype@npm:1.0.5"
   peerDependencies:
     typescript: ">=5.0.4"
     zod: ^3 >=3.22.0
@@ -3951,7 +3951,7 @@ __metadata:
       optional: true
     zod:
       optional: true
-  checksum: 0986ec822ad279e7ea1d15398f88bad335a58419799f8ba80e3d5712fdd5a2b5858b387a1213d9da31571c3a42d10ca878a463cce11dae1bb17dbe4deeb40db4
+  checksum: 4a4865926e5e8e33e4fab0081a106ce4f627db30b4052fbc449e4707aea6d34d805d46c8d6d0a72234bdd9a2b4900993591515fc299bc57d393181c70dc0c19e
   languageName: node
   linkType: hard
 
