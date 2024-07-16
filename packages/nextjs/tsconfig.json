@@ -15,10 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "~~/*": ["./*"],
-      "abitype": ["./node_modules/abitype"],
-      "viem/node_modules/abitype": ["./node_modules/viem/node_modules/abitype"],
-      "wagmi/node_modules/abitype": ["./node_modules/wagmi/node_modules/abitype"]
+      "~~/*": ["./*"]
     },
     "plugins": [
       {
