@@ -19,7 +19,7 @@ const isJsonString = (str: string) => {
 };
 
 const isBigInt = (str: string) => {
-  if (str.trim().length === 0) return false;
+  if (str.trim().length === 0 || str.startsWith("0")) return false;
   try {
     BigInt(str);
     return true;
