@@ -21,6 +21,11 @@ const isJsonString = (str: string) => {
 // Recursive function to deeply parse JSON strings, correctly handling nested arrays and encoded JSON strings
 const deepParseValues = (value: any): any => {
   if (typeof value === "string") {
+    try {
+      return BigInt(value);
+    } catch (e) {
+      // It's not a BigInt, continue
+    }
     if (isJsonString(value)) {
       const parsed = JSON.parse(value);
       return deepParseValues(parsed);
