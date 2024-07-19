@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "graphclient:build": "graphclient build",
     "dev": "next dev",
     "start": "next dev",
     "build": "next build",

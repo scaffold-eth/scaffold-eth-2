@@ -4,23 +4,23 @@ import { Address } from "~~/components/scaffold-eth";
 import useGraphClient from "~~/hooks/scaffold-eth/useGraphClient";
 
 const GreetingsTable = () => {
-  const query = `
-{
-   greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-     id
-     greeting
-     premium
-     value
-     createdAt
-     sender {
-       address
-       greetingCount
-     }
-   }
- }
-`;
+  //   const query = `
+  // {
+  //    greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+  //      id
+  //      greeting
+  //      premium
+  //      value
+  //      createdAt
+  //      sender {
+  //        address
+  //        greetingCount
+  //      }
+  //    }
+  //  }
+  // `;
 
-  const { data: greetingsData, error } = useGraphClient(query);
+  const { data: greetingsData, error } = useGraphClient();
 
   // Subgraph maybe not yet configured
   if (error) {

@@ -1,5 +1,8 @@
 // @ts-nocheck
 import { GraphQLResolveInfo, SelectionSetNode, FieldNode, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { gql } from '@graphql-mesh/utils';
+
 import type { GetMeshOptions } from '@graphql-mesh/runtime';
 import type { YamlConfig } from '@graphql-mesh/types';
 import { PubSub } from '@graphql-mesh/utils';
@@ -11,13 +14,15 @@ import { MeshResolvedSource } from '@graphql-mesh/runtime';
 import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
 import GraphqlHandler from "@graphql-mesh/graphql"
 import BareMerger from "@graphql-mesh/merger-bare";
+import { printWithCache } from '@graphql-mesh/utils';
+import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations';
 import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
 import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
 import { path as pathModule } from '@graphql-mesh/cross-helpers';
 import { ImportFn } from '@graphql-mesh/types';
-import type { Uniswapv2Types } from './sources/uniswapv2/types';
-import * as importedModule$0 from "./sources/uniswapv2/introspectionSchema";
+import type { YourContractTypes } from './sources/YourContract/types';
+import * as importedModule$0 from "./sources/YourContract/introspectionSchema";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -608,7 +613,7 @@ export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
   derivedFrom?: derivedFromDirectiveResolver<any, any, ContextType>;
 }>;
 
-export type MeshContext = Uniswapv2Types.Context & BaseMeshContext;
+export type MeshContext = YourContractTypes.Context & BaseMeshContext;
 
 
 import { fileURLToPath } from '@graphql-mesh/utils';
@@ -617,7 +622,7 @@ const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url
 const importFn: ImportFn = <T>(moduleId: string) => {
   const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
   switch(relativeModuleId) {
-    case ".graphclient/sources/uniswapv2/introspectionSchema":
+    case ".graphclient/sources/YourContract/introspectionSchema":
       return Promise.resolve(importedModule$0) as T;
     
     default:
@@ -650,22 +655,22 @@ const cache = new (MeshCache as any)({
 const sources: MeshResolvedSource[] = [];
 const transforms: MeshTransform[] = [];
 const additionalEnvelopPlugins: MeshPlugin<any>[] = [];
-const uniswapv2Transforms = [];
+const yourContractTransforms = [];
 const additionalTypeDefs = [] as any[];
-const uniswapv2Handler = new GraphqlHandler({
-              name: "uniswapv2",
+const yourContractHandler = new GraphqlHandler({
+              name: "YourContract",
               config: {"endpoint":"http://localhost:8000/subgraphs/name/scaffold-eth/your-contract"},
               baseDir,
               cache,
               pubsub,
-              store: sourcesStore.child("uniswapv2"),
-              logger: logger.child("uniswapv2"),
+              store: sourcesStore.child("YourContract"),
+              logger: logger.child("YourContract"),
               importFn,
             });
 sources[0] = {
-          name: 'uniswapv2',
-          handler: uniswapv2Handler,
-          transforms: uniswapv2Transforms
+          name: 'YourContract',
+          handler: yourContractHandler,
+          transforms: yourContractTransforms
         }
 const additionalResolvers = [] as any[]
 const merger = new(BareMerger as any)({
@@ -674,6 +679,15 @@ const merger = new(BareMerger as any)({
         logger: logger.child('bareMerger'),
         store: rootStore.child('bareMerger')
       })
+const documentHashMap = {
+        "0f297a8d2a5ec4bc2a5724a8582baf2b6027a6394dc10901d073d4602d66e9d4": GetGreetingsDocument
+      }
+additionalEnvelopPlugins.push(usePersistedOperations({
+        getPersistedOperation(key) {
+          return documentHashMap[key];
+        },
+        ...{}
+      }))
 
   return {
     sources,
@@ -687,7 +701,14 @@ const merger = new(BareMerger as any)({
     additionalEnvelopPlugins,
     get documents() {
       return [
-      
+      {
+        document: GetGreetingsDocument,
+        get rawSDL() {
+          return printWithCache(GetGreetingsDocument);
+        },
+        location: 'GetGreetingsDocument.graphql',
+        sha256Hash: '0f297a8d2a5ec4bc2a5724a8582baf2b6027a6394dc10901d073d4602d66e9d4'
+      }
     ];
     },
     fetchFn,
@@ -737,3 +758,42 @@ export function getBuiltGraphClient(): Promise<MeshInstance> {
 export const execute: ExecuteMeshFn = (...args) => getBuiltGraphClient().then(({ execute }) => execute(...args));
 
 export const subscribe: SubscribeMeshFn = (...args) => getBuiltGraphClient().then(({ subscribe }) => subscribe(...args));
+export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(globalContext?: TGlobalContext) {
+  const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
+  return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
+}
+export type GetGreetingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGreetingsQuery = { greetings: Array<(
+    Pick<Greeting, 'id' | 'greeting' | 'premium' | 'value' | 'createdAt'>
+    & { sender: Pick<Sender, 'address' | 'greetingCount'> }
+  )> };
+
+
+export const GetGreetingsDocument = gql`
+    query GetGreetings {
+  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+    id
+    greeting
+    premium
+    value
+    createdAt
+    sender {
+      address
+      greetingCount
+    }
+  }
+}
+    ` as unknown as DocumentNode<GetGreetingsQuery, GetGreetingsQueryVariables>;
+
+
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
+  return {
+    GetGreetings(variables?: GetGreetingsQueryVariables, options?: C): Promise<GetGreetingsQuery> {
+      return requester<GetGreetingsQuery, GetGreetingsQueryVariables>(GetGreetingsDocument, variables, options) as Promise<GetGreetingsQuery>;
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;
