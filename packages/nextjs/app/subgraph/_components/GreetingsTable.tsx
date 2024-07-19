@@ -1,27 +1,26 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
 import { Address } from "~~/components/scaffold-eth";
+import useGraphClient from "~~/hooks/scaffold-eth/useGraphClient";
 
 const GreetingsTable = () => {
-  const GREETINGS_GRAPHQL = `
+  const query = `
 {
-  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-    id
-    greeting
-    premium
-    value
-    createdAt
-    sender {
-      address
-      greetingCount
-    }
-  }
-}
+   greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+     id
+     greeting
+     premium
+     value
+     createdAt
+     sender {
+       address
+       greetingCount
+     }
+   }
+ }
 `;
 
-  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-  const { data: greetingsData, error } = useQuery(GREETINGS_GQL, { fetchPolicy: "network-only" });
+  const { data: greetingsData, error } = useGraphClient(query);
 
   // Subgraph maybe not yet configured
   if (error) {
@@ -40,7 +39,7 @@ const GreetingsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {greetingsData?.greetings?.map((greeting: any, index: number) => {
+            {(greetingsData as any)?.greetings?.map((greeting: any, index: number) => {
               return (
                 <tr key={greeting.id}>
                   <th>{index + 1}</th>
