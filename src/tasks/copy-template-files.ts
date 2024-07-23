@@ -9,10 +9,9 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
+import { BASE_DIR, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
 
-const BASE_DIR = "base";
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
-const SOLIDITY_FRAMEWORKS_DIR = "solidity-frameworks";
 
 const copy = promisify(ncp);
 let copyOrLink = copy;
