@@ -9,6 +9,10 @@ const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
     repository: "https://github.com/scaffold-eth/create-eth-extensions",
     branch: "eip-712",
   },
+  ponder: {
+    repository: "https://github.com/scaffold-eth/create-eth-extensions",
+    branch: "ponder",
+  },
 };
 
 export { CURATED_EXTENSIONS };
