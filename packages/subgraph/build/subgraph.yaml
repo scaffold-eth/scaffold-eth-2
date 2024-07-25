@@ -19,8 +19,8 @@ dataSources:
         - Sender
       abis:
         - name: YourContract
-          file: YourContract/abis/localhost_YourContract.json
+          file: YourContract\abis\localhost_YourContract.json
       eventHandlers:
         - event: GreetingChange(indexed address,string,bool,uint256)
           handler: handleGreetingChange
-      file: YourContract/YourContract.wasm
+      file: YourContract\YourContract.wasm
