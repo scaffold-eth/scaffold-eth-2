@@ -4,7 +4,7 @@ const contents = ({ providerNames, providerSetups, providerImports, providerProp
   // filter out empty strings
   const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
 
-  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`);
+  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`).reverse();
 
   return `"use client";
 

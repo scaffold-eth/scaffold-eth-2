@@ -1,3 +1,8 @@
+import { withDefaults } from "../../../../utils.js";
+
+const contents = ({ imports }) => {
+  return `
+${imports.filter(Boolean).join("\n")}
 import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
@@ -21,4 +26,9 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ScaffoldEthApp;
+export default ScaffoldEthApp;`;
+};
+
+export default withDefaults(contents, {
+  imports: ""
+});
