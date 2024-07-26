@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.52
+
+### Patch Changes
+
+- 12ae58d: Add curated Ponder extension
+- 6d21542: add onchainkit to curated extension
+- 6d21542: feat: template files update
+
 ## 0.0.51
 
 ### Patch Changes
