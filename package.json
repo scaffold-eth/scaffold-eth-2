@@ -17,7 +17,6 @@
     "deploy:verify": "yarn workspace @se-2/foundry deploy:verify",
     "compile": "yarn workspace @se-2/foundry compile",
     "account:generate": "yarn workspace @se-2/foundry account:generate",
-    "account:dangerous-re-generate": "yarn workspace @se-2/foundry account:dangerous-re-generate",
     "account:import": "yarn workspace @se-2/foundry account:import",
     "flatten": "yarn workspace @se-2/foundry flatten",
     "foundry:format": "yarn workspace @se-2/foundry format",
