@@ -14,21 +14,17 @@ contract DeployScript is ScaffoldETHDeploy {
     deployerPrivateKey = setupLocalhostEnv();
   }
 
-  function run() external checkDeployerPrivateKey deploymentExporter {
+  function run() external ScaffoldEthDeployerRunner {
     DeployYourContract deployYourContract = new DeployYourContract();
     deployYourContract.run();
   }
 
-  modifier checkDeployerPrivateKey() {
+  modifier ScaffoldEthDeployerRunner() {
     if (deployerPrivateKey == 0) {
       revert InvalidPrivateKey(
         "You don't have a deployer account. Make sure you have set DEPLOYER_PRIVATE_KEY in .env or use `yarn generate` to generate a new random account"
       );
     }
-    _;
-  }
-
-  modifier deploymentExporter() {
     _;
     exportDeployments();
   }
