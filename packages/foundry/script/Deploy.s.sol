@@ -17,6 +17,10 @@ contract DeployScript is ScaffoldETHDeploy {
   function run() external ScaffoldEthDeployerRunner {
     DeployYourContract deployYourContract = new DeployYourContract();
     deployYourContract.run();
+
+    // deploy more contracts here
+    // DeployMyContract deployMyContract = new DeployMyContract();
+    // deployMyContract.run();
   }
 
   modifier ScaffoldEthDeployerRunner() {
