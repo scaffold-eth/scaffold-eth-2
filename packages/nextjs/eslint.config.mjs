@@ -11,11 +11,11 @@ export default tseslint.config(
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/ban-ts-comment": "error",
     },
     /*... */
   },
-  // @ts-ignore
+  // @ts-expect-error eslintPluginPrettierRecommended types are broken for now
   eslintPluginPrettierRecommended,
   // ...
 );
