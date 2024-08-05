@@ -13,9 +13,7 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "error",
     },
-    /*... */
   },
   // @ts-expect-error eslintPluginPrettierRecommended types are broken for now
   eslintPluginPrettierRecommended,
-  // ...
 );
