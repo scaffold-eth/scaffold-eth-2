@@ -9,7 +9,7 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
-import { BASE_DIR, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
+import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 
@@ -65,7 +65,11 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
   }
 };
 
-const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: string, targetDir: string) => {
+const copyExtensionFiles = async (
+  { dev: isDev, solidityFramework }: Options,
+  extensionPath: string,
+  targetDir: string,
+) => {
   // copy (or link if dev) root files
   await copyOrLink(extensionPath, path.join(targetDir), {
     clobber: false,
@@ -96,7 +100,14 @@ const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: strin
         const isArgs = isArgsRegex.test(path);
         const isTemplate = isTemplateRegex.test(path);
         const isPackageJson = isPackageJsonRegex.test(path);
-        const shouldSkip = isArgs || isTemplate || isPackageJson;
+
+        const unselectedSolidityFrameworks = [SOLIDITY_FRAMEWORKS.FOUNDRY, SOLIDITY_FRAMEWORKS.HARDHAT].filter(
+          sf => sf !== solidityFramework,
+        );
+        const isUnselectedSolidityFrameworksRegexes = unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}$`));
+        const isUnselectedSolidityFramework = isUnselectedSolidityFrameworksRegexes.some(sfregex => sfregex.test(path));
+
+        const shouldSkip = isArgs || isTemplate || isPackageJson || isUnselectedSolidityFramework;
 
         return !shouldSkip;
       },
@@ -293,7 +304,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     options.solidityFramework && getSolidityFrameworkPath(options.solidityFramework, templateDir);
 
   if (solidityFrameworkPath) {
-    await copyExtensionsFiles(options, solidityFrameworkPath, targetDir);
+    await copyExtensionFiles(options, solidityFrameworkPath, targetDir);
   }
 
   // 3. Set up external extension if needed
@@ -310,7 +321,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
       await setUpExternalExtensionFiles(options, tmpDir);
     }
 
-    await copyExtensionsFiles(options, externalExtensionPath, targetDir);
+    await copyExtensionFiles(options, externalExtensionPath, targetDir);
   }
 
   // 4. Process templated files and generate output

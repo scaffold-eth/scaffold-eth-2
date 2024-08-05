@@ -4,6 +4,13 @@ import { promises } from "fs";
 import path from "path";
 
 const { mkdir, link } = promises;
+
+const passesFilter = (source: string, options?: Options) =>
+  options?.filter === undefined
+    ? true // no filter
+    : typeof options.filter === "function"
+      ? options.filter(source) // filter is function
+      : options.filter.test(source); // filter is regex
 /**
  * The goal is that this function has the same API as ncp, so they can be used
  * interchangeably.
@@ -11,14 +18,7 @@ const { mkdir, link } = promises;
  * - clobber not implemented
  */
 const linkRecursive = async (source: string, destination: string, options?: Options): Promise<void> => {
-  const passesFilter =
-    options?.filter === undefined
-      ? true // no filter
-      : typeof options.filter === "function"
-        ? options.filter(source) // filter is function
-        : options.filter.test(source); // filter is regex
-
-  if (!passesFilter) {
+  if (!passesFilter(source, options)) {
     return;
   }
 
@@ -29,6 +29,9 @@ const linkRecursive = async (source: string, destination: string, options?: Opti
         const sourceSubpath = path.join(source, subPath);
         const isSubPathAFolder = lstatSync(sourceSubpath).isDirectory();
         const destSubPath = path.join(destination, subPath);
+        if (!passesFilter(destSubPath, options)) {
+          return;
+        }
         const existsDestSubPath = existsSync(destSubPath);
         if (isSubPathAFolder && !existsDestSubPath) {
           await mkdir(destSubPath);

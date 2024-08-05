@@ -24,7 +24,7 @@ const validateExternalExtension = async (
       );
       await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
     } catch {
-      throw new Error(`Extesnion not found in "externalExtensions/${extensionName}"`);
+      throw new Error(`Extension not found in "externalExtensions/${extensionName}"`);
     }
 
     return extensionName;
