@@ -32,3 +32,5 @@ export type TemplateDescriptor = {
   relativePath: string;
   source: string;
 };
+
+export type SolidityFrameworkChoices = (SolidityFramework | { value: any; name: string })[];

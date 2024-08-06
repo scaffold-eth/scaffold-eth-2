@@ -11,13 +11,13 @@ import { showHelpMessage } from "./utils/show-help-message";
 export async function cli(args: Args) {
   try {
     renderIntroMessage();
-    const rawOptions = await parseArgumentsIntoOptions(args);
+    const { rawOptions, solidityFrameworkChoices } = await parseArgumentsIntoOptions(args);
     if (rawOptions.help) {
       showHelpMessage();
       return;
     }
 
-    const options = await promptForMissingOptions(rawOptions);
+    const options = await promptForMissingOptions(rawOptions, solidityFrameworkChoices);
     if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       await validateFoundryUp();
     }

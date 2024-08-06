@@ -1,7 +1,10 @@
-import type { Args, ExternalExtension, SolidityFramework, RawOptions } from "../types";
+import type { Args, ExternalExtension, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
 import arg from "arg";
 import * as https from "https";
-import { getDataFromExternalExtensionArgument } from "./external-extensions";
+import {
+  getDataFromExternalExtensionArgument,
+  getSolidityFrameworkDirsFromExternalExtension,
+} from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
@@ -51,7 +54,9 @@ const validateExternalExtension = async (
 };
 
 // TODO update smartContractFramework code with general extensions
-export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptions> {
+export async function parseArgumentsIntoOptions(
+  rawArgs: Args,
+): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: SolidityFrameworkChoices }> {
   const args = arg(
     {
       "--skip-install": Boolean,
@@ -81,12 +86,6 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   const project = args._[0] ?? null;
 
-  const solidityFramework = args["--solidity-framework"] ?? null;
-
-  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
-    await validateFoundryUp();
-  }
-
   // ToDo. Allow multiple
   const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
@@ -100,13 +99,38 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     );
   }
 
+  let solidityFrameworkChoices = [
+    SOLIDITY_FRAMEWORKS.HARDHAT,
+    SOLIDITY_FRAMEWORKS.FOUNDRY,
+    { value: null, name: "none" },
+  ];
+
+  if (extension) {
+    const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension(extension);
+
+    if (externalExtensionSolidityFrameworkDirs.length !== 0) {
+      solidityFrameworkChoices = externalExtensionSolidityFrameworkDirs;
+    }
+  }
+
+  // if lengh is 1, we don't give user a choice and set it ourselves.
+  const solidityFramework =
+    solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : args["--solidity-framework"] ?? null;
+
+  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
+    await validateFoundryUp();
+  }
+
   return {
-    project,
-    install: !skipInstall,
-    dev,
-    externalExtension: extension,
-    help,
-    solidityFramework,
+    rawOptions: {
+      project,
+      install: !skipInstall,
+      dev,
+      externalExtension: extension,
+      help,
+      solidityFramework: solidityFramework as RawOptions["solidityFramework"],
+    },
+    solidityFrameworkChoices,
   };
 }
 
