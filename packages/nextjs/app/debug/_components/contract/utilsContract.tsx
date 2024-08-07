@@ -14,6 +14,7 @@ const isJsonString = (str: string) => {
     JSON.parse(str);
     return true;
   } catch (e) {
+    console.log(e);
     return false;
   }
 };
@@ -24,6 +25,7 @@ const isBigInt = (str: string) => {
     BigInt(str);
     return true;
   } catch (e) {
+    console.log(e);
     return false;
   }
 };
