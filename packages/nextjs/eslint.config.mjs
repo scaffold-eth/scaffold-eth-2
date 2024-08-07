@@ -1,11 +1,51 @@
 // @ts-check
-import eslint from "@eslint/js";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import tseslint from "typescript-eslint";
+import { fixupPluginRules } from "@eslint/compat";
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import prettierConfigRecommended from "eslint-plugin-prettier/recommended";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import ts from "typescript-eslint";
 
-export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
+});
+
+const pluginsToPatch = [
+  "@next/next",
+  // Other plugins to patch, example :
+  "react-hooks",
+];
+
+const compatConfig = [...compat.extends("next/core-web-vitals")];
+
+const patchedConfig = compatConfig.map(entry => {
+  const plugins = entry.plugins;
+  for (const key in plugins) {
+    if (plugins.hasOwnProperty(key) && pluginsToPatch.includes(key)) {
+      plugins[key] = fixupPluginRules(plugins[key]);
+    }
+  }
+  return entry;
+});
+
+const config = [
+  ...patchedConfig,
+  ...ts.configs.recommended,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ["*.js", "*.mjs"],
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   {
     rules: {
       "no-unused-vars": "off",
@@ -14,6 +54,22 @@ export default tseslint.config(
       "@typescript-eslint/ban-ts-comment": "error",
     },
   },
-  // @ts-expect-error eslintPluginPrettierRecommended types are broken for now
-  eslintPluginPrettierRecommended,
-);
+
+  prettierConfigRecommended, // Last since it disables some previously set rules
+  {
+    ignores: [
+      ".next/*",
+      "out/*",
+      "node_modules/*",
+      "**/*.less",
+      "**/*.css",
+      "**/*.scss",
+      "**/*.json",
+      "**/*.png",
+      "**/*.svg",
+      "**/generated/**/*",
+    ],
+  },
+];
+
+export default config;
