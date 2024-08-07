@@ -15,11 +15,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-const pluginsToPatch = [
-  "@next/next",
-  // Other plugins to patch, example :
-  "react-hooks",
-];
+const pluginsToPatch = ["@next/next", "react-hooks"];
 
 const compatConfig = [...compat.extends("next/core-web-vitals")];
 
