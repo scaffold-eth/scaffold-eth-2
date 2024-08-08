@@ -86,6 +86,10 @@ const config: HardhatUserConfig = {
       url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
+    apeCurtis: {
+      url: `https://curtis.rpc.caldera.xyz/http/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
     gnosis: {
       url: "https://rpc.gnosischain.com",
       accounts: [deployerPrivateKey],
