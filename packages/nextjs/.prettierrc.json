@@ -1,5 +1,4 @@
 {
-  "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "arrowParens": "avoid",
   "printWidth": 120,
   "tabWidth": 2,
