@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.53
+
+### Patch Changes
+
+- fix: vscode eslint not working (https://github.com/scaffold-eth/scaffold-eth-2/pull/905)
+- cli: display correct solidity framework options based on extension
+- cli: Add curated ERC-20 extension
+- cli: fix: copy only chosen solidity framework folder
+
 ## 0.0.52
 
 ### Patch Changes
