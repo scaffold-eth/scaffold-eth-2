@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ContractInput } from "./ContractInput";
-import { getFunctionInputKey, getInitalTupleArrayFormState } from "./utilsContract";
+import { getFunctionInputKey, getInitialTupleArrayFormState } from "./utilsContract";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import { AbiParameterTuple } from "~~/utils/scaffold-eth/contract";
 
@@ -12,7 +12,7 @@ type TupleArrayProps = {
 };
 
 export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObjectKey }: TupleArrayProps) => {
-  const [form, setForm] = useState<Record<string, any>>(() => getInitalTupleArrayFormState(abiTupleParameter));
+  const [form, setForm] = useState<Record<string, any>>(() => getInitialTupleArrayFormState(abiTupleParameter));
   const [additionalInputs, setAdditionalInputs] = useState<Array<typeof abiTupleParameter.components>>([
     abiTupleParameter.components,
   ]);
