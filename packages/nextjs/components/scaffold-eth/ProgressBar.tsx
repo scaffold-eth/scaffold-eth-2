@@ -45,9 +45,10 @@ export function ProgressBar() {
     NProgress.configure({ showSpinner: false });
 
     const handleAnchorClick = (event: MouseEvent) => {
-      const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
+      const anchor = event.currentTarget as HTMLAnchorElement;
+      const targetUrl = anchor.href;
       const currentUrl = location.href;
-      if (targetUrl !== currentUrl) {
+      if (targetUrl !== currentUrl && !anchor.target) {
         NProgress.start();
       }
     };
