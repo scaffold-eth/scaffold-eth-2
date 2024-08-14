@@ -75,6 +75,9 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
         hash: transactionHash,
         confirmations: options?.blockConfirmations,
       });
+
+      // transactionReceipt.status ???
+
       notification.remove(notificationId);
 
       notification.success(
