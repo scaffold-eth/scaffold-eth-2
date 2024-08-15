@@ -45,11 +45,12 @@ export function ProgressBar() {
     NProgress.configure({ showSpinner: false });
 
     const handleAnchorClick = (event: MouseEvent) => {
-      const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
+      const anchor = event.currentTarget as HTMLAnchorElement;
+      const targetUrl = anchor.href;
       const currentUrl = location.href;
-      if (targetUrl !== currentUrl) {
-        NProgress.start();
-      }
+      const isTargetBlank = anchor?.target === "_blank";
+      if (targetUrl === currentUrl || isTargetBlank) return;
+      NProgress.start();
     };
 
     const handleMutation: MutationCallback = () => {
