@@ -48,7 +48,8 @@ export function ProgressBar() {
       const anchor = event.currentTarget as HTMLAnchorElement;
       const targetUrl = anchor.href;
       const currentUrl = location.href;
-      if (targetUrl !== currentUrl && !anchor.target) {
+      const isTargetBlank = anchor?.target === "_blank";
+      if (targetUrl !== currentUrl && !isTargetBlank) {
         NProgress.start();
       }
     };
