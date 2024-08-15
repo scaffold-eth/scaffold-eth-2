@@ -49,9 +49,8 @@ export function ProgressBar() {
       const targetUrl = anchor.href;
       const currentUrl = location.href;
       const isTargetBlank = anchor?.target === "_blank";
-      if (targetUrl !== currentUrl && !isTargetBlank) {
-        NProgress.start();
-      }
+      if (targetUrl === currentUrl || isTargetBlank) return;
+      NProgress.start();
     };
 
     const handleMutation: MutationCallback = () => {
