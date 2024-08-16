@@ -80,6 +80,8 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
 
       notification.remove(notificationId);
 
+      if (transactionReceipt.status === "reverted") throw new Error("Transaction reverted");
+
       notification.success(
         <TxnNotification message="Transaction completed successfully!" blockExplorerLink={blockExplorerTxURL} />,
         {
