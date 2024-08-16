@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/BidBoard.sol": {
+      "content": "// SPDX-License-Identifier: UNLICENSED\npragma solidity ^0.8.13;\n\ncontract BidBoard {\n\tstring public message;\n\taddress public currentAdvertiser;\n\tuint public currentAmount;\n\taddress payable public owner;\n\n\tevent MessageUpdated(\n\t\tstring newMessage,\n\t\taddress indexed newAdvertiser,\n\t\tuint newAmount\n\t);\n\n\tconstructor() {\n\t\towner = payable(msg.sender);\n\t\tmessage = \"Welcome to Apechain\";\n\t}\n\n\tmodifier onlyOwner() {\n\t\trequire(msg.sender == owner, \"Only the owner can call this function.\");\n\t\t_;\n\t}\n\n\tfunction updateMessage(string calldata newMessage) external payable {\n\t\trequire(\n\t\t\tmsg.value > currentAmount,\n\t\t\t\"Must send more Ether than the previous amount.\"\n\t\t);\n\n\t\tmessage = newMessage;\n\t\tcurrentAdvertiser = msg.sender;\n\t\tcurrentAmount = msg.value;\n\n\t\towner.transfer(msg.value);\n\n\t\temit MessageUpdated(newMessage, msg.sender, msg.value);\n\t}\n\n\tfunction updateOwner(address payable newOwner) external onlyOwner {\n\t\towner = newOwner;\n\t}\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

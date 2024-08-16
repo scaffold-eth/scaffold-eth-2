@@ -32,7 +32,7 @@
     "react-hot-toast": "^2.4.0",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.13.0",
-    "viem": "2.17.4",
+    "viem": "2.19.6",
     "wagmi": "2.10.10",
     "zustand": "^4.1.2"
   },
