@@ -30,8 +30,7 @@ async function getBalanceForEachNetwork(address) {
     }
 
     for (const networkName in rpcEndpoints) {
-      if (networkName === "localhost" || networkName === "default_network")
-        continue;
+      if (networkName === "localhost") continue;
 
       const networkUrl = replaceENVAlchemyKey(rpcEndpoints[networkName]);
 
