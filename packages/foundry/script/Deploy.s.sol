@@ -6,7 +6,7 @@ import "./DeployHelpers.s.sol";
 import { DeployYourContract } from "./00_deploy_your_contract.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
-  function run() external ScaffoldEthDeployerRunner {
+  function run() external {
     DeployYourContract deployYourContract = new DeployYourContract();
     deployYourContract.run();
 
