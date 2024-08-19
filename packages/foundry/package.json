@@ -10,7 +10,7 @@
     "deploy": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy --ffi && node scripts-js/generateTsAbis.js",
     "deploy:verify": "forge build --build-info --build-info-path out/build-info/ && forge script script/Deploy.s.sol --rpc-url ${1:-default_network} --broadcast --legacy --ffi --verify ; node scripts-js/generateTsAbis.js",
     "flatten": "forge flatten",
-    "fork": "anvil --fork-url ${0:-mainnet} --chain-id 31337 --config-out localhost.json",
+    "fork": "anvil --fork-url ${0:-mainnet} --chain-id 31337",
     "format": "forge fmt && prettier --write ./script/**/*.js",
     "account:generate": "cast wallet import ${1:-scaffold-eth-custom} --private-key $(cast wallet new | grep 'Private key:' | awk '{print $3}')",
     "account:import": "cast wallet import ${1:-scaffold-eth-custom} --interactive",
