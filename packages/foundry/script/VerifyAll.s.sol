@@ -106,11 +106,9 @@ contract VerifyAll is Script {
     }
   }
 
-  function _getCompiledBytecode(string memory contractName)
-    internal
-    view
-    returns (string memory compiledBytecode)
-  {
+  function _getCompiledBytecode(
+    string memory contractName
+  ) internal view returns (string memory compiledBytecode) {
     string memory root = vm.projectRoot();
     string memory path =
       string.concat(root, "/out/", contractName, ".sol/", contractName, ".json");

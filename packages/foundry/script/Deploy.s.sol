@@ -1,29 +1,17 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import { YourContract } from "../contracts/YourContract.sol";
-import { ScaffoldETHDeploy, console } from "./DeployHelpers.s.sol";
+import "../contracts/YourContract.sol";
+import "./DeployHelpers.s.sol";
+import { DeployYourContract } from "./00_deploy_your_contract.s.sol";
 
 contract DeployScript is ScaffoldETHDeploy {
-  error InvalidPrivateKey(string);
+  function run() external ScaffoldEthDeployerRunner {
+    DeployYourContract deployYourContract = new DeployYourContract();
+    deployYourContract.run();
 
-  function run() external {
-    address deployer = _startBroadcast();
-    YourContract yourContract = new YourContract(deployer);
-    console.logString(
-      string.concat(
-        "YourContract deployed at: ", vm.toString(address(yourContract))
-      )
-    );
-    _stopBroadcast();
-
-    /**
-     * This function generates the file containing the contracts Abi definitions.
-     * These definitions are used to derive the types needed in the custom scaffold-eth hooks, for example.
-     * This function should be called last.
-     */
-    exportDeployments();
+    // deploy more contracts here
+    // DeployMyContract deployMyContract = new DeployMyContract();
+    // deployMyContract.run();
   }
-
-  function test() public { }
 }

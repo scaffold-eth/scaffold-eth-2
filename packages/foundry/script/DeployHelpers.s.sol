@@ -7,6 +7,7 @@ import { Vm } from "forge-std/Vm.sol";
 contract ScaffoldETHDeploy is Script {
   error InvalidChain();
   error DeployerHasNoBalance();
+  error InvalidPrivateKey(string);
 
   event AnvilSetBalance(address account, uint256 amount);
   event FailedAnvilRequest();
@@ -21,17 +22,32 @@ contract ScaffoldETHDeploy is Script {
   Deployment[] public deployments;
   uint256 constant ANVIL_BASE_BALANCE = 10000 ether;
 
-  function _startBroadcast() internal returns (address deployer) {
-    vm.startBroadcast();
-    (, deployer,) = vm.readCallers();
+  /// @notice The deployer address for every run
+  address deployer;
 
-    if (block.chainid == 31337 && deployer.balance == 0) {
-      try this.anvil_setBalance(deployer, ANVIL_BASE_BALANCE) {
-        emit AnvilSetBalance(deployer, ANVIL_BASE_BALANCE);
+  /// @notice Use this modifier on your run() function on your deploy scripts
+  modifier ScaffoldEthDeployerRunner() {
+    deployer = _startBroadcast();
+    if (deployer == address(0)) {
+      revert InvalidPrivateKey("Invalid private key");
+    }
+    _;
+    _stopBroadcast();
+    exportDeployments();
+  }
+
+  function _startBroadcast() internal returns (address) {
+    vm.startBroadcast();
+    (, address _deployer,) = vm.readCallers();
+
+    if (block.chainid == 31337 && _deployer.balance == 0) {
+      try this.anvil_setBalance(_deployer, ANVIL_BASE_BALANCE) {
+        emit AnvilSetBalance(_deployer, ANVIL_BASE_BALANCE);
       } catch {
         emit FailedAnvilRequest();
       }
     }
+    return _deployer;
   }
 
   function _stopBroadcast() internal {
