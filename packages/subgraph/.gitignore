@@ -1,0 +1,3 @@
+build/*
+generated/*
+graph-node/data/*
