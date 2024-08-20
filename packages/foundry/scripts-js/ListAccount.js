@@ -67,7 +67,10 @@ async function main() {
 
   if (!verifyAddressFormat(address)) {
     console.log(
-      "🚫️ Invalid account or password, please run `yarn account:generate` or `yarn account:import`"
+      `🚫️ Unable to access keystore account ${process.env.ETH_KEYSTORE_ACCOUNT}`
+    );
+    console.log(
+      "\nPlease run `yarn account:generate` to generate deployer keystore account and update `ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom` in `.env` file"
     );
     return;
   }
