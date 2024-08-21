@@ -70,7 +70,7 @@ const Subgraph: NextPage = () => {
               <p className="text-center text-lg">
                 Create Graph Client runtime artifact directory with{" "}
                 <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-                  yarn client
+                  yarn graphclient:build
                 </code>
               </p>
             </div>
