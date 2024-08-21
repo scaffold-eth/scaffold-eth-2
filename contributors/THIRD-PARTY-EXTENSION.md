@@ -63,7 +63,7 @@ A developer goes through 2 phases while developing an extension:
    **Some Caveats:**
 
    - Only the addition of new files and new directories is allowed while creating an extension. If you try to overwrite existing files, it won't be reflected.
-   - `*.args.mjs` files: You might want to add content to existing base instance files. For example, adding a new page link in the Header component. `create-eth` allows injecting additional content into **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files.
+   - `*.args.mjs` files: You might want to add content to existing base instance files. For example, adding a new page link in the Header component. `create-eth` allows injecting additional content into **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files. For a list of supported template files and their corresponding args files, see [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
    - Changes to `package.json` won't be copied directly; instead, you should manually create/update `package.json` with only things necessary for the extension inside the `create-eth/externalExtensions/${extensionName}` directory. For example, check out this [`package.json`](https://github.com/scaffold-eth/create-eth-extensions/blob/subgraph/extension/packages/nextjs/package.json) from the `subgraph` extension, which adds extra dependencies to the frontend.
 
 > TIP: The next section command should guide you with info when changes to unsupported files are detected, or you could inject some content using `*.args.mjs` for the respective file.

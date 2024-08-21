@@ -148,6 +148,8 @@ To avoid issues when named arguments have typos, the `withDefaults` utility will
 
 For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If there are multiple Args files, we combine them into an array
 
+To see the list of template files and their matching args files, check [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
+
 I've thought about how the strings should be joined, but an option is to use [tagged templates](4). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
