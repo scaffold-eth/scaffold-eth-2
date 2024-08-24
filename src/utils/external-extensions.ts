@@ -7,7 +7,7 @@ import { SOLIDITY_FRAMEWORKS } from "./consts";
 // Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
-  if (CURATED_EXTENSIONS[externalExtension]) {
+  if (CURATED_EXTENSIONS[externalExtension.toLowerCase()]) {
     externalExtension = getArgumentFromExternalExtensionOption(CURATED_EXTENSIONS[externalExtension]);
   }
 
