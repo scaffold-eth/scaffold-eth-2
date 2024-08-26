@@ -36,13 +36,12 @@ account:
 
 # Generate a new account
 account-generate:
-	@cast wallet import $${1:-scaffold-eth-custom} --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$${1:-scaffold-eth-custom}"
+	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
+	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$(ACCOUNT_NAME)"
 
 # Import an existing account
 account-import:
-	@cast wallet import $${1:-scaffold-eth-custom} --interactive
-
+	@cast wallet import ${ACCOUNT_NAME} --interactive
 
 # Compile contracts
 compile:
