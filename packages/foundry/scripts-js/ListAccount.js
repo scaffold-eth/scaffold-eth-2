@@ -65,9 +65,19 @@ function verifyAddressFormat(address) {
 async function main() {
   const address = process.argv[2];
 
+  if (process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default") {
+    console.log("Displaying balance for deault account");
+    console.log(
+      "Did you forgot to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in .env file?\n"
+    );
+  }
+
   if (!verifyAddressFormat(address)) {
     console.log(
-      "🚫️ Invalid account or password, please run `yarn account:generate` or `yarn account:import`"
+      `🚫️ Unable to access keystore account ${process.env.ETH_KEYSTORE_ACCOUNT}`
+    );
+    console.log(
+      "\nPlease run `yarn account:generate` to generate deployer keystore account and update `ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom` in `.env` file"
     );
     return;
   }
