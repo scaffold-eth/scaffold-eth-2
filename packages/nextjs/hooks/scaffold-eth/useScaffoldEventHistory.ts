@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
@@ -11,10 +11,6 @@ import {
   UseScaffoldEventHistoryConfig,
   UseScaffoldEventHistoryData,
 } from "~~/utils/scaffold-eth/contract";
-
-const getRandomId = () => {
-  return Math.random().toString(36).slice(2, 11);
-};
 
 const getEvents = async (
   getLogsParams: GetLogsParameters<AbiEvent | undefined, AbiEvent[] | undefined, boolean, BlockNumber, BlockNumber>,
@@ -109,8 +105,6 @@ export const useScaffoldEventHistory = <
         eventName,
         fromBlock: fromBlock.toString(),
         chainId: targetNetwork.id,
-        // Prevent caching between different instances of the hook
-        instanceId: useMemo(getRandomId, []),
       },
     ],
     queryFn: async ({ pageParam }) => {
