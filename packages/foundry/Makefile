@@ -26,13 +26,18 @@ build-and-deploy: build deploy generate-abis
 generate-abis:
 	node scripts-js/generateTsAbis.js
 
-# Verify keystore
 verify-keystore:
-	@cast wallet address 
+	@set -a && source .env && \
+	if [ "$$ETH_KEYSTORE_ACCOUNT" = "scaffold-eth-default" ]; then \
+		cast wallet address --password localhost; \
+	else \
+		cast wallet address; \
+	fi
 
 # List account
 account:
-	@node scripts-js/ListAccount.js $$(make verify-keystore)
+	@address=$$(make -s verify-keystore | tail -n 1) && \
+	node scripts-js/ListAccount.js $$address
 
 # Generate a new account
 account-generate:
@@ -78,6 +83,7 @@ test:
 
 # Verify contracts
 verify:
-	forge build --build-info --build-info-path out/build-info/ && \
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
+
+build-and-verify: build verify
 

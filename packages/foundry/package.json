@@ -16,7 +16,7 @@
     "format": "make format",
     "lint": "make lint",
     "test": "make test",
-    "verify": "make verify RPC_URL=${1:-localhost}",
+    "verify": "make build-and-verify RPC_URL=${1:-localhost}",
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {
