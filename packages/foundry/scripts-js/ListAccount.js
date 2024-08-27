@@ -62,24 +62,35 @@ function verifyAddressFormat(address) {
   }
 }
 
+const DEFAULT_KEYSTORE_ACCOUNT = "scaffold-eth-default";
 async function main() {
   const address = process.argv[2];
+  const isValidAddress = verifyAddressFormat(address);
+  const isDefaultAccount =
+    process.env.ETH_KEYSTORE_ACCOUNT === DEFAULT_KEYSTORE_ACCOUNT;
 
-  if (process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default") {
-    console.log("Displaying balance for deault account");
+  if (!isValidAddress) {
     console.log(
-      "Did you forgot to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in .env file?\n"
+      `\n🚫️ Unable to access keystore account ${process.env.ETH_KEYSTORE_ACCOUNT}`
     );
-  }
 
-  if (!verifyAddressFormat(address)) {
+    if (isDefaultAccount) {
+      console.log(
+        "\n🏠 It seems you are trying to access the localhost account. Did you forget to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in the .env file?\n"
+      );
+    }
+
     console.log(
-      `🚫️ Unable to access keystore account ${process.env.ETH_KEYSTORE_ACCOUNT}`
-    );
-    console.log(
-      "\nPlease run `yarn account:generate` to generate deployer keystore account and update `ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom` in `.env` file"
+      "\n💡 If you haven't generated a deployer keystore account yet, please run `yarn account:generate`. Then update the `.env` file with `ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom`"
     );
     return;
+  }
+
+  if (isValidAddress && isDefaultAccount) {
+    console.log("\n⚠️ Displaying balance for default account");
+    console.log(
+      "\n❓ Did you forget to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in the .env file?\n"
+    );
   }
 
   console.log(await toString(address, { type: "terminal", small: true }));

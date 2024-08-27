@@ -27,17 +27,11 @@ generate-abis:
 	node scripts-js/generateTsAbis.js
 
 verify-keystore:
-	@set -a && source .env && \
-	if [ "$$ETH_KEYSTORE_ACCOUNT" = "scaffold-eth-default" ]; then \
-		cast wallet address --password localhost; \
-	else \
-		cast wallet address; \
-	fi
+	@cast wallet address
 
 # List account
 account:
-	@address=$$(make -s verify-keystore | tail -n 1) && \
-	node scripts-js/ListAccount.js $$address
+	@node scripts-js/ListAccount.js $$(make verify-keystore)
 
 # Generate a new account
 account-generate:
