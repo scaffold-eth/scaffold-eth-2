@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config: [foundry]
+        config: [hardhat, foundry, no_solidity_framework]
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +37,10 @@ jobs:
       - name: Install Foundry
         if: matrix.config == 'foundry'
         uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Add Foundry to PATH
+        if: matrix.config == 'foundry'
+        run: echo "$HOME/.foundry/bin" >> $GITHUB_PATH
 
       - name: Install application (Foundry configuration)
         if: matrix.config == 'foundry'
