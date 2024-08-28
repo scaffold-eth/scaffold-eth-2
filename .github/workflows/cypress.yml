@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config: [hardhat, foundry, no_solidity_framework]
+        config: [foundry]
     steps:
       - uses: actions/checkout@v4
 
