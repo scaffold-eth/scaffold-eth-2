@@ -68,7 +68,7 @@ function findAddressFromArgs(args) {
 
 const DEFAULT_KEYSTORE_ACCOUNT = "scaffold-eth-default";
 async function main() {
-  const address = findAddressFromArgs(args);
+  const address = findAddressFromArgs(process.argv);
 
   const isValidAddress = verifyAddressFormat(address);
   const isDefaultAccount =
