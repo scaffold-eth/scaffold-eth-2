@@ -62,23 +62,13 @@ function verifyAddressFormat(address) {
   }
 }
 
-function parseArgs(args) {
-  const parsedArgs = {};
-  args.forEach((arg) => {
-    if (arg.startsWith("--")) {
-      const [key, value] = arg.slice(2).split("=");
-      parsedArgs[key] = value;
-    }
-  });
-  return parsedArgs;
+function findAddressFromArgs(args) {
+  return args.find((arg) => arg.startsWith("0x") && arg.length === 42);
 }
 
 const DEFAULT_KEYSTORE_ACCOUNT = "scaffold-eth-default";
 async function main() {
-  const args = process.argv.slice(2); // Remove the first two elements (node and script path)
-  const parsedArgs = parseArgs(args);
-  const address = parsedArgs.address;
-  console.log("address", address);
+  const address = findAddressFromArgs(args);
 
   const isValidAddress = verifyAddressFormat(address);
   const isDefaultAccount =

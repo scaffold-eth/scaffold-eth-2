@@ -31,7 +31,7 @@ verify-keystore:
 
 # List account
 account:
-	@node scripts-js/ListAccount.js --address=$$(make verify-keystore)
+	@node scripts-js/ListAccount.js $$(make verify-keystore)
 
 # Generate a new account
 account-generate:
