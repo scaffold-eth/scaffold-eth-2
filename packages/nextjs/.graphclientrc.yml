@@ -1,0 +1,8 @@
+# .graphclientrc.yml
+sources:
+  - name: YourContract
+    handler:
+      graphql:
+        endpoint: http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
+documents:
+  - ./graphql/GetGreetings.gql
