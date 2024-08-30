@@ -1,4 +1,6 @@
-import * as dotenv from "dotenv";
+import { withDefaults } from "../../../../utils.js";
+
+const contents = ({ imports }) => `import * as dotenv from "dotenv";
 dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
@@ -9,6 +11,7 @@ import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
+${imports.filter(Boolean).join("\n")}
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -42,48 +45,48 @@ const config: HardhatUserConfig = {
     // If the network you are looking for is not here you can add new network settings
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+        url: \`https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}\`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+      url: \`https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://eth-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     arbitrum: {
-      url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://arb-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     arbitrumSepolia: {
-      url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://arb-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     optimism: {
-      url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://opt-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     optimismSepolia: {
-      url: `https://opt-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://opt-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://polygon-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonMumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://polygon-mumbai.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvm: {
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://polygonzkevm-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvmTestnet: {
-      url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: \`https://polygonzkevm-testnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     gnosis: {
@@ -121,12 +124,12 @@ const config: HardhatUserConfig = {
   },
   // configuration for harhdat-verify plugin
   etherscan: {
-    apiKey: `${etherscanApiKey}`,
+    apiKey: \`\${etherscanApiKey}\`,
   },
   // configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
     etherscan: {
-      apiKey: `${etherscanApiKey}`,
+      apiKey: \`\${etherscanApiKey}\`,
     },
   },
   sourcify: {
@@ -134,4 +137,8 @@ const config: HardhatUserConfig = {
   },
 };
 
-export default config;
+export default config;`;
+
+export default withDefaults(contents, {
+  imports: "",
+});

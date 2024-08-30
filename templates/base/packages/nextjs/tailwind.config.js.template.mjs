@@ -1,4 +1,6 @@
-/** @type {import('tailwindcss').Config} */
+import { withDefaults } from "../../../utils.js";
+
+const contents = ({ lightTheme, darkTheme }) => `/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
@@ -8,7 +10,27 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        light: {
+        light: ${lightTheme},
+      },
+      {
+        dark: ${darkTheme},
+      },
+    ],
+  },
+  theme: {
+    extend: {
+      boxShadow: {
+        center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
+      },
+      animation: {
+        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+    },
+  },
+};`;
+
+export default withDefaults(contents, {
+  lightTheme: `{
           primary: "#93BBFB",
           "primary-content": "#212638",
           secondary: "#DAE8FF",
@@ -37,10 +59,8 @@ module.exports = {
           ".link:hover": {
             opacity: "80%",
           },
-        },
-      },
-      {
-        dark: {
+        }`,
+  darkTheme: `{
           primary: "#212638",
           "primary-content": "#F9FBFF",
           secondary: "#323f61",
@@ -70,18 +90,5 @@ module.exports = {
           ".link:hover": {
             opacity: "80%",
           },
-        },
-      },
-    ],
-  },
-  theme: {
-    extend: {
-      boxShadow: {
-        center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
-      },
-      animation: {
-        "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-    },
-  },
-};
+        }`,
+});
