@@ -30,7 +30,6 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
-    "use-debounce": "^10.0.3",
     "usehooks-ts": "^3.1.0",
     "viem": "2.20.0",
     "wagmi": "2.12.7",

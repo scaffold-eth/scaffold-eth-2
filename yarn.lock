@@ -2259,7 +2259,6 @@ __metadata:
     tailwindcss: ^3.4.10
     type-fest: ^4.25.0
     typescript: 5.5.4
-    use-debounce: ^10.0.3
     usehooks-ts: ^3.1.0
     vercel: ^37.1.1
     viem: 2.20.0
@@ -13505,15 +13504,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7913df383a5a6fcb399212eedefaac2e0c6f843555202d4e3010bac3848afe38ecaa3d0d6500ad1d936fbeffd637e6c517e68edb024af5e6beca7f27f3ce7b21
-  languageName: node
-  linkType: hard
-
-"use-debounce@npm:^10.0.3":
-  version: 10.0.3
-  resolution: "use-debounce@npm:10.0.3"
-  peerDependencies:
-    react: "*"
-  checksum: 19146eeb9adb893fe18a601ee8d3ba095b3c8b01e200f552462e7bb7370fcdbe5e7ffa8d5072dbf5eee58cae64f95903c26a5446039c1338c721808be808b546
   languageName: node
   linkType: hard
 
