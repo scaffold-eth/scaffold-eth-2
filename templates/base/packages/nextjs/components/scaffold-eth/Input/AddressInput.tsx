@@ -48,7 +48,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     },
   });
 
-  const { data: ensAvatar, isLoading: isEnsAvtarLoading } = useEnsAvatar({
+  const { data: ensAvatar, isLoading: isEnsAvatarLoading } = useEnsAvatar({
     name: ensName ? normalize(ensName) : undefined,
     chainId: 1,
     query: {
@@ -94,7 +94,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       prefix={
         ensName ? (
           <div className="flex bg-base-300 rounded-l-full items-center">
-            {isEnsAvtarLoading && <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>}
+            {isEnsAvatarLoading && <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>}
             {ensAvatar ? (
               <span className="w-[35px]">
                 {

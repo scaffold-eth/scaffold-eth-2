@@ -5,6 +5,7 @@ import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
   ContractName,
@@ -105,6 +106,7 @@ export const useScaffoldEventHistory = <
         eventName,
         fromBlock: fromBlock.toString(),
         chainId: targetNetwork.id,
+        filters: JSON.stringify(filters, replacer),
       },
     ],
     queryFn: async ({ pageParam }) => {
