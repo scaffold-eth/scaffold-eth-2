@@ -1,5 +1,19 @@
 # create-eth
 
+## 0.0.54
+
+### Patch Changes
+
+- 7d5626f: cli: templatise tailwind and hardhat config
+- c74730d: - revert #875 (https://github.com/scaffold-eth/scaffold-eth-2/pull/905)
+  - Fix typos (https://github.com/scaffold-eth/scaffold-eth-2/pull/906)
+  - Exclude external links from triggering progress bar ([#909](https://github.com/scaffold-eth/scaffold-eth-2/pull/909))
+  - Handle tx revert in `useTransactor` (https://github.com/scaffold-eth/scaffold-eth-2/pull/907)
+  - show blockexplorer link when transaction is reverted (https://github.com/scaffold-eth/scaffold-eth-2/pull/910)
+  - fix: useScaffoldEventHistory caching (https://github.com/scaffold-eth/scaffold-eth-2/pull/916)
+  - allow json module imports (https://github.com/scaffold-eth/scaffold-eth-2/pull/921)
+- c56aac4: cli: allow case-sensitive extension names
+
 ## 0.0.53
 
 ### Patch Changes
