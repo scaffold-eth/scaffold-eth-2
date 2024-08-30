@@ -8,3 +8,4 @@
 - Handle tx revert in `useTransactor` (https://github.com/scaffold-eth/scaffold-eth-2/pull/907)
 - show blockexplorer link when transaction is reverted (https://github.com/scaffold-eth/scaffold-eth-2/pull/910)
 - fix: useScaffoldEventHistory caching (https://github.com/scaffold-eth/scaffold-eth-2/pull/916)
+- allow json module imports (https://github.com/scaffold-eth/scaffold-eth-2/pull/921)
