@@ -27,7 +27,11 @@ generate-abis:
 	node scripts-js/generateTsAbis.js
 
 verify-keystore:
-	@cast wallet address
+	if grep -q "scaffold-eth-default" .env; then \
+		cast wallet address --password localhost; \
+  else \
+		cast wallet address; \
+  fi
 
 # List account
 account:
