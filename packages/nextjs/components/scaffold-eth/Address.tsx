@@ -12,11 +12,45 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
+const CopyIcon = ({ className, address }: { className?: string; address: string }) => {
+  const [addressCopied, setAddressCopied] = useState(false);
+  return (
+    <CopyToClipboard
+      text={address}
+      onCopy={() => {
+        setAddressCopied(true);
+        setTimeout(() => {
+          setAddressCopied(false);
+        }, 800);
+      }}
+    >
+      <button onClick={e => e.stopPropagation()}>
+        {addressCopied ? (
+          <CheckCircleIcon className={className} aria-hidden="true" />
+        ) : (
+          <DocumentDuplicateIcon className={className} aria-hidden="true" />
+        )}
+      </button>
+    </CopyToClipboard>
+  );
+};
+
 type AddressProps = {
   address?: AddressType;
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  showBoth?: boolean;
+};
+
+const sizeMap = {
+  xs: 0,
+  sm: 1,
+  base: 2,
+  lg: 3,
+  xl: 4,
+  "2xl": 5,
+  "3xl": 6,
 };
 
 const blockieSizeMap = {
@@ -29,13 +63,32 @@ const blockieSizeMap = {
   "3xl": 15,
 };
 
-/**
- * Displays an address (or ENS) with a Blockie image and option to copy address.
- */
-export const Address = ({ address, disableAddressLink, format, size = "base" }: AddressProps) => {
-  const [ens, setEns] = useState<string | null>();
-  const [ensAvatar, setEnsAvatar] = useState<string | null>();
-  const [addressCopied, setAddressCopied] = useState(false);
+const copyIconSizeMap = {
+  xs: "h-[14px] w-[14px]",
+  sm: "h-[16px] w-[16px]",
+  base: "h-[18px] w-[18px]",
+  lg: "h-[20px] w-[20px]",
+  xl: "h-[22px] w-[22px]",
+  "2xl": "h-[24px] w-[24px]",
+  "3xl": "h-[26px] w-[26px]",
+};
+
+const getCopyIconSize = (currentSize: keyof typeof copyIconSizeMap) => {
+  return copyIconSizeMap[currentSize];
+};
+
+const getNextSize = (currentSize: keyof typeof sizeMap, step = 1): keyof typeof sizeMap => {
+  const sizes = Object.keys(sizeMap) as Array<keyof typeof sizeMap>;
+  const currentIndex = sizes.indexOf(currentSize);
+  const nextIndex = Math.min(currentIndex + step, sizes.length - 1);
+  return sizes[nextIndex];
+};
+
+export const Address = ({ address, disableAddressLink, format, size, showBoth = false }: AddressProps) => {
+  const ens = "austingriffith.eth";
+  const ensAvatar = "/logo.svg";
+  const [_ens, setEns] = useState<string | null>();
+  const [_ensAvatar, setEnsAvatar] = useState<string | null>();
   const checkSumAddress = address ? getAddress(address) : undefined;
 
   const { targetNetwork } = useTargetNetwork();
@@ -56,7 +109,6 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     },
   });
 
-  // We need to apply this pattern to avoid Hydration errors.
   useEffect(() => {
     setEns(fetchedEns);
   }, [fetchedEns]);
@@ -65,7 +117,6 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     setEnsAvatar(fetchedEnsAvatar);
   }, [fetchedEnsAvatar]);
 
-  // Skeleton UI
   if (!checkSumAddress) {
     return (
       <div className="animate-pulse flex space-x-4">
@@ -82,13 +133,27 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   }
 
   const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
-  let displayAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
+  const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
+  const displayAddress = ens || (format === "long" ? checkSumAddress : shortAddress);
 
-  if (ens) {
-    displayAddress = ens;
-  } else if (format === "long") {
-    displayAddress = checkSumAddress;
-  }
+  size = size ?? (showBoth && ens ? "xs" : "base");
+  const addressSize = size;
+  const blockieSize = showBoth && ens ? getNextSize(size, 4) : size;
+  const ensSize = showBoth && ens ? getNextSize(size) : size;
+
+  const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
+    return disableAddressLink ? (
+      <>{children}</>
+    ) : (
+      <Link
+        href={blockExplorerAddressLink}
+        target={targetNetwork.id === hardhat.id ? undefined : "_blank"}
+        rel={targetNetwork.id === hardhat.id ? undefined : "noopener noreferrer"}
+      >
+        {children}
+      </Link>
+    );
+  };
 
   return (
     <div className="flex items-center flex-shrink-0">
@@ -96,45 +161,33 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
         <BlockieAvatar
           address={checkSumAddress}
           ensImage={ensAvatar}
-          size={(blockieSizeMap[size] * 24) / blockieSizeMap["base"]}
+          size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
         />
       </div>
-      {disableAddressLink ? (
-        <span className={`ml-1.5 text-${size} font-normal`}>{displayAddress}</span>
-      ) : targetNetwork.id === hardhat.id ? (
-        <span className={`ml-1.5 text-${size} font-normal`}>
-          <Link href={blockExplorerAddressLink}>{displayAddress}</Link>
-        </span>
+      {showBoth && ens ? (
+        <div className="flex flex-col">
+          <span className={`ml-1.5 text-${ensSize} font-bold`}>
+            <LinkWrapper>{ens}</LinkWrapper>
+          </span>
+          <div className="flex">
+            <span className={`ml-1.5 text-${addressSize} font-normal`}>
+              <LinkWrapper>{shortAddress}</LinkWrapper>
+            </span>
+            <CopyIcon
+              className={`ml-1 text-sky-600 ${getCopyIconSize(size)} ${getCopyIconSize(size)} cursor-pointer`}
+              address={checkSumAddress}
+            />
+          </div>
+        </div>
       ) : (
-        <a
-          className={`ml-1.5 text-${size} font-normal`}
-          target="_blank"
-          href={blockExplorerAddressLink}
-          rel="noopener noreferrer"
-        >
-          {displayAddress}
-        </a>
-      )}
-      {addressCopied ? (
-        <CheckCircleIcon
-          className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer flex-shrink-0"
-          aria-hidden="true"
-        />
-      ) : (
-        <CopyToClipboard
-          text={checkSumAddress}
-          onCopy={() => {
-            setAddressCopied(true);
-            setTimeout(() => {
-              setAddressCopied(false);
-            }, 800);
-          }}
-        >
-          <DocumentDuplicateIcon
-            className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer flex-shrink-0"
-            aria-hidden="true"
-          />
-        </CopyToClipboard>
+        <>
+          <span className={`ml-1.5 text-${addressSize} font-normal`}>
+            <LinkWrapper>{displayAddress}</LinkWrapper>
+          </span>
+          {!(showBoth && ens) && (
+            <CopyIcon address={checkSumAddress} className="ml-1.5 text-sky-600 h-5 w-5 cursor-pointer" />
+          )}
+        </>
       )}
     </div>
   );
