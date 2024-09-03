@@ -37,10 +37,18 @@
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
+    "@types/node": "^22.5.1",
+    "hardhat": "^2.22.9",
     "husky": "^8.0.1",
-    "lint-staged": "^13.0.3"
+    "lint-staged": "^13.0.3",
+    "ts-node": "^10.9.2"
   },
   "engines": {
     "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "dotenv": "^16.4.5",
+    "viem": "^2.20.1"
   }
 }

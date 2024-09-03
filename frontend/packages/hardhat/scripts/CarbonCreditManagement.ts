@@ -1,4 +1,4 @@
-import { Contract } from "ethers";
+import { Contract } from "viem";
 
 export class CarbonCreditManagement {
   private contract: Contract;

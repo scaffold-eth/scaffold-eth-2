@@ -1,4 +1,4 @@
-import { Contract } from "ethers";
+import { Contract } from 'viem';
 
 export class MintingBurning {
   private tokenContract: Contract;
@@ -8,10 +8,10 @@ export class MintingBurning {
   }
 
   async mint(to: string, amount: number): Promise<void> {
-    await this.tokenContract.mint(to, amount);
+    await this.tokenContract.write.mint([to, amount]);
   }
 
   async burn(from: string, amount: number): Promise<void> {
-    await this.tokenContract.burn(from, amount);
+    await this.tokenContract.write.burn([from, amount]);
   }
 }
