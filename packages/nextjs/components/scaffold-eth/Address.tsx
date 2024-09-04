@@ -85,10 +85,8 @@ const getNextSize = (currentSize: keyof typeof sizeMap, step = 1): keyof typeof 
 };
 
 export const Address = ({ address, disableAddressLink, format, size, showBoth = false }: AddressProps) => {
-  const ens = "austingriffith.eth";
-  const ensAvatar = "/logo.svg";
-  const [_ens, setEns] = useState<string | null>();
-  const [_ensAvatar, setEnsAvatar] = useState<string | null>();
+  const [ens, setEns] = useState<string | null>();
+  const [ensAvatar, setEnsAvatar] = useState<string | null>();
   const checkSumAddress = address ? getAddress(address) : undefined;
 
   const { targetNetwork } = useTargetNetwork();
