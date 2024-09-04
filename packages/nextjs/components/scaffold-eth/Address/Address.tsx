@@ -1,47 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { AddressCopyIcon } from "./AddressCopyIcon";
+import { AddressLinkWrapper } from "./AddressLinkWrapper";
 import { Address as AddressType, getAddress, isAddress } from "viem";
-import { hardhat } from "viem/chains";
 import { normalize } from "viem/ens";
 import { useEnsAvatar, useEnsName } from "wagmi";
-import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
-
-const CopyIcon = ({ className, address }: { className?: string; address: string }) => {
-  const [addressCopied, setAddressCopied] = useState(false);
-  return (
-    <CopyToClipboard
-      text={address}
-      onCopy={() => {
-        setAddressCopied(true);
-        setTimeout(() => {
-          setAddressCopied(false);
-        }, 800);
-      }}
-    >
-      <button onClick={e => e.stopPropagation()}>
-        {addressCopied ? (
-          <CheckCircleIcon className={className} aria-hidden="true" />
-        ) : (
-          <DocumentDuplicateIcon className={className} aria-hidden="true" />
-        )}
-      </button>
-    </CopyToClipboard>
-  );
-};
-
-type AddressProps = {
-  address?: AddressType;
-  disableAddressLink?: boolean;
-  format?: "short" | "long";
-  size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
-  showBoth?: boolean;
-};
 
 const sizeMap = {
   xs: 0,
@@ -82,6 +49,14 @@ const getNextSize = (currentSize: keyof typeof sizeMap, step = 1): keyof typeof 
   const currentIndex = sizes.indexOf(currentSize);
   const nextIndex = Math.min(currentIndex + step, sizes.length - 1);
   return sizes[nextIndex];
+};
+
+type AddressProps = {
+  address?: AddressType;
+  disableAddressLink?: boolean;
+  format?: "short" | "long";
+  size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
+  showBoth?: boolean;
 };
 
 export const Address = ({ address, disableAddressLink, format, size, showBoth = false }: AddressProps) => {
@@ -139,20 +114,6 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
   const blockieSize = showBoth && ens ? getNextSize(size, 4) : size;
   const ensSize = showBoth && ens ? getNextSize(size) : size;
 
-  const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
-    return disableAddressLink ? (
-      <>{children}</>
-    ) : (
-      <Link
-        href={blockExplorerAddressLink}
-        target={targetNetwork.id === hardhat.id ? undefined : "_blank"}
-        rel={targetNetwork.id === hardhat.id ? undefined : "noopener noreferrer"}
-      >
-        {children}
-      </Link>
-    );
-  };
-
   return (
     <div className="flex items-center flex-shrink-0">
       <div className="flex-shrink-0">
@@ -165,13 +126,23 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
       {showBoth && ens ? (
         <div className="flex flex-col">
           <span className={`ml-1.5 text-${ensSize} font-bold`}>
-            <LinkWrapper>{ens}</LinkWrapper>
+            <AddressLinkWrapper
+              disableAddressLink={disableAddressLink}
+              blockExplorerAddressLink={blockExplorerAddressLink}
+            >
+              {ens}
+            </AddressLinkWrapper>
           </span>
           <div className="flex">
             <span className={`ml-1.5 text-${addressSize} font-normal`}>
-              <LinkWrapper>{shortAddress}</LinkWrapper>
+              <AddressLinkWrapper
+                disableAddressLink={disableAddressLink}
+                blockExplorerAddressLink={blockExplorerAddressLink}
+              >
+                {shortAddress}
+              </AddressLinkWrapper>
             </span>
-            <CopyIcon
+            <AddressCopyIcon
               className={`ml-1 text-sky-600 ${getCopyIconSize(size)} ${getCopyIconSize(size)} cursor-pointer`}
               address={checkSumAddress}
             />
@@ -180,10 +151,15 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
       ) : (
         <>
           <span className={`ml-1.5 text-${addressSize} font-normal`}>
-            <LinkWrapper>{displayAddress}</LinkWrapper>
+            <AddressLinkWrapper
+              disableAddressLink={disableAddressLink}
+              blockExplorerAddressLink={blockExplorerAddressLink}
+            >
+              {displayAddress}
+            </AddressLinkWrapper>
           </span>
           {!(showBoth && ens) && (
-            <CopyIcon address={checkSumAddress} className="ml-1.5 text-sky-600 h-5 w-5 cursor-pointer" />
+            <AddressCopyIcon address={checkSumAddress} className="ml-1.5 text-sky-600 h-5 w-5 cursor-pointer" />
           )}
         </>
       )}
