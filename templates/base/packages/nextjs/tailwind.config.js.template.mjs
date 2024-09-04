@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../utils.js";
 
-const contents = ({ lightTheme, darkTheme }) => `/** @type {import('tailwindcss').Config} */
+const contents = ({ lightTheme, darkTheme, extendTheme }) => `/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("daisyui")],
@@ -19,6 +19,7 @@ module.exports = {
   },
   theme: {
     extend: {
+      ${extendTheme[0] && `${extendTheme[0]},`}
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
       },
@@ -91,4 +92,5 @@ export default withDefaults(contents, {
             opacity: "80%",
           },
         }`,
+  extendTheme: "",
 });
