@@ -155,7 +155,10 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
             </AddressLinkWrapper>
           </span>
           {!(showBoth && ens) && (
-            <AddressCopyIcon address={checkSumAddress} className="ml-1.5 text-sky-600 h-5 w-5 cursor-pointer" />
+            <AddressCopyIcon
+              address={checkSumAddress}
+              className={`ml-1.5 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
+            />
           )}
         </>
       )}
