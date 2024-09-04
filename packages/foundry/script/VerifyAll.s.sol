@@ -59,7 +59,7 @@ contract VerifyAll is Script {
       (address)
     );
     bytes memory deployedBytecode = abi.decode(
-      vm.parseJson(content, searchStr(currTransactionIdx, "transaction.data")),
+      vm.parseJson(content, searchStr(currTransactionIdx, "transaction.input")),
       (bytes)
     );
     bytes memory compiledBytecode = abi.decode(
@@ -106,11 +106,9 @@ contract VerifyAll is Script {
     }
   }
 
-  function _getCompiledBytecode(string memory contractName)
-    internal
-    view
-    returns (string memory compiledBytecode)
-  {
+  function _getCompiledBytecode(
+    string memory contractName
+  ) internal view returns (string memory compiledBytecode) {
     string memory root = vm.projectRoot();
     string memory path =
       string.concat(root, "/out/", contractName, ".sol/", contractName, ".json");
