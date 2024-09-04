@@ -65,7 +65,7 @@ flatten:
 
 # Start a fork
 fork:
-	anvil --fork-url ${FORK_URL:-mainnet} --chain-id 31337
+	anvil --fork-url ${FORK_URL} --chain-id 31337
 
 # Format code
 format:
