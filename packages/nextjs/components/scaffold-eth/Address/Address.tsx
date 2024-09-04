@@ -31,17 +31,13 @@ const blockieSizeMap = {
 };
 
 const copyIconSizeMap = {
-  xs: "h-[14px] w-[14px]",
-  sm: "h-[16px] w-[16px]",
+  xs: "h-3.5 w-3.5",
+  sm: "h-4 w-4",
   base: "h-[18px] w-[18px]",
-  lg: "h-[20px] w-[20px]",
+  lg: "h-5 w-5",
   xl: "h-[22px] w-[22px]",
-  "2xl": "h-[24px] w-[24px]",
+  "2xl": "h-6 w-6",
   "3xl": "h-[26px] w-[26px]",
-};
-
-const getCopyIconSize = (currentSize: keyof typeof copyIconSizeMap) => {
-  return copyIconSizeMap[currentSize];
 };
 
 const getNextSize = (currentSize: keyof typeof sizeMap, step = 1): keyof typeof sizeMap => {
@@ -143,7 +139,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
               </AddressLinkWrapper>
             </span>
             <AddressCopyIcon
-              className={`ml-1 text-sky-600 ${getCopyIconSize(size)} ${getCopyIconSize(size)} cursor-pointer`}
+              className={`ml-1 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
               address={checkSumAddress}
             />
           </div>
