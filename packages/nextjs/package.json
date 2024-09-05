@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",
-    "@rainbow-me/rainbowkit": "2.1.2",
+    "@rainbow-me/rainbowkit": "2.1.5",
     "@tanstack/react-query": "^5.28.6",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",

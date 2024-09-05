@@ -2013,9 +2013,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:2.1.2":
-  version: 2.1.2
-  resolution: "@rainbow-me/rainbowkit@npm:2.1.2"
+"@rainbow-me/rainbowkit@npm:2.1.5":
+  version: 2.1.5
+  resolution: "@rainbow-me/rainbowkit@npm:2.1.5"
   dependencies:
     "@vanilla-extract/css": 1.14.0
     "@vanilla-extract/dynamic": 2.1.0
@@ -2030,7 +2030,7 @@ __metadata:
     react-dom: ">=18"
     viem: 2.x
     wagmi: ^2.9.0
-  checksum: 8d127509b376715c3e22030a4df74ef061d3da86bfa481bae3ea035192fa324fb82179da284f4bdf98feb1b2672157ca9440ed0c51d9280d9da694b9e6ba6250
+  checksum: 5f740674c61e26a7f2000f92188f5efbcfed2076bf1c5045344064b77da98324e8553928cf02674f41098ab6d893eb700aad0699fec5b955129871bb2a0963d4
   languageName: node
   linkType: hard
 
@@ -2225,7 +2225,7 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": ^2.0.11
-    "@rainbow-me/rainbowkit": 2.1.2
+    "@rainbow-me/rainbowkit": 2.1.5
     "@tanstack/react-query": ^5.28.6
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^17.0.35
