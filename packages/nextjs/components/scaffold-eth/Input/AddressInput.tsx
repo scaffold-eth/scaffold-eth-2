@@ -66,6 +66,10 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     onChange(ensAddress);
   }, [ensAddress, onChange, debouncedValue]);
 
+  useEffect(() => {
+    setEnteredEnsName(undefined);
+  }, [value]);
+
   const handleChange = useCallback(
     (newValue: Address) => {
       setEnteredEnsName(undefined);
