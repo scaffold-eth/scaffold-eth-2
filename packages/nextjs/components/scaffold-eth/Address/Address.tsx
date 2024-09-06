@@ -10,14 +10,14 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
-const sizeMap = {
-  xs: 0,
-  sm: 1,
-  base: 2,
-  lg: 3,
-  xl: 4,
-  "2xl": 5,
-  "3xl": 6,
+const textSizeMap = {
+  xs: "text-xs",
+  sm: "text-sm",
+  base: "text-base",
+  lg: "text-lg",
+  xl: "text-xl",
+  "2xl": "text-2xl",
+  "3xl": "text-3xl",
 };
 
 const blockieSizeMap = {
@@ -40,8 +40,8 @@ const copyIconSizeMap = {
   "3xl": "h-[26px] w-[26px]",
 };
 
-const getNextSize = (currentSize: keyof typeof sizeMap, step = 1): keyof typeof sizeMap => {
-  const sizes = Object.keys(sizeMap) as Array<keyof typeof sizeMap>;
+const getNextSize = (currentSize: keyof typeof textSizeMap, step = 1): keyof typeof textSizeMap => {
+  const sizes = Object.keys(textSizeMap) as Array<keyof typeof textSizeMap>;
   const currentIndex = sizes.indexOf(currentSize);
   const nextIndex = Math.min(currentIndex + step, sizes.length - 1);
   return sizes[nextIndex];
@@ -121,7 +121,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
       </div>
       {showBoth && ens ? (
         <div className="flex flex-col">
-          <span className={`ml-1.5 text-${ensSize} font-bold`}>
+          <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}
               blockExplorerAddressLink={blockExplorerAddressLink}
@@ -130,7 +130,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
             </AddressLinkWrapper>
           </span>
           <div className="flex">
-            <span className={`ml-1.5 text-${addressSize} font-normal`}>
+            <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
               <AddressLinkWrapper
                 disableAddressLink={disableAddressLink}
                 blockExplorerAddressLink={blockExplorerAddressLink}
@@ -146,7 +146,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
         </div>
       ) : (
         <>
-          <span className={`ml-1.5 text-${addressSize} font-normal`}>
+          <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}
               blockExplorerAddressLink={blockExplorerAddressLink}
