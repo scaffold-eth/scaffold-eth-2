@@ -1,7 +1,9 @@
 {
-  "arrowParens": "avoid",
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "semi": false,
+  "singleQuote": true,
   "printWidth": 120,
-  "tabWidth": 2,
+  "bracketSpacing": true,
   "trailingComma": "all",
   "importOrder": ["^react$", "^next/(.*)$", "<THIRD_PARTY_MODULES>", "^@heroicons/(.*)$", "^~~/(.*)$"],
   "importOrderSortSpecifiers": true
