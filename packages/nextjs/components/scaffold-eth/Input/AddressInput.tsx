@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { blo } from "blo";
 import { useDebounceValue } from "usehooks-ts";
 import { Address, isAddress } from "viem";
@@ -70,14 +70,6 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     setEnteredEnsName(undefined);
   }, [value]);
 
-  const handleChange = useCallback(
-    (newValue: Address) => {
-      setEnteredEnsName(undefined);
-      onChange(newValue);
-    },
-    [onChange],
-  );
-
   const reFocus =
     isEnsAddressError ||
     isEnsNameError ||
@@ -92,7 +84,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       placeholder={placeholder}
       error={ensAddress === null}
       value={value as Address}
-      onChange={handleChange}
+      onChange={onChange}
       disabled={isEnsAddressLoading || isEnsNameLoading || disabled}
       reFocus={reFocus}
       prefix={
