@@ -121,7 +121,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
       <div className="flex flex-col">
         {isShowBothAndEnsOrLoading &&
           (isEnsNameLoading ? (
-            <div className={`ml-1.5 skeleton rounded-lg font-bold self-start ${textSizeMap[ensSize]}`}>
+            <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
             </div>
           ) : (
@@ -130,7 +130,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
                 disableAddressLink={disableAddressLink}
                 blockExplorerAddressLink={blockExplorerAddressLink}
               >
-                {isEnsNameLoading ? shortAddress : ens}
+                {ens}
               </AddressLinkWrapper>
             </span>
           ))}
