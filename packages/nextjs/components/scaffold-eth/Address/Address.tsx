@@ -18,7 +18,7 @@ const textSizeMap = {
   xl: "text-xl",
   "2xl": "text-2xl",
   "3xl": "text-3xl",
-};
+} as const;
 
 const blockieSizeMap = {
   xs: 6,
@@ -28,7 +28,11 @@ const blockieSizeMap = {
   xl: 10,
   "2xl": 12,
   "3xl": 15,
-};
+  "4xl": 17,
+  "5xl": 19,
+  "6xl": 21,
+  "7xl": 23,
+} as const;
 
 const copyIconSizeMap = {
   xs: "h-3.5 w-3.5",
@@ -38,10 +42,12 @@ const copyIconSizeMap = {
   xl: "h-[22px] w-[22px]",
   "2xl": "h-6 w-6",
   "3xl": "h-[26px] w-[26px]",
-};
+} as const;
 
-const getNextSize = (currentSize: keyof typeof textSizeMap, step = 1): keyof typeof textSizeMap => {
-  const sizes = Object.keys(textSizeMap) as Array<keyof typeof textSizeMap>;
+type SizeMap = typeof textSizeMap | typeof blockieSizeMap;
+
+const getNextSize = <T extends SizeMap>(sizeMap: T, currentSize: keyof T, step = 1): keyof T => {
+  const sizes = Object.keys(sizeMap) as Array<keyof T>;
   const currentIndex = sizes.indexOf(currentSize);
   const nextIndex = Math.min(currentIndex + step, sizes.length - 1);
   return sizes[nextIndex];
@@ -107,8 +113,8 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
 
   size = size ?? (showBoth && ens ? "xs" : "base");
   const addressSize = size;
-  const blockieSize = showBoth && ens ? getNextSize(size, 4) : size;
-  const ensSize = showBoth && ens ? getNextSize(size) : size;
+  const blockieSize = showBoth && ens ? getNextSize(blockieSizeMap, size, 4) : size;
+  const ensSize = showBoth && ens ? getNextSize(textSizeMap, size) : size;
 
   return (
     <div className="flex items-center flex-shrink-0">
