@@ -68,7 +68,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
 
   const { targetNetwork } = useTargetNetwork();
 
-  const { data: fetchedEns } = useEnsName({
+  const { data: fetchedEns, isLoading: isEnsNameLoading } = useEnsName({
     address: checkSumAddress,
     chainId: 1,
     query: {
@@ -113,8 +113,10 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
 
   size = size ?? (showBoth && ens ? "xs" : "base");
   const addressSize = size;
-  const blockieSize = showBoth && ens ? getNextSize(blockieSizeMap, size, 4) : size;
-  const ensSize = showBoth && ens ? getNextSize(textSizeMap, size) : size;
+
+  const isShowBothAndEnsOrLoading = showBoth && (ens || isEnsNameLoading);
+  const blockieSize = isShowBothAndEnsOrLoading ? getNextSize(blockieSizeMap, size, 4) : size;
+  const ensSize = isShowBothAndEnsOrLoading ? getNextSize(textSizeMap, size) : size;
 
   return (
     <div className="flex items-center flex-shrink-0">
@@ -125,16 +127,22 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
           size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
         />
       </div>
-      {showBoth && ens ? (
+      {isShowBothAndEnsOrLoading ? (
         <div className="flex flex-col">
-          <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
-            <AddressLinkWrapper
-              disableAddressLink={disableAddressLink}
-              blockExplorerAddressLink={blockExplorerAddressLink}
-            >
-              {ens}
-            </AddressLinkWrapper>
-          </span>
+          {isEnsNameLoading ? (
+            <div className={`ml-1.5 skeleton rounded-lg ${textSizeMap[ensSize]}`}>
+              <span className="invisible">{shortAddress}</span>
+            </div>
+          ) : (
+            <span className={`ml-1.5 ${textSizeMap[ensSize]} font-bold`}>
+              <AddressLinkWrapper
+                disableAddressLink={disableAddressLink}
+                blockExplorerAddressLink={blockExplorerAddressLink}
+              >
+                {ens}
+              </AddressLinkWrapper>
+            </span>
+          )}
           <div className="flex">
             <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
               <AddressLinkWrapper
