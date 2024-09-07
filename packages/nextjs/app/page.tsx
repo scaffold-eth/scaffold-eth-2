@@ -37,6 +37,9 @@ const Home: NextPage = () => {
               packages/hardhat/contracts
             </code>
           </p>
+          <p className="text-center text-lg mt-4">
+            <strong style={{ fontSize: "36px", color: "#04D1FF" }}>DEPLOY ON METIS</strong>
+          </p>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
