@@ -110,7 +110,8 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
 
   const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
   const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
-  const displayAddress = ens || (format === "long" ? checkSumAddress : shortAddress);
+  const displayAddress = format === "long" ? checkSumAddress : shortAddress;
+  const displayEnsOrAddress = ens || displayAddress;
 
   size = size ?? (showBoth && ens ? "xs" : "base");
   const addressSize = size;
@@ -128,10 +129,10 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
           size={(blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"]}
         />
       </div>
-      {isShowBothAndEnsOrLoading ? (
-        <div className="flex flex-col">
-          {isEnsNameLoading ? (
-            <div className={`ml-1.5 skeleton rounded-lg ${textSizeMap[ensSize]}`}>
+      <div className="flex flex-col">
+        {isShowBothAndEnsOrLoading &&
+          (isEnsNameLoading ? (
+            <div className={`ml-1.5 skeleton rounded-lg font-bold self-start ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
             </div>
           ) : (
@@ -140,41 +141,25 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
                 disableAddressLink={disableAddressLink}
                 blockExplorerAddressLink={blockExplorerAddressLink}
               >
-                {ens}
+                {isEnsNameLoading ? shortAddress : ens}
               </AddressLinkWrapper>
             </span>
-          )}
-          <div className="flex">
-            <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
-              <AddressLinkWrapper
-                disableAddressLink={disableAddressLink}
-                blockExplorerAddressLink={blockExplorerAddressLink}
-              >
-                {shortAddress}
-              </AddressLinkWrapper>
-            </span>
-            <AddressCopyIcon
-              className={`ml-1 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
-              address={checkSumAddress}
-            />
-          </div>
-        </div>
-      ) : (
-        <>
+          ))}
+        <div className="flex">
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}
               blockExplorerAddressLink={blockExplorerAddressLink}
             >
-              {displayAddress}
+              {showBoth ? displayAddress : displayEnsOrAddress}
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
+            className={`ml-1 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
             address={checkSumAddress}
-            className={`ml-1.5 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
           />
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };
