@@ -27,16 +27,19 @@ export const useScaffoldReadContract = <
   contractName,
   functionName,
   args,
+  chain,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const { data: deployedContract } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
+  const selectedChain = chain ?? targetNetwork;
+  const { data: deployedContract } = useDeployedContractInfo(contractName, selectedChain);
+
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
   // set watch to true by default
   const defaultWatch = watch ?? true;
 
   const readContractHookRes = useReadContract({
-    chainId: targetNetwork.id,
+    chainId: selectedChain.id,
     functionName,
     address: deployedContract?.address,
     abi: deployedContract?.abi,
@@ -56,7 +59,7 @@ export const useScaffoldReadContract = <
   const queryClient = useQueryClient();
   const { data: blockNumber } = useBlockNumber({
     watch: defaultWatch,
-    chainId: targetNetwork.id,
+    chainId: selectedChain.id,
     query: {
       enabled: defaultWatch,
     },
