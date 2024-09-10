@@ -1,9 +1,9 @@
 import {
   copyTemplateFiles,
   createProjectDirectory,
-  installPackages,
   createFirstGitCommit,
   prettierFormat,
+  installPackages,
 } from "./tasks";
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
@@ -36,13 +36,17 @@ export async function createProject(options: Options) {
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
       {
-        title: `📦 Installing dependencies with yarn, this could take a while`,
-        task: () => installPackages(targetDirectory),
+        title: "📦 Installing dependencies with yarn, this could take a while",
+        task: (_, task) => installPackages(targetDirectory, task),
         skip: () => {
           if (!options.install) {
             return "Manually skipped, since `--skip-install` flag was passed";
           }
           return false;
+        },
+        rendererOptions: {
+          outputBar: 8,
+          persistentOutput: false,
         },
       },
       {
