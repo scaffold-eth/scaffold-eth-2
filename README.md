@@ -46,7 +46,7 @@ yarn install && forge install --root packages/foundry
 yarn chain
 ```
 
-This command starts a local Ethereum network using anvil. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/foundry/foundry.toml`.
+This command starts a local Ethereum network using Anvil for testing and development. You can customize the network in `packages/foundry/foundry.toml`. When deploying to this local chain, Scaffold-ETH 2 creates a keystore account using Anvil's last address private key. This keystore account is named `scaffold-eth-local` with the password `localhost`.
 
 3. On a second terminal, deploy the test contract:
 
@@ -54,7 +54,7 @@ This command starts a local Ethereum network using anvil. The network runs on yo
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script/Deploy.s.sol` to deploy the contract to the network. You can also customize the deploy script.
+This command deploys a test smart contract to the local network with the keystore account mentioned in `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT`. When using `scaffold-eth-locahost` this command doesn't require any password. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script/Deploy.s.sol` to deploy the contract to the network. You can also customize the deploy script.
 
 4. On a third terminal, start your NextJS app:
 
@@ -63,6 +63,53 @@ yarn start
 ```
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+
+## Deploying to live networks
+
+1. Configure you network
+
+Scaffold-ETH 2 comes with a selection of predefined networks. You can also add your custom network in `packages/foundry/foundry.toml`
+
+2. Generate a new keystore account or import your existing account
+
+The keystore account mentioned in `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT` is the account used to deploy your contracts. Additionally, the deployer account will be used to exectue function call that are part of your deployment script. You can generate a new keystore account with random address which will be used for all your next Scaffold-ETH 2 projects using the following command:
+
+```shell
+yarn generate
+```
+
+Above command will prompt for password and generate a new keystore account under the name `scaffold-eth-custom`. Now update the `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom`. Subsequent `yarn deploy` will prompt the password for this account and use this as a deployer account.
+
+Additionally instead of generating `scaffold-eth-custom` keystore account with random address you can run `yarn account:import` to initialize `scaffold-eth-custom` keystore account with your private key.
+
+Also if you want to use your existing keystore account you can update the `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT` with the name of your existing account and that account will be used for deployments.
+
+You can check the configured (generated or manually set) account and balances with:
+
+```
+yarn account
+```
+
+3. Deploy your smart contract(s)
+
+Run the command below to deploy the smart contract to the target network. Make sure to have some funds in your deployer account to pay for the transaction.
+
+```
+yarn deploy --network <network-name>
+```
+
+eg: `yarn deploy --network sepolia`
+
+4. Verify your smart contract
+   You can verify your smart contract on etherscan by running:
+
+```
+yarn verify --network <network-name>
+```
+
+eg: `yarn verify --network sepolia`
+
+This uses `VerifyAll.s.sol` script located in `packages/foundry/script` to verify the contract.
 
 **What's next**:
 
@@ -82,3 +129,7 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 We welcome contributions to Scaffold-ETH 2!
 
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+
+```
+
+```
