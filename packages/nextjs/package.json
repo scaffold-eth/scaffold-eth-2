@@ -13,6 +13,7 @@
     "vercel": "vercel",
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
     "drizzle-kit": "drizzle-kit",
+    "db:local:init": "docker-compose up -d && yarn drizzle-kit push && yarn seed",
     "seed": "tsx services/database/seed.ts"
   },
   "dependencies": {
