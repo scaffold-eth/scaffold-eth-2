@@ -15,7 +15,9 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "~~/*": ["./*"]
+      "~~/*": ["./*"],
+      "@/*": ["./*"],
+      "auth": ["./auth"]      
     },
     "plugins": [
       {

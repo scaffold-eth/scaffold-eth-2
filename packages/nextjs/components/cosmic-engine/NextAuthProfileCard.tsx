@@ -1,5 +1,10 @@
 import { getServerSession } from "next-auth";
-import { SessionDisplay, SignInButton, SignOutButton } from "~~/components/cosmic-engine";
+import {
+  SessionDisplay,
+  SignInNextAuthButton,
+  SignInWithEthereumButton,
+  SignOutButton,
+} from "~~/components/cosmic-engine";
 import { authOptions } from "~~/utils/auth";
 
 export const NextAuthProfileCard = async () => {
@@ -9,8 +14,13 @@ export const NextAuthProfileCard = async () => {
     <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-s rounded-3xl">
       <p className="my-2 font-medium">Next Auth Profile Card</p>
       {!session ? (
-        <div>
-          <SignInButton />
+        <div className="flex flex-col">
+          <div className="py-3">
+            <SignInNextAuthButton />
+          </div>
+          <div className="py-3">
+            <SignInWithEthereumButton />
+          </div>
         </div>
       ) : (
         <div>

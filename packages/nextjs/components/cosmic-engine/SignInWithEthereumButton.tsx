@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 
-export const SignInButton = () => {
+export const SignInWithEthereumButton = () => {
   const { openConnectModal } = useConnectModal();
   const { isAuthenticated } = useAuthSession();
   const router = useRouter();

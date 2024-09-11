@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { useDisconnect } from "wagmi";
 import { useAuthSession } from "~~/hooks/useAuthSession";
 
@@ -21,6 +22,7 @@ export const SignOutButton = () => {
       className="btn btn-outline text-lg font-normal"
       onClick={() => {
         disconnect();
+        signOut();
         router.refresh();
       }}
       type="button"

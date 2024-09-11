@@ -1,11 +1,17 @@
 import { cookies } from "next/headers";
 import { AuthOptions, Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
 import { createBuilder, getBuilderById } from "~~/services/database/repositories/builders";
 
 export const providers = [
+  GithubProvider({
+    clientId: process.env.AUTH_GITHUB_ID || "",
+    clientSecret: process.env.AUTH_GITHUB_SECRET || "",
+  }),
+
   CredentialsProvider({
     name: "Ethereum",
     credentials: {
