@@ -83,3 +83,4 @@ Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob
 ## Main Changes of Cosmic Engine from Scaffold-ETH 2
 
 * Changed default burner wallet behavior, now uses Sepolia as default
+* Add Next Auth login via Github and Solana
