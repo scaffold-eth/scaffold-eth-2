@@ -3,3 +3,4 @@ export * from "./NextAuthProfileCard";
 export * from "./SignInWithEthereumButton";
 export * from "./SignOutButton";
 export * from "./SignInNextAuthButton";
+export * from "./SignInWithSolanaButton";

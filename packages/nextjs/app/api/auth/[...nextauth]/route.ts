@@ -8,8 +8,6 @@ async function auth(req: NextRequest, res: NextResponse) {
   const { searchParams } = new URL(req.url as string);
   const isDefaultSigninPage = searchParams.get("nextauth")?.includes("signin");
 
-  console.log("isDefaultSigninPage", isDefaultSigninPage);
-
   if (isDefaultSigninPage) {
     providers.pop();
   }

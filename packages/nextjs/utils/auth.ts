@@ -5,11 +5,12 @@ import GithubProvider from "next-auth/providers/github";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
 import { createBuilder, getBuilderById } from "~~/services/database/repositories/builders";
+import { SigninMessage } from "~~/utils/SigninMessage";
 
 export const providers = [
   GithubProvider({
-    clientId: process.env.AUTH_GITHUB_ID || "",
-    clientSecret: process.env.AUTH_GITHUB_SECRET || "",
+    clientId: process.env.AUTH_GITHUB_ID as string,
+    clientSecret: process.env.AUTH_GITHUB_SECRET as string,
   }),
 
   CredentialsProvider({
@@ -73,6 +74,53 @@ export const providers = [
       }
     },
   }),
+
+  CredentialsProvider({
+    name: "Solana",
+    id: "solana",
+    credentials: {
+      message: {
+        label: "Message",
+        type: "text",
+      },
+      signature: {
+        label: "Signature",
+        type: "text",
+      },
+    },
+    async authorize(credentials) {
+      try {
+        const signinMessage = new SigninMessage(JSON.parse(credentials?.message || "{}"));
+        const nextAuthUrl = new URL(process.env.NEXTAUTH_URL as string);
+        if (signinMessage.domain !== nextAuthUrl.host) {
+          return null;
+        }
+
+        if (
+          signinMessage.nonce !==
+          (await getCsrfToken({
+            req: {
+              headers: {
+                cookie: cookies().toString(),
+              },
+            },
+          }))
+        ) {
+          return null;
+        }
+
+        const validationResult = await signinMessage.validate(credentials?.signature || "");
+
+        if (!validationResult) throw new Error("Could not validate the signed message");
+
+        return {
+          id: signinMessage.publicKey,
+        };
+      } catch (e) {
+        return null;
+      }
+    },
+  }),
 ];
 
 interface ExtendedUser extends User {
@@ -96,6 +144,7 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }: { session: Session; token: any }) {
       const user = session.user as ExtendedUser;
+
       user.address = token.sub;
       user.role = token.role;
 
