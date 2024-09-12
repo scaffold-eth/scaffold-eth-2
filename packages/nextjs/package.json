@@ -49,6 +49,7 @@
     "react-hot-toast": "^2.4.0",
     "siwe": "^2.3.2",
     "tweetnacl": "^1.0.3",
+    "unique-names-generator": "^4.7.1",
     "use-debounce": "^8.0.4",
     "usehooks-ts": "^2.13.0",
     "viem": "2.17.4",

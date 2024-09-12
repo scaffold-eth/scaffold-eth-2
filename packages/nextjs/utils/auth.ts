@@ -1,13 +1,31 @@
 import { cookies } from "next/headers";
-import { AuthOptions, Session, User } from "next-auth";
+import { randomUUID } from "crypto";
+// import {JWT} from "next-auth/jwt";
+import {
+  // Account,
+  // Profile,
+  AuthOptions,
+  Session,
+  SessionStrategy,
+  User,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import { getCsrfToken } from "next-auth/react";
 import { SiweMessage } from "siwe";
+import { Config, adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { createBuilder, getBuilderById } from "~~/services/database/repositories/builders";
 import { SigninMessage } from "~~/utils/SigninMessage";
 
 export const providers = [
+  CredentialsProvider({
+    name: "anonymous",
+    id: "anonymous",
+    credentials: {},
+    async authorize() {
+      return createAnonymousUser();
+    },
+  }),
   GithubProvider({
     clientId: process.env.AUTH_GITHUB_ID as string,
     clientSecret: process.env.AUTH_GITHUB_SECRET as string,
@@ -126,19 +144,21 @@ export const providers = [
 interface ExtendedUser extends User {
   role?: string;
   address?: string;
+  provider?: string;
 }
 
 export const authOptions: AuthOptions = {
   // https://next-auth.js.org/configuration/providers/oauth
   providers,
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as SessionStrategy,
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }: { token: any; user: ExtendedUser }) {
+    async jwt({ token, user, account }: { token: any; user: ExtendedUser; account: any }) {
       if (user) {
         token.role = user.role;
+        token.provider = account.provider;
       }
       return token;
     },
@@ -147,8 +167,42 @@ export const authOptions: AuthOptions = {
 
       user.address = token.sub;
       user.role = token.role;
+      user.provider = token.provider;
 
       return session;
     },
   },
+
+  // events: {
+  //   async signIn({user, account, profile}: {user: ExtendedUser, account: Account | null, profile?: Profile}): Promise<void> {
+  //     console.log(`signIn of ${user.name} from ${user?.provider || account?.provider}`);
+  //   },
+  //   async signOut({session, token}: {session: Session, token: JWT}): Promise<void> {
+  //     console.log(`signOut of ${token.name} from ${token.provider}`);
+  //   },
+  // },
 } as const;
+
+// Helper functions
+
+const createAnonymousUser = (): ExtendedUser => {
+  // generate a random name and email for this anonymous user
+  const customConfig: Config = {
+    dictionaries: [adjectives, colors, animals],
+    separator: "-",
+    length: 3,
+    style: "capital",
+  };
+  // handle is simple-red-aardvark
+  const unique_handle: string = uniqueNamesGenerator(customConfig).replaceAll(" ", "");
+  // real name is Red Aardvark
+  const unique_realname: string = unique_handle.split("-").slice(1).join(" ");
+  const unique_uuid: string = randomUUID();
+  return {
+    id: unique_uuid,
+    email: `${unique_handle.toLowerCase()}@example.com`,
+    name: unique_realname,
+    image: "",
+    provider: "anonymous",
+  };
+};
