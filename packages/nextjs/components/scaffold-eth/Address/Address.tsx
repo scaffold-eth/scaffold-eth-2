@@ -58,10 +58,10 @@ type AddressProps = {
   disableAddressLink?: boolean;
   format?: "short" | "long";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl";
-  showBoth?: boolean;
+  onlyEnsOrAddress?: boolean;
 };
 
-export const Address = ({ address, disableAddressLink, format, size, showBoth = false }: AddressProps) => {
+export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAddress = false }: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
   const { targetNetwork } = useTargetNetwork();
@@ -102,12 +102,12 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
   const displayEnsOrAddress = ens || displayAddress;
 
-  size = size ?? (showBoth && ens ? "xs" : "base");
+  size = size ?? (onlyEnsOrAddress || !ens ? "base" : "xs");
   const addressSize = size;
 
-  const isShowBothAndEnsOrLoading = showBoth && (ens || isEnsNameLoading);
-  const blockieSize = isShowBothAndEnsOrLoading ? getNextSize(blockieSizeMap, size, 4) : size;
-  const ensSize = isShowBothAndEnsOrLoading ? getNextSize(textSizeMap, size) : size;
+  const shouldTryEnsWithAddress = !onlyEnsOrAddress && (ens || isEnsNameLoading);
+  const blockieSize = shouldTryEnsWithAddress ? getNextSize(blockieSizeMap, size, 4) : size;
+  const ensSize = shouldTryEnsWithAddress ? getNextSize(textSizeMap, size) : size;
 
   return (
     <div className="flex items-center flex-shrink-0">
@@ -119,7 +119,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
         />
       </div>
       <div className="flex flex-col">
-        {isShowBothAndEnsOrLoading &&
+        {shouldTryEnsWithAddress &&
           (isEnsNameLoading ? (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
@@ -140,7 +140,7 @@ export const Address = ({ address, disableAddressLink, format, size, showBoth = 
               disableAddressLink={disableAddressLink}
               blockExplorerAddressLink={blockExplorerAddressLink}
             >
-              {showBoth ? displayAddress : displayEnsOrAddress}
+              {onlyEnsOrAddress ? displayEnsOrAddress : displayAddress}
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
