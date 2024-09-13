@@ -102,7 +102,7 @@ export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAd
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
   const displayEnsOrAddress = ens || displayAddress;
 
-  size = size ?? (onlyEnsOrAddress || !ens ? "base" : "xs");
+  size = size ?? (onlyEnsOrAddress || (!ens && !isEnsNameLoading) ? "base" : "xs");
   const addressSize = size;
 
   const shouldTryEnsWithAddress = !onlyEnsOrAddress && (ens || isEnsNameLoading);
