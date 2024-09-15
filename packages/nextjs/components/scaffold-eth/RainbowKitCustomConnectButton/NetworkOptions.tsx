@@ -23,9 +23,10 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
       {allowedNetworks
         .filter(allowedNetwork => allowedNetwork.id !== chain?.id)
         .map(allowedNetwork => (
-          <DropdownMenuItem key={allowedNetwork.id} className={hidden ? "hidden" : ""}>
+          <DropdownMenuItem asChild key={allowedNetwork.id} className={hidden ? "hidden" : ""}>
             <Button
               variant="ghost"
+              size="sm"
               className="w-full justify-start"
               onClick={() => {
                 switchChain?.({ chainId: allowedNetwork.id });
@@ -48,3 +49,18 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
     </>
   );
 };
+
+{
+  /* <DropdownMenuItem asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-destructive"
+            onClick={() => disconnect()}
+          >
+            <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
+            <span>Disconnect</span>
+          </Button>
+        </DropdownMenuItem>
+      </DropdownMenuContent> */
+}

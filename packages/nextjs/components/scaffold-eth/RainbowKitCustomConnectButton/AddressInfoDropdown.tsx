@@ -133,7 +133,7 @@ export const AddressInfoDropdown = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start text-red-600"
+                className="w-full justify-start text-destructive"
                 onClick={() => {
                   disconnect();
                   closeDropdown();

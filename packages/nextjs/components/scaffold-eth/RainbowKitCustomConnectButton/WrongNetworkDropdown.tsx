@@ -1,8 +1,14 @@
 import { NetworkOptions } from "./NetworkOptions";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useDisconnect } from "wagmi";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 import { Button } from "~~/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "~~/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~~/components/ui/dropdown-menu";
 
 export const WrongNetworkDropdown = () => {
   const { disconnect } = useDisconnect();
@@ -15,12 +21,19 @@ export const WrongNetworkDropdown = () => {
           <ChevronDown className="h-4 w-4 ml-2" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent align="end" className="border-none bg-base-200 rounded-2xl">
         <NetworkOptions />
-        <Button variant="ghost" className="w-full justify-start text-destructive" onClick={() => disconnect()}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Disconnect
-        </Button>
+        <DropdownMenuItem asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-destructive"
+            onClick={() => disconnect()}
+          >
+            <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
+            <span>Disconnect</span>
+          </Button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
