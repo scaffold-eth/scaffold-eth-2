@@ -12,7 +12,7 @@ export const AddressQRCodeModal = ({ address, children }: AddressQRCodeModalProp
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={e => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Address QR Code</DialogTitle>
         </DialogHeader>
