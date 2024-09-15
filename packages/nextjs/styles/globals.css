@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Remove this defaults */
 :root,
 [data-theme] {
   background: oklch(var(--b2));
@@ -30,3 +31,4 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+/* Remove this defaults */

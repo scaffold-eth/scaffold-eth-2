@@ -74,6 +74,7 @@ module.exports = {
       },
     ],
   },
+  // remove this defaults
   theme: {
     extend: {
       boxShadow: {

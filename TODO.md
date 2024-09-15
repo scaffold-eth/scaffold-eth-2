@@ -9,5 +9,6 @@
   - [ ] AddressInput (this will require updating InputBase etc)
   - [ ] Balance
 - [ ] Update meta things like
+  - [ ] Remove heroicons and use lucide react(comes default with shadcn)
   - [ ] transaction toast with shadcn toast
   - [ ] modals
