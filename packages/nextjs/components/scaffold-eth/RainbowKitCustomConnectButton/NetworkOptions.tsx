@@ -49,18 +49,3 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
     </>
   );
 };
-
-{
-  /* <DropdownMenuItem asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start text-destructive"
-            onClick={() => disconnect()}
-          >
-            <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
-            <span>Disconnect</span>
-          </Button>
-        </DropdownMenuItem>
-      </DropdownMenuContent> */
-}
