@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { randomUUID } from "crypto";
+// import { randomUUID } from "crypto";
 // import {JWT} from "next-auth/jwt";
 import {
   // Account,
@@ -21,11 +21,15 @@ export const providers = [
   CredentialsProvider({
     name: "anonymous",
     id: "anonymous",
-    credentials: {},
-    async authorize() {
-      return createAnonymousUser();
+    credentials: {
+      publicKey: { label: "publicKey", type: "text", placeholder: "0x0" },
+    },
+    async authorize(credentials) {
+      // return createAnonymousUser();
+      return createAnonymousEthUser(credentials);
     },
   }),
+
   GithubProvider({
     clientId: process.env.AUTH_GITHUB_ID as string,
     clientSecret: process.env.AUTH_GITHUB_SECRET as string,
@@ -185,7 +189,31 @@ export const authOptions: AuthOptions = {
 
 // Helper functions
 
-const createAnonymousUser = (): ExtendedUser => {
+// const createAnonymousUser = (): ExtendedUser => {
+//   // generate a random name and email for this anonymous user
+//   const customConfig: Config = {
+//     dictionaries: [adjectives, colors, animals],
+//     separator: "-",
+//     length: 3,
+//     style: "capital",
+//   };
+//   // handle is simple-red-aardvark
+//   const unique_handle: string = uniqueNamesGenerator(customConfig).replaceAll(" ", "");
+//   // real name is Red Aardvark
+//   const unique_realname: string = unique_handle.split("-").slice(1).join(" ");
+//   const unique_uuid: string = randomUUID();
+//   return {
+//     id: unique_uuid,
+//     email: `${unique_handle.toLowerCase()}@example.com`,
+//     name: unique_realname,
+//     image: "",
+//     provider: "anonymous",
+//   };
+// };
+
+const createAnonymousEthUser = (credentials: any): ExtendedUser => {
+  const publicKey = credentials?.publicKey as string;
+
   // generate a random name and email for this anonymous user
   const customConfig: Config = {
     dictionaries: [adjectives, colors, animals],
@@ -197,9 +225,9 @@ const createAnonymousUser = (): ExtendedUser => {
   const unique_handle: string = uniqueNamesGenerator(customConfig).replaceAll(" ", "");
   // real name is Red Aardvark
   const unique_realname: string = unique_handle.split("-").slice(1).join(" ");
-  const unique_uuid: string = randomUUID();
+
   return {
-    id: unique_uuid,
+    id: publicKey,
     email: `${unique_handle.toLowerCase()}@example.com`,
     name: unique_realname,
     image: "",
