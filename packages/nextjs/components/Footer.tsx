@@ -40,7 +40,8 @@ export const Footer = () => {
               </>
             )}
           </div>
-          <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
+          {/* Broken switch theme */}
+          <SwitchTheme />
         </div>
       </div>
       <div className="w-full">
