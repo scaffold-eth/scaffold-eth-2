@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 /* Remove this defaults */
-:root,
-[data-theme] {
-  background: oklch(var(--b2));
-}
 
 body {
   min-height: 100vh;

@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const daisyuiColorObj = require("daisyui/src/theming/index");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
@@ -91,46 +94,44 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
+        border: daisyuiColorObj["base-content"],
+        input: daisyuiColorObj["base-content"],
+        ring: daisyuiColorObj["base-content"],
+        background: daisyuiColorObj["base-100"],
+        foreground: daisyuiColorObj["base-content"],
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: daisyuiColorObj["primary"],
+          foreground: daisyuiColorObj["primary-content"],
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: daisyuiColorObj["secondary"],
+          foreground: daisyuiColorObj["secondary-content"],
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: daisyuiColorObj["error"],
+          foreground: daisyuiColorObj["error-content"],
         },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        chart: {
-          1: "hsl(var(--chart-1))",
-          2: "hsl(var(--chart-2))",
-          3: "hsl(var(--chart-3))",
-          4: "hsl(var(--chart-4))",
-          5: "hsl(var(--chart-5))",
+        muted: {
+          DEFAULT: daisyuiColorObj["base-300"],
+          foreground: daisyuiColorObj["base-content"],
         },
+        accent: {
+          DEFAULT: daisyuiColorObj["accent"],
+          foreground: daisyuiColorObj["accent-content"],
+        },
+        popover: {
+          DEFAULT: daisyuiColorObj["base-100"],
+          foreground: daisyuiColorObj["base-content"],
+        },
+        card: {
+          DEFAULT: daisyuiColorObj["base-100"],
+          foreground: daisyuiColorObj["base-content"],
+        },
+      },
+      borderRadius: {
+        lg: "var(--rounded-btn)",
+        md: "calc(var(--rounded-btn) - 2px)",
+        sm: "calc(var(--rounded-btn) - 4px)",
       },
     },
   },
