@@ -52,7 +52,7 @@ export const AddressInfoDropdown = ({
   };
 
   return (
-    <DropdownMenu open={open}>
+    <DropdownMenu open={open} onOpenChange={open ? undefined : setOpen}>
       <DropdownMenuTrigger asChild onClick={() => setOpen(open => !open)}>
         <Button size="sm" variant="secondary" className="pl-0 pr-2 gap-0 h-auto">
           <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
@@ -66,6 +66,7 @@ export const AddressInfoDropdown = ({
         align="end"
         className="border-none bg-base-200 rounded-2xl"
         onInteractOutside={closeDropdown}
+        onEscapeKeyDown={closeDropdown}
       >
         <NetworkOptions hidden={!selectingNetwork} />
         {!selectingNetwork && (
@@ -98,16 +99,16 @@ export const AddressInfoDropdown = ({
                 )}
               </Button>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <AddressQRCodeModal address={address}>
+            <AddressQRCodeModal address={address}>
+              <DropdownMenuItem asChild>
+                <Button variant="ghost" size="sm" className="w-full justify-start">
                   <div className="flex items-center w-full">
                     <QrCodeIcon className="mr-2 h-4 w-4" />
                     <span>View QR Code</span>
                   </div>
-                </AddressQRCodeModal>
-              </Button>
-            </DropdownMenuItem>
+                </Button>
+              </DropdownMenuItem>
+            </AddressQRCodeModal>
             <DropdownMenuItem asChild>
               <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
                 <a target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
