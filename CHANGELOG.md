@@ -1,5 +1,15 @@
 # create-eth
 
+## 0.0.55
+
+### Patch Changes
+
+- fix: different contracts on different chains (https://github.com/scaffold-eth/scaffold-eth-2/pull/920)
+- bug: Reset enteredEns on Address input when changing the value (https://github.com/scaffold-eth/scaffold-eth-2/pull/926)
+- Up viem, wagmi and rainbowkit (https://github.com/scaffold-eth/scaffold-eth-2/pull/925)
+- cli: show yarn install ouput (4bec81e)
+- cli: Allow solidity versions and networks + tailwind extend theme (2064f18:)
+
 ## 0.0.54
 
 ### Patch Changes
