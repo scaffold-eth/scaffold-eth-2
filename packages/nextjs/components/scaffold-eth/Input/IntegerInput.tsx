@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { parseUnits } from "viem";
 import { CommonInputProps, InputBase, IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 
 type IntegerInputProps = CommonInputProps<string | bigint> & {
@@ -23,7 +24,7 @@ export const IntegerInput = ({
     if (typeof value === "bigint") {
       return onChange(value * 10n ** 18n);
     }
-    return onChange(BigInt(Math.round(Number(value) * 10 ** 18)));
+    return onChange(parseUnits(value, 18));
   }, [onChange, value]);
 
   useEffect(() => {
