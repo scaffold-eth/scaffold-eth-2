@@ -10,6 +10,8 @@ import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 const textSizeMap = {
+  "3xs": "text-[10px]",
+  "2xs": "text-[11px]",
   xs: "text-xs",
   sm: "text-sm",
   base: "text-base",
@@ -21,6 +23,8 @@ const textSizeMap = {
 } as const;
 
 const blockieSizeMap = {
+  "3xs": 4,
+  "2xs": 5,
   xs: 6,
   sm: 7,
   base: 8,
@@ -35,6 +39,8 @@ const blockieSizeMap = {
 } as const;
 
 const copyIconSizeMap = {
+  "3xs": "h-2.5 w-2.5",
+  "2xs": "h-3 w-3",
   xs: "h-3.5 w-3.5",
   sm: "h-4 w-4",
   base: "h-[18px] w-[18px]",
@@ -42,6 +48,7 @@ const copyIconSizeMap = {
   xl: "h-[22px] w-[22px]",
   "2xl": "h-6 w-6",
   "3xl": "h-[26px] w-[26px]",
+  "4xl": "h-7 w-7",
 } as const;
 
 type SizeMap = typeof textSizeMap | typeof blockieSizeMap;
@@ -53,6 +60,13 @@ const getNextSize = <T extends SizeMap>(sizeMap: T, currentSize: keyof T, step =
   return sizes[nextIndex];
 };
 
+const getPrevSize = <T extends SizeMap>(sizeMap: T, currentSize: keyof T, step = 1): keyof T => {
+  const sizes = Object.keys(sizeMap) as Array<keyof T>;
+  const currentIndex = sizes.indexOf(currentSize);
+  const prevIndex = Math.max(currentIndex - step, 0);
+  return sizes[prevIndex];
+};
+
 type AddressProps = {
   address?: AddressType;
   disableAddressLink?: boolean;
@@ -61,7 +75,13 @@ type AddressProps = {
   onlyEnsOrAddress?: boolean;
 };
 
-export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAddress = false }: AddressProps) => {
+export const Address = ({
+  address,
+  disableAddressLink,
+  format,
+  size = "base",
+  onlyEnsOrAddress = false,
+}: AddressProps) => {
   const checkSumAddress = address ? getAddress(address) : undefined;
 
   const { targetNetwork } = useTargetNetwork();
@@ -102,12 +122,11 @@ export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAd
   const displayAddress = format === "long" ? checkSumAddress : shortAddress;
   const displayEnsOrAddress = ens || displayAddress;
 
-  size = size ?? (onlyEnsOrAddress || (!ens && !isEnsNameLoading) ? "base" : "xs");
-  const addressSize = size;
+  const showAddressWithEnsOrEnsSkeleton = !onlyEnsOrAddress && (ens || isEnsNameLoading);
 
-  const shouldTryEnsWithAddress = !onlyEnsOrAddress && (ens || isEnsNameLoading);
-  const blockieSize = shouldTryEnsWithAddress ? getNextSize(blockieSizeMap, size, 4) : size;
-  const ensSize = shouldTryEnsWithAddress ? getNextSize(textSizeMap, size) : size;
+  const addressSize = showAddressWithEnsOrEnsSkeleton ? getPrevSize(textSizeMap, size, 2) : size;
+  const ensSize = getNextSize(textSizeMap, addressSize);
+  const blockieSize = showAddressWithEnsOrEnsSkeleton ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
 
   return (
     <div className="flex items-center flex-shrink-0">
@@ -119,7 +138,7 @@ export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAd
         />
       </div>
       <div className="flex flex-col">
-        {shouldTryEnsWithAddress &&
+        {showAddressWithEnsOrEnsSkeleton &&
           (isEnsNameLoading ? (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
@@ -144,7 +163,7 @@ export const Address = ({ address, disableAddressLink, format, size, onlyEnsOrAd
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
-            className={`ml-1 text-sky-600 ${copyIconSizeMap[size]} cursor-pointer`}
+            className={`ml-1 text-sky-600 ${copyIconSizeMap[addressSize]} cursor-pointer`}
             address={checkSumAddress}
           />
         </div>
