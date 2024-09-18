@@ -108,9 +108,9 @@ export const Address = ({
 
   const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && (ens || isEnsNameLoading));
 
-  const addressSize = showSkeleton ? getPrevSize(textSizeMap, size, 2) : size;
+  const addressSize = showSkeleton && !onlyEnsOrAddress ? getPrevSize(textSizeMap, size, 2) : size;
   const ensSize = getNextSize(textSizeMap, addressSize);
-  const blockieSize = showSkeleton ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
+  const blockieSize = showSkeleton && !onlyEnsOrAddress ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
 
   if (!checkSumAddress) {
     return (
