@@ -27,7 +27,6 @@ export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
             <Button
               variant="ghost"
               size="sm"
-              className="w-full justify-start"
               onClick={() => {
                 switchChain?.({ chainId: allowedNetwork.id });
               }}

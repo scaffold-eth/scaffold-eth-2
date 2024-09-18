@@ -16,20 +16,15 @@ export const WrongNetworkDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="destructive" size="sm" className="mr-2">
+        <Button variant="destructive" size="sm">
           Wrong network
           <ChevronDown className="h-4 w-4 ml-2" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-none bg-base-200 rounded-2xl">
+      <DropdownMenuContent align="end">
         <NetworkOptions />
         <DropdownMenuItem asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start text-destructive"
-            onClick={() => disconnect()}
-          >
+          <Button variant="ghost" size="sm" onClick={() => disconnect()}>
             <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
             <span>Disconnect</span>
           </Button>
