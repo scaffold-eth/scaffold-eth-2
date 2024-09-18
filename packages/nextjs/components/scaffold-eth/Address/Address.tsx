@@ -102,12 +102,35 @@ export const Address = ({
     },
   });
 
+  const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
+  const displayAddress = format === "long" ? checkSumAddress : shortAddress;
+  const displayEnsOrAddress = ens || displayAddress;
+
+  const showSkeleton = !checkSumAddress || (!onlyEnsOrAddress && (ens || isEnsNameLoading));
+
+  const addressSize = showSkeleton ? getPrevSize(textSizeMap, size, 2) : size;
+  const ensSize = getNextSize(textSizeMap, addressSize);
+  const blockieSize = showSkeleton ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
+
   if (!checkSumAddress) {
     return (
-      <div className="animate-pulse flex space-x-4">
-        <div className="rounded-md bg-slate-300 h-6 w-6"></div>
-        <div className="flex items-center space-y-6">
-          <div className="h-2 w-28 bg-slate-300 rounded"></div>
+      <div className="flex items-center">
+        <div
+          className="flex-shrink-0 skeleton rounded-full"
+          style={{
+            width: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
+            height: (blockieSizeMap[blockieSize] * 24) / blockieSizeMap["base"],
+          }}
+        ></div>
+        <div className="flex flex-col space-y-1">
+          {!onlyEnsOrAddress && (
+            <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
+              <span className="invisible">0x1234...56789</span>
+            </div>
+          )}
+          <div className={`ml-1.5 skeleton rounded-lg ${textSizeMap[addressSize]}`}>
+            <span className="invisible">0x1234...56789</span>
+          </div>
         </div>
       </div>
     );
@@ -118,15 +141,6 @@ export const Address = ({
   }
 
   const blockExplorerAddressLink = getBlockExplorerAddressLink(targetNetwork, checkSumAddress);
-  const shortAddress = checkSumAddress?.slice(0, 6) + "..." + checkSumAddress?.slice(-4);
-  const displayAddress = format === "long" ? checkSumAddress : shortAddress;
-  const displayEnsOrAddress = ens || displayAddress;
-
-  const showAddressWithEnsOrEnsSkeleton = !onlyEnsOrAddress && (ens || isEnsNameLoading);
-
-  const addressSize = showAddressWithEnsOrEnsSkeleton ? getPrevSize(textSizeMap, size, 2) : size;
-  const ensSize = getNextSize(textSizeMap, addressSize);
-  const blockieSize = showAddressWithEnsOrEnsSkeleton ? getNextSize(blockieSizeMap, addressSize, 4) : addressSize;
 
   return (
     <div className="flex items-center flex-shrink-0">
@@ -138,7 +152,7 @@ export const Address = ({
         />
       </div>
       <div className="flex flex-col">
-        {showAddressWithEnsOrEnsSkeleton &&
+        {showSkeleton &&
           (isEnsNameLoading ? (
             <div className={`ml-1.5 skeleton rounded-lg font-bold ${textSizeMap[ensSize]}`}>
               <span className="invisible">{shortAddress}</span>
