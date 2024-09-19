@@ -12,13 +12,13 @@ export const AddressQRCodeModal = ({ address, children }: AddressQRCodeModalProp
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent onOpenAutoFocus={e => e.preventDefault()}>
+      <DialogContent onOpenAutoFocus={(e: Event) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Address QR Code</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center gap-6 py-6 break-all">
           <QRCodeSVG value={address} size={256} />
-          <Address address={address} format="long" disableAddressLink />
+          <Address address={address} format="long" disableAddressLink onlyEnsOrAddress />
         </div>
       </DialogContent>
     </Dialog>
