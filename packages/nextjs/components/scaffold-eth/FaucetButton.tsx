@@ -54,12 +54,9 @@ export const FaucetButton = () => {
 
   const isBalanceZero = Boolean(balance && balance.value === 0n);
 
-  const tooltipKey = balance ? (balance.value ? "non-empty-balance" : "empty-balance") : "no-balance";
-
   return (
     <TooltipProvider delayDuration={0}>
-      {/* Refresh the key for defaultOpen to work */}
-      <Tooltip defaultOpen={isBalanceZero} key={tooltipKey}>
+      <Tooltip open={isBalanceZero}>
         <TooltipTrigger asChild>
           <Button variant="outline" size="icon" onClick={sendETH} disabled={loading}>
             {!loading ? (
