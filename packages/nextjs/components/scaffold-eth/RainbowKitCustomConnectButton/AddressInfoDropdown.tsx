@@ -71,34 +71,34 @@ export const AddressInfoDropdown = ({
         <NetworkOptions hidden={!selectingNetwork} />
         {!selectingNetwork && (
           <>
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                {addressCopied ? (
-                  <div className="flex items-center">
-                    <CheckCircleIcon
-                      className="text-xl font-normal h-6 w-4 cursor-pointer mr-2 ml-2 sm:ml-0"
-                      aria-hidden="true"
-                    />
-                    <span className="whitespace-nowrap">Copied!</span>
-                  </div>
-                ) : (
-                  <CopyToClipboard
-                    text={checkSumAddress}
-                    onCopy={() => {
-                      setAddressCopied(true);
-                      setTimeout(() => {
-                        setAddressCopied(false);
-                      }, 800);
-                    }}
-                  >
-                    <div className="flex items-center w-full">
+            <CopyToClipboard
+              text={checkSumAddress}
+              onCopy={() => {
+                setAddressCopied(true);
+                setTimeout(() => {
+                  setAddressCopied(false);
+                }, 800);
+              }}
+            >
+              <DropdownMenuItem asChild>
+                <Button variant="ghost" size="sm" className="w-full justify-start">
+                  {addressCopied ? (
+                    <>
+                      <CheckCircleIcon
+                        className="text-xl font-normal h-6 w-4 cursor-pointer mr-2 ml-2 sm:ml-0"
+                        aria-hidden="true"
+                      />
+                      <span className="whitespace-nowrap">Copied!</span>
+                    </>
+                  ) : (
+                    <>
                       <DocumentDuplicateIcon className="text-xl font-normal h-6 w-4 mr-2" aria-hidden="true" />
                       <span className="whitespace-nowrap">Copy address</span>
-                    </div>
-                  </CopyToClipboard>
-                )}
-              </Button>
-            </DropdownMenuItem>
+                    </>
+                  )}
+                </Button>
+              </DropdownMenuItem>
+            </CopyToClipboard>
             <AddressQRCodeModal address={address}>
               <DropdownMenuItem asChild>
                 <Button variant="ghost" size="sm" className="w-full">
