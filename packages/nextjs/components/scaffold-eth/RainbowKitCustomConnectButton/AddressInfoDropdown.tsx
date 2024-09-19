@@ -62,7 +62,12 @@ export const AddressInfoDropdown = ({
           <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" onInteractOutside={closeDropdown} onEscapeKeyDown={closeDropdown}>
+      <DropdownMenuContent
+        align="end"
+        onInteractOutside={closeDropdown}
+        onEscapeKeyDown={closeDropdown}
+        className={open ? "" : "!pointer-events-none"}
+      >
         <NetworkOptions hidden={!selectingNetwork} />
         {!selectingNetwork && (
           <>
