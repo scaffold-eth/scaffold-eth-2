@@ -2235,7 +2235,6 @@ __metadata:
     "@tanstack/react-query": ^5.28.6
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^18.19.50
-    "@types/nprogress": ^0
     "@types/react": ^18.3.5
     "@typescript-eslint/eslint-plugin": ^5.39.0
     "@uniswap/sdk-core": ^4.0.1
@@ -2250,8 +2249,8 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     next: ^14.2.11
+    next-nprogress-bar: ^2.3.13
     next-themes: ^0.3.0
-    nprogress: ^0.2.0
     postcss: ^8.4.45
     prettier: ^2.8.4
     qrcode.react: ^3.1.0
@@ -2879,13 +2878,6 @@ __metadata:
   version: 8.10.66
   resolution: "@types/node@npm:8.10.66"
   checksum: c52039de862654a139abdc6a51de532a69dd80516ac35a959c3b3a2831ecbaaf065b0df5f9db943f5e28b544ebb9a891730d52b52f7a169b86a82bc060210000
-  languageName: node
-  linkType: hard
-
-"@types/nprogress@npm:^0":
-  version: 0.2.1
-  resolution: "@types/nprogress@npm:0.2.1"
-  checksum: fe9db499f3d9cff90bad9f49336ff82ea444a51ca336a25ec401d18cc8fb12e546b622bdc11379491475c22cd4d9fb1195c805055cacb365627c667e52d618b1
   languageName: node
   linkType: hard
 
@@ -10677,6 +10669,15 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
+  languageName: node
+  linkType: hard
+
+"next-nprogress-bar@npm:^2.3.13":
+  version: 2.3.13
+  resolution: "next-nprogress-bar@npm:2.3.13"
+  dependencies:
+    nprogress: ^0.2.0
+  checksum: be217d4a28a4b8681f647b1baebae040949bb38824ae93ca83f11f037bc3e34c3ddae18a123878ebfda2eb6b7e42d9ae25468b23c2a80980aec6564101921d4d
   languageName: node
   linkType: hard
 

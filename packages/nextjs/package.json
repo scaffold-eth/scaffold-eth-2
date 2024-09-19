@@ -23,8 +23,8 @@
     "burner-connector": "^0.0.8",
     "daisyui": "4.12.10",
     "next": "^14.2.11",
+    "next-nprogress-bar": "^2.3.13",
     "next-themes": "^0.3.0",
-    "nprogress": "^0.2.0",
     "qrcode.react": "^3.1.0",
     "react": "^18.3.1",
     "react-copy-to-clipboard": "^5.1.0",
@@ -39,7 +39,6 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^18.19.50",
-    "@types/nprogress": "^0",
     "@types/react": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "abitype": "1.0.6",
