@@ -24,7 +24,7 @@ export const WrongNetworkDropdown = () => {
       <DropdownMenuContent align="end">
         <NetworkOptions />
         <DropdownMenuItem asChild>
-          <Button variant="ghost" size="sm" onClick={() => disconnect()}>
+          <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => disconnect()}>
             <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
             <span>Disconnect</span>
           </Button>

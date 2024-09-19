@@ -67,7 +67,7 @@ export const AddressInfoDropdown = ({
         {!selectingNetwork && (
           <>
             <DropdownMenuItem asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="w-full justify-start">
                 {addressCopied ? (
                   <div className="flex items-center">
                     <CheckCircleIcon
@@ -96,7 +96,7 @@ export const AddressInfoDropdown = ({
             </DropdownMenuItem>
             <AddressQRCodeModal address={address}>
               <DropdownMenuItem asChild>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="w-full">
                   <div className="flex items-center w-full">
                     <QrCodeIcon className="mr-2 h-4 w-4" />
                     <span>View QR Code</span>
@@ -105,7 +105,7 @@ export const AddressInfoDropdown = ({
               </DropdownMenuItem>
             </AddressQRCodeModal>
             <DropdownMenuItem asChild>
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" className="w-full" asChild>
                 <a target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer">
                   <ArrowTopRightOnSquareIcon className="mr-2 h-4 w-4" />
                   View on Block Explorer
@@ -114,7 +114,12 @@ export const AddressInfoDropdown = ({
             </DropdownMenuItem>
             {allowedNetworks.length > 1 && (
               <DropdownMenuItem asChild>
-                <Button variant="ghost" size="sm" onClick={() => setSelectingNetwork(true)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start"
+                  onClick={() => setSelectingNetwork(true)}
+                >
                   <ArrowsRightLeftIcon className="mr-2 h-4 w-4" />
                   <span>Switch Network</span>
                 </Button>
@@ -124,6 +129,7 @@ export const AddressInfoDropdown = ({
               <Button
                 variant="ghost"
                 size="sm"
+                className="w-full justify-start"
                 onClick={() => {
                   disconnect();
                   closeDropdown();
