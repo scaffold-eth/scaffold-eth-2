@@ -58,38 +58,42 @@ const Home: NextPage = () => {
           </div>
         </div>
 
-        <div className="flex-grow bg-base-300 w-full flex items-center justify-evenly flex-col">
-          <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-6 md:gap-12 w-full md:w-4/6 px-4">
-            <div className="flex flex-col w-full md:w-96 justify-center">
+        <div className="flex-grow bg-transparent dark:bg-primary w-full flex items-center justify-evenly flex-col">
+          <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-6 md:gap-12 w-full md:w-4/6 px-4 py-12">
+            <div className="flex flex-col w-full md:w-96 justify-center py-6">
               <input
                 type="text"
-                className="block w-full bg-transparent mb-3 md:mb-5 rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full bg-transparent mb-3 md:mb-5 rounded border-0 py-1.5 pl-7 pr-20 ring-2 ring-inset ring-accent dark:ring-base-200 placeholder:text-gray-400 dark:placeholder:text-base-content focus:ring-2 focus:ring-inset focus:ring-base-300 dark:focus:ring-base-300 sm:text-sm sm:leading-6"
                 placeholder="Enter your message"
                 onChange={e => setnewMessage(e.target.value)}
               />
               <input
                 type="text"
-                className="block w-full bg-transparent mb-3 md:mb-5 rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full bg-transparent mb-3 md:mb-5 rounded border-0 py-1.5 pl-7 pr-20 ring-2 ring-inset ring-accent dark:ring-base-200 placeholder:text-gray-400 dark:placeholder:text-base-content focus:ring-2 focus:ring-inset focus:ring-base-300 dark:focus:ring-base-300 sm:text-sm sm:leading-6"
                 placeholder="Enter new price"
                 onChange={e => setNewPrice(e.target.value)}
               />
               <button
                 onClick={() => submitBid()}
-                className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                className="bg-accent text-white font-semibold py-2 px-4 rounded-lg hover:bg-neutral dark:hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-base-300 focus:ring-opacity-50"
               >
                 Submit
               </button>
             </div>
-            <div className="border-gray-300 border w-full md:w-3/6 h-60 flex flex-col items-center justify-evenly p-3 rounded">
-              <p>{`"${message}"`}</p>
-              <div className="flex justify-between w-full">
-                <h5>
-                  Current price: <br /> {formatedAmount.toFixed(1)} ETH
-                </h5>
-                <h5>
-                  Top bidder:
-                  <Address address={currentAdvertiser} />
-                </h5>
+            <div className="bg-gradient-holographic w-full md:w-3/6 h-60 p-1 rounded">
+              <div className="bg-ape-radial bg-cover bg-center w-full h-full rounded">
+                <div className="bg-primary bg-opacity-75 w-full h-full flex flex-col items-center justify-evenly p-6 rounded">
+                  <p>{`"${message}"`}</p>
+                  <div className="flex justify-between w-full">
+                    <h5>
+                      Current price: <br /> {formatedAmount.toFixed(1)} ETH
+                    </h5>
+                    <h5>
+                      Top bidder:
+                      <Address address={currentAdvertiser} />
+                    </h5>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
