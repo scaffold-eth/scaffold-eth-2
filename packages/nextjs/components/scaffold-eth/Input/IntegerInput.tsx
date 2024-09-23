@@ -25,7 +25,7 @@ export const IntegerInput = ({
   }, [onChange, value]);
 
   useEffect(() => {
-    if (isValidInteger(variant, value, false)) {
+    if (isValidInteger(variant, value)) {
       setInputError(false);
     } else {
       setInputError(true);
