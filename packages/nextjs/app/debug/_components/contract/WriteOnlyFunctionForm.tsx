@@ -33,7 +33,7 @@ export const WriteOnlyFunctionForm = ({
   inheritedFrom,
 }: WriteOnlyFunctionFormProps) => {
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
-  const [txValue, setTxValue] = useState<string | bigint>("");
+  const [txValue, setTxValue] = useState<string>("");
   const { chain } = useAccount();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
