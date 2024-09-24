@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
+import { parseEther } from "viem";
 import { CommonInputProps, InputBase, IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 
-type IntegerInputProps = CommonInputProps<string | bigint> & {
+type IntegerInputProps = CommonInputProps<string> & {
   variant?: IntegerVariant;
   disableMultiplyBy1e18?: boolean;
 };
@@ -20,14 +21,11 @@ export const IntegerInput = ({
     if (!value) {
       return;
     }
-    if (typeof value === "bigint") {
-      return onChange(value * 10n ** 18n);
-    }
-    return onChange(BigInt(Math.round(Number(value) * 10 ** 18)));
+    return onChange(parseEther(value).toString());
   }, [onChange, value]);
 
   useEffect(() => {
-    if (isValidInteger(variant, value, false)) {
+    if (isValidInteger(variant, value)) {
       setInputError(false);
     } else {
       setInputError(true);

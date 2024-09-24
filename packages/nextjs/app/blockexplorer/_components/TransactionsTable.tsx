@@ -44,14 +44,14 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                     <td className="w-1/12 md:py-4">{block.number?.toString()}</td>
                     <td className="w-2/1 md:py-4">{timeMined}</td>
                     <td className="w-2/12 md:py-4">
-                      <Address address={tx.from} size="sm" />
+                      <Address address={tx.from} size="sm" onlyEnsOrAddress />
                     </td>
                     <td className="w-2/12 md:py-4">
                       {!receipt?.contractAddress ? (
-                        tx.to && <Address address={tx.to} size="sm" />
+                        tx.to && <Address address={tx.to} size="sm" onlyEnsOrAddress />
                       ) : (
                         <div className="relative">
-                          <Address address={receipt.contractAddress} size="sm" />
+                          <Address address={receipt.contractAddress} size="sm" onlyEnsOrAddress />
                           <small className="absolute top-4 left-4">(Contract Creation)</small>
                         </div>
                       )}
