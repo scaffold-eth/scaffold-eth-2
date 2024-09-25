@@ -15,7 +15,7 @@
     "fork": "make fork FORK_URL=${1:-mainnet}",
     "format": "make format",
     "lint": "make lint",
-    "test": "make test",
+    "test": "forge test",
     "verify": "make build-and-verify RPC_URL=${1:-localhost}",
     "postinstall": "shx cp -n .env.example .env"
   },
