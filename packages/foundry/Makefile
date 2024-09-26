@@ -77,10 +77,6 @@ format:
 lint:
 	forge fmt --check && prettier --check ./script/**/*.js
 
-# Run tests
-test:
-	forge test
-
 # Verify contracts
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
