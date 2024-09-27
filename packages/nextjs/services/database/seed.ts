@@ -5,7 +5,7 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import * as path from "path";
 import { Client } from "pg";
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env.development.local") });
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const client = new Client({
   connectionString: process.env.POSTGRES_URL,
