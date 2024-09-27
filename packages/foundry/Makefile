@@ -71,7 +71,7 @@ flatten:
 
 # Format code
 format:
-	forge fmt && prettier --write ./script/**/*.js
+	forge fmt && prettier --write ./scripts-js/**/*.js
 
 # Lint code
 lint:
