@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "start": "next dev",
-    "build": "yarn drizzle-kit push && next build",
+    "build": "next build",
+    "vercel:build": "yarn drizzle-kit generate && yarn build",
     "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
