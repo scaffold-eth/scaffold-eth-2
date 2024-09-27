@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next dev",
-    "build": "next build",
+    "build": "yarn drizzle-kit push && next build",
     "serve": "next start",
     "lint": "next lint",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
@@ -14,6 +14,7 @@
     "vercel:yolo": "vercel --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true",
     "drizzle-kit": "drizzle-kit",
     "db:local:init": "docker-compose up -d && yarn drizzle-kit push && yarn seed",
+    "db:init": "yarn drizzle-kit push && yarn seed",
     "seed": "tsx services/database/seed.ts"
   },
   "dependencies": {
