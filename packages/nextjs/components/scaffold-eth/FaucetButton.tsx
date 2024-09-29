@@ -58,7 +58,7 @@ export const FaucetButton = () => {
     <TooltipProvider delayDuration={0}>
       <Tooltip open={isBalanceZero}>
         <TooltipTrigger asChild>
-          <Button variant="outline" size="icon" onClick={sendETH} disabled={loading}>
+          <Button variant="outline" size="icon" className="h-8" onClick={sendETH} disabled={loading}>
             {!loading ? (
               <BanknotesIcon className="h-4 w-4" />
             ) : (
