@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
   label: string;
@@ -26,26 +26,32 @@ export const menuLinks: HeaderMenuLink[] = [
   },
 ];
 
-export const HeaderMenuLinks = () => {
+export const HeaderMenuLinks = ({ withDropDownMenu }: { withDropDownMenu?: boolean }) => {
   const pathname = usePathname();
 
   return (
     <>
       {menuLinks.map(({ label, href, icon }) => {
         const isActive = pathname === href;
-        return (
-          <li key={href}>
-            <Link
-              href={href}
-              passHref
-              className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
-            >
-              {icon}
-              <span>{label}</span>
-            </Link>
-          </li>
+        const MenuLink = () => (
+          <Link
+            href={href}
+            passHref
+            className={`${
+              isActive ? "bg-secondary shadow-md" : ""
+            } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-md grid grid-flow-col`}
+          >
+            {icon}
+            <span>{label}</span>
+          </Link>
+        );
+
+        return withDropDownMenu ? (
+          <DropdownMenuItem key={href} asChild>
+            <MenuLink />
+          </DropdownMenuItem>
+        ) : (
+          <MenuLink />
         );
       })}
     </>
@@ -56,37 +62,20 @@ export const HeaderMenuLinks = () => {
  * Site header
  */
 export const Header = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const burgerMenuRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(
-    burgerMenuRef,
-    useCallback(() => setIsDrawerOpen(false), []),
-  );
-
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
-      <div className="navbar-start w-auto lg:w-1/2">
-        <div className="lg:hidden dropdown" ref={burgerMenuRef}>
-          <label
-            tabIndex={0}
-            className={`ml-1 btn btn-ghost ${isDrawerOpen ? "hover:bg-secondary" : "hover:bg-transparent"}`}
-            onClick={() => {
-              setIsDrawerOpen(prevIsOpenState => !prevIsOpenState);
-            }}
-          >
-            <Bars3Icon className="h-1/2" />
-          </label>
-          {isDrawerOpen && (
-            <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              onClick={() => {
-                setIsDrawerOpen(false);
-              }}
-            >
-              <HeaderMenuLinks />
-            </ul>
-          )}
+    <div className="sticky lg:static top-0 flex items-center p-2 bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+      <div className="inline-flex items-start w-auto lg:w-1/2">
+        <div className="lg:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <label tabIndex={0} className={`ml-1 btn btn-ghost`}>
+                <Bars3Icon className="h-1/2" />
+              </label>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="m-3 p-2 shadow bg-base-100 rounded-box w-52">
+              <HeaderMenuLinks withDropDownMenu />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
@@ -101,7 +90,7 @@ export const Header = () => {
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end flex-grow mr-4 space-x-1">
+      <div className="inline-flex justify-end w-1/2 flex-grow mr-4 space-x-1">
         <RainbowKitCustomConnectButton />
         <FaucetButton />
       </div>
