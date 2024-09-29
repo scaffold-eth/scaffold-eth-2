@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { ReactNode, forwardRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaff
 type HeaderMenuLink = {
   label: string;
   href: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 };
 
 export const menuLinks: HeaderMenuLink[] = [
@@ -26,6 +26,26 @@ export const menuLinks: HeaderMenuLink[] = [
   },
 ];
 
+type MenuLinkProps = HeaderMenuLink & {
+  isActive: boolean;
+};
+
+const MenuLink = forwardRef<HTMLAnchorElement, MenuLinkProps>(({ href, label, icon, isActive }, ref) => (
+  <Link
+    href={href}
+    passHref
+    ref={ref}
+    className={`${
+      isActive ? "bg-secondary shadow-md" : ""
+    } hover:bg-secondary hover:shadow-md  py-1.5 px-3 text-sm rounded-md grid grid-flow-col`}
+  >
+    {icon}
+    <span>{label}</span>
+  </Link>
+));
+
+MenuLink.displayName = "MenuLink";
+
 export const HeaderMenuLinks = ({ withDropDownMenu }: { withDropDownMenu?: boolean }) => {
   const pathname = usePathname();
 
@@ -33,25 +53,13 @@ export const HeaderMenuLinks = ({ withDropDownMenu }: { withDropDownMenu?: boole
     <>
       {menuLinks.map(({ label, href, icon }) => {
         const isActive = pathname === href;
-        const MenuLink = () => (
-          <Link
-            href={href}
-            passHref
-            className={`${
-              isActive ? "bg-secondary shadow-md" : ""
-            } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-md grid grid-flow-col`}
-          >
-            {icon}
-            <span>{label}</span>
-          </Link>
-        );
 
         return withDropDownMenu ? (
           <DropdownMenuItem key={href} asChild>
-            <MenuLink />
+            <MenuLink key={href} href={href} label={label} icon={icon} isActive={isActive} />
           </DropdownMenuItem>
         ) : (
-          <MenuLink key={href} />
+          <MenuLink key={href} href={href} label={label} icon={icon} isActive={isActive} />
         );
       })}
     </>
