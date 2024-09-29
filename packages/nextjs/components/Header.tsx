@@ -51,7 +51,7 @@ export const HeaderMenuLinks = ({ withDropDownMenu }: { withDropDownMenu?: boole
             <MenuLink />
           </DropdownMenuItem>
         ) : (
-          <MenuLink />
+          <MenuLink key={href} />
         );
       })}
     </>
