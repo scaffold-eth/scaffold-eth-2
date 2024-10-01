@@ -1,10 +1,15 @@
 "use client";
 
+import { Client } from "@heroiclabs/nakama-js";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const DatabaseProfileCard = async () => {
-  const saveToDB = async () => {
-    console.log("Saving to DB");
+  const saveToDB = async (account: string) => {
+    const client = new Client("defaultkey", "127.0.0.1", "7350");
+
+    // Authenticate with the Nakama server using Device Authentication.
+    const session = await client.authenticateDevice(account, true);
+    console.info("Successfully authenticated:", session);
   };
 
   return (
@@ -29,7 +34,11 @@ export const DatabaseProfileCard = async () => {
                   <>
                     <div className="flex flex-col items-center mr-1">
                       <span className="text-xs">{chain.name}</span>
-                      <button className="btn btn-primary btn-sm" onClick={saveToDB} type="button">
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => saveToDB(account.address)}
+                        type="button"
+                      >
                         Save to DB
                       </button>
                     </div>

@@ -19,6 +19,7 @@
     "seed": "tsx services/database/seed.ts"
   },
   "dependencies": {
+    "@heroiclabs/nakama-js": "^2.8.0",
     "@heroicons/react": "^2.0.11",
     "@rainbow-me/rainbowkit": "2.1.2",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.4.1",

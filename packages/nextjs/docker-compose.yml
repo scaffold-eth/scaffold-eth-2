@@ -1,10 +1,70 @@
-version: "3"
+version: '3'
 services:
-  db:
-    image: postgres:16
+  postgres:
+    image: postgres:12.2-alpine
+    container_name: postgres
+    hostname: postgres
     environment:
-      POSTGRES_PASSWORD: mysecretpassword
+      - POSTGRES_DB=nakama
+      - POSTGRES_PASSWORD=localdb
+    volumes:
+      - data:/var/lib/postgresql/data
+    expose:
+      - "8080"
+      - "5432"
     ports:
       - "5432:5432"
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "nakama"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  nakama:
+    container_name: nakama
+    image: registry.heroiclabs.com/heroiclabs/nakama:3.22.0
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - >
+          /nakama/nakama migrate up --database.address postgres:localdb@postgres:5432/nakama &&
+          exec /nakama/nakama --name nakama1 --database.address postgres:localdb@postgres:5432/nakama --logger.level DEBUG --session.token_expiry_sec 7200          
+    restart: always
+    links:
+      - "postgres:db"
+    depends_on:
+      postgres:
+        condition: service_healthy
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - /c/z/nakama/data:/nakama/data
+    expose:
+      - "7349"
+      - "7350"
+      - "7351"
+    ports:
+      - "7349:7349"
+      - "7350:7350"
+      - "7351:7351"
+    healthcheck:
+      test: ["CMD", "/nakama/nakama", "healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    expose:
+      - "5050"
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: name@example.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    restart: unless-stopped
+
+volumes:
+  data:
