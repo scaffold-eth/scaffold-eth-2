@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=nakama
       - POSTGRES_PASSWORD=localdb
     volumes:
-      - data:/var/lib/postgresql/data
+      - ./postgres:/var/lib/postgresql/data
     expose:
       - "8080"
       - "5432"
@@ -29,7 +29,7 @@ services:
       - "-ecx"
       - >
           /nakama/nakama migrate up --database.address postgres:localdb@postgres:5432/nakama &&
-          exec /nakama/nakama --name nakama1 --database.address postgres:localdb@postgres:5432/nakama --logger.level DEBUG --session.token_expiry_sec 7200          
+          exec /nakama/nakama  --config /nakama/data/local.yml --name nakama1 --database.address postgres:localdb@postgres:5432/nakama --logger.level DEBUG --session.token_expiry_sec 7200          
     restart: always
     links:
       - "postgres:db"
@@ -37,7 +37,7 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - /c/z/nakama/data:/nakama/data
+      - ./nakama:/nakama/data
     expose:
       - "7349"
       - "7350"
@@ -65,6 +65,3 @@ services:
       PGADMIN_DEFAULT_EMAIL: name@example.com
       PGADMIN_DEFAULT_PASSWORD: password
     restart: unless-stopped
-
-volumes:
-  data:

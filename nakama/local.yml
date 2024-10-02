@@ -1,0 +1,4 @@
+logger:
+  level: "DEBUG"
+runtime:
+  js_entrypoint: "./index.js"

@@ -4,8 +4,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/hardhat",
-      "packages/nextjs"
+      "packages/*"
     ]
   },
   "scripts": {
@@ -34,7 +33,9 @@
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "db:local:init": "yarn workspace @se-2/nextjs db:local:init"
+    "db:local:init": "yarn workspace @se-2/nextjs db:local:init",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {

@@ -1,0 +1,14 @@
+{
+    "name": "@se-2/nakama-modules",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "tsc"
+    },
+    "main": "build/index.js",    
+    "devDependencies": {
+        "typescript": "^4.5.4"        
+    },
+    "dependencies": {
+        "nakama-runtime": "github:heroiclabs/nakama-common"
+    }
+}
