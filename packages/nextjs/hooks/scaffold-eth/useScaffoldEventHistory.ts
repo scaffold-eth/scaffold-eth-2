@@ -74,6 +74,7 @@ export const useScaffoldEventHistory = <
   contractName,
   eventName,
   fromBlock,
+  chain,
   filters,
   blockData,
   transactionData,
@@ -82,14 +83,16 @@ export const useScaffoldEventHistory = <
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const { targetNetwork } = useTargetNetwork();
+  const selectedChain = chain ?? targetNetwork;
+
   const publicClient = usePublicClient({
-    chainId: targetNetwork.id,
+    chainId: selectedChain.id,
   });
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: targetNetwork.id });
+  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedChain.id });
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const { data: deployedContractData } = useDeployedContractInfo(contractName, selectedChain);
 
   const event =
     deployedContractData &&
@@ -105,7 +108,7 @@ export const useScaffoldEventHistory = <
         address: deployedContractData?.address,
         eventName,
         fromBlock: fromBlock.toString(),
-        chainId: targetNetwork.id,
+        chainId: selectedChain.id,
         filters: JSON.stringify(filters, replacer),
       },
     ],

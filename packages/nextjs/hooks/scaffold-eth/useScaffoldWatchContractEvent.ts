@@ -19,10 +19,12 @@ export const useScaffoldWatchContractEvent = <
 >({
   contractName,
   eventName,
+  chain,
   onLogs,
 }: UseScaffoldEventConfig<TContractName, TEventName>) => {
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
+  const selectedChain = chain ?? targetNetwork;
+  const { data: deployedContractData } = useDeployedContractInfo(contractName, selectedChain);
 
   const addIndexedArgsToLogs = (logs: Log[]) => logs.map(addIndexedArgsToEvent);
   const listenerWithIndexedArgs = (logs: Log[]) => onLogs(addIndexedArgsToLogs(logs) as Parameters<typeof onLogs>[0]);
@@ -30,7 +32,7 @@ export const useScaffoldWatchContractEvent = <
   return useWatchContractEvent({
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
-    chainId: targetNetwork.id,
+    chainId: selectedChain.id,
     onLogs: listenerWithIndexedArgs,
     eventName,
   });

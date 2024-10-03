@@ -18,13 +18,21 @@ export const useScaffoldContract = <
 >({
   contractName,
   walletClient,
+  chain,
 }: {
   contractName: TContractName;
   walletClient?: TWalletClient | null;
+  chain?: Chain;
 }) => {
-  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
-  const publicClient = usePublicClient({ chainId: targetNetwork.id });
+  const selectedChain = chain ?? targetNetwork;
+
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(
+    contractName,
+    selectedChain,
+  );
+
+  const publicClient = usePublicClient({ chainId: selectedChain?.id });
 
   let contract = undefined;
   if (deployedContractData && publicClient) {
