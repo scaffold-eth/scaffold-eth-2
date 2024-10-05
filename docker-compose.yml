@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=nakama
       - POSTGRES_PASSWORD=localdb
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
     expose:
       - "8080"
       - "5432"
@@ -23,7 +23,7 @@ services:
 
   nakama:
     container_name: nakama
-    image: registry.heroiclabs.com/heroiclabs/nakama:3.22.0
+    image: heroiclabs/nakama:3.22.0-arm
     entrypoint:
       - "/bin/sh"
       - "-ecx"
@@ -65,3 +65,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: name@example.com
       PGADMIN_DEFAULT_PASSWORD: password
     restart: unless-stopped
+
+volumes:
+  postgres:
