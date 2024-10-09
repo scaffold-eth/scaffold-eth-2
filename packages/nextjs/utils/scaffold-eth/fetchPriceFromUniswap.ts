@@ -4,9 +4,11 @@ import { Pair, Route } from "@uniswap/v2-sdk";
 import { Address, createPublicClient, fallback, http, parseAbi } from "viem";
 import { mainnet } from "viem/chains";
 
+const alchemyHttpUrl = getAlchemyHttpUrl(mainnet.id);
+const rpcFallbacks = alchemyHttpUrl ? [http(alchemyHttpUrl), http()] : [http()];
 const publicClient = createPublicClient({
   chain: mainnet,
-  transport: fallback([http(getAlchemyHttpUrl(mainnet.id)), http()]),
+  transport: fallback(rpcFallbacks),
 });
 
 const ABI = parseAbi([
