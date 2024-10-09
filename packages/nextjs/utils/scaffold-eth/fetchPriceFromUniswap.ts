@@ -1,12 +1,12 @@
 import { ChainWithAttributes, getAlchemyHttpUrl } from "./networks";
 import { CurrencyAmount, Token } from "@uniswap/sdk-core";
 import { Pair, Route } from "@uniswap/v2-sdk";
-import { Address, createPublicClient, http, parseAbi } from "viem";
+import { Address, createPublicClient, fallback, http, parseAbi } from "viem";
 import { mainnet } from "viem/chains";
 
 const publicClient = createPublicClient({
   chain: mainnet,
-  transport: http(getAlchemyHttpUrl(mainnet.id)),
+  transport: fallback([http(getAlchemyHttpUrl(mainnet.id)), http()]),
 });
 
 const ABI = parseAbi([
