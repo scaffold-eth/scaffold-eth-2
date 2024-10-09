@@ -1,6 +1,23 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ imports, solidityVersion, networks }) => `import * as dotenv from "dotenv";
+const contents = ({ imports, solidityVersion, networks, compilers }) => {
+
+  const massagedCompilers = compilers[0]?.[0] ? JSON.stringify(compilers[0]) : '';
+  
+  const defaultCompilers = `[
+  {
+    version: "${solidityVersion[0]}",
+    settings: {
+      optimizer: {
+        enabled: true,
+        // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+        runs: 200,
+      },
+    },
+  },
+]`;
+
+return `import * as dotenv from "dotenv";
 dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
@@ -24,18 +41,7 @@ const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z
 
 const config: HardhatUserConfig = {
   solidity: {
-    compilers: [
-      {
-        version: "${solidityVersion[0]}",
-        settings: {
-          optimizer: {
-            enabled: true,
-            // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
-            runs: 200,
-          },
-        },
-      },
-    ],
+    compilers: ${massagedCompilers || defaultCompilers}
   },
   defaultNetwork: "localhost",
   namedAccounts: {
@@ -142,10 +148,14 @@ const config: HardhatUserConfig = {
   },
 };
 
-export default config;`;
+export default config;`
+};
 
 export default withDefaults(contents, {
   imports: "",
-  solidityVersion: "0.8.17",
+  solidityVersion: "0.8.20",
   networks: "",
+  // set solidity compilers
+  // https://hardhat.org/hardhat-runner/docs/advanced/multiple-solidity-versions#multiple-solidity-versions
+  compilers: [],
 });
