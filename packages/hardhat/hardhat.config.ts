@@ -12,7 +12,7 @@ import "hardhat-deploy-ethers";
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
-const providerApiKey = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+const providerApiKey = process.env.ALCHEMY_API_KEY || "";
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
@@ -51,43 +51,43 @@ const config: HardhatUserConfig = {
       },
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+      url: `https://cloudflare-eth.com`,
       accounts: [deployerPrivateKey],
     },
     sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://rpc2.sepolia.org`,
       accounts: [deployerPrivateKey],
     },
     arbitrum: {
-      url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://arb1.arbitrum.io/rpc`,
       accounts: [deployerPrivateKey],
     },
     arbitrumSepolia: {
-      url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://sepolia-rollup.arbitrum.io/rpc`,
       accounts: [deployerPrivateKey],
     },
     optimism: {
-      url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://mainnet.optimism.io`,
       accounts: [deployerPrivateKey],
     },
     optimismSepolia: {
-      url: `https://opt-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://sepolia.optimism.io`,
       accounts: [deployerPrivateKey],
     },
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://polygon-rpc.com`,
       accounts: [deployerPrivateKey],
     },
     polygonMumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://rpc.ankr.com/polygon_mumbai`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvm: {
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://zkevm-rpc.com`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvmTestnet: {
-      url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
+      url: `https://rpc.public.zkevm-test.net`,
       accounts: [deployerPrivateKey],
     },
     gnosis: {
