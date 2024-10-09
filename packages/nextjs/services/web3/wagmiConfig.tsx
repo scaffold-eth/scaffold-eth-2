@@ -17,9 +17,12 @@ export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
+    const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
+    const rpcFallbacks = alchemyHttpUrl ? [http(alchemyHttpUrl), http()] : [http()];
+
     return createClient({
       chain,
-      transport: fallback([http(getAlchemyHttpUrl(chain.id)), http()]),
+      transport: fallback(rpcFallbacks),
       ...(chain.id !== (hardhat as Chain).id
         ? {
             pollingInterval: scaffoldConfig.pollingInterval,
