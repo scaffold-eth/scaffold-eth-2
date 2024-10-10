@@ -424,7 +424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/address@npm:5.7.0, @ethersproject/address@npm:^5.0.0, @ethersproject/address@npm:^5.0.2, @ethersproject/address@npm:^5.7.0":
+"@ethersproject/address@npm:5.7.0, @ethersproject/address@npm:^5.0.2, @ethersproject/address@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/address@npm:5.7.0"
   dependencies:
@@ -679,7 +679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/solidity@npm:5.7.0, @ethersproject/solidity@npm:^5.0.0, @ethersproject/solidity@npm:^5.7.0":
+"@ethersproject/solidity@npm:5.7.0, @ethersproject/solidity@npm:^5.0.9, @ethersproject/solidity@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/solidity@npm:5.7.0"
   dependencies:
@@ -2171,8 +2171,8 @@ __metadata:
     "@types/node": ^18.19.50
     "@types/react": ^18.3.5
     "@typescript-eslint/eslint-plugin": ^5.39.0
-    "@uniswap/sdk-core": ^4.0.1
-    "@uniswap/v2-sdk": ^3.0.1
+    "@uniswap/sdk-core": ^5.8.2
+    "@uniswap/v2-sdk": ^4.6.1
     abitype: 1.0.6
     autoprefixer: ^10.4.20
     blo: ^1.0.1
@@ -3086,30 +3086,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uniswap/sdk-core@npm:^4.0.1, @uniswap/sdk-core@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "@uniswap/sdk-core@npm:4.0.7"
+"@uniswap/sdk-core@npm:^5.8.1, @uniswap/sdk-core@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "@uniswap/sdk-core@npm:5.8.2"
   dependencies:
     "@ethersproject/address": ^5.0.2
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/keccak256": 5.7.0
+    "@ethersproject/strings": 5.7.0
     big.js: ^5.2.2
     decimal.js-light: ^2.5.0
     jsbi: ^3.1.4
     tiny-invariant: ^1.1.0
     toformat: ^2.0.0
-  checksum: b89ce380206f14fef70fb233c34edb439e9602bc4c17c4801e3032ed6e4b932d71942f677535c996c55e724f9dd7fac42443e117f75bae9348300380e50d95a5
+  checksum: fde13653021cea136e4e8d2e04e7f45559e5cd64481fcd0b087a9cd674bfe053c05faeb5a844651b20dd0b70717723746c7f82060e99a057de9561800f8f0606
   languageName: node
   linkType: hard
 
-"@uniswap/v2-sdk@npm:^3.0.1":
-  version: 3.2.1
-  resolution: "@uniswap/v2-sdk@npm:3.2.1"
+"@uniswap/v2-sdk@npm:^4.6.1":
+  version: 4.6.1
+  resolution: "@uniswap/v2-sdk@npm:4.6.1"
   dependencies:
-    "@ethersproject/address": ^5.0.0
-    "@ethersproject/solidity": ^5.0.0
-    "@uniswap/sdk-core": ^4.0.7
+    "@ethersproject/address": ^5.0.2
+    "@ethersproject/solidity": ^5.0.9
+    "@uniswap/sdk-core": ^5.8.1
     tiny-invariant: ^1.1.0
     tiny-warning: ^1.0.3
-  checksum: 519c01e840878d03b99f0220da3a686afa097287b1c10fc65aaabd0555bab0fbcb013ac6d991453f70161e2e804b0e0797fb853d635acf56eae133671fdcb515
+  checksum: 0d4c1e58feef7d65c143a776447dbe4e0c06c2f2b6877d57b2db3056a4f8c441c503449f5bfa150ac9e02516ef1c6f5fce5bc89a55d637311bc3e5c8e01ef163
   languageName: node
   linkType: hard
 
