@@ -28,7 +28,7 @@
     "@types/eslint": "^8",
     "@types/mocha": "^10.0.8",
     "@types/prettier": "^2",
-    "@types/qrcode": "^1",
+    "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
     "chai": "^4.5.0",
@@ -43,14 +43,14 @@
     "prettier": "^2.8.4",
     "solidity-coverage": "^0.8.13",
     "ts-node": "^10.9.1",
-    "typechain": "^8.1.0",
+    "typechain": "^8.3.2",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
     "@typechain/ethers-v6": "^0.5.1",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.4.5",
     "envfile": "^6.18.0",
-    "qrcode": "^1.5.1"
+    "qrcode": "^1.5.4"
   }
 }
