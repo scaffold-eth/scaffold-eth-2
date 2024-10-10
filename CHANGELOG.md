@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.57
+
+### Patch Changes
+
+- ad4c237: deprecate default alchemy key (scaffold-eth#955)
+- b6f0d70: Add template support for solidity compilers
+
 ## 0.0.56
 
 ### Patch Changes
