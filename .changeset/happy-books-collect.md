@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-depreciate default alchemy key (scaffold-eth#955)
+deprecate default alchemy key (scaffold-eth#955)
