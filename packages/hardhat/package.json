@@ -50,7 +50,7 @@
     "@openzeppelin/contracts": "^5.0.2",
     "@typechain/ethers-v6": "^0.5.1",
     "dotenv": "^16.0.3",
-    "envfile": "^6.18.0",
+    "envfile": "^7.1.0",
     "qrcode": "^1.5.1"
   }
 }
