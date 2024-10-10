@@ -2195,8 +2195,7 @@ __metadata:
     tailwindcss: ^3.4.11
     type-fest: ^4.6.0
     typescript: 5.5.3
-    use-debounce: ^8.0.4
-    usehooks-ts: ^2.13.0
+    usehooks-ts: ^3.1.0
     vercel: ^37.4.2
     viem: 2.21.7
     wagmi: 2.12.11
@@ -13499,15 +13498,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-debounce@npm:^8.0.4":
-  version: 8.0.4
-  resolution: "use-debounce@npm:8.0.4"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 0f8b9e571f68a4694033ec00690bf73d781ac890140ae9ed4b330f71f7adb3f7d7df5cdaa32923c4d03fdc9de8a11be0f84301175ae4f66208af52ad03c55504
-  languageName: node
-  linkType: hard
-
 "use-sidecar@npm:^1.1.2":
   version: 1.1.2
   resolution: "use-sidecar@npm:1.1.2"
@@ -13533,14 +13523,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "usehooks-ts@npm:2.13.0"
+"usehooks-ts@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "usehooks-ts@npm:3.1.0"
   dependencies:
     lodash.debounce: ^4.0.8
   peerDependencies:
     react: ^16.8.0  || ^17 || ^18
-  checksum: ad07930e1b5c70392603eb8b3f199f44349c75406fe31013f79b0fb7fdece59f47f8dba09b6f1fafaa00d68f43240dbb13cdc1afb89b647f1d53504599a51ca0
+  checksum: 4f850c0c5ab408afa52fa2ea2c93c488cd7065c82679eb1fb62cba12ca4c57ff62d52375acc6738823421fe6579ce3adcea1e2dc345ce4f549c593d2e51455b3
   languageName: node
   linkType: hard
 
