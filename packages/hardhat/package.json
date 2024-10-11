@@ -44,7 +44,7 @@
     "solidity-coverage": "^0.8.13",
     "ts-node": "^10.9.1",
     "typechain": "^8.1.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
