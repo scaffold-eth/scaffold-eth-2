@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
+import { Chain } from "viem";
 import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
@@ -22,16 +23,19 @@ import {
  */
 export const useScaffoldWriteContract = <TContractName extends ContractName>(
   contractName: TContractName,
+  chain?: Chain,
   writeContractParams?: UseWriteContractParameters,
 ) => {
-  const { chain } = useAccount();
+  const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
   const { targetNetwork } = useTargetNetwork();
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const selectedNetwork = chain ?? targetNetwork;
+
+  const { data: deployedContractData } = useDeployedContractInfo(contractName, selectedNetwork);
 
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
@@ -44,12 +48,13 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
       return;
     }
 
-    if (!chain?.id) {
+    if (!accountChain?.id) {
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
-      notification.error("You are on the wrong network");
+
+    if (accountChain?.id !== selectedNetwork.id) {
+      notification.error("Your wallet is connected to the wrong network");
       return;
     }
 
@@ -93,12 +98,13 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
       return;
     }
-    if (!chain?.id) {
+    if (!accountChain?.id) {
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
-      notification.error("You are on the wrong network");
+
+    if (accountChain?.id !== selectedNetwork.id) {
+      notification.error("Your wallet is connected to the wrong network");
       return;
     }
 
