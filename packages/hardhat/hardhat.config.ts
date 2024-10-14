@@ -16,7 +16,7 @@ const deployerPrivateKey =
 // If not set, it uses ours Etherscan default API key.
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 // forking rpc url
-const forkingURL = process.env.FORKING_URL || "";
+const forkingURL = process.env.FORKING_URL || "https://cloudflare-eth.com";
 
 const config: HardhatUserConfig = {
   solidity: {
