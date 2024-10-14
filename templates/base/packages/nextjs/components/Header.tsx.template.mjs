@@ -1,5 +1,7 @@
 import { withDefaults } from "../../../../utils.js";
-const contents = ({ menuIconImports, menuObjects }) => {
+const contents = ({ menuIconImports, menuObjects, logoText, logoDescription }) => {
+  const stringifiedAdditionalMenuLinks = menuObjects.filter(Boolean).join(",\n");
+
   return `"use client";
 
 import React, { useCallback, useRef, useState } from "react";
@@ -22,12 +24,12 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Home",
     href: "/",
   },
+  ${stringifiedAdditionalMenuLinks && `${stringifiedAdditionalMenuLinks},`}
   {
     label: "Debug Contracts",
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  ${menuObjects.filter(Boolean).join(",\n")}
 ];
 
 export const HeaderMenuLinks = () => {
@@ -97,8 +99,8 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Scaffold-ETH</span>
-            <span className="text-xs">Ethereum dev stack</span>
+            <span className="font-bold leading-tight">${logoText}</span>
+            <span className="text-xs">${logoDescription}</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
@@ -117,4 +119,6 @@ export const Header = () => {
 export default withDefaults(contents, {
   menuIconImports: "",
   menuObjects: "",
+  logoText: "Scaffold-ETH",
+  logoDescription: "Ethereum dev stack"
 });
