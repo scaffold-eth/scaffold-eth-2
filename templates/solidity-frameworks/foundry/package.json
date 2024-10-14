@@ -6,12 +6,14 @@
     "chain": "yarn workspace @se-2/foundry chain",
     "deploy": "yarn workspace @se-2/foundry deploy",
     "deploy:verify": "yarn workspace @se-2/foundry deploy:verify",
+    "account:generate": "yarn workspace @se-2/foundry account:generate",
+    "account:import": "yarn workspace @se-2/foundry account:import",
     "foundry:lint": "yarn workspace @se-2/foundry lint",
     "foundry:test": "yarn workspace @se-2/foundry test",
     "foundry:format": "yarn workspace @se-2/foundry format",
     "test": "yarn foundry:test",
     "verify": "yarn workspace @se-2/foundry verify",
-    "generate": "yarn workspace @se-2/foundry generate",
+    "generate": "yarn account:generate",
     "flatten": "yarn workspace @se-2/foundry flatten",
     "format": "yarn next:format && yarn foundry:format"
   }
