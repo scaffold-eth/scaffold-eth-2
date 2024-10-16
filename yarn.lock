@@ -2142,7 +2142,7 @@ __metadata:
     "@typescript-eslint/parser": latest
     chai: ^4.5.0
     dotenv: ^16.0.3
-    envfile: ^6.18.0
+    envfile: ^7.1.0
     eslint: ^8.26.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
@@ -5968,12 +5968,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envfile@npm:^6.18.0":
-  version: 6.18.0
-  resolution: "envfile@npm:6.18.0"
+"envfile@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "envfile@npm:7.1.0"
   bin:
     envfile: bin.cjs
-  checksum: 3a3762994d7b84ccf0293c1269cdfa5ea8971bdbbf7e3571fb686a6415eee2029e43d3faf36ed4222a83eaaf38fbc4fa37b3f50b77ea417ca35561e0e54059c1
+  checksum: 63c6e49c19763dafbac6c3665907aed04215f617a4679c12bf006d2de7f3b93431fe46764c52288ca783e01c77ea31de44c563ca16a1d783bd668a9bb31f034e
   languageName: node
   linkType: hard
 
@@ -13536,6 +13536,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-sync-external-store@npm:1.2.2":
+  version: 1.2.2
+  resolution: "use-sync-external-store@npm:1.2.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: fe07c071c4da3645f112c38c0e57beb479a8838616ff4e92598256ecce527f2888c08febc7f9b2f0ce2f0e18540ba3cde41eb2035e4fafcb4f52955037098a81
+  languageName: node
+  linkType: hard
+
 "usehooks-ts@npm:^2.13.0":
   version: 2.13.0
   resolution: "usehooks-ts@npm:2.13.0"
@@ -14320,7 +14329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:4.4.1, zustand@npm:^4.1.2":
+"zustand@npm:4.4.1":
   version: 4.4.1
   resolution: "zustand@npm:4.4.1"
   dependencies:
@@ -14337,5 +14346,25 @@ __metadata:
     react:
       optional: true
   checksum: 80acd0fbf633782996642802c8692bbb80ae5c80a8dff4c501b88250acd5ccd468fbc6398bdce198475a25e3839c91385b81da921274f33ffb5c2d08c3eab400
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^4.1.2":
+  version: 4.5.5
+  resolution: "zustand@npm:4.5.5"
+  dependencies:
+    use-sync-external-store: 1.2.2
+  peerDependencies:
+    "@types/react": ">=16.8"
+    immer: ">=9.0.6"
+    react: ">=16.8"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    immer:
+      optional: true
+    react:
+      optional: true
+  checksum: 654e47959970bc66bbf2ae80fced7e556dd488e9ee54eb678330cb036ecc7184f4b8c2cae273be28022533622c54ab6339bf3fe30d19236367c5c251b6c6679a
   languageName: node
   linkType: hard
