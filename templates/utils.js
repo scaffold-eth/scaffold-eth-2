@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>
   (receivedArgs) => {
@@ -23,3 +25,5 @@ export const withDefaults =
 
     return template(argsWithDefault);
   };
+
+export const stringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })

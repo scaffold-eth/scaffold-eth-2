@@ -34,7 +34,7 @@ When a package enforces commonjs imports, our templates created within those pac
 
 ### Default values
 
-It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, I've created a utility function that receives the template and expected arguments with their default values, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
+It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, We've created a utility function that receives the template and expected arguments with their default values, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
 
 As a bonus, using this function will throw an error when an [Args file](#args-file-content) is trying to send an argument with a name not expected by the template.
 
@@ -92,7 +92,7 @@ const stringWithoutNewLines = `This string starts without a new line
 and ends without new lines`;
 ```
 
-If you do this, however, prettier will try to indent the backtick. To avoid that you can see I've added a bunch of `// prettier-ignore`s before the template strings.
+If you do this, however, prettier will try to indent the backtick. To avoid that you can see We've added a bunch of `// prettier-ignore`s before the template strings.
 
 # Args files
 
@@ -146,11 +146,11 @@ To avoid issues when named arguments have typos, the `withDefaults` utility will
 
 # Args files injection in Template files
 
-For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If there are multiple Args files, we combine them into an array
+For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If Args files are found, we combine them into an array.
 
 To see the list of template files and their matching args files, check [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
 
-I've thought about how the strings should be joined, but an option is to use [tagged templates](4). We can go as crazy as we want with tagged templates.
+We've thought about how the strings should be joined, but an option is to use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
 
@@ -176,9 +176,27 @@ The special files and folders are:
 
 # Things worth mentioning
 
+## Recommended way to handle complex arguments in templates
+
+Most of the time you will use string arguments for templating, but sometimes you will need to add arrays, objects, bigints, etc. You can handle them however you want, but we're recommending to use the table below as a helper.
+
+Note: The `stringify` function used in the examples below should be imported from the `templates/utils.js` file:
+
+```javascript
+import { stringify } from "../path/to/templates/utils.js";
+```
+
+| Pattern                 | Template                                                                                | Args                                                       | Result                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Replace an object       | `const replacedObj = ${stringify(replacedObj[0])}`                                      | `const replacedObj = { key1: "Replaced", key2: "Object" }` | `const replacedObj = { key1: "Replaced", key2: "Object" }`                              |
+| Replace an array        | `const replacedArr = ${stringify(replacedArr[0])}`                                      | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                             |
+| Object, add new entries | `const mergedObj = ${stringify({ key1: "value1", key2: "value2", ...objToMerge[0] })};` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };` |
+| Array, add new items    | `const arrWithAdditionalItems = ${stringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
+| BigInt                  | `const bigInt = ${stringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
+
 ## Merging package.json files
 
-The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
+The package we use to merge `package.json` files [merge-packages](https://www.npmjs.com/package/merge-packages) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
 
 For example:
 
@@ -204,9 +222,4 @@ The first and last files are the first and second arguments when we call the fun
 
 ## Filesystem async methods
 
-This is a possible improvement in the speed of the cli. I've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
-
-[1]: https://github.com/nextauthjs/next-auth
-[2]: https://www.prisma.io/
-[3]: https://github.com/zppack/merge-packages
-[4]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
+This is a possible improvement in the speed of the cli. We've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
