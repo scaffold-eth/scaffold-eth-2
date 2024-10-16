@@ -2166,7 +2166,7 @@ __metadata:
   dependencies:
     "@heroicons/react": ^2.1.5
     "@rainbow-me/rainbowkit": 2.1.6
-    "@tanstack/react-query": ^5.59.8
+    "@tanstack/react-query": ^5.59.15
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/node": ^18.19.50
     "@types/react": ^18.3.5
@@ -2200,7 +2200,7 @@ __metadata:
     vercel: ^37.4.2
     viem: 2.21.7
     wagmi: 2.12.11
-    zustand: ^4.5.5
+    zustand: ^5.0.0
   languageName: unknown
   linkType: soft
 
@@ -2494,21 +2494,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.59.6":
-  version: 5.59.6
-  resolution: "@tanstack/query-core@npm:5.59.6"
-  checksum: 3c26faf5db0dfbacdf258f1cdad27410e905394c9a4987115acb4e1afecaaf95ec60bde27a69a12beb5ef3978a16f9f5c30bf51f7d1f7646d74ad9a17383e157
+"@tanstack/query-core@npm:5.59.13":
+  version: 5.59.13
+  resolution: "@tanstack/query-core@npm:5.59.13"
+  checksum: 2f43f53ecd0151c9f83f822f47a8c882cce234ece2fa4fc575ae1bf865094ff145f5efe7cb9c750541df143804941248aceaf85e7c5346a7897d896845996dff
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.59.8":
-  version: 5.59.8
-  resolution: "@tanstack/react-query@npm:5.59.8"
+"@tanstack/react-query@npm:^5.59.15":
+  version: 5.59.15
+  resolution: "@tanstack/react-query@npm:5.59.15"
   dependencies:
-    "@tanstack/query-core": 5.59.6
+    "@tanstack/query-core": 5.59.13
   peerDependencies:
     react: ^18 || ^19
-  checksum: 584fa340f197d3afd8dc9639ab5fa0238eea41050b2ddd642f3be94d5c8a16cb7773da3fc6e90b3c1b473c9170fb4eedd83460270ce014a004cf97df3ab36f15
+  checksum: 465aa2cdfc83fe3ebbb3dfe94ad39ac9e047e6808890b9dfd253d7aec31cdc46198af3c3a8dfa6a7212f941db7df1fe9a724540504cc2e3efa1cdffcb2d48164
   languageName: node
   linkType: hard
 
@@ -13533,15 +13533,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:1.2.2":
-  version: 1.2.2
-  resolution: "use-sync-external-store@npm:1.2.2"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: fe07c071c4da3645f112c38c0e57beb479a8838616ff4e92598256ecce527f2888c08febc7f9b2f0ce2f0e18540ba3cde41eb2035e4fafcb4f52955037098a81
-  languageName: node
-  linkType: hard
-
 "usehooks-ts@npm:^2.13.0":
   version: 2.13.0
   resolution: "usehooks-ts@npm:2.13.0"
@@ -14346,15 +14337,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:^4.5.5":
-  version: 4.5.5
-  resolution: "zustand@npm:4.5.5"
-  dependencies:
-    use-sync-external-store: 1.2.2
+"zustand@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "zustand@npm:5.0.0"
   peerDependencies:
-    "@types/react": ">=16.8"
+    "@types/react": ">=18.0.0"
     immer: ">=9.0.6"
-    react: ">=16.8"
+    react: ">=18.0.0"
+    use-sync-external-store: ">=1.2.0"
   peerDependenciesMeta:
     "@types/react":
       optional: true
@@ -14362,6 +14352,8 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 654e47959970bc66bbf2ae80fced7e556dd488e9ee54eb678330cb036ecc7184f4b8c2cae273be28022533622c54ab6339bf3fe30d19236367c5c251b6c6679a
+    use-sync-external-store:
+      optional: true
+  checksum: dc7414de234f9d2c0afad472d6971e9ac32281292faa8ee0910521cad063f84eeeb6f792efab068d6750dab5854fb1a33ac6e9294b796925eb680a59fc1b42f9
   languageName: node
   linkType: hard
