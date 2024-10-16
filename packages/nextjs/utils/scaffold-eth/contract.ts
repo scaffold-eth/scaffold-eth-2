@@ -306,9 +306,9 @@ export type UseScaffoldEventHistoryData<
               IndexedOnly: false;
             }
           >;
-        block: TBlockData extends true ? Block<bigint, true> : null;
-        receipt: TReceiptData extends true ? GetTransactionReturnType : null;
-        transaction: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
+        blockData: TBlockData extends true ? Block<bigint, true> : null;
+        receiptData: TReceiptData extends true ? GetTransactionReturnType : null;
+        transactionData: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
       }[]
     >
   | undefined;
