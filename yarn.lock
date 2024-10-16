@@ -424,7 +424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/address@npm:5.7.0, @ethersproject/address@npm:^5.0.0, @ethersproject/address@npm:^5.0.2, @ethersproject/address@npm:^5.7.0":
+"@ethersproject/address@npm:5.7.0, @ethersproject/address@npm:^5.0.2, @ethersproject/address@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/address@npm:5.7.0"
   dependencies:
@@ -679,7 +679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/solidity@npm:5.7.0, @ethersproject/solidity@npm:^5.0.0, @ethersproject/solidity@npm:^5.7.0":
+"@ethersproject/solidity@npm:5.7.0, @ethersproject/solidity@npm:^5.0.9, @ethersproject/solidity@npm:^5.7.0":
   version: 5.7.0
   resolution: "@ethersproject/solidity@npm:5.7.0"
   dependencies:
@@ -2142,7 +2142,7 @@ __metadata:
     "@typescript-eslint/parser": latest
     chai: ^4.5.0
     dotenv: ^16.4.5
-    envfile: ^6.18.0
+    envfile: ^7.1.0
     eslint: ^8.26.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
@@ -2171,8 +2171,8 @@ __metadata:
     "@types/node": ^18.19.50
     "@types/react": ^18.3.5
     "@typescript-eslint/eslint-plugin": ^5.39.0
-    "@uniswap/sdk-core": ^4.0.1
-    "@uniswap/v2-sdk": ^3.0.1
+    "@uniswap/sdk-core": ^5.8.2
+    "@uniswap/v2-sdk": ^4.6.1
     abitype: 1.0.6
     autoprefixer: ^10.4.20
     blo: ^1.2.0
@@ -2195,8 +2195,7 @@ __metadata:
     tailwindcss: ^3.4.11
     type-fest: ^4.26.1
     typescript: 5.5.3
-    use-debounce: ^8.0.4
-    usehooks-ts: ^2.13.0
+    usehooks-ts: ^3.1.0
     vercel: ^37.4.2
     viem: 2.21.7
     wagmi: 2.12.11
@@ -3086,30 +3085,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uniswap/sdk-core@npm:^4.0.1, @uniswap/sdk-core@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "@uniswap/sdk-core@npm:4.0.7"
+"@uniswap/sdk-core@npm:^5.8.1, @uniswap/sdk-core@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "@uniswap/sdk-core@npm:5.8.2"
   dependencies:
     "@ethersproject/address": ^5.0.2
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/keccak256": 5.7.0
+    "@ethersproject/strings": 5.7.0
     big.js: ^5.2.2
     decimal.js-light: ^2.5.0
     jsbi: ^3.1.4
     tiny-invariant: ^1.1.0
     toformat: ^2.0.0
-  checksum: b89ce380206f14fef70fb233c34edb439e9602bc4c17c4801e3032ed6e4b932d71942f677535c996c55e724f9dd7fac42443e117f75bae9348300380e50d95a5
+  checksum: fde13653021cea136e4e8d2e04e7f45559e5cd64481fcd0b087a9cd674bfe053c05faeb5a844651b20dd0b70717723746c7f82060e99a057de9561800f8f0606
   languageName: node
   linkType: hard
 
-"@uniswap/v2-sdk@npm:^3.0.1":
-  version: 3.2.1
-  resolution: "@uniswap/v2-sdk@npm:3.2.1"
+"@uniswap/v2-sdk@npm:^4.6.1":
+  version: 4.6.1
+  resolution: "@uniswap/v2-sdk@npm:4.6.1"
   dependencies:
-    "@ethersproject/address": ^5.0.0
-    "@ethersproject/solidity": ^5.0.0
-    "@uniswap/sdk-core": ^4.0.7
+    "@ethersproject/address": ^5.0.2
+    "@ethersproject/solidity": ^5.0.9
+    "@uniswap/sdk-core": ^5.8.1
     tiny-invariant: ^1.1.0
     tiny-warning: ^1.0.3
-  checksum: 519c01e840878d03b99f0220da3a686afa097287b1c10fc65aaabd0555bab0fbcb013ac6d991453f70161e2e804b0e0797fb853d635acf56eae133671fdcb515
+  checksum: 0d4c1e58feef7d65c143a776447dbe4e0c06c2f2b6877d57b2db3056a4f8c441c503449f5bfa150ac9e02516ef1c6f5fce5bc89a55d637311bc3e5c8e01ef163
   languageName: node
   linkType: hard
 
@@ -5965,12 +5967,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envfile@npm:^6.18.0":
-  version: 6.18.0
-  resolution: "envfile@npm:6.18.0"
+"envfile@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "envfile@npm:7.1.0"
   bin:
     envfile: bin.cjs
-  checksum: 3a3762994d7b84ccf0293c1269cdfa5ea8971bdbbf7e3571fb686a6415eee2029e43d3faf36ed4222a83eaaf38fbc4fa37b3f50b77ea417ca35561e0e54059c1
+  checksum: 63c6e49c19763dafbac6c3665907aed04215f617a4679c12bf006d2de7f3b93431fe46764c52288ca783e01c77ea31de44c563ca16a1d783bd668a9bb31f034e
   languageName: node
   linkType: hard
 
@@ -13499,15 +13501,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-debounce@npm:^8.0.4":
-  version: 8.0.4
-  resolution: "use-debounce@npm:8.0.4"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 0f8b9e571f68a4694033ec00690bf73d781ac890140ae9ed4b330f71f7adb3f7d7df5cdaa32923c4d03fdc9de8a11be0f84301175ae4f66208af52ad03c55504
-  languageName: node
-  linkType: hard
-
 "use-sidecar@npm:^1.1.2":
   version: 1.1.2
   resolution: "use-sidecar@npm:1.1.2"
@@ -13533,14 +13526,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "usehooks-ts@npm:2.13.0"
+"usehooks-ts@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "usehooks-ts@npm:3.1.0"
   dependencies:
     lodash.debounce: ^4.0.8
   peerDependencies:
     react: ^16.8.0  || ^17 || ^18
-  checksum: ad07930e1b5c70392603eb8b3f199f44349c75406fe31013f79b0fb7fdece59f47f8dba09b6f1fafaa00d68f43240dbb13cdc1afb89b647f1d53504599a51ca0
+  checksum: 4f850c0c5ab408afa52fa2ea2c93c488cd7065c82679eb1fb62cba12ca4c57ff62d52375acc6738823421fe6579ce3adcea1e2dc345ce4f549c593d2e51455b3
   languageName: node
   linkType: hard
 
