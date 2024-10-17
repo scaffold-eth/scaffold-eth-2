@@ -21,6 +21,7 @@
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:format": "yarn workspace @se-2/hardhat format",
+    "hardhat:check-types": "yarn workspace @se-2/hardhat check-types",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "test": "yarn hardhat:test",
     "format": "yarn next:format && yarn hardhat:format",
