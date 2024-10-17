@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.58
+
+### Patch Changes
+
+- e9a969d: Template for externalContracts.ts
+- 9151c92: template: allow passing metadata & header logoText and description
+- ba4e12e: added recommended templating rules
+- 2270abb: fix foundry generate script
+
 ## 0.0.57
 
 ### Patch Changes
