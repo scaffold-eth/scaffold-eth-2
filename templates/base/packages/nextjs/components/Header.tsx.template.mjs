@@ -1,5 +1,5 @@
 import { withDefaults } from "../../../../utils.js";
-const contents = ({ menuIconImports, menuObjects, logoText, logoDescription }) => {
+const contents = ({ menuIconImports, menuObjects, logoTitle, logoSubtitle }) => {
   const stringifiedAdditionalMenuLinks = menuObjects.filter(Boolean).join(",\n");
 
   return `"use client";
@@ -99,8 +99,8 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">${logoText}</span>
-            <span className="text-xs">${logoDescription}</span>
+            <span className="font-bold leading-tight">${logoTitle}</span>
+            <span className="text-xs">${logoSubtitle}</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
@@ -119,6 +119,6 @@ export const Header = () => {
 export default withDefaults(contents, {
   menuIconImports: "",
   menuObjects: "",
-  logoText: "Scaffold-ETH",
-  logoDescription: "Ethereum dev stack"
+  logoTitle: "Scaffold-ETH",
+  logoSubtitle: "Ethereum dev stack"
 });

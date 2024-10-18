@@ -194,6 +194,8 @@ import { stringify } from "../path/to/templates/utils.js";
 | Array, add new items    | `const arrWithAdditionalItems = ${stringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
 | BigInt                  | `const bigInt = ${stringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
 
+> NOTE: If the object contains function as a value `stringify` utility truncates it to `[Function keyName]`. In this case we have to use object spread operator while merging the objects and `JSON.stringify` while replacing the objects. Checkout [`next.config.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/next.config.template.mjs) for an example.
+
 ## Merging package.json files
 
 The package we use to merge `package.json` files [merge-packages](https://www.npmjs.com/package/merge-packages) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
