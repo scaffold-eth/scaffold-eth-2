@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
 import { ContractUI } from "~~/app/debug/_components/contract";
-import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
-import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
+import { ContractName } from "~~/utils/scaffold-eth/contract";
+import { getAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
+const contractsData = getAllContracts();
+const contractNames = Object.keys(contractsData) as ContractName[];
 
 export function DebugContracts() {
-  const contractsData = useAllContracts();
-  const contractNames = useMemo(() => Object.keys(contractsData) as ContractName[], [contractsData]);
-
   const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
@@ -23,7 +22,7 @@ export function DebugContracts() {
     if (!contractNames.includes(selectedContract)) {
       setSelectedContract(contractNames[0]);
     }
-  }, [contractNames, selectedContract, setSelectedContract]);
+  }, [selectedContract, setSelectedContract]);
 
   return (
     <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
@@ -44,7 +43,7 @@ export function DebugContracts() {
                   onClick={() => setSelectedContract(contractName)}
                 >
                   {contractName}
-                  {(contractsData[contractName] as GenericContract)?.external && (
+                  {contractsData[contractName].external && (
                     <span className="tooltip tooltip-top tooltip-accent" data-tip="External contract">
                       <BarsArrowUpIcon className="h-4 w-4 cursor-pointer" />
                     </span>
@@ -57,7 +56,7 @@ export function DebugContracts() {
             <ContractUI
               key={contractName}
               contractName={contractName}
-              className={contractName === selectedContract ? "" : "hidden"}
+              className={contractName === selectedContract ? "" : ""}
             />
           ))}
         </>
