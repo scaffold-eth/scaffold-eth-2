@@ -4,8 +4,24 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { NextPage } from "next";
 // import { getUserNFTs, mintNFT } from "~~/utils/scaffold-eth/contractFunctions";
+import { useAccount } from "wagmi";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
+import { addToIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
+import nftsMetadata from "~~/utils/simpleNFT/nftsMetadata";
+import { MyHoldings } from "./_components";
 
 const Collection: NextPage = () => {
+  const { address: connectedAddress, isConnected, isConnecting } = useAccount();
+
+  const { writeContractAsync } = useScaffoldWriteContract("YourCollectible");
+
+  const { data: tokenIdCounter } = useScaffoldReadContract({
+    contractName: "YourCollectible",
+    functionName: "tokenIdCounter",
+    watch: true,
+  } as any);
+
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     url: "",
@@ -50,13 +66,38 @@ const Collection: NextPage = () => {
     setPoem(data.content);
   };
 
+
+
   const mint = async () => {
 
     // await mintNFT(formData.url, formData.name, formData.description, formData.cost);
     setShowModal(false);
+
+    // circle back to the zero item if we've reached the end of the array
+    if (tokenIdCounter === undefined) return;
+
+    const tokenIdCounterNumber = Number(tokenIdCounter);
+    const currentTokenMetaData = nftsMetadata[tokenIdCounterNumber % nftsMetadata.length];
+    const notificationId = notification.loading("Uploading to IPFS");
+    try {
+      const uploadedItem = await addToIPFS(currentTokenMetaData);
+
+      // First remove previous loading notification and then show success notification
+      notification.remove(notificationId);
+      notification.success("Metadata uploaded to IPFS");
+
+      await writeContractAsync({
+        functionName: "mintItem",
+        args: [connectedAddress, uploadedItem.path],
+      });
+    } catch (error) {
+      notification.remove(notificationId);
+      console.error(error);
+    }
+
     // const nfts = await getUserNFTs();
-    const nfts = [];
-    setUserNFTs(nfts);
+    // const nfts = [];
+    // setUserNFTs(nfts);
   };
 
   return (
@@ -154,6 +195,7 @@ const Collection: NextPage = () => {
           </div>
         ))}
       </div>
+      <MyHoldings />
     </>
   );
 };

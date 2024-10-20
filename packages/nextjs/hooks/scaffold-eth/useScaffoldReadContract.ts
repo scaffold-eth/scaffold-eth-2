@@ -21,14 +21,14 @@ import {
  * @param config.args - args to be passed to the function call
  */
 export const useScaffoldReadContract = <
-  TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
+    TContractName extends ContractName,
+    TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
 >({
-  contractName,
-  functionName,
-  args,
-  ...readConfig
-}: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
+    contractName,
+    functionName,
+    args,
+    ...readConfig
+  }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const { data: deployedContract } = useDeployedContractInfo(contractName);
   const { targetNetwork } = useTargetNetwork();
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
@@ -49,7 +49,7 @@ export const useScaffoldReadContract = <
   }) as Omit<ReturnType<typeof useReadContract>, "data" | "refetch"> & {
     data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
     refetch: (
-      options?: RefetchOptions | undefined,
+        options?: RefetchOptions | undefined,
     ) => Promise<QueryObserverResult<AbiFunctionReturnType<ContractAbi, TFunctionName>, ReadContractErrorType>>;
   };
 
