@@ -67,37 +67,50 @@ const Collection: NextPage = () => {
   };
 
 
-
   const mint = async () => {
-
-    // await mintNFT(formData.url, formData.name, formData.description, formData.cost);
     setShowModal(false);
 
-    // circle back to the zero item if we've reached the end of the array
+    // Ensure tokenIdCounter is defined
     if (tokenIdCounter === undefined) return;
 
     const tokenIdCounterNumber = Number(tokenIdCounter);
+    // Get the current NFT metadata
     const currentTokenMetaData = nftsMetadata[tokenIdCounterNumber % nftsMetadata.length];
+
+    // Prepare the updated metadata using the form data
+    const updatedMetaData = {
+      ...currentTokenMetaData,
+      name: formData.name, // Use input form's name
+      description: formData.description, // Use input form's description
+      image: formData.url, // Use input form's URL
+    };
+    // updatedMetaData.attributes.push({
+    //   trait_type: "Poem",
+    //   value: poem,
+    // });
+
     const notificationId = notification.loading("Uploading to IPFS");
     try {
-      const uploadedItem = await addToIPFS(currentTokenMetaData);
+      const uploadedItem = await addToIPFS(updatedMetaData);
 
-      // First remove previous loading notification and then show success notification
+      // Remove previous loading notification and show success notification
       notification.remove(notificationId);
       notification.success("Metadata uploaded to IPFS");
 
+      // Call the mintItem function on the smart contract
       await writeContractAsync({
         functionName: "mintItem",
         args: [connectedAddress, uploadedItem.path],
       });
+
+      // Optional: Fetch user NFTs again after minting
+      // const nfts = await getUserNFTs();
+      // setUserNFTs(nfts);
+
     } catch (error) {
       notification.remove(notificationId);
       console.error(error);
     }
-
-    // const nfts = await getUserNFTs();
-    // const nfts = [];
-    // setUserNFTs(nfts);
   };
 
   return (
