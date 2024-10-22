@@ -4,14 +4,10 @@ const content = ({ deploymentsScriptsImports, deploymentsLogic }) => `//SPDX-Lic
 pragma solidity ^0.8.19;
 
 import "./DeployHelpers.s.sol";
-import { DeployYourContract } from "./DeployYourContract.s.sol";
 ${deploymentsScriptsImports.filter(Boolean).join("\n")}
 
 contract DeployScript is ScaffoldETHDeploy {
   function run() external {
-    DeployYourContract deployYourContract = new DeployYourContract();
-    deployYourContract.run();
-
     ${deploymentsLogic.filter(Boolean).join("\n")}
 
     // deploy more contracts here

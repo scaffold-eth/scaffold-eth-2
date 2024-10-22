@@ -36,11 +36,12 @@ export async function promptForMissingOptions(
 
   const answers = await inquirer.prompt(questions, cliAnswers);
 
+  const solidityFramework = options.solidityFramework ?? answers.solidityFramework;
   const mergedOptions: Options = {
     project: options.project ?? answers.project,
     install: options.install,
     dev: options.dev ?? defaultOptions.dev,
-    solidityFramework: options.solidityFramework ?? answers.solidityFramework,
+    solidityFramework: solidityFramework === "none" ? null : solidityFramework,
     externalExtension: options.externalExtension,
   };
 
