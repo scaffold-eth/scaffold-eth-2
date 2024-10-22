@@ -31,8 +31,8 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.0",
     "usehooks-ts": "^3.1.0",
-    "viem": "2.21.7",
-    "wagmi": "2.12.11",
+    "viem": "2.21.32",
+    "wagmi": "2.12.23",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
