@@ -13,10 +13,9 @@ const buildHardhatEslintCommand = (filenames) =>
     .join(" ")}`;
 
 module.exports = {
-  "packages/nextjs/**/*.js": [buildNextEslintCommand],
   "packages/nextjs/**/*.{ts,tsx}": [
     buildNextEslintCommand,
     checkTypesNextCommand,
   ],
-  "packages/hardhat/**/*.{js,ts,tsx}": [buildHardhatEslintCommand],
+  "packages/hardhat/**/*.{ts,tsx}": [buildHardhatEslintCommand],
 };
