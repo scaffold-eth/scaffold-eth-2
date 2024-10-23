@@ -36,21 +36,20 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^18.19.50",
     "@types/react": "^18.3.5",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
     "abitype": "1.0.6",
     "autoprefixer": "^10.4.20",
-    "eslint": "^8.15.0",
-    "eslint-config-next": "^14.0.4",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8.4.45",
-    "prettier": "^2.8.4",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.11",
     "type-fest": "^4.26.1",
-    "typescript": "5.5.3",
+    "typescript": "<5.6.0",
     "vercel": "^37.4.2"
   }
 }
