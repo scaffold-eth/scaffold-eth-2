@@ -14,6 +14,7 @@ import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
+  Chain,
   GetEventArgs,
   GetTransactionReceiptReturnType,
   GetTransactionReturnType,
@@ -170,6 +171,7 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
+  chain?: Chain;
   watch?: boolean;
 } & IsContractDeclarationMissing<
   Partial<UseReadContractParameters>,
@@ -215,6 +217,7 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
   eventName: TEventName;
+  chain?: Chain;
 } & IsContractDeclarationMissing<
   Omit<UseWatchContractEventParameters, "onLogs" | "address" | "abi" | "eventName"> & {
     onLogs: (
@@ -274,6 +277,7 @@ export type UseScaffoldEventHistoryConfig<
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
+  chain?: Chain;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: TBlockData;
   transactionData?: TTransactionData;
