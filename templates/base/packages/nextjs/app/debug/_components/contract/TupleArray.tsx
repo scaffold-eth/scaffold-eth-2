@@ -21,15 +21,18 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
 
   useEffect(() => {
     // Extract and group fields based on index prefix
-    const groupedFields = Object.keys(form).reduce((acc, key) => {
-      const [indexPrefix, ...restArray] = key.split("_");
-      const componentName = restArray.join("_");
-      if (!acc[indexPrefix]) {
-        acc[indexPrefix] = {};
-      }
-      acc[indexPrefix][componentName] = form[key];
-      return acc;
-    }, {} as Record<string, Record<string, any>>);
+    const groupedFields = Object.keys(form).reduce(
+      (acc, key) => {
+        const [indexPrefix, ...restArray] = key.split("_");
+        const componentName = restArray.join("_");
+        if (!acc[indexPrefix]) {
+          acc[indexPrefix] = {};
+        }
+        acc[indexPrefix][componentName] = form[key];
+        return acc;
+      },
+      {} as Record<string, Record<string, any>>,
+    );
 
     let argsArray: Array<Record<string, any>> = [];
 

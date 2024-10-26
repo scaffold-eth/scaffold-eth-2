@@ -154,16 +154,17 @@ type OptionalTuple<T> = T extends readonly [infer H, ...infer R] ? readonly [H |
 type UseScaffoldArgsParam<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>>,
-> = TFunctionName extends FunctionNamesWithInputs<TContractName>
-  ? {
-      args: OptionalTuple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
-      value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
-        ? bigint | undefined
-        : undefined;
-    }
-  : {
-      args?: never;
-    };
+> =
+  TFunctionName extends FunctionNamesWithInputs<TContractName>
+    ? {
+        args: OptionalTuple<UnionToIntersection<AbiFunctionArguments<ContractAbi<TContractName>, TFunctionName>>>;
+        value?: ExtractAbiFunction<ContractAbi<TContractName>, TFunctionName>["stateMutability"] extends "payable"
+          ? bigint | undefined
+          : undefined;
+      }
+    : {
+        args?: never;
+      };
 
 export type UseScaffoldReadConfig<
   TContractName extends ContractName,
@@ -305,9 +306,9 @@ export type UseScaffoldEventHistoryData<
               IndexedOnly: false;
             }
           >;
-        block: TBlockData extends true ? Block<bigint, true> : null;
-        receipt: TReceiptData extends true ? GetTransactionReturnType : null;
-        transaction: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
+        blockData: TBlockData extends true ? Block<bigint, true> : null;
+        receiptData: TReceiptData extends true ? GetTransactionReturnType : null;
+        transactionData: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
       }[]
     >
   | undefined;
