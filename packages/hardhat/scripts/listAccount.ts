@@ -30,6 +30,7 @@ async function main() {
       console.log("--", networkName, "-- 📡");
       console.log("   balance:", +ethers.formatEther(balance));
       console.log("   nonce:", +(await provider.getTransactionCount(address)));
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       console.log("Can't connect to network", networkName);
     }
