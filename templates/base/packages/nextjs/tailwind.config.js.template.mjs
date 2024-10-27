@@ -3,6 +3,7 @@ import { withDefaults } from "../../../utils.js";
 const contents = ({ lightTheme, darkTheme, extendTheme }) => `/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("daisyui")],
   darkTheme: "dark",
   darkMode: ["selector", "[data-theme='dark']"],

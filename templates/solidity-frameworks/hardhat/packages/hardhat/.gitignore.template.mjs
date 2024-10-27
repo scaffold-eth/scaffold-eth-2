@@ -24,6 +24,9 @@ cache-zk
 # deployments
 deployments/localhost
 
+# typescript
+*.tsbuildinfo
+
 # other
 temp`
 

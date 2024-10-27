@@ -13,6 +13,7 @@ const isJsonString = (str: string) => {
   try {
     JSON.parse(str);
     return true;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false;
   }
@@ -23,6 +24,7 @@ const isBigInt = (str: string) => {
   try {
     BigInt(str);
     return true;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false;
   }
