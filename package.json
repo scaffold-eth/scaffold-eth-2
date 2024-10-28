@@ -41,7 +41,8 @@
     "local-create": "yarn workspace @se-2/subgraph local-create",
     "local-ship": "yarn workspace @se-2/subgraph local-ship",
     "abi-copy": "yarn workspace @se-2/subgraph abi-copy",
-    "codegen": "yarn workspace @se-2/subgraph codegen"
+    "codegen": "yarn workspace @se-2/subgraph codegen",
+    "graphclient:build": "yarn workspace @se-2/nextjs client"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {

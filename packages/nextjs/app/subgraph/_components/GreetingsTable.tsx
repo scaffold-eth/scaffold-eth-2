@@ -1,31 +1,33 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { GetGreetingsDocument, execute } from "~~/.graphclient";
 import { Address } from "~~/components/scaffold-eth";
 
 const GreetingsTable = () => {
-  const GREETINGS_GRAPHQL = `
-{
-  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
-    id
-    greeting
-    premium
-    value
-    createdAt
-    sender {
-      address
-      greetingCount
-    }
-  }
-}
-`;
+  const [greetingsData, setGreetingsData] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
 
-  const GREETINGS_GQL = gql(GREETINGS_GRAPHQL);
-  const { data: greetingsData, error } = useQuery(GREETINGS_GQL, { fetchPolicy: "network-only" });
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!execute || !GetGreetingsDocument) {
+        return;
+      }
+      try {
+        const { data: result } = await execute(GetGreetingsDocument, {});
+        setGreetingsData(result);
+        console.log(result);
+      } catch (err) {
+        setError(err);
+      } finally {
+      }
+    };
 
-  // Subgraph maybe not yet configured
+    fetchData();
+  }, []);
+
   if (error) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -40,17 +42,15 @@ const GreetingsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {greetingsData?.greetings?.map((greeting: any, index: number) => {
-              return (
-                <tr key={greeting.id}>
-                  <th>{index + 1}</th>
-                  <td>
-                    <Address address={greeting?.sender?.address} />
-                  </td>
-                  <td>{greeting.greeting}</td>
-                </tr>
-              );
-            })}
+            {greetingsData?.greetings?.map((greeting: any, index: number) => (
+              <tr key={greeting.id}>
+                <th>{index + 1}</th>
+                <td>
+                  <Address address={greeting?.sender?.address} />
+                </td>
+                <td>{greeting.greeting}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

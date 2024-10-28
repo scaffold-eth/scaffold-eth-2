@@ -1,0 +1,13 @@
+query GetGreetings {
+  greetings(first: 25, orderBy: createdAt, orderDirection: desc) {
+    id
+    greeting
+    premium
+    value
+    createdAt
+    sender {
+      address
+      greetingCount
+    }
+  }
+}
