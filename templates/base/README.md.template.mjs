@@ -6,7 +6,8 @@ const getQuickStart = ({
   contractsPath,
   scriptsPath,
   testCommand,
-}) => `## Quickstart
+}) => `
+## Quickstart
 
 To get started with Scaffold-ETH 2, follow the steps below:
 
@@ -16,10 +17,10 @@ To get started with Scaffold-ETH 2, follow the steps below:
 cd my-dapp-example
 yarn install
 \`\`\`
-
 ${
   Boolean(solidityFramework[0])
-    ? `2. Run a local network in the first terminal:
+    ? `
+2. Run a local network in the first terminal:
 
 \`\`\`
 yarn chain
@@ -49,7 +50,7 @@ ${
     ? `
 Run smart contract test with ${testCommand[0]}
 
-- Edit your smart contract \`YourContract.sol\` in ${contractsPath[0]}
+- Edit your smart contracts in ${contractsPath[0]}
 - Edit your frontend homepage at \`packages/nextjs/app/page.tsx\`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
 - Edit your deployment scripts in ${scriptsPath[0]}
 `
@@ -57,6 +58,7 @@ Run smart contract test with ${testCommand[0]}
 }`;
 
 const contents = ({
+  skipQuickStart,
   solidityFramework,
   networkConfigPath,
   contractsPath,
@@ -95,8 +97,7 @@ Before you begin, you need to install the following tools:
 - [Node (>= v18.18)](https://nodejs.org/en/download/)
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
-
-${getQuickStart({
+${skipQuickStart[0] ? "" : getQuickStart({
   solidityFramework,
   networkConfigPath,
   contractsPath,
@@ -117,6 +118,7 @@ We welcome contributions to Scaffold-ETH 2!
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.`;
 
 export default withDefaults(contents, {
+  skipQuickStart: false,
   solidityFramework: "",
   networkConfigPath: "",
   contractsPath: "",
