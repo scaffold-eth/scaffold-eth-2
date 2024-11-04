@@ -41,7 +41,7 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
   }
 
   return (
-    <div className={`${className} p-6 w-full`}>
+    <div className={`${className} p-6`}>
       <h1 className="text-xs my-0">Debug Contracts</h1>
       <p className="text-primary mt-6">
         You can debug & interact with your deployed contracts here. Check{" "}
