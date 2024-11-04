@@ -57,26 +57,32 @@ export const DisplayVariable = ({
   }, [error]);
 
   return (
-    <div className="space-y-1 pb-2">
+    <div className="space-y-1 pb-6">
       <div className="flex items-center">
-        <h3 className="font-medium text-lg mb-0 break-all">{abiFunction.name}</h3>
-        <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
+        <h3 className="text-xs text-primary mb-0 mr-1 break-all">{abiFunction.name}</h3>
+        <button className="btn btn-ghost btn-circle btn-xs" onClick={async () => await refetch()}>
           {isFetching ? (
-            <span className="loading loading-spinner loading-xs"></span>
+            <span className="loading loading-spinner w-3 h-3 loading-xs"></span>
+
           ) : (
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
         </button>
         <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
-      <div className="text-gray-500 font-medium flex flex-col items-start">
+      <div className="flex flex-col items-start">
         <div>
           <div
             className={`break-all block transition bg-transparent ${
-              showAnimation ? "bg-warning rounded-sm animate-pulse-fast" : ""
+              showAnimation ? "bg-info/50 rounded-none animate-pulse-fast" : ""
             }`}
           >
-            {displayTxResult(result)}
+
+{isFetching ? (
+          <div className="animate-pulse h-5 w-28 bg-base-300 rounded"></div>
+          ) : (
+                        displayTxResult(result)
+          )}
           </div>
         </div>
       </div>
