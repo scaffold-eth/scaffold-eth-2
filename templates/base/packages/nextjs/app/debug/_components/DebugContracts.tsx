@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import { useSessionStorage } from "usehooks-ts";
 import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
 import { ContractUI } from "~~/app/debug/_components/contract";
 import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
@@ -13,7 +13,7 @@ export function DebugContracts() {
   const contractsData = useAllContracts();
   const contractNames = useMemo(() => Object.keys(contractsData) as ContractName[], [contractsData]);
 
-  const [selectedContract, setSelectedContract] = useLocalStorage<ContractName>(
+  const [selectedContract, setSelectedContract] = useSessionStorage<ContractName>(
     selectedContractStorageKey,
     contractNames[0],
     { initializeWithValue: false },
