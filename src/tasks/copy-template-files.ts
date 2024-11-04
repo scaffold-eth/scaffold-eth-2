@@ -360,11 +360,19 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     await copyExtensionFiles(options, externalExtensionPath, targetDir);
   }
 
-  if (!options.externalExtension && options.solidityFramework && exampleContractsPath) {
+  const shouldCopyExampleContracts = !options.externalExtension && options.solidityFramework && exampleContractsPath;
+  if (shouldCopyExampleContracts) {
     await copyExtensionFiles(options, exampleContractsPath, targetDir);
   }
+
   // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, solidityFrameworkPath, exampleContractsPath, targetDir);
+  await processTemplatedFiles(
+    options,
+    basePath,
+    solidityFrameworkPath,
+    shouldCopyExampleContracts ? exampleContractsPath : null,
+    targetDir,
+  );
 
   // 5. Delete tmp directory
   if (options.externalExtension && !options.dev) {
