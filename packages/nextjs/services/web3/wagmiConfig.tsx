@@ -1,6 +1,6 @@
 import { wagmiConnectors } from "./wagmiConnectors";
 import { Chain, createClient, http } from "viem";
-import { hardhat, mainnet } from "viem/chains";
+import { apeChain, arbitrum, base, hardhat, mainnet } from "viem/chains";
 import { createConfig } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
@@ -26,5 +26,27 @@ export const wagmiConfig = createConfig({
           }
         : {}),
     });
+  },
+});
+
+export const config = createConfig({
+  chains: [
+    apeChain,
+    {
+      ...mainnet,
+      rpcUrls: {
+        default: {
+          http: ["https://eth-mainnet.g.alchemy.com/v2/<YOUR-ALCHEMY-KEY>"],
+        },
+      },
+    },
+    arbitrum,
+    base,
+  ],
+  transports: {
+    [apeChain.id]: http(),
+    [mainnet.id]: http(),
+    [arbitrum.id]: http(),
+    [base.id]: http(),
   },
 });
