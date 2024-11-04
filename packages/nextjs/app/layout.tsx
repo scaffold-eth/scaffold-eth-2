@@ -1,4 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
+import "@yuga-labs/ape-portal-public/dist/assets/style.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";

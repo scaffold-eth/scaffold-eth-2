@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Portal } from "../components/ApePortal";
+// import { ApePortal, Bridge } from "@yuga-labs/ape-portal-public";
 import type { NextPage } from "next";
-import { Address as Addresss, formatEther, parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
-import { Address, Balance } from "~~/components/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
@@ -18,10 +20,10 @@ const Home: NextPage = () => {
     contractName: "BidBoard",
     functionName: "message",
   });
-  const { data: currentAdvertiser } = useScaffoldReadContract({
-    contractName: "BidBoard",
-    functionName: "currentAdvertiser",
-  });
+  // const { data: currentAdvertiser } = useScaffoldReadContract({
+  //   contractName: "BidBoard",
+  //   functionName: "currentAdvertiser",
+  // });
 
   const { data: currentAmount } = useScaffoldReadContract({
     contractName: "BidBoard",
@@ -57,7 +59,6 @@ const Home: NextPage = () => {
             <Address address={connectedAddress} />
           </div>
         </div>
-
         <div className="flex-grow bg-transparent dark:bg-primary w-full flex items-center justify-evenly flex-col">
           <div className="flex flex-col md:flex-row justify-center items-center mt-5 gap-6 md:gap-12 w-full md:w-4/6 px-4 py-12">
             <div className="flex flex-col w-full md:w-96 justify-center py-6">
@@ -90,7 +91,7 @@ const Home: NextPage = () => {
                     </h5>
                     <h5>
                       Top bidder:
-                      <Address address={currentAdvertiser} />
+                      {/* <Address address={currentAdvertiser} /> */}
                     </h5>
                   </div>
                 </div>
@@ -104,6 +105,7 @@ const Home: NextPage = () => {
             </Link>{" "}
           </p>
         </div>
+        <Portal />
       </div>
     </>
   );
