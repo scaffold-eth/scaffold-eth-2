@@ -8,7 +8,8 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        light: {
+// swapped the key names - dark is light. light is dark.
+        dark: {
           primary: "#212638",
           "primary-content": "#93BBFB",
           secondary: "#DAE8FF",
@@ -40,7 +41,7 @@ module.exports = {
         },
       },
       {
-        dark: {
+        light: {
           primary: "#FFFFFF",
           "primary-content": "#000000",
           secondary: "#222222",

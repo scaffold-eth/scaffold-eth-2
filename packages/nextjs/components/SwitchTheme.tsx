@@ -7,7 +7,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  const isDarkMode = resolvedTheme === "light";
+  const isDarkMode = resolvedTheme === "dark";
 
   const handleToggle = () => {
     if (isDarkMode) {
