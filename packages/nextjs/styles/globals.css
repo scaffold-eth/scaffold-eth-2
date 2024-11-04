@@ -3,14 +3,6 @@
 @import "tailwindcss/utilities";
 
 @font-face {
-  font-family: "SuisseIntlMono-Bold-WebXL";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url(./fonts/SuisseIntlMono-Bold-WebXL.woff) format("woff");
-}
-
-@font-face {
   font-family: "PPNeueMontrealMono-Variable";
   font-style: normal;
   font-weight: 400;
