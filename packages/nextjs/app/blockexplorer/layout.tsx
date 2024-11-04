@@ -6,7 +6,7 @@ export const metadata = getMetadata({
 });
 
 const BlockExplorerLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+  return <div className="p-6">{children}</div>;
 };
 
 export default BlockExplorerLayout;

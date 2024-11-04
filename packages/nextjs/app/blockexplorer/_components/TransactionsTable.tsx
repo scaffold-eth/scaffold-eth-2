@@ -10,17 +10,17 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
 
   return (
     <div className="flex justify-center px-4 md:px-0">
-      <div className="overflow-x-auto w-full shadow-2xl rounded-xl">
-        <table className="table text-xl bg-base-100 table-zebra w-full md:table-md table-sm">
+      <div className="overflow-x-auto w-full rounded-none">
+        <table className="table table-zebra w-full table-xs border border-secondary">
           <thead>
-            <tr className="rounded-xl text-sm text-base-content">
-              <th className="bg-primary">Transaction Hash</th>
-              <th className="bg-primary">Function Called</th>
-              <th className="bg-primary">Block Number</th>
-              <th className="bg-primary">Time Mined</th>
-              <th className="bg-primary">From</th>
-              <th className="bg-primary">To</th>
-              <th className="bg-primary text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
+            <tr className="text-xs text-primary divide-x divide-secondary/50 border-b border-secondary">
+              <th>Transaction Hash</th>
+              <th>Function Called</th>
+              <th>Block Number</th>
+              <th>Time Mined</th>
+              <th>From</th>
+              <th>To</th>
+              <th className="text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
             </tr>
           </thead>
           <tbody>
@@ -31,7 +31,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                 const functionCalled = tx.input.substring(0, 10);
 
                 return (
-                  <tr key={tx.hash} className="hover text-sm">
+                  <tr key={tx.hash} className="hover divide-x divide-secondary/50">
                     <td className="w-1/12 md:py-4">
                       <TransactionHash hash={tx.hash} />
                     </td>
@@ -44,14 +44,14 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                     <td className="w-1/12 md:py-4">{block.number?.toString()}</td>
                     <td className="w-2/1 md:py-4">{timeMined}</td>
                     <td className="w-2/12 md:py-4">
-                      <Address address={tx.from} size="sm" onlyEnsOrAddress />
+                      <Address address={tx.from} size="xs" onlyEnsOrAddress />
                     </td>
                     <td className="w-2/12 md:py-4">
                       {!receipt?.contractAddress ? (
-                        tx.to && <Address address={tx.to} size="sm" onlyEnsOrAddress />
+                        tx.to && <Address address={tx.to} size="xs" onlyEnsOrAddress />
                       ) : (
                         <div className="relative">
-                          <Address address={receipt.contractAddress} size="sm" onlyEnsOrAddress />
+                          <Address address={receipt.contractAddress} size="xs" onlyEnsOrAddress />
                           <small className="absolute top-4 left-4">(Contract Creation)</small>
                         </div>
                       )}
