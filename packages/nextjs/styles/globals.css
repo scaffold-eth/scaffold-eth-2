@@ -2,6 +2,29 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@font-face {
+  font-family: "SuisseIntlMono-Bold-WebXL";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/SuisseIntlMono-Bold-WebXL.woff) format("woff");
+}
+
+@font-face {
+  font-family: "PPNeueMontrealMono-Variable";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/PPNeueMontrealMono-Variable.woff2) format("woff");
+}
+
+@font-face {
+  font-family: "PPRightSerifMono-Variable";
+  font-style: normal;
+  font-display: swap;
+  src: url(./fonts/PPRightSerifMono-Variable.woff2) format("woff");
+}
+
 :root,
 [data-theme] {
   background: oklch(var(--b2));
@@ -9,6 +32,20 @@
 
 body {
   min-height: 100vh;
+  font-family: "PPNeueMontrealMono-Variable", serif;
+}
+.font-right-serif {
+  font-family: "PPRightSerifMono-Variable", serif;
+}
+.contract-name {
+  font-family: "PPRightSerifMono-Variable", serif;
+}
+
+.fixed-footer {
+  font-family: "PPRightSerifMono-Variable", serif;
+}
+.faucet-modal {
+  font-family: "PPNeueMontrealMono-Variable", serif;
 }
 
 h1,
