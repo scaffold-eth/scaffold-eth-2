@@ -88,9 +88,9 @@ export const WriteOnlyFunctionForm = ({
   const zeroInputs = inputs.length === 0 && abiFunction.stateMutability !== "payable";
 
   return (
-    <div className="py-5 space-y-3 first:pt-0 last:pb-1">
-      <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
-        <p className="my-0 break-words">
+    <div className="py-5 first:pt-0 last:pb-1">
+      <div className={`${zeroInputs ? "flex-row justify-between items-center" : "space-y-6"}`}>
+        <p className="my-0 break-words pb-3">
           <span className="font-medium bg-primary text-primary-content px-[2px]">{abiFunction.name}</span>
           <InheritanceTooltip inheritedFrom={inheritedFrom} />
         </p>
@@ -111,28 +111,28 @@ export const WriteOnlyFunctionForm = ({
             />
           </div>
         ) : null}
-        <div className="flex justify-between gap-2">
+        <div
+          className={`flex ${
+            writeDisabled &&
+            "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+          }`}
+          data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
+        >
+          <button
+            className="btn btn-primary btn-outline btn-md w-full lg:w-auto rounded-full"
+            disabled={writeDisabled || isPending}
+            onClick={handleWrite}
+          >
+            {isPending && <span className="loading loading-spinner loading-xs"></span>}
+            Send
+          </button>
+        </div>
+        <div>
           {!zeroInputs && (
             <div className="flex-grow basis-0">
               {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
             </div>
           )}
-          <div
-            className={`flex ${
-              writeDisabled &&
-              "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-            }`}
-            data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
-          >
-            <button
-              className="btn btn-primary btn-outline btn-md w-full lg:w-auto rounded-full"
-              disabled={writeDisabled || isPending}
-              onClick={handleWrite}
-            >
-              {isPending && <span className="loading loading-spinner loading-xs"></span>}
-              Send 💸
-            </button>
-          </div>
         </div>
       </div>
       {zeroInputs && txResult ? (
