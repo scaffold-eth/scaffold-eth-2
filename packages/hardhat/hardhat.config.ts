@@ -126,7 +126,7 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
     celoAlfajores: {
-      url: "https://forno.alfajores.celo-testnet.org/",
+      url: "https://alfajores-forno.celo-testnet.org",
       accounts: [deployerPrivateKey],
     },
   },
