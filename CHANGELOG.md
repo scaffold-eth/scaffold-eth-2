@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.60
+
+### Patch Changes
+
+- fix: localStorage -> sessionStorage in debug contracts page (https://github.com/scaffold-eth/scaffold-eth-2/pull/975)
+- fix: processing solidity-example template
+- skipQuickStart param for README template
+
 ## 0.0.59
 
 ### Patch Changes
