@@ -76,7 +76,7 @@ Here are some tips for a high-quality pull request:
 - Create a title for the PR that accurately defines the work done.
 - Structure the description neatly to make it easy to consume by the readers. For example, you can include bullet points and screenshots instead of having one large paragraph.
 - Add the link to the issue if applicable.
-- Have a good commit message that summarises the work done.
+- Have a good commit message that summarizes the work done.
 
 Once you submit your PR:
 
