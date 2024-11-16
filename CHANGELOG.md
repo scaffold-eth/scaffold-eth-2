@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.61
+
+### Patch Changes
+
+- ab052e3: alchemy defaults
+
 ## 0.0.60
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "create-eth",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "description": "Create a Scaffold-ETH-2 app",
   "repository": {
     "type": "git",
