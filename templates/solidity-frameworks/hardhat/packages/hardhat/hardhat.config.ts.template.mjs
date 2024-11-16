@@ -30,13 +30,14 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 ${imports.filter(Boolean).join("\n")}
 
+// If not set, it uses ours Alchemy's default API key.
+// You can get your own at https://dashboard.alchemyapi.io
+const providerApiKey = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 // If not set, it uses ours Etherscan default API key.
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
-// forking rpc url
-const forkingURL = process.env.FORKING_URL || "";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -55,48 +56,48 @@ const config: HardhatUserConfig = {
     // If the network you are looking for is not here you can add new network settings
     hardhat: {
       forking: {
-        url: forkingURL,
+        url: \`https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}\`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
     },
     mainnet: {
-      url: \`https://cloudflare-eth.com\`,
+      url: \`https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     sepolia: {
-      url: \`https://rpc2.sepolia.org\`,
+      url: \`https://eth-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     arbitrum: {
-      url: \`https://arb1.arbitrum.io/rpc\`,
+      url: \`https://arb-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     arbitrumSepolia: {
-      url: \`https://sepolia-rollup.arbitrum.io/rpc\`,
+      url: \`https://arb-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     optimism: {
-      url: \`https://mainnet.optimism.io\`,
+      url: \`https://opt-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     optimismSepolia: {
-      url: \`https://sepolia.optimism.io\`,
+      url: \`https://opt-sepolia.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygon: {
-      url: \`https://polygon-rpc.com\`,
+      url: \`https://polygon-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonMumbai: {
-      url: \`https://rpc.ankr.com/polygon_mumbai\`,
+      url: \`https://polygon-mumbai.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvm: {
-      url: \`https://zkevm-rpc.com\`,
+      url: \`https://polygonzkevm-mainnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     polygonZkEvmTestnet: {
-      url: \`https://rpc.public.zkevm-test.net\`,
+      url: \`https://polygonzkevm-testnet.g.alchemy.com/v2/\${providerApiKey}\`,
       accounts: [deployerPrivateKey],
     },
     gnosis: {
