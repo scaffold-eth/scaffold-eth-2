@@ -15,7 +15,7 @@ export const TransactionHash = ({ hash }: { hash: string }) => {
       </Link>
       {addressCopied ? (
         <CheckCircleIcon
-          className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+          className="ml-1.5 text-xl font-normal text-base-content h-5 w-5 cursor-pointer"
           aria-hidden="true"
         />
       ) : (
@@ -29,7 +29,7 @@ export const TransactionHash = ({ hash }: { hash: string }) => {
           }}
         >
           <DocumentDuplicateIcon
-            className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+            className="ml-1.5 text-xl font-normal text-base-content h-5 w-5 cursor-pointer"
             aria-hidden="true"
           />
         </CopyToClipboard>
