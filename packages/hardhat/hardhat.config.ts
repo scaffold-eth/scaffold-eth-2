@@ -123,6 +123,14 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
     },
+    celo: {
+      url: "https://forno.celo.org",
+      accounts: [deployerPrivateKey],
+    },
+    celoAlfajores: {
+      url: "https://alfajores-forno.celo-testnet.org",
+      accounts: [deployerPrivateKey],
+    },
   },
   // configuration for harhdat-verify plugin
   etherscan: {
