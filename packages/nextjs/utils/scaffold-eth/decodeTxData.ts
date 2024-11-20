@@ -38,11 +38,11 @@ export const decodeTransactionData = (tx: TransactionWithFunction) => {
         foundInterface = true;
         break;
       } catch (e) {
-        // NOTE: do nothing
+        // do nothing
       }
     }
     if (!foundInterface) {
-      tx.functionName = "Unknown ABI";
+      tx.functionName = "⚠️ Unknown";
     }
   }
   return tx;
