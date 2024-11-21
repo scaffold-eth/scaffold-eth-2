@@ -37,7 +37,7 @@ export const decodeTransactionData = (tx: TransactionWithFunction) => {
         })?.inputs.map((input: any) => input.type);
         foundInterface = true;
         break;
-      } catch (e) {
+      } catch {
         // do nothing
       }
     }
