@@ -35,6 +35,8 @@ To get started with Scaffold-ETH 2, follow the steps below:
 npx create-eth@latest
 ```
 
+This command will install all the necessary packages and dependencies, so it might take a while.
+
 2. Run a local network in the first terminal:
 
 ```
