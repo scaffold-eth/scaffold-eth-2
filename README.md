@@ -29,12 +29,10 @@ Before you begin, you need to install the following tools:
 
 To get started with Scaffold-ETH 2, follow the steps below:
 
-1. Clone this repo & install dependencies
+1. Install the latest version of Scaffold-ETH 2
 
 ```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
-yarn install
+npx create-eth@latest
 ```
 
 2. Run a local network in the first terminal:
