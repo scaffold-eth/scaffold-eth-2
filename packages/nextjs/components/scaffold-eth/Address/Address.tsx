@@ -177,7 +177,7 @@ export const Address = ({
             </AddressLinkWrapper>
           </span>
           <AddressCopyIcon
-            className={`ml-1 text-base-content ${copyIconSizeMap[addressSize]} cursor-pointer`}
+            className={`ml-1 ${copyIconSizeMap[addressSize]} cursor-pointer`}
             address={checkSumAddress}
           />
         </div>

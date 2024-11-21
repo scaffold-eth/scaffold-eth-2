@@ -28,10 +28,7 @@ export const TransactionHash = ({ hash }: { hash: string }) => {
             }, 800);
           }}
         >
-          <DocumentDuplicateIcon
-            className="ml-1.5 text-xl font-normal text-base-content h-5 w-5 cursor-pointer"
-            aria-hidden="true"
-          />
+          <DocumentDuplicateIcon className="ml-1.5 text-xl font-normal h-5 w-5 cursor-pointer" aria-hidden="true" />
         </CopyToClipboard>
       )}
     </div>
