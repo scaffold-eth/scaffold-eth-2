@@ -15,12 +15,13 @@ export const BytesInput = ({ value, onChange, name, placeholder, disabled }: Com
       onChange={onChange}
       disabled={disabled}
       suffix={
-        <div
+        <button
           className="self-center cursor-pointer text-xl font-semibold px-4 text-accent"
           onClick={convertStringToBytes}
+          type="button"
         >
           #
-        </div>
+        </button>
       }
     />
   );
