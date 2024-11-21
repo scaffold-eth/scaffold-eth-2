@@ -117,6 +117,7 @@ export const EtherInput = ({
             className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
             onClick={toggleDisplayUsdMode}
             disabled={!displayUsdMode && !nativeCurrencyPrice}
+            type="button"
           >
             <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           </button>
