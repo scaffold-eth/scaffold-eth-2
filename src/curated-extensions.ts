@@ -1,30 +1,16 @@
 import { ExternalExtension } from "./types";
+import extensions from "./extensions.json";
 
-const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
-  subgraph: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "subgraph",
-  },
-  "eip-712": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-712",
-  },
-  ponder: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "ponder",
-  },
-  onchainkit: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "onchainkit",
-  },
-  "erc-20": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "erc-20",
-  },
-  "eip-5792": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-5792",
-  },
-};
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
+  if (!ext.branch || !ext.repository || !ext.description) {
+    throw new Error(`Extension missing required fields: ${JSON.stringify(ext)}`);
+  }
+
+  acc[ext.branch] = {
+    repository: ext.repository,
+    branch: ext.branch,
+  };
+  return acc;
+}, {});
 
 export { CURATED_EXTENSIONS };

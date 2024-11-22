@@ -1,0 +1,37 @@
+[
+  {
+    "description": "This Scaffold-ETH 2 extension helps you build and test subgraphs locally for your contracts. It also enables interaction with the front-end and facilitates easy deployment to Subgraph Studio.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "subgraph"
+  },
+  {
+    "description": "An implementation of EIP-712, allowing you to send, sign, and verify typed messages in a user-friendly manner.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "eip-712"
+  },
+  {
+    "description": "This Scaffold-ETH 2 extension comes pre-configured with ponder.sh, providing an example to help you get started quickly.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "ponder"
+  },
+  {
+    "description": "This Scaffold-ETH 2 extension comes pre-configured with onchainkit, providing an example to help you get started quickly.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "onchainkit"
+  },
+  {
+    "description": "This extension introduces an ERC-20 token contract and demonstrates how to interact with it, including getting a holder balance and transferring tokens.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "erc-20"
+  },
+  {
+    "description": "This extension demonstrates on how to use EIP-5792 wallet capabilities. This EIP introduces new JSON-RPC methods for sending multiple calls from the user wallet, and checking their status",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "eip-5792"
+  },
+  {
+    "description": "This extension shows how to use on-chain randomness using RANDAO for truly on-chain unpredictable random sources.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "randao"
+  }
+]

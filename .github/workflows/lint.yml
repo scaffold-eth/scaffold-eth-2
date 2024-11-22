@@ -32,3 +32,6 @@ jobs:
 
       - name: Run lint
         run: yarn lint --max-warnings=0
+
+      - name: Run type-check
+        run: yarn type-check

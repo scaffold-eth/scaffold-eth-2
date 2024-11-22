@@ -6,7 +6,8 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "templates", "externalExtensions", "**/*.test.ts"]
 }
