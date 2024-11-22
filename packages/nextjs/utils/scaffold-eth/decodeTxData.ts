@@ -18,6 +18,7 @@ const interfaces = chainMetaData
 
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
   if (tx.input.length >= 10 && !tx.input.startsWith("0x60e06040")) {
+    let foundInterface = false;
     for (const [, contractAbi] of Object.entries(interfaces)) {
       try {
         const { functionName, args } = decodeFunctionData({
@@ -34,11 +35,14 @@ export const decodeTransactionData = (tx: TransactionWithFunction) => {
           abi: contractAbi as AbiFunction[],
           name: functionName,
         })?.inputs.map((input: any) => input.type);
-
+        foundInterface = true;
         break;
-      } catch (e) {
-        console.error(`Parsing failed: ${e}`);
+      } catch {
+        // do nothing
       }
+    }
+    if (!foundInterface) {
+      tx.functionName = "⚠️ Unknown";
     }
   }
   return tx;
