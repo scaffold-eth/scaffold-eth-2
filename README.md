@@ -37,6 +37,9 @@ npx create-eth@latest
 
 This command will install all the necessary packages and dependencies, so it might take a while.
 
+> [!NOTE]
+> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
+
 2. Run a local network in the first terminal:
 
 ```
