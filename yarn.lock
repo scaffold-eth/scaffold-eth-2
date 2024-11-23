@@ -2290,6 +2290,7 @@ __metadata:
     hardhat-deploy-ethers: ^0.4.2
     hardhat-gas-reporter: ^2.2.1
     prettier: ^3.3.3
+    prettier-plugin-solidity: ^1.4.1
     qrcode: ^1.5.4
     solidity-coverage: ^0.8.13
     ts-node: ^10.9.1
@@ -11088,6 +11089,18 @@ __metadata:
   dependencies:
     fast-diff: ^1.1.2
   checksum: 00ce8011cf6430158d27f9c92cfea0a7699405633f7f1d4a45f07e21bf78e99895911cbcdc3853db3a824201a7c745bd49bfea8abd5fb9883e765a90f74f8392
+  languageName: node
+  linkType: hard
+
+"prettier-plugin-solidity@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "prettier-plugin-solidity@npm:1.4.1"
+  dependencies:
+    "@solidity-parser/parser": ^0.18.0
+    semver: ^7.5.4
+  peerDependencies:
+    prettier: ">=2.3.0"
+  checksum: ac9f3cc525553a45e70f60898da5d4a7b733128cdd9893686364790ff688c56dd6eb0234620759dc6fabad4dc354a27097927b29ea7761c5814c64613c07222f
   languageName: node
   linkType: hard
 
