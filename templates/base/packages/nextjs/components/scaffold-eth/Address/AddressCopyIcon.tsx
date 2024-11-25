@@ -14,7 +14,7 @@ export const AddressCopyIcon = ({ className, address }: { className?: string; ad
         }, 800);
       }}
     >
-      <button onClick={e => e.stopPropagation()}>
+      <button onClick={e => e.stopPropagation()} type="button">
         {addressCopied ? (
           <CheckCircleIcon className={className} aria-hidden="true" />
         ) : (
