@@ -42,6 +42,7 @@
     "hardhat-deploy-ethers": "~0.4.2",
     "hardhat-gas-reporter": "~2.2.1",
     "prettier": "~3.3.3",
+    "prettier-plugin-solidity": "~1.4.1",
     "solidity-coverage": "~0.8.13",
     "ts-node": "~10.9.1",
     "typechain": "~8.3.2",
