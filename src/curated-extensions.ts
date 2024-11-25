@@ -2,7 +2,7 @@ import { ExternalExtension } from "./types";
 import extensions from "./extensions.json";
 
 const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
-  if (!ext.branch || !ext.repository || !ext.description) {
+  if (!ext.repository) {
     throw new Error(`Extension missing required fields: ${JSON.stringify(ext)}`);
   }
 
