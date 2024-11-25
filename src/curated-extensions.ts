@@ -7,7 +7,7 @@ type ExtensionWithFlag = ExternalExtension & {
 
 const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExtensionWithFlag>>((acc, ext: ExtensionWithFlag) => {
   if (!ext.repository) {
-    throw new Error(`Extension missing required fields: ${JSON.stringify(ext)}`);
+    throw new Error(`Extension missing 'repository' fields: ${JSON.stringify(ext)}`);
   }
   if (!ext.branch && !ext.extensionFlag) {
     throw new Error(`Extension must have either 'branch' or 'extensionFlag': ${JSON.stringify(ext)}`);
