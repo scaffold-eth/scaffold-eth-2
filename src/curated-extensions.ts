@@ -18,7 +18,7 @@ const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>(
     throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
   }
   if (!ext.extensionFlagValue) {
-    throw new Error(`Extension must have 'extensionFlag': ${JSON.stringify(ext)}`);
+    throw new Error(`Extension must have 'extensionFlagValue': ${JSON.stringify(ext)}`);
   }
 
   acc[ext.extensionFlagValue] = {
