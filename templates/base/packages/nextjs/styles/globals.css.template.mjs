@@ -1,3 +1,7 @@
+import { withDefaults } from '../../../../utils.js'
+
+const contents = ({ globalImports }) =>
+`${globalImports}
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -30,3 +34,8 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+`
+
+export default withDefaults(contents, {
+  globalImports: ''
+})
