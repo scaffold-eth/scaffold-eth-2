@@ -1,11 +1,17 @@
 import { ExternalExtension } from "./types";
-import extensionsJson from "./extensions.json";
+import curatedExtension from "./extensions.json";
 
-type ExtensionWithFlag = ExternalExtension & {
+type ExtensionJSON = {
   extensionFlagValue: string;
+  repository: string;
+  branch?: string;
+  // fields usefull for scaffoldeth.io
+  description: string;
+  version?: string; // if not present we default to latest
+  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
 };
 
-const extensions: ExtensionWithFlag[] = extensionsJson;
+const extensions: ExtensionJSON[] = curatedExtension;
 
 const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
   if (!ext.repository) {
