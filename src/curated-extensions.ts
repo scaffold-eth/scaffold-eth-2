@@ -1,20 +1,21 @@
 import { ExternalExtension } from "./types";
-import extensions from "./extensions.json";
+import extensionsJson from "./extensions.json";
 
 type ExtensionWithFlag = ExternalExtension & {
-  extensionFlag?: string;
+  extensionFlagValue: string;
 };
 
-const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExtensionWithFlag>>((acc, ext: ExtensionWithFlag) => {
+const extensions: ExtensionWithFlag[] = extensionsJson;
+
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
   if (!ext.repository) {
-    throw new Error(`Extension missing 'repository' fields: ${JSON.stringify(ext)}`);
+    throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
   }
-  if (!ext.branch && !ext.extensionFlag) {
-    throw new Error(`Extension must have either 'branch' or 'extensionFlag': ${JSON.stringify(ext)}`);
+  if (!ext.extensionFlagValue) {
+    throw new Error(`Extension must have 'extensionFlag': ${JSON.stringify(ext)}`);
   }
 
-  const key = ext.branch || ext.extensionFlag;
-  acc[key!] = {
+  acc[ext.extensionFlagValue] = {
     repository: ext.repository,
     branch: ext.branch,
   };
