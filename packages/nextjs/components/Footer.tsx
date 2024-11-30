@@ -6,8 +6,8 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
-import { useGlobalState } from "~~/services/store/store";
 import scaffoldConfig from "~~/scaffold.config";
+import { useGlobalState } from "~~/services/store/store";
 
 /**
  * Site footer
