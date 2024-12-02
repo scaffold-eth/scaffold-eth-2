@@ -6,7 +6,7 @@ import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
-  title: scaffoldConfig.projectName,
+  title: `${scaffoldConfig.projectName} App`,
   description: scaffoldConfig.projectDescription,
 });
 
