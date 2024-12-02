@@ -1,4 +1,3 @@
-import { BuidlGuidlLogo } from "./components/assets/BuidlGuidlLogo";
 import * as chains from "viem/chains";
 
 export type ScaffoldConfig = {
@@ -7,16 +6,6 @@ export type ScaffoldConfig = {
   alchemyApiKey: string;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
-  projectName: string;
-  projectDescription: string;
-  projectNameHeader: string;
-  projectDescriptionHeader: string;
-  projectIconPathHeader: string;
-  projectCreator: string;
-  projectCreatorSvg: any;
-  projectCreatorLink: string;
-  projectRepoLink: string;
-  projectSupportLink: string;
 };
 
 const scaffoldConfig = {
@@ -41,17 +30,6 @@ const scaffoldConfig = {
 
   // Only show the Burner Wallet when running on hardhat network
   onlyLocalBurnerWallet: true,
-
-  projectNameHeader: "Scaffold-ETH",
-  projectDescriptionHeader: "Ethereum dev stack",
-  projectIconPathHeader: "/logo.svg",
-  projectName: "Scaffold-ETH 2",
-  projectDescription: "Built with 🏗 Scaffold-ETH 2",
-  projectCreator: "BuidlGuidl",
-  projectCreatorSvg: BuidlGuidlLogo,
-  projectCreatorLink: "https://buidlguidl.com/",
-  projectRepoLink: "https://github.com/scaffold-eth/se-2",
-  projectSupportLink: "https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;

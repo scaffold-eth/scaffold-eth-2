@@ -6,7 +6,7 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { SwitchTheme } from "~~/components/SwitchTheme";
 import { Faucet } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
-import scaffoldConfig from "~~/scaffold.config";
+import projectConfig from "~~/project.config";
 import { useGlobalState } from "~~/services/store/store";
 
 /**
@@ -47,7 +47,7 @@ export const Footer = () => {
         <ul className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
-              <a href={scaffoldConfig.projectRepoLink} target="_blank" rel="noreferrer" className="link">
+              <a href={projectConfig.repoLink} target="_blank" rel="noreferrer" className="link">
                 Fork me
               </a>
             </div>
@@ -58,17 +58,17 @@ export const Footer = () => {
               </p>
               <a
                 className="flex justify-center items-center gap-1"
-                href={scaffoldConfig.projectCreatorLink}
+                href={projectConfig.creatorLink}
                 target="_blank"
                 rel="noreferrer"
               >
-                <scaffoldConfig.projectCreatorSvg className="w-3 h-5 pb-1" />
-                <span className="link">{scaffoldConfig.projectCreator}</span>
+                <projectConfig.creatorSvg className="w-3 h-5 pb-1" />
+                <span className="link">{projectConfig.creator}</span>
               </a>
             </div>
             <span>·</span>
             <div className="text-center">
-              <a href={scaffoldConfig.projectSupportLink} target="_blank" rel="noreferrer" className="link">
+              <a href={projectConfig.supportLink} target="_blank" rel="noreferrer" className="link">
                 Support
               </a>
             </div>
