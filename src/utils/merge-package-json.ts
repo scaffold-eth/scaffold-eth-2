@@ -14,7 +14,9 @@ export function mergePackageJson(targetPackageJsonPath: string, secondPackageJso
 
   const mergedPkgStr = mergeJsonStr.default(targetPackageJson, secondPackageJson);
 
-  fs.writeFileSync(targetPackageJsonPath, mergedPkgStr, "utf8");
+  const formattedPkgStr = JSON.stringify(JSON.parse(mergedPkgStr), null, 2);
+
+  fs.writeFileSync(targetPackageJsonPath, formattedPkgStr, "utf8");
   if (isDev) {
     const devStr = `TODO: write relevant information for the contributor`;
     fs.writeFileSync(`${targetPackageJsonPath}.dev`, devStr, "utf8");
