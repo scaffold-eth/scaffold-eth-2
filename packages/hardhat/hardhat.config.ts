@@ -9,6 +9,8 @@ import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
+import { task } from "hardhat/config";
+import generateTsAbis from "./scripts/generateTsAbis";
 
 // If not set, it uses the hardhat account 0 private key.
 const deployerPrivateKey =
@@ -172,5 +174,13 @@ const config: HardhatUserConfig = {
     enabled: false,
   },
 };
+
+// Extend the deploy task
+task("deploy").setAction(async (args, hre, runSuper) => {
+  // Run the original deploy task
+  await runSuper(args);
+  // Force run the generateTsAbis script
+  await generateTsAbis(hre);
+});
 
 export default config;
