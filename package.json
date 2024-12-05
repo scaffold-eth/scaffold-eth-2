@@ -9,15 +9,12 @@
     ]
   },
   "scripts": {
-    "account": "echo 'DEPRECATED: use yarn hardhat:account instead' && yarn hardhat:account",
+    "account": "yarn hardhat:account",
     "chain": "yarn hardhat:chain",
-    "compile": "echo 'DEPRECATED: use yarn hardhat:compile instead' && yarn hardhat:compile",
     "deploy": "yarn hardhat:deploy",
-    "flatten": "echo 'DEPRECATED: use yarn hardhat:flatten instead' && yarn hardhat:flatten",
-    "fork": "echo 'DEPRECATED: use yarn hardhat:fork instead' && yarn hardhat:fork",
+    "fork": "yarn hardhat:fork",
     "format": "yarn next:format && yarn hardhat:format",
-    "generate": "echo 'DEPRECATED: use yarn hardhat:generate instead' && yarn hardhat:generate",
-    "hardhat-verify": "echo 'DEPRECATED: use yarn hardhat:hardhat-verify instead' && yarn hardhat:hardhat-verify",
+    "generate": "yarn hardhat:generate",
     "hardhat:account": "yarn workspace @se-2/hardhat account",
     "hardhat:chain": "yarn workspace @se-2/hardhat chain",
     "hardhat:check-types": "yarn workspace @se-2/hardhat check-types",
@@ -43,7 +40,7 @@
     "test": "yarn hardhat:test",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "vercel": "yarn workspace @se-2/nextjs vercel",
-    "verify": "echo 'DEPRECATED: use yarn hardhat:verify instead' && yarn hardhat:verify"
+    "verify": "yarn hardhat:verify"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
