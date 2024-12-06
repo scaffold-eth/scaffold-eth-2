@@ -6,7 +6,7 @@
     "chain": "hardhat node --network hardhat --no-deploy",
     "check-types": "tsc --noEmit --incremental",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy",
+    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "generate": "hardhat run scripts/generateAccount.ts",
     "flatten": "hardhat flatten",
@@ -49,6 +49,7 @@
     "typescript": "<5.6.0"
   },
   "dependencies": {
+    "@inquirer/password": "^4.0.2",
     "@openzeppelin/contracts": "^5.0.2",
     "@typechain/ethers-v6": "^0.5.1",
     "dotenv": "^16.4.5",
