@@ -26,7 +26,7 @@ const setNewEnvConfig = async (existingEnvConfig = {}) => {
 
   const newEnvConfig = {
     ...existingEnvConfig,
-    DEPLOYER_PRIVATE_KEY: encryptedJson,
+    DEPLOYER_PRIVATE_KEY_ENCRYPTED: encryptedJson,
   };
 
   // Store in .env
@@ -44,7 +44,7 @@ async function main() {
   }
 
   const existingEnvConfig = parse(fs.readFileSync(envFilePath).toString());
-  if (existingEnvConfig.DEPLOYER_PRIVATE_KEY) {
+  if (existingEnvConfig.DEPLOYER_PRIVATE_KEY_ENCRYPTED) {
     console.log("⚠️ You already have a deployer account. Check the packages/hardhat/.env file");
     return;
   }
