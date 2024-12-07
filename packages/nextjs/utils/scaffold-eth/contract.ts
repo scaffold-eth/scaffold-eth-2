@@ -1,4 +1,4 @@
-import { AllowedChains } from "./networks";
+import { AllowedChainIds } from "./networks";
 import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
@@ -168,12 +168,12 @@ type UseScaffoldArgsParam<
 
 export type UseDeployedContractConfig<TContractName extends ContractName> = {
   contractName: TContractName;
-  chain?: AllowedChains;
+  chainId?: AllowedChainIds;
 };
 
 export type UseScaffoldWriteConfig<TContractName extends ContractName> = {
   contractName: TContractName;
-  chain?: AllowedChains;
+  chainId?: AllowedChainIds;
   writeContractParams?: UseWriteContractParameters;
 };
 
@@ -182,7 +182,7 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
-  chain?: AllowedChains;
+  chainId?: AllowedChainIds;
   watch?: boolean;
 } & IsContractDeclarationMissing<
   Partial<UseReadContractParameters>,
@@ -228,7 +228,7 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
   eventName: TEventName;
-  chain?: AllowedChains;
+  chainId?: AllowedChainIds;
 } & IsContractDeclarationMissing<
   Omit<UseWatchContractEventParameters, "onLogs" | "address" | "abi" | "eventName"> & {
     onLogs: (
@@ -288,7 +288,7 @@ export type UseScaffoldEventHistoryConfig<
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
-  chain?: AllowedChains;
+  chainId?: AllowedChainIds;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: TBlockData;
   transactionData?: TTransactionData;

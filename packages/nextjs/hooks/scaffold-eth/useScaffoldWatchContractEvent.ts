@@ -3,6 +3,8 @@ import { Abi, ExtractAbiEventNames } from "abitype";
 import { Log } from "viem";
 import { useWatchContractEvent } from "wagmi";
 import { addIndexedArgsToEvent, useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -19,12 +21,16 @@ export const useScaffoldWatchContractEvent = <
 >({
   contractName,
   eventName,
-  chain,
+  chainId,
   onLogs,
 }: UseScaffoldEventConfig<TContractName, TEventName>) => {
   const { targetNetwork } = useTargetNetwork();
-  const selectedChain = chain ?? targetNetwork;
-  const { data: deployedContractData } = useDeployedContractInfo({ contractName, chain: selectedChain });
+  const selectedChain =
+    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedChain.id as AllowedChainIds,
+  });
 
   const addIndexedArgsToLogs = (logs: Log[]) => logs.map(addIndexedArgsToEvent);
   const listenerWithIndexedArgs = (logs: Log[]) => onLogs(addIndexedArgsToLogs(logs) as Parameters<typeof onLogs>[0]);

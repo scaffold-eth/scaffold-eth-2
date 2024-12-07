@@ -6,7 +6,8 @@ import { Config, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { AllowedChainIds, notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
@@ -23,7 +24,7 @@ import {
  */
 export const useScaffoldWriteContract = <TContractName extends ContractName>({
   contractName,
-  chain,
+  chainId,
   writeContractParams,
 }: UseScaffoldWriteConfig<TContractName>) => {
   const { chain: accountChain } = useAccount();
@@ -33,9 +34,13 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const selectedNetwork = chain ?? targetNetwork;
+  const selectedNetwork =
+    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
 
-  const { data: deployedContractData } = useDeployedContractInfo({ contractName, chain: selectedNetwork });
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedNetwork.id as AllowedChainIds,
+  });
 
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,

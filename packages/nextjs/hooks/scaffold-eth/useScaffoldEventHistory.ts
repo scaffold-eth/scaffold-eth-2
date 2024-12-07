@@ -5,6 +5,8 @@ import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -74,7 +76,7 @@ export const useScaffoldEventHistory = <
   contractName,
   eventName,
   fromBlock,
-  chain,
+  chainId,
   filters,
   blockData,
   transactionData,
@@ -83,7 +85,8 @@ export const useScaffoldEventHistory = <
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const { targetNetwork } = useTargetNetwork();
-  const selectedChain = chain ?? targetNetwork;
+  const selectedChain =
+    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
 
   const publicClient = usePublicClient({
     chainId: selectedChain.id,
@@ -92,7 +95,10 @@ export const useScaffoldEventHistory = <
 
   const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedChain.id });
 
-  const { data: deployedContractData } = useDeployedContractInfo({ contractName, chain: selectedChain });
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedChain.id as AllowedChainIds,
+  });
 
   const event =
     deployedContractData &&

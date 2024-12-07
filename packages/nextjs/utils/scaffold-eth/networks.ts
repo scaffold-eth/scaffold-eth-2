@@ -9,9 +9,9 @@ type ChainAttributes = {
   nativeCurrencyTokenAddress?: string;
 };
 
-// export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
+export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
 export type TargetNetworks = typeof scaffoldConfig.targetNetworks;
-export type AllowedChains = TargetNetworks[number] & Partial<ChainAttributes>;
+export type AllowedChainIds = TargetNetworks[number]["id"] & Partial<ChainAttributes>;
 
 // export type ConfiguredChains = (typeof scaffoldConfig)["targetNetworks"];
 
@@ -132,7 +132,7 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 /**
  * @returns targetNetworks array containing networks configured in scaffold.config including extra network metadata
  */
-export function getTargetNetworks(): AllowedChains[] {
+export function getTargetNetworks(): ChainWithAttributes[] {
   return scaffoldConfig.targetNetworks.map(targetNetwork => ({
     ...targetNetwork,
     ...NETWORKS_EXTRA_DATA[targetNetwork.id],

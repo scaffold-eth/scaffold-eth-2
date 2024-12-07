@@ -5,6 +5,8 @@ import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import scaffoldConfig from "~~/scaffold.config";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
   AbiFunctionReturnType,
   ContractAbi,
@@ -27,12 +29,16 @@ export const useScaffoldReadContract = <
   contractName,
   functionName,
   args,
-  chain,
+  chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const { targetNetwork } = useTargetNetwork();
-  const selectedChain = chain ?? targetNetwork;
-  const { data: deployedContract } = useDeployedContractInfo({ contractName, chain: selectedChain });
+  const selectedChain =
+    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
+  const { data: deployedContract } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedChain.id as AllowedChainIds,
+  });
 
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
   // set watch to true by default
