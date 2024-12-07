@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Chain } from "viem";
-import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
+import { Config, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
@@ -13,6 +12,7 @@ import {
   ContractName,
   ScaffoldWriteContractOptions,
   ScaffoldWriteContractVariables,
+  UseScaffoldWriteConfig,
 } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -21,11 +21,11 @@ import {
  * @param contractName - name of the contract to be written to
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
-export const useScaffoldWriteContract = <TContractName extends ContractName>(
-  contractName: TContractName,
-  chain?: Chain,
-  writeContractParams?: UseWriteContractParameters,
-) => {
+export const useScaffoldWriteContract = <TContractName extends ContractName>({
+  contractName,
+  chain,
+  writeContractParams,
+}: UseScaffoldWriteConfig<TContractName>) => {
   const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
@@ -35,7 +35,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
 
   const selectedNetwork = chain ?? targetNetwork;
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName, selectedNetwork);
+  const { data: deployedContractData } = useDeployedContractInfo({ contractName, chain: selectedNetwork });
 
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,

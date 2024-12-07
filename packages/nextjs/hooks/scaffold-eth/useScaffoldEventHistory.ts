@@ -92,7 +92,7 @@ export const useScaffoldEventHistory = <
 
   const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedChain.id });
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName, selectedChain);
+  const { data: deployedContractData } = useDeployedContractInfo({ contractName, chain: selectedChain });
 
   const event =
     deployedContractData &&

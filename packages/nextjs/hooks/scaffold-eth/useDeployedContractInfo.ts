@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useIsMounted } from "usehooks-ts";
-import { Chain } from "viem";
 import { usePublicClient } from "wagmi";
-import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
+import {
+  Contract,
+  ContractCodeStatus,
+  ContractName,
+  UseDeployedContractConfig,
+  contracts,
+} from "~~/utils/scaffold-eth/contract";
 
 /**
  * Gets the matching contract info for the provided contract name from the contracts present in deployedContracts.ts
  * and externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  */
-export const useDeployedContractInfo = <TContractName extends ContractName>(
-  contractName: TContractName,
-  chain?: Chain,
-) => {
+export const useDeployedContractInfo = <TContractName extends ContractName>({
+  contractName,
+  chain,
+}: UseDeployedContractConfig<TContractName>) => {
   const isMounted = useIsMounted();
   const { targetNetwork } = useTargetNetwork();
   const selectedChain = chain ?? targetNetwork;

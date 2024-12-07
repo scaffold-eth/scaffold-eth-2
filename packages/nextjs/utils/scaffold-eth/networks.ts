@@ -9,7 +9,11 @@ type ChainAttributes = {
   nativeCurrencyTokenAddress?: string;
 };
 
-export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
+// export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
+export type TargetNetworks = typeof scaffoldConfig.targetNetworks;
+export type AllowedChains = TargetNetworks[number] & Partial<ChainAttributes>;
+
+// export type ConfiguredChains = (typeof scaffoldConfig)["targetNetworks"];
 
 // Mapping of chainId to RPC chain name an format followed by alchemy and infura
 export const RPC_CHAIN_NAMES: Record<number, string> = {
@@ -128,7 +132,7 @@ export function getBlockExplorerAddressLink(network: chains.Chain, address: stri
 /**
  * @returns targetNetworks array containing networks configured in scaffold.config including extra network metadata
  */
-export function getTargetNetworks(): ChainWithAttributes[] {
+export function getTargetNetworks(): AllowedChains[] {
   return scaffoldConfig.targetNetworks.map(targetNetwork => ({
     ...targetNetwork,
     ...NETWORKS_EXTRA_DATA[targetNetwork.id],

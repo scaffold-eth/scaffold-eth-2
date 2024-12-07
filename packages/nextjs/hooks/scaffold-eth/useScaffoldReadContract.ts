@@ -32,7 +32,7 @@ export const useScaffoldReadContract = <
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const { targetNetwork } = useTargetNetwork();
   const selectedChain = chain ?? targetNetwork;
-  const { data: deployedContract } = useDeployedContractInfo(contractName, selectedChain);
+  const { data: deployedContract } = useDeployedContractInfo({ contractName, chain: selectedChain });
 
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
   // set watch to true by default

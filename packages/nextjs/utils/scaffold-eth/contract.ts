@@ -1,3 +1,4 @@
+import { AllowedChains } from "./networks";
 import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
@@ -14,7 +15,6 @@ import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
-  Chain,
   GetEventArgs,
   GetTransactionReceiptReturnType,
   GetTransactionReturnType,
@@ -22,7 +22,7 @@ import {
   TransactionReceipt,
   WriteContractErrorType,
 } from "viem";
-import { Config, UseReadContractParameters, UseWatchContractEventParameters } from "wagmi";
+import { Config, UseReadContractParameters, UseWatchContractEventParameters, UseWriteContractParameters } from "wagmi";
 import { WriteContractParameters, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
@@ -166,12 +166,23 @@ type UseScaffoldArgsParam<
       args?: never;
     };
 
+export type UseDeployedContractConfig<TContractName extends ContractName> = {
+  contractName: TContractName;
+  chain?: AllowedChains;
+};
+
+export type UseScaffoldWriteConfig<TContractName extends ContractName> = {
+  contractName: TContractName;
+  chain?: AllowedChains;
+  writeContractParams?: UseWriteContractParameters;
+};
+
 export type UseScaffoldReadConfig<
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
-  chain?: Chain;
+  chain?: AllowedChains;
   watch?: boolean;
 } & IsContractDeclarationMissing<
   Partial<UseReadContractParameters>,
@@ -217,7 +228,7 @@ export type UseScaffoldEventConfig<
 > = {
   contractName: TContractName;
   eventName: TEventName;
-  chain?: Chain;
+  chain?: AllowedChains;
 } & IsContractDeclarationMissing<
   Omit<UseWatchContractEventParameters, "onLogs" | "address" | "abi" | "eventName"> & {
     onLogs: (
@@ -277,7 +288,7 @@ export type UseScaffoldEventHistoryConfig<
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
-  chain?: Chain;
+  chain?: AllowedChains;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: TBlockData;
   transactionData?: TTransactionData;
