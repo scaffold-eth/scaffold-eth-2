@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, useAccount, useWriteContract } from "wagmi";
@@ -32,7 +32,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,

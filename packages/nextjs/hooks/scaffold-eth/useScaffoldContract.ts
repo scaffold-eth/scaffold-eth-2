@@ -1,4 +1,4 @@
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { Account, Address, Chain, Client, Transport, getContract } from "viem";
 import { usePublicClient } from "wagmi";
 import { GetWalletClientReturnType } from "wagmi/actions";
@@ -25,7 +25,7 @@ export const useScaffoldContract = <
   walletClient?: TWalletClient | null;
   chainId?: AllowedChainIds;
 }) => {
-  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork?.id as AllowedChainIds,

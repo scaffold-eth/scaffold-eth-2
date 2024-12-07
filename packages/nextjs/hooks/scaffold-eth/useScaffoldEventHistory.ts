@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
@@ -83,7 +83,7 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
 
   const publicClient = usePublicClient({
     chainId: selectedNetwork.id,

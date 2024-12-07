@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
@@ -31,7 +31,7 @@ export const useScaffoldReadContract = <
   chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
   const { data: deployedContract } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork.id as AllowedChainIds,

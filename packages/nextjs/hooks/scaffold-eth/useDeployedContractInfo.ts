@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { useIsMounted } from "usehooks-ts";
 import { usePublicClient } from "wagmi";
 import { AllowedChainIds } from "~~/utils/scaffold-eth";
@@ -21,7 +21,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>({
 }: UseDeployedContractConfig<TContractName>) => {
   const isMounted = useIsMounted();
 
-  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
   const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const publicClient = usePublicClient({ chainId: selectedNetwork.id });

@@ -1,4 +1,4 @@
-import { useAllowedChain } from "./useAllowedChain";
+import { useAllowedNetwork } from "./useAllowedChain";
 import { useTargetNetwork } from "./useTargetNetwork";
 import { useTheme } from "next-themes";
 import { AllowedChainIds, ChainWithAttributes } from "~~/utils/scaffold-eth";
@@ -17,7 +17,7 @@ export const useNetworkColor = (chainId?: AllowedChainIds) => {
   const { resolvedTheme } = useTheme();
   const { targetNetwork } = useTargetNetwork();
 
-  const chain = useAllowedChain(chainId);
+  const chain = useAllowedNetwork(chainId);
   const isDarkMode = resolvedTheme === "dark";
 
   return getNetworkColor(chain ? chain : targetNetwork, isDarkMode);
