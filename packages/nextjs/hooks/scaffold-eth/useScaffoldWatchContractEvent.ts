@@ -1,8 +1,9 @@
+import { useAllowedChain } from "./useAllowedChain";
 import { Abi, ExtractAbiEventNames } from "abitype";
 import { Log } from "viem";
 import { useWatchContractEvent } from "wagmi";
 import { addIndexedArgsToEvent, useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaffold-eth/contract";
 
 /**

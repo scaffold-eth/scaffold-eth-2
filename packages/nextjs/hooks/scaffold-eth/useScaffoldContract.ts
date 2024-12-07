@@ -1,8 +1,9 @@
+import { useAllowedChain } from "./useAllowedChain";
 import { Account, Address, Chain, Client, Transport, getContract } from "viem";
 import { usePublicClient } from "wagmi";
 import { GetWalletClientReturnType } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**

@@ -1,10 +1,11 @@
 import { useEffect } from "react";
+import { useAllowedChain } from "./useAllowedChain";
 import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
   AbiFunctionReturnType,
   ContractAbi,
