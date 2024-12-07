@@ -1,10 +1,8 @@
-import { useTargetNetwork } from "./useTargetNetwork";
 import { Account, Address, Chain, Client, Transport, getContract } from "viem";
 import { usePublicClient } from "wagmi";
 import { GetWalletClientReturnType } from "wagmi/actions";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { AllowedChainIds } from "~~/utils/scaffold-eth";
+import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
 import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -26,11 +24,7 @@ export const useScaffoldContract = <
   walletClient?: TWalletClient | null;
   chainId?: AllowedChainIds;
 }) => {
-  const { targetNetwork } = useTargetNetwork();
-
-  const selectedChain =
-    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
-
+  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo({
     contractName,
     chainId: selectedChain?.id as AllowedChainIds,

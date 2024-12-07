@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import scaffoldConfig from "~~/scaffold.config";
-import { AllowedChainIds } from "~~/utils/scaffold-eth";
+import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
 import {
   AbiFunctionReturnType,
   ContractAbi,
@@ -32,9 +30,7 @@ export const useScaffoldReadContract = <
   chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const { targetNetwork } = useTargetNetwork();
-  const selectedChain =
-    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
+  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
   const { data: deployedContract } = useDeployedContractInfo({
     contractName,
     chainId: selectedChain.id as AllowedChainIds,

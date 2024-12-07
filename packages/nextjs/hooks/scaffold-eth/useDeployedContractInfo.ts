@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { useIsMounted } from "usehooks-ts";
 import { usePublicClient } from "wagmi";
-import scaffoldConfig from "~~/scaffold.config";
+import { AllowedChainIds, useAllowedChain } from "~~/utils/scaffold-eth";
 import {
   Contract,
   ContractCodeStatus,
@@ -20,10 +19,8 @@ export const useDeployedContractInfo = <TContractName extends ContractName>({
   chainId,
 }: UseDeployedContractConfig<TContractName>) => {
   const isMounted = useIsMounted();
-  const { targetNetwork } = useTargetNetwork();
-  const selectedChain =
-    scaffoldConfig.targetNetworks.find(targetNetwork => targetNetwork.id === chainId) ?? targetNetwork;
 
+  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
   const deployedContract = contracts?.[selectedChain.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
   const publicClient = usePublicClient({ chainId: selectedChain.id });
