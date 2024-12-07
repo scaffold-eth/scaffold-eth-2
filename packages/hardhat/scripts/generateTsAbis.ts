@@ -87,7 +87,7 @@ function getContractDataFromDeployments() {
       const { abi, address, metadata } = JSON.parse(
         fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
       );
-      const inheritedFunctions = getInheritedFunctions(JSON.parse(metadata).sources, contractName);
+      const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
       contracts[contractName] = { address, abi, inheritedFunctions };
     }
     output[chainId] = contracts;
@@ -112,7 +112,7 @@ const generateTsAbis: DeployFunction = async function () {
   }
   fs.writeFileSync(
     `${TARGET_DIR}deployedContracts.ts`,
-    prettier.format(
+    await prettier.format(
       `${generatedContractComment} import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract"; \n\n
  const deployedContracts = {${fileContent}} as const; \n\n export default deployedContracts satisfies GenericContractsDeclaration`,
       {
@@ -125,9 +125,3 @@ const generateTsAbis: DeployFunction = async function () {
 };
 
 export default generateTsAbis;
-
-// Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags generateTsAbis
-generateTsAbis.tags = ["generateTsAbis"];
-
-generateTsAbis.runAtTheEnd = true;
