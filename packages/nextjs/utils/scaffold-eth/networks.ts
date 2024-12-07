@@ -11,7 +11,7 @@ type ChainAttributes = {
 
 export type ChainWithAttributes = chains.Chain & Partial<ChainAttributes>;
 export type TargetNetworks = typeof scaffoldConfig.targetNetworks;
-export type AllowedChainIds = TargetNetworks[number]["id"] & Partial<ChainAttributes>;
+export type AllowedChainIds = TargetNetworks[number]["id"];
 
 // export type ConfiguredChains = (typeof scaffoldConfig)["targetNetworks"];
 
