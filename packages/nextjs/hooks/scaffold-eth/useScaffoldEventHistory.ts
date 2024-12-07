@@ -83,18 +83,18 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
 
   const publicClient = usePublicClient({
-    chainId: selectedChain.id,
+    chainId: selectedNetwork.id,
   });
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedChain.id });
+  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedNetwork.id });
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,
-    chainId: selectedChain.id as AllowedChainIds,
+    chainId: selectedNetwork.id as AllowedChainIds,
   });
 
   const event =
@@ -111,7 +111,7 @@ export const useScaffoldEventHistory = <
         address: deployedContractData?.address,
         eventName,
         fromBlock: fromBlock.toString(),
-        chainId: selectedChain.id,
+        chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
       },
     ],

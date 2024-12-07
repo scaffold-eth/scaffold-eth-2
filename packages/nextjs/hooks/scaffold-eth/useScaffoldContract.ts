@@ -25,13 +25,13 @@ export const useScaffoldContract = <
   walletClient?: TWalletClient | null;
   chainId?: AllowedChainIds;
 }) => {
-  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo({
     contractName,
-    chainId: selectedChain?.id as AllowedChainIds,
+    chainId: selectedNetwork?.id as AllowedChainIds,
   });
 
-  const publicClient = usePublicClient({ chainId: selectedChain?.id });
+  const publicClient = usePublicClient({ chainId: selectedNetwork?.id });
 
   let contract = undefined;
   if (deployedContractData && publicClient) {

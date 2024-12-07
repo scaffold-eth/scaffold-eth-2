@@ -21,10 +21,10 @@ export const useDeployedContractInfo = <TContractName extends ContractName>({
 }: UseDeployedContractConfig<TContractName>) => {
   const isMounted = useIsMounted();
 
-  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
-  const deployedContract = contracts?.[selectedChain.id]?.[contractName as ContractName] as Contract<TContractName>;
+  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
+  const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
-  const publicClient = usePublicClient({ chainId: selectedChain.id });
+  const publicClient = usePublicClient({ chainId: selectedNetwork.id });
 
   useEffect(() => {
     const checkContractDeployment = async () => {

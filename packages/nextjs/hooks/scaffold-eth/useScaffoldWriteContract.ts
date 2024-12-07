@@ -32,11 +32,11 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const selectedChain = useAllowedChain(chainId as AllowedChainIds);
+  const selectedNetwork = useAllowedChain(chainId as AllowedChainIds);
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,
-    chainId: selectedChain.id as AllowedChainIds,
+    chainId: selectedNetwork.id as AllowedChainIds,
   });
 
   const sendContractWriteAsyncTx = async <
@@ -55,7 +55,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
       return;
     }
 
-    if (accountChain?.id !== selectedChain.id) {
+    if (accountChain?.id !== selectedNetwork.id) {
       notification.error("Your wallet is connected to the wrong network");
       return;
     }
@@ -105,7 +105,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
       return;
     }
 
-    if (accountChain?.id !== selectedChain.id) {
+    if (accountChain?.id !== selectedNetwork.id) {
       notification.error("Your wallet is connected to the wrong network");
       return;
     }
