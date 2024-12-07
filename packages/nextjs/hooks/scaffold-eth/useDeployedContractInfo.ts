@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAllowedNetwork } from "./useAllowedChain";
 import { useIsMounted } from "usehooks-ts";
 import { usePublicClient } from "wagmi";
+import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
   Contract,
