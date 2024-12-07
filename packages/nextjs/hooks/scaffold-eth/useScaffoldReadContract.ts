@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
+import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
   AbiFunctionReturnType,
   ContractAbi,
@@ -27,16 +28,21 @@ export const useScaffoldReadContract = <
   contractName,
   functionName,
   args,
+  chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const { data: deployedContract } = useDeployedContractInfo(contractName);
-  const { targetNetwork } = useTargetNetwork();
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+  const { data: deployedContract } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedNetwork.id as AllowedChainIds,
+  });
+
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
   // set watch to true by default
   const defaultWatch = watch ?? true;
 
   const readContractHookRes = useReadContract({
-    chainId: targetNetwork.id,
+    chainId: selectedNetwork.id,
     functionName,
     address: deployedContract?.address,
     abi: deployedContract?.abi,
@@ -56,7 +62,7 @@ export const useScaffoldReadContract = <
   const queryClient = useQueryClient();
   const { data: blockNumber } = useBlockNumber({
     watch: defaultWatch,
-    chainId: targetNetwork.id,
+    chainId: selectedNetwork.id,
     query: {
       enabled: defaultWatch,
     },

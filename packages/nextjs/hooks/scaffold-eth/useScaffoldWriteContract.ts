@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
+import { Config, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
+import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
+import { AllowedChainIds, notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
   ScaffoldWriteContractOptions,
   ScaffoldWriteContractVariables,
+  UseScaffoldWriteConfig,
 } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -20,18 +21,23 @@ import {
  * @param contractName - name of the contract to be written to
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
-export const useScaffoldWriteContract = <TContractName extends ContractName>(
-  contractName: TContractName,
-  writeContractParams?: UseWriteContractParameters,
-) => {
-  const { chain } = useAccount();
+export const useScaffoldWriteContract = <TContractName extends ContractName>({
+  contractName,
+  chainId,
+  writeContractParams,
+}: UseScaffoldWriteConfig<TContractName>) => {
+  const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
-  const { targetNetwork } = useTargetNetwork();
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedNetwork.id as AllowedChainIds,
+  });
 
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
@@ -44,12 +50,13 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
       return;
     }
 
-    if (!chain?.id) {
+    if (!accountChain?.id) {
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
-      notification.error("You are on the wrong network");
+
+    if (accountChain?.id !== selectedNetwork.id) {
+      notification.error("Your wallet is connected to the wrong network");
       return;
     }
 
@@ -93,12 +100,13 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>(
       notification.error("Target Contract is not deployed, did you forget to run `yarn deploy`?");
       return;
     }
-    if (!chain?.id) {
+    if (!accountChain?.id) {
       notification.error("Please connect your wallet");
       return;
     }
-    if (chain?.id !== targetNetwork.id) {
-      notification.error("You are on the wrong network");
+
+    if (accountChain?.id !== selectedNetwork.id) {
+      notification.error("Your wallet is connected to the wrong network");
       return;
     }
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
+import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
@@ -74,6 +75,7 @@ export const useScaffoldEventHistory = <
   contractName,
   eventName,
   fromBlock,
+  chainId,
   filters,
   blockData,
   transactionData,
@@ -81,15 +83,19 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const { targetNetwork } = useTargetNetwork();
+  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+
   const publicClient = usePublicClient({
-    chainId: targetNetwork.id,
+    chainId: selectedNetwork.id,
   });
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: targetNetwork.id });
+  const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedNetwork.id });
 
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
+  const { data: deployedContractData } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedNetwork.id as AllowedChainIds,
+  });
 
   const event =
     deployedContractData &&
@@ -105,7 +111,7 @@ export const useScaffoldEventHistory = <
         address: deployedContractData?.address,
         eventName,
         fromBlock: fromBlock.toString(),
-        chainId: targetNetwork.id,
+        chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
       },
     ],
