@@ -3,14 +3,16 @@ dotenv.config();
 import { Wallet } from "ethers";
 import password from "@inquirer/password";
 import { spawn } from "child_process";
+import { config } from "hardhat";
 
 /**
  * Unencrypts the private key and runs the hardhat deploy command
  */
 async function main() {
-  const isNetworkProvided = process.argv.slice(2).includes("--network");
+  const networkIndex = process.argv.indexOf("--network");
+  const networkName = networkIndex !== -1 ? process.argv[networkIndex + 1] : config.defaultNetwork;
 
-  if (!isNetworkProvided) {
+  if (networkName === "localhost" || networkName === "hardhat") {
     // Deploy command on the localhost network
     const hardhat = spawn("hardhat", ["deploy", ...process.argv.slice(2)], {
       stdio: "inherit",
