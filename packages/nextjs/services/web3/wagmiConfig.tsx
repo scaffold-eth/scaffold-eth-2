@@ -17,8 +17,14 @@ export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
   ssr: true,
   client({ chain }) {
+    let rpcFallbacks = [http()];
+
     const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
-    const rpcFallbacks = alchemyHttpUrl ? [http(alchemyHttpUrl), http()] : [http()];
+    if (alchemyHttpUrl) {
+      const isUsingDefaultKey = scaffoldConfig.alchemyApiKey === "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+      // If using default Scaffold-ETH 2 API key, we prioritize the default RPC
+      rpcFallbacks = isUsingDefaultKey ? [http(), http(alchemyHttpUrl)] : [http(alchemyHttpUrl), http()];
+    }
 
     return createClient({
       chain,
