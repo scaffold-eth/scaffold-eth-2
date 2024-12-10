@@ -15,10 +15,9 @@ export function getNetworkColor(network: ChainWithAttributes, isDarkMode: boolea
  */
 export const useNetworkColor = (chainId?: AllowedChainIds) => {
   const { resolvedTheme } = useTheme();
-  const { targetNetwork } = useTargetNetwork();
 
   const chain = useSelectedNetwork(chainId);
   const isDarkMode = resolvedTheme === "dark";
 
-  return getNetworkColor(chain ? chain : targetNetwork, isDarkMode);
+  return getNetworkColor(chain, isDarkMode);
 };
