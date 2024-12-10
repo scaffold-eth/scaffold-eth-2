@@ -5,13 +5,9 @@ import "../contracts/YourContract.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployYourContract is ScaffoldETHDeploy {
-  // use `deployer` from `ScaffoldETHDeploy`
-  function run() external ScaffoldEthDeployerRunner {
-    YourContract yourContract = new YourContract(deployer);
-    console.logString(
-      string.concat(
-        "YourContract deployed at: ", vm.toString(address(yourContract))
-      )
-    );
-  }
+    // use `deployer` from `ScaffoldETHDeploy`
+    function run() external ScaffoldEthDeployerRunner {
+        YourContract yourContract = new YourContract(deployer);
+        console.logString(string.concat("YourContract deployed at: ", vm.toString(address(yourContract))));
+    }
 }
