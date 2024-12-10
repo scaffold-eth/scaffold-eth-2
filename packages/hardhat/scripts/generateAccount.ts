@@ -7,8 +7,8 @@ const envFilePath = "./.env";
 
 const getValidatedPassword = async () => {
   while (true) {
-    const pass = await password({ message: "Enter a password to encrypt your private key:", mask: true });
-    const confirmation = await password({ message: "Confirm password:", mask: true });
+    const pass = await password({ message: "Enter a password to encrypt your private key:" });
+    const confirmation = await password({ message: "Confirm password:" });
 
     if (pass === confirmation) {
       return pass;

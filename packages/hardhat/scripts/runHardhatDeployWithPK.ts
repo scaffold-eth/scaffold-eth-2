@@ -33,7 +33,7 @@ async function main() {
     return;
   }
 
-  const pass = await password({ message: "Enter password to decrypt private key:", mask: true });
+  const pass = await password({ message: "Enter password to decrypt private key:" });
 
   try {
     const wallet = await Wallet.fromEncryptedJson(encryptedKey, pass);
