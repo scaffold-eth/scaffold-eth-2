@@ -58,6 +58,7 @@ const getEvents = async (
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
  * @param config.fromBlock - the block number to start reading events from
+ * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param config.filters - filters to be applied to the event (parameterName: value)
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
  * @param config.transactionData - if set to true it will return the transaction data for each event (default: false)

@@ -20,6 +20,7 @@ import {
  * @param config.contractName - deployed contract name
  * @param config.functionName - name of the function to be called
  * @param config.args - args to be passed to the function call
+ * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  */
 export const useScaffoldReadContract = <
   TContractName extends ContractName,
