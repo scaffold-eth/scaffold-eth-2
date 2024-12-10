@@ -17,6 +17,7 @@ async function main() {
     const hardhat = spawn("hardhat", ["deploy", ...process.argv.slice(2)], {
       stdio: "inherit",
       env: process.env,
+      shell: process.platform === "win32",
     });
 
     hardhat.on("exit", code => {
@@ -41,6 +42,7 @@ async function main() {
     const hardhat = spawn("hardhat", ["deploy", ...process.argv.slice(2)], {
       stdio: "inherit",
       env: process.env,
+      shell: process.platform === "win32",
     });
 
     hardhat.on("exit", code => {
