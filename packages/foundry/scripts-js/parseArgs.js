@@ -18,9 +18,9 @@ Options:
   --help, -h           Show this help message
 
 Examples:
-  yarn deploy --file DeploySolution2.s.sol --network sepolia
+  yarn deploy --file DeployYourContract.s.sol --network sepolia
   yarn deploy --network sepolia
-  yarn deploy --file DeploySolution2.s.sol
+  yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
   process.exit(0);
