@@ -62,6 +62,50 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 ## Deploying to Live Networks
 
+### Setting Up Your Deployer Account
+
+<details>
+<summary>Option 1: Generate new account</summary>
+
+```
+yarn generate
+```
+
+This creates a `scaffold-eth-custom` keystore in `~/.foundry/keystores/scaffold-eth-custom` account.
+
+Update `.env` in `packages/foundry`:
+
+```
+ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+```
+
+</details>
+
+<details>
+<summary>Option 2: Import existing private key</summary>
+
+```
+yarn account:import
+```
+
+This imports your key as `scaffold-eth-custom`.
+
+Update `.env`:
+
+```
+ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+```
+
+</details>
+
+View your account status:
+
+```
+yarn account
+```
+
+This will ask for your keystore account password.
+
 ### Deployment Commands
 
 <details>
@@ -115,7 +159,7 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 
 **Live Networks**:
 
-- Requires custom keystore setup (see "Setting Up Your Deployer Account" below)
+- Requires custom keystore setup (see "Setting Up Your Deployer Account" above)
 - Will prompt for keystore password
 </details>
 
@@ -127,50 +171,6 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 3. Add to main `Deploy.s.sol` if needed
 4. Deploy using commands above
 </details>
-
-### Setting Up Your Deployer Account
-
-<details>
-<summary>Option 1: Generate new account</summary>
-
-```
-yarn generate
-```
-
-This creates a `scaffold-eth-custom` keystore in `~/.foundry/keystores/scaffold-eth-custom` account.
-
-Update `.env` in `packages/foundry`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
-```
-
-</details>
-
-<details>
-<summary>Option 2: Import existing private key</summary>
-
-```
-yarn account:import
-```
-
-This imports your key as `scaffold-eth-custom`.
-
-Update `.env`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
-```
-
-</details>
-
-View your account status:
-
-```
-yarn account
-```
-
-This will ask for your keystore account password.
 
 ## Documentation
 
