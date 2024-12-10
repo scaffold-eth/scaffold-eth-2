@@ -8,6 +8,8 @@ export type ScaffoldConfig = {
   onlyLocalBurnerWallet: boolean;
 };
 
+export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+
 const scaffoldConfig = {
   // The networks on which your DApp is live
   targetNetworks: [chains.hardhat],
@@ -20,7 +22,7 @@ const scaffoldConfig = {
   // You can get your own at https://dashboard.alchemyapi.io
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
-  alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF",
+  alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY,
 
   // This is ours WalletConnect's default project ID.
   // You can get your own at https://cloud.walletconnect.com
