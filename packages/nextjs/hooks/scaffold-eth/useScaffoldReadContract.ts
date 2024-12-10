@@ -3,7 +3,7 @@ import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/r
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
-import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
@@ -31,7 +31,7 @@ export const useScaffoldReadContract = <
   chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
   const { data: deployedContract } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork.id as AllowedChainIds,

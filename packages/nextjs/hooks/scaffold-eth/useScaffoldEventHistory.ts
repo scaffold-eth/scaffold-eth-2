@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
-import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
@@ -83,7 +83,7 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
 
   const publicClient = usePublicClient({
     chainId: selectedNetwork.id,

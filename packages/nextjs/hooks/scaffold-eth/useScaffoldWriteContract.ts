@@ -4,7 +4,7 @@ import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
-import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds, notification } from "~~/utils/scaffold-eth";
 import {
@@ -32,7 +32,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,

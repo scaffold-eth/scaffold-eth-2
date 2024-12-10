@@ -1,7 +1,7 @@
 import { Abi, ExtractAbiEventNames } from "abitype";
 import { Log } from "viem";
 import { useWatchContractEvent } from "wagmi";
-import { useAllowedNetwork } from "~~/hooks/scaffold-eth";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { addIndexedArgsToEvent, useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { ContractAbi, ContractName, UseScaffoldEventConfig } from "~~/utils/scaffold-eth/contract";
@@ -23,7 +23,7 @@ export const useScaffoldWatchContractEvent = <
   chainId,
   onLogs,
 }: UseScaffoldEventConfig<TContractName, TEventName>) => {
-  const selectedNetwork = useAllowedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork.id as AllowedChainIds,
