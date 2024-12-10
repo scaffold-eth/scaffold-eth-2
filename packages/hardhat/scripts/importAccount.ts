@@ -17,12 +17,26 @@ const getValidatedPassword = async () => {
   }
 };
 
+const getWalletFromPrivateKey = async () => {
+  while (true) {
+    const privateKey = await password({ message: "Paste your private key:" });
+    try {
+      const wallet = new ethers.Wallet(privateKey);
+      return wallet;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (e) {
+      console.log("❌ Invalid private key format. Please try again.");
+    }
+  }
+};
+
 const setNewEnvConfig = async (existingEnvConfig = {}) => {
-  console.log("👛 Generating new Wallet\n");
-  const randomWallet = ethers.Wallet.createRandom();
+  console.log("👛 Importing Wallet\n");
+
+  const wallet = await getWalletFromPrivateKey();
 
   const pass = await getValidatedPassword();
-  const encryptedJson = await randomWallet.encrypt(pass);
+  const encryptedJson = await wallet.encrypt(pass);
 
   const newEnvConfig = {
     ...existingEnvConfig,
@@ -32,7 +46,7 @@ const setNewEnvConfig = async (existingEnvConfig = {}) => {
   // Store in .env
   fs.writeFileSync(envFilePath, stringify(newEnvConfig));
   console.log("\n📄 Encrypted Private Key saved to packages/hardhat/.env file");
-  console.log("🪄 Generated wallet address:", randomWallet.address, "\n");
+  console.log("🪄 Imported wallet address:", wallet.address, "\n");
   console.log("⚠️ Make sure to remember your password! You'll need it to decrypt the private key.");
 };
 
