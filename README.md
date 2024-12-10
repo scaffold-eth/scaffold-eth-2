@@ -26,7 +26,7 @@ Before you begin, you need to install the following tools:
 - [Git](https://git-scm.com/downloads)
 - [Foundryup](https://book.getfoundry.sh/getting-started/installation)
 
-> **Note for Windows users**. Foundryup is not currently supported by Powershell or Cmd. You will need to use [Git BASH](https://gitforwindows.org/) or [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) as your terminal.
+> **Note for Windows users**. Foundryup is not currently supported by Powershell or Cmd, and has issues with Git Bash. You will need to use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) as your terminal.
 
 ## Quickstart
 
