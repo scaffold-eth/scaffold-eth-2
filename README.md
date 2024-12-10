@@ -71,7 +71,7 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 yarn generate
 ```
 
-This creates a `scaffold-eth-custom` keystore in `~/.foundry/keystores/scaffold-eth-custom` account.
+This creates a `scaffold-eth-custom` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-custom` account.
 
 Update `.env` in `packages/foundry`:
 
@@ -104,7 +104,7 @@ View your account status:
 yarn account
 ```
 
-This will ask for your keystore account password.
+This will ask for your [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) account password set in `packages/foundry/.env`.
 
 ### Deployment Commands
 
