@@ -46,15 +46,11 @@ yarn install && forge install --root packages/foundry
 yarn chain
 ```
 
-This command starts a local Ethereum network using Anvil for testing and development. You can customize the network in `packages/foundry/foundry.toml`. When deploying to this local chain, Scaffold-ETH 2 creates a keystore account using Anvil's last address private key. This keystore account is named `scaffold-eth-local` with the password `localhost`.
-
 3. On a second terminal, deploy the test contract:
 
 ```
 yarn deploy
 ```
-
-This command deploys a test smart contract to the local network with the keystore account mentioned in `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT`. When using `scaffold-eth-locahost` this command doesn't require any password. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script/Deploy.s.sol` to deploy the contract to the network. You can also customize the deploy script.
 
 4. On a third terminal, start your NextJS app:
 
@@ -64,59 +60,117 @@ yarn start
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
-## Deploying to live networks
+## Deploying to Live Networks
 
-1. Configure you network
+### Deployment Commands
 
-Scaffold-ETH 2 comes with a selection of predefined networks. You can also add your custom network in `packages/foundry/foundry.toml`
+<details>
+<summary>Understanding deployment scripts structure</summary>
 
-2. Generate a new keystore account or import your existing account
+Scaffold-ETH 2 uses two types of deployment scripts in `packages/foundry/script`:
 
-The keystore account mentioned in `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT` is the account used to deploy your contracts. Additionally, the deployer account will be used to exectue function call that are part of your deployment script. You can generate a new keystore account with random address which will be used for all your next Scaffold-ETH 2 projects using the following command:
+1. `Deploy.s.sol`: Main deployment script that runs all contracts sequentially
+2. Individual scripts (e.g., `DeployYourContract.s.sol`): Deploy specific contracts
 
-```shell
+Each script inherits from `ScaffoldETHDeploy` which handles:
+
+- Deployer account setup and funding
+- Contract verification preparation
+- Exporting ABIs and addresses to the frontend
+</details>
+
+<details>
+<summary>Basic deploy commands</summary>
+
+1. Deploy all contracts (uses `Deploy.s.sol`):
+
+```
+yarn deploy
+```
+
+2. Deploy specific contract:
+
+```bash
+yarn deploy --file DeployYourContract.s.sol
+```
+
+3. Deploy to a network:
+
+```
+yarn deploy --network <network-name> --file <file-name>
+```
+
+If you don't provide a file name, it will default to `Deploy.s.sol`.
+
+</details>
+
+<details>
+<summary>Environment-specific behavior</summary>
+
+**Local Development (`yarn chain`)**:
+
+- Uses `scaffold-eth-default` keystore automatically
+- No password needed for deployment
+- Uses Anvil's Account #9 by default
+
+**Live Networks**:
+
+- Requires custom keystore setup (see "Setting Up Your Deployer Account" below)
+- Will prompt for keystore password
+</details>
+
+<details>
+<summary>Creating new deployments</summary>
+
+1. Create your contract in `packages/foundry/contracts`
+2. Create deployment script in `packages/foundry/script` (use existing scripts as templates)
+3. Add to main `Deploy.s.sol` if needed
+4. Deploy using commands above
+</details>
+
+### Setting Up Your Deployer Account
+
+<details>
+<summary>Option 1: Generate new account</summary>
+
+```
 yarn generate
 ```
 
-Above command will prompt for password and generate a new keystore account under the name `scaffold-eth-custom`. Now update the `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom`. Subsequent `yarn deploy` will prompt the password for this account and use this as a deployer account.
+This creates a `scaffold-eth-custom` keystore in `~/.foundry/keystores/scaffold-eth-custom` account.
 
-Additionally instead of generating `scaffold-eth-custom` keystore account with random address you can run `yarn account:import` to initialize `scaffold-eth-custom` keystore account with your private key.
+Update `.env` in `packages/foundry`:
 
-Also if you want to use your existing keystore account you can update the `packages/foundry/.env#ETH_KEYSTORE_ACCOUNT` with the name of your existing account and that account will be used for deployments.
+```
+ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+```
 
-You can check the configured (generated or manually set) account and balances with:
+</details>
+
+<details>
+<summary>Option 2: Import existing private key</summary>
+
+```
+yarn account:import
+```
+
+This imports your key as `scaffold-eth-custom`.
+
+Update `.env`:
+
+```
+ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+```
+
+</details>
+
+View your account status:
 
 ```
 yarn account
 ```
 
-3. Deploy your smart contract(s)
-
-Run the command below to deploy the smart contract to the target network. Make sure to have some funds in your deployer account to pay for the transaction.
-
-```
-yarn deploy --network <network-name>
-```
-
-eg: `yarn deploy --network sepolia`
-
-4. Verify your smart contract
-   You can verify your smart contract on etherscan by running:
-
-```
-yarn verify --network <network-name>
-```
-
-eg: `yarn verify --network sepolia`
-
-This uses `VerifyAll.s.sol` script located in `packages/foundry/script` to verify the contract.
-
-**What's next**:
-
-- Edit your smart contract `YourContract.sol` in `packages/foundry/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/script/deploy/Deploy.s.sol`
-- Edit your smart contract test in: `packages/foundry/test`. To run test use `yarn foundry:test`
+This will ask for your keystore account password.
 
 ## Documentation
 
