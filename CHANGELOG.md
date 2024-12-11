@@ -1,5 +1,16 @@
 # create-eth
 
+## 0.0.63
+
+### Patch Changes
+
+- Optimism and base networks verification (https://github.com/scaffold-eth/scaffold-eth-2/pull/996)
+- move 99_deployScript as hardhat task (https://github.com/scaffold-eth/scaffold-eth-2/pull/1005)**
+- feat: use current yarn version in vercel on deploy via cli (https://github.com/scaffold-eth/scaffold-eth-2/pull/1007)
+- reverse rpc fallback order (https://github.com/scaffold-eth/scaffold-eth-2/pull/1010)
+- Encrypt deployer PK on .env file (when using hardhat) (https://github.com/scaffold-eth/scaffold-eth-2/pull/1008 )
+- Format package.json files
+
 ## 0.0.62
 
 ### Patch Changes
