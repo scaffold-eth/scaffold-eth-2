@@ -17,6 +17,9 @@ contract DeployScript is ScaffoldETHDeploy {
 }`;
 
 export default withDefaults(content, {
-  deploymentsScriptsImports: "",
-  deploymentsLogic: "",
+  deploymentsScriptsImports: `import { DeployYourContract } from "./DeployYourContract.s.sol";`,
+  deploymentsLogic: `
+    DeployYourContract deployYourContract = new DeployYourContract();
+    deployYourContract.run();
+  `,
 });
