@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
-    "start": "next dev",
     "build": "next build",
-    "serve": "next start",
-    "lint": "next lint",
-    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
+    "dev": "next dev",
+    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
+    "lint": "next lint",
+    "serve": "next start",
+    "start": "next dev",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1",
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
   },

@@ -8,16 +8,22 @@
     "chain": "hardhat node --network hardhat --no-deploy",
     "check-types": "tsc --noEmit --incremental",
     "compile": "hardhat compile",
-    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
+<<<<<<< HEAD
+
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "generate": "yarn account:generate",
+=======
+    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
+>>>>>>> 5a7efa7 (Sort lines also in packages/**/package.json)
     "flatten": "hardhat flatten",
+    "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
+    "format": "prettier --write './**/*.(ts|sol)'",
+    "generate": "hardhat run scripts/generateAccount.ts",
+    "hardhat-verify": "hardhat verify",
     "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
-    "format": "prettier --write './**/*.(ts|sol)'",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify",
-    "hardhat-verify": "hardhat verify"
+    "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
