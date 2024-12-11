@@ -84,7 +84,7 @@ export const useScaffoldEventHistory = <
   watch,
   enabled = true,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
-  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId);
 
   const publicClient = usePublicClient({
     chainId: selectedNetwork.id,

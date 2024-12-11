@@ -24,7 +24,7 @@ export const useScaffoldWatchContractEvent = <
   chainId,
   onLogs,
 }: UseScaffoldEventConfig<TContractName, TEventName>) => {
-  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId);
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork.id as AllowedChainIds,

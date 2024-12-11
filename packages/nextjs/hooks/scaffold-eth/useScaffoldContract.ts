@@ -26,7 +26,7 @@ export const useScaffoldContract = <
   walletClient?: TWalletClient | null;
   chainId?: AllowedChainIds;
 }) => {
-  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId);
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo({
     contractName,
     chainId: selectedNetwork?.id as AllowedChainIds,

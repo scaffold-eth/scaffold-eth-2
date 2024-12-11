@@ -33,7 +33,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
 
   const wagmiContractWrite = useWriteContract(writeContractParams);
 
-  const selectedNetwork = useSelectedNetwork(chainId as AllowedChainIds);
+  const selectedNetwork = useSelectedNetwork(chainId);
 
   const { data: deployedContractData } = useDeployedContractInfo({
     contractName,
