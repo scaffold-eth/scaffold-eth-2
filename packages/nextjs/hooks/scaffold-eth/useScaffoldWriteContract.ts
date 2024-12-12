@@ -57,7 +57,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
     }
 
     if (accountChain?.id !== selectedNetwork.id) {
-      notification.error("Your wallet is connected to the wrong network");
+      notification.error(`Wallet is connected to the wrong network. Please switch to ${selectedNetwork.name}`);
       return;
     }
 
@@ -107,7 +107,7 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
     }
 
     if (accountChain?.id !== selectedNetwork.id) {
-      notification.error("Your wallet is connected to the wrong network");
+      notification.error(`Wallet is connected to the wrong network. Please switch to ${selectedNetwork.name}`);
       return;
     }
 
