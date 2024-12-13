@@ -153,9 +153,8 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 
 **Local Development (`yarn chain`)**:
 
-- Uses `scaffold-eth-default` keystore automatically
-- No password needed for deployment
-- Uses Anvil's Account #9 by default
+- No password needed for deployment if `ETH_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
+- Uses Anvil's Account #9 as default keystore account
 
 **Live Networks**:
 
