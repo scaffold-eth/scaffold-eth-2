@@ -37,6 +37,27 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
+if (
+  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
+  network !== "localhost"
+) {
+  console.log(
+    "\nError: Cannot deploy to live network using 'scaffold-eth-default' keystore account!",
+    "\nPlease update your .env file to use a custom keysotre account by setting ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'"
+  );
+  process.exit(0);
+}
+
+if (
+  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
+  network === "localhost"
+) {
+  console.log(
+    `\nWarning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.`,
+    `\nPlease enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account\n`
+  );
+}
+
 // Set environment variables for the make command
 process.env.DEPLOY_SCRIPT = `script/${fileName}`;
 process.env.RPC_URL = network;
