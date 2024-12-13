@@ -90,7 +90,7 @@ if (
 You can either:
 1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
    OR
-2. Use the default account by setting in .env and re-run the command:
+2. Set the default keystore account in your .env and re-run the command to skip password prompt:
    ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
 `);
 }
