@@ -47,7 +47,12 @@ function getDeploymentHistory(broadcastPath) {
 
   // Sort files to process them in chronological order
   const runFiles = files
-    .filter((file) => file.startsWith("run-") && file.endsWith(".json"))
+    .filter(
+      (file) =>
+        file.startsWith("run-") &&
+        file.endsWith(".json") &&
+        !file.includes("run-latest")
+    )
     .sort((a, b) => {
       // Extract run numbers and compare them
       const runA = parseInt(a.match(/run-(\d+)/)?.[1] || "0");
