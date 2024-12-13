@@ -80,15 +80,19 @@ The default account (scaffold-eth-default) can only be used for localhost deploy
   process.exit(0);
 }
 
-// Check for custom account on localhost
 if (
   process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
   network === "localhost"
 ) {
-  console.log(
-    `\nWarning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.`,
-    `\nPlease enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account\n`
-  );
+  console.log(`
+⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
+
+You can either:
+1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
+   OR
+2. Use the default account by setting in .env and re-run the command:
+   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
+`);
 }
 
 // Set environment variables for the make command
