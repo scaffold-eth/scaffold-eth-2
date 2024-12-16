@@ -15,7 +15,7 @@
    "format": "make format",
    "lint": "make lint",
    "postinstall": "shx cp -n .env.example .env",
-   "test": "make test",
+   "test": "forge test",
    "verify": "make build-and-verify RPC_URL=${1:-localhost}",
    "verify-keystore": "make verify-keystore"
   },
