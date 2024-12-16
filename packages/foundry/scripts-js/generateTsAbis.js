@@ -133,39 +133,57 @@ function getInheritedFunctions(mainArtifact) {
 
 function processAllDeployments(broadcastPath) {
   const scriptFolders = getDirectories(broadcastPath);
-  const allContracts = {};
+  const allDeployments = new Map();
 
-  // Process each script folder
   scriptFolders.forEach((scriptFolder) => {
     const scriptPath = join(broadcastPath, scriptFolder);
     const chainFolders = getDirectories(scriptPath);
 
-    // Process each chain folder within the script folder
     chainFolders.forEach((chainId) => {
       const chainPath = join(scriptPath, chainId);
+      const deploymentHistory = getDeploymentHistory(chainPath);
 
-      // Initialize chain object if it doesn't exist
+      deploymentHistory.forEach((deployment) => {
+        const timestamp = parseInt(
+          deployment.deploymentFile.match(/run-(\d+)/)?.[1] || "0"
+        );
+        const key = `${chainId}-${deployment.contractName}`;
+
+        // Only update if this deployment is newer
+        if (
+          !allDeployments.has(key) ||
+          timestamp > allDeployments.get(key).timestamp
+        ) {
+          allDeployments.set(key, {
+            ...deployment,
+            timestamp,
+            chainId,
+            deploymentScript: scriptFolder,
+          });
+        }
+      });
+    });
+  });
+
+  const allContracts = {};
+
+  allDeployments.forEach((deployment) => {
+    const { chainId, contractName } = deployment;
+    const artifact = getArtifactOfContract(contractName);
+
+    if (artifact) {
       if (!allContracts[chainId]) {
         allContracts[chainId] = {};
       }
 
-      // Get deployment history for this specific chain path
-      const deploymentHistory = getDeploymentHistory(chainPath);
-
-      // Process each deployment
-      deploymentHistory.forEach((deployment) => {
-        const artifact = getArtifactOfContract(deployment.contractName);
-        if (artifact) {
-          allContracts[chainId][deployment.contractName] = {
-            address: deployment.address,
-            abi: artifact.abi,
-            inheritedFunctions: getInheritedFunctions(artifact),
-            deploymentFile: deployment.deploymentFile,
-            deploymentScript: scriptFolder, // Track which script deployed this contract
-          };
-        }
-      });
-    });
+      allContracts[chainId][contractName] = {
+        address: deployment.address,
+        abi: artifact.abi,
+        inheritedFunctions: getInheritedFunctions(artifact),
+        deploymentFile: deployment.deploymentFile,
+        deploymentScript: deployment.deploymentScript,
+      };
+    }
   });
 
   return allContracts;
