@@ -121,8 +121,18 @@ export const useScaffoldEventHistory = <
     },
     enabled: enabled && isContractAddressAndClientReady,
     initialPageParam: fromBlock,
-    getNextPageParam: () => {
-      return blockNumber;
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      if (!blockNumber || fromBlock >= blockNumber) return undefined;
+
+      const lastPageHighestBlock = Math.max(
+        Number(fromBlock),
+        ...(lastPage || []).map(event => Number(event.blockNumber || 0)),
+      );
+      const nextBlock = BigInt(Math.max(Number(lastPageParam), lastPageHighestBlock) + 1);
+
+      if (nextBlock > blockNumber) return undefined;
+
+      return nextBlock;
     },
     select: data => {
       const events = data.pages.flat();
@@ -133,6 +143,7 @@ export const useScaffoldEventHistory = <
         TTransactionData,
         TReceiptData
       >;
+
       return {
         pages: eventHistoryData?.reverse(),
         pageParams: data.pageParams,
