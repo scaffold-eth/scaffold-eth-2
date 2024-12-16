@@ -3,19 +3,21 @@
   "version": "0.0.1",
   "scripts": {
     "account": "hardhat run scripts/listAccount.ts",
+    "account:generate": "hardhat run scripts/generateAccount.ts",
+    "account:import": "hardhat run scripts/importAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
     "check-types": "tsc --noEmit --incremental",
     "compile": "hardhat compile",
-    "deploy": "hardhat deploy",
-    "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
-    "generate": "hardhat run scripts/generateAccount.ts",
+    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
     "flatten": "hardhat flatten",
+    "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
+    "format": "prettier --write './**/*.(ts|sol)'",
+    "generate": "yarn account:generate",
+    "hardhat-verify": "hardhat verify",
     "lint": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore ./*.ts ./deploy/**/*.ts ./scripts/**/*.ts ./test/**/*.ts",
     "lint-staged": "eslint --config ./.eslintrc.json --ignore-path ./.eslintignore",
-    "format": "prettier --write './**/*.(ts|sol)'",
     "test": "REPORT_GAS=true hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify",
-    "hardhat-verify": "hardhat verify"
+    "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -49,6 +51,7 @@
     "typescript": "<5.6.0"
   },
   "dependencies": {
+    "@inquirer/password": "^4.0.2",
     "@openzeppelin/contracts": "^5.0.2",
     "@typechain/ethers-v6": "^0.5.1",
     "dotenv": "^16.4.5",

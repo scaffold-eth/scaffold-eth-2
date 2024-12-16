@@ -3,15 +3,15 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
-    "start": "next dev",
     "build": "next build",
-    "serve": "next start",
-    "lint": "next lint",
-    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "check-types": "tsc --noEmit --incremental",
-    "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1",
-    "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true"
+    "dev": "next dev",
+    "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
+    "lint": "next lint",
+    "serve": "next start",
+    "start": "next dev",
+    "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
+    "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
@@ -31,8 +31,8 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.0",
     "usehooks-ts": "^3.1.0",
-    "viem": "2.21.32",
-    "wagmi": "2.12.23",
+    "viem": "2.21.54",
+    "wagmi": "2.13.4",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

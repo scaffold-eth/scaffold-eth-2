@@ -312,7 +312,6 @@ export type UseScaffoldEventHistoryData<
   | IsContractDeclarationMissing<
       any[],
       {
-        log: Log<bigint, number, false, TEvent, false, [TEvent], TEventName>;
         args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
           GetEventArgs<
             ContractAbi<TContractName>,
@@ -324,7 +323,7 @@ export type UseScaffoldEventHistoryData<
         blockData: TBlockData extends true ? Block<bigint, true> : null;
         receiptData: TReceiptData extends true ? GetTransactionReturnType : null;
         transactionData: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
-      }[]
+      } & Log<bigint, number, false, TEvent, false, [TEvent], TEventName>[]
     >
   | undefined;
 
