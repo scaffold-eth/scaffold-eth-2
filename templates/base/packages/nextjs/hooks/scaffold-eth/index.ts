@@ -13,3 +13,4 @@ export * from "./useScaffoldWriteContract";
 export * from "./useTargetNetwork";
 export * from "./useTransactor";
 export * from "./useWatchBalance";
+export * from "./useSelectedNetwork";
