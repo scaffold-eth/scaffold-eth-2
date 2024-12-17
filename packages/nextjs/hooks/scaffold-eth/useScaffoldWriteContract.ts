@@ -60,6 +60,12 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       : (configOrName as UseScaffoldWriteConfig<TContractName>);
   const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
 
+  if (typeof configOrName === "string") {
+    console.warn(
+      "Using `useScaffoldWriteContract` with a string parameter is deprecated. Please use the object parameter version instead.",
+    );
+  }
+
   const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
