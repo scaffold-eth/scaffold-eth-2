@@ -54,10 +54,10 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
   configOrName: UseScaffoldWriteConfig<TContractName> | TContractName,
   writeContractParams?: UseWriteContractParameters,
 ): ScaffoldWriteContractReturnType<TContractName> {
-  const finalConfig: UseScaffoldWriteConfig<TContractName> =
+  const finalConfig =
     typeof configOrName === "string"
       ? { contractName: configOrName, writeContractParams, chainId: undefined }
-      : (configOrName as any);
+      : (configOrName as UseScaffoldWriteConfig<TContractName>);
   const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
 
   const { chain: accountChain } = useAccount();
