@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Config, useAccount, useWriteContract } from "wagmi";
+import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
@@ -15,6 +15,34 @@ import {
   UseScaffoldWriteConfig,
 } from "~~/utils/scaffold-eth/contract";
 
+type ScaffoldWriteContractReturnType<TContractName extends ContractName> = Omit<
+  ReturnType<typeof useWriteContract>,
+  "writeContract" | "writeContractAsync"
+> & {
+  isMining: boolean;
+  writeContractAsync: <
+    TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
+  >(
+    variables: ScaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: ScaffoldWriteContractOptions,
+  ) => Promise<WriteContractReturnType | undefined>;
+  writeContract: <TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">>(
+    variables: ScaffoldWriteContractVariables<TContractName, TFunctionName>,
+    options?: Omit<ScaffoldWriteContractOptions, "onBlockConfirmation" | "blockConfirmations">,
+  ) => void;
+};
+
+export function useScaffoldWriteContract<TContractName extends ContractName>(
+  config: UseScaffoldWriteConfig<TContractName>,
+): ScaffoldWriteContractReturnType<TContractName>;
+/**
+ * @deprecated Use object parameter version instead: useScaffoldWriteContract({ contractName: "YourContract" })
+ */
+export function useScaffoldWriteContract<TContractName extends ContractName>(
+  contractName: TContractName,
+  writeContractParams?: UseWriteContractParameters,
+): ScaffoldWriteContractReturnType<TContractName>;
+
 /**
  * Wrapper around wagmi's useWriteContract hook which automatically loads (by name) the contract ABI and address from
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
@@ -22,16 +50,21 @@ import {
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
-export const useScaffoldWriteContract = <TContractName extends ContractName>({
-  contractName,
-  chainId,
-  writeContractParams,
-}: UseScaffoldWriteConfig<TContractName>) => {
+export function useScaffoldWriteContract<TContractName extends ContractName>(
+  configOrName: UseScaffoldWriteConfig<TContractName> | TContractName,
+  writeContractParams?: UseWriteContractParameters,
+): ScaffoldWriteContractReturnType<TContractName> {
+  const finalConfig: UseScaffoldWriteConfig<TContractName> =
+    typeof configOrName === "string"
+      ? { contractName: configOrName, writeContractParams, chainId: undefined }
+      : (configOrName as any);
+  const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
+
   const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
 
-  const wagmiContractWrite = useWriteContract(writeContractParams);
+  const wagmiContractWrite = useWriteContract(finalWriteContractParams);
 
   const selectedNetwork = useSelectedNetwork(chainId);
 
@@ -136,4 +169,4 @@ export const useScaffoldWriteContract = <TContractName extends ContractName>({
     // Overwrite wagmi's writeContract
     writeContract: sendContractWriteTx,
   };
-};
+}
