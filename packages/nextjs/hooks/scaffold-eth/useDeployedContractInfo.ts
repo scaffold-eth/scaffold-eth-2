@@ -10,16 +10,34 @@ import {
   contracts,
 } from "~~/utils/scaffold-eth/contract";
 
+type DeployedContractData<TContractName extends ContractName> = {
+  data: Contract<TContractName> | undefined;
+  isLoading: boolean;
+};
+
 /**
  * Gets the matching contract info for the provided contract name from the contracts present in deployedContracts.ts
  * and externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  */
-export const useDeployedContractInfo = <TContractName extends ContractName>({
-  contractName,
-  chainId,
-}: UseDeployedContractConfig<TContractName>) => {
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  config: UseDeployedContractConfig<TContractName>,
+): DeployedContractData<TContractName>;
+/**
+ * @deprecated Use object parameter version instead: useDeployedContractInfo({ contractName: "YourContract" })
+ */
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  contractName: TContractName,
+): DeployedContractData<TContractName>;
+
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  configOrName: UseDeployedContractConfig<TContractName> | TContractName,
+): DeployedContractData<TContractName> {
   const isMounted = useIsMounted();
 
+  const finalConfig: UseDeployedContractConfig<TContractName> =
+    typeof configOrName === "string" ? { contractName: configOrName } : (configOrName as any);
+
+  const { contractName, chainId } = finalConfig;
   const selectedNetwork = useSelectedNetwork(chainId);
   const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
@@ -58,4 +76,4 @@ export const useDeployedContractInfo = <TContractName extends ContractName>({
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
     isLoading: status === ContractCodeStatus.LOADING,
   };
-};
+}
