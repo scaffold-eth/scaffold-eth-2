@@ -7,3 +7,4 @@
 - feat: disable vercel telemetry (https://github.com/scaffold-eth/scaffold-eth-2/pull/1012)
 - Optional chainId config in Scaffold hooks (https://github.com/scaffold-eth/scaffold-eth-2/pull/931)
 - Foundry improvements (https://github.com/scaffold-eth/scaffold-eth-2/pull/1011)
+- make `useScaffoldWriteContract` & `useDeployedContractInfo` backward compatible (https://github.com/scaffold-eth/scaffold-eth-2/pull/1015)
