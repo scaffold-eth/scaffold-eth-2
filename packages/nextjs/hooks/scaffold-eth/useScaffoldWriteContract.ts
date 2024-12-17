@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
@@ -60,11 +60,13 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       : (configOrName as UseScaffoldWriteConfig<TContractName>);
   const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
 
-  if (typeof configOrName === "string") {
-    console.warn(
-      "Using `useScaffoldWriteContract` with a string parameter is deprecated. Please use the object parameter version instead.",
-    );
-  }
+  useEffect(() => {
+    if (typeof configOrName === "string") {
+      console.warn(
+        "Using `useScaffoldWriteContract` with a string parameter is deprecated. Please use the object parameter version instead.",
+      );
+    }
+  }, [configOrName]);
 
   const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
