@@ -14,7 +14,6 @@ check_balance() {
     echo $balance
 }
 
-# Function to convert hex to decimal
 hex_to_decimal() {
     printf '%d\n' "$1"
 }
@@ -28,9 +27,9 @@ wei_to_ether() {
 display_balance() {
     local address=$1
     local rpc_url=$2
-    local balance_hex=$(check_balance $address $rpc_url)
-    local balance_wei=$(hex_to_decimal $balance_hex)
-    local balance_eth=$(wei_to_ether $balance_wei)
+    local balance_hex=$(check_balance "$address" "$rpc_url")
+    local balance_wei=$(hex_to_decimal "$balance_hex")
+    local balance_eth=$(wei_to_ether "$balance_wei")
     echo "Current balance: $balance_eth ETH" >&2
 }
 
@@ -99,13 +98,9 @@ else
 fi
 
 # Check if the selected keystore is scaffold-eth-default
-# Maybe we don't let the user use this keystore for deployment?
 if [ "$selected_keystore" == "scaffold-eth-default" ]; then
-    echo "Warning: scaffold-eth-default is only for local development purposes." >&2
-    echo "You can create a new keystore with a custom name by running 'yarn account:generate --name <name>'" >&2
-    read -p "Are you sure you want to use this keystore? (y/n): " confirm
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        echo "Keystore selection cancelled." >&2
+    if [ "$RPC_URL" != "http://127.0.0.1:8545" ] && [ "$RPC_URL" != "http://localhost:8545" ]; then
+        echo "❌ Error: Cannot use scaffold-eth-default keystore for non-localhost deployments!" >&2
         exit 1
     fi
 fi

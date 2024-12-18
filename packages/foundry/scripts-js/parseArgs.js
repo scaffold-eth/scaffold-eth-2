@@ -13,6 +13,9 @@ const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
 
+//// Maybe also a flag for the keystore to use?
+//// e.g. yarn deploy --network sepolia --keystore <keystore_name>
+
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
   console.log(`
@@ -42,6 +45,7 @@ for (let i = 0; i < args.length; i++) {
 }
 
 // Check if the network exists in rpc_endpoints
+let rpcUrl;
 try {
   const foundryTomlPath = join(__dirname, "..", "foundry.toml");
   const tomlString = readFileSync(foundryTomlPath, "utf-8");
@@ -54,45 +58,35 @@ try {
     );
     process.exit(1);
   }
+
+  rpcUrl = parsedToml.rpc_endpoints[network].replace(/\${(\w+)}/g, (_, key) => {
+    const value = process.env[key];
+    if (!value) {
+      console.log(`\n❌ Error: Environment variable ${key} is not set!`);
+      process.exit(1);
+    }
+    return value;
+  });
 } catch (error) {
   console.error("\n❌ Error reading or parsing foundry.toml:", error);
   process.exit(1);
 }
 
-// Check for default account on live network
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
-  network !== "localhost"
-) {
-  console.log(`
-❌ Error: Cannot deploy to live network using default keystore account!
+let selectedKeystore = process.env.ETH_KEYSTORE_ACCOUNT;
+if (network !== "localhost") {
+  const keystoreResult = spawnSync(
+    "bash",
+    [join(__dirname, "..", "scripts", "select_keystore.sh"), rpcUrl],
+    { stdio: ["inherit", "pipe", "inherit"], encoding: "utf-8" }
+  );
 
-To deploy to ${network}, please follow these steps:
+  if (keystoreResult.status !== 0) {
+    console.error("\n❌ Error selecting keystore");
+    process.exit(1);
+  }
 
-1. If you haven't generated a keystore account yet:
-   $ yarn generate
-
-2. Update your .env file:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
-
-The default account (scaffold-eth-default) can only be used for localhost deployments.
-`);
-  process.exit(0);
-}
-
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
-  network === "localhost"
-) {
-  console.log(`
-⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
-
-You can either:
-1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
-   OR
-2. Set the default keystore account in your .env and re-run the command to skip password prompt:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
-`);
+  selectedKeystore = keystoreResult.stdout.trim();
+  process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 }
 
 // Set environment variables for the make command
