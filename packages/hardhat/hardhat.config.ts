@@ -160,6 +160,14 @@ const config: HardhatUserConfig = {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: [deployerPrivateKey],
     },
+    ink: {
+      url: "https://rpc-gel.inkonchain.com",
+      accounts: [deployerPrivateKey],
+    },
+    inkSepolia: {
+      url: "https://rpc-gel-sepolia.inkonchain.com",
+      accounts: [deployerPrivateKey],
+    },
   },
   // configuration for harhdat-verify plugin
   etherscan: {
