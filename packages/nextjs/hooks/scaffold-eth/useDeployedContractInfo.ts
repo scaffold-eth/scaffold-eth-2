@@ -37,12 +37,13 @@ export function useDeployedContractInfo<TContractName extends ContractName>(
   const finalConfig: UseDeployedContractConfig<TContractName> =
     typeof configOrName === "string" ? { contractName: configOrName } : (configOrName as any);
 
-  if (typeof configOrName === "string") {
-    console.warn(
-      "Using `useDeployedContractInfo` with a string parameter is deprecated. Please use the object parameter version instead.",
-    );
-  }
-
+  useEffect(() => {
+    if (typeof configOrName === "string") {
+      console.warn(
+        "Using `useDeployedContractInfo` with a string parameter is deprecated. Please use the object parameter version instead.",
+      );
+    }
+  }, [configOrName]);
   const { contractName, chainId } = finalConfig;
   const selectedNetwork = useSelectedNetwork(chainId);
   const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
