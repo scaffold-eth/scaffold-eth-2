@@ -33,7 +33,14 @@ deploy:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
+		RPC_URL=$$(grep "^$(RPC_URL) =" foundry.toml | sed 's/.*= "\(.*\)"/\1/'); \
+		KEYSTORE=$$(bash scripts/select_keystore.sh "$$RPC_URL"); \
+		if [ -n "$$KEYSTORE" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
+		else \
+			echo "Keystore selection failed. Aborting deployment."; \
+			exit 1; \
+		fi; \
 	fi
 
 # Build and deploy target
@@ -57,7 +64,6 @@ account:
 # Generate a new account
 account-generate:
 	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$(ACCOUNT_NAME)"
 
 # Import an existing account
 account-import:
@@ -80,7 +86,13 @@ deploy-verify:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify; \
+		KEYSTORE=$$(bash scripts/select_keystore.sh); \
+		if [ -n "$$KEYSTORE" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --account ~/.foundry/keystores/"$$KEYSTORE"; \
+		else \
+			echo "Keystore selection failed. Aborting deployment."; \
+			exit 1; \
+		fi; \
 	fi
 	node scripts-js/generateTsAbis.js
 
@@ -95,6 +107,10 @@ format:
 # Lint code
 lint:
 	forge fmt --check && prettier --check ./script/**/*.js
+
+# Run tests
+test:
+	forge test
 
 # Verify contracts
 verify:
