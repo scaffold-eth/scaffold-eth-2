@@ -1,8 +1,11 @@
 .PHONY: build deploy generate-abis verify-keystore account chain compile deploy-verify flatten fork format lint test verify
 
+DEPLOY_SCRIPT ?= script/Deploy.s.sol
+
 # setup wallet for anvil
 setup-anvil-wallet:
 	shx rm ~/.foundry/keystores/scaffold-eth-default 2>/dev/null; \
+	shx rm -rf broadcast/Deploy.s.sol/31337
 	cast wallet import --private-key 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6 --unsafe-password 'localhost' scaffold-eth-default
 
 # Start local chain
@@ -15,17 +18,25 @@ fork: setup-anvil-wallet
 
 # Build the project
 build:
-	forge build --build-info --build-info-path out/build-info/
+	forge build --via-ir --build-info --build-info-path out/build-info/
 
-# Deploy the project
+# Deploy the contracts
 deploy:
+	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
+		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
+		exit 1; \
+	fi
 	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		forge script script/Deploy.s.sol --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
+		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
+		else \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
+		fi \
 	else \
 		RPC_URL=$$(grep "^$(RPC_URL) =" foundry.toml | sed 's/.*= "\(.*\)"/\1/'); \
 		KEYSTORE=$$(bash scripts/select_keystore.sh "$$RPC_URL"); \
 		if [ -n "$$KEYSTORE" ]; then \
-			forge script script/Deploy.s.sol --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
 		else \
 			echo "Keystore selection failed. Aborting deployment."; \
 			exit 1; \
@@ -42,9 +53,9 @@ generate-abis:
 verify-keystore:
 	if grep -q "scaffold-eth-default" .env; then \
 		cast wallet address --password localhost; \
-  else \
+	else \
 		cast wallet address; \
-  fi
+	fi
 
 # List account
 account:
@@ -64,12 +75,20 @@ compile:
 
 # Deploy and verify
 deploy-verify:
+	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
+		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
+		exit 1; \
+	fi
 	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		forge script script/Deploy.s.sol --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
+		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
+		else \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
+		fi \
 	else \
 		KEYSTORE=$$(bash scripts/select_keystore.sh); \
 		if [ -n "$$KEYSTORE" ]; then \
-			forge script script/Deploy.s.sol --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --account ~/.foundry/keystores/"$$KEYSTORE"; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --account ~/.foundry/keystores/"$$KEYSTORE"; \
 		else \
 			echo "Keystore selection failed. Aborting deployment."; \
 			exit 1; \
