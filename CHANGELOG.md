@@ -1,11 +1,23 @@
 # create-eth
 
+## 0.0.64
+
+### Patch Changes
+
+- Follow root level naming convention (https://github.com/scaffold-eth/scaffold-eth-2/pull/1006)
+- Fix useScaffoldEventHistory duplicated events (https://github.com/scaffold-eth/scaffold-eth-2/pull/1014)
+- feat: disable vercel telemetry (https://github.com/scaffold-eth/scaffold-eth-2/pull/1012)
+- Optional chainId config in Scaffold hooks (https://github.com/scaffold-eth/scaffold-eth-2/pull/931)
+- Foundry improvements (https://github.com/scaffold-eth/scaffold-eth-2/pull/1011)
+- make `useScaffoldWriteContract` & `useDeployedContractInfo` backward compatible (https://github.com/scaffold-eth/scaffold-eth-2/pull/1015)
+- fix: move warnings to useEffect (https://github.com/scaffold-eth/scaffold-eth-2/pull/1016)
+
 ## 0.0.63
 
 ### Patch Changes
 
 - Optimism and base networks verification (https://github.com/scaffold-eth/scaffold-eth-2/pull/996)
-- move 99_deployScript as hardhat task (https://github.com/scaffold-eth/scaffold-eth-2/pull/1005)**
+- move 99_deployScript as hardhat task (https://github.com/scaffold-eth/scaffold-eth-2/pull/1005)\*\*
 - feat: use current yarn version in vercel on deploy via cli (https://github.com/scaffold-eth/scaffold-eth-2/pull/1007)
 - reverse rpc fallback order (https://github.com/scaffold-eth/scaffold-eth-2/pull/1010)
 - Encrypt deployer PK on .env file (when using hardhat) (https://github.com/scaffold-eth/scaffold-eth-2/pull/1008 )
