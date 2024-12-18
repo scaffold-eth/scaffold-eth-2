@@ -6,13 +6,22 @@ pragma solidity ^0.8.19;
 import "./DeployHelpers.s.sol";
 ${deploymentsScriptsImports.filter(Boolean).join("\n")}
 
+/**
+ * @notice Main deployment script for all contracts
+ * @dev Run this when you want to deploy multiple contracts at once
+ *
+ * Example: yarn deploy # runs this script(without\`--file\` flag)
+ */
 contract DeployScript is ScaffoldETHDeploy {
   function run() external {
+    // Deploys all your contracts sequentially
+    // Add new deployments here when needed
+
     ${deploymentsLogic.filter(Boolean).join("\n")}
 
-    // deploy more contracts here
-    // DeployMyContract deployMyContract = new DeployMyContract();
-    // deployMyContract.run();
+    // Deploy another contract
+    // DeployMyContract myContract = new DeployMyContract();
+    // myContract.run();
   }
 }`;
 

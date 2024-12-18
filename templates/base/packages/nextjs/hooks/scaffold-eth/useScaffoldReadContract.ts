@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { QueryObserverResult, RefetchOptions, useQueryClient } from "@tanstack/react-query";
 import type { ExtractAbiFunctionNames } from "abitype";
 import { ReadContractErrorType } from "viem";
 import { useBlockNumber, useReadContract } from "wagmi";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import {
   AbiFunctionReturnType,
   ContractAbi,
@@ -19,6 +20,7 @@ import {
  * @param config.contractName - deployed contract name
  * @param config.functionName - name of the function to be called
  * @param config.args - args to be passed to the function call
+ * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  */
 export const useScaffoldReadContract = <
   TContractName extends ContractName,
@@ -27,16 +29,21 @@ export const useScaffoldReadContract = <
   contractName,
   functionName,
   args,
+  chainId,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const { data: deployedContract } = useDeployedContractInfo(contractName);
-  const { targetNetwork } = useTargetNetwork();
+  const selectedNetwork = useSelectedNetwork(chainId);
+  const { data: deployedContract } = useDeployedContractInfo({
+    contractName,
+    chainId: selectedNetwork.id as AllowedChainIds,
+  });
+
   const { query: queryOptions, watch, ...readContractConfig } = readConfig;
   // set watch to true by default
   const defaultWatch = watch ?? true;
 
   const readContractHookRes = useReadContract({
-    chainId: targetNetwork.id,
+    chainId: selectedNetwork.id,
     functionName,
     address: deployedContract?.address,
     abi: deployedContract?.abi,
@@ -56,7 +63,7 @@ export const useScaffoldReadContract = <
   const queryClient = useQueryClient();
   const { data: blockNumber } = useBlockNumber({
     watch: defaultWatch,
-    chainId: targetNetwork.id,
+    chainId: selectedNetwork.id,
     query: {
       enabled: defaultWatch,
     },
