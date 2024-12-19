@@ -28,16 +28,16 @@ deploy:
 	fi
 	@if [ "$(RPC_URL)" = "localhost" ]; then \
 		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --via-ir --build-info --build-info-path out/build-info/; \
 		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --via-ir --build-info --build-info-path out/build-info/; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
+		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --via-ir --build-info --build-info-path out/build-info/; \
 	fi
 
 # Build and deploy target
-build-and-deploy: build deploy generate-abis
+deploy-and-generate-abis: deploy generate-abis
 
 # Generate TypeScript ABIs
 generate-abis:
@@ -75,14 +75,13 @@ deploy-verify:
 	fi
 	@if [ "$(RPC_URL)" = "localhost" ]; then \
 		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify --via-ir --build-info --build-info-path out/build-info/; \
 		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify --via-ir --build-info --build-info-path out/build-info/; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify; \
+		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --via-ir --build-info --build-info-path out/build-info/; \
 	fi
-	node scripts-js/generateTsAbis.js
 
 # Flatten contracts
 flatten:
@@ -100,4 +99,4 @@ lint:
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
 
-build-and-verify: build verify
+verify-and-generate-abis: verify generate-abis
