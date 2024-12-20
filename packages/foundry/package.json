@@ -10,7 +10,6 @@
     "chain": "make chain",
     "compile": "make compile",
     "deploy": "node scripts-js/parseArgs.js",
-    "deploy:verify": "node scripts-js/parseArgs.js --verify",
     "flatten": "make flatten",
     "fork": "make fork FORK_URL=${1:-mainnet}",
     "format": "make format",

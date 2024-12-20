@@ -12,6 +12,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let verify = false;
 
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
@@ -21,9 +22,11 @@ Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
   --network <network>   Specify the network (default: localhost)
   --help, -h           Show this help message
+  --verify             Verify the deployment
 Examples:
   yarn deploy --file DeployYourContract.s.sol --network sepolia
   yarn deploy --network sepolia
+  yarn deploy --network sepolia --verify  
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
@@ -38,6 +41,8 @@ for (let i = 0; i < args.length; i++) {
   } else if (args[i] === "--file" && args[i + 1]) {
     fileName = args[i + 1];
     i++; // Skip next arg since we used it
+  } else if (args[i] === "--verify") {
+    verify = true;
   }
 }
 
@@ -102,7 +107,7 @@ process.env.RPC_URL = network;
 const result = spawnSync(
   "make",
   [
-    "deploy-and-generate-abis",
+    verify ? "deploy-verify" : "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
   ],
