@@ -94,6 +94,3 @@ lint:
 # Verify contracts
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
-
-# Verify and generate ABIs
-verify-and-generate-abis: verify generate-abis
