@@ -10,13 +10,12 @@
     "chain": "make chain",
     "compile": "make compile",
     "deploy": "node scripts-js/parseArgs.js",
-    "deploy:verify": "node scripts/parseArgs.js --verify",
     "flatten": "make flatten",
     "fork": "make fork FORK_URL=${1:-mainnet}",
     "format": "make format",
     "lint": "make lint",
     "test": "forge test",
-    "verify": "make build-and-verify RPC_URL=${1:-localhost}",
+    "verify": "make verify RPC_URL=${1:-localhost}",
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {

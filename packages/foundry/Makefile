@@ -16,10 +16,6 @@ chain: setup-anvil-wallet
 fork: setup-anvil-wallet
 	anvil --fork-url ${FORK_URL} --chain-id 31337
 
-# Build the project
-build:
-	forge build --via-ir --build-info --build-info-path out/build-info/
-
 # Deploy the contracts
 deploy:
 	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
@@ -36,8 +32,8 @@ deploy:
 		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
 	fi
 
-# Build and deploy target
-build-and-deploy: build deploy generate-abis
+# Deploy and generate ABIs
+deploy-and-generate-abis: deploy generate-abis
 
 # Generate TypeScript ABIs
 generate-abis:
@@ -82,7 +78,6 @@ deploy-verify:
 	else \
 		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify; \
 	fi
-	node scripts-js/generateTsAbis.js
 
 # Flatten contracts
 flatten:
@@ -99,5 +94,3 @@ lint:
 # Verify contracts
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
-
-build-and-verify: build verify
