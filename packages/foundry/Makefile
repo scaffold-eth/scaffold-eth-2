@@ -32,7 +32,7 @@ deploy:
 		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --via-ir; \
 	fi
 
-# Build and deploy target
+# Deploy and generate ABIs
 deploy-and-generate-abis: deploy generate-abis
 
 # Generate TypeScript ABIs
@@ -95,4 +95,5 @@ lint:
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
 
+# Verify and generate ABIs
 verify-and-generate-abis: verify generate-abis
