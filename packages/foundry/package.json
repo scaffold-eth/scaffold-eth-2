@@ -16,7 +16,7 @@
     "format": "make format",
     "lint": "make lint",
     "test": "forge test",
-    "verify": "make build-and-verify RPC_URL=${1:-localhost}",
+    "verify": "make verify-and-generate-abis RPC_URL=${1:-localhost}",
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {
