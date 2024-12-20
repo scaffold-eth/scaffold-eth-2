@@ -73,7 +73,7 @@ To deploy to ${network}, please follow these steps:
    $ yarn generate
 
 2. Update your .env file:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
+   ETH_KEYSTORE_ACCOUNT set to the generated account's name.
 
 The default account (scaffold-eth-default) can only be used for localhost deployments.
 `);

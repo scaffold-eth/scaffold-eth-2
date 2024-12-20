@@ -54,10 +54,18 @@ verify-keystore:
 account:
 	@node scripts-js/ListAccount.js $$(make verify-keystore)
 
+RANDOM_STRING := $(shell openssl rand -base64 12 | tr -dc A-Za-z0-9 | head -c 12)
+
 # Generate a new account
 account-generate:
-	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$(ACCOUNT_NAME)"
+	@if [ "$(ACCOUNT_NAME)" = "scaffold-eth-custom" ]; then \
+		ACCOUNT_NAME="scaffold-eth-$(RANDOM_STRING)"; \
+	else \
+		ACCOUNT_NAME=$(ACCOUNT_NAME); \
+	fi; \
+	cast wallet import $$ACCOUNT_NAME --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}'); \
+	echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$$ACCOUNT_NAME"
+
 
 # Import an existing account
 account-import:

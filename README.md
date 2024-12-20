@@ -71,12 +71,12 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 yarn generate
 ```
 
-This creates a `scaffold-eth-custom` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-custom` account.
+This creates a `scaffold-eth-${}` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-${}` account.
 
 Update `.env` in `packages/foundry`:
 
 ```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+ETH_KEYSTORE_ACCOUNT=scaffold-eth-${}
 ```
 
 </details>
@@ -85,15 +85,15 @@ ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
 <summary>Option 2: Import existing private key</summary>
 
 ```
-yarn account:import
+yarn account:import -- ${ACCOUNT_NAME}
 ```
 
-This imports your key as `scaffold-eth-custom`.
+This imports your key as `${ACCOUNT_NAME}`.
 
 Update `.env`:
 
 ```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
+ETH_KEYSTORE_ACCOUNT=${ACCOUNT_NAME}
 ```
 
 </details>
