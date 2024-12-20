@@ -16,10 +16,6 @@ chain: setup-anvil-wallet
 fork: setup-anvil-wallet
 	anvil --fork-url ${FORK_URL} --chain-id 31337
 
-# Build the project
-build:
-	forge build --via-ir --build-info --build-info-path out/build-info/
-
 # Deploy the contracts
 deploy:
 	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
