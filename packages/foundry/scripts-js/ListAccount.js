@@ -81,12 +81,12 @@ async function main() {
 
     if (isDefaultAccount) {
       console.log(
-        "\n🏠 It seems you are trying to access the localhost account. Did you forget to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in the .env file?\n"
+        "\n🏠 It seems you are trying to access the localhost account. Did you forget to update ETH_KEYSTORE_ACCOUNT to your generated wallet in the .env file?\n"
       );
     }
 
     console.log(
-      "\n💡 If you haven't generated a deployer keystore account yet, please run `yarn account:generate`. Then update the `.env` file with `ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom`"
+      "\n💡 If you haven't generated a deployer keystore account yet, please run `yarn account:generate`. Then update the `ETH_KEYSTORE_ACCOUNT` value in the `.env` file"
     );
     return;
   }
@@ -94,7 +94,7 @@ async function main() {
   if (isValidAddress && isDefaultAccount) {
     console.log("\n⚠️ Displaying balance for default account");
     console.log(
-      "\n❓ Did you forget to update ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom in the .env file?\n"
+      "\n❓ Did you forget to update ETH_KEYSTORE_ACCOUNT's value in the .env file?\n"
     );
   }
 
