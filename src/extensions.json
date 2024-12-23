@@ -40,5 +40,11 @@
     "description": "This extension shows how to use on-chain randomness using RANDAO for truly on-chain unpredictable random sources.",
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "randao"
+  },
+  {
+    "extensionFlagValue": "erc-721",
+    "description": "This extension introduces an ERC-721 token contract and demonstrates how to use it, including getting the total supply and holder balance, listing all NFTs from the collection and NFTs from the connected address, and how to transfer NFTs.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "erc-721"
   }
 ]
