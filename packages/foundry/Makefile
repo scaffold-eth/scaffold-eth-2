@@ -29,13 +29,17 @@ deploy:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
 		fi \
 	else \
-		RPC_URL=$$(grep "^$(RPC_URL) =" foundry.toml | sed 's/.*= "\(.*\)"/\1/'); \
-		KEYSTORE=$$(bash scripts/select_keystore.sh "$$RPC_URL"); \
-		if [ -n "$$KEYSTORE" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
+		if [ -n "$(ETH_KEYSTORE_ACCOUNT)" ]; then \
+			echo "Using keystore: $(ETH_KEYSTORE_ACCOUNT)"; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$(ETH_KEYSTORE_ACCOUNT)"; \
 		else \
-			echo "Keystore selection failed. Aborting deployment."; \
-			exit 1; \
+			KEYSTORE=$$(bash scripts/select_keystore.sh "$$RPC_URL"); \
+			if [ -n "$$KEYSTORE" ]; then \
+				forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
+			else \
+				echo "Keystore selection failed. Aborting deployment."; \
+				exit 1; \
+			fi; \
 		fi; \
 	fi
 

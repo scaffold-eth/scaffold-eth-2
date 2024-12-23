@@ -12,6 +12,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let specifiedKeystore = null;
 
 //// Maybe also a flag for the keystore to use?
 //// e.g. yarn deploy --network sepolia --keystore <keystore_name>
@@ -23,10 +24,11 @@ Usage: yarn deploy [options]
 Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
   --network <network>   Specify the network (default: localhost)
+  --keystore <name>     Specify the keystore to use (skips interactive selection)
   --help, -h           Show this help message
 Examples:
   yarn deploy --file DeployYourContract.s.sol --network sepolia
-  yarn deploy --network sepolia
+  yarn deploy --network sepolia --keystore scaffold-eth-custom
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
@@ -40,6 +42,9 @@ for (let i = 0; i < args.length; i++) {
     i++; // Skip next arg since we used it
   } else if (args[i] === "--file" && args[i + 1]) {
     fileName = args[i + 1];
+    i++; // Skip next arg since we used it
+  } else if (args[i] === "--keystore" && args[i + 1]) {
+    specifiedKeystore = args[i + 1];
     i++; // Skip next arg since we used it
   }
 }
@@ -74,18 +79,38 @@ try {
 
 let selectedKeystore = process.env.ETH_KEYSTORE_ACCOUNT;
 if (network !== "localhost") {
-  const keystoreResult = spawnSync(
-    "bash",
-    [join(__dirname, "..", "scripts", "select_keystore.sh"), rpcUrl],
-    { stdio: ["inherit", "pipe", "inherit"], encoding: "utf-8" }
-  );
+  if (specifiedKeystore) {
+    // If keystore is specified, verify it exists
+    const keystoreResult = spawnSync(
+      "test",
+      [
+        "-f",
+        join(process.env.HOME, ".foundry", "keystores", specifiedKeystore),
+      ],
+      { stdio: "pipe" }
+    );
 
-  if (keystoreResult.status !== 0) {
-    console.error("\n❌ Error selecting keystore");
-    process.exit(1);
+    if (keystoreResult.status !== 0) {
+      console.error(`\n❌ Error: Keystore '${specifiedKeystore}' not found!`);
+      process.exit(1);
+    }
+
+    selectedKeystore = specifiedKeystore;
+  } else {
+    // Interactive keystore selection if not specified
+    const keystoreResult = spawnSync(
+      "bash",
+      [join(__dirname, "..", "scripts", "select_keystore.sh"), rpcUrl],
+      { stdio: ["inherit", "pipe", "inherit"], encoding: "utf-8" }
+    );
+
+    if (keystoreResult.status !== 0) {
+      console.error("\n❌ Error selecting keystore");
+      process.exit(1);
+    }
+
+    selectedKeystore = keystoreResult.stdout.trim();
   }
-
-  selectedKeystore = keystoreResult.stdout.trim();
   process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 }
 
@@ -99,6 +124,7 @@ const result = spawnSync(
     "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
+    `ETH_KEYSTORE_ACCOUNT=${process.env.ETH_KEYSTORE_ACCOUNT}`,
   ],
   {
     stdio: "inherit",
