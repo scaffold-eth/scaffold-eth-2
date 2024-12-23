@@ -12,6 +12,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let verify = false;
 
 //// Maybe also a flag for the keystore to use?
 //// e.g. yarn deploy --network sepolia --keystore <keystore_name>
@@ -96,7 +97,7 @@ process.env.RPC_URL = network;
 const result = spawnSync(
   "make",
   [
-    "build-and-deploy",
+    "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
   ],
