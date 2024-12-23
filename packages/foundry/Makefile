@@ -1,4 +1,4 @@
-.PHONY: build deploy generate-abis verify-keystore account chain compile deploy-verify flatten fork format lint test verify
+.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
 
 DEPLOY_SCRIPT ?= script/Deploy.s.sol
 
@@ -62,22 +62,6 @@ account-import:
 # Compile contracts
 compile:
 	forge compile
-
-# Deploy and verify
-deploy-verify:
-	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
-		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
-		exit 1; \
-	fi
-	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
-		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
-		fi \
-	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify; \
-	fi
 
 # Flatten contracts
 flatten:
