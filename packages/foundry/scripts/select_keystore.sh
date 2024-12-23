@@ -45,7 +45,7 @@ if [ ! -d "$KEYSTORE_DIR" ]; then
 fi
 
 # List all keystores
-keystores=($(ls "$KEYSTORE_DIR"))
+keystores=($(ls "$KEYSTORE_DIR" | grep -v "scaffold-eth-default"))
 
 if [ ${#keystores[@]} -eq 0 ]; then
     echo "No keystores found in $KEYSTORE_DIR, generating a new account..." >&2
@@ -95,14 +95,6 @@ if [ "$selection" -eq 0 ]; then
 else
     # Get the selected keystore
     selected_keystore="${keystores[$((selection-1))]}"
-fi
-
-# Check if the selected keystore is scaffold-eth-default
-if [ "$selected_keystore" == "scaffold-eth-default" ]; then
-    if [ "$RPC_URL" != "http://127.0.0.1:8545" ] && [ "$RPC_URL" != "http://localhost:8545" ]; then
-        echo "❌ Error: Cannot use scaffold-eth-default keystore for non-localhost deployments!" >&2
-        exit 1
-    fi
 fi
 
 # After selecting or creating the keystore
