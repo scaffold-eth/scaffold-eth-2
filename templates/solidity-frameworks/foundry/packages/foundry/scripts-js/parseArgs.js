@@ -102,7 +102,7 @@ process.env.RPC_URL = network;
 const result = spawnSync(
   "make",
   [
-    "build-and-deploy",
+    "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
   ],
