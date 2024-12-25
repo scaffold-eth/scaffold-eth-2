@@ -14,9 +14,6 @@ let fileName = "Deploy.s.sol";
 let network = "localhost";
 let specifiedKeystore = null;
 
-//// Maybe also a flag for the keystore to use?
-//// e.g. yarn deploy --network sepolia --keystore <keystore_name>
-
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
   console.log(`
