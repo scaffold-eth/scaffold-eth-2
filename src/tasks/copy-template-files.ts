@@ -65,6 +65,19 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
   }
 };
 
+const isUnselectedSolidityFrameworkFile = ({
+  path,
+  solidityFramework,
+}: {
+  path: string;
+  solidityFramework: SolidityFramework | null;
+}) => {
+  const unselectedSolidityFrameworks = [SOLIDITY_FRAMEWORKS.FOUNDRY, SOLIDITY_FRAMEWORKS.HARDHAT].filter(
+    sf => sf !== solidityFramework,
+  );
+  return unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}`)).some(sfregex => sfregex.test(path));
+};
+
 const copyExtensionFiles = async (
   { dev: isDev, solidityFramework }: Options,
   extensionPath: string,
@@ -101,11 +114,7 @@ const copyExtensionFiles = async (
         const isTemplate = isTemplateRegex.test(path);
         const isPackageJson = isPackageJsonRegex.test(path);
 
-        const unselectedSolidityFrameworks = [SOLIDITY_FRAMEWORKS.FOUNDRY, SOLIDITY_FRAMEWORKS.HARDHAT].filter(
-          sf => sf !== solidityFramework,
-        );
-        const isUnselectedSolidityFrameworksRegexes = unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}$`));
-        const isUnselectedSolidityFramework = isUnselectedSolidityFrameworksRegexes.some(sfregex => sfregex.test(path));
+        const isUnselectedSolidityFramework = isUnselectedSolidityFrameworkFile({ path, solidityFramework });
 
         const shouldSkip = isArgs || isTemplate || isPackageJson || isUnselectedSolidityFramework;
 
@@ -116,6 +125,15 @@ const copyExtensionFiles = async (
     // copy each package's package.json
     const extensionPackages = fs.readdirSync(extensionPackagesPath);
     extensionPackages.forEach(packageName => {
+      const isUnselectedSolidityFramework = isUnselectedSolidityFrameworkFile({
+        path: path.join(targetDir, "packages", packageName, "package.json"),
+        solidityFramework,
+      });
+
+      if (isUnselectedSolidityFramework) {
+        return;
+      }
+
       mergePackageJson(
         path.join(targetDir, "packages", packageName, "package.json"),
         path.join(extensionPath, "packages", packageName, "package.json"),
