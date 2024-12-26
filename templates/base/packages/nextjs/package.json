@@ -20,7 +20,7 @@
     "@uniswap/sdk-core": "~5.8.2",
     "@uniswap/v2-sdk": "~4.6.1",
     "blo": "~1.2.0",
-    "burner-connector": "~0.0.8",
+    "burner-connector": "0.0.9",
     "daisyui": "4.12.10",
     "next": "~14.2.11",
     "next-nprogress-bar": "~2.3.13",
