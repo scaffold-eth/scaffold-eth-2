@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.65
+
+### Patch Changes
+
+- 8c4e925: foundry: avoid extra compilation (https://github.com/scaffold-eth/scaffold-eth-2/pull/1020)
+- 38d85c0: up burner-connector version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1021)
+- aed3345: cli: fix merge package.json files for extensions with both solidity-frameworks
+
 ## 0.0.64
 
 ### Patch Changes
