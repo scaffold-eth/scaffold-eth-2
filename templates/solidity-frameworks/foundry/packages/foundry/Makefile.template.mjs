@@ -1,4 +1,7 @@
-.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
+
+import { withDefaults } from "../../../../utils.js";
+
+const content = ({ recipes, postDeployRecipeToRun }) => `.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
 
 DEPLOY_SCRIPT ?= script/Deploy.s.sol
 
@@ -14,7 +17,7 @@ chain: setup-anvil-wallet
 
 # Start a fork
 fork: setup-anvil-wallet
-	anvil --fork-url ${FORK_URL} --chain-id 31337
+	anvil --fork-url \${FORK_URL} --chain-id 31337
 
 # Deploy the contracts
 deploy:
@@ -24,16 +27,16 @@ deploy:
 	fi
 	@if [ "$(RPC_URL)" = "localhost" ]; then \
 		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --via-ir --legacy --ffi; \
 		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --via-ir --ffi; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
+		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --via-ir --ffi; \
 	fi
 
 # Deploy and generate ABIs
-deploy-and-generate-abis: deploy generate-abis
+deploy-and-generate-abis: deploy generate-abis ${postDeployRecipeToRun.filter(Boolean).join(" ")}
 
 # Generate TypeScript ABIs
 generate-abis:
@@ -57,7 +60,7 @@ account-generate:
 
 # Import an existing account
 account-import:
-	@cast wallet import ${ACCOUNT_NAME} --interactive
+	@cast wallet import \${ACCOUNT_NAME} --interactive
 
 # Compile contracts
 compile:
@@ -78,3 +81,11 @@ lint:
 # Verify contracts
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
+
+${recipes.filter(Boolean).join("\n")}`
+
+
+export default withDefaults(content, {
+  recipes: ``,
+  postDeployRecipeToRun: ``,
+});
