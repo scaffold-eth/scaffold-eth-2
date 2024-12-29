@@ -1,19 +1,54 @@
 import { useEffect, useState } from "react";
-import { useTargetNetwork } from "./useTargetNetwork";
 import { useIsMounted } from "usehooks-ts";
 import { usePublicClient } from "wagmi";
-import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
+import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
+import {
+  Contract,
+  ContractCodeStatus,
+  ContractName,
+  UseDeployedContractConfig,
+  contracts,
+} from "~~/utils/scaffold-eth/contract";
+
+type DeployedContractData<TContractName extends ContractName> = {
+  data: Contract<TContractName> | undefined;
+  isLoading: boolean;
+};
 
 /**
  * Gets the matching contract info for the provided contract name from the contracts present in deployedContracts.ts
  * and externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  */
-export const useDeployedContractInfo = <TContractName extends ContractName>(contractName: TContractName) => {
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  config: UseDeployedContractConfig<TContractName>,
+): DeployedContractData<TContractName>;
+/**
+ * @deprecated Use object parameter version instead: useDeployedContractInfo({ contractName: "YourContract" })
+ */
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  contractName: TContractName,
+): DeployedContractData<TContractName>;
+
+export function useDeployedContractInfo<TContractName extends ContractName>(
+  configOrName: UseDeployedContractConfig<TContractName> | TContractName,
+): DeployedContractData<TContractName> {
   const isMounted = useIsMounted();
-  const { targetNetwork } = useTargetNetwork();
-  const deployedContract = contracts?.[targetNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
+
+  const finalConfig: UseDeployedContractConfig<TContractName> =
+    typeof configOrName === "string" ? { contractName: configOrName } : (configOrName as any);
+
+  useEffect(() => {
+    if (typeof configOrName === "string") {
+      console.warn(
+        "Using `useDeployedContractInfo` with a string parameter is deprecated. Please use the object parameter version instead.",
+      );
+    }
+  }, [configOrName]);
+  const { contractName, chainId } = finalConfig;
+  const selectedNetwork = useSelectedNetwork(chainId);
+  const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
-  const publicClient = usePublicClient({ chainId: targetNetwork.id });
+  const publicClient = usePublicClient({ chainId: selectedNetwork.id });
 
   useEffect(() => {
     const checkContractDeployment = async () => {
@@ -48,4 +83,4 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(cont
     data: status === ContractCodeStatus.DEPLOYED ? deployedContract : undefined,
     isLoading: status === ContractCodeStatus.LOADING,
   };
-};
+}

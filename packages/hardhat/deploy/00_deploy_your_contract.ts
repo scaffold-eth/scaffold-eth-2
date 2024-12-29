@@ -15,8 +15,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     When deploying to live networks (e.g `yarn deploy --network sepolia`), the deployer account
     should have sufficient balance to pay for the gas fees for contract creation.
 
-    You can generate a random account with `yarn generate` which will fill DEPLOYER_PRIVATE_KEY
-    with a random private key in the .env file (then used on hardhat.config.ts)
+    You can generate a random account with `yarn generate` or `yarn account:import` to import your
+    existing PK which will fill DEPLOYER_PRIVATE_KEY_ENCRYPTED in the .env file (then used on hardhat.config.ts)
     You can run the `yarn account` command to check your balance in every network.
   */
   const { deployer } = await hre.getNamedAccounts();
