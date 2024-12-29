@@ -14,7 +14,6 @@
     "fork": "yarn workspace @se-2/foundry fork",
     "deploy": "yarn workspace @se-2/foundry deploy",
     "verify": "yarn workspace @se-2/foundry verify",
-    "deploy:verify": "yarn workspace @se-2/foundry deploy:verify",
     "compile": "yarn workspace @se-2/foundry compile",
     "generate": "yarn account:generate",
     "account:generate": "yarn workspace @se-2/foundry account:generate",
