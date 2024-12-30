@@ -6,7 +6,6 @@
     "chain": "yarn foundry:chain",
     "compile": "yarn foundry:compile",
     "deploy": "yarn foundry:deploy",
-    "deploy:verify": "yarn foundry:deploy-verify",
     "fork": "yarn foundry:fork",
     "format": "yarn next:format && yarn foundry:format",
     "foundry:account": "yarn workspace @se-2/foundry account",
