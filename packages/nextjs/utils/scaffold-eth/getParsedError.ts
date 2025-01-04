@@ -1,7 +1,7 @@
 import { BaseError as BaseViemError, ContractFunctionRevertedError } from "viem";
 
 /**
- * Parses an viem/wagmi error to get a displayable string
+ * Parses a viem/wagmi error to get a displayable string
  * @param e - error object
  * @returns parsed error string
  */
