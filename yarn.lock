@@ -668,6 +668,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/validate-npm-package-name@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@types/validate-npm-package-name@npm:4.0.2"
+  checksum: 3f35a3cc8ddd919b456843f36d55a4f1df5f03d5d9b6494b4d8f5f3b24e3f24a11c922772d9970a67f1249214da18c157776e9c6d2e72227799459849dfd9c76
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:8.15.0":
   version: 8.15.0
   resolution: "@typescript-eslint/eslint-plugin@npm:8.15.0"
@@ -1389,6 +1396,7 @@ __metadata:
     "@types/inquirer": 9.0.3
     "@types/ncp": 2.0.5
     "@types/node": 18.16.0
+    "@types/validate-npm-package-name": 4.0.2
     arg: 5.0.2
     chalk: 5.2.0
     eslint: ^9.15.0
@@ -1406,6 +1414,7 @@ __metadata:
     tslib: 2.5.0
     typescript: ^5.6.3
     typescript-eslint: ^8.15.0
+    validate-npm-package-name: 6.0.0
   bin:
     create-eth: bin/create-dapp-se2.js
   languageName: unknown
@@ -5023,6 +5032,13 @@ __metadata:
     spdx-correct: ^3.0.0
     spdx-expression-parse: ^3.0.0
   checksum: 35703ac889d419cf2aceef63daeadbe4e77227c39ab6287eeb6c1b36a746b364f50ba22e88591f5d017bc54685d8137bc2d328d0a896e4d3fd22093c0f32a9ad
+  languageName: node
+  linkType: hard
+
+"validate-npm-package-name@npm:6.0.0":
+  version: 6.0.0
+  resolution: "validate-npm-package-name@npm:6.0.0"
+  checksum: 4d018c4fa07f95534a5fea667adc653b1ef52f08bf56aff066c28394499d0a6949c0b00edbd7077c4dc1e041da9220af7c742ced67d7d2d6a1b07d10cbe91b29
   languageName: node
   linkType: hard
 

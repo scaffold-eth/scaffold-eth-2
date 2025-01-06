@@ -1,6 +1,8 @@
 import { Options, RawOptions, SolidityFrameworkChoices } from "../types";
 import inquirer from "inquirer";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
+import { validateNpmName } from "./validate-name";
+import { basename, resolve } from "path";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {
@@ -23,7 +25,13 @@ export async function promptForMissingOptions(
       name: "project",
       message: "Your project name:",
       default: defaultOptions.project,
-      validate: (value: string) => value.length > 0,
+      validate: (name: string) => {
+        const validation = validateNpmName(basename(resolve(name)));
+        if (validation.valid) {
+          return true;
+        }
+        return "Project " + validation.problems[0];
+      },
     },
     {
       type: "list",

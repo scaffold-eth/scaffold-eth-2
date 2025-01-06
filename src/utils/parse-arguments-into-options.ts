@@ -12,6 +12,7 @@ import { validateFoundryUp } from "./system-validation";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { validateNpmName } from "./validate-name";
 
 const validateExternalExtension = async (
   extensionName: string,
@@ -74,7 +75,7 @@ export async function parseArgumentsIntoOptions(
       "-h": "--help",
     },
     {
-      argv: rawArgs.slice(2).map(a => a.toLowerCase()),
+      argv: rawArgs.slice(2),
     },
   );
 
@@ -84,7 +85,7 @@ export async function parseArgumentsIntoOptions(
 
   const help = args["--help"] ?? false;
 
-  const project = args._[0] ?? null;
+  let project: string | null = args._[0] ?? null;
 
   // use the original extension arg
   const extensionName = args["--extension"] && rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
@@ -99,6 +100,18 @@ export async function parseArgumentsIntoOptions(
         )}\n`,
       ),
     );
+  }
+
+  if (project) {
+    const validation = validateNpmName(project);
+    if (!validation.valid) {
+      console.error(
+        `Could not create a project called ${chalk.yellow(`"${project}"`)} because of naming restrictions:`,
+      );
+
+      validation.problems.forEach(p => console.error(`${chalk.red(">>")} Project ${p}`));
+      project = null;
+    }
   }
 
   let solidityFrameworkChoices = [
