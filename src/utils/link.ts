@@ -5,12 +5,18 @@ import path from "path";
 
 const { mkdir, link } = promises;
 
-const passesFilter = (source: string, options?: Options) =>
-  options?.filter === undefined
+const passesFilter = (source: string, options?: Options) => {
+  const isDSStore = /\.DS_Store$/.test(source);
+  if (isDSStore) {
+    return false; // Exclude .DS_Store files
+  }
+
+  return options?.filter === undefined
     ? true // no filter
     : typeof options.filter === "function"
       ? options.filter(source) // filter is function
       : options.filter.test(source); // filter is regex
+};
 /**
  * The goal is that this function has the same API as ncp, so they can be used
  * interchangeably.
