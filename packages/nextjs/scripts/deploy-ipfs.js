@@ -33,6 +33,7 @@ async function checkIpfsDaemon() {
       console.log(`✓ Connected to ${peerCount} peers`);
     }
   } catch (error) {
+    console.log(error);
     console.error("❌ IPFS is not installed or daemon is not running.");
     console.log("Please install IPFS and start the daemon:");
     console.log("1. Install IPFS: https://docs.ipfs.tech/install/");
@@ -54,6 +55,7 @@ async function addDirectoryToIpfs(path) {
       await execAsync(`ipfs dht provide ${cid}`);
       console.log("✓ Announced content to the IPFS network");
     } catch (error) {
+      console.log(error);
       console.log("⚠️  Warning: Could not announce content to the network. Content might take longer to be available.");
     }
 
@@ -80,14 +82,12 @@ async function main() {
 
   console.log("\n✨ Upload complete! Your site is now available at:");
   console.log(`🔗 IPFS Gateway: https://ipfs.io/ipfs/${cid}`);
-  console.log(`🔗 Dweb link: ipfs://${cid}`);
   console.log("\n💡 To ensure your site stays available:");
   console.log("1. Keep your IPFS daemon running");
   console.log("2. Pin the CID on other nodes: ipfs pin add " + cid);
   console.log("\n💡 If the gateway times out, you can:");
   console.log("1. Wait a few minutes and try again");
-  console.log("2. Try another gateway like https://cloudflare-ipfs.com/ipfs/" + cid);
-  console.log("3. Install the IPFS Companion browser extension");
+  console.log("2. Install the IPFS Companion browser extension");
 }
 
 main().catch(err => {
