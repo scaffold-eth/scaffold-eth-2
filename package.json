@@ -44,6 +44,7 @@
     "test": "yarn hardhat:test",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
+    "fleek": "yarn workspace @se-2/nextjs fleek",
     "verify": "yarn hardhat:verify"
   },
   "packageManager": "yarn@3.2.3",
