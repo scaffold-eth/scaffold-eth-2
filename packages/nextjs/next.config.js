@@ -26,5 +26,4 @@ if (isIpfs) {
   };
 }
 
-
 module.exports = nextConfig;
