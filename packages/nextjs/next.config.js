@@ -16,4 +16,15 @@ const nextConfig = {
   },
 };
 
+const isIpfs = process.env.npm_lifecycle_event === "ipfs";
+
+if (isIpfs) {
+  nextConfig.output = "export";
+  nextConfig.trailingSlash = true;
+  nextConfig.images = {
+    unoptimized: true,
+  };
+}
+
+
 module.exports = nextConfig;
