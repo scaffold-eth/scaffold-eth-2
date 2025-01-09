@@ -16,4 +16,14 @@ const nextConfig = {
   },
 };
 
+const isFleek = process.env.npm_lifecycle_event === "fleek";
+
+if (isFleek) {
+  nextConfig.output = "export";
+  nextConfig.trailingSlash = true;
+  nextConfig.images = {
+    unoptimized: true,
+  };
+}
+
 module.exports = nextConfig;
