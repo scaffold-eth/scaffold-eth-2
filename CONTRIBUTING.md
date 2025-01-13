@@ -22,6 +22,12 @@ The project is under active development.
 
 You can view the open Issues, follow the development process and contribute to the project.
 
+### Rules
+
+1. All code contributions require an issue to be created and agreed upon by core contributors before submitting a Pull Request. This ensures proper discussion, alignment, and consensus on the proposed changes.
+2. Contributors must be humans, not bots.
+3. First time contributions must not contain only spelling or grammatical fixes.
+
 ## Getting started
 
 You can contribute to this repo in many ways:
