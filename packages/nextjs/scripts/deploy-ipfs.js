@@ -1,65 +1,45 @@
-import { exec } from "child_process";
+import { create } from "kubo-rpc-client";
+import { globSource } from "kubo-rpc-client";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { promisify } from "util";
 
-const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-async function checkIpfsDaemon() {
-  try {
-    await execAsync("ipfs --version");
-    // Check if daemon is running and has peers
-    const { stdout } = await execAsync("ipfs swarm peers");
-    const peerCount = stdout.split("\n").filter(Boolean).length;
-
-    if (peerCount < 1) {
-      console.log("⚠️  Warning: Your IPFS node has no peers. Content might not be accessible immediately.");
-      console.log("Waiting for peers to connect...");
-      // Wait for peers to connect
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      const { stdout: newStdout } = await execAsync("ipfs swarm peers");
-      const newPeerCount = newStdout.split("\n").filter(Boolean).length;
-      if (newPeerCount < 1) {
-        console.log("Still no peers connected. You might want to:");
-        console.log("1. Check your internet connection");
-        console.log("2. Ensure your IPFS daemon is not behind a firewall");
-        console.log("3. Try running 'ipfs daemon --enable-pubsub-experiment' for better connectivity");
-      } else {
-        console.log(`✓ Connected to ${newPeerCount} peers`);
-      }
-    } else {
-      console.log(`✓ Connected to ${peerCount} peers`);
-    }
-  } catch (error) {
-    console.log(error);
-    console.error("❌ IPFS is not installed or daemon is not running.");
-    console.log("Please install IPFS and start the daemon:");
-    console.log("1. Install IPFS: https://docs.ipfs.tech/install/");
-    console.log("2. Start the daemon: ipfs daemon");
-    process.exit(1);
-  }
-}
+const ipfsConfig = {
+  host: "ipfs.nifty.ink",
+  port: 3001,
+  protocol: "https",
+  timeout: 250000,
+};
 
 async function addDirectoryToIpfs(path) {
-  console.log("📦 Adding directory to IPFS...");
+  console.log("📦 Adding directory to IPFS via Nifty Ink...");
 
   try {
-    // Add the entire directory to IPFS and get the hash
-    const { stdout } = await execAsync(`ipfs add -r -Q "${path}"`);
-    const cid = stdout.trim();
+    const ipfs = create(ipfsConfig);
 
-    // Announce the content to the network
-    try {
-      await execAsync(`ipfs dht provide ${cid}`);
-      console.log("✓ Announced content to the IPFS network");
-    } catch (error) {
-      console.log(error);
-      console.log("⚠️  Warning: Could not announce content to the network. Content might take longer to be available.");
+    // Track the root directory CID
+    let rootCid = null;
+
+    // Add the entire directory to IPFS
+    for await (const result of ipfs.addAll(globSource(path, "**/*"), {
+      pin: true,
+      wrapWithDirectory: true, // This is key - it wraps all files in a directory
+    })) {
+      if (result.path === "") {
+        // This is the root directory entry
+        rootCid = result.cid;
+      } else {
+        console.log(`Added ${result.path} - CID: ${result.cid}`);
+      }
     }
 
-    return cid;
+    if (!rootCid) {
+      throw new Error("Failed to get root directory CID");
+    }
+
+    return rootCid.toString();
   } catch (error) {
     console.error("Error adding directory to IPFS:", error);
     throw error;
@@ -67,27 +47,15 @@ async function addDirectoryToIpfs(path) {
 }
 
 async function main() {
-  // First check if IPFS is installed and running
-  await checkIpfsDaemon();
-
   // Get the path to the out directory
   const outDir = join(__dirname, "..", "out");
 
-  console.log("🚀 Uploading to IPFS...");
+  console.log("🚀 Uploading to Nifty Ink IPFS...");
   const cid = await addDirectoryToIpfs(outDir);
 
-  // Give the network some time to propagate the content
-  console.log("\n⏳ Waiting for network propagation...");
-  await new Promise(resolve => setTimeout(resolve, 5000));
-
   console.log("\n✨ Upload complete! Your site is now available at:");
-  console.log(`🔗 IPFS Gateway: https://ipfs.io/ipfs/${cid}`);
-  console.log("\n💡 To ensure your site stays available:");
-  console.log("1. Keep your IPFS daemon running");
-  console.log("2. Pin the CID on other nodes: ipfs pin add " + cid);
-  console.log("\n💡 If the gateway times out, you can:");
-  console.log("1. Wait a few minutes and try again");
-  console.log("2. Install the IPFS Companion browser extension");
+  console.log(`🔗 Nifty Ink Gateway: https://gateway.nifty.ink:42069/ipfs/${cid}`);
+  console.log("\n💡 Note: Your content is being served through the Nifty Ink IPFS gateway");
 }
 
 main().catch(err => {
