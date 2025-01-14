@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
+import { useLogout } from "@account-kit/react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
 import { Address } from "viem";
-import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
@@ -32,8 +32,8 @@ export const AddressInfoDropdown = ({
   displayName,
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
-  const { disconnect } = useDisconnect();
   const checkSumAddress = getAddress(address);
+  const { logout } = useLogout();
 
   const [addressCopied, setAddressCopied] = useState(false);
 
@@ -125,9 +125,9 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => disconnect()}
+              onClick={() => logout()}
             >
-              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
+              <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Logout</span>
             </button>
           </li>
         </ul>
