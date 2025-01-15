@@ -1,6 +1,7 @@
+import { useChain } from "@account-kit/react";
 import { getPublicClient } from "@wagmi/core";
-import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
-import { Config, useWalletClient } from "wagmi";
+import { Hash, TransactionReceipt } from "viem";
+import { Config } from "wagmi";
 import { SendTransactionMutate } from "wagmi/query";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
@@ -32,26 +33,16 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
  * @param _walletClient - Optional wallet client to use. If not provided, will use the one from useWalletClient.
  * @returns function that takes in transaction function as callback, shows UI feedback for transaction and returns a promise of the transaction hash
  */
-export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => {
-  let walletClient = _walletClient;
-  const { data } = useWalletClient();
-  if (walletClient === undefined && data) {
-    walletClient = data;
-  }
+export const useTransactor = (): TransactionFunc => {
+  const { chain } = useChain();
 
   const result: TransactionFunc = async (tx, options) => {
-    if (!walletClient) {
-      notification.error("Cannot access account");
-      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
-      return;
-    }
-
     let notificationId = null;
     let transactionHash: Hash | undefined = undefined;
     let transactionReceipt: TransactionReceipt | undefined;
     let blockExplorerTxURL = "";
     try {
-      const network = await walletClient.getChainId();
+      const network = chain.id;
       // Get full transaction from public client
       const publicClient = getPublicClient(wagmiConfig);
 
@@ -61,7 +52,9 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
         const result = await tx();
         transactionHash = result;
       } else if (tx != null) {
-        transactionHash = await walletClient.sendTransaction(tx as SendTransactionParameters);
+        // TODO: change this into send user operation if we're going to use this
+        transactionHash = "0xabc...";
+        // transactionHash = await client.sendTransaction(tx as SendTransactionParameters);
       } else {
         throw new Error("Incorrect transaction passed to transactor");
       }

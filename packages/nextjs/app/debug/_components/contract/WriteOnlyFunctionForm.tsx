@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
+import { useChain, useSendUserOperation, useSmartAccountClient } from "@account-kit/react";
 import { Abi, AbiFunction } from "abitype";
-import { Address, TransactionReceipt } from "viem";
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { Address, Hex, TransactionReceipt, encodeFunctionData } from "viem";
+import { useWaitForTransactionReceipt } from "wagmi";
 import {
   ContractInput,
   TxReceipt,
@@ -32,26 +33,43 @@ export const WriteOnlyFunctionForm = ({
   contractAddress,
   inheritedFrom,
 }: WriteOnlyFunctionFormProps) => {
+  const { client } = useSmartAccountClient({
+    type: "LightAccount",
+  });
+  const { sendUserOperationAsync, isSendingUserOperation } = useSendUserOperation({
+    client,
+    waitForTxn: true,
+  });
+  const [hash, setHash] = useState<Hex | undefined>();
   const [form, setForm] = useState<Record<string, any>>(() => getInitialFormState(abiFunction));
   const [txValue, setTxValue] = useState<string>("");
-  const { chain } = useAccount();
+  const { chain } = useChain();
   const writeTxn = useTransactor();
   const { targetNetwork } = useTargetNetwork();
   const writeDisabled = !chain || chain?.id !== targetNetwork.id;
 
-  const { data: result, isPending, writeContractAsync } = useWriteContract();
+  // const { data: result, isPending, writeContractAsync } = useWriteContract();
 
   const handleWrite = async () => {
-    if (writeContractAsync) {
+    if (sendUserOperationAsync) {
       try {
-        const makeWriteWithParams = () =>
-          writeContractAsync({
-            address: contractAddress,
-            functionName: abiFunction.name,
-            abi: abi,
-            args: getParsedContractFunctionArgs(form),
-            value: BigInt(txValue),
+        const makeWriteWithParams = async () => {
+          if (!client) throw Error("Expecting the client");
+
+          const { hash } = await sendUserOperationAsync({
+            uo: {
+              target: contractAddress,
+              data: encodeFunctionData({
+                functionName: abiFunction.name,
+                abi: abi,
+                args: getParsedContractFunctionArgs(form),
+              }),
+              value: BigInt(txValue),
+            },
           });
+          setHash(hash);
+          return hash;
+        };
         await writeTxn(makeWriteWithParams);
         onChange();
       } catch (e: any) {
@@ -62,7 +80,7 @@ export const WriteOnlyFunctionForm = ({
 
   const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
   const { data: txResult } = useWaitForTransactionReceipt({
-    hash: result,
+    hash,
   });
   useEffect(() => {
     setDisplayedTxResult(txResult);
@@ -124,8 +142,12 @@ export const WriteOnlyFunctionForm = ({
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
-              {isPending && <span className="loading loading-spinner loading-xs"></span>}
+            <button
+              className="btn btn-secondary btn-sm"
+              disabled={writeDisabled || isSendingUserOperation}
+              onClick={handleWrite}
+            >
+              {isSendingUserOperation && <span className="loading loading-spinner loading-xs"></span>}
               Send 💸
             </button>
           </div>
