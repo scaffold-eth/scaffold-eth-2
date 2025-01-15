@@ -46,5 +46,53 @@
     "description": "This extension introduces an ERC-721 token contract and demonstrates how to use it, including getting the total supply and holder balance, listing all NFTs from the collection and NFTs from the connected address, and how to transfer NFTs.",
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "erc-721"
+  },
+  {
+    "extensionFlagValue": "challenge-0-simple-nft",
+    "description": "SpeedRunEthereum Challenge 0: Simple NFT Example.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-0-simple-nft"
+  },
+  {
+    "extensionFlagValue": "challenge-1-decentralized-staking",
+    "description": "SpeedRunEthereum Challenge 1: Decentralized Staking App.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-1-decentralized-staking"
+  },
+  {
+    "extensionFlagValue": "challenge-2-token-vendor",
+    "description": "SpeedRunEthereum Challenge 2: Token Vendor.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-2-token-vendor"
+  },
+  {
+    "extensionFlagValue": "challenge-3-dice-game",
+    "description": "SpeedRunEthereum Challenge 3: Dice Game.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-3-dice-game"
+  },
+  {
+    "extensionFlagValue": "challenge-4-dex",
+    "description": "SpeedRunEthereum Challenge 4: Build a DEX.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-4-dex"
+  },
+  {
+    "extensionFlagValue": "challenge-5-state-channels",
+    "description": "SpeedRunEthereum Challenge 5: A State Channel Application.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-5-state-channels"
+  },
+  {
+    "extensionFlagValue": "challenge-6-multisig",
+    "description": "SpeedRunEthereum Challenge 6: Multisig Wallet.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-6-multisig"
+  },
+  {
+    "extensionFlagValue": "challenge-7-svg-nft",
+    "description": "SpeedRunEthereum Challenge 7: SVG NFT.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-7-svg-nft"
   }
 ]
