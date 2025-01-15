@@ -14,13 +14,19 @@ Read the [README](README.md) to get an overview of the project.
 
 The goal of create-eth is to be a "toolkit creator", using Scaffold-ETH 2 as a base to provide the primary building blocks for a decentralized application. In the future we plan to add "curated" packages to it, and open the possibility to import 3rd party packages (that follow our standard).
 
-The repo can be forked to include integrations and more features.
+The repo can be forked to include integrations and more features, but we want to keep the `main` branch simple and minimal.
 
 ### Project Status
 
 The project is under active development.
 
-You can view the open Issues, follow the development process and contribute to the project.
+You can view the open Issues, follow the development process, and contribute to the project.
+
+### Rules
+
+1. All code contributions require an Issue to be created and agreed upon by core contributors before submitting a Pull Request. This ensures proper discussion, alignment, and consensus on the proposed changes.
+2. Contributors must be humans, not bots.
+3. First-time contributions must not contain only spelling or grammatical fixes.
 
 ## Getting started
 
@@ -57,7 +63,7 @@ Some tips to follow when you are creating an issue:
 
 - Provide as much context as possible. Over-communicate to give the most details to the reader.
 - Include the steps to reproduce the issue or the reason for adding the feature.
-- Screenshots, videos etc., are highly appreciated.
+- Screenshots, videos, etc., are highly appreciated.
 
 ### Pull Requests
 
@@ -86,7 +92,7 @@ Here are some tips for a high-quality pull request:
 
 Once you submit your PR:
 
-- We may ask questions, request additional information or ask for changes to be made before a PR can be merged. Please note that these are to make the PR clear for everyone involved and aims to create a frictionless interaction process.
+- We may ask questions, request additional information, or ask for changes to be made before a PR can be merged. Please note that these are to make the PR clear for everyone involved and aim to create a frictionless interaction process.
 - As you update your PR and apply changes, mark each conversation resolved.
 
 Once the PR is approved, we'll "squash-and-merge" to keep the git commit history clean.
