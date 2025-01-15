@@ -1,5 +1,21 @@
 # create-eth
 
+## 0.1.0
+
+### Minor Changes
+
+- 6fdbc09: Add SpeedRunEthereum challenges as curated extensions
+
+### Patch Changes
+
+- f983396: templatise `foundry.toml` file
+- 4db867d: validate project name inline with npm name rules
+- 5d85956: foundry: remove deploy:verify from base package.json
+- 36f7a79: - Add contributing rules (https://github.com/scaffold-eth/scaffold-eth-2/pull/1031)
+  - Add vercel login script (https://github.com/scaffold-eth/scaffold-eth-2/pull/1027)
+- e8c33d8: update readme
+- b4dbf8e: cli: allow github url as extension flag
+
 ## 0.0.65
 
 ### Patch Changes
