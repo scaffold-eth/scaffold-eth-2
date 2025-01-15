@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
-import { useChain, useSendUserOperation, useSmartAccountClient } from "@account-kit/react";
+import { useChain, useSendUserOperation } from "@account-kit/react";
 import { Abi, AbiFunction } from "abitype";
 import { Address, Hex, TransactionReceipt, encodeFunctionData } from "viem";
 import { useWaitForTransactionReceipt } from "wagmi";
@@ -16,6 +16,7 @@ import {
 } from "~~/app/debug/_components/contract";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useClient } from "~~/hooks/scaffold-eth/useClient";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 
 type WriteOnlyFunctionFormProps = {
@@ -33,11 +34,9 @@ export const WriteOnlyFunctionForm = ({
   contractAddress,
   inheritedFrom,
 }: WriteOnlyFunctionFormProps) => {
-  const { client } = useSmartAccountClient({
-    type: "LightAccount",
-  });
+  const { client } = useClient();
   const { sendUserOperationAsync, isSendingUserOperation } = useSendUserOperation({
-    client,
+    client: client,
     waitForTxn: true,
   });
   const [hash, setHash] = useState<Hex | undefined>();

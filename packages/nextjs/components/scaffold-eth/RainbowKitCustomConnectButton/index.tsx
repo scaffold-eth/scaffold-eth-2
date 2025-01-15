@@ -4,10 +4,11 @@
 import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
-import { useAccount, useAuthModal } from "@account-kit/react";
+import { useAuthModal } from "@account-kit/react";
 import { Address } from "viem";
 import { arbitrumSepolia } from "viem/chains";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
+import { useClient } from "~~/hooks/scaffold-eth/useClient";
 import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 
 /**
@@ -16,7 +17,7 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const RainbowKitCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { openAuthModal } = useAuthModal();
-  const { address } = useAccount({ type: "LightAccount" });
+  const { address } = useClient();
   const connected = !!address;
 
   if (!connected) {
