@@ -16,7 +16,7 @@ const nextConfig = {
   },
 };
 
-const isIpfs = process.env.npm_lifecycle_event === "ipfs";
+const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";
 
 if (isIpfs) {
   nextConfig.output = "export";
