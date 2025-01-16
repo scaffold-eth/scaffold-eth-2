@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useAccount } from "@account-kit/react";
 import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { useClient } from "~~/hooks/scaffold-eth/useClient";
 
 const Home: NextPage = () => {
-  const { address } = useAccount({
-    type: "LightAccount",
-  });
+  const { address } = useClient();
 
   return (
     <>
