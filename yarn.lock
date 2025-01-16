@@ -4100,6 +4100,7 @@ __metadata:
     "@uniswap/sdk-core": ^5.8.2
     "@uniswap/v2-sdk": ^4.6.1
     abitype: 1.0.6
+    alchemy-sdk: ^3.5.0
     autoprefixer: ^10.4.20
     blo: ^1.2.0
     burner-connector: 0.0.9
@@ -6332,7 +6333,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"alchemy-sdk@npm:^3.0.0":
+"alchemy-sdk@npm:^3.0.0, alchemy-sdk@npm:^3.5.0":
   version: 3.5.0
   resolution: "alchemy-sdk@npm:3.5.0"
   dependencies:

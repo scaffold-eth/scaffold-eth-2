@@ -20,10 +20,12 @@ if (process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID) {
   ]);
 }
 
+export const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+
 export const config = createConfig(
   {
     // alchemy config
-    transport: alchemy({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
+    transport: alchemy({ apiKey }), // TODO: add your Alchemy API key - setup your app and embedded account config in the alchemy dashboard (https://dashboard.alchemy.com/accounts)
     policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_POLICY_ID,
     chain: arbitrumSepolia, // TODO: specify your preferred chain here and update imports from @account-kit/infra
     ssr: true, // Defers hydration of the account state to the client after the initial mount solving any inconsistencies between server and client state (read more here: https://accountkit.alchemy.com/react/ssr)
