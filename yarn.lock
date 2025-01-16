@@ -2538,7 +2538,6 @@ __metadata:
     eslint-config-next: ^14.2.15
     eslint-config-prettier: ^8.10.0
     eslint-plugin-prettier: ^5.2.1
-    glob: ^11.0.1
     kubo-rpc-client: ^5.0.2
     next: ^14.2.11
     next-nprogress-bar: ^2.3.13
@@ -8034,22 +8033,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^11.0.1":
-  version: 11.0.1
-  resolution: "glob@npm:11.0.1"
-  dependencies:
-    foreground-child: ^3.1.0
-    jackspeak: ^4.0.1
-    minimatch: ^10.0.0
-    minipass: ^7.1.2
-    package-json-from-dist: ^1.0.0
-    path-scurry: ^2.0.0
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: ffbbafe1d2dae2fa68f190ac76df7254e840b27f59df34129fd658bd9da0c50b538d144eb0962dc7fa71cdaccf3fe108f045d4a15b3f5815e465749a6bf00965
-  languageName: node
-  linkType: hard
-
 "glob@npm:^5.0.15":
   version: 5.0.15
   resolution: "glob@npm:5.0.15"
@@ -9303,15 +9286,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^4.0.1":
-  version: 4.0.2
-  resolution: "jackspeak@npm:4.0.2"
-  dependencies:
-    "@isaacs/cliui": ^8.0.2
-  checksum: 210030029edfa1658328799ad88c3d0fc057c4cb8a069fc4137cc8d2cc4b65c9721c6e749e890f9ca77a954bb54f200f715b8896e50d330e5f3e902e72b40974
-  languageName: node
-  linkType: hard
-
 "javascript-natural-sort@npm:0.7.1":
   version: 0.7.1
   resolution: "javascript-natural-sort@npm:0.7.1"
@@ -9881,13 +9855,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^11.0.0":
-  version: 11.0.2
-  resolution: "lru-cache@npm:11.0.2"
-  checksum: f9c27c58919a30f42834de9444de9f75bcbbb802c459239f96dd449ad880d8f9a42f51556d13659864dc94ab2dbded9c4a4f42a3e25a45b6da01bb86111224df
-  languageName: node
-  linkType: hard
-
 "lru-cache@npm:^6.0.0":
   version: 6.0.0
   resolution: "lru-cache@npm:6.0.0"
@@ -10138,15 +10105,6 @@ __metadata:
   dependencies:
     brace-expansion: ^2.0.1
   checksum: b34b98463da4754bc526b244d680c69d4d6089451ebe512edaf6dd9eeed0279399cfa3edb19233513b8f830bf4bfcad911dddcdf125e75074100d52f724774f0
-  languageName: node
-  linkType: hard
-
-"minimatch@npm:^10.0.0":
-  version: 10.0.1
-  resolution: "minimatch@npm:10.0.1"
-  dependencies:
-    brace-expansion: ^2.0.1
-  checksum: f5b63c2f30606091a057c5f679b067f84a2cd0ffbd2dbc9143bda850afd353c7be81949ff11ae0c86988f07390eeca64efd7143ee05a0dab37f6c6b38a2ebb6c
   languageName: node
   linkType: hard
 
@@ -11409,16 +11367,6 @@ __metadata:
     lru-cache: ^10.2.0
     minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
   checksum: 890d5abcd593a7912dcce7cf7c6bf7a0b5648e3dee6caf0712c126ca0a65c7f3d7b9d769072a4d1baf370f61ce493ab5b038d59988688e0c5f3f646ee3c69023
-  languageName: node
-  linkType: hard
-
-"path-scurry@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "path-scurry@npm:2.0.0"
-  dependencies:
-    lru-cache: ^11.0.0
-    minipass: ^7.1.2
-  checksum: 9953ce3857f7e0796b187a7066eede63864b7e1dfc14bf0484249801a5ab9afb90d9a58fc533ebb1b552d23767df8aa6a2c6c62caf3f8a65f6ce336a97bbb484
   languageName: node
   linkType: hard
 
