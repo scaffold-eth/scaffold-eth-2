@@ -45,6 +45,7 @@
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "ipfs": "yarn workspace @se-2/nextjs ipfs",
+    "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
     "verify": "yarn hardhat:verify"
   },
   "packageManager": "yarn@3.2.3",
