@@ -12,6 +12,7 @@
     "start": "next dev",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1",
+    "ipfs": "NEXT_PUBLIC_IPFS_BUILD=true yarn build && node scripts/deploy-ipfs.mjs",
     "vercel:login": "vercel login"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "blo": "^1.2.0",
     "burner-connector": "0.0.9",
     "daisyui": "4.12.10",
+    "kubo-rpc-client": "^5.0.2",
     "next": "^14.2.11",
     "next-nprogress-bar": "^2.3.13",
     "next-themes": "^0.3.0",
