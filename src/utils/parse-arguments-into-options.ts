@@ -88,7 +88,7 @@ export async function parseArgumentsIntoOptions(
   let project: string | null = args._[0] ?? null;
 
   // use the original extension arg
-  const extensionName = args["--extension"] && rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
+  const extensionName = args["--extension"];
   // ToDo. Allow multiple
   const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
