@@ -1,58 +1,10 @@
-import type { Args, ExternalExtension, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
+import type { Args, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
 import arg from "arg";
-import * as https from "https";
-import {
-  getDataFromExternalExtensionArgument,
-  getSolidityFrameworkDirsFromExternalExtension,
-} from "./external-extensions";
+import { getSolidityFrameworkDirsFromExternalExtension, validateExternalExtension } from "./external-extensions";
 import chalk from "chalk";
-import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateFoundryUp } from "./system-validation";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import { validateNpmName } from "./validate-name";
-
-const validateExternalExtension = async (
-  extensionName: string,
-  dev: boolean,
-): Promise<{ repository: string; branch?: string } | string> => {
-  if (dev) {
-    // Check externalExtensions/${extensionName} exists
-    try {
-      const currentFileUrl = import.meta.url;
-      const externalExtensionsDirectory = path.resolve(
-        decodeURI(fileURLToPath(currentFileUrl)),
-        "../../externalExtensions",
-      );
-      await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
-    } catch {
-      throw new Error(`Extension not found in "externalExtensions/${extensionName}"`);
-    }
-
-    return extensionName;
-  }
-
-  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(extensionName);
-
-  // Check if repository exists
-  await new Promise((resolve, reject) => {
-    https
-      .get(githubBranchUrl, res => {
-        if (res.statusCode !== 200) {
-          reject(new Error(`Extension not found: ${githubUrl}`));
-        } else {
-          resolve(null);
-        }
-      })
-      .on("error", err => {
-        reject(err);
-      });
-  });
-
-  return { repository: githubUrl, branch };
-};
 
 // TODO update smartContractFramework code with general extensions
 export async function parseArgumentsIntoOptions(
@@ -92,11 +44,12 @@ export async function parseArgumentsIntoOptions(
   // ToDo. Allow multiple
   const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
-  if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
+  // if dev mode, extension would be a string
+  if (extension && typeof extension === "object" && !extension.isTrusted) {
     console.log(
       chalk.yellow(
         ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(
-          (extension as ExternalExtension).repository,
+          extension.repository,
         )}\n`,
       ),
     );

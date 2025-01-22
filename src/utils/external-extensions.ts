@@ -1,9 +1,38 @@
 import fs from "fs";
 import path from "path";
+import * as https from "https";
 import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
-import { CURATED_EXTENSIONS } from "../curated-extensions";
+import curatedExtension from "../extensions.json";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
+
+type ExtensionJSON = {
+  extensionFlagValue: string;
+  repository: string;
+  branch?: string;
+  // fields usefull for scaffoldeth.io
+  description: string;
+  version?: string; // if not present we default to latest
+  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
+};
+
+const TRUSTED_GITHUB_ORGANIZATIONS = ["scaffold-eth", "buidlguidl"];
+
+const extensions: ExtensionJSON[] = curatedExtension;
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
+  if (!ext.repository) {
+    throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
+  }
+  if (!ext.extensionFlagValue) {
+    throw new Error(`Extension must have 'extensionFlagValue': ${JSON.stringify(ext)}`);
+  }
+
+  acc[ext.extensionFlagValue] = {
+    repository: ext.repository,
+    branch: ext.branch,
+  };
+  return acc;
+}, {});
 
 function deconstructGithubUrl(url: string) {
   const urlParts = url.split("/");
@@ -13,6 +42,47 @@ function deconstructGithubUrl(url: string) {
 
   return { ownerName, repoName, branch };
 }
+
+export const validateExternalExtension = async (
+  extensionName: string,
+  dev: boolean,
+): Promise<{ repository: string; branch?: string; isTrusted: boolean } | string> => {
+  if (dev) {
+    // Check externalExtensions/${extensionName} exists
+    try {
+      const currentFileUrl = import.meta.url;
+      const externalExtensionsDirectory = path.resolve(
+        decodeURI(fileURLToPath(currentFileUrl)),
+        "../../externalExtensions",
+      );
+      await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
+    } catch {
+      throw new Error(`Extension not found in "externalExtensions/${extensionName}"`);
+    }
+
+    return extensionName;
+  }
+
+  const { githubUrl, githubBranchUrl, branch, owner } = getDataFromExternalExtensionArgument(extensionName);
+  const isTrusted = TRUSTED_GITHUB_ORGANIZATIONS.includes(owner.toLowerCase()) || !!CURATED_EXTENSIONS[extensionName];
+
+  // Check if repository exists
+  await new Promise((resolve, reject) => {
+    https
+      .get(githubBranchUrl, res => {
+        if (res.statusCode !== 200) {
+          reject(new Error(`Extension not found: ${githubUrl}`));
+        } else {
+          resolve(null);
+        }
+      })
+      .on("error", err => {
+        reject(err);
+      });
+  });
+
+  return { repository: githubUrl, branch, isTrusted };
+};
 
 // Gets the data from the argument passed to the `--extension` option.
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
