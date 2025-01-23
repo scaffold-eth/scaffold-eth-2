@@ -34,7 +34,7 @@ export const AddressStorageTab = ({ address }: { address: Address }) => {
         }
         setStorage(storageData);
       } catch (error) {
-        console.error("Failed to fetch storage:", error);
+        console.warn("Failed to fetch storage:", error);
       }
     };
 

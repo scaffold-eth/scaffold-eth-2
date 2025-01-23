@@ -10,7 +10,7 @@ export const useContractLogs = (address: Address) => {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      if (!client) return console.error("Client not found");
+      if (!client) return console.warn("Client not found");
       try {
         const existingLogs = await client.getLogs({
           address: address,
@@ -19,7 +19,7 @@ export const useContractLogs = (address: Address) => {
         });
         setLogs(existingLogs);
       } catch (error) {
-        console.error("Failed to fetch logs:", error);
+        console.warn("Failed to fetch logs:", error);
       }
     };
     fetchLogs();
