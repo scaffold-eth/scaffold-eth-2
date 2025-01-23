@@ -23,7 +23,7 @@
     "blo": "^1.2.0",
     "burner-connector": "0.0.9",
     "daisyui": "4.12.10",
-    "next": "^15.1.4",
+    "next": "^15.1.6",
     "next-nprogress-bar": "^2.3.13",
     "next-themes": "^0.3.0",
     "qrcode.react": "^4.0.1",
