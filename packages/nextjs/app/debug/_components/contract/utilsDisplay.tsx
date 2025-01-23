@@ -19,7 +19,7 @@ type ResultFontSize = "sm" | "base" | "xs" | "lg" | "xl" | "2xl" | "3xl";
 export const displayTxResult = (
   displayContent: DisplayContent | DisplayContent[],
   fontSize: ResultFontSize = "base",
-): string | ReactElement<any> | number => {
+): string | ReactElement | number => {
   if (displayContent == null) {
     return "";
   }
