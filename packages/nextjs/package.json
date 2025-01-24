@@ -12,7 +12,8 @@
     "start": "next dev",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1",
-    "ipfs": "NEXT_PUBLIC_IPFS_BUILD=true yarn build && node scripts/deploy-ipfs.mjs",
+    "ipfs:init": "bgipfs upload config init -u https://pin.bgipfs.com -a 'Basic dXNlcjpqNFRWNkdlWUxQMjRMb3FzTWNQa2FSU2E0dGRTRVUwcmdJZm0vWGtoTElFPQ=='",
+    "ipfs": "NEXT_PUBLIC_IPFS_BUILD=true yarn build && yarn bgipfs upload out && echo '🚀 Upload complete! Your site is now available at: https://gateway.bgipfs.com/ipfs/${cid}'",
     "vercel:login": "vercel login"
   },
   "dependencies": {
@@ -44,6 +45,7 @@
     "@types/react": "^18.3.5",
     "abitype": "1.0.6",
     "autoprefixer": "^10.4.20",
+    "bgipfs": "^0.0.4",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.15",
     "eslint-config-prettier": "^8.10.0",
