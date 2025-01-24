@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.1.1
+
+### Patch Changes
+
+- 7e6dc73: - update contract sort order in numberic way (https://github.com/scaffold-eth/scaffold-eth-2/pull/1032)
+  - downgrade wagmi and viem version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1038)
+- 1572e5a: Add trusted GitHub organizations for extensions
+- 13bf6a9: cli: allow capital letter in extension name
+
 ## 0.1.0
 
 ### Minor Changes
