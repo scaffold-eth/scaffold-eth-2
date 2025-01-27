@@ -23,6 +23,7 @@
     "hardhat:check-types": "yarn workspace @se-2/hardhat check-types",
     "hardhat:compile": "yarn workspace @se-2/hardhat compile",
     "hardhat:deploy": "yarn workspace @se-2/hardhat deploy",
+    "hardhat:clean": "yarn workspace @se-2/hardhat clean",
     "hardhat:flatten": "yarn workspace @se-2/hardhat flatten",
     "hardhat:fork": "yarn workspace @se-2/hardhat fork",
     "hardhat:format": "yarn workspace @se-2/hardhat format",
