@@ -22,6 +22,7 @@
     "foundry:format": "yarn workspace @se-2/foundry format",
     "foundry:lint": "yarn workspace @se-2/foundry lint",
     "foundry:test": "yarn workspace @se-2/foundry test",
+    "foundry:clean": "yarn workspace @se-2/foundry clean",
     "test": "yarn foundry:test",
     "format": "yarn next:format && yarn foundry:format",
     "start": "yarn workspace @se-2/nextjs dev",
