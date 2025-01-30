@@ -29,7 +29,18 @@ deploy:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
+		if [ -n "$(ETH_KEYSTORE_ACCOUNT)" ]; then \
+			echo "Using keystore: $(ETH_KEYSTORE_ACCOUNT)"; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$(ETH_KEYSTORE_ACCOUNT)"; \
+		else \
+			KEYSTORE=$$(bash scripts/select_keystore.sh "$$RPC_URL"); \
+			if [ -n "$$KEYSTORE" ]; then \
+				forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$$KEYSTORE"; \
+			else \
+				echo "Keystore selection failed. Aborting deployment."; \
+				exit 1; \
+			fi; \
+		fi; \
 	fi
 
 # Deploy and generate ABIs
@@ -53,7 +64,6 @@ account:
 # Generate a new account
 account-generate:
 	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$(ACCOUNT_NAME)"
 
 # Import an existing account
 account-import:
@@ -62,6 +72,29 @@ account-import:
 # Compile contracts
 compile:
 	forge compile
+
+# Deploy and verify
+deploy-verify:
+	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
+		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
+		exit 1; \
+	fi
+	@if [ "$(RPC_URL)" = "localhost" ]; then \
+		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
+		else \
+			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
+		fi \
+	else \
+		KEYSTORE=$$(bash scripts/select_keystore.sh); \
+		if [ -n "$$KEYSTORE" ]; then \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --account ~/.foundry/keystores/"$$KEYSTORE"; \
+		else \
+			echo "Keystore selection failed. Aborting deployment."; \
+			exit 1; \
+		fi; \
+	fi
+	node scripts-js/generateTsAbis.js
 
 # Flatten contracts
 flatten:
@@ -74,6 +107,10 @@ format:
 # Lint code
 lint:
 	forge fmt --check && prettier --check ./script/**/*.js
+
+# Run tests
+test:
+	forge test
 
 # Verify contracts
 verify:
