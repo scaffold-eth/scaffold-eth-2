@@ -1,3 +1,4 @@
+import { basename, resolve } from "path";
 import validateProjectName from "validate-npm-package-name";
 
 type ValidateNpmNameResult =
@@ -10,7 +11,7 @@ type ValidateNpmNameResult =
     };
 
 export function validateNpmName(name: string): ValidateNpmNameResult {
-  const nameValidation = validateProjectName(name);
+  const nameValidation = validateProjectName(basename(resolve(name)));
   if (nameValidation.validForNewPackages) {
     return { valid: true };
   }
