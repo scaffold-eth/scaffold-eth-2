@@ -12,7 +12,7 @@
     "start": "next dev",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
     "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1",
-    "ipfs": "NEXT_PUBLIC_IPFS_BUILD=true yarn build && yarn bgipfs upload config init -u https://upload.bgipfs.com && yarn bgipfs upload out && echo '🚀 Upload complete! Your site is now available at: https://gateway.bgipfs.com/ipfs/${cid}'",
+    "ipfs": "NEXT_PUBLIC_IPFS_BUILD=true yarn build && yarn bgipfs upload config init -u https://upload.bgipfs.com && CID=$(yarn bgipfs upload out | grep -o 'CID: [^ ]*' | cut -d' ' -f2) && [ ! -z \"$CID\" ] && echo '🚀 Upload complete! Your site is now available at: https://community.bgipfs.com/ipfs/'$CID || echo '❌ Upload failed'",
     "vercel:login": "vercel login"
   },
   "dependencies": {
