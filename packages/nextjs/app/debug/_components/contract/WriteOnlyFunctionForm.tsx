@@ -55,7 +55,7 @@ export const WriteOnlyFunctionForm = ({
         await writeTxn(makeWriteWithParams);
         onChange();
       } catch (e: any) {
-        console.error("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
+        console.warn("⚡️ ~ file: WriteOnlyFunctionForm.tsx:handleWrite ~ error", e);
       }
     }
   };

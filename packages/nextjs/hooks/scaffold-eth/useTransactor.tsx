@@ -42,7 +42,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
   const result: TransactionFunc = async (tx, options) => {
     if (!walletClient) {
       notification.error("Cannot access account");
-      console.error("⚡️ ~ file: useTransactor.tsx ~ error");
+      console.warn("⚡️ ~ file: useTransactor.tsx ~ error");
       return;
     }
 
@@ -93,7 +93,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       if (notificationId) {
         notification.remove(notificationId);
       }
-      console.error("⚡️ ~ file: useTransactor.ts ~ error", error);
+      console.warn("⚡️ ~ file: useTransactor.ts ~ error", error);
       const message = getParsedError(error);
 
       // if receipt was reverted, show notification with block explorer link and return error

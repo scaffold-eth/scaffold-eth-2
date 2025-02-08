@@ -63,7 +63,7 @@ export const fetchPriceFromUniswap = async (targetNetwork: ChainWithAttributes):
     const price = parseFloat(route.midPrice.toSignificant(6));
     return price;
   } catch (error) {
-    console.error(
+    console.warn(
       `useNativeCurrencyPrice - Error fetching ${targetNetwork.nativeCurrency.symbol} price from Uniswap: `,
       error,
     );
