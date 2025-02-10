@@ -2102,16 +2102,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:2.1.6":
-  version: 2.1.6
-  resolution: "@rainbow-me/rainbowkit@npm:2.1.6"
+"@rainbow-me/rainbowkit@npm:^2.2.3":
+  version: 2.2.3
+  resolution: "@rainbow-me/rainbowkit@npm:2.2.3"
   dependencies:
     "@vanilla-extract/css": 1.15.5
     "@vanilla-extract/dynamic": 2.1.2
     "@vanilla-extract/sprinkles": 1.6.3
     clsx: 2.1.1
     qrcode: 1.5.4
-    react-remove-scroll: 2.6.0
+    react-remove-scroll: 2.6.2
     ua-parser-js: ^1.0.37
   peerDependencies:
     "@tanstack/react-query": ">=5.0.0"
@@ -2119,7 +2119,7 @@ __metadata:
     react-dom: ">=18"
     viem: 2.x
     wagmi: ^2.9.0
-  checksum: d13af4b9ffa25271282dadfb438b025a3c630bc8e4b9893450a4ac900a8f7f151c02e6c597d52f5fdceff7c0446e4f4c8ebd68ff0773971ec6f6a76c34be0548
+  checksum: 7b74cc4faa94f232bb1dc5844a20091c97c166d7c06ec00fbb3a111cbd165485d521c293280c57193868252c96024bfece26b1f1ca6b49fd340295e46b2d3dd6
   languageName: node
   linkType: hard
 
@@ -2354,7 +2354,7 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": ^2.1.5
-    "@rainbow-me/rainbowkit": 2.1.6
+    "@rainbow-me/rainbowkit": ^2.2.3
     "@tanstack/react-query": ^5.59.15
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/node": ^18.19.50
@@ -11460,19 +11460,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-remove-scroll-bar@npm:^2.3.6":
-  version: 2.3.6
-  resolution: "react-remove-scroll-bar@npm:2.3.6"
+"react-remove-scroll-bar@npm:^2.3.7":
+  version: 2.3.8
+  resolution: "react-remove-scroll-bar@npm:2.3.8"
   dependencies:
-    react-style-singleton: ^2.2.1
+    react-style-singleton: ^2.2.2
     tslib: ^2.0.0
   peerDependencies:
-    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    "@types/react": "*"
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: e793fe110e2ea60d5724d0b60f09de1f6cd1b080df00df9e68bb9a1b985895830e703194647059fdc22402a67a89b7673a5260773b89bcd98031fd99bc91aefa
+  checksum: c4663247f689dbe51c370836edf735487f6d8796acb7f15b09e8a1c14e84c7997360e8e3d54de2bc9c0e782fed2b2c4127d15b4053e4d2cf26839e809e57605f
   languageName: node
   linkType: hard
 
@@ -11495,22 +11495,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-remove-scroll@npm:2.6.0":
-  version: 2.6.0
-  resolution: "react-remove-scroll@npm:2.6.0"
+"react-remove-scroll@npm:2.6.2":
+  version: 2.6.2
+  resolution: "react-remove-scroll@npm:2.6.2"
   dependencies:
-    react-remove-scroll-bar: ^2.3.6
+    react-remove-scroll-bar: ^2.3.7
     react-style-singleton: ^2.2.1
     tslib: ^2.1.0
-    use-callback-ref: ^1.3.0
+    use-callback-ref: ^1.3.3
     use-sidecar: ^1.1.2
   peerDependencies:
-    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    "@types/react": "*"
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: e7ad2383ce20d63cf28f3ed14e63f684e139301fc4a5c1573da330d4465b733e6084c33b2bfcaee448c9b1df0e37993a15d6cba8a1dd80fe631f803e48e9f798
+  checksum: 310e6e6d2f28226a1751dc5084a2dce49167f0b69e3d78d6510f329f423ee313d4f6477f5e1adccb68baef40a7af75541e980a8c398cb82ea0d3573e514e8124
   languageName: node
   linkType: hard
 
@@ -11528,6 +11528,22 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7ee8ef3aab74c7ae1d70ff34a27643d11ba1a8d62d072c767827d9ff9a520905223e567002e0bf6c772929d8ea1c781a3ba0cc4a563e92b1e3dc2eaa817ecbe8
+  languageName: node
+  linkType: hard
+
+"react-style-singleton@npm:^2.2.2":
+  version: 2.2.3
+  resolution: "react-style-singleton@npm:2.2.3"
+  dependencies:
+    get-nonce: ^1.0.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: a7b0bf493c9231065ebafa84c4237aed997c746c561196121b7de82fe155a5355b372db5070a3ac9fe980cf7f60dc0f1e8cf6402a2aa5b2957392932ccf76e76
   languageName: node
   linkType: hard
 
@@ -13582,6 +13598,21 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7913df383a5a6fcb399212eedefaac2e0c6f843555202d4e3010bac3848afe38ecaa3d0d6500ad1d936fbeffd637e6c517e68edb024af5e6beca7f27f3ce7b21
+  languageName: node
+  linkType: hard
+
+"use-callback-ref@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "use-callback-ref@npm:1.3.3"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 4da1c82d7a2409cee6c882748a40f4a083decf238308bf12c3d0166f0e338f8d512f37b8d11987eb5a421f14b9b5b991edf3e11ed25c3bb7a6559081f8359b44
   languageName: node
   linkType: hard
 
