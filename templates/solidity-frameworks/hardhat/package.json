@@ -24,7 +24,7 @@
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "hardhat:verify": "yarn workspace @se-2/hardhat verify",
-    "lint": "yarn nextjs:lint && yarn hardhat:lint",
+    "lint": "yarn next:lint && yarn hardhat:lint",
     "test": "yarn hardhat:test",
     "verify": "yarn hardhat:verify"
   }
