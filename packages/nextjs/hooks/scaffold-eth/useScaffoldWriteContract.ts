@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
-import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
+import { Config, UseWriteContractParameters, useAccount, useConfig, useWriteContract } from "wagmi";
+import { WriteContractErrorType, WriteContractReturnType, simulateContract } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { AllowedChainIds, notification } from "~~/utils/scaffold-eth";
+import { AllowedChainIds, getParsedError, notification } from "~~/utils/scaffold-eth";
 import {
   ContractAbi,
   ContractName,
@@ -60,6 +60,8 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       : (configOrName as UseScaffoldWriteConfig<TContractName>);
   const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
 
+  const wagmiConfig = useConfig();
+
   useEffect(() => {
     if (typeof configOrName === "string") {
       console.warn(
@@ -80,6 +82,16 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     contractName,
     chainId: selectedNetwork.id as AllowedChainIds,
   });
+
+  const simulateAndNotifyError = async (params: WriteContractVariables<Abi, string, any[], Config, number>) => {
+    try {
+      await simulateContract(wagmiConfig, params);
+    } catch (error) {
+      const parsedError = getParsedError(error);
+      notification.error(parsedError);
+      throw error;
+    }
+  };
 
   const sendContractWriteAsyncTx = async <
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
@@ -105,13 +117,18 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     try {
       setIsMining(true);
       const { blockConfirmations, onBlockConfirmation, ...mutateOptions } = options || {};
+
+      const writeContractObject = {
+        abi: deployedContractData.abi as Abi,
+        address: deployedContractData.address,
+        ...variables,
+      } as WriteContractVariables<Abi, string, any[], Config, number>;
+
+      await simulateAndNotifyError(writeContractObject);
+
       const makeWriteWithParams = () =>
         wagmiContractWrite.writeContractAsync(
-          {
-            abi: deployedContractData.abi as Abi,
-            address: deployedContractData.address,
-            ...variables,
-          } as WriteContractVariables<Abi, string, any[], Config, number>,
+          writeContractObject,
           mutateOptions as
             | MutateOptions<
                 WriteContractReturnType,
