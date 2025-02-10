@@ -78,7 +78,7 @@ format:
 
 # Lint code
 lint:
-	forge fmt --check && prettier --check ./script/**/*.js
+	forge fmt --check && prettier --check ./scripts-js/**/*.js
 
 # Verify contracts
 verify:
