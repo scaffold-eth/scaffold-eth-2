@@ -175,6 +175,7 @@ export type UseDeployedContractConfig<TContractName extends ContractName> = {
 export type UseScaffoldWriteConfig<TContractName extends ContractName> = {
   contractName: TContractName;
   chainId?: AllowedChainIds;
+  disableSimulate?: boolean;
   writeContractParams?: UseWriteContractParameters;
 };
 
