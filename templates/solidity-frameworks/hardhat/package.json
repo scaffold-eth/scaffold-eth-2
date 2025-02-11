@@ -12,6 +12,7 @@
     "hardhat:account": "yarn workspace @se-2/hardhat account",
     "hardhat:chain": "yarn workspace @se-2/hardhat chain",
     "hardhat:check-types": "yarn workspace @se-2/hardhat check-types",
+    "hardhat:clean": "yarn workspace @se-2/hardhat clean",
     "hardhat:compile": "yarn workspace @se-2/hardhat compile",
     "hardhat:deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:flatten": "yarn workspace @se-2/hardhat flatten",
@@ -23,7 +24,7 @@
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "hardhat:verify": "yarn workspace @se-2/hardhat verify",
-    "lint": "yarn nextjs:lint && yarn hardhat:lint",
+    "lint": "yarn next:lint && yarn hardhat:lint",
     "test": "yarn hardhat:test",
     "verify": "yarn hardhat:verify"
   }
