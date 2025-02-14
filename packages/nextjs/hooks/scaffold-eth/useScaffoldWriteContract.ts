@@ -7,13 +7,13 @@ import { WriteContractVariables } from "wagmi/query";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
 import { AllowedChainIds, notification } from "~~/utils/scaffold-eth";
-import { simulateContractWriteAndNotifyError } from "~~/utils/scaffold-eth/common";
 import {
   ContractAbi,
   ContractName,
   ScaffoldWriteContractOptions,
   ScaffoldWriteContractVariables,
   UseScaffoldWriteConfig,
+  simulateContractWriteAndNotifyError,
 } from "~~/utils/scaffold-eth/contract";
 
 type ScaffoldWriteContractReturnType<TContractName extends ContractName> = Omit<
