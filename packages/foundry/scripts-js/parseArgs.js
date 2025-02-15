@@ -12,6 +12,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let specifiedKeystore = null;
 
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
@@ -20,10 +21,11 @@ Usage: yarn deploy [options]
 Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
   --network <network>   Specify the network (default: localhost)
+  --keystore <name>     Specify the keystore to use (skips interactive selection)
   --help, -h           Show this help message
 Examples:
   yarn deploy --file DeployYourContract.s.sol --network sepolia
-  yarn deploy --network sepolia
+  yarn deploy --network sepolia --keystore scaffold-eth-custom
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
@@ -38,10 +40,14 @@ for (let i = 0; i < args.length; i++) {
   } else if (args[i] === "--file" && args[i + 1]) {
     fileName = args[i + 1];
     i++; // Skip next arg since we used it
+  } else if (args[i] === "--keystore" && args[i + 1]) {
+    specifiedKeystore = args[i + 1];
+    i++; // Skip next arg since we used it
   }
 }
 
 // Check if the network exists in rpc_endpoints
+let rpcUrl;
 try {
   const foundryTomlPath = join(__dirname, "..", "foundry.toml");
   const tomlString = readFileSync(foundryTomlPath, "utf-8");
@@ -54,45 +60,55 @@ try {
     );
     process.exit(1);
   }
+
+  rpcUrl = parsedToml.rpc_endpoints[network].replace(/\${(\w+)}/g, (_, key) => {
+    const value = process.env[key];
+    if (!value) {
+      console.log(`\n❌ Error: Environment variable ${key} is not set!`);
+      process.exit(1);
+    }
+    return value;
+  });
 } catch (error) {
   console.error("\n❌ Error reading or parsing foundry.toml:", error);
   process.exit(1);
 }
 
-// Check for default account on live network
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
-  network !== "localhost"
-) {
-  console.log(`
-❌ Error: Cannot deploy to live network using default keystore account!
+let selectedKeystore = process.env.ETH_KEYSTORE_ACCOUNT;
+if (network !== "localhost") {
+  if (specifiedKeystore) {
+    // If keystore is specified, verify it exists
+    const keystoreResult = spawnSync(
+      "test",
+      [
+        "-f",
+        join(process.env.HOME, ".foundry", "keystores", specifiedKeystore),
+      ],
+      { stdio: "pipe" }
+    );
 
-To deploy to ${network}, please follow these steps:
+    if (keystoreResult.status !== 0) {
+      console.error(`\n❌ Error: Keystore '${specifiedKeystore}' not found!`);
+      process.exit(1);
+    }
 
-1. If you haven't generated a keystore account yet:
-   $ yarn generate
+    selectedKeystore = specifiedKeystore;
+  } else {
+    // Interactive keystore selection if not specified
+    const keystoreResult = spawnSync(
+      "bash",
+      [join(__dirname, "..", "scripts", "select_keystore.sh"), rpcUrl],
+      { stdio: ["inherit", "pipe", "inherit"], encoding: "utf-8" }
+    );
 
-2. Update your .env file:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
+    if (keystoreResult.status !== 0) {
+      console.error("\n❌ Error selecting keystore");
+      process.exit(1);
+    }
 
-The default account (scaffold-eth-default) can only be used for localhost deployments.
-`);
-  process.exit(0);
-}
-
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
-  network === "localhost"
-) {
-  console.log(`
-⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
-
-You can either:
-1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
-   OR
-2. Set the default keystore account in your .env and re-run the command to skip password prompt:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
-`);
+    selectedKeystore = keystoreResult.stdout.trim();
+  }
+  process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 }
 
 // Set environment variables for the make command
@@ -105,6 +121,7 @@ const result = spawnSync(
     "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
+    `ETH_KEYSTORE_ACCOUNT=${process.env.ETH_KEYSTORE_ACCOUNT}`,
   ],
   {
     stdio: "inherit",
