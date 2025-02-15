@@ -21,15 +21,18 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
 
   useEffect(() => {
     // Extract and group fields based on index prefix
-    const groupedFields = Object.keys(form).reduce((acc, key) => {
-      const [indexPrefix, ...restArray] = key.split("_");
-      const componentName = restArray.join("_");
-      if (!acc[indexPrefix]) {
-        acc[indexPrefix] = {};
-      }
-      acc[indexPrefix][componentName] = form[key];
-      return acc;
-    }, {} as Record<string, Record<string, any>>);
+    const groupedFields = Object.keys(form).reduce(
+      (acc, key) => {
+        const [indexPrefix, ...restArray] = key.split("_");
+        const componentName = restArray.join("_");
+        if (!acc[indexPrefix]) {
+          acc[indexPrefix] = {};
+        }
+        acc[indexPrefix][componentName] = form[key];
+        return acc;
+      },
+      {} as Record<string, Record<string, any>>,
+    );
 
     let argsArray: Array<Record<string, any>> = [];
 
@@ -99,7 +102,7 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
     <div>
       <div className="collapse collapse-arrow bg-base-200 pl-4 py-1.5 border-2 border-secondary">
         <input type="checkbox" className="min-h-fit peer" />
-        <div className="collapse-title p-0 min-h-fit peer-checked:mb-1 text-primary-content/50">
+        <div className="collapse-title after:!top-3.5 p-0 min-h-fit peer-checked:mb-1 text-primary-content/50">
           <p className="m-0 text-[1rem]">{abiTupleParameter.internalType}</p>
         </div>
         <div className="ml-3 flex-col space-y-2 border-secondary/70 border-l-2 pl-4 collapse-content">
