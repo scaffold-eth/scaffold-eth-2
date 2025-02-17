@@ -4,6 +4,9 @@ import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
+import { accessSync } from "fs";
+import { constants } from "fs";
+import { selectKeystore } from './selectKeystore.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
@@ -78,16 +81,10 @@ let selectedKeystore = process.env.ETH_KEYSTORE_ACCOUNT;
 if (network !== "localhost") {
   if (specifiedKeystore) {
     // If keystore is specified, verify it exists
-    const keystoreResult = spawnSync(
-      "test",
-      [
-        "-f",
-        join(process.env.HOME, ".foundry", "keystores", specifiedKeystore),
-      ],
-      { stdio: "pipe" }
-    );
-
-    if (keystoreResult.status !== 0) {
+    const keystorePath = join(process.env.HOME, '.foundry', 'keystores', specifiedKeystore);
+    try {
+      accessSync(keystorePath, constants.F_OK);
+    } catch (error) {
       console.error(`\n❌ Error: Keystore '${specifiedKeystore}' not found!`);
       process.exit(1);
     }
@@ -95,18 +92,12 @@ if (network !== "localhost") {
     selectedKeystore = specifiedKeystore;
   } else {
     // Interactive keystore selection if not specified
-    const keystoreResult = spawnSync(
-      "bash",
-      [join(__dirname, "..", "scripts", "select_keystore.sh"), rpcUrl],
-      { stdio: ["inherit", "pipe", "inherit"], encoding: "utf-8" }
-    );
-
-    if (keystoreResult.status !== 0) {
-      console.error("\n❌ Error selecting keystore");
+    try {
+      selectedKeystore = await selectKeystore();
+    } catch (error) {
+      console.error("\n❌ Error selecting keystore:", error);
       process.exit(1);
     }
-
-    selectedKeystore = keystoreResult.stdout.trim();
   }
   process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 }
