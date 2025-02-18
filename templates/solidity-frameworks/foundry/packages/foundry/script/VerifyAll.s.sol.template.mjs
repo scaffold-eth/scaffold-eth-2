@@ -73,7 +73,7 @@ contract VerifyAll is Script {
         inputs[5] = vm.toString(block.chainid);
         inputs[6] = "--constructor-args";
         inputs[7] = vm.toString(constructorArgs);
-${formattedArgs}
+        ${formattedArgs}
 
         FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
 
