@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Config, UseWriteContractParameters, useAccount, useWriteContract } from "wagmi";
+import { Config, UseWriteContractParameters, useAccount, useConfig, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
@@ -13,6 +13,7 @@ import {
   ScaffoldWriteContractOptions,
   ScaffoldWriteContractVariables,
   UseScaffoldWriteConfig,
+  simulateContractWriteAndNotifyError,
 } from "~~/utils/scaffold-eth/contract";
 
 type ScaffoldWriteContractReturnType<TContractName extends ContractName> = Omit<
@@ -60,6 +61,8 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       : (configOrName as UseScaffoldWriteConfig<TContractName>);
   const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
 
+  const wagmiConfig = useConfig();
+
   useEffect(() => {
     if (typeof configOrName === "string") {
       console.warn(
@@ -105,13 +108,20 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     try {
       setIsMining(true);
       const { blockConfirmations, onBlockConfirmation, ...mutateOptions } = options || {};
+
+      const writeContractObject = {
+        abi: deployedContractData.abi as Abi,
+        address: deployedContractData.address,
+        ...variables,
+      } as WriteContractVariables<Abi, string, any[], Config, number>;
+
+      if (!finalConfig?.disableSimulate) {
+        await simulateContractWriteAndNotifyError({ wagmiConfig, writeContractParams: writeContractObject });
+      }
+
       const makeWriteWithParams = () =>
         wagmiContractWrite.writeContractAsync(
-          {
-            abi: deployedContractData.abi as Abi,
-            address: deployedContractData.address,
-            ...variables,
-          } as WriteContractVariables<Abi, string, any[], Config, number>,
+          writeContractObject,
           mutateOptions as
             | MutateOptions<
                 WriteContractReturnType,
