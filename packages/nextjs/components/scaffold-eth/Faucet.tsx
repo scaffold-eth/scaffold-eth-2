@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AddressInput2 } from "./Input/AddressInput2";
+import { CustomAddressInput } from "./Input/CustomAddressInput";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
@@ -23,6 +25,8 @@ const localWalletClient = createWalletClient({
 export const Faucet = () => {
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState<AddressType>();
+  const [inputAddress2, setInputAddress2] = useState<AddressType>();
+  const [inputAddress3, setInputAddress3] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
 
@@ -110,6 +114,16 @@ export const Faucet = () => {
                 placeholder="Destination Address"
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
+              />
+              <AddressInput2
+                placeholder="Destination Address"
+                value={inputAddress2 ?? ""}
+                onChange={value => setInputAddress2(value as AddressType)}
+              />
+              <CustomAddressInput
+                placeholder="Destination Address"
+                value={inputAddress3 ?? ""}
+                onChange={value => setInputAddress3(value as AddressType)}
               />
               <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
               <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
