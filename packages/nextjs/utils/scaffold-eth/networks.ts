@@ -36,6 +36,11 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.celoAlfajores.id]: "celo-alfajores",
 };
 
+export const getRpcOverrideHttpUrl = (chainId: number) => {
+  const rpcOverride = scaffoldConfig.rpcOverrides[chainId as keyof typeof scaffoldConfig.rpcOverrides];
+  return rpcOverride;
+};
+
 export const getAlchemyHttpUrl = (chainId: number) => {
   return scaffoldConfig.alchemyApiKey && RPC_CHAIN_NAMES[chainId]
     ? `https://${RPC_CHAIN_NAMES[chainId]}.g.alchemy.com/v2/${scaffoldConfig.alchemyApiKey}`
