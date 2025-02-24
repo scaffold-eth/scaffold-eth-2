@@ -35,6 +35,7 @@ yarn-error.log*
 .env.production.local
 
 # typescript
-*.tsbuildinfo`
+*.tsbuildinfo
+ipfs-upload.config.json`
 
 export default contents

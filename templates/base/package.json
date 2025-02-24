@@ -19,7 +19,8 @@
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
-    "vercel:login": "yarn workspace @se-2/nextjs vercel:login"
+    "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
+    "ipfs": "yarn workspace @se-2/nextjs ipfs"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
@@ -27,6 +28,6 @@
     "lint-staged": "~13.2.2"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20.18.3"
   }
 }
