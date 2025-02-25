@@ -13,7 +13,7 @@ async function selectKeystore() {
   const keystorePath = join(process.env.HOME, '.foundry', 'keystores');
   
   try {
-    const keystores = readdirSync(keystorePath);
+    const keystores = readdirSync(keystorePath).filter(keystore => keystore !== 'scaffold-eth-default');
     
     if (keystores.length === 0) {
       console.error('\n❌ No keystores found in ~/.foundry/keystores');
