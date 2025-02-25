@@ -50,7 +50,6 @@ for (let i = 0; i < args.length; i++) {
 }
 
 // Check if the network exists in rpc_endpoints
-let rpcUrl;
 try {
   const foundryTomlPath = join(__dirname, "..", "foundry.toml");
   const tomlString = readFileSync(foundryTomlPath, "utf-8");
@@ -63,15 +62,6 @@ try {
     );
     process.exit(1);
   }
-
-  rpcUrl = parsedToml.rpc_endpoints[network].replace(/\${(\w+)}/g, (_, key) => {
-    const value = process.env[key];
-    if (!value) {
-      console.log(`\n❌ Error: Environment variable ${key} is not set!`);
-      process.exit(1);
-    }
-    return value;
-  });
 } catch (error) {
   console.error("\n❌ Error reading or parsing foundry.toml:", error);
   process.exit(1);
