@@ -1,6 +1,6 @@
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import { spawnSync } from 'child_process';
+import { spawnSync, spawn } from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
 
@@ -13,7 +13,6 @@ async function selectKeystore() {
   const keystorePath = join(process.env.HOME, '.foundry', 'keystores');
   
   try {
-    // Get list of keystores
     const keystores = readdirSync(keystorePath);
     
     if (keystores.length === 0) {
@@ -21,34 +20,73 @@ async function selectKeystore() {
       process.exit(1);
     }
 
-    // Display keystores with their associated addresses
     console.log('\n🔑 Available keystores:');
-    const keystoreDetails = keystores.map((keystore, index) => {
-      // Get address for each keystore using cast
-      const result = spawnSync('cast', ['wallet', 'address', '--keystore', join(keystorePath, keystore)], {
+    console.log('0. Create new keystore');
+    
+    keystores.map((keystore, index) => {
+      console.log(`${index + 1}. ${keystore}`);
+      
+      return { keystore };
+    });
+
+    const answer = await new Promise(resolve => {
+      rl.question('\nSelect a keystore or create new (enter number): ', resolve);
+    });
+
+    const selection = parseInt(answer);
+
+    if (selection === 0) {
+      const newWalletResult = spawnSync('cast', ['wallet', 'new'], {
         encoding: 'utf-8'
       });
-      
-      const address = result.stdout.trim();
-      console.log(`${index + 1}. ${keystore} (${address})`);
-      
-      return { keystore, address };
-    });
 
-    // Prompt user for selection
-    const answer = await new Promise(resolve => {
-      rl.question('\nSelect a keystore (enter number): ', resolve);
-    });
+      if (newWalletResult.error || newWalletResult.status !== 0) {
+        console.error('\n❌ Error generating new wallet:', newWalletResult.stderr || newWalletResult.error);
+        process.exit(1);
+      }
 
-    const selection = parseInt(answer) - 1;
+      const privateKey = newWalletResult.stdout
+        .split('\n')
+        .find(line => line.includes('Private key:'))
+        ?.split(':')[1]
+        ?.trim();
 
-    if (isNaN(selection) || selection < 0 || selection >= keystores.length) {
+      if (!privateKey) {
+        console.error('\n❌ Could not extract private key from output');
+        process.exit(1);
+      }
+
+      const keystoreName = await new Promise(resolve => {
+        rl.question('\nEnter name for new keystore: ', resolve);
+      });
+
+      return new Promise((resolve, reject) => {
+        const importProcess = spawn('cast', ['wallet', 'import', keystoreName, '--private-key', privateKey], {
+          stdio: 'inherit'
+        });
+
+        importProcess.on('close', (code) => {
+          if (code === 0) {
+            console.log('\n✅ New keystore created successfully!');
+            console.log('\n🔑 Created new keystore:', keystoreName);
+            console.log('\n💻 Please re-run the script to select the keystore!');
+            process.exit(0);
+          } else {
+            console.error('\n❌ Error importing keystore');
+            reject(new Error('Import failed'));
+          }
+        });
+      });
+    }
+
+    if (isNaN(selection) || selection < 1 || selection > keystores.length) {
       console.error('\n❌ Invalid selection');
       process.exit(1);
     }
 
-    // Return selected keystore name
-    return keystores[selection];
+    const selectedKeystore = keystores[selection - 1];
+    
+    return selectedKeystore;
 
   } catch (error) {
     console.error('\n❌ Error reading keystores:', error);
@@ -60,9 +98,14 @@ async function selectKeystore() {
 
 // Run the selection if this script is called directly
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  selectKeystore().then(keystore => {
-    console.log(keystore); // Print selected keystore for capture by parent process
-  });
+  selectKeystore()
+    .then(keystore => {
+      console.log('\n🔑 Selected keystore:', keystore);
+    })
+    .catch(error => {
+      console.error(error);
+      process.exit(1);
+    });
 }
 
 export { selectKeystore };
