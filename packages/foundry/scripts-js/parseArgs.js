@@ -4,6 +4,9 @@ import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
+import { accessSync } from "fs";
+import { constants } from "fs";
+import { selectKeystore } from './selectKeystore.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
@@ -12,6 +15,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let specifiedKeystore = null;
 
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
@@ -20,10 +24,11 @@ Usage: yarn deploy [options]
 Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
   --network <network>   Specify the network (default: localhost)
+  --keystore <name>     Specify the keystore to use (skips interactive selection)
   --help, -h           Show this help message
 Examples:
   yarn deploy --file DeployYourContract.s.sol --network sepolia
-  yarn deploy --network sepolia
+  yarn deploy --network sepolia --keystore scaffold-eth-custom
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
@@ -37,6 +42,9 @@ for (let i = 0; i < args.length; i++) {
     i++; // Skip next arg since we used it
   } else if (args[i] === "--file" && args[i + 1]) {
     fileName = args[i + 1];
+    i++; // Skip next arg since we used it
+  } else if (args[i] === "--keystore" && args[i + 1]) {
+    specifiedKeystore = args[i + 1];
     i++; // Skip next arg since we used it
   }
 }
@@ -59,40 +67,29 @@ try {
   process.exit(1);
 }
 
-// Check for default account on live network
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
-  network !== "localhost"
-) {
-  console.log(`
-❌ Error: Cannot deploy to live network using default keystore account!
+let selectedKeystore = "scaffold-eth-default";
+if (network !== "localhost") {
+  if (specifiedKeystore) {
+    // If keystore is specified, verify it exists
+    const keystorePath = join(process.env.HOME, '.foundry', 'keystores', specifiedKeystore);
+    try {
+      accessSync(keystorePath, constants.F_OK);
+    } catch (error) {
+      console.error(`\n❌ Error: Keystore '${specifiedKeystore}' not found!`);
+      process.exit(1);
+    }
 
-To deploy to ${network}, please follow these steps:
-
-1. If you haven't generated a keystore account yet:
-   $ yarn generate
-
-2. Update your .env file:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
-
-The default account (scaffold-eth-default) can only be used for localhost deployments.
-`);
-  process.exit(0);
-}
-
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
-  network === "localhost"
-) {
-  console.log(`
-⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
-
-You can either:
-1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
-   OR
-2. Set the default keystore account in your .env and re-run the command to skip password prompt:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
-`);
+    selectedKeystore = specifiedKeystore;
+  } else {
+    // Interactive keystore selection if not specified
+    try {
+      selectedKeystore = await selectKeystore();
+    } catch (error) {
+      console.error("\n❌ Error selecting keystore:", error);
+      process.exit(1);
+    }
+  }
+  process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 }
 
 // Set environment variables for the make command
@@ -105,6 +102,7 @@ const result = spawnSync(
     "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
+    `ETH_KEYSTORE_ACCOUNT=${selectedKeystore}`,
   ],
   {
     stdio: "inherit",
