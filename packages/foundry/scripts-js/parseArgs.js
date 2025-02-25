@@ -67,7 +67,7 @@ try {
   process.exit(1);
 }
 
-let selectedKeystore = process.env.ETH_KEYSTORE_ACCOUNT;
+let selectedKeystore = "scaffold-eth-default";
 if (network !== "localhost") {
   if (specifiedKeystore) {
     // If keystore is specified, verify it exists
@@ -102,7 +102,7 @@ const result = spawnSync(
     "deploy-and-generate-abis",
     `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
     `RPC_URL=${process.env.RPC_URL}`,
-    `ETH_KEYSTORE_ACCOUNT=${process.env.ETH_KEYSTORE_ACCOUNT}`,
+    `ETH_KEYSTORE_ACCOUNT=${selectedKeystore}`,
   ],
   {
     stdio: "inherit",
