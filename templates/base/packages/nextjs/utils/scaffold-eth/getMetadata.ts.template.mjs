@@ -1,7 +1,7 @@
 import { withDefaults } from '../../../../../utils.js'
 
-const contents = ({ titleTemplate, thumbnailPath }) =>
-`import type { Metadata } from "next";
+const contents = ({ titleTemplate, extraIcons, extraMetadata, thumbnailPath }) => `
+import type { Metadata } from "next";
 
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? \`https://\${process.env.VERCEL_PROJECT_PRODUCTION_URL}\`
@@ -48,12 +48,16 @@ export const getMetadata = ({
     },
     icons: {
       icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+      ${extraIcons[0] ? Object.entries(extraIcons[0]).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join(',\n      ') : ''}
     },
+    ${extraMetadata[0] ? Object.entries(extraMetadata[0]).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join(',\n    ') : ''}
   };
 };
 `
 
 export default withDefaults(contents, {
+  extraIcons: {},
+  extraMetadata: {},
   titleTemplate: "%s | Scaffold-ETH 2",
   thumbnailPath: "/thumbnail.jpg",
 })
