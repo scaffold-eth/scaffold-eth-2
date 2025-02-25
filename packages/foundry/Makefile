@@ -21,16 +21,20 @@ deploy:
 	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
 		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
 		exit 1; \
-	fi
-	@if [ "$(RPC_URL)" = "localhost" ]; then \
+	fi; \
+	if [ "$(RPC_URL)" = "localhost" ]; then \
 		forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
 	else \
 		if [ -n "$(ETH_KEYSTORE_ACCOUNT)" ]; then \
+			if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
+				echo "Error: scaffold-eth-default keystore can only be used with localhost. Please use a different keystore for non-localhost deployments."; \
+				exit 1; \
+			fi; \
 			echo "Using keystore: $(ETH_KEYSTORE_ACCOUNT)"; \
 			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$(ETH_KEYSTORE_ACCOUNT)"; \
 		else \
 			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi; \
-		fi \
+		fi; \
 	fi
 
 # Deploy and generate ABIs
@@ -62,29 +66,6 @@ account-import:
 # Compile contracts
 compile:
 	forge compile
-
-# Deploy and verify
-deploy-verify:
-	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
-		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
-		exit 1; \
-	fi
-	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
-		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
-		fi \
-	else \
-		KEYSTORE=$$(bash scripts/select_keystore.sh); \
-		if [ -n "$$KEYSTORE" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify --account ~/.foundry/keystores/"$$KEYSTORE"; \
-		else \
-			echo "Keystore selection failed. Aborting deployment."; \
-			exit 1; \
-		fi; \
-	fi
-	node scripts-js/generateTsAbis.js
 
 # Flatten contracts
 flatten:
