@@ -24,7 +24,7 @@
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
-    "husky": "~8.0.3",
+    "husky": "~9.1.6",
     "lint-staged": "~13.2.2"
   },
   "engines": {
