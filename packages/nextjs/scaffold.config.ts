@@ -4,7 +4,7 @@ export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
   alchemyApiKey: string;
-  rpcOverrides: Record<number, string>;
+  rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
 };
@@ -26,10 +26,10 @@ const scaffoldConfig = {
   alchemyApiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY,
 
   // If you want to use a different RPC for a specific network, you can add it here.
-  // The key is the chain ID, and the value is the RPC URL.
-  // (this should be commented)
+  // The key is the chain ID, and the value is the HTTP RPC URL
   rpcOverrides: {
-    [chains.mainnet.id]: "https://mainnet.buidlguidl.com",
+    // Example:
+    // [chains.mainnet.id]: "https://mainnet.buidlguidl.com",
   },
 
   // This is ours WalletConnect's default project ID.
