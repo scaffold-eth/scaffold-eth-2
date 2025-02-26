@@ -1,10 +1,204 @@
-<svg width="103" height="102" viewBox="0 0 103 102" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0.72229" y="0.99707" width="101.901" height="100.925" rx="19.6606" fill="black"/>
-<path d="M69.4149 42.5046L70.9118 39.812L72.5438 42.5046L83.0241 59.1906L70.9533 65.9361L59.1193 59.1906L69.4149 42.5046Z" fill="white"/>
-<path d="M70.9533 69.2496L60.6577 63.6876L70.9533 79.0719L81.184 63.4985L70.9533 69.2496Z" fill="white"/>
-<path d="M70.953 65.9259V41.8533V39.8499L83.063 59.1785L70.953 65.9259Z" fill="#DFDFDF"/>
-<path d="M70.9617 79.0499L71.0409 69.2969L81.2062 63.4629L70.9617 79.0499Z" fill="#DFDFDF"/>
-<path d="M34.409 21.6931V24.6125H34.4132L34.4124 27.747H26.8093L26.8093 27.7566H25.5383L21.3839 36.4914H34.4135V39.9723H34.4091L34.4135 69.4549C34.4135 73.5268 31.1126 76.8277 27.0408 76.8277H24.7346L19.8064 84.0772H62.4172L57.3539 76.8277H51.7795C47.7076 76.8277 44.4067 73.5268 44.4067 69.4549L44.4024 43.665C44.5071 39.7076 47.7304 36.5273 51.7046 36.4914H79.5481L74.6584 27.7566H53.6021L53.6021 27.747L44.3987 27.7469L44.3994 24.6125H44.4022V18.3245L34.409 21.6931Z" fill="white"/>
-<path d="M39.882 19.8517V76.5496C39.9731 74.9642 41.0475 70.8554 44.3648 69.1027V50.8665L44.4703 50.8998V43.8309C44.4703 39.7591 47.7712 36.4582 51.843 36.4582H79.5812L76.9508 31.8656H49.9083C46.1286 31.8656 44.3648 34.556 44.3648 34.556L44.4435 18.3066L39.882 19.8517Z" fill="#DFDFDF"/>
-<path d="M23.622 31.7927L21.3295 36.5083H34.4247V31.7927H23.622Z" fill="#DFDFDF"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <!-- Removed the background rectangle to make background transparent -->
+  
+  <!-- Circular backdrop with gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E7D32" />
+      <stop offset="100%" stop-color="#1565C0" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+    </radialGradient>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+    </filter>
+  </defs>
+  
+  <circle cx="300" cy="300" r="250" fill="url(#bg-gradient)" />
+  <circle cx="300" cy="300" r="250" fill="url(#glow)" />
+  
+  <!-- Honeycomb structure background -->
+  <g opacity="0.15">
+    <!-- Row 1 -->
+    <path d="M150,155 L180,138 L210,155 L210,189 L180,206 L150,189 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M210,155 L240,138 L270,155 L270,189 L240,206 L210,189 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M270,155 L300,138 L330,155 L330,189 L300,206 L270,189 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M330,155 L360,138 L390,155 L390,189 L360,206 L330,189 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M390,155 L420,138 L450,155 L450,189 L420,206 L390,189 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    
+    <!-- Row 2 -->
+    <path d="M120,189 L150,172 L180,189 L180,223 L150,240 L120,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M180,189 L210,172 L240,189 L240,223 L210,240 L180,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M240,189 L270,172 L300,189 L300,223 L270,240 L240,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M300,189 L330,172 L360,189 L360,223 L330,240 L300,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M360,189 L390,172 L420,189 L420,223 L390,240 L360,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M420,189 L450,172 L480,189 L480,223 L450,240 L420,223 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    
+    <!-- Row 3 -->
+    <path d="M150,223 L180,206 L210,223 L210,257 L180,274 L150,257 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M210,223 L240,206 L270,223 L270,257 L240,274 L210,257 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M270,223 L300,206 L330,223 L330,257 L300,274 L270,257 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M330,223 L360,206 L390,223 L390,257 L360,274 L330,257 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M390,223 L420,206 L450,223 L450,257 L420,274 L390,257 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    
+    <!-- Row 4 -->
+    <path d="M120,257 L150,240 L180,257 L180,291 L150,308 L120,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M180,257 L210,240 L240,257 L240,291 L210,308 L180,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M240,257 L270,240 L300,257 L300,291 L270,308 L240,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M300,257 L330,240 L360,257 L360,291 L330,308 L300,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M360,257 L390,240 L420,257 L420,291 L390,308 L360,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+    <path d="M420,257 L450,240 L480,257 L480,291 L450,308 L420,291 Z" fill="#FFFFFF" stroke="#E8F5E9" stroke-width="1" />
+  </g>
+  
+  <!-- Central honeycomb structure - with blues and greens -->
+  <g>
+    <!-- Central hexagon -->
+    <path d="M300,240 L340,262 L340,306 L300,328 L260,306 L260,262 Z" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1.5" />
+    
+    <!-- Surrounding hexagons in refined blue and green colors -->
+    <path d="M300,196 L340,218 L340,262 L300,284 L260,262 L260,218 Z" fill="#A8E6CF" opacity="0.9" stroke="#88D8BD" stroke-width="1" />
+    <path d="M340,218 L380,196 L420,218 L420,262 L380,284 L340,262 Z" fill="#8FD3C4" opacity="0.9" stroke="#7BC4B6" stroke-width="1" />
+    <path d="M340,306 L380,284 L420,306 L420,350 L380,372 L340,350 Z" fill="#7FCDFF" opacity="0.9" stroke="#69B7E8" stroke-width="1" />
+    <path d="M300,328 L340,350 L340,394 L300,416 L260,394 L260,350 Z" fill="#6CB2E8" opacity="0.9" stroke="#5A9DD1" stroke-width="1" />
+    <path d="M260,306 L300,328 L300,372 L260,394 L220,372 L220,328 Z" fill="#5AABD8" opacity="0.9" stroke="#4696C3" stroke-width="1" />
+    <path d="M260,218 L300,196 L300,240 L260,262 L220,240 L220,196 Z" fill="#DCEDC1" opacity="0.9" stroke="#C5D8A4" stroke-width="1" />
+    
+    <!-- Additional outer hexagons -->
+    <path d="M380,152 L420,174 L420,218 L380,240 L340,218 L340,174 Z" fill="#C7F9CC" opacity="0.8" stroke="#AEE6B3" stroke-width="1" />
+    <path d="M420,306 L460,284 L500,306 L500,350 L460,372 L420,350 Z" fill="#98D6EA" opacity="0.8" stroke="#7EC0D6" stroke-width="1" />
+    <path d="M340,394 L380,372 L420,394 L420,438 L380,460 L340,438 Z" fill="#81CAEF" opacity="0.8" stroke="#6EB4D8" stroke-width="1" />
+    <path d="M220,372 L260,394 L260,438 L220,460 L180,438 L180,394 Z" fill="#8FD3FF" opacity="0.8" stroke="#78BCEB" stroke-width="1" />
+    <path d="M180,240 L220,218 L260,240 L260,284 L220,306 L180,284 Z" fill="#E1F5C4" opacity="0.8" stroke="#CBDFAC" stroke-width="1" />
+    <path d="M260,152 L300,130 L340,152 L340,196 L300,218 L260,196 Z" fill="#E8F6CA" opacity="0.8" stroke="#D1E0B4" stroke-width="1" />
+  </g>
+  
+  <!-- Bees and pollen particles -->
+  <g>
+    <!-- More realistic bee design -->
+    <!-- Bee 1 -->
+    <g transform="translate(220, 230) rotate(15)">
+      <!-- Bee body -->
+      <ellipse cx="0" cy="0" rx="9" ry="6" fill="#FFA000" />
+      
+      <!-- Stripes -->
+      <path d="M-6,-2 L6,-2 L6,0 L-6,0 Z" fill="#212121" />
+      <path d="M-5,-4 L5,-4 L5,-2 L-5,-2 Z" fill="#FFA000" />
+      <path d="M-6,0 L6,0 L6,2 L-6,2 Z" fill="#FFA000" />
+      <path d="M-5,2 L5,2 L5,4 L-5,4 Z" fill="#212121" />
+      
+      <!-- Head -->
+      <circle cx="-7" cy="0" r="4" fill="#212121" />
+      
+      <!-- Eyes -->
+      <circle cx="-8" cy="-1" r="1" fill="#FFFFFF" />
+      <circle cx="-8" cy="1" r="1" fill="#FFFFFF" />
+      
+      <!-- Antenna -->
+      <path d="M-10,-1 C-12,-3 -13,-5 -12,-6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <path d="M-10,1 C-12,3 -13,5 -12,6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <circle cx="-12" cy="-6" r="0.8" fill="#212121" />
+      <circle cx="-12" cy="6" r="0.8" fill="#212121" />
+      
+      <!-- Wings -->
+      <ellipse cx="2" cy="-6" rx="6" ry="4" fill="#FFFFFF" opacity="0.7" transform="rotate(-15)" />
+      <ellipse cx="2" cy="6" rx="5" ry="3" fill="#FFFFFF" opacity="0.6" transform="rotate(15)" />
+    </g>
+    
+    <!-- Bee 2 -->
+    <g transform="translate(400, 290) rotate(-30)">
+      <!-- Bee body -->
+      <ellipse cx="0" cy="0" rx="9" ry="6" fill="#FFA000" />
+      
+      <!-- Stripes -->
+      <path d="M-6,-2 L6,-2 L6,0 L-6,0 Z" fill="#212121" />
+      <path d="M-5,-4 L5,-4 L5,-2 L-5,-2 Z" fill="#FFA000" />
+      <path d="M-6,0 L6,0 L6,2 L-6,2 Z" fill="#FFA000" />
+      <path d="M-5,2 L5,2 L5,4 L-5,4 Z" fill="#212121" />
+      
+      <!-- Head -->
+      <circle cx="-7" cy="0" r="4" fill="#212121" />
+      
+      <!-- Eyes -->
+      <circle cx="-8" cy="-1" r="1" fill="#FFFFFF" />
+      <circle cx="-8" cy="1" r="1" fill="#FFFFFF" />
+      
+      <!-- Antenna -->
+      <path d="M-10,-1 C-12,-3 -13,-5 -12,-6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <path d="M-10,1 C-12,3 -13,5 -12,6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <circle cx="-12" cy="-6" r="0.8" fill="#212121" />
+      <circle cx="-12" cy="6" r="0.8" fill="#212121" />
+      
+      <!-- Wings -->
+      <ellipse cx="2" cy="-6" rx="6" ry="4" fill="#FFFFFF" opacity="0.7" transform="rotate(-15)" />
+      <ellipse cx="2" cy="6" rx="5" ry="3" fill="#FFFFFF" opacity="0.6" transform="rotate(15)" />
+    </g>
+    
+    <!-- Bee 3 -->
+    <g transform="translate(300, 180) rotate(60)">
+      <!-- Bee body -->
+      <ellipse cx="0" cy="0" rx="9" ry="6" fill="#FFA000" />
+      
+      <!-- Stripes -->
+      <path d="M-6,-2 L6,-2 L6,0 L-6,0 Z" fill="#212121" />
+      <path d="M-5,-4 L5,-4 L5,-2 L-5,-2 Z" fill="#FFA000" />
+      <path d="M-6,0 L6,0 L6,2 L-6,2 Z" fill="#FFA000" />
+      <path d="M-5,2 L5,2 L5,4 L-5,4 Z" fill="#212121" />
+      
+      <!-- Head -->
+      <circle cx="-7" cy="0" r="4" fill="#212121" />
+      
+      <!-- Eyes -->
+      <circle cx="-8" cy="-1" r="1" fill="#FFFFFF" />
+      <circle cx="-8" cy="1" r="1" fill="#FFFFFF" />
+      
+      <!-- Antenna -->
+      <path d="M-10,-1 C-12,-3 -13,-5 -12,-6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <path d="M-10,1 C-12,3 -13,5 -12,6" stroke="#212121" stroke-width="0.8" fill="none" />
+      <circle cx="-12" cy="-6" r="0.8" fill="#212121" />
+      <circle cx="-12" cy="6" r="0.8" fill="#212121" />
+      
+      <!-- Wings -->
+      <ellipse cx="2" cy="-6" rx="6" ry="4" fill="#FFFFFF" opacity="0.7" transform="rotate(-15)" />
+      <ellipse cx="2" cy="6" rx="5" ry="3" fill="#FFFFFF" opacity="0.6" transform="rotate(15)" />
+    </g>
+    
+    <!-- Flight Paths -->
+    <path d="M220,230 Q240,200 270,210 T320,190 T380,220 T400,290" stroke="#AED6F1" stroke-width="1" stroke-dasharray="3,3" fill="none" opacity="0.5" />
+    <path d="M400,290 Q420,320 370,330 T300,350 T230,330 T180,320" stroke="#AED6F1" stroke-width="1" stroke-dasharray="3,3" fill="none" opacity="0.5" />
+    <path d="M300,180 Q330,210 350,220 T390,260 T350,300 T320,330" stroke="#AED6F1" stroke-width="1" stroke-dasharray="3,3" fill="none" opacity="0.5" />
+    
+    <!-- Pollen particles -->
+    <g filter="url(#blur)">
+      <circle cx="230" cy="215" r="3" fill="#FFD54F" />
+      <circle cx="245" cy="230" r="2" fill="#FFD54F" />
+      <circle cx="260" cy="210" r="4" fill="#FFD54F" />
+      <circle cx="280" cy="200" r="2" fill="#FFD54F" />
+      <circle cx="300" cy="205" r="3" fill="#FFD54F" />
+      <circle cx="320" cy="195" r="2" fill="#FFD54F" />
+      <circle cx="340" cy="210" r="4" fill="#FFD54F" />
+      <circle cx="360" cy="225" r="2" fill="#FFD54F" />
+      <circle cx="375" cy="245" r="3" fill="#FFD54F" />
+      <circle cx="385" cy="265" r="2" fill="#FFD54F" />
+      <circle cx="390" cy="280" r="4" fill="#FFD54F" />
+      <circle cx="385" cy="300" r="2" fill="#FFD54F" />
+      <circle cx="370" cy="315" r="3" fill="#FFD54F" />
+      <circle cx="350" cy="325" r="2" fill="#FFD54F" />
+      <circle cx="330" cy="335" r="4" fill="#FFD54F" />
+      <circle cx="310" cy="340" r="2" fill="#FFD54F" />
+      <circle cx="290" cy="335" r="3" fill="#FFD54F" />
+      <circle cx="270" cy="325" r="2" fill="#FFD54F" />
+      <circle cx="250" cy="315" r="4" fill="#FFD54F" />
+      <circle cx="230" cy="300" r="2" fill="#FFD54F" />
+      <circle cx="210" cy="285" r="3" fill="#FFD54F" />
+    </g>
+  </g>
+  
+  <!-- Text elements with BLACK color -->
+  <g>
+    <text x="300" y="290" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#000000">POLLINATION</text>
+    <text x="300" y="330" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#000000">STATION</text>
+    <text x="300" y="360" font-family="Arial, sans-serif" font-size="14" font-weight="500" text-anchor="middle" fill="#000000">Connecting DAOs, Cultivating Collaboration</text>
+  </g>
 </svg>
