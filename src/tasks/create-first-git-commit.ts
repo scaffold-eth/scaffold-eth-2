@@ -13,7 +13,7 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
     if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       const foundryWorkSpacePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
       // forge install foundry libraries
-      await execa("forge", ["install", ...foundryLibraries, "--no-commit"], { cwd: foundryWorkSpacePath });
+      await execa("forge", ["install", ...foundryLibraries], { cwd: foundryWorkSpacePath });
       await execa("git", ["add", "-A"], { cwd: targetDir });
       await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
     }
