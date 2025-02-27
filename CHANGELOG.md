@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.1.5
+
+### Patch Changes
+
+- 929b07d: cli: fix foundry nigtly version install command
+
 ## 0.1.4
 
 ### Patch Changes
