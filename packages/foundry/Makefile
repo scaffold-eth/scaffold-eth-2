@@ -44,16 +44,16 @@ deploy-and-generate-abis: deploy generate-abis
 generate-abis:
 	node scripts-js/generateTsAbis.js
 
-verify-keystore:
-	if grep -q "scaffold-eth-default" .env; then \
-		cast wallet address --password localhost; \
-	else \
-		cast wallet address; \
-	fi
-
 # List account
 account:
-	@node scripts-js/ListAccount.js $$(make verify-keystore)
+	@node scripts-js/ListAccount.js $(RPC_URL)
+
+get-address:
+	@cast wallet address --account $(ACCOUNT_NAME)
+
+# Check balance of an address
+check-balance:
+	@node scripts-js/getAddressBalance.js $(ADDRESS) $(RPC_URL)
 
 # Generate a new account
 account-generate:

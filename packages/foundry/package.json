@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "verify-keystore": "make verify-keystore",
-    "account": "make account",
+    "account": "node scripts-js/checkAccountBalance.js",
     "account:generate": "make account-generate ACCOUNT_NAME=${1:-scaffold-eth-custom}",
     "account:import": "make account-import ACCOUNT_NAME=${1:-scaffold-eth-custom}",
     "chain": "make chain",
