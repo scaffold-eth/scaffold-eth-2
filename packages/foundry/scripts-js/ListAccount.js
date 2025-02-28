@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 config();
 import { join, dirname } from "path";
-import { ethers, Wallet } from "ethers";
+import { ethers } from "ethers";
 import { toString } from "qrcode";
 import { readFileSync } from "fs";
 import { parse } from "toml";
