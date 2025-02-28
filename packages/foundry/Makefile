@@ -61,8 +61,8 @@ account-generate:
 
 # Import an existing account
 account-import:
-	@cast wallet import ${ACCOUNT_NAME} --interactive
-
+	@cast wallet import $(ACCOUNT_NAME) --private-key $(PRIVATE_KEY)
+	
 # Compile contracts
 compile:
 	forge compile
