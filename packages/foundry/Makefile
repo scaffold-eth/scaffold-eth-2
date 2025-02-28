@@ -21,15 +21,20 @@ deploy:
 	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
 		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
 		exit 1; \
-	fi
-	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
-		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi; \
-		fi \
+	fi; \
+	if [ "$(RPC_URL)" = "localhost" ]; then \
+		forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi; \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
+		if [ -n "$(ETH_KEYSTORE_ACCOUNT)" ]; then \
+			if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
+				echo "Error: scaffold-eth-default keystore can only be used with localhost. Please use a different keystore for non-localhost deployments."; \
+				exit 1; \
+			fi; \
+			echo "Using keystore: $(ETH_KEYSTORE_ACCOUNT)"; \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi --account ~/.foundry/keystores/"$(ETH_KEYSTORE_ACCOUNT)"; \
+		else \
+			forge script $(DEPLOY_SCRIPT) --rpc-url $$RPC_URL --broadcast --legacy --ffi; \
+		fi; \
 	fi
 
 # Deploy and generate ABIs
@@ -39,26 +44,25 @@ deploy-and-generate-abis: deploy generate-abis
 generate-abis:
 	node scripts-js/generateTsAbis.js
 
-verify-keystore:
-	if grep -q "scaffold-eth-default" .env; then \
-		cast wallet address --password localhost; \
-	else \
-		cast wallet address; \
-	fi
-
 # List account
 account:
-	@node scripts-js/ListAccount.js $$(make verify-keystore)
+	@node scripts-js/ListAccount.js $(RPC_URL)
+
+get-address:
+	@cast wallet address --account $(ACCOUNT_NAME)
+
+# Check balance of an address
+check-balance:
+	@node scripts-js/getAddressBalance.js $(ADDRESS) $(RPC_URL)
 
 # Generate a new account
 account-generate:
 	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-	@echo "Please update .env file with ETH_KEYSTORE_ACCOUNT=$(ACCOUNT_NAME)"
 
 # Import an existing account
 account-import:
-	@cast wallet import ${ACCOUNT_NAME} --interactive
-
+	@cast wallet import $(ACCOUNT_NAME) --private-key $(PRIVATE_KEY)
+	
 # Compile contracts
 compile:
 	forge compile
@@ -74,6 +78,10 @@ format:
 # Lint code
 lint:
 	forge fmt --check && prettier --check ./script/**/*.js
+
+# Run tests
+test:
+	forge test
 
 # Verify contracts
 verify:
