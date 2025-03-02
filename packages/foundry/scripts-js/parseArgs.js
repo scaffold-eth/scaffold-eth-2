@@ -98,8 +98,7 @@ To deploy to ${network}, please follow these steps:
 1. If you haven't generated a keystore account yet:
    $ yarn generate
 
-2. Update your .env file:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
+2. Run the deployment command again.
 
 The default account (scaffold-eth-default) can only be used for localhost deployments.
 `);
