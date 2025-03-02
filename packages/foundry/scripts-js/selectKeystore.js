@@ -4,12 +4,14 @@ import { spawnSync, spawn } from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
+// Move readline interface creation inside the function
 async function selectKeystore() {
+  // Create readline interface only when function is called
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  
   const keystorePath = join(process.env.HOME, '.foundry', 'keystores');
   
   try {
@@ -60,6 +62,9 @@ async function selectKeystore() {
         rl.question('\nEnter name for new keystore: ', resolve);
       });
 
+      // Close readline before spawning process with inherited stdio
+      rl.close();
+
       return new Promise((resolve, reject) => {
         const importProcess = spawn('cast', ['wallet', 'import', keystoreName, '--private-key', privateKey], {
           stdio: 'inherit'
@@ -85,13 +90,15 @@ async function selectKeystore() {
     }
 
     const selectedKeystore = keystores[selection - 1];
-    
+    // Close readline before returning
+    rl.close();
     return selectedKeystore;
 
   } catch (error) {
     console.error('\n❌ Error reading keystores:', error);
     process.exit(1);
   } finally {
+    // Ensure readline is closed
     rl.close();
   }
 }

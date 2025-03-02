@@ -4,7 +4,7 @@ import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
-import { selectKeystore } from './selectKeystore.js';
+import { selectKeystore } from './selectKeystore.js'; // Now safe to use!
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
@@ -60,9 +60,45 @@ try {
   process.exit(1);
 }
 
+// Check for default account on live network
+if (
+  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
+  network !== "localhost"
+) {
+  console.log(`
+❌ Error: Cannot deploy to live network using default keystore account!
+
+To deploy to ${network}, please follow these steps:
+
+1. If you haven't generated a keystore account yet:
+   $ yarn generate
+
+2. Update your .env file:
+   ETH_KEYSTORE_ACCOUNT='scaffold-eth-custom'
+
+The default account (scaffold-eth-default) can only be used for localhost deployments.
+`);
+  process.exit(0);
+}
+
+if (
+  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
+  network === "localhost"
+) {
+  console.log(`
+⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
+
+You can either:
+1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
+   OR
+2. Set the default keystore account in your .env and re-run the command to skip password prompt:
+   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
+`);
+}
+
+// Uncomment and use the selectKeystore function for non-localhost networks
 let selectedKeystore = process.env.LOCALHOST_KEYSTORE_ACCOUNT;
 if (network !== "localhost") {
-  // Interactive keystore selection if not specified
   try {
     selectedKeystore = await selectKeystore();
   } catch (error) {
@@ -74,14 +110,12 @@ if (network !== "localhost") {
 // Set environment variables for the make command
 process.env.DEPLOY_SCRIPT = `script/${fileName}`;
 process.env.RPC_URL = network;
+process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 
 const result = spawnSync(
   "make",
   [
     "deploy-and-generate-abis",
-    `DEPLOY_SCRIPT=${process.env.DEPLOY_SCRIPT}`,
-    `RPC_URL=${process.env.RPC_URL}`,
-    `ETH_KEYSTORE_ACCOUNT=${selectedKeystore}`,
   ],
   {
     stdio: "inherit",
