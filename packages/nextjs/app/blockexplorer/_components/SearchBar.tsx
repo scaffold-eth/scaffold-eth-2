@@ -22,7 +22,7 @@ export const SearchBar = () => {
           return;
         }
       } catch (error) {
-        console.warn("Failed to fetch transaction:", error);
+        console.error("Failed to fetch transaction:", error);
       }
     }
 

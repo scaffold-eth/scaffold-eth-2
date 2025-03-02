@@ -71,7 +71,7 @@ export function useDeployedContractInfo<TContractName extends ContractName>(
         }
         setStatus(ContractCodeStatus.DEPLOYED);
       } catch (e) {
-        console.warn(e);
+        console.error(e);
         setStatus(ContractCodeStatus.NOT_FOUND);
       }
     };
