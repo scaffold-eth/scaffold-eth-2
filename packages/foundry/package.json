@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "verify-keystore": "make verify-keystore",
     "account": "node scripts-js/checkAccountBalance.js",
     "account:generate": "make account-generate ACCOUNT_NAME=${1:-scaffold-eth-custom}",
     "account:import": "node scripts-js/importAccount.js",
