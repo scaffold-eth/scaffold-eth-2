@@ -3,27 +3,29 @@ import { join } from 'path';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
 async function listKeystores() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+
   const keystorePath = join(process.env.HOME, '.foundry', 'keystores');
-  
+
   try {
-    const keystores = readdirSync(keystorePath).filter(keystore => keystore !== 'scaffold-eth-default');
-    
+    const keystores = readdirSync(keystorePath);
+
     if (keystores.length === 0) {
       console.error('\n❌ No keystores found in ~/.foundry/keystores');
       process.exit(1);
     }
 
     console.log('\n🔑 Available keystores:');
-    
+
     keystores.map((keystore, index) => {
       console.log(`${index + 1}. ${keystore}`);
-      
+
       return { keystore };
     });
 
@@ -38,8 +40,8 @@ async function listKeystores() {
       process.exit(1);
     }
 
-    const selectedKeystore = keystores[selection - 1];    
-    
+    const selectedKeystore = keystores[selection - 1];
+
     return selectedKeystore;
 
   } catch (error) {

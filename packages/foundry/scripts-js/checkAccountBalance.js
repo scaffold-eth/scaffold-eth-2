@@ -45,14 +45,13 @@ async function getBalanceForEachNetwork(address) {
       console.log(`\n--${networkName}-- 📡`);
 
       try {
-        console.log("Creating provider...");
         const provider = new ethers.providers.JsonRpcProvider(networkUrl);
 
         // Get balance and format it
         const balance = await provider.getBalance(address);
-        const formattedBalance = ethers.utils.formatEther(balance);
+        const formattedBalance = +ethers.utils.formatUnits(balance);
 
-        console.log("   Balance:", formattedBalance, "ETH");
+        console.log("   Balance:", formattedBalance);
         console.log("   Nonce:", await provider.getTransactionCount(address));
       } catch (e) {
         console.log(`   ❌ Can't connect to network ${networkName}: ${e.message}`);

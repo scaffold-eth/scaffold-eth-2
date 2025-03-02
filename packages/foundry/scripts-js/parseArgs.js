@@ -4,7 +4,7 @@ import { join, dirname } from "path";
 import { readFileSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
-import { selectKeystore } from './selectKeystore.js'; // Now safe to use!
+import { selectKeystore } from './selectKeystore.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();

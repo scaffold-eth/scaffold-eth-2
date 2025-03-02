@@ -1,4 +1,4 @@
-.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
+.PHONY: build deploy generate-abis get-address account chain compile flatten fork format lint test verify
 
 DEPLOY_SCRIPT ?= script/Deploy.s.sol
 
@@ -43,6 +43,7 @@ generate-abis:
 account:
 	@node scripts-js/ListAccount.js $(RPC_URL)
 
+# Get address of a keystore
 get-address:
 	@cast wallet address --account $(ACCOUNT_NAME)
 
