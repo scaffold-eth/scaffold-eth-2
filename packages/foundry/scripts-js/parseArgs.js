@@ -1,7 +1,7 @@
 import { spawnSync } from "child_process";
 import { config } from "dotenv";
 import { join, dirname } from "path";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
 import { selectKeystore } from './selectKeystore.js';
@@ -13,6 +13,7 @@ config();
 const args = process.argv.slice(2);
 let fileName = "Deploy.s.sol";
 let network = "localhost";
+let keystoreArg = null;
 
 // Show help message if --help is provided
 if (args.includes("--help") || args.includes("-h")) {
@@ -21,10 +22,11 @@ Usage: yarn deploy [options]
 Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
   --network <network>   Specify the network (default: localhost)
+  --keystore <name>     Specify the keystore account to use (bypasses selection prompt)
   --help, -h           Show this help message
 Examples:
   yarn deploy --file DeployYourContract.s.sol --network sepolia
-  yarn deploy --network sepolia
+  yarn deploy --network sepolia --keystore my-account
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
   `);
@@ -39,7 +41,20 @@ for (let i = 0; i < args.length; i++) {
   } else if (args[i] === "--file" && args[i + 1]) {
     fileName = args[i + 1];
     i++; // Skip next arg since we used it
+  } else if (args[i] === "--keystore" && args[i + 1]) {
+    keystoreArg = args[i + 1];
+    i++; // Skip next arg since we used it
   }
+}
+
+// Function to check if a keystore exists
+function validateKeystore(keystoreName) {
+  if (keystoreName === "scaffold-eth-default") {
+    return true; // Default keystore is always valid
+  }
+  
+  const keystorePath = join(process.env.HOME, '.foundry', 'keystores', keystoreName);
+  return existsSync(keystorePath);
 }
 
 // Check if the network exists in rpc_endpoints
@@ -77,12 +92,32 @@ You can either:
 
 let selectedKeystore = process.env.LOCALHOST_KEYSTORE_ACCOUNT;
 if (network !== "localhost") {
-  try {
-    selectedKeystore = await selectKeystore();
-  } catch (error) {
-    console.error("\n❌ Error selecting keystore:", error);
+  if (keystoreArg) {
+    // Use the keystore provided via command line argument
+    if (!validateKeystore(keystoreArg)) {
+      console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
+      console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
+      process.exit(1);
+    }
+    selectedKeystore = keystoreArg;
+    console.log(`\n🔑 Using keystore: ${selectedKeystore}`);
+  } else {
+    try {
+      selectedKeystore = await selectKeystore();
+    } catch (error) {
+      console.error("\n❌ Error selecting keystore:", error);
+      process.exit(1);
+    }
+  }
+} else if (keystoreArg) {
+  // Allow overriding the localhost keystore with --keystore flag
+  if (!validateKeystore(keystoreArg)) {
+    console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
+    console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
     process.exit(1);
   }
+  selectedKeystore = keystoreArg;
+  console.log(`\n🔑 Using keystore: ${selectedKeystore} for localhost deployment`);
 }
 
 // Check for default account on live network
