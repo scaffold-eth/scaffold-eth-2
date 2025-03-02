@@ -60,9 +60,34 @@ try {
   process.exit(1);
 }
 
+if (
+  process.env.LOCALHOST_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
+  network === "localhost"
+) {
+  console.log(`
+⚠️ Warning: Using ${process.env.LOCALHOST_KEYSTORE_ACCOUNT} keystore account on localhost.
+
+You can either:
+1. Enter the password for ${process.env.LOCALHOST_KEYSTORE_ACCOUNT} account
+   OR
+2. Set the localhost keystore account in your .env and re-run the command to skip password prompt:
+   LOCALHOST_KEYSTORE_ACCOUNT='scaffold-eth-default'
+`);
+}
+
+let selectedKeystore = process.env.LOCALHOST_KEYSTORE_ACCOUNT;
+if (network !== "localhost") {
+  try {
+    selectedKeystore = await selectKeystore();
+  } catch (error) {
+    console.error("\n❌ Error selecting keystore:", error);
+    process.exit(1);
+  }
+}
+
 // Check for default account on live network
 if (
-  process.env.ETH_KEYSTORE_ACCOUNT === "scaffold-eth-default" &&
+  selectedKeystore === "scaffold-eth-default" &&
   network !== "localhost"
 ) {
   console.log(`
@@ -79,32 +104,6 @@ To deploy to ${network}, please follow these steps:
 The default account (scaffold-eth-default) can only be used for localhost deployments.
 `);
   process.exit(0);
-}
-
-if (
-  process.env.ETH_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
-  network === "localhost"
-) {
-  console.log(`
-⚠️ Warning: Using ${process.env.ETH_KEYSTORE_ACCOUNT} keystore account on localhost.
-
-You can either:
-1. Enter the password for ${process.env.ETH_KEYSTORE_ACCOUNT} account
-   OR
-2. Set the default keystore account in your .env and re-run the command to skip password prompt:
-   ETH_KEYSTORE_ACCOUNT='scaffold-eth-default'
-`);
-}
-
-// Uncomment and use the selectKeystore function for non-localhost networks
-let selectedKeystore = process.env.LOCALHOST_KEYSTORE_ACCOUNT;
-if (network !== "localhost") {
-  try {
-    selectedKeystore = await selectKeystore();
-  } catch (error) {
-    console.error("\n❌ Error selecting keystore:", error);
-    process.exit(1);
-  }
 }
 
 // Set environment variables for the make command
