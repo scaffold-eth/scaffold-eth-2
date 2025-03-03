@@ -47,10 +47,6 @@ account:
 get-address:
 	@cast wallet address --account $(ACCOUNT_NAME)
 
-# Check balance of an address
-check-balance:
-	@node scripts-js/getAddressBalance.js $(ADDRESS) $(RPC_URL)
-
 # Generate a new account
 account-generate:
 	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
