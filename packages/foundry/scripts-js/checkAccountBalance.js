@@ -1,4 +1,4 @@
-import { listKeystores } from "./ListAccount.js";
+import { listKeystores } from "./ListKeystores.js";
 import { getAddressBalance } from "./getAddressBalance.js";
 import { execSync } from "child_process";
 import dotenv from "dotenv";
