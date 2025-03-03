@@ -4,7 +4,7 @@ import { join, dirname } from "path";
 import { readFileSync, existsSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
-import { selectKeystore } from "./selectKeystore.js";
+import { selectOrCreateKeystore } from "./selectOrCreateKeystore.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
@@ -110,7 +110,7 @@ if (network !== "localhost") {
     console.log(`\n🔑 Using keystore: ${selectedKeystore}`);
   } else {
     try {
-      selectedKeystore = await selectKeystore();
+      selectedKeystore = await selectOrCreateKeystore();
     } catch (error) {
       console.error("\n❌ Error selecting keystore:", error);
       process.exit(1);

@@ -5,7 +5,7 @@ import readline from "readline";
 import { fileURLToPath } from "url";
 
 // Move readline interface creation inside the function
-async function selectKeystore() {
+async function selectOrCreateKeystore() {
   // Create readline interface only when function is called
   const rl = readline.createInterface({
     input: process.stdin,
@@ -128,4 +128,4 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     });
 }
 
-export { selectKeystore };
+export { selectOrCreateKeystore };
