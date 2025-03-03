@@ -41,7 +41,7 @@ generate-abis:
 
 # List account
 account:
-	@node scripts-js/ListAccount.js $(RPC_URL)
+	@node scripts-js/checkAccountBalance.js
 
 # Get address of a keystore
 get-address:
