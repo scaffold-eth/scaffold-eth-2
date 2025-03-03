@@ -1,13 +1,8 @@
 import { spawn } from "child_process";
-import readline from "readline";
+import { createInterface } from "readline";
 import { config } from "dotenv";
-
+import { stdin as input, stdout as output } from "process";
 config();
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
 /**
  * Prompts the user for input with the given question
@@ -15,10 +10,64 @@ const rl = readline.createInterface({
  * @returns {Promise<string>} - The user's response
  */
 function prompt(question) {
+  const rl = createInterface({
+    input,
+    output,
+  });
+
   return new Promise((resolve) => {
     rl.question(question, (answer) => {
+      rl.close();
       resolve(answer);
     });
+  });
+}
+
+/**
+ * Prompts for password with hidden input
+ * @param {string} question - The prompt text
+ * @returns {Promise<string>} - The user's response (hidden during input)
+ */
+function promptHidden(question) {
+  return new Promise((resolve) => {
+    // Display the question first
+    output.write(question);
+
+    // Configure stdin
+    input.setRawMode(true);
+    input.resume();
+    input.setEncoding("utf8");
+
+    let password = "";
+
+    // Handle keypress events
+    const onData = (key) => {
+      // Ctrl+C
+      if (key === "\u0003") {
+        output.write("\n");
+        process.exit(1);
+      }
+      // Enter key
+      else if (key === "\r" || key === "\n") {
+        output.write("\n");
+        input.setRawMode(false);
+        input.pause();
+        input.removeListener("data", onData);
+        resolve(password);
+      }
+      // Backspace
+      else if (key === "\u0008" || key === "\u007F") {
+        if (password.length > 0) {
+          password = password.slice(0, -1);
+        }
+      }
+      // Regular character
+      else {
+        password += key;
+      }
+    };
+
+    input.on("data", onData);
   });
 }
 
@@ -31,7 +80,7 @@ async function importAccount() {
     let accountName = process.argv[2];
     if (!accountName) {
       accountName = await prompt("\nEnter account name (e.g., my-keystore): ");
-      
+
       if (!accountName.trim()) {
         console.error("\n❌ Account name cannot be empty");
         process.exit(1);
@@ -40,16 +89,18 @@ async function importAccount() {
 
     // Check if account name is scaffold-eth-default
     if (accountName === "scaffold-eth-default") {
-      console.error("\n❌ Cannot use 'scaffold-eth-default' as account name. This is reserved for local development.");
+      console.error(
+        "\n❌ Cannot use 'scaffold-eth-default' as account name. This is reserved for local development."
+      );
       process.exit(1);
     }
 
     // Get private key from command line args or prompt user
     let privateKey = process.argv[3];
     if (!privateKey) {
-      privateKey = await prompt("\nEnter private key: ");
-      console.log("\n");
-      
+      // Use the hidden input method for the private key
+      privateKey = await promptHidden("\nPaste your private key: ");
+
       if (!privateKey.trim()) {
         console.error("\n❌ Private key cannot be empty");
         process.exit(1);
@@ -60,22 +111,18 @@ async function importAccount() {
     if (!privateKey.startsWith("0x")) {
       privateKey = `0x${privateKey}`;
     }
-    
-    // Close the readline interface before spawning the process
-    // This allows the terminal to be fully available for the cast command's password prompt
-    rl.close();
 
     const importProcess = spawn(
       "make",
       [
         "account-import",
         `ACCOUNT_NAME=${accountName}`,
-        `PRIVATE_KEY=${privateKey}`
+        `PRIVATE_KEY=${privateKey}`,
       ],
       {
         stdio: "inherit",
         shell: true,
-        cwd: process.cwd()
+        cwd: process.cwd(),
       }
     );
 
@@ -88,7 +135,6 @@ async function importAccount() {
         process.exit(1);
       }
     });
-
   } catch (error) {
     console.error("\n❌ Error importing account:", error);
     process.exit(1);
@@ -96,7 +142,7 @@ async function importAccount() {
 }
 
 // Run the import function
-importAccount().catch(error => {
+importAccount().catch((error) => {
   console.error("\n❌ Unexpected error:", error);
   process.exit(1);
 });
