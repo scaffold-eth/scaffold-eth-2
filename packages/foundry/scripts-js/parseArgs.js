@@ -4,7 +4,7 @@ import { join, dirname } from "path";
 import { readFileSync, existsSync } from "fs";
 import { parse } from "toml";
 import { fileURLToPath } from "url";
-import { selectKeystore } from './selectKeystore.js';
+import { selectKeystore } from "./selectKeystore.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
@@ -52,8 +52,13 @@ function validateKeystore(keystoreName) {
   if (keystoreName === "scaffold-eth-default") {
     return true; // Default keystore is always valid
   }
-  
-  const keystorePath = join(process.env.HOME, '.foundry', 'keystores', keystoreName);
+
+  const keystorePath = join(
+    process.env.HOME,
+    ".foundry",
+    "keystores",
+    keystoreName
+  );
   return existsSync(keystorePath);
 }
 
@@ -96,7 +101,9 @@ if (network !== "localhost") {
     // Use the keystore provided via command line argument
     if (!validateKeystore(keystoreArg)) {
       console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
-      console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
+      console.log(
+        `Please check that the keystore exists in ~/.foundry/keystores/`
+      );
       process.exit(1);
     }
     selectedKeystore = keystoreArg;
@@ -113,18 +120,19 @@ if (network !== "localhost") {
   // Allow overriding the localhost keystore with --keystore flag
   if (!validateKeystore(keystoreArg)) {
     console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
-    console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
+    console.log(
+      `Please check that the keystore exists in ~/.foundry/keystores/`
+    );
     process.exit(1);
   }
   selectedKeystore = keystoreArg;
-  console.log(`\n🔑 Using keystore: ${selectedKeystore} for localhost deployment`);
+  console.log(
+    `\n🔑 Using keystore: ${selectedKeystore} for localhost deployment`
+  );
 }
 
 // Check for default account on live network
-if (
-  selectedKeystore === "scaffold-eth-default" &&
-  network !== "localhost"
-) {
+if (selectedKeystore === "scaffold-eth-default" && network !== "localhost") {
   console.log(`
 ❌ Error: Cannot deploy to live network using default keystore account!
 
@@ -145,15 +153,9 @@ process.env.DEPLOY_SCRIPT = `script/${fileName}`;
 process.env.RPC_URL = network;
 process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 
-const result = spawnSync(
-  "make",
-  [
-    "deploy-and-generate-abis",
-  ],
-  {
-    stdio: "inherit",
-    shell: true,
-  }
-);
+const result = spawnSync("make", ["deploy-and-generate-abis"], {
+  stdio: "inherit",
+  shell: true,
+});
 
 process.exit(result.status);

@@ -1,14 +1,13 @@
-import { listKeystores } from './ListAccount.js';
-import { getAddressBalance } from './getAddressBalance.js';
-import { execSync } from 'child_process';
-import dotenv from 'dotenv';
+import { listKeystores } from "./ListAccount.js";
+import { getAddressBalance } from "./getAddressBalance.js";
+import { execSync } from "child_process";
+import dotenv from "dotenv";
 import { join, dirname } from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import { toString } from "qrcode";
 import { readFileSync } from "fs";
 import { parse } from "toml";
 import { ethers } from "ethers";
-
 
 const ALCHEMY_API_KEY =
   process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
@@ -16,7 +15,7 @@ const ALCHEMY_API_KEY =
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-dotenv.config({ path: join(__dirname, '..', '.env') });
+dotenv.config({ path: join(__dirname, "..", ".env") });
 
 async function getBalanceForEachNetwork(address) {
   try {
@@ -54,7 +53,9 @@ async function getBalanceForEachNetwork(address) {
         console.log("   Balance:", formattedBalance);
         console.log("   Nonce:", await provider.getTransactionCount(address));
       } catch (e) {
-        console.log(`   ❌ Can't connect to network ${networkName}: ${e.message}`);
+        console.log(
+          `   ❌ Can't connect to network ${networkName}: ${e.message}`
+        );
       }
     }
   } catch (error) {
@@ -62,15 +63,14 @@ async function getBalanceForEachNetwork(address) {
   }
 }
 
-
 async function checkAccountBalance() {
   try {
     // Step 1: List accounts and let user select one
-    console.log('📋 Listing available accounts...');
+    console.log("📋 Listing available accounts...");
     const selectedKeystore = await listKeystores();
 
     if (!selectedKeystore) {
-      console.error('❌ No keystore selected');
+      console.error("❌ No keystore selected");
       process.exit(1);
     }
 
@@ -81,8 +81,8 @@ async function checkAccountBalance() {
     let address;
     try {
       address = execSync(addressCommand).toString().trim();
-      console.log('\n💰 Checking balances across networks...');
-      console.log('\n')
+      console.log("\n💰 Checking balances across networks...");
+      console.log("\n");
       await getBalanceForEachNetwork(address);
     } catch (error) {
       console.error(`❌ Error getting address: ${error.message}`);
@@ -90,14 +90,14 @@ async function checkAccountBalance() {
     }
 
     // Step 3: Check the balance on local network
-    console.log('\n💰 Checking local network balance...');
+    console.log("\n💰 Checking local network balance...");
     try {
-      const rpcUrl = process.argv[2] || process.env.RPC_URL || 'http://localhost:8545';
+      const rpcUrl =
+        process.argv[2] || process.env.RPC_URL || "http://localhost:8545";
       await getAddressBalance(address, rpcUrl);
     } catch (error) {
       console.log(`❌ Error checking local balance: ${error.message}`);
     }
-
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}`);
     process.exit(1);
@@ -106,11 +106,10 @@ async function checkAccountBalance() {
 
 // Run the function if this script is called directly
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  checkAccountBalance()
-    .catch(error => {
-      console.error(error);
-      process.exit(1);
-    });
+  checkAccountBalance().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 }
 
-export { checkAccountBalance }; 
+export { checkAccountBalance };
