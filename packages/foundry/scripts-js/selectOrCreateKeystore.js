@@ -19,8 +19,9 @@ async function selectOrCreateKeystore() {
     );
 
     if (keystores.length === 0) {
-      console.error("\n❌ No keystores found in ~/.foundry/keystores");
-      process.exit(1);
+      console.log(
+        "\n❌ No keystores found in ~/.foundry/keystores, please select 0 to create a new keystore"
+      );
     }
 
     console.log("\n🔑 Available keystores:");
