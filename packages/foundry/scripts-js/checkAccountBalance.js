@@ -1,4 +1,3 @@
-import { getAddressBalance } from "./getAddressBalance.js";
 import { listKeystores } from "./listKeystores.js";
 import { execSync } from "child_process";
 import dotenv from "dotenv";
@@ -38,8 +37,6 @@ async function getBalanceForEachNetwork(address) {
     console.log(`\n📊 Address: ${address}`);
 
     for (const networkName in rpcEndpoints) {
-      if (networkName === "localhost") continue;
-
       const networkUrl = replaceENVAlchemyKey(rpcEndpoints[networkName]);
       console.log(`\n--${networkName}-- 📡`);
 
@@ -87,16 +84,6 @@ async function checkAccountBalance() {
     } catch (error) {
       console.error(`❌ Error getting address: ${error.message}`);
       process.exit(1);
-    }
-
-    // Step 3: Check the balance on local network
-    console.log("\n💰 Checking local network balance...");
-    try {
-      const rpcUrl =
-        process.argv[2] || process.env.RPC_URL || "http://localhost:8545";
-      await getAddressBalance(address, rpcUrl);
-    } catch (error) {
-      console.log(`❌ Error checking local balance: ${error.message}`);
     }
   } catch (error) {
     console.error(`\n❌ Error: ${error.message}`);
