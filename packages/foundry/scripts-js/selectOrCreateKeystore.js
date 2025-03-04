@@ -84,10 +84,11 @@ async function selectOrCreateKeystore() {
 
         importProcess.on("close", (code) => {
           if (code === 0) {
-            console.log("\n✅ New keystore created successfully!");
-            console.log("\n🔑 Created new keystore:", keystoreName);
             console.log(
-              "\n💻 Please re-run the script to select the keystore!"
+              "\n💰 Fund the address and re-run the deploy command to use this keystore."
+            );
+            console.log(
+              `\nTIP: Use \`yarn account\` and select \`${keystoreName}\` keystore to check if the address is funded.`
             );
             process.exit(0);
           } else {
