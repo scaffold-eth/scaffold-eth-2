@@ -4,7 +4,6 @@ import { spawnSync, spawn } from "child_process";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-// Move readline interface creation inside the function
 async function selectOrCreateKeystore() {
   // Create readline interface only when function is called
   const rl = readline.createInterface({
