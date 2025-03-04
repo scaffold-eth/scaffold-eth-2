@@ -62,7 +62,69 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 ## Deploying to Live Networks
 
-### Setting Up Your Deployer Account
+### Deployment Commands
+
+<details open>
+<summary>Understanding deployment scripts structure</summary>
+
+Scaffold-ETH 2 uses two types of deployment scripts in `packages/foundry/script`:
+
+1. `Deploy.s.sol`: Main deployment script that runs all contracts sequentially
+2. Individual scripts (e.g., `DeployYourContract.s.sol`): Deploy specific contracts
+
+Each script inherits from `ScaffoldETHDeploy` which handles:
+
+- Deployer account setup and funding
+- Contract verification preparation
+- Exporting ABIs and addresses to the frontend
+</details>
+
+<details open>
+<summary>Basic deploy commands</summary>
+  
+  
+1. Deploy to a network (uses `Deploy.s.sol`):
+
+```bash
+yarn deploy --network <network-name>
+```
+
+2. Deploy specific contract:
+
+```bash
+yarn deploy --network <network-name> --file DeployYourContract.s.sol
+```
+
+This will use the `DeployYourContract.s.sol` script to deploy the contract.
+
+</details>
+
+<details>
+<summary>Environment-specific behavior</summary>
+
+**Local Development (`yarn chain`)**:
+
+- No password needed for deployment if `LOCALHOST_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
+- Uses Anvil's Account #9 as default keystore account
+- Update `LOCALHOST_KEYSTORE_ACCOUNT` in `.env` to use a different keystore account for deployment
+
+**Live Networks**:
+
+- Requires custom keystore (see "Creating new deployments" below)
+- Will prompt for keystore password
+
+</details>
+
+<details>
+<summary>Creating new deployments</summary>
+
+1. Create your contract in `packages/foundry/contracts`
+2. Create deployment script in `packages/foundry/script` (use existing scripts as templates)
+3. Add to main `Deploy.s.sol` if needed
+4. Deploy using commands above
+</details>
+
+### Generate/Import keystore account
 
 <details>
 <summary>Option 1: Generate new account</summary>
@@ -91,71 +153,6 @@ yarn account
 ```
 
 This will ask you to select [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) present `~/.foundry/keystores` and show you the balance of selected account on network configured in `packages/foundry/foundry.toml`.
-
-### Deployment Commands
-
-<details>
-<summary>Understanding deployment scripts structure</summary>
-
-Scaffold-ETH 2 uses two types of deployment scripts in `packages/foundry/script`:
-
-1. `Deploy.s.sol`: Main deployment script that runs all contracts sequentially
-2. Individual scripts (e.g., `DeployYourContract.s.sol`): Deploy specific contracts
-
-Each script inherits from `ScaffoldETHDeploy` which handles:
-
-- Deployer account setup and funding
-- Contract verification preparation
-- Exporting ABIs and addresses to the frontend
-</details>
-
-<details>
-<summary>Basic deploy commands</summary>
-
-1. Deploy all contracts (uses `Deploy.s.sol`):
-
-```
-yarn deploy
-```
-
-2. Deploy specific contract:
-
-```bash
-yarn deploy --file DeployYourContract.s.sol
-```
-
-3. Deploy to a network:
-
-```
-yarn deploy --network <network-name> --file <file-name>
-```
-
-If you don't provide a file name, it will default to `Deploy.s.sol`.
-
-</details>
-
-<details>
-<summary>Environment-specific behavior</summary>
-
-**Local Development (`yarn chain`)**:
-
-- No password needed for deployment if `LOCALHOST_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
-- Uses Anvil's Account #9 as default keystore account
-
-**Live Networks**:
-
-- Requires custom keystore setup (see "Setting Up Your Deployer Account" above)
-- Will prompt for keystore password
-</details>
-
-<details>
-<summary>Creating new deployments</summary>
-
-1. Create your contract in `packages/foundry/contracts`
-2. Create deployment script in `packages/foundry/script` (use existing scripts as templates)
-3. Add to main `Deploy.s.sol` if needed
-4. Deploy using commands above
-</details>
 
 ## Documentation
 
