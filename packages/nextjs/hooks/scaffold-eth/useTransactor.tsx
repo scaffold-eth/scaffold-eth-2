@@ -1,6 +1,6 @@
-import { getPublicClient } from "@wagmi/core";
 import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
 import { Config, useWalletClient } from "wagmi";
+import { getPublicClient } from "wagmi/actions";
 import { SendTransactionMutate } from "wagmi/query";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { getBlockExplorerTxLink, getParsedError, notification } from "~~/utils/scaffold-eth";
