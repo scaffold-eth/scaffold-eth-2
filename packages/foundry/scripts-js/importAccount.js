@@ -24,54 +24,6 @@ function prompt(question) {
 }
 
 /**
- * Prompts for password with hidden input
- * @param {string} question - The prompt text
- * @returns {Promise<string>} - The user's response (hidden during input)
- */
-function promptHidden(question) {
-  return new Promise((resolve) => {
-    // Display the question first
-    output.write(question);
-
-    // Configure stdin
-    input.setRawMode(true);
-    input.resume();
-    input.setEncoding("utf8");
-
-    let password = "";
-
-    // Handle keypress events
-    const onData = (key) => {
-      // Ctrl+C
-      if (key === "\u0003") {
-        output.write("\n");
-        process.exit(1);
-      }
-      // Enter key
-      else if (key === "\r" || key === "\n") {
-        output.write("\n");
-        input.setRawMode(false);
-        input.pause();
-        input.removeListener("data", onData);
-        resolve(password);
-      }
-      // Backspace
-      else if (key === "\u0008" || key === "\u007F") {
-        if (password.length > 0) {
-          password = password.slice(0, -1);
-        }
-      }
-      // Regular character
-      else {
-        password += key;
-      }
-    };
-
-    input.on("data", onData);
-  });
-}
-
-/**
  * Main function to import an account
  */
 async function importAccount() {
@@ -95,30 +47,9 @@ async function importAccount() {
       process.exit(1);
     }
 
-    // Get private key from command line args or prompt user
-    let privateKey = process.argv[3];
-    if (!privateKey) {
-      // Use the hidden input method for the private key
-      privateKey = await promptHidden("\nPaste your private key: ");
-
-      if (!privateKey.trim()) {
-        console.error("\n❌ Private key cannot be empty");
-        process.exit(1);
-      }
-    }
-
-    // Add 0x prefix if not present
-    if (!privateKey.startsWith("0x")) {
-      privateKey = `0x${privateKey}`;
-    }
-
     const importProcess = spawn(
       "make",
-      [
-        "account-import",
-        `ACCOUNT_NAME=${accountName}`,
-        `PRIVATE_KEY=${privateKey}`,
-      ],
+      ["account-import", `ACCOUNT_NAME=${accountName}`],
       {
         stdio: "inherit",
         shell: true,
