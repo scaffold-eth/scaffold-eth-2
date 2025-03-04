@@ -73,12 +73,6 @@ yarn generate
 
 This creates a `scaffold-eth-custom` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-custom` account.
 
-Update `.env` in `packages/foundry`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
-```
-
 </details>
 
 <details>
@@ -86,14 +80,6 @@ ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
 
 ```
 yarn account:import
-```
-
-This imports your key as `scaffold-eth-custom`.
-
-Update `.env`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
 ```
 
 </details>
@@ -104,7 +90,7 @@ View your account status:
 yarn account
 ```
 
-This will ask for your [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) account password set in `packages/foundry/.env`.
+This will ask you to select [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) present `~/.foundry/keystores` and show you the balance of selected account on network configured in `packages/foundry/foundry.toml`.
 
 ### Deployment Commands
 
@@ -153,7 +139,7 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 
 **Local Development (`yarn chain`)**:
 
-- No password needed for deployment if `ETH_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
+- No password needed for deployment if `LOCALHOST_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
 - Uses Anvil's Account #9 as default keystore account
 
 **Live Networks**:
