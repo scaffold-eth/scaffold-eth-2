@@ -62,53 +62,9 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 ## Deploying to Live Networks
 
-### Setting Up Your Deployer Account
-
-<details>
-<summary>Option 1: Generate new account</summary>
-
-```
-yarn generate
-```
-
-This creates a `scaffold-eth-custom` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-custom` account.
-
-Update `.env` in `packages/foundry`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
-```
-
-</details>
-
-<details>
-<summary>Option 2: Import existing private key</summary>
-
-```
-yarn account:import
-```
-
-This imports your key as `scaffold-eth-custom`.
-
-Update `.env`:
-
-```
-ETH_KEYSTORE_ACCOUNT=scaffold-eth-custom
-```
-
-</details>
-
-View your account status:
-
-```
-yarn account
-```
-
-This will ask for your [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) account password set in `packages/foundry/.env`.
-
 ### Deployment Commands
 
-<details>
+<details open>
 <summary>Understanding deployment scripts structure</summary>
 
 Scaffold-ETH 2 uses two types of deployment scripts in `packages/foundry/script`:
@@ -123,28 +79,23 @@ Each script inherits from `ScaffoldETHDeploy` which handles:
 - Exporting ABIs and addresses to the frontend
 </details>
 
-<details>
+<details open>
 <summary>Basic deploy commands</summary>
+  
+  
+1. Deploy to a network (uses `Deploy.s.sol`):
 
-1. Deploy all contracts (uses `Deploy.s.sol`):
-
-```
-yarn deploy
+```bash
+yarn deploy --network <network-name>
 ```
 
 2. Deploy specific contract:
 
 ```bash
-yarn deploy --file DeployYourContract.s.sol
+yarn deploy --network <network-name> --file DeployYourContract.s.sol
 ```
 
-3. Deploy to a network:
-
-```
-yarn deploy --network <network-name> --file <file-name>
-```
-
-If you don't provide a file name, it will default to `Deploy.s.sol`.
+This will use the `DeployYourContract.s.sol` script to deploy the contract.
 
 </details>
 
@@ -153,13 +104,15 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 
 **Local Development (`yarn chain`)**:
 
-- No password needed for deployment if `ETH_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
+- No password needed for deployment if `LOCALHOST_KEYSTORE_ACCOUNT=scaffold-eth-default` is set in `.env` file.
 - Uses Anvil's Account #9 as default keystore account
+- Update `LOCALHOST_KEYSTORE_ACCOUNT` in `.env` to use a different keystore account for deployment
 
 **Live Networks**:
 
-- Requires custom keystore setup (see "Setting Up Your Deployer Account" above)
+- Requires custom keystore (see "Creating new deployments" below)
 - Will prompt for keystore password
+
 </details>
 
 <details>
@@ -170,6 +123,36 @@ If you don't provide a file name, it will default to `Deploy.s.sol`.
 3. Add to main `Deploy.s.sol` if needed
 4. Deploy using commands above
 </details>
+
+### Generate/Import keystore account
+
+<details>
+<summary>Option 1: Generate new account</summary>
+
+```
+yarn generate
+```
+
+This creates a `scaffold-eth-custom` [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) in `~/.foundry/keystores/scaffold-eth-custom` account.
+
+</details>
+
+<details>
+<summary>Option 2: Import existing private key</summary>
+
+```
+yarn account:import
+```
+
+</details>
+
+View your account status:
+
+```
+yarn account
+```
+
+This will ask you to select [keystore](https://book.getfoundry.sh/reference/cli/cast/wallet#cast-wallet) present `~/.foundry/keystores` and show you the balance of selected account on network configured in `packages/foundry/foundry.toml`.
 
 ## Documentation
 
