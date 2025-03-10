@@ -48,8 +48,8 @@ async function importAccount() {
     }
 
     const importProcess = spawn(
-      "make",
-      ["account-import", `ACCOUNT_NAME=${accountName}`],
+      "cast",
+      ["wallet", "import", accountName, "--interactive"],
       {
         stdio: "inherit",
         shell: true,

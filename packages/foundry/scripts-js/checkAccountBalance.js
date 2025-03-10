@@ -73,7 +73,7 @@ async function checkAccountBalance() {
 
     // Step 2: Get the address of the selected account
     console.log(`\n🔍 Getting address for keystore: ${selectedKeystore}`);
-    const addressCommand = `make -C "${__dirname}/.." get-address ACCOUNT_NAME=${selectedKeystore}`;
+    const addressCommand = `cast wallet address --account ${selectedKeystore}`;
 
     let address;
     try {
