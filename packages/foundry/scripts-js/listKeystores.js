@@ -12,10 +12,15 @@ async function listKeystores() {
   const keystorePath = join(process.env.HOME, ".foundry", "keystores");
 
   try {
-    const keystores = readdirSync(keystorePath);
+    const keystores = readdirSync(keystorePath).filter(
+      (keystore) => keystore !== "scaffold-eth-default"
+    );
 
     if (keystores.length === 0) {
-      console.error("\n❌ No keystores found in ~/.foundry/keystores");
+      console.error(
+        "\n❌ No keystores found in ~/.foundry/keystores, please create a new keystore by running:"
+      );
+      console.log("\n\tyarn account:generate\n");
       process.exit(1);
     }
 
