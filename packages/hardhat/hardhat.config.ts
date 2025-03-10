@@ -18,8 +18,15 @@ const deployerPrivateKey =
   process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 // If not set, it uses our block explorers default API keys.
 const etherscanApiKey = process.env.ETHERSCAN_MAINNET_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
+const etherscanArbitrumApiKey = process.env.ETHERSCAN_ARBITRUM_API_KEY || "R9X53I6K48FA8BTXC1UI6H8UMU5NU7Z1Y2";
 const etherscanOptimisticApiKey = process.env.ETHERSCAN_OPTIMISTIC_API_KEY || "RM62RDISS1RH448ZY379NX625ASG1N633R";
+const etherscanPolygonApiKey = process.env.ETHERSCAN_POLYGON_API_KEY || "YVW76HDWKVVN2IDZWGAHFBPKVSKHYK3KZP";
+const etherscanPolygonZkEvmApiKey = process.env.ETHERSCAN_POLYGON_ZKEVM_API_KEY || "JM598H75YBWKGNW9X3FB1BH2I48BHXBGIQ";
+const etherscanGnosisApiKey = process.env.ETHERSCAN_GNOSIS_API_KEY || "RH1ZHBF92AUMWT6Z2JEJAMYJWR6CH2X7KZ";
+const etherscanChiadoApiKey = process.env.ETHERSCAN_CHIADO_API_KEY || "a1a62bdd-fba0-4a54-ad05-fb88c765b962";
 const basescanApiKey = process.env.BASESCAN_API_KEY || "ZZZEIPMT1MNJ8526VV2Y744CA7TNZR64G6";
+const etherscanScrollApiKey = process.env.ETHERSCAN_SCROLL_API_KEY || "GW76ZR67CQ9XA18ARWRHFBTNGAY98EW9CD";
+const etherscanCeloApiKey = process.env.ETHERSCAN_CELO_API_KEY || "1RZ6V5E76VQANQHZS2ITHN2YWZAUP9SF3S";
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -59,18 +66,42 @@ const config: HardhatUserConfig = {
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.etherscan.io/api",
+          apiKey: etherscanApiKey,
+        },
+      },
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-sepolia.etherscan.io/api",
+          apiKey: etherscanApiKey,
+        },
+      },
     },
     arbitrum: {
       url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.arbiscan.io/api",
+          apiKey: etherscanArbitrumApiKey,
+        },
+      },
     },
     arbitrumSepolia: {
       url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-sepolia.arbiscan.io/api",
+          apiKey: etherscanArbitrumApiKey,
+        },
+      },
     },
     optimism: {
       url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
@@ -95,26 +126,62 @@ const config: HardhatUserConfig = {
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.polygonscan.com/api",
+          apiKey: etherscanPolygonApiKey,
+        },
+      },
     },
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-testnet.polygonscan.com/api",
+          apiKey: etherscanPolygonApiKey,
+        },
+      },
     },
     polygonZkEvm: {
       url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-zkevm.polygonscan.com/api",
+          apiKey: etherscanPolygonZkEvmApiKey,
+        },
+      },
     },
     polygonZkEvmTestnet: {
       url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-cardona-zkevm.polygonscan.com/api",
+          apiKey: etherscanPolygonZkEvmApiKey,
+        },
+      },
     },
     gnosis: {
       url: "https://rpc.gnosischain.com",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.gnosisscan.io/api",
+          apiKey: etherscanGnosisApiKey,
+        },
+      },
     },
     chiado: {
       url: "https://rpc.chiadochain.net",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://eth-sepolia.blockscout.com/api",
+          apiKey: etherscanChiadoApiKey,
+        },
+      },
     },
     base: {
       url: "https://mainnet.base.org",
@@ -139,10 +206,22 @@ const config: HardhatUserConfig = {
     scrollSepolia: {
       url: "https://sepolia-rpc.scroll.io",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-sepolia.scrollscan.com/api",
+          apiKey: etherscanScrollApiKey,
+        },
+      },
     },
     scroll: {
       url: "https://rpc.scroll.io",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.scrollscan.com/api",
+          apiKey: etherscanScrollApiKey,
+        },
+      },
     },
     pgn: {
       url: "https://rpc.publicgoods.network",
@@ -155,10 +234,22 @@ const config: HardhatUserConfig = {
     celo: {
       url: "https://forno.celo.org",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.celoscan.io/api",
+          apiKey: etherscanCeloApiKey,
+        },
+      },
     },
     celoAlfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: [deployerPrivateKey],
+      verify: {
+        etherscan: {
+          apiUrl: "https://api-alfajores.celoscan.io/api",
+          apiKey: etherscanCeloApiKey,
+        },
+      },
     },
   },
   // configuration for harhdat-verify plugin
