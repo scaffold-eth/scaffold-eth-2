@@ -59,22 +59,27 @@ const config: HardhatUserConfig = {
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 1,
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 11155111,
     },
     arbitrum: {
       url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 42161,
     },
     arbitrumSepolia: {
       url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 421614,
     },
     optimism: {
       url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 10,
       verify: {
         etherscan: {
           apiUrl: "https://api-optimistic.etherscan.io",
@@ -85,6 +90,7 @@ const config: HardhatUserConfig = {
     optimismSepolia: {
       url: `https://opt-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 420,
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia-optimistic.etherscan.io",
@@ -95,30 +101,37 @@ const config: HardhatUserConfig = {
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 137,
     },
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 80001,
     },
     polygonZkEvm: {
       url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 1101,
     },
     polygonZkEvmTestnet: {
       url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
+      chainId: 2442,
     },
     gnosis: {
       url: "https://rpc.gnosischain.com",
       accounts: [deployerPrivateKey],
+      chainId: 100,
     },
     chiado: {
       url: "https://rpc.chiadochain.net",
       accounts: [deployerPrivateKey],
+      chainId: 10200,
     },
     base: {
       url: "https://mainnet.base.org",
       accounts: [deployerPrivateKey],
+      chainId: 8453,
       verify: {
         etherscan: {
           apiUrl: "https://api.basescan.org",
@@ -129,6 +142,7 @@ const config: HardhatUserConfig = {
     baseSepolia: {
       url: "https://sepolia.base.org",
       accounts: [deployerPrivateKey],
+      chainId: 84532,
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia.basescan.org",
@@ -136,29 +150,35 @@ const config: HardhatUserConfig = {
         },
       },
     },
-    scrollSepolia: {
-      url: "https://sepolia-rpc.scroll.io",
-      accounts: [deployerPrivateKey],
-    },
     scroll: {
       url: "https://rpc.scroll.io",
       accounts: [deployerPrivateKey],
+      chainId: 534352,
+    },
+    scrollSepolia: {
+      url: "https://sepolia-rpc.scroll.io",
+      accounts: [deployerPrivateKey],
+      chainId: 534351,
     },
     pgn: {
       url: "https://rpc.publicgoods.network",
       accounts: [deployerPrivateKey],
+      chainId: 424,
     },
     pgnTestnet: {
       url: "https://sepolia.publicgoods.network",
       accounts: [deployerPrivateKey],
+      chainId: 58008,
     },
     celo: {
       url: "https://forno.celo.org",
       accounts: [deployerPrivateKey],
+      chainId: 42220,
     },
     celoAlfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: [deployerPrivateKey],
+      chainId: 44787,
     },
   },
   // configuration for harhdat-verify plugin
