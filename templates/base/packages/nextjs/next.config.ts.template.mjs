@@ -1,12 +1,12 @@
 import { stringify, withDefaults } from '../../../utils.js'
 
 const contents = ({ ignoreTsAndLintBuildErrors, extraConfig }) =>
-`// @ts-check
+`import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   ${extraConfig[0] ? `...${stringify(extraConfig[0])},` : ''}
   reactStrictMode: true,
+  devIndicators: false,
   typescript: {
     ignoreBuildErrors: ${ignoreTsAndLintBuildErrors},
   },
