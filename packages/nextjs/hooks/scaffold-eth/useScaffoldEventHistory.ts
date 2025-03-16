@@ -142,8 +142,7 @@ export const useScaffoldEventHistory = <
       return nextBlock;
     },
     select: data => {
-      const events = data.pages.flat();
-      const eventHistoryData = events?.map(addIndexedArgsToEvent) as UseScaffoldEventHistoryData<
+      const events = data.pages.flat() as unknown as UseScaffoldEventHistoryData<
         TContractName,
         TEventName,
         TBlockData,
@@ -152,7 +151,7 @@ export const useScaffoldEventHistory = <
       >;
 
       return {
-        pages: eventHistoryData?.reverse(),
+        pages: events?.reverse(),
         pageParams: data.pageParams,
       };
     },
@@ -179,12 +178,4 @@ export const useScaffoldEventHistory = <
     isFetchingNewEvent: query.isFetchingNextPage,
     refetch: query.refetch,
   };
-};
-
-export const addIndexedArgsToEvent = (event: any) => {
-  if (event.args && !Array.isArray(event.args)) {
-    return { ...event, args: { ...event.args, ...Object.values(event.args) } };
-  }
-
-  return event;
 };

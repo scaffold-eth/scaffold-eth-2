@@ -21,6 +21,7 @@
     "hardhat:account": "yarn workspace @se-2/hardhat account",
     "hardhat:chain": "yarn workspace @se-2/hardhat chain",
     "hardhat:check-types": "yarn workspace @se-2/hardhat check-types",
+    "hardhat:clean": "yarn workspace @se-2/hardhat clean",
     "hardhat:compile": "yarn workspace @se-2/hardhat compile",
     "hardhat:deploy": "yarn workspace @se-2/hardhat deploy",
     "hardhat:flatten": "yarn workspace @se-2/hardhat flatten",
@@ -32,7 +33,7 @@
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
     "hardhat:verify": "yarn workspace @se-2/hardhat verify",
-    "lint": "yarn nextjs:lint && yarn hardhat:lint",
+    "lint": "yarn next:lint && yarn hardhat:lint",
     "next:build": "yarn workspace @se-2/nextjs build",
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "next:format": "yarn workspace @se-2/nextjs format",
@@ -44,6 +45,7 @@
     "test": "yarn hardhat:test",
     "vercel": "yarn workspace @se-2/nextjs vercel",
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
+    "ipfs": "yarn workspace @se-2/nextjs ipfs",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
     "verify": "yarn hardhat:verify"
   },
@@ -53,6 +55,6 @@
     "lint-staged": "^15.2.10"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20.18.3"
   }
 }
