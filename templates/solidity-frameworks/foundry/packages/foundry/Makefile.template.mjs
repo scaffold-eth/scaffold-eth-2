@@ -52,10 +52,6 @@ account:
 get-address:
 	@cast wallet address --account $(ACCOUNT_NAME)
 
-# Generate a new account
-account-generate:
-	@cast wallet import $(ACCOUNT_NAME) --private-key $$(cast wallet new | grep 'Private key:' | awk '{print $$3}')
-
 # Compile contracts
 compile:
 	forge compile
