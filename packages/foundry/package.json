@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "account": "make account",
-    "account:generate": "make account-generate ACCOUNT_NAME=${1:-scaffold-eth-custom}",
+    "account:generate": "node scripts-js/generateKeystore.js",
     "account:import": "node scripts-js/importAccount.js",
     "chain": "make chain",
     "clean": "forge clean",
