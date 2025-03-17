@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+When the user asks how to interact with contracts, always prefer Scaffold-ETH hooks.
+
+# Reading from contracts
+
+- When reading data from contracts, use [useScaffoldReadContract.ts](mdc:packages/nextjs/hooks/scaffold-eth/useScaffoldReadContract.ts).
+
+
+# Writing to contracts
+
+- When writing to contracts, use [useScaffoldWriteContract.ts](mdc:packages/nextjs/hooks/scaffold-eth/useScaffoldWriteContract.ts).
