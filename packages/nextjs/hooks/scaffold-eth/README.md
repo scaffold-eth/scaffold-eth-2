@@ -6,7 +6,7 @@ This directory contains custom React hooks that are used throughout the Scaffold
 
 ### useAddress
 
-`useAddress` is a hook that handles the logic for displaying Ethereum addresses with ENS name resolution and various formatting options.
+`useAddress` is a hook that handles the logic for fetching and resolving Ethereum addresses with ENS integration. UI-specific formatting and display logic remains in the component.
 
 #### Usage
 
@@ -18,10 +18,11 @@ const MyComponent = ({ address }) => {
     checkSumAddress,
     ens,
     ensAvatar,
-    displayAddress,
-    displayEnsOrAddress,
+    isEnsNameLoading,
+    blockExplorerAddressLink,
     isValidAddress,
-    // ...more properties
+    shortAddress,
+    longAddress,
   } = useAddress({
     address,
     format: "short", // or "long"
@@ -48,9 +49,17 @@ The hook returns an object with the following properties:
 - `ens` - ENS name if available
 - `ensAvatar` - ENS avatar if available
 - `isEnsNameLoading` - Loading state for ENS resolution
-- `displayAddress` - Formatted address (short or long)
-- `displayEnsOrAddress` - ENS name if available, otherwise formatted address
-- `showSkeleton` - Whether to show loading skeleton
-- `addressSize`, `ensSize`, `blockieSize` - Size variants for styling
 - `blockExplorerAddressLink` - Link to block explorer for the address
 - `isValidAddress` - Whether the address is a valid Ethereum address
+- `shortAddress` - Shortened address format (0x1234...5678)
+- `longAddress` - Full address format
+
+#### UI Helper Exports
+
+The module also exports several UI utility functions and constants that can be used by components:
+
+- `textSizeMap` - Tailwind classes for different text sizes
+- `blockieSizeMap` - Size values for Blockie avatars
+- `copyIconSizeMap` - Tailwind classes for copy icon sizes
+- `getNextSize` - Helper function to get next size in a size map
+- `getPrevSize` - Helper function to get previous size in a size map
