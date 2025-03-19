@@ -42,7 +42,7 @@ Never use any other patterns for contract interaction. The hooks are:
 - useScaffoldWriteContract (for writing)
   </contract_interaction_patterns>
 
-3. If applicable, link to @the official documentation or relevant external resources.
+3. If applicable, link to the official documentation (https://docs.scaffoldeth.io/) or relevant external resources.
 
 </instructions>
 
