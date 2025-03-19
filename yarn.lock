@@ -3775,18 +3775,16 @@ __metadata:
 
 "@scaffold-ui/hook@file:../../../scaffold-ui/packages/hooks::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.1.0
-  resolution: "@scaffold-ui/hook@file:../../../scaffold-ui/packages/hooks#../../../scaffold-ui/packages/hooks::hash=3c21bf&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
+  resolution: "@scaffold-ui/hook@file:../../../scaffold-ui/packages/hooks#../../../scaffold-ui/packages/hooks::hash=531ff8&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
     blo: ^1.2.0
   peerDependencies:
-    "@tanstack/react-query": 5.59.15
+    "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
-    "@types/react-dom": ^19.0.4
-    react: "*"
-    react-dom: "*"
-    viem: 2.23.0
-    wagmi: 2.14.11
-  checksum: 098857219e5ec01e9e79a588af40db0bb41f2d7fc849e0ed81fa58193caafb9f7db325d4aa1964163c77bdb3a6a935624bc56cec60990cf9a5763ef6a2b695dc
+    react: ^19.0.0
+    viem: ^2.23.0
+    wagmi: ^2.14.11
+  checksum: 4dcdb414fb2f501ec4d95afc6a6804fd0cf1e7b0305d5387efb771ef60c81b37f4412882b30e5f3ff47924addc92cde0c4e0f890f2504f4735462466c592e24b
   languageName: node
   linkType: hard
 
