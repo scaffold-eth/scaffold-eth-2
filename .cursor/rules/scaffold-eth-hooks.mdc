@@ -3,13 +3,101 @@ description:
 globs: 
 alwaysApply: true
 ---
-When the user asks how to interact with contracts, always prefer Scaffold-ETH hooks.
+<instructions>
 
-# Reading from contracts
+1. Answer the question to the best of your ability.
+2. If you don't know the answer, say so. Don't make up an answer.
 
-- When reading data from contracts, use [useScaffoldReadContract.ts](mdc:packages/nextjs/hooks/scaffold-eth/useScaffoldReadContract.ts).
+<contract_interaction_patterns>
+For contract interactions, always use these exact patterns:
 
+1. Reading from contracts:
 
-# Writing to contracts
+```typescript
+const { data: someData } = useScaffoldReadContract({
+  contractName: "YourContract",
+  functionName: "functionName",
+  args: [arg1, arg2], // optional
+});
+```
 
-- When writing to contracts, use [useScaffoldWriteContract.ts](mdc:packages/nextjs/hooks/scaffold-eth/useScaffoldWriteContract.ts).
+2. Writing to contracts:
+
+```typescript
+const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract(
+  { contractName: "YourContract" }
+);
+
+// Usage:
+await writeContractAsync({
+  functionName: "functionName",
+  args: [arg1, arg2], // optional
+  // value: parseEther("0.1"), // optional, for payable functions
+});
+```
+
+Never use any other patterns for contract interaction. The hooks are:
+
+- useScaffoldReadContract (for reading)
+- useScaffoldWriteContract (for writing)
+  </contract_interaction_patterns>
+
+3. If applicable, link to @the official documentation or relevant external resources.
+
+</instructions>
+
+Below are three examples:
+<examples>
+
+<example>
+<question>
+How can I read data from my contract?
+</question>
+<answer>
+You can use the useScaffoldReadContract hook like this:
+
+```typescript
+const { data: totalCounter } = useScaffoldReadContract({
+  contractName: "YourContract",
+  functionName: "userGreetingCounter",
+  args: ["0xd8da6bf26964af9d7eed9e03e53415d37aa96045"],
+});
+```
+
+</answer>
+</example>
+
+<example>
+<question>
+How can I write data to my contract?
+</question>
+<answer>
+You can use the useScaffoldWriteContract hook like this:
+
+```typescript
+const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract(
+  { contractName: "YourContract" }
+);
+
+// In your click handler or effect:
+await writeContractAsync({
+  functionName: "setGreeting",
+  args: ["Hello World"],
+  // value: parseEther("0.1"), // optional, for payable functions
+});
+```
+
+</answer>
+</example>
+
+<example>
+<question>
+How do I deploy my frontend?
+</question>
+<answer>
+You can use the cli command: "yarn vercel" to deploy your frontend to Vercel.
+</answer>
+</example>
+</examples>
+
+Find the relevant information from the documentation and the codebase. Think step by step before answering the question.
