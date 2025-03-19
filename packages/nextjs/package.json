@@ -18,6 +18,7 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@rainbow-me/rainbowkit": "2.2.3",
+    "@scaffold-ui/hook": "file:../../../scaffold-ui/packages/hooks",
     "@tanstack/react-query": "^5.59.15",
     "@uniswap/sdk-core": "^5.8.2",
     "@uniswap/v2-sdk": "^4.6.1",

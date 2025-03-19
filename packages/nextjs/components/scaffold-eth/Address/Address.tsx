@@ -2,9 +2,9 @@
 
 import { AddressCopyIcon } from "./AddressCopyIcon";
 import { AddressLinkWrapper } from "./AddressLinkWrapper";
+import { useAddress } from "@scaffold-ui/hook";
 import { Address as AddressType } from "viem";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
-import { useAddress } from "~~/hooks/scaffold-eth/useAddress";
 
 // Size maps moved from the component
 export const textSizeMap = {
