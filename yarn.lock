@@ -3950,7 +3950,7 @@ __metadata:
     autoprefixer: ^10.4.20
     bgipfs: ^0.0.12
     blo: ^1.2.0
-    burner-connector: ^0.0.12
+    burner-connector: 0.0.12
     daisyui: 4.12.10
     eslint: ^8.57.1
     eslint-config-next: ^15.1.4
@@ -7266,7 +7266,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burner-connector@npm:^0.0.12":
+"burner-connector@npm:0.0.12":
   version: 0.0.12
   resolution: "burner-connector@npm:0.0.12"
   dependencies:
