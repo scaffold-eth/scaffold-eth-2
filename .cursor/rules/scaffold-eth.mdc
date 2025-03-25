@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Guidelines and best practices to build a dApp with Scaffold-ETH 2 
+globs: **/*.ts,**/*.tsx,**/*.js,**/*.jsx,**/*.sol 
 alwaysApply: true
 ---
 <instructions>
