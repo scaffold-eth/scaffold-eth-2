@@ -39,11 +39,11 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "latest",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^18.19.50",
     "@types/react": "^19.0.7",
     "abitype": "1.0.6",
-    "autoprefixer": "^10.4.20",
     "bgipfs": "^0.0.12",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.1.4",
@@ -51,7 +51,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "postcss": "^8.4.45",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.11",
+    "tailwindcss": "latest",
     "type-fest": "^4.26.1",
     "typescript": "<5.6.0",
     "vercel": "^39.1.3"
