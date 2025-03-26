@@ -1,8 +1,0 @@
-# folders
-artifacts
-cache
-contracts
-node_modules/
-typechain-types
-# files
-**/*.json
