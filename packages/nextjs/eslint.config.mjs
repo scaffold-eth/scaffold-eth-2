@@ -1,6 +1,6 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import prettierPlugin from "eslint-plugin-prettier";
-import { defineConfig, globalIgnores } from "eslint/config";
+import { defineConfig } from "eslint/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,17 +11,6 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores([
-    "**/.next",
-    "**/node_modules/",
-    "**/*.less",
-    "**/*.css",
-    "**/*.scss",
-    "**/*.json",
-    "**/*.png",
-    "**/*.svg",
-    "**/generated/**/*",
-  ]),
   {
     plugins: {
       prettier: prettierPlugin,
