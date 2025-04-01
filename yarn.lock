@@ -3923,7 +3923,7 @@ __metadata:
     bgipfs: ^0.0.12
     blo: ^1.2.0
     burner-connector: 0.0.12
-    daisyui: 4.12.10
+    daisyui: ^5.0.9
     eslint: ^8.57.1
     eslint-config-next: ^15.1.4
     eslint-config-prettier: ^8.10.0
@@ -7498,13 +7498,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelcase-css@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "camelcase-css@npm:2.0.1"
-  checksum: 1cec2b3b3dcb5026688a470b00299a8db7d904c4802845c353dbd12d9d248d3346949a814d83bfd988d4d2e5b9904c07efe76fecd195a1d4f05b543e7c0b56b1
-  languageName: node
-  linkType: hard
-
 "camelcase@npm:^5.0.0":
   version: 5.3.1
   resolution: "camelcase@npm:5.3.1"
@@ -8170,16 +8163,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-selector-tokenizer@npm:^0.8":
-  version: 0.8.0
-  resolution: "css-selector-tokenizer@npm:0.8.0"
-  dependencies:
-    cssesc: ^3.0.0
-    fastparse: ^1.1.2
-  checksum: 1eb7ca7d2c21ede700a0fab7df4547198431c30ba62663d81a566a8abe6ab7524f627ce6c0bde63f34917e199b73be4081e449bd8faf107d155766204082aa0a
-  languageName: node
-  linkType: hard
-
 "css-what@npm:^6.1.0":
   version: 6.1.0
   resolution: "css-what@npm:6.1.0"
@@ -8210,13 +8193,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"culori@npm:^3":
-  version: 3.3.0
-  resolution: "culori@npm:3.3.0"
-  checksum: 7091ab572ed49222a25872a0c2c350340b96dac1c3237a7b58a93bfb02d11c64d68c585c32f91985a563b3d52402d16722e33a00087456287df28e3db5d99f13
-  languageName: node
-  linkType: hard
-
 "dag-jose@npm:^5.0.0":
   version: 5.1.1
   resolution: "dag-jose@npm:5.1.1"
@@ -8227,15 +8203,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daisyui@npm:4.12.10":
-  version: 4.12.10
-  resolution: "daisyui@npm:4.12.10"
-  dependencies:
-    css-selector-tokenizer: ^0.8
-    culori: ^3
-    picocolors: ^1
-    postcss-js: ^4
-  checksum: 506e7545502b75f43995f6fd460c907e95af03b12d750b49dbec14338d81d91b540cded0179004c87d2a326d024500b8529a456f70819bff24011b269f76aeec
+"daisyui@npm:^5.0.9":
+  version: 5.0.9
+  resolution: "daisyui@npm:5.0.9"
+  checksum: edb53c33d814fa9aa67ae898951451792e552c4ea5510e1c4b7a28dd30c5287b120bbfcfcaaf0879782f780de6fc4fc6e3634d228578f894721ad9f5ec9f4158
   languageName: node
   linkType: hard
 
@@ -10178,13 +10149,6 @@ __metadata:
   version: 1.0.16
   resolution: "fastest-levenshtein@npm:1.0.16"
   checksum: a78d44285c9e2ae2c25f3ef0f8a73f332c1247b7ea7fb4a191e6bb51aa6ee1ef0dfb3ed113616dcdc7023e18e35a8db41f61c8d88988e877cf510df8edafbc71
-  languageName: node
-  linkType: hard
-
-"fastparse@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "fastparse@npm:1.1.2"
-  checksum: c4d199809dc4e8acafeb786be49481cc9144de296e2d54df4540ccfd868d0df73afc649aba70a748925eb32bbc4208b723d6288adf92382275031a8c7e10c0aa
   languageName: node
   linkType: hard
 
@@ -15504,7 +15468,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:1.0.0, picocolors@npm:^1, picocolors@npm:^1.0.0":
+"picocolors@npm:1.0.0, picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
   checksum: a2e8092dd86c8396bdba9f2b5481032848525b3dc295ce9b57896f931e63fc16f79805144321f72976383fc249584672a75cc18d6777c6b757603f372f745981
@@ -15629,17 +15593,6 @@ __metadata:
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
   checksum: b32d403ece71e042385cc7856385cecf1cd8e144fa74d2f1de40d1e16035dba097bc189715925e79b67bdd1472796ff168d3a90d296356c9c94d272d5b95f3ae
-  languageName: node
-  linkType: hard
-
-"postcss-js@npm:^4":
-  version: 4.0.1
-  resolution: "postcss-js@npm:4.0.1"
-  dependencies:
-    camelcase-css: ^2.0.1
-  peerDependencies:
-    postcss: ^8.4.21
-  checksum: 5c1e83efeabeb5a42676193f4357aa9c88f4dc1b3c4a0332c132fe88932b33ea58848186db117cf473049fc233a980356f67db490bd0a7832ccba9d0b3fd3491
   languageName: node
   linkType: hard
 
