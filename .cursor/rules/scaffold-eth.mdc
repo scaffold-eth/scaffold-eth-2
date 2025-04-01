@@ -1,0 +1,81 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps on Ethereum. Its tech stack is NextJS, RainbowKit, Wagmi and Typescript. Supports Hardhat and Foundry.
+
+It's a yarn monorepo that contains two main packages:
+
+- Hardhat (`packages/hardhat`): The solidity framework to write, test and deploy EVM Smart Contracts.
+- NextJS (`packages/nextjs`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
+
+The usual dev flow is:
+
+- Start SE-2 locally:
+  - `yarn chain`: Starts a local blockchain network
+  - `yarn deploy`: Deploys SE-2 default contract
+  - `yarn start`: Starts the frontend
+- Write a Smart Contract (modify the deployment script in `packages/hardhat/deploy` if needed)
+- Deploy it locally (`yarn deploy`)
+- Go to the `http://locahost:3000/debug` page to interact with your contract with a nice UI
+- Iterate until you get the functionality you want in your contract
+- Write tests for the contract in `packages/hardhat/test`
+- Create your custom UI using all the SE-2 components, hooks, and utilities.
+- Deploy your Smart Contrac to a live network
+- Deploy your UI (`yarn vercel` or `yarn ipfs`)
+  - You can tweak which network the frontend is poiting (and some other configurations) in `scaffold.config.ts`
+
+## Smart Contract UI interactions guidelines
+
+SE-2 provides a set of hooks that facilitates contract interactions from the UI. It reads the contract data from `deployedContracts.ts` and `externalContracts.ts`, located in `packages/nextjs/contracts`.
+
+### Reading data from a contract
+Use the `useScaffoldReadContract` (`packages/nextjs/hooks/scaffold-eth/useScaffoldReadContract.ts`) hook. Example:
+
+```typescript
+const { data: someData } = useScaffoldReadContract({
+  contractName: "YourContract",
+  functionName: "functionName",
+  args: [arg1, arg2], // optional
+});
+```
+
+### Writing data to a contract
+Use the `useScaffoldWriteContract` (`packages/nextjs/hooks/scaffold-eth/useScaffoldWriteContract.ts`) hook.
+1. Initilize the hook with just the contract name
+2. Call the `writeContractAsync` function.
+
+ Example:
+
+```typescript
+const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract(
+  { contractName: "YourContract" }
+);
+
+// Usage (this will send a write transaction to the contract)
+await writeContractAsync({
+  functionName: "functionName",
+  args: [arg1, arg2], // optional
+  value: parseEther("0.1"), // optional, for payable functions
+});
+```
+
+Never use any other patterns for contract interaction. The hooks are:
+
+- useScaffoldReadContract (for reading)
+- useScaffoldWriteContract (for writing)
+
+### Other Hooks
+SE-2 also provides other hooks to interact with blockchain data: `useScaffoldWatchContractEvent`, `useScaffoldEventHistory`, `useDeployedContractInfo`, `useScaffoldContract`, `useTransactor`. They live under `packages/nextjs/hooks/scaffold-eth`.
+
+## Display Components guidelines
+SE-2 provides a set of pre-built React components for common Ethereum use cases: 
+- `Address`: Always use this when displaying an ETH address
+- `AddressInput`: Always use this when users need to input an ETH address
+- `Balance`: Display the ETH/USDC balance of a given address
+- `EtherInput`: An extended number input with ETH/USD conversion.
+
+They live under `packages/nextjs/components/scaffold-eth`.
+
+Find the relevant information from the documentation and the codebase. Think step by step before answering the question.
