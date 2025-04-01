@@ -8,7 +8,7 @@ This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps
 It's a yarn monorepo that contains two main packages:
 
 - Hardhat (`packages/hardhat`): The solidity framework to write, test and deploy EVM Smart Contracts.
-- NextJS (`packages/nextjs`): The UI framework extended with utilities to make interacting with Smart Contracts easy.
+- NextJS (`packages/nextjs`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
 
 The usual dev flow is:
 
