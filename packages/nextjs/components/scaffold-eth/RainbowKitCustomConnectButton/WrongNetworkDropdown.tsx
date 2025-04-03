@@ -18,7 +18,7 @@ export const WrongNetworkDropdown = () => {
         <NetworkOptions />
         <li>
           <button
-            className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
+            className="menu-item text-error btn-sm rounded-xl! flex gap-3 py-3"
             type="button"
             onClick={() => disconnect()}
           >
