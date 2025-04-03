@@ -71,27 +71,30 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+
+  p {
+    margin: 1rem 0;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+}
+
+@layer base {
 }
 
 :root,
 [data-theme] {
   background: var(--color-base-200);
-}
-
-body {
-  min-height: 100vh;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  margin-bottom: 0.5rem;
-  line-height: 1;
-}
-
-p {
-  margin: 1rem 0;
 }
 
 .btn {
