@@ -1,4 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+  --shadow-center: 0 0 12px -2px rgb(0 0 0 / 0.05);
+  --animate-pulse-fast: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @plugin "daisyui" {
   themes:
     light,
@@ -26,6 +32,7 @@
   --color-error: #ff8863;
 
   --radius-field: 9999rem;
+  --radius-box: 1rem;
   --tt-tailw: 6px;
 }
 
@@ -50,6 +57,7 @@
   --color-error: #ff8863;
 
   --radius-field: 9999rem;
+  --radius-box: 1rem;
 
   --tt-tailw: 6px;
   --tt-bg: var(--color-primary);
@@ -87,9 +95,6 @@
     margin-bottom: 0.5rem;
     line-height: 1;
   }
-}
-
-@layer base {
 }
 
 :root,
