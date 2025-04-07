@@ -30,9 +30,9 @@ export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
           </CopyToClipboard>
         )}
       </div>
-      <div className="flex-wrap collapse collapse-arrow">
-        <input type="checkbox" className="min-h-0 peer" />
-        <div className="collapse-title text-sm min-h-0 py-1.5 pl-1 after:top-4!">
+      <div tabIndex={0} className="flex-wrap collapse collapse-arrow">
+        <input type="checkbox" className="!min-h-0 peer" />
+        <div className="collapse-title text-sm !min-h-0 py-1.5 pl-1 after:top-4!">
           <strong>Transaction Receipt</strong>
         </div>
         <div className="collapse-content overflow-auto bg-secondary rounded-t-none rounded-3xl pl-0!">
