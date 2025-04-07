@@ -153,11 +153,11 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
   },
-  // configuration for harhdat-verify plugin
+  // Configuration for harhdat-verify plugin
   etherscan: {
     apiKey: `${etherscanApiKey}`,
   },
-  // configuration for etherscan-verify from hardhat-deploy plugin
+  // Configuration for etherscan-verify from hardhat-deploy plugin
   verify: {
     etherscan: {
       apiKey: `${etherscanApiKey}`,
