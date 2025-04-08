@@ -1,4 +1,4 @@
-const contents = ({solidityFramework, deployScriptDir }) => {
+const contents = ({ solidityFramework, deployScriptDir }) => {
   return `---
 description: 
 globs: 
