@@ -1,3 +1,5 @@
+import { withDefaults } from "../../../utils.js"
+
 const contents = ({ solidityFramework, deployScriptDir }) => {
   return `---
 description: 
