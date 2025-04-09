@@ -24,7 +24,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          existing_pr=$(gh pr list --state open --json title --jq '.[] | select(.title | contains("Version Packages"))')
+          existing_pr=$(gh pr list --state open --json title --jq '.[] | select(.title == "Version Packages")')
           if [ -n "$existing_pr" ]; then
             echo "Release PR already exists."
             echo "SKIP_RELEASE=true" >> $GITHUB_ENV
