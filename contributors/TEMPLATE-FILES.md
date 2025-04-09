@@ -49,11 +49,12 @@ If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTE
 
 ### create-eth internal use
 
-#### GitHub
+#### Monorepo root
 
-| Template                                                                                                                                            | Example args file                                                                                                                                       |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [(workflow) `lint.yaml.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.github/workflows/lint.yaml.template.mjs) | [`lint.yaml.args.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/.github/workflows/lint.yaml.args.mjs) |
+| Template                                                                                                                                                                    | Example args file                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [(workflow) `lint.yaml.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.github/workflows/lint.yaml.template.mjs)                         | [`lint.yaml.args.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/.github/workflows/lint.yaml.args.mjs)                     |
+| [(cursor rules) `.cursor/rules/scaffold-eth.mdc.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.cursor/rules/scaffold-eth.template.mdc) | [`.cursor/rules/scaffold-eth.args.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/.cursor/rules/scaffold-eth.mdc.args.mjs) |
 
 #### NextJS
 
