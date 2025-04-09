@@ -9,7 +9,7 @@ alwaysApply: true
 
 This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps on Ethereum. Its tech stack is NextJS, RainbowKit, Wagmi and Typescript. Supports Hardhat and Foundry.
 
-It's a yarn monorepo that contains two main packages:
+It's a yarn monorepo that contains following packages:
 
 ${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0].toUpperCase()} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
 - NextJS (\`packages/nextjs\`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
@@ -18,8 +18,8 @@ ${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0].toUpperCase()} (\`pa
 The usual dev flow is:
 
 - Start SE-2 locally:
-  - \`yarn chain\`: Starts a local blockchain network
-  - \`yarn deploy\`: Deploys SE-2 default contract
+${Boolean(solidityFramework[0]) ? `  - \`yarn chain\`: Starts a local blockchain network` : ""}
+${Boolean(solidityFramework[0]) ? `  - \`yarn deploy\`: Deploys SE-2 default contract` : ""}
   - \`yarn start\`: Starts the frontend
 ${Boolean(solidityFramework[0]) ? `- Write a Smart Contract (modify the deployment script in \`packages/${solidityFramework[0]}/${deployScriptDir}\` if needed)` : ""}
 - Deploy it locally (\`yarn deploy\`)
@@ -29,7 +29,7 @@ ${Boolean(solidityFramework[0]) ? `- Write tests for the contract in \`packages/
 - Create your custom UI using all the SE-2 components, hooks, and utilities.
 - Deploy your Smart Contrac to a live network
 - Deploy your UI (\`yarn vercel\` or \`yarn ipfs\`)
-  - You can tweak which network the frontend is poiting (and some other configurations) in \`scaffold.config.ts\`
+  - You can tweak which network the frontend is pointing (and some other configurations) in \`scaffold.config.ts\`
 
 ## Smart Contract UI interactions guidelines
 SE-2 provides a set of hooks that facilitates contract interactions from the UI. It reads the contract data from \`deployedContracts.ts\` and \`externalContracts.ts\`, located in \`packages/nextjs/contracts\`.
