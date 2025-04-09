@@ -11,7 +11,7 @@ This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps
 
 It's a yarn monorepo that contains two main packages:
 
-${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0]} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
+${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0].toUpperCase()} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
 - NextJS (\`packages/nextjs\`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
 
 
