@@ -24,7 +24,7 @@ Before you begin, you need to install the following tools:
 - [Node (>= v22.0)](https://nodejs.org/en/download/)
 - [Git](https://git-scm.com/downloads)
 - Package Manager (choose one):
-  - [Yarn (v1 or v2+)](https://yarnpkg.com/getting-started/install)
+  - [Yarn (v3.2.3)](https://yarnpkg.com/getting-started/install) - Note: This project uses Yarn 3.2.3 which is included in the project. You don't need to install Yarn globally.
   - [pnpm](https://pnpm.io/installation)
 
 ## Quickstart
