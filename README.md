@@ -67,6 +67,13 @@ export GITHUB_TOKEN=<github-token>
 ```
 
 6. Install ApePortal package:
+
+Using Yarn:
+```
+yarn add @yuga-labs/ape-portal-public
+```
+
+Using pnpm:
 ```
 pnpm i @yuga-labs/ape-portal-public
 ```
