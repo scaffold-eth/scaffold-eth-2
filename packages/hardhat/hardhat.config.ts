@@ -8,7 +8,6 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
-import "hardhat-deploy-ethers";
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -135,6 +134,10 @@ const config: HardhatUserConfig = {
   },
   sourcify: {
     enabled: false,
+  },
+  typechain: {
+    outDir: "types",
+    target: "ethers-v6",
   },
 };
 

@@ -30,10 +30,11 @@
     "next:check-types": "npm -w @se-2/nextjs run check-types",
     "next:build": "npm -w @se-2/nextjs run build",
     "next:serve": "npm -w @se-2/nextjs run serve",
-    "postinstall": "husky install",
+    "postinstall": "husky install && npm -w @se-2/hardhat run ensure-hardhat",
     "precommit": "lint-staged",
     "vercel": "npm -w @se-2/nextjs run vercel",
-    "vercel:yolo": "npm -w @se-2/nextjs run vercel:yolo"
+    "vercel:yolo": "npm -w @se-2/nextjs run vercel:yolo",
+    "ensure-hardhat": "if [ ! -f node_modules/.bin/hardhat ]; then npm install hardhat; fi"
   },
   "devDependencies": {
     "husky": "^8.0.1",

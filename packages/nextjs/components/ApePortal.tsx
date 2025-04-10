@@ -1,3 +1,5 @@
+"use client";
+
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { ApeConfig, ApePortal, ApeProvider, Bridge, Buy, Swap } from "@yuga-labs/ape-portal-public";
 
