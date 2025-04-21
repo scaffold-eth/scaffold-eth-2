@@ -42,7 +42,6 @@
     "@trivago/prettier-plugin-sort-imports": "~4.3.0",
     "@types/node": "~18.19.50",
     "@types/react": "~19.0.7",
-    "@typescript-eslint/eslint-plugin": "~5.40.0",
     "abitype": "1.0.6",
     "autoprefixer": "~10.4.20",
     "bgipfs": "~0.0.12",
