@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
-import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
 import { Address } from "viem";
 import { useDisconnect } from "wagmi";
@@ -58,33 +57,29 @@ export const AddressInfoDropdown = ({
         <ul className="dropdown-content menu z-2 p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1">
           <NetworkOptions hidden={!selectingNetwork} />
           <li className={selectingNetwork ? "hidden" : ""}>
-            {addressCopied ? (
-              <div className="h-8 btn-sm rounded-xl! flex gap-3 py-3">
-                <CheckCircleIcon
-                  className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                  aria-hidden="true"
-                />
-                <span className=" whitespace-nowrap">Copy address</span>
-              </div>
-            ) : (
-              <CopyToClipboard
-                text={checkSumAddress}
-                onCopy={() => {
+            <div
+              className="h-8 btn-sm rounded-xl! flex gap-3 py-3 cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(checkSumAddress).then(() => {
                   setAddressCopied(true);
                   setTimeout(() => {
                     setAddressCopied(false);
                   }, 800);
-                }}
-              >
-                <div className="h-8 btn-sm rounded-xl! flex gap-3 py-3">
-                  <DocumentDuplicateIcon
-                    className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                    aria-hidden="true"
-                  />
-                  <span className=" whitespace-nowrap">Copy address</span>
-                </div>
-              </CopyToClipboard>
-            )}
+                });
+              }}
+            >
+              {addressCopied ? (
+                <>
+                  <CheckCircleIcon className="text-xl font-normal h-6 w-4 ml-2 sm:ml-0" aria-hidden="true" />
+                  <span className="whitespace-nowrap">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <DocumentDuplicateIcon className="text-xl font-normal h-6 w-4 ml-2 sm:ml-0" aria-hidden="true" />
+                  <span className="whitespace-nowrap">Copy address</span>
+                </>
+              )}
+            </div>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <label htmlFor="qrcode-modal" className="h-8 btn-sm rounded-xl! flex gap-3 py-3">
