@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.1.8
+
+### Patch Changes
+
+- dfcd3b2: fix: remove outdated typescript-eslint/eslint-plugin
+
 ## 0.1.7
 
 ### Patch Changes
