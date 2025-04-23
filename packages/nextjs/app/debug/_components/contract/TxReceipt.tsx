@@ -1,25 +1,20 @@
-import { useState } from "react";
 import { TransactionReceipt } from "viem";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ObjectFieldDisplay } from "~~/app/debug/_components/contract";
+import { useCopyToClipboard } from "~~/hooks/scaffold-eth/useCopyToClipboard";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
-  const [txResultCopied, setTxResultCopied] = useState(false);
+  const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(JSON.stringify(txResult, replacer, 2)).then(() => {
-      setTxResultCopied(true);
-      setTimeout(() => {
-        setTxResultCopied(false);
-      }, 800);
-    });
+    copyToClipboard(JSON.stringify(txResult, replacer, 2));
   };
 
   return (
     <div className="flex text-sm rounded-3xl peer-checked:rounded-b-none min-h-0 bg-secondary py-0">
       <div className="mt-1 pl-2">
-        {txResultCopied ? (
+        {isCopiedToClipboard ? (
           <CheckCircleIcon
             className="ml-1.5 text-xl font-normal text-base-content h-5 w-5 cursor-pointer"
             aria-hidden="true"

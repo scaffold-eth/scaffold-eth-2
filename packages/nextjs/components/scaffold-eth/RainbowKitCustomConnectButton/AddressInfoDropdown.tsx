@@ -13,7 +13,7 @@ import {
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
-import { useOutsideClick } from "~~/hooks/scaffold-eth";
+import { useCopyToClipboard, useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
@@ -34,14 +34,15 @@ export const AddressInfoDropdown = ({
   const { disconnect } = useDisconnect();
   const checkSumAddress = getAddress(address);
 
-  const [addressCopied, setAddressCopied] = useState(false);
-
+  const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
   const [selectingNetwork, setSelectingNetwork] = useState(false);
   const dropdownRef = useRef<HTMLDetailsElement>(null);
+
   const closeDropdown = () => {
     setSelectingNetwork(false);
     dropdownRef.current?.removeAttribute("open");
   };
+
   useOutsideClick(dropdownRef, closeDropdown);
 
   return (
@@ -59,16 +60,9 @@ export const AddressInfoDropdown = ({
           <li className={selectingNetwork ? "hidden" : ""}>
             <div
               className="h-8 btn-sm rounded-xl! flex gap-3 py-3 cursor-pointer"
-              onClick={() => {
-                navigator.clipboard.writeText(checkSumAddress).then(() => {
-                  setAddressCopied(true);
-                  setTimeout(() => {
-                    setAddressCopied(false);
-                  }, 800);
-                });
-              }}
+              onClick={() => copyToClipboard(checkSumAddress)}
             >
-              {addressCopied ? (
+              {isCopiedToClipboard ? (
                 <>
                   <CheckCircleIcon className="text-xl font-normal h-6 w-4 ml-2 sm:ml-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Copied!</span>

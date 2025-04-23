@@ -1,30 +1,18 @@
-import { useState } from "react";
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { useCopyToClipboard } from "~~/hooks/scaffold-eth/useCopyToClipboard";
 
 export const AddressCopyIcon = ({ className, address }: { className?: string; address: string }) => {
-  const [addressCopied, setAddressCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(address);
-      setAddressCopied(true);
-      setTimeout(() => {
-        setAddressCopied(false);
-      }, 800);
-    } catch (err) {
-      console.error("Failed to copy address:", err);
-    }
-  };
+  const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
 
   return (
     <button
       onClick={e => {
         e.stopPropagation();
-        handleCopy();
+        copyToClipboard(address);
       }}
       type="button"
     >
-      {addressCopied ? (
+      {isCopiedToClipboard ? (
         <CheckCircleIcon className={className} aria-hidden="true" />
       ) : (
         <DocumentDuplicateIcon className={className} aria-hidden="true" />
