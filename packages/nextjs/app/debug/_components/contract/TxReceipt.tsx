@@ -5,16 +5,13 @@ import { useCopyToClipboard } from "~~/hooks/scaffold-eth/useCopyToClipboard";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
 export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
-  const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
-
-  const handleCopy = () => {
-    copyToClipboard(JSON.stringify(txResult, replacer, 2));
-  };
+  const { copyToClipboard: copyTxResultToClipboard, isCopiedToClipboard: isTxResultCopiedToClipboard } =
+    useCopyToClipboard();
 
   return (
     <div className="flex text-sm rounded-3xl peer-checked:rounded-b-none min-h-0 bg-secondary py-0">
       <div className="mt-1 pl-2">
-        {isCopiedToClipboard ? (
+        {isTxResultCopiedToClipboard ? (
           <CheckCircleIcon
             className="ml-1.5 text-xl font-normal text-base-content h-5 w-5 cursor-pointer"
             aria-hidden="true"
@@ -23,7 +20,7 @@ export const TxReceipt = ({ txResult }: { txResult: TransactionReceipt }) => {
           <DocumentDuplicateIcon
             className="ml-1.5 text-xl font-normal h-5 w-5 cursor-pointer"
             aria-hidden="true"
-            onClick={handleCopy}
+            onClick={() => copyTxResultToClipboard(JSON.stringify(txResult, replacer, 2))}
           />
         )}
       </div>
