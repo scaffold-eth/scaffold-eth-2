@@ -34,7 +34,8 @@ export const AddressInfoDropdown = ({
   const { disconnect } = useDisconnect();
   const checkSumAddress = getAddress(address);
 
-  const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
+  const { copyToClipboard: copyAddressToClipboard, isCopiedToClipboard: isAddressCopiedToClipboard } =
+    useCopyToClipboard();
   const [selectingNetwork, setSelectingNetwork] = useState(false);
   const dropdownRef = useRef<HTMLDetailsElement>(null);
 
@@ -60,9 +61,9 @@ export const AddressInfoDropdown = ({
           <li className={selectingNetwork ? "hidden" : ""}>
             <div
               className="h-8 btn-sm rounded-xl! flex gap-3 py-3 cursor-pointer"
-              onClick={() => copyToClipboard(checkSumAddress)}
+              onClick={() => copyAddressToClipboard(checkSumAddress)}
             >
-              {isCopiedToClipboard ? (
+              {isAddressCopiedToClipboard ? (
                 <>
                   <CheckCircleIcon className="text-xl font-normal h-6 w-4 ml-2 sm:ml-0" aria-hidden="true" />
                   <span className="whitespace-nowrap">Copied!</span>
