@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
+import { QRCodeSVG } from "qrcode.react";
 import { getAddress } from "viem";
-import { Address } from "viem";
+import { Address as AddressType } from "viem";
 import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
@@ -12,14 +13,15 @@ import {
   DocumentDuplicateIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
-import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
+import { Modal } from "~~/components/Modal";
+import { Address, BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useCopyToClipboard, useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
 const allowedNetworks = getTargetNetworks();
 
 type AddressInfoDropdownProps = {
-  address: Address;
+  address: AddressType;
   blockExplorerAddressLink: string | undefined;
   displayName: string;
   ensAvatar?: string;
@@ -33,6 +35,7 @@ export const AddressInfoDropdown = ({
 }: AddressInfoDropdownProps) => {
   const { disconnect } = useDisconnect();
   const checkSumAddress = getAddress(address);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
 
   const { copyToClipboard: copyAddressToClipboard, isCopiedToClipboard: isAddressCopiedToClipboard } =
     useCopyToClipboard();
@@ -48,6 +51,12 @@ export const AddressInfoDropdown = ({
 
   return (
     <>
+      <Modal isOpen={isQrModalOpen} onClose={() => setIsQrModalOpen(false)} title="Address QR Code">
+        <div className="flex flex-col items-center gap-6 space-y-3 py-6">
+          <QRCodeSVG value={address} size={256} />
+          <Address address={address} format="long" disableAddressLink onlyEnsOrAddress />
+        </div>
+      </Modal>
       <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
         <summary className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 h-auto!">
           <BlockieAvatar address={checkSumAddress} size={30} ensImage={ensAvatar} />
@@ -77,10 +86,10 @@ export const AddressInfoDropdown = ({
             </div>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
-            <label htmlFor="qrcode-modal" className="h-8 btn-sm rounded-xl! flex gap-3 py-3">
+            <button className="h-8 btn-sm rounded-xl! flex gap-3 py-3" onClick={() => setIsQrModalOpen(true)}>
               <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
               <span className="whitespace-nowrap">View QR Code</span>
-            </label>
+            </button>
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <button className="h-8 btn-sm rounded-xl! flex gap-3 py-3" type="button">
