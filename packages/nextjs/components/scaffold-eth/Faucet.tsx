@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Modal } from "../Modal";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
@@ -25,6 +26,7 @@ export const Faucet = () => {
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { chain: ConnectedChain } = useAccount();
 
@@ -81,49 +83,40 @@ export const Faucet = () => {
 
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal gap-1">
+      <button className="btn btn-primary btn-sm font-normal gap-1" onClick={() => setIsModalOpen(true)}>
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
-      </label>
-      <input type="checkbox" id="faucet-modal" className="modal-toggle" />
-      <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative">
-          {/* dummy input to capture event onclick on modal box */}
-          <input className="h-0 w-0 absolute top-0 left-0" />
-          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
-          <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
-            ✕
-          </label>
-          <div className="space-y-3">
-            <div className="flex space-x-4">
-              <div>
-                <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} onlyEnsOrAddress />
-              </div>
-              <div>
-                <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress} />
-              </div>
+      </button>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Local faucet">
+        <div className="space-y-3">
+          <div className="flex space-x-4">
+            <div>
+              <span className="text-sm font-bold">From:</span>
+              <Address address={faucetAddress} onlyEnsOrAddress />
             </div>
-            <div className="flex flex-col space-y-3">
-              <AddressInput
-                placeholder="Destination Address"
-                value={inputAddress ?? ""}
-                onChange={value => setInputAddress(value as AddressType)}
-              />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-                {!loading ? (
-                  <BanknotesIcon className="h-6 w-6" />
-                ) : (
-                  <span className="loading loading-spinner loading-sm"></span>
-                )}
-                <span>Send</span>
-              </button>
+            <div>
+              <span className="text-sm font-bold pl-3">Available:</span>
+              <Balance address={faucetAddress} />
             </div>
           </div>
-        </label>
-      </label>
+          <div className="flex flex-col space-y-3">
+            <AddressInput
+              placeholder="Destination Address"
+              value={inputAddress ?? ""}
+              onChange={value => setInputAddress(value as AddressType)}
+            />
+            <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
+            <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+              {!loading ? (
+                <BanknotesIcon className="h-6 w-6" />
+              ) : (
+                <span className="loading loading-spinner loading-sm"></span>
+              )}
+              <span>Send</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
