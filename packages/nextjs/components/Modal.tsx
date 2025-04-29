@@ -1,30 +1,17 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
-interface ModalProps {
+type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
   title?: string;
-}
+};
 
 export const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen, onClose]);
+  const modalRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(modalRef, onClose);
 
   if (!isOpen) return null;
 
