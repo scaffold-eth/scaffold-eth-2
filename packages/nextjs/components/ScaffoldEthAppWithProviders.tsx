@@ -12,6 +12,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+import { composeProviders, createProvider } from "~~/utils/scaffold-eth/composeProviders";
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -45,17 +46,21 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
     setMounted(true);
   }, []);
 
+  const providers = [
+    createProvider(WagmiProvider, { config: wagmiConfig }),
+    createProvider(QueryClientProvider, { client: queryClient }),
+    createProvider(ProgressBar, { height: "3px", color: "#2299dd" }),
+    createProvider(RainbowKitProvider, {
+      avatar: BlockieAvatar,
+      theme: mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme(),
+    }),
+  ];
+
+  const ComposedProviders = composeProviders(providers);
+
   return (
-    <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <ProgressBar height="3px" color="#2299dd" />
-        <RainbowKitProvider
-          avatar={BlockieAvatar}
-          theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
-        >
-          <ScaffoldEthApp>{children}</ScaffoldEthApp>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <ComposedProviders>
+      <ScaffoldEthApp>{children}</ScaffoldEthApp>
+    </ComposedProviders>
   );
 };
