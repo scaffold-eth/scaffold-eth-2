@@ -35,7 +35,7 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
       <div className="animate-pulse flex space-x-4">
         <div className="rounded-md bg-slate-300 h-6 w-6"></div>
         <div className="flex items-center space-y-6">
-          <div className="h-2 w-28 bg-slate-300 rounded"></div>
+          <div className="h-2 w-28 bg-slate-300 rounded-sm"></div>
         </div>
       </div>
     );

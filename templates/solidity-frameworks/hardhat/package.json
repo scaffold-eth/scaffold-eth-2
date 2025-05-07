@@ -3,6 +3,7 @@
     "account": "yarn hardhat:account",
     "account:import": "yarn workspace @se-2/hardhat account:import",
     "account:generate": "yarn workspace @se-2/hardhat account:generate",
+    "account:reveal-pk": "yarn workspace @se-2/hardhat account:reveal-pk",
     "chain": "yarn hardhat:chain",
     "compile": "yarn hardhat:compile",
     "deploy": "yarn hardhat:deploy",
