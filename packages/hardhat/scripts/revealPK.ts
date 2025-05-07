@@ -17,8 +17,7 @@ async function main() {
   let wallet: Wallet;
   try {
     wallet = (await Wallet.fromEncryptedJson(encryptedKey, pass)) as Wallet;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
+  } catch {
     console.log("❌ Failed to decrypt private key. Wrong password?");
     return;
   }
