@@ -1,5 +1,5 @@
 ---
-"create-eth": patch
+"create-eth": minor
 ---
 
 - Tailwind v4 + Daisy v5 migration (https://github.com/scaffold-eth/scaffold-eth-2/pull/1078)
