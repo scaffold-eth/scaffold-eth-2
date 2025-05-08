@@ -60,6 +60,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
   return (
     <ComposedProviders>
+      <ProgressBar height="3px" color="#2299dd" />
       <ScaffoldEthApp>{children}</ScaffoldEthApp>
     </ComposedProviders>
   );
