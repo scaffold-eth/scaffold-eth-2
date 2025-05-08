@@ -42,7 +42,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                       )}
                     </td>
                     <td className="w-1/12 md:py-4">{block.number?.toString()}</td>
-                    <td className="w-2/1 md:py-4">{timeMined}</td>
+                    <td className="w-2/12 md:py-4">{timeMined}</td>
                     <td className="w-2/12 md:py-4">
                       <Address address={tx.from} size="sm" onlyEnsOrAddress />
                     </td>

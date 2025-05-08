@@ -55,6 +55,15 @@ Once you're happy with the file contents, you'd need to reverse-engineer the cha
 
 For example, `generated.txt` would have a sibling `generated.txt.dev` file with information about the "template" and "args" files that contributed to the current result.
 
+## Adding or removing a new project type
+
+While adding or removing the `.template.mjs` file, we make sure we check the below checklist:
+
+- [ ] Add or remove the `.template.mjs` file in the respective directory (check the [`TEMPLATING.md`](./TEMPLATING.md#recommended-way-to-handle-complex-arguments-in-templates))
+- [ ] Add or remove the corresponding `.args.mjs` file from `create-eth-extension` repo [`example`](https://github.com/scaffold-eth/create-eth-extensions/tree/example) branch.
+- [ ] Update the [`TEMPLATE-FILES.md`](./TEMPLATE-FILES.md) file to include or remove the template file.
+- [ ] (optional) If the file was removed then we add the changeset as `minor` update.
+
 ## Back-merging main branch / Publishing to NPM
 
 1. Switch to `upstream-main` branch and sync it with SE-2 repo in the GitHub UI, using "Sync fork" (you can also add the remote branch locally and do it locally)

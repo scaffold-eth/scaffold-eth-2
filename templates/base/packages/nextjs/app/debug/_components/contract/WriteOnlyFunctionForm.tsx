@@ -118,14 +118,12 @@ export const WriteOnlyFunctionForm = ({
         ) : null}
         <div className="flex justify-between gap-2">
           {!zeroInputs && (
-            <div className="flex-grow basis-0">
-              {displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}
-            </div>
+            <div className="grow basis-0">{displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}</div>
           )}
           <div
             className={`flex ${
               writeDisabled &&
-              "tooltip before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
+              "tooltip tooltip-bottom tooltip-secondary before:content-[attr(data-tip)] before:-translate-x-1/3 before:left-auto before:transform-none"
             }`}
             data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
           >
@@ -137,7 +135,7 @@ export const WriteOnlyFunctionForm = ({
         </div>
       </div>
       {zeroInputs && txResult ? (
-        <div className="flex-grow basis-0">
+        <div className="grow basis-0">
           <TxReceipt txResult={txResult} />
         </div>
       ) : null}
