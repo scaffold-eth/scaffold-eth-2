@@ -84,7 +84,7 @@ export const Header = () => {
         </Link>
         <div className="hidden lg:flex lg:flex-nowrap px-1 gap-2">{getHeaderMenuLinks(pathname)}</div>
       </div>
-      <div className="navbar-end grow mr-4">
+      <div className="navbar-end grow mr-4 gap-1">
         <RainbowKitCustomConnectButton />
         {isLocalNetwork && <FaucetButton />}
       </div>
