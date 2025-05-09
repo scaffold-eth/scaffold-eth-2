@@ -94,5 +94,11 @@
     "description": "SpeedRunEthereum Challenge 7: SVG NFT.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-7-svg-nft"
+  },
+  {
+    "extensionFlagValue": "challenge-over-collateralized-lending",
+    "description": "SpeedRunEthereum Challenge: Over-collateralized Lending.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-over-collateralized-lending"
   }
 ]
