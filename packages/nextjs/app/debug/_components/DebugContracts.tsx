@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useSessionStorage } from "usehooks-ts";
 import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
+import { Tooltip } from "~~/app/components/Tooltip";
 import { ContractUI } from "~~/app/debug/_components/contract";
 import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
 import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
@@ -51,9 +52,9 @@ export function DebugContracts() {
                 >
                   {contractName}
                   {(contractsData[contractName] as GenericContract)?.external && (
-                    <span className="tooltip tooltip-top tooltip-accent" data-tip="External contract">
+                    <Tooltip content="External contract" position="top">
                       <BarsArrowUpIcon className="h-4 w-4 cursor-pointer" />
-                    </span>
+                    </Tooltip>
                   )}
                 </button>
               ))}

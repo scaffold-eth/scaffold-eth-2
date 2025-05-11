@@ -71,7 +71,7 @@ export const ReadOnlyFunctionForm = ({
 
   return (
     <div className="flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
-      <p className="font-medium my-0 break-words">
+      <p className="font-medium my-0 flex items-center">
         {abiFunction.name}
         <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </p>
