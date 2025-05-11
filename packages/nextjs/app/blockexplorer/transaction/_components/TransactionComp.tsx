@@ -45,33 +45,33 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
       {transaction ? (
         <div className="overflow-x-auto">
           <h2 className="text-3xl font-bold mb-4 text-center text-primary-content">Transaction Details</h2>{" "}
-          <table className="table rounded-lg bg-base-100 w-full shadow-lg md:table-lg table-md">
+          <table className="table-auto rounded-lg bg-base-100 w-full shadow-lg">
             <tbody>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Transaction Hash:</strong>
                 </td>
-                <td>{transaction.hash}</td>
+                <td className="px-4 py-3">{transaction.hash}</td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Block Number:</strong>
                 </td>
-                <td>{Number(transaction.blockNumber)}</td>
+                <td className="px-4 py-3">{Number(transaction.blockNumber)}</td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>From:</strong>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   <Address address={transaction.from} format="long" onlyEnsOrAddress />
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>To:</strong>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   {!receipt?.contractAddress ? (
                     transaction.to && <Address address={transaction.to} format="long" onlyEnsOrAddress />
                   ) : (
@@ -82,19 +82,19 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
                   )}
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Value:</strong>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   {formatEther(transaction.value)} {targetNetwork.nativeCurrency.symbol}
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Function called:</strong>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   <div className="w-full md:max-w-[600px] lg:max-w-[800px] overflow-x-auto whitespace-nowrap">
                     {functionCalled === "0x" ? (
                       "This transaction did not call any function."
@@ -107,17 +107,17 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
                   </div>
                 </td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Gas Price:</strong>
                 </td>
-                <td>{formatUnits(transaction.gasPrice || 0n, 9)} Gwei</td>
+                <td className="px-4 py-3">{formatUnits(transaction.gasPrice || 0n, 9)} Gwei</td>
               </tr>
-              <tr>
-                <td>
+              <tr className="border-b border-primary/40">
+                <td className="px-4 py-3">
                   <strong>Data:</strong>
                 </td>
-                <td className="form-control">
+                <td className="form-control px-4 py-3">
                   <textarea
                     readOnly
                     value={transaction.input}
@@ -126,10 +126,10 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
                 </td>
               </tr>
               <tr>
-                <td>
+                <td className="px-4 py-3">
                   <strong>Logs:</strong>
                 </td>
-                <td>
+                <td className="px-4 py-3">
                   <ul>
                     {receipt?.logs?.map((log, i) => (
                       <li key={i}>
