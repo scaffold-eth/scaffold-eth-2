@@ -3,7 +3,7 @@ import { join } from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-async function listKeystores() {
+async function listKeystores(selectMessage = "Select a keystore: ") {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -24,7 +24,7 @@ async function listKeystores() {
       process.exit(1);
     }
 
-    console.log("\n🔑 Available keystores:");
+    console.log("\n💼 Available keystores:");
 
     keystores.map((keystore, index) => {
       console.log(`${index + 1}. ${keystore}`);
@@ -33,7 +33,7 @@ async function listKeystores() {
     });
 
     const answer = await new Promise((resolve) => {
-      rl.question("\nSelect a keystore to display its balance: ", resolve);
+      rl.question(`\n${selectMessage}`, resolve);
     });
 
     const selection = parseInt(answer);

@@ -64,7 +64,9 @@ async function checkAccountBalance() {
   try {
     // Step 1: List accounts and let user select one
     console.log("📋 Listing available accounts...");
-    const selectedKeystore = await listKeystores();
+    const selectedKeystore = await listKeystores(
+      "Select a keystore to display its balance: "
+    );
 
     if (!selectedKeystore) {
       console.error("❌ No keystore selected");

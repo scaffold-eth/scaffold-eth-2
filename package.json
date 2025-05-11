@@ -18,6 +18,7 @@
     "generate": "yarn account:generate",
     "account:generate": "yarn workspace @se-2/foundry account:generate",
     "account:import": "yarn workspace @se-2/foundry account:import",
+    "account:reveal-pk": "yarn workspace @se-2/foundry account:reveal-pk",
     "flatten": "yarn workspace @se-2/foundry flatten",
     "foundry:clean": "yarn workspace @se-2/foundry clean",
     "foundry:format": "yarn workspace @se-2/foundry format",
