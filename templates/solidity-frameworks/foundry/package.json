@@ -3,6 +3,7 @@
     "account": "yarn foundry:account",
     "account:generate": "yarn foundry:generate",
     "account:import": "yarn foundry:account-import",
+    "account:reveal-pk": "yarn workspace @se-2/foundry account:reveal-pk",
     "chain": "yarn foundry:chain",
     "compile": "yarn foundry:compile",
     "deploy": "yarn foundry:deploy",
