@@ -109,11 +109,3 @@
 .btn.btn-ghost {
   @apply shadow-none;
 }
-
-.link {
-  text-underline-offset: 2px;
-}
-
-.link:hover {
-  opacity: 80%;
-}
