@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.2.1
+
+### Patch Changes
+
+- 60caf91: - Add chain metadata to `useSelectedNetwork` hook (https://github.com/scaffold-eth/scaffold-eth-2/pull/1093)
+  - Add `account:reveal-pk` in foundry (https://github.com/scaffold-eth/scaffold-eth-2/pull/1094)
+
 ## 0.2.0
 
 ### Minor Changes
