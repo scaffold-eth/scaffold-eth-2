@@ -6,7 +6,7 @@ async function revealPk() {
     console.log("👀 This will reveal your private key on the console.");
 
     const selectedKeystore = await listKeystores(
-      "Select a keystore to reveal its private key: "
+      "Select a keystore to reveal its private key (enter the number, e.g., 1): "
     );
 
     if (!selectedKeystore) {

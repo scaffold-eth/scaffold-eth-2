@@ -3,7 +3,9 @@ import { join } from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-async function listKeystores(selectMessage = "Select a keystore: ") {
+async function listKeystores(
+  selectMessage = "Select a keystore (enter the number, e.g., 1):"
+) {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
