@@ -8,7 +8,10 @@ import { PaginationButton } from "./PaginationButton";
 import { TransactionsTable } from "./TransactionsTable";
 import { createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
+import { Button } from "~~/components/Button";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
+
+const tabs = ["transactions", "code", "storage", "logs"];
 
 type AddressCodeTabProps = {
   bytecode: string;
@@ -51,35 +54,21 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
   return (
     <>
       {isContract && (
-        <div role="tablist" className="tabs tabs-lift">
-          <button
-            role="tab"
-            className={`tab ${activeTab === "transactions" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("transactions")}
-          >
-            Transactions
-          </button>
-          <button
-            role="tab"
-            className={`tab ${activeTab === "code" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("code")}
-          >
-            Code
-          </button>
-          <button
-            role="tab"
-            className={`tab  ${activeTab === "storage" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("storage")}
-          >
-            Storage
-          </button>
-          <button
-            role="tab"
-            className={`tab  ${activeTab === "logs" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("logs")}
-          >
-            Logs
-          </button>
+        <div role="tablist" className="flex gap-2">
+          {tabs.map(tab => (
+            <Button
+              variant="secondary"
+              size="sm"
+              role="tab"
+              className={`font-light! hover:border-transparent! ${
+                activeTab === tab ? "bg-base-300! hover:bg-base-300! no-animation" : "bg-base-100! hover:bg-secondary!"
+              }`}
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </Button>
+          ))}
         </div>
       )}
       {activeTab === "transactions" && (
