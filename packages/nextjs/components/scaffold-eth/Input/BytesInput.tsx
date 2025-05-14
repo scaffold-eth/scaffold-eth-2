@@ -20,7 +20,7 @@ export const BytesInput = ({ value, onChange, name, placeholder, disabled }: Com
           variant="secondary"
           size="sm"
           circle
-          className="self-center cursor-pointer text-lg px-4"
+          className="self-center cursor-pointer text-lg px-4 h-[2.2rem] min-h-[2.2rem]"
           onClick={convertStringToBytes}
         >
           #

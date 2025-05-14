@@ -50,7 +50,7 @@ export const IntegerInput = ({
               variant="secondary"
               size="sm"
               circle
-              className={`font-semibold text-accent`}
+              className="font-semibold text-accent h-[2.2rem] min-h-[2.2rem]"
               onClick={multiplyBy1e18}
               disabled={disabled}
               type="button"
