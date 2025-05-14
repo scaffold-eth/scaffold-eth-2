@@ -167,7 +167,7 @@ export const Address = ({
               </AddressLinkWrapper>
             </span>
           ))}
-        <div className="flex">
+        <div className="flex items-center">
           <span className={`ml-1.5 ${textSizeMap[addressSize]} font-normal`}>
             <AddressLinkWrapper
               disableAddressLink={disableAddressLink}

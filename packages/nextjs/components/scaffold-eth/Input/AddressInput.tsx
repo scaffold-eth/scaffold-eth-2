@@ -89,7 +89,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
       reFocus={reFocus}
       prefix={
         ensName ? (
-          <div className="flex bg-base-300 rounded-l-full items-center">
+          <div className="flex bg-base-300 rounded-l-full items-center self-stretch">
             {isEnsAvatarLoading && <div className="skeleton bg-base-200 w-[35px] h-[35px] rounded-full shrink-0"></div>}
             {ensAvatar ? (
               <span className="w-[35px]">
