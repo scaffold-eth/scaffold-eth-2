@@ -1,4 +1,5 @@
 import { ReactNode, useRef } from "react";
+import { Button } from "./Button";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -20,9 +21,9 @@ export const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
       <div className="fixed inset-0 bg-black/50 transition-opacity" onClick={onClose} />
 
       <div className="relative w-full max-w-lg rounded-lg bg-base-100 p-6 shadow-xl">
-        <button onClick={onClose} className="absolute right-4 top-4 rounded-full p-1 cursor-pointer hover:bg-base-300">
+        <Button variant="ghost" size="sm" circle onClick={onClose} className="absolute right-4 top-4">
           <XMarkIcon className="h-6 w-6" />
-        </button>
+        </Button>
 
         {title && <h2 className="mb-4 text-xl font-semibold">{title}</h2>}
 

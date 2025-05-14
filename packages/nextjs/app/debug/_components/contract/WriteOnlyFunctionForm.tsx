@@ -14,6 +14,7 @@ import {
   getParsedContractFunctionArgs,
   transformAbiFunction,
 } from "~~/app/debug/_components/contract";
+import { Button } from "~~/components/Button";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -127,10 +128,10 @@ export const WriteOnlyFunctionForm = ({
             position="bottom"
             className="-translate-x-6/7"
           >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
+            <Button variant="secondary" size="sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
               {isPending && <span className="loading loading-spinner loading-xs"></span>}
               Send 💸
-            </button>
+            </Button>
           </Tooltip>
         </div>
       </div>

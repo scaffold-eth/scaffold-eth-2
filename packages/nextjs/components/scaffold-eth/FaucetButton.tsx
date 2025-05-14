@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "../Button";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
@@ -62,13 +63,13 @@ export const FaucetButton = () => {
       disabled={!isBalanceZero}
       className="font-bold -translate-x-[9.75rem]"
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+      <Button variant="secondary" circle size="sm" onClick={sendETH} disabled={loading}>
         {!loading ? (
           <BanknotesIcon className="h-4 w-4" />
         ) : (
           <span className="loading loading-spinner loading-xs"></span>
         )}
-      </button>
+      </Button>
     </Tooltip>
   );
 };

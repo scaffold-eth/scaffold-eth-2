@@ -7,6 +7,7 @@ import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { Button } from "~~/components/Button";
 import { useAnimationConfig } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
@@ -60,13 +61,13 @@ export const DisplayVariable = ({
     <div className="space-y-1 pb-2">
       <div className="flex items-center">
         <h3 className="font-medium text-lg mb-0 break-all mr-1">{abiFunction.name}</h3>
-        <button className="btn btn-ghost btn-xs" onClick={async () => await refetch()}>
+        <Button variant="ghost" size="xs" circle onClick={async () => await refetch()}>
           {isFetching ? (
             <span className="loading loading-spinner loading-xs"></span>
           ) : (
             <ArrowPathIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
           )}
-        </button>
+        </Button>
         <InheritanceTooltip inheritedFrom={inheritedFrom} />
       </div>
       <div className="text-base-content/80 flex flex-col items-start">

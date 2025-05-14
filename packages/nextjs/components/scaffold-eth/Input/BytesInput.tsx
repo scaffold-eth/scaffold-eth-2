@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { bytesToString, isHex, toBytes, toHex } from "viem";
+import { Button } from "~~/components/Button";
 import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
 export const BytesInput = ({ value, onChange, name, placeholder, disabled }: CommonInputProps) => {
@@ -15,13 +16,15 @@ export const BytesInput = ({ value, onChange, name, placeholder, disabled }: Com
       onChange={onChange}
       disabled={disabled}
       suffix={
-        <button
-          className="self-center cursor-pointer text-xl font-semibold px-4 text-accent"
+        <Button
+          variant="secondary"
+          size="sm"
+          circle
+          className="self-center cursor-pointer text-lg px-4"
           onClick={convertStringToBytes}
-          type="button"
         >
           #
-        </button>
+        </Button>
       }
     />
   );

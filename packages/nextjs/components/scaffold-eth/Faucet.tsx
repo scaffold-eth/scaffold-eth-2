@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "../Button";
 import { Modal } from "../Modal";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
@@ -83,10 +84,10 @@ export const Faucet = () => {
 
   return (
     <div>
-      <button className="btn btn-primary btn-sm font-normal gap-1" onClick={() => setIsModalOpen(true)}>
+      <Button variant="primary" size="sm" className="font-normal gap-1" onClick={() => setIsModalOpen(true)}>
         <BanknotesIcon className="h-4 w-4" />
         <span>Faucet</span>
-      </button>
+      </Button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Local faucet">
         <div className="space-y-3">
           <div className="flex space-x-4">
@@ -106,14 +107,14 @@ export const Faucet = () => {
               onChange={value => setInputAddress(value as AddressType)}
             />
             <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-            <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+            <Button variant="primary" size="sm" className="h-10 px-2 rounded-full" onClick={sendETH} disabled={loading}>
               {!loading ? (
                 <BanknotesIcon className="h-6 w-6" />
               ) : (
                 <span className="loading loading-spinner loading-sm"></span>
               )}
               <span>Send</span>
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

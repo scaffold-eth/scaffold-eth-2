@@ -3,6 +3,8 @@
 @theme {
   --shadow-center: 0 0 12px -2px rgb(0 0 0 / 0.05);
   --animate-pulse-fast: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --color-primary-shade: color-mix(in oklab, var(--color-primary), #000 7%);
+  --color-secondary-shade: color-mix(in oklab, var(--color-secondary), #000 7%);
 }
 
 @plugin "daisyui" {
@@ -100,12 +102,4 @@
 :root,
 [data-theme] {
   background: var(--color-base-200);
-}
-
-.btn {
-  @apply shadow-md;
-}
-
-.btn.btn-ghost {
-  @apply shadow-none;
 }

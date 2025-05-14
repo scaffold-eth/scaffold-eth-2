@@ -13,6 +13,7 @@ import {
   getParsedContractFunctionArgs,
   transformAbiFunction,
 } from "~~/app/debug/_components/contract";
+import { Button } from "~~/components/Button";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
@@ -85,8 +86,10 @@ export const ReadOnlyFunctionForm = ({
             </div>
           )}
         </div>
-        <button
-          className="btn btn-secondary btn-sm self-end md:self-start"
+        <Button
+          variant="secondary"
+          size="sm"
+          className="self-end md:self-start"
           onClick={async () => {
             const { data } = await refetch();
             setResult(data);
@@ -95,7 +98,7 @@ export const ReadOnlyFunctionForm = ({
         >
           {isFetching && <span className="loading loading-spinner loading-xs"></span>}
           Read 📡
-        </button>
+        </Button>
       </div>
     </div>
   );
