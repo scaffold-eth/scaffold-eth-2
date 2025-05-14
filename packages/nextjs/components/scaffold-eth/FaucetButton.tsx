@@ -7,6 +7,7 @@ import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "~~/app/components/Tooltip";
+import { Loading } from "~~/components/Loading";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
@@ -64,11 +65,7 @@ export const FaucetButton = () => {
       className="font-bold -translate-x-[9.75rem]"
     >
       <Button variant="secondary" circle size="sm" onClick={sendETH} disabled={loading}>
-        {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
-        ) : (
-          <span className="loading loading-spinner loading-xs"></span>
-        )}
+        {!loading ? <BanknotesIcon className="h-4 w-4" /> : <Loading size="xs" />}
       </Button>
     </Tooltip>
   );

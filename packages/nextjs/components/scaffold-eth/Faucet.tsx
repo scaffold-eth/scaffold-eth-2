@@ -7,6 +7,7 @@ import { Address as AddressType, createWalletClient, http, parseEther } from "vi
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { Loading } from "~~/components/Loading";
 import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
@@ -107,12 +108,14 @@ export const Faucet = () => {
               onChange={value => setInputAddress(value as AddressType)}
             />
             <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-            <Button variant="primary" size="sm" className="h-10 px-2 rounded-full" onClick={sendETH} disabled={loading}>
-              {!loading ? (
-                <BanknotesIcon className="h-6 w-6" />
-              ) : (
-                <span className="loading loading-spinner loading-sm"></span>
-              )}
+            <Button
+              variant="primary"
+              size="sm"
+              className="h-10 px-2 rounded-full gap-1"
+              onClick={sendETH}
+              disabled={loading}
+            >
+              {!loading ? <BanknotesIcon className="h-6 w-6" /> : <Loading size="sm" />}
               <span>Send</span>
             </Button>
           </div>

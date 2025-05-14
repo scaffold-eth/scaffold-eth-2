@@ -14,6 +14,7 @@ import {
   transformAbiFunction,
 } from "~~/app/debug/_components/contract";
 import { Button } from "~~/components/Button";
+import { Loading } from "~~/components/Loading";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
 
@@ -89,14 +90,14 @@ export const ReadOnlyFunctionForm = ({
         <Button
           variant="secondary"
           size="sm"
-          className="self-end md:self-start"
+          className="self-end md:self-start gap-1"
           onClick={async () => {
             const { data } = await refetch();
             setResult(data);
           }}
           disabled={isFetching}
         >
-          {isFetching && <span className="loading loading-spinner loading-xs"></span>}
+          {isFetching && <Loading size="xs" />}
           Read 📡
         </Button>
       </div>
