@@ -1,13 +1,9 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 Scaffold-DOT
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on Polkadot Hub blockchain with Solidity smart contracts. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
-⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
+⚙️ Built using NextJS, Reown AppKit, Hardhat, Wagmi, Viem, and Typescript.
 
 - ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
 - 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
@@ -27,18 +23,19 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Scaffold-DOT, follow the steps below:
 
-1. Install the latest version of Scaffold-ETH 2
+1. Install the latest version of Scaffold-DOT
 
 ```
-npx create-eth@latest
+git clone https://github.com/scaffold-dot/scaffold-dot.git
 ```
 
-This command will install all the necessary packages and dependencies, so it might take a while.
+```
+yarn i
+```
 
-> [!NOTE]
-> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
+These commands will install all the necessary packages and dependencies, so it might take a while.
 
 2. Run a local network in the first terminal:
 
@@ -46,7 +43,7 @@ This command will install all the necessary packages and dependencies, so it mig
 yarn chain
 ```
 
-This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
+This command starts a local Polkadot network that runs on your local machine and can be used for testing and development.
 
 3. On a second terminal, deploy the test contract:
 
@@ -54,7 +51,7 @@ This command starts a local Ethereum network that runs on your local machine and
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
+This command deploys a test smart contract to the local network.
 
 4. On a third terminal, start your NextJS app:
 
@@ -65,6 +62,8 @@ yarn start
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
 **What's next**:
+
+Scaffold-DOT is a fork of scaffold-ETH2. For now, you can follow their docs below.
 
 Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
 
@@ -77,12 +76,12 @@ Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-st
 
 ## Documentation
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
+Visit the Scaffold-ETH 2 [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides for working with Scaffold-DOT.
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+To know more about its features, check out their [website](https://scaffoldeth.io).
 
-## Contributing to Scaffold-ETH 2
+## Contributing to Scaffold-DOT
 
-We welcome contributions to Scaffold-ETH 2!
+We welcome contributions to Scaffold-DOT!
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Please see [CONTRIBUTING.MD](https://github.com/scaffold-dot/scaffold-dot/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
