@@ -10,10 +10,10 @@ type ExtensionJSON = {
   extensionFlagValue: string;
   repository: string;
   branch?: string;
-  // fields usefull for scaffoldeth.io
+  // fields useful for scaffoldeth.io
   description: string;
   version?: string; // if not present we default to latest
-  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
+  name?: string; // human readable name, if not present we default to branch or extensionFlagValue on UI
 };
 
 const TRUSTED_GITHUB_ORGANIZATIONS = ["scaffold-eth", "buidlguidl"];
@@ -165,13 +165,26 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
 
   const { branch, repository } = externalExtension;
   const { ownerName, repoName } = deconstructGithubUrl(repository);
-  const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${branch ? `?ref=${branch}` : ""}`;
-  const res = await fetch(githubApiUrl);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch the githubApiUrl ${githubApiUrl}`);
-  }
-  const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
-  const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
 
-  return filterSolidityFrameworkDirs(directories);
+  const frameworkChecks = solidityFrameworks.map(async framework => {
+    const githubUrl = `https://github.com/${ownerName}/${repoName}/tree/${branch}/extension/packages/${framework}`;
+    try {
+      const res = await fetch(githubUrl);
+      if (res.status === 200) return framework as SolidityFramework;
+      if (res.status === 404) return null;
+
+      throw new Error(
+        `${framework.charAt(0).toUpperCase() + framework.slice(1)} framework check failed with status ${res.status}. You can verify it at ${githubUrl}.`,
+      );
+    } catch (err) {
+      console.warn((err as Error).message);
+
+      return framework as SolidityFramework;
+    }
+  });
+
+  const results = await Promise.all(frameworkChecks);
+  const frameworkDirs = results.filter((framework): framework is SolidityFramework => framework !== null);
+
+  return frameworkDirs;
 };

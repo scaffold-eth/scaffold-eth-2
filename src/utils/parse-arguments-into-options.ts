@@ -81,7 +81,7 @@ export async function parseArgumentsIntoOptions(
     }
   }
 
-  // if lengh is 1, we don't give user a choice and set it ourselves.
+  // if length is 1, we don't give user a choice and set it ourselves.
   const solidityFramework =
     solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : (args["--solidity-framework"] ?? null);
 
