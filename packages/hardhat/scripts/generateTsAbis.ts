@@ -77,31 +77,9 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
 
 // Use either hardhat-deploy directory structure if it exists, or directly get contracts from artifacts
 async function getContractDataFromDeployments(hre: HardhatRuntimeEnvironment, deployedContracts?: Record<string, string>) {
-  // If deployments directory exists, use it (hardhat-deploy style)
-  if (fs.existsSync(DEPLOYMENTS_DIR)) {
-    const output = {} as Record<string, any>;
-    for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
-      const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
-      const contracts = {} as Record<string, any>;
-      for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
-        const { abi, address, metadata } = JSON.parse(
-          fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
-        );
-        const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
-        contracts[contractName] = { address, abi, inheritedFunctions };
-      }
-      output[chainId] = contracts;
-    }
-    return output;
-  } 
-  // Otherwise, use the passed in contracts or look in artifacts directory
-  else {
-    // If no deployed contracts were passed, notify the user
-    if (!deployedContracts || Object.keys(deployedContracts).length === 0) {
-      console.warn("No deployed contracts provided and no deployments directory found.");
-      console.warn("Creating empty deployedContracts.ts file.");
-      return {};
-    }
+  // If deployed contracts are provided, use them first (prioritize over deployments directory)
+  if (deployedContracts && Object.keys(deployedContracts).length > 0) {
+    console.log("🎯 Using provided deployed contract addresses...");
     
     // Get the network chainId
     const network = await hre.network.provider.send('eth_chainId');
@@ -151,6 +129,31 @@ async function getContractDataFromDeployments(hre: HardhatRuntimeEnvironment, de
     }
     
     return { [chainId]: contracts };
+  }
+  
+  // If deployments directory exists, use it (hardhat-deploy style)
+  if (fs.existsSync(DEPLOYMENTS_DIR)) {
+    console.log("📁 Found deployments directory, reading from hardhat-deploy files...");
+    const output = {} as Record<string, any>;
+    for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
+      const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+      const contracts = {} as Record<string, any>;
+      for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
+        const { abi, address, metadata } = JSON.parse(
+          fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
+        );
+        const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
+        contracts[contractName] = { address, abi, inheritedFunctions };
+      }
+      output[chainId] = contracts;
+    }
+    return output;
+  } 
+  // Otherwise, create empty contracts
+  else {
+    console.warn("No deployed contracts provided and no deployments directory found.");
+    console.warn("Creating empty deployedContracts.ts file.");
+    return {};
   }
 }
 

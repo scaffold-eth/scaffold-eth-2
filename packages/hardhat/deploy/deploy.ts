@@ -1,49 +1,38 @@
-import { ethers, hardhatArguments } from "hardhat";
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import generateTsAbis from "../scripts/generateTsAbis";
-
-async function main() {
+const func = async function (hre: any) {
   console.log("Deploying MyToken contract...");
+  
+  const { ethers } = hre;
+  
+  // Get accounts
+  const accounts = await ethers.getSigners();
+  const deployer = accounts[0];
+  
+  console.log(`Deploying with account: ${deployer.address}`);
+
+  // Calculate initial supply (1,000,000 tokens with 18 decimals)
+  const initialSupply = ethers.parseEther("1000000");
 
   // Get the contract factory
   const MyToken = await ethers.getContractFactory("MyToken");
 
-  // Calculate initial supply (1,000,000 tokens with 18 decimals)
-  const initialSupply = 1000000n * 10n ** 18n;
-
-  // Deploy the contract with the initial supply
+  // Deploy the contract
   console.log("Starting deployment...");
   const myToken = await MyToken.deploy(initialSupply);
-
-  // Wait for deployment to complete
-  await myToken.deploymentTransaction()?.wait();
+  await myToken.waitForDeployment();
   
-  // Get the deployed contract address
   const tokenAddress = await myToken.getAddress();
-  console.log(`MyToken deployed to: ${tokenAddress}`);
   
-  // Return the deployed contract addresses
-  return {
+  console.log(`MyToken deployed to: ${tokenAddress}`);
+  console.log(`Deployed by: ${deployer.address}`);
+  
+  // Store the deployed contract address for generateTsAbis to pick up
+  (global as any).deployedContracts = {
     MyToken: tokenAddress
   };
-}
-
-// Function to run the ABI generation after deployment
-async function runAll() {
-  // First run the main deployment
-  const deployedContracts = await main();
   
-  // Then generate the TypeScript ABIs
-  console.log("Generating TypeScript ABI definitions...");
-  const hre = require('hardhat') as HardhatRuntimeEnvironment;
-  await generateTsAbis(hre, deployedContracts);
-  console.log("TypeScript ABI generation complete!");
-}
+  return true;
+};
 
-// Execute the deployment and ABI generation
-runAll()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+export default func;
+func.tags = ["MyToken"];
+func.id = "deploy_mytoken";

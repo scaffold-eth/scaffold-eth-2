@@ -1,1 +1,1 @@
-npx hardhat run deploy/deploy.ts --network westendHub
+npx hardhat deploy --network westendHub
