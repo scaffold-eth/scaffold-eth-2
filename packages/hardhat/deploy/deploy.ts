@@ -1,4 +1,6 @@
-import { ethers } from "hardhat";
+import { ethers, hardhatArguments } from "hardhat";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import generateTsAbis from "../scripts/generateTsAbis";
 
 async function main() {
   console.log("Deploying MyToken contract...");
@@ -17,11 +19,29 @@ async function main() {
   await myToken.deploymentTransaction()?.wait();
   
   // Get the deployed contract address
-  console.log(`MyToken deployed to: ${await myToken.getAddress()}`);
+  const tokenAddress = await myToken.getAddress();
+  console.log(`MyToken deployed to: ${tokenAddress}`);
+  
+  // Return the deployed contract addresses
+  return {
+    MyToken: tokenAddress
+  };
 }
 
-// Execute the deployment
-main()
+// Function to run the ABI generation after deployment
+async function runAll() {
+  // First run the main deployment
+  const deployedContracts = await main();
+  
+  // Then generate the TypeScript ABIs
+  console.log("Generating TypeScript ABI definitions...");
+  const hre = require('hardhat') as HardhatRuntimeEnvironment;
+  await generateTsAbis(hre, deployedContracts);
+  console.log("TypeScript ABI generation complete!");
+}
+
+// Execute the deployment and ABI generation
+runAll()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
