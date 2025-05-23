@@ -18,6 +18,10 @@ node_modules
 # IDE
 .vscode
 .idea
-
+ 
+ 
 # cli
 dist
+
+/packages/hardhat/artifacts-pvm/*
+/packages/hardhat/cache-pvm/*
