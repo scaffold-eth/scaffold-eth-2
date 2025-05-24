@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('@nomicfoundation/hardhat-toolbox');
 require('@parity/hardhat-polkadot');
 require('hardhat-deploy');
@@ -8,7 +9,7 @@ import generateTsAbis from './scripts/generateTsAbis';
 // You can generate a random account with `yarn generate` or `yarn account:import` to import your existing PK
 // Address: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 const deployerPrivateKey =
-  process.env.DEPLOYER_PRIVATE_KEY ?? "5d81f7f73383460d1fd532ca3da3769fd9e69ee047cd4239aa667b4a2c8c5d94";
+  process.env.DEPLOYER_PRIVATE_KEY ?? "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
 
 // Extend the deploy task
 task("deploy").setAction(async (args, hre, runSuper) => {
