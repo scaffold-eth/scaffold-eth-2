@@ -16,7 +16,7 @@ const Debug: NextPage = () => {
         <p className="text-neutral">
           You can debug & interact with your deployed contracts here.
           <br /> Check{" "}
-          <code className="italic bg-base-100 text-base font-bold [word-spacing:-0.5rem] px-1">
+          <code className="italic bg-base-100 text-primary font-bold [word-spacing:-0.5rem] px-1">
             packages / nextjs / app / debug / page.tsx
           </code>{" "}
         </p>
