@@ -83,7 +83,7 @@ export const Header = () => {
         </details>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/Polkadot_Token_Black.svg" />
+            <Image alt="SE2 logo" className="cursor-pointer" fill src="/Polkadot_Asset_02.svg" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">Scaffold-DOT</span>
