@@ -90,6 +90,10 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.celoAlfajores.id]: {
     color: "#476520",
   },
+  // Westend Asset Hub
+  [420420421]: {
+    color: "#E6007A", // Polkadot pink
+  },
 };
 
 /**

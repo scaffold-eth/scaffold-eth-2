@@ -8,7 +8,7 @@
 
 import * as fs from "fs";
 import prettier from "prettier";
-import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 const generatedContractComment = `
 /**
@@ -18,7 +18,7 @@ const generatedContractComment = `
 `;
 
 const DEPLOYMENTS_DIR = "./deployments";
-const ARTIFACTS_DIR = "./artifacts";
+const ARTIFACTS_DIR = "./artifacts-pvm";
 
 function getDirectories(path: string) {
   return fs
@@ -75,33 +75,95 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
   return inheritedFunctions;
 }
 
-function getContractDataFromDeployments() {
-  if (!fs.existsSync(DEPLOYMENTS_DIR)) {
-    throw Error("At least one other deployment script should exist to generate an actual contract.");
-  }
-  const output = {} as Record<string, any>;
-  for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
-    const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+// Use either hardhat-deploy directory structure if it exists, or directly get contracts from artifacts
+async function getContractDataFromDeployments(hre: HardhatRuntimeEnvironment, deployedContracts?: Record<string, string>) {
+  // If deployed contracts are provided, use them first (prioritize over deployments directory)
+  if (deployedContracts && Object.keys(deployedContracts).length > 0) {
+    console.log("🎯 Using provided deployed contract addresses...");
+    
+    // Get the network chainId
+    const network = await hre.network.provider.send('eth_chainId');
+    const chainId = parseInt(network, 16).toString();
     const contracts = {} as Record<string, any>;
-    for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
-      const { abi, address, metadata } = JSON.parse(
-        fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
-      );
-      const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
-      contracts[contractName] = { address, abi, inheritedFunctions };
+    
+    // For each deployed contract, get its ABI from artifacts
+    for (const [contractName, contractAddress] of Object.entries(deployedContracts)) {
+      console.log(`Processing contract: ${contractName} at ${contractAddress}`);
+      
+      // Find the contract artifact
+      const artifactPath = `${ARTIFACTS_DIR}/contracts/${contractName}.sol/${contractName}.json`;
+      if (!fs.existsSync(artifactPath)) {
+        console.warn(`Artifact not found for ${contractName} at ${artifactPath}`);
+        console.warn(`Attempting fallback paths...`);
+        // Try alternative paths that might exist
+        if (fs.existsSync(`${ARTIFACTS_DIR}/contracts`)) {
+          const contractDirs = fs.readdirSync(`${ARTIFACTS_DIR}/contracts`, { withFileTypes: true })
+            .filter(dirent => dirent.isDirectory())
+            .map(dirent => dirent.name);
+          
+          let found = false;
+          for (const dir of contractDirs) {
+            if (dir.endsWith('.sol') && fs.existsSync(`${ARTIFACTS_DIR}/contracts/${dir}/${contractName}.json`)) {
+              found = true;
+              console.log(`Found artifact at ${ARTIFACTS_DIR}/contracts/${dir}/${contractName}.json`);
+              const { abi, metadata } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/contracts/${dir}/${contractName}.json`).toString());
+              const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
+              contracts[contractName] = { address: contractAddress, abi, inheritedFunctions };
+              break;
+            }
+          }
+          
+          if (!found) {
+            console.warn(`Could not find artifact for ${contractName} in any contract directory`);
+            continue;
+          }
+        } else {
+          console.warn(`Could not find contracts directory in ${ARTIFACTS_DIR}`);
+          continue;
+        }
+      } else {
+        const { abi, metadata } = JSON.parse(fs.readFileSync(artifactPath).toString());
+        const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
+        contracts[contractName] = { address: contractAddress, abi, inheritedFunctions };
+      }
     }
-    output[chainId] = contracts;
+    
+    return { [chainId]: contracts };
   }
-  return output;
+  
+  // If deployments directory exists, use it (hardhat-deploy style)
+  if (fs.existsSync(DEPLOYMENTS_DIR)) {
+    console.log("📁 Found deployments directory, reading from hardhat-deploy files...");
+    const output = {} as Record<string, any>;
+    for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
+      const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+      const contracts = {} as Record<string, any>;
+      for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
+        const { abi, address, metadata } = JSON.parse(
+          fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
+        );
+        const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
+        contracts[contractName] = { address, abi, inheritedFunctions };
+      }
+      output[chainId] = contracts;
+    }
+    return output;
+  } 
+  // Otherwise, create empty contracts
+  else {
+    console.warn("No deployed contracts provided and no deployments directory found.");
+    console.warn("Creating empty deployedContracts.ts file.");
+    return {};
+  }
 }
 
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
  * This script should be run last.
  */
-const generateTsAbis: DeployFunction = async function () {
+const generateTsAbis = async function (hre: HardhatRuntimeEnvironment, deployedContracts?: Record<string, string>) {
   const TARGET_DIR = "../nextjs/contracts/";
-  const allContractsData = getContractDataFromDeployments();
+  const allContractsData = await getContractDataFromDeployments(hre, deployedContracts);
 
   const fileContent = Object.entries(allContractsData).reduce((content, [chainId, chainConfig]) => {
     return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(chainConfig, null, 2)},`;
