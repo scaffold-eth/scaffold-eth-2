@@ -48,7 +48,7 @@ export const IntegerInput = ({
             data-tip="Multiply by 1e18 (wei)"
           >
             <button
-              className={`${disabled ? "cursor-not-allowed" : "cursor-pointer"} font-semibold px-4 text-accent`}
+              className={`${disabled ? "cursor-not-allowed" : "cursor-pointer"} font-semibold px-4 text-xl text-primary`}
               onClick={multiplyBy1e18}
               disabled={disabled}
               type="button"
