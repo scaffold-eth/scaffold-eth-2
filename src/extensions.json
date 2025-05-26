@@ -100,5 +100,11 @@
     "description": "SpeedRunEthereum Challenge: Over-collateralized Lending.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-over-collateralized-lending"
+  },
+  {
+    "extensionFlagValue": "challenge-prediction-markets",
+    "description": "SpeedRunEthereum Challenge: Prediction Markets.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-prediction-markets"
   }
 ]
