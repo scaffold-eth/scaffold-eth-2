@@ -3,7 +3,7 @@
 
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
 
-const MyTokenModule = buildModule('MyTokenModule', (m) => {
+export default buildModule('MyToken', (m) => {
     const initialSupply = m.getParameter('initialSupply', 1_000_000n * 10n ** 18n);
 
     const token = m.contract('MyToken', [initialSupply]);
@@ -11,4 +11,3 @@ const MyTokenModule = buildModule('MyTokenModule', (m) => {
     return { token };
 });
 
-export default MyTokenModule;

@@ -9,7 +9,16 @@ import generateTsAbis from './scripts/generateTsAbis';
 // You can generate a random account with `yarn generate` or `yarn account:import` to import your existing PK
 // Address: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 const deployerPrivateKey =
-  process.env.DEPLOYER_PRIVATE_KEY ?? "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
+  process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? process.env.PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+
+// If not set, it uses our block explorers default API keys.
+const etherscanApiKey = process.env.ETHERSCAN_MAINNET_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
+const etherscanOptimisticApiKey = process.env.ETHERSCAN_OPTIMISTIC_API_KEY || "RM62RDISS1RH448ZY379NX625ASG1N633R";
+const basescanApiKey = process.env.BASESCAN_API_KEY || "ZZZEIPMT1MNJ8526VV2Y744CA7TNZR64G6";
+
+// If not set, it uses ours Alchemy's default API key.
+// You can get your own at https://dashboard.alchemyapi.io
+const providerApiKey = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 // Extend the deploy task
 task("deploy").setAction(async (args, hre, runSuper) => {

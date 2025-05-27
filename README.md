@@ -37,23 +37,21 @@ yarn i
 
 These commands will install all the necessary packages and dependencies, so it might take a while.
 
-2. Run a local network in the first terminal:
 
-```
-yarn chain
-```
+2. Create a .env in packages/hardhat and add 'PRIVATE_KEY="<YOUR_PRIVATE_KEY>"'. It's highly recommended to use a new wallet address with no real tokens, make sure you [get some WND tokens](faucet.polkadot.io/westend?parachain=1000)
 
-This command starts a local Polkadot network that runs on your local machine and can be used for testing and development.
-
-3. On a second terminal, deploy the test contract:
+3. On a terminal, deploy the test contract:
 
 ```
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network.
+This command deploys a test smart contract to the Westend Hub, awaiting containerized resolc binary from paritytech to run local development.
 
-4. On a third terminal, start your NextJS app:
+
+4. Copy the generated contract information, located in hardhat/ignition/deployments, to nextjs/contracts/externalContracts.ts. Will be automated soon.
+
+5. On a second terminal, start your NextJS app:
 
 ```
 yarn start
