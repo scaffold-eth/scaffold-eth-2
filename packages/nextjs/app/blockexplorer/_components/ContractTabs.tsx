@@ -6,7 +6,7 @@ import { AddressLogsTab } from "./AddressLogsTab";
 import { AddressStorageTab } from "./AddressStorageTab";
 import { PaginationButton } from "./PaginationButton";
 import { TransactionsTable } from "./TransactionsTable";
-import { createPublicClient, http } from "viem";
+import { Address, createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
 import { useFetchBlocks } from "~~/hooks/scaffold-eth";
 
@@ -16,7 +16,7 @@ type AddressCodeTabProps = {
 };
 
 type PageProps = {
-  address: string;
+  address: Address;
   contractData: AddressCodeTabProps | null;
 };
 
