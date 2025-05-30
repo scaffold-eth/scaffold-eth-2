@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../Button";
 import { Address, formatEther } from "viem";
 import { useDisplayUsdMode } from "~~/hooks/scaffold-eth/useDisplayUsdMode";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -52,8 +53,10 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
   const formattedBalance = balance ? Number(formatEther(balance.value)) : 0;
 
   return (
-    <button
-      className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}
+    <Button
+      variant="ghost"
+      size="sm"
+      className={`${className} !p-0 !min-h-0 !h-auto`}
       onClick={toggleDisplayUsdMode}
       type="button"
     >
@@ -70,6 +73,6 @@ export const Balance = ({ address, className = "", usdMode }: BalanceProps) => {
           </>
         )}
       </div>
-    </button>
+    </Button>
   );
 };
