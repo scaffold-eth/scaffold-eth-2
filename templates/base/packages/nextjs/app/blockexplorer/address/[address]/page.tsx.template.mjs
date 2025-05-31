@@ -3,6 +3,7 @@ import { withDefaults } from "../../../../../../../utils.js";
 const contents = ({ chainName, artifactsDirName }) => `
 import fs from "fs";
 import path from "path";
+import { Address } from "viem";
 import { ${chainName[0]} } from "viem/chains";
 import { AddressComponent } from "~~/app/blockexplorer/_components/AddressComponent";
 import deployedContracts from "~~/contracts/deployedContracts";
@@ -10,7 +11,7 @@ import { isZeroAddress } from "~~/utils/scaffold-eth/common";
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 type PageProps = {
-  params: Promise<{ address: string }>;
+  params: Promise<{ address: Address }>;
 };
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
@@ -39,7 +40,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
   return { bytecode, assembly };
 }
 
-const getContractData = async (address: string) => {
+const getContractData = async (address: Address) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = ${chainName[0]}.id;
   let contractPath = "";
@@ -87,7 +88,7 @@ export function generateStaticParams() {
 
 const AddressPage = async (props: PageProps) => {
   const params = await props.params;
-  const address = params?.address as string;
+  const address = params?.address as Address;
 
   if (isZeroAddress(address)) return null;
 
