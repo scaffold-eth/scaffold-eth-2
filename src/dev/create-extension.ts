@@ -28,13 +28,19 @@ const ncpPromise = promisify(ncp);
 const currentFileUrl = import.meta.url;
 const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../../templates");
 
-const getProjectPath = (rawArgs: string[]) => {
-  const args = arg({}, { argv: rawArgs.slice(2) });
+const getParsedArgs = (rawArgs: string[]) => {
+  const args = arg(
+    {
+      "--from-commit": String,
+    },
+    { argv: rawArgs.slice(2) },
+  );
   const projectPath = args._[0];
+  const fromCommit = args["--from-commit"];
   if (!projectPath) {
     throw new Error("Project path is required");
   }
-  return { projectPath };
+  return { projectPath, fromCommit };
 };
 
 const getDeletedFiles = async (projectPath: string): Promise<string[]> => {
@@ -54,15 +60,17 @@ const getDeletedFiles = async (projectPath: string): Promise<string[]> => {
   return Array.from(allFilesSet).filter(file => !currentFilesArray.includes(file));
 };
 
-const getChangedFilesSinceFirstCommit = async (projectPath: string): Promise<string[]> => {
-  const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
+const getChangedFilesSinceFirstCommit = async (projectPath: string, baseCommit?: string): Promise<string[]> => {
+  let base = baseCommit;
+  if (!base) {
+    const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
+      cwd: projectPath,
+    });
+    base = firstCommit.trim();
+  }
+  const { stdout } = await execa("git", ["diff", "--diff-filter=d", "--name-only", `${base}..HEAD`], {
     cwd: projectPath,
   });
-
-  const { stdout } = await execa("git", ["diff", "--diff-filter=d", "--name-only", `${firstCommit.trim()}..HEAD`], {
-    cwd: projectPath,
-  });
-
   return stdout.split("\n").filter(Boolean);
 };
 
@@ -194,7 +202,7 @@ const copyChanges = async (
 
 const main = async (rawArgs: string[]) => {
   try {
-    const { projectPath } = getProjectPath(rawArgs);
+    const { projectPath, fromCommit: baseCommit } = getParsedArgs(rawArgs);
     const projectName = path.basename(projectPath);
     const templates = new Set<string>();
     await findTemplateFiles(templateDirectory, templates);
@@ -203,7 +211,7 @@ const main = async (rawArgs: string[]) => {
     prettyLog.info(`Extension name: ${projectName}\n`);
 
     prettyLog.info("Getting list of changed files...", 1);
-    const changedFiles = await getChangedFilesSinceFirstCommit(projectPath);
+    const changedFiles = await getChangedFilesSinceFirstCommit(projectPath, baseCommit);
     const deletedFiles = await getDeletedFiles(projectPath);
 
     if (changedFiles.length === 0 && deletedFiles.length === 0) {
