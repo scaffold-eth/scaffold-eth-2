@@ -60,6 +60,7 @@
     "listr2": "^8.2.1",
     "merge-packages": "^0.1.6",
     "ncp": "2.0.0",
+    "semver": "^7.7.2",
     "validate-npm-package-name": "6.0.0"
   },
   "packageManager": "yarn@3.5.0"

@@ -1411,6 +1411,7 @@ __metadata:
     prettier: ^3.3.3
     rollup: 3.21.0
     rollup-plugin-auto-external: 2.0.0
+    semver: ^7.7.2
     tslib: 2.5.0
     typescript: ^5.6.3
     typescript-eslint: ^8.15.0
@@ -4353,6 +4354,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 40f6a95101e8d854357a644da1b8dd9d93ce786d5c6a77227bc69dbb17bea83d0d1d1d7c4cd5920a6df909f48e8bd8a5909869535007f90278289f2451d0292d
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.7.2":
+  version: 7.7.2
+  resolution: "semver@npm:7.7.2"
+  bin:
+    semver: bin/semver.js
+  checksum: dd94ba8f1cbc903d8eeb4dd8bf19f46b3deb14262b6717d0de3c804b594058ae785ef2e4b46c5c3b58733c99c83339068203002f9e37cfe44f7e2cc5e3d2f621
   languageName: node
   linkType: hard
 

@@ -5,12 +5,21 @@ import { renderIntroMessage } from "./utils/render-intro-message";
 import type { Args } from "./types";
 import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
-import { validateFoundryUp } from "./utils/system-validation";
+import { validateFoundryUp, checkSystemRequirements } from "./utils/system-validation";
 import { showHelpMessage } from "./utils/show-help-message";
 
 export async function cli(args: Args) {
   try {
     renderIntroMessage();
+
+    const { errors } = await checkSystemRequirements();
+
+    if (errors.length > 0) {
+      console.log(chalk.red("\n❌ Create-eth requirements not met:"));
+      errors.forEach(error => console.log(chalk.red(`  - ${error}`)));
+      process.exit(1);
+    }
+
     const { rawOptions, solidityFrameworkChoices } = await parseArgumentsIntoOptions(args);
     if (rawOptions.help) {
       showHelpMessage();
