@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { Banknote, Loader2 } from "lucide-react";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
-import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { Button } from "~~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~~/components/ui/tooltip";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
@@ -53,21 +55,17 @@ export const FaucetButton = () => {
   const isBalanceZero = balance && balance.value === 0n;
 
   return (
-    <div
-      className={
-        !isBalanceZero
-          ? "ml-1"
-          : "ml-1 tooltip tooltip-bottom tooltip-primary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:-translate-x-2/5"
-      }
-      data-tip="Grab funds from faucet"
-    >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-        {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
-        ) : (
-          <span className="loading loading-spinner loading-xs"></span>
-        )}
-      </button>
+    <div className="ml-1">
+      <Tooltip open={isBalanceZero ? true : undefined}>
+        <TooltipTrigger asChild>
+          <Button size="sm" onClick={sendETH} disabled={loading}>
+            {!loading ? <Banknote className="h-4 w-4" /> : <Loader2 className="h-4 w-4 animate-spin" />}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="mr-2">
+          <p>Grab funds from faucet</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 };
