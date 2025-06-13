@@ -1,6 +1,6 @@
 import { withDefaults } from '../../../../utils.js'
 
-const contents = ({ globalImports }) =>
+const contents = ({ globalImports, postContent }) =>
 `${globalImports}
 @import "tailwindcss";
 
@@ -122,8 +122,14 @@ const contents = ({ globalImports }) =>
 
 .link:hover {
   opacity: 80%;
-}`
+}
+
+${postContent[0] ? `
+  /* -- EXTENSION OVERRIDES -- */
+  ${postContent[0]}
+` : ''}`
 
 export default withDefaults(contents, {
-  globalImports: ''
+  globalImports: '',
+  postContent: "",
 })
