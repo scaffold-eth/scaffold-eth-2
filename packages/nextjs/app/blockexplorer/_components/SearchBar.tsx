@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { isAddress, isHex } from "viem";
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
+import { Button } from "~~/components/Button";
 
 export const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -41,9 +42,9 @@ export const SearchBar = () => {
         placeholder="Search by hash or address"
         onChange={e => setSearchInput(e.target.value)}
       />
-      <button className="btn btn-sm btn-primary" type="submit">
+      <Button variant="primary" size="sm" type="submit">
         Search
-      </button>
+      </Button>
     </form>
   );
 };

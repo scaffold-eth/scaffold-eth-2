@@ -3,7 +3,9 @@
 import { useEffect, useMemo } from "react";
 import { useSessionStorage } from "usehooks-ts";
 import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
+import { Tooltip } from "~~/app/components/Tooltip";
 import { ContractUI } from "~~/app/debug/_components/contract";
+import { Button } from "~~/components/Button";
 import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
 import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
@@ -40,22 +42,24 @@ export function DebugContracts() {
           {contractNames.length > 1 && (
             <div className="flex flex-row gap-2 w-full max-w-7xl pb-1 px-6 lg:px-10 flex-wrap">
               {contractNames.map(contractName => (
-                <button
-                  className={`btn btn-secondary btn-sm font-light hover:border-transparent ${
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className={`font-light! hover:border-transparent! ${
                     contractName === selectedContract
-                      ? "bg-base-300 hover:bg-base-300 no-animation"
-                      : "bg-base-100 hover:bg-secondary"
+                      ? "bg-base-300! hover:bg-base-300! no-animation"
+                      : "bg-base-100! hover:bg-secondary!"
                   }`}
                   key={contractName}
                   onClick={() => setSelectedContract(contractName)}
                 >
                   {contractName}
                   {(contractsData[contractName] as GenericContract)?.external && (
-                    <span className="tooltip tooltip-top tooltip-accent" data-tip="External contract">
+                    <Tooltip content="External contract" position="top">
                       <BarsArrowUpIcon className="h-4 w-4 cursor-pointer" />
-                    </span>
+                    </Tooltip>
                   )}
-                </button>
+                </Button>
               ))}
             </div>
           )}

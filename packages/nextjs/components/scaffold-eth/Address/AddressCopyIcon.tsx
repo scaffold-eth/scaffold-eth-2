@@ -1,4 +1,5 @@
 import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { Button } from "~~/components/Button";
 import { useCopyToClipboard } from "~~/hooks/scaffold-eth/useCopyToClipboard";
 
 export const AddressCopyIcon = ({ className, address }: { className?: string; address: string }) => {
@@ -6,18 +7,20 @@ export const AddressCopyIcon = ({ className, address }: { className?: string; ad
     useCopyToClipboard();
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size="xs"
+      circle
       onClick={e => {
         e.stopPropagation();
         copyAddressToClipboard(address);
       }}
-      type="button"
     >
       {isAddressCopiedToClipboard ? (
         <CheckCircleIcon className={className} aria-hidden="true" />
       ) : (
         <DocumentDuplicateIcon className={className} aria-hidden="true" />
       )}
-    </button>
+    </Button>
   );
 };
