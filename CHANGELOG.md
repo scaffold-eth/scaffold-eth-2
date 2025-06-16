@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.2.4
+
+### Patch Changes
+
+- 4f31b79: up burner-connector version
+
 ## 0.2.3
 
 ### Patch Changes
