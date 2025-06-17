@@ -167,7 +167,8 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
   const { ownerName, repoName } = deconstructGithubUrl(repository);
 
   const frameworkChecks = solidityFrameworks.map(async framework => {
-    const githubUrl = `https://github.com/${ownerName}/${repoName}/tree/${branch}/extension/packages/${framework}`;
+    const branchOrHead = branch ? `tree/${branch}` : "blob/HEAD";
+    const githubUrl = `https://github.com/${ownerName}/${repoName}/${branchOrHead}/extension/packages/${framework}`;
     try {
       const res = await fetch(githubUrl);
       if (res.status === 200) return framework as SolidityFramework;
