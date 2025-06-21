@@ -3013,22 +3013,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomicfoundation/hardhat-verify@npm:^2.0.10":
-  version: 2.0.10
-  resolution: "@nomicfoundation/hardhat-verify@npm:2.0.10"
+"@nomicfoundation/hardhat-verify@npm:^2.0.14":
+  version: 2.0.14
+  resolution: "@nomicfoundation/hardhat-verify@npm:2.0.14"
   dependencies:
     "@ethersproject/abi": ^5.1.2
     "@ethersproject/address": ^5.0.2
     cbor: ^8.1.0
-    chalk: ^2.4.2
     debug: ^4.1.1
     lodash.clonedeep: ^4.5.0
+    picocolors: ^1.1.0
     semver: ^6.3.0
     table: ^6.8.0
     undici: ^5.14.0
   peerDependencies:
-    hardhat: ^2.0.4
-  checksum: 138160942ddb72e94412b02c0d52336758a99070b75b264dbf2f879ea78fe83817541c6871397034438adef35174af924727eb2b3c1294775e6a0fad1b311189
+    hardhat: ^2.24.1
+  checksum: 8f194fce3400f6943d49cb34cf4919e4737f4d4637de49cf66b29cb32cc6f8a5a6fa00aa3e8dd0807a403212673fe62b9b1b6289a155d7c453bdc65d0358f40f
   languageName: node
   linkType: hard
 
@@ -3848,7 +3848,7 @@ __metadata:
     "@nomicfoundation/hardhat-chai-matchers": ^2.0.7
     "@nomicfoundation/hardhat-ethers": ^3.0.8
     "@nomicfoundation/hardhat-network-helpers": ^1.0.11
-    "@nomicfoundation/hardhat-verify": ^2.0.10
+    "@nomicfoundation/hardhat-verify": ^2.0.14
     "@openzeppelin/contracts": ^5.0.2
     "@typechain/ethers-v5": ^11.1.2
     "@typechain/ethers-v6": ^0.5.1
@@ -14927,7 +14927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1.1.1":
+"picocolors@npm:^1.1.0, picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
   checksum: e1cf46bf84886c79055fdfa9dcb3e4711ad259949e3565154b004b260cd356c5d54b31a1437ce9782624bf766272fe6b0154f5f0c744fb7af5d454d2b60db045
