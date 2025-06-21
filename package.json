@@ -29,7 +29,6 @@
     "hardhat:fork": "yarn workspace @se-2/hardhat fork",
     "hardhat:format": "yarn workspace @se-2/hardhat format",
     "hardhat:generate": "yarn workspace @se-2/hardhat generate",
-    "hardhat:hardhat-verify": "yarn workspace @se-2/hardhat hardhat-verify",
     "hardhat:lint": "yarn workspace @se-2/hardhat lint",
     "hardhat:lint-staged": "yarn workspace @se-2/hardhat lint-staged",
     "hardhat:test": "yarn workspace @se-2/hardhat test",
@@ -48,7 +47,8 @@
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "ipfs": "yarn workspace @se-2/nextjs ipfs",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
-    "verify": "yarn hardhat:verify"
+    "verify": "yarn hardhat:verify",
+    "hardhat-verify": "yarn workspace @se-2/hardhat hardhat-verify"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
