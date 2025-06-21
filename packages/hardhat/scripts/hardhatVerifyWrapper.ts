@@ -24,30 +24,30 @@ const main = async () => {
 
   const deploymentFiles = fs
     .readdirSync(deploymentsPath)
-    .filter(file => file.endsWith(".json") && !file.includes("solcInputs"));
+    .filter(
+      file =>
+        file.endsWith(".json") &&
+        !file.includes("solcInputs") &&
+        (!contractName || path.basename(file, ".json") === contractName),
+    );
 
   if (deploymentFiles.length === 0) {
-    console.log(`❌ No contracts found for network: ${network}`);
+    const message = contractName
+      ? `❌ Contract '${contractName}' not found`
+      : `❌ No contracts found for network: ${network}`;
+    console.log(message);
     return;
   }
 
-  const filesToVerify = contractName
-    ? deploymentFiles.filter(file => path.basename(file, ".json") === contractName)
-    : deploymentFiles;
-
-  if (contractName && filesToVerify.length === 0) {
-    console.log(`❌ Contract '${contractName}' not found`);
-    return;
-  }
-
-  for (const file of filesToVerify) {
+  for (const file of deploymentFiles) {
     const name = path.basename(file, ".json");
     const filePath = path.join(deploymentsPath, file);
 
     try {
       const deployment = JSON.parse(fs.readFileSync(filePath, "utf8"));
-      const args = (deployment.args || []).join(" ");
-      const command = `yarn hh-verify --network ${network} ${deployment.address} ${args}`;
+
+      const baseCommand = `yarn hh-verify --network ${network} ${deployment.address}`;
+      const command = deployment.args?.length ? `${baseCommand} ${deployment.args.join(" ")}` : baseCommand;
 
       console.log(`🔍 Verifying ${name}...`);
       const { stdout } = await execAsync(command);
