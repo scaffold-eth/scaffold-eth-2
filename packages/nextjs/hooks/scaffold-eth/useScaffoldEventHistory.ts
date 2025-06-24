@@ -26,6 +26,7 @@ const getEvents = async (
   const logs = await publicClient?.getLogs({
     address: getLogsParams.address,
     fromBlock: getLogsParams.fromBlock,
+    toBlock: getLogsParams.toBlock,
     args: getLogsParams.args,
     event: getLogsParams.event,
   });
@@ -58,6 +59,7 @@ const getEvents = async (
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
  * @param config.fromBlock - the block number to start reading events from
+ * @param config.toBlock - optional block number to stop reading events at (if not provided, reads until current block)
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param config.filters - filters to be applied to the event (parameterName: value)
  * @param config.blockData - if set to true it will return the block data for each event (default: false)
@@ -76,6 +78,7 @@ export const useScaffoldEventHistory = <
   contractName,
   eventName,
   fromBlock,
+  toBlock,
   chainId,
   filters,
   blockData,
@@ -112,6 +115,7 @@ export const useScaffoldEventHistory = <
         address: deployedContractData?.address,
         eventName,
         fromBlock: fromBlock.toString(),
+        toBlock: toBlock?.toString(),
         chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
       },
@@ -119,7 +123,13 @@ export const useScaffoldEventHistory = <
     queryFn: async ({ pageParam }) => {
       if (!isContractAddressAndClientReady) return undefined;
       const data = await getEvents(
-        { address: deployedContractData?.address, event, fromBlock: pageParam, args: filters },
+        {
+          address: deployedContractData?.address,
+          event,
+          fromBlock: pageParam,
+          toBlock,
+          args: filters,
+        },
         publicClient,
         { blockData, transactionData, receiptData },
       );
@@ -137,7 +147,9 @@ export const useScaffoldEventHistory = <
       );
       const nextBlock = BigInt(Math.max(Number(lastPageParam), lastPageHighestBlock) + 1);
 
-      if (nextBlock > blockNumber) return undefined;
+      // Don't go beyond the specified toBlock or current block
+      const maxBlock = toBlock || blockNumber;
+      if (nextBlock > maxBlock) return undefined;
 
       return nextBlock;
     },
