@@ -300,6 +300,7 @@ export type UseScaffoldEventHistoryConfig<
   receiptData?: TReceiptData;
   watch?: boolean;
   enabled?: boolean;
+  blocksBatchSize?: number;
 };
 
 export type UseScaffoldEventHistoryData<
