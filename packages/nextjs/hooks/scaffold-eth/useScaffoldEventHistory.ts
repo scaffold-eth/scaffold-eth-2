@@ -67,6 +67,7 @@ const getEvents = async (
  * @param config.receiptData - if set to true it will return the receipt data for each event (default: false)
  * @param config.watch - if set to true, the events will be updated every pollingInterval milliseconds set at scaffoldConfig (default: false)
  * @param config.enabled - set this to false to disable the hook from running (default: true)
+ * @param config.blocksBatchSize - optional batch size for fetching events. If specified, each batch will contain at most this many blocks (default: 500)
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
@@ -86,6 +87,7 @@ export const useScaffoldEventHistory = <
   receiptData,
   watch,
   enabled = true,
+  blocksBatchSize = 500,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const selectedNetwork = useSelectedNetwork(chainId);
 
@@ -118,16 +120,26 @@ export const useScaffoldEventHistory = <
         toBlock: toBlock?.toString(),
         chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
+        blocksBatchSize: blocksBatchSize.toString(),
       },
     ],
     queryFn: async ({ pageParam }) => {
       if (!isContractAddressAndClientReady) return undefined;
+
+      // Calculate the toBlock for this batch
+      let batchToBlock = toBlock;
+      const batchEndBlock = pageParam + BigInt(blocksBatchSize) - 1n;
+      const maxBlock = toBlock || (blockNumber ? BigInt(blockNumber) : undefined);
+      if (maxBlock) {
+        batchToBlock = batchEndBlock < maxBlock ? batchEndBlock : maxBlock;
+      }
+
       const data = await getEvents(
         {
           address: deployedContractData?.address,
           event,
           fromBlock: pageParam,
-          toBlock,
+          toBlock: batchToBlock,
           args: filters,
         },
         publicClient,
@@ -142,13 +154,14 @@ export const useScaffoldEventHistory = <
       if (!blockNumber || fromBlock >= blockNumber) return undefined;
 
       const lastPageHighestBlock = Math.max(
-        Number(fromBlock),
+        Number(lastPageParam),
         ...(lastPage || []).map(event => Number(event.blockNumber || 0)),
       );
       const nextBlock = BigInt(Math.max(Number(lastPageParam), lastPageHighestBlock) + 1);
 
       // Don't go beyond the specified toBlock or current block
-      const maxBlock = toBlock || blockNumber;
+      const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
+
       if (nextBlock > maxBlock) return undefined;
 
       return nextBlock;
@@ -181,6 +194,13 @@ export const useScaffoldEventHistory = <
     query.fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockNumber, watch]);
+
+  // Manual trigger to fetch next page when previous page completes
+  useEffect(() => {
+    if (query.status === "success" && query.hasNextPage && !query.isFetchingNextPage && !query.error) {
+      query.fetchNextPage();
+    }
+  }, [query]);
 
   return {
     data: query.data?.pages,
