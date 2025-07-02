@@ -19,7 +19,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link text-md">
+        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link">
           check out transaction
         </a>
       ) : null}
