@@ -292,6 +292,7 @@ export type UseScaffoldEventHistoryConfig<
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
   fromBlock: bigint;
+  toBlock?: bigint;
   chainId?: AllowedChainIds;
   filters?: EventFilters<TContractName, TEventName>;
   blockData?: TBlockData;
