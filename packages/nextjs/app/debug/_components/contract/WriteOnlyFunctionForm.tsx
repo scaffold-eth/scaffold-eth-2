@@ -5,6 +5,7 @@ import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
 import { useAccount, useConfig, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { Tooltip } from "~~/app/components/Tooltip";
 import {
   ContractInput,
   TxReceipt,
@@ -13,6 +14,8 @@ import {
   getParsedContractFunctionArgs,
   transformAbiFunction,
 } from "~~/app/debug/_components/contract";
+import { Button } from "~~/components/Button";
+import { Loading } from "~~/components/Loading";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -95,7 +98,7 @@ export const WriteOnlyFunctionForm = ({
   return (
     <div className="py-5 space-y-3 first:pt-0 last:pb-1">
       <div className={`flex gap-3 ${zeroInputs ? "flex-row justify-between items-center" : "flex-col"}`}>
-        <p className="font-medium my-0 break-words">
+        <p className="font-medium my-0 flex items-center">
           {abiFunction.name}
           <InheritanceTooltip inheritedFrom={inheritedFrom} />
         </p>
@@ -120,18 +123,23 @@ export const WriteOnlyFunctionForm = ({
           {!zeroInputs && (
             <div className="grow basis-0">{displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}</div>
           )}
-          <div
-            className={`flex ${
-              writeDisabled &&
-              "tooltip tooltip-bottom tooltip-secondary before:content-[attr(data-tip)] before:-translate-x-1/3 before:left-auto before:transform-none"
-            }`}
-            data-tip={`${writeDisabled && "Wallet not connected or in the wrong network"}`}
+          <Tooltip
+            disabled={!writeDisabled}
+            content="Wallet not connected or in the wrong network"
+            position="bottom"
+            className="-translate-x-6/7"
           >
-            <button className="btn btn-secondary btn-sm" disabled={writeDisabled || isPending} onClick={handleWrite}>
-              {isPending && <span className="loading loading-spinner loading-xs"></span>}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="gap-1"
+              disabled={writeDisabled || isPending}
+              onClick={handleWrite}
+            >
+              {isPending && <Loading size="xs" />}
               Send 💸
-            </button>
-          </div>
+            </Button>
+          </Tooltip>
         </div>
       </div>
       {zeroInputs && txResult ? (

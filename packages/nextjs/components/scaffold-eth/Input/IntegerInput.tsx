@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { parseEther } from "viem";
+import { Tooltip } from "~~/app/components/Tooltip";
+import { Button } from "~~/components/Button";
 import { CommonInputProps, InputBase, IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 
 type IntegerInputProps = CommonInputProps<string> & {
@@ -43,19 +45,19 @@ export const IntegerInput = ({
       suffix={
         !inputError &&
         !disableMultiplyBy1e18 && (
-          <div
-            className="space-x-4 flex tooltip tooltip-top tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-            data-tip="Multiply by 1e18 (wei)"
-          >
-            <button
-              className={`${disabled ? "cursor-not-allowed" : "cursor-pointer"} font-semibold px-4 text-accent`}
+          <Tooltip content="Multiply by 1e18 (wei)">
+            <Button
+              variant="secondary"
+              size="sm"
+              circle
+              className="font-semibold text-accent h-[2.2rem] min-h-[2.2rem]"
               onClick={multiplyBy1e18}
               disabled={disabled}
               type="button"
             >
               ∗
-            </button>
-          </div>
+            </Button>
+          </Tooltip>
         )
       }
     />

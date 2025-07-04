@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "../Button";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { Tooltip } from "~~/app/components/Tooltip";
+import { Loading } from "~~/components/Loading";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
@@ -53,21 +56,17 @@ export const FaucetButton = () => {
   const isBalanceZero = balance && balance.value === 0n;
 
   return (
-    <div
-      className={
-        !isBalanceZero
-          ? "ml-1"
-          : "ml-1 tooltip tooltip-bottom tooltip-primary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:-translate-x-2/5"
-      }
-      data-tip="Grab funds from faucet"
+    <Tooltip
+      content="Grab funds from faucet"
+      color="primary"
+      position="bottom"
+      open={isBalanceZero}
+      disabled={!isBalanceZero}
+      className="font-bold -translate-x-[9.75rem]"
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-        {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
-        ) : (
-          <span className="loading loading-spinner loading-xs"></span>
-        )}
-      </button>
-    </div>
+      <Button variant="secondary" circle size="sm" onClick={sendETH} disabled={loading}>
+        {!loading ? <BanknotesIcon className="h-4 w-4" /> : <Loading size="xs" />}
+      </Button>
+    </Tooltip>
   );
 };

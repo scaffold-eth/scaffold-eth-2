@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ContractInput } from "./ContractInput";
 import { getFunctionInputKey, getInitialTupleArrayFormState } from "./utilsContract";
+import { Button } from "~~/components/Button";
 import { replacer } from "~~/utils/scaffold-eth/common";
 import { AbiParameterTuple } from "~~/utils/scaffold-eth/contract";
 
@@ -126,13 +127,13 @@ export const TupleArray = ({ abiTupleParameter, setParentForm, parentStateObject
             </div>
           ))}
           <div className="flex space-x-2">
-            <button className="btn btn-sm btn-secondary" onClick={addInput}>
+            <Button variant="secondary" size="sm" onClick={addInput}>
               +
-            </button>
+            </Button>
             {additionalInputs.length > 0 && (
-              <button className="btn btn-sm btn-secondary" onClick={removeInput}>
+              <Button variant="secondary" size="sm" onClick={removeInput}>
                 -
-              </button>
+              </Button>
             )}
           </div>
         </div>

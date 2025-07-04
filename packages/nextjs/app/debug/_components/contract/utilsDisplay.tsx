@@ -1,6 +1,8 @@
 import { ReactElement, useState } from "react";
 import { TransactionBase, TransactionReceipt, formatEther, isAddress, isHex } from "viem";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
+import { Tooltip } from "~~/app/components/Tooltip";
+import { Button } from "~~/components/Button";
 import { Address } from "~~/components/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
 
@@ -58,16 +60,13 @@ const NumberDisplay = ({ value }: { value: bigint }) => {
   }
 
   return (
-    <div className="flex items-baseline">
-      {isEther ? "Ξ" + formatEther(value) : String(value)}
-      <span
-        className="tooltip tooltip-secondary font-sans ml-2"
-        data-tip={isEther ? "Multiply by 1e18" : "Divide by 1e18"}
-      >
-        <button className="btn btn-ghost btn-circle btn-xs" onClick={() => setIsEther(!isEther)}>
+    <div className="flex items-baseline gap-2">
+      {isEther ? `Ξ ${formatEther(value)}` : String(value)}
+      <Tooltip content={isEther ? "Multiply by 1e18" : "Divide by 1e18"} className="font-sans">
+        <Button variant="ghost" size="xs" circle onClick={() => setIsEther(!isEther)}>
           <ArrowsRightLeftIcon className="h-3 w-3 opacity-65" />
-        </button>
-      </span>
+        </Button>
+      </Tooltip>
     </div>
   );
 };
