@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
 import { getAddress } from "viem";
 import { Address } from "viem";
+import { privateKeyToAddress } from "viem/accounts";
 import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
@@ -11,6 +12,7 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
   QrCodeIcon,
+  WalletIcon,
 } from "@heroicons/react/24/outline";
 import { BlockieAvatar, isENS } from "~~/components/scaffold-eth";
 import { useCopyToClipboard, useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -45,6 +47,37 @@ export const AddressInfoDropdown = ({
   };
 
   useOutsideClick(dropdownRef, closeDropdown);
+
+  const handleEjectWallet = () => {
+    try {
+      const burnerWalletPK = localStorage.getItem("burnerWallet.pk");
+      if (burnerWalletPK) {
+        const url = `https://punkwallet.io/pk#${burnerWalletPK}`;
+        window.open(url, "_blank");
+      } else {
+        console.log("No burner wallet private key found in localStorage");
+      }
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+    }
+  };
+
+  // Check if the connected address matches the burner wallet address
+  const isBurnerWallet = () => {
+    try {
+      const burnerWalletPK = localStorage.getItem("burnerWallet.pk");
+      if (!burnerWalletPK) return false;
+
+      // Add '0x' prefix if not present
+      const formattedPK = burnerWalletPK.startsWith("0x") ? burnerWalletPK : `0x${burnerWalletPK}`;
+      const burnerAddress = privateKeyToAddress(formattedPK as `0x${string}`);
+
+      return getAddress(burnerAddress) === checkSumAddress;
+    } catch (error) {
+      console.error("Error checking burner wallet:", error);
+      return false;
+    }
+  };
 
   return (
     <>
@@ -95,6 +128,14 @@ export const AddressInfoDropdown = ({
               </a>
             </button>
           </li>
+          {isBurnerWallet() && (
+            <li className={selectingNetwork ? "hidden" : ""}>
+              <button className="h-8 btn-sm rounded-xl! flex gap-3 py-3" type="button" onClick={handleEjectWallet}>
+                <WalletIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                <span className="whitespace-nowrap">Eject Wallet</span>
+              </button>
+            </li>
+          )}
           {allowedNetworks.length > 1 ? (
             <li className={selectingNetwork ? "hidden" : ""}>
               <button
