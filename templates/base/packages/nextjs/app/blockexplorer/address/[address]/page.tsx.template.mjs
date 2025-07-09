@@ -43,6 +43,11 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 const getContractData = async (address: Address) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
   const chainId = ${chainName[0]}.id;
+
+  if (!contracts || !contracts[chainId] || Object.keys(contracts[chainId]).length === 0) {
+    return null;
+  }
+
   let contractPath = "";
 
   const buildInfoDirectory = path.join(
@@ -63,7 +68,7 @@ const getContractData = async (address: Address) => {
     throw new Error(\`Directory \${buildInfoDirectory} not found.\`);
   }
 
-  const deployedContractsOnChain = contracts ? contracts[chainId] : {};
+  const deployedContractsOnChain = contracts[chainId];
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address.toLowerCase()) {
       contractPath = \`contracts/\${contractName}.sol\`;
