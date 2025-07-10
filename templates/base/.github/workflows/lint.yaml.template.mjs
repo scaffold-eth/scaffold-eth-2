@@ -40,5 +40,5 @@ jobs:
         run: yarn next:check-types`;
 
 export default withDefaults(contents, {
-  solidityEnvSetup: undefined,
+  solidityEnvSetup: "",
 });

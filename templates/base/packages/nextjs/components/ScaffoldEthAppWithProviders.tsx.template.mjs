@@ -1,10 +1,31 @@
-import { withDefaults } from "../../../../utils.js";
+import { stringify, withDefaults } from "../../../../utils.js";
 
-const contents = ({ providerNames, providerSetups, providerImports, providerProps, globalClassNames }) => {
-  // filter out empty strings
-  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
+const defaultProviders = {
+  WagmiProvider: { config: "$$wagmiConfig$$" },
+  QueryClientProvider: { client: "$$queryClient$$" },
+  RainbowKitProvider: {
+    avatar: "$$BlockieAvatar$$",
+    theme: "$$mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()$$"
+  }
+};
 
-  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`).reverse();
+const contents = ({ preContent, globalClassNames, extraProviders, overrideProviders }) => {
+  const providersObject =
+    overrideProviders?.[0] && Object.keys(overrideProviders[0]).length > 0
+      ? overrideProviders[0]
+      : { ...defaultProviders, ...(extraProviders[0] || {}) };
+
+  const providerEntries = Object.entries(providersObject);
+  const providerOpeningTags = providerEntries.map(([providerName, props]) => {
+    const propAssignments = Object.entries(props).map(([propName, propValue]) => 
+      `${propName}={${stringify(propValue)}}`
+    ).join(' ');
+    return `<${providerName} ${propAssignments}>`;
+  }).join('\n    ');
+
+  const providerClosingTags = providerEntries.reverse().map(([providerName]) => {
+    return `</${providerName}>`;
+  }).join('\n    ');
 
   return `"use client";
 
@@ -20,7 +41,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-${providerImports.filter(Boolean).join("\n")}
+${preContent[0] || ''}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -45,8 +66,6 @@ export const queryClient = new QueryClient({
   },
 });
 
-${providerSetups.filter(Boolean).join("\n")}
-
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
@@ -57,27 +76,17 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
   }, []);
 
   return (
-    <WagmiProvider config={wagmiConfig}>
-    ${providerOpeningTags.join("\n")}
-      <QueryClientProvider client={queryClient}>
-        <ProgressBar height="3px" color="#2299dd" />
-        <RainbowKitProvider
-          avatar={BlockieAvatar}
-          theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
-        >
-          <ScaffoldEthApp>{children}</ScaffoldEthApp>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    ${providerClosingTags.join("\n")}
-    </WagmiProvider>
+    ${providerOpeningTags}
+      <ProgressBar height="3px" color="#2299dd" />
+      <ScaffoldEthApp>{children}</ScaffoldEthApp>
+    ${providerClosingTags}
   );
 };`;
 };
 
 export default withDefaults(contents, {
-  providerNames: "",
-  providerSetups: "",
-  providerImports: "",
-  providerProps: "",
+  preContent: "",
   globalClassNames: "",
+  extraProviders: {},
+  overrideProviders: {},
 });

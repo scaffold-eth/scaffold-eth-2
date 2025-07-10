@@ -1,4 +1,4 @@
-import { withDefaults } from '../../../../utils.js'
+import { stringify, withDefaults } from '../../../../utils.js'
 
 const contents = ({ externalContracts }) =>
 `import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
@@ -14,7 +14,7 @@ const contents = ({ externalContracts }) =>
  *   },
  * } as const;
  */
-const externalContracts = ${JSON.stringify(externalContracts[0])} as const;
+const externalContracts = ${stringify(externalContracts[0])} as const;
 
 export default externalContracts satisfies GenericContractsDeclaration;
 `

@@ -1,6 +1,10 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ imports, externalExtensionName, description }) => {
+const contents = ({ preContent, externalExtensionName, description, fullContentOverride }) => {
+  if (fullContentOverride[0]) {
+    return fullContentOverride[0];
+  }
+
   return `
 "use client";
 
@@ -9,7 +13,7 @@ import { Address } from "~~/components/scaffold-eth";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-${imports}
+${preContent[0] || ''}
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -64,7 +68,7 @@ export default Home;
 };
 
 export default withDefaults(contents, {
-  imports: ``,
+  preContent: ``,
   description: `
 <p className="text-center text-lg">
   Get started by editing{" "}
@@ -83,5 +87,6 @@ export default withDefaults(contents, {
   </code>
 </p>
 `,
-  externalExtensionName: ""
+  externalExtensionName: "",
+  fullContentOverride: "",
 });

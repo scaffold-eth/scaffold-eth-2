@@ -1,10 +1,10 @@
 import { withDefaults } from "../../../../../utils.js";
 
-const content = ({ deploymentsScriptsImports, deploymentsLogic }) => `//SPDX-License-Identifier: MIT
+const content = ({ preContent, deploymentsLogic }) => `//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 import "./DeployHelpers.s.sol";
-${deploymentsScriptsImports.filter(Boolean).join("\n")}
+${preContent[0] || ''}
 
 /**
  * @notice Main deployment script for all contracts
@@ -26,7 +26,7 @@ contract DeployScript is ScaffoldETHDeploy {
 }`;
 
 export default withDefaults(content, {
-  deploymentsScriptsImports: `import { DeployYourContract } from "./DeployYourContract.s.sol";`,
+  preContent: `import { DeployYourContract } from "./DeployYourContract.s.sol";`,
   deploymentsLogic: `
     DeployYourContract deployYourContract = new DeployYourContract();
     deployYourContract.run();

@@ -9,7 +9,7 @@ const content = ({
 }) => `[profile.default]
 src = 'contracts'
 out = 'out'
-libs = ['lib']
+libs = ['lib', 'node_modules']
 fs_permissions = [{ access = "read-write", path = "./"}]
 ${extraProfileDefaults.filter(Boolean).join("\n")}
 

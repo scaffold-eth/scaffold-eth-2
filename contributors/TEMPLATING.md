@@ -176,23 +176,141 @@ The special files and folders are:
 
 # Things worth mentioning
 
+## Rules for template args:
+
+The reason for converting normal file to template is allowing customisation to that file for extension developer.
+This customisation can be broadly broken into:
+
+1. **When extending/modifying already declared variables/objects**:
+
+- Use `preContent` (string) for imports and variable declarations
+- Use `<name>Overrides` (object) to extend existing variables/objects
+- Can reference variables defined in template and `preContent` in two ways:
+  - `$$variableName$$` - When variable needs to be used without quotes (expressions/variables)
+    - example: `{ accounts: ["$$deployerPrivateKey$$"] }` -> `{ accounts: [deployerPrivateKey] }`
+  - `\${variableName}` - When variable needs to be interpolated within a string
+
+<details>
+  <summary>
+
+    Example `hardhat.config.js.template.mjs`
+
+  </summary>
+
+```typescript
+import { withDefaults } from "../utils";
+
+const defaultConfig = {
+  networks: {
+    hardhat: {
+      enabled: '$$process.env.MAINNET_FORKING_ENABLED === "true"$$', // enabled: process.env.MAINNET_FORKING_ENABLED === "true"
+      chainId: 31337,
+    },
+    mainnet: {
+      url: `https://eth-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
+      accounts: ["$$deployerPrivateKey$$"], // ==> accounts: [deployerPrivateKey]
+    },
+  },
+};
+
+export default withDefaults(
+  ({ preContent, configOverrides }) => `
+${preContent}
+
+const deployerPrivateKey =
+  process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+
+const config = ${stringify(deepMerge(defaultConfig, configOverrides[0]))};
+
+export default config;
+`,
+  {
+    preContent: "",
+    configOverrides: {},
+  },
+);
+
+// In extension's args file (hardhat.config.ts.args.mjs)
+export const preContent = `
+// Custom variables
+const CUSTOM_API_KEY = process.env.CUSTOM_API_KEY;
+`;
+
+export const configOverrides = {
+  networks: {
+    hardhat: {
+      forking: {
+        enabled: '$$process.env.MAINNET_FORKING_ENABLED === "false"$$', // (expression) enabled: process.env.MAINNET_FORKING_ENABLED === "false"
+        blockNumber: 1234567,
+      },
+    },
+    customNetwork: {
+      url: "https://custom.network",
+      accounts: ["$$deployerPrivateKey$$"], // (variable) accounts: [deployerPrivateKey]
+      blah: `test \${CUSTOM_API_KEY}`, // (string interpolation) blah: `test ${CUSTOM_API_KEY}`
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.custom-explorer.io",
+          apiKey: "$$etherscanApiKey$$",
+        },
+      },
+    },
+  },
+};
+```
+
+</details>
+
+2. When adding new code/logic:
+
+- Use descriptive/sensible `string` arguments. Depending on level of customisation.
+
+<details>
+  <summary>
+
+    Example `Component.tsx.template.mjs`
+
+  </summary>
+
+```typescript
+export default withDefaults(
+  ({ preContent, renderContent }) => `
+import { Base } from './Base';
+${preContent[0] || ""}
+
+export const Component = () => {
+${renderContent}
+};
+`,
+  {
+    preContent: "",
+    renderContent: "",
+  },
+);
+```
+
+</details>
+
 ## Recommended way to handle complex arguments in templates
 
 Most of the time you will use string arguments for templating, but sometimes you will need to add arrays, objects, bigints, etc. You can handle them however you want, but we're recommending to use the table below as a helper.
 
-Note: The `stringify` function used in the examples below should be imported from the `templates/utils.js` file:
+The `stringify` and `deepMerge` functions used in the examples below should be imported from the `templates/utils.js` file:
+
+> NOTE: If if the template file is `.json` file, you should use `JSON.stringify` instead of `stringify` utility. This makes sure the JSON is formatted correctly.
 
 ```javascript
-import { stringify } from "../path/to/templates/utils.js";
+import { stringify, deepMerge } from "../path/to/templates/utils.js";
 ```
 
-| Pattern                 | Template                                                                                | Args                                                       | Result                                                                                  |
-| ----------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Replace an object       | `const replacedObj = ${stringify(replacedObj[0])}`                                      | `const replacedObj = { key1: "Replaced", key2: "Object" }` | `const replacedObj = { key1: "Replaced", key2: "Object" }`                              |
-| Replace an array        | `const replacedArr = ${stringify(replacedArr[0])}`                                      | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                             |
-| Object, add new entries | `const mergedObj = ${stringify({ key1: "value1", key2: "value2", ...objToMerge[0] })};` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };` |
-| Array, add new items    | `const arrWithAdditionalItems = ${stringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
-| BigInt                  | `const bigInt = ${stringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
+| Pattern                                  | Template                                                                                                                      | Args                                                                                             | Result                                                                                                          |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Replace an object                        | `const replacedObj = ${stringify(replacedObj[0])}`                                                                            | `const replacedObj = { key1: "Replaced", key2: "Object" }`                                       | `const replacedObj = { key1: "Replaced", key2: "Object" }`                                                      |
+| Replace an array                         | `const replacedArr = ${stringify(replacedArr[0])}`                                                                            | `const replacedArr = ["Replaced", "Array"]`                                                      | `const replacedArr = ["Replaced", "Array"]`                                                                     |
+| Object, add new entries                  | `const mergedObj = ${stringify(deepMerge({ key1: "value1", key2: "value2"}, objToMerge[0] })};`                               | `const objToMerge = { key3: "Merged", key4: "Object" }`                                          | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };`                         |
+| Array, add new items                     | `const arrWithAdditionalItems = ${stringify(['a', 'b', ...arrayToSpread[0]])}`                                                | `const arrayToSpread = ["Spread", "This"]`                                                       | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                                                   |
+| Object, deep merge (Arrays are replaced) | `const deepMergedObj = ${deepMerge({ key1: "value1", key2: "value2", key3: ["value3_0", "value3_1"]}, objToDeepMerge[0] ))};` | `const objToDeepMerge = { key1: "replacedValue_1", key3: ["replacedValue3_0"], key4: "value4" }` | `const deepMergedObj = { key1: "replacedValue_1", key2: "value2", key3: ["replacedValue3_0"], key4: "value4" }` |
+| BigInt                                   | `const bigInt = ${stringify(someBigInt[0])};`                                                                                 | `const someBigInt = 123n`                                                                        | `const bigInt = 123n;`                                                                                          |
 
 > NOTE: If the object contains function as a value `stringify` utility truncates it to `[Function keyName]`. In this case we have to use object spread operator while merging the objects and `JSON.stringify` while replacing the objects. Checkout [`next.config.js.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/next.config.js.template.mjs) for an example.
 

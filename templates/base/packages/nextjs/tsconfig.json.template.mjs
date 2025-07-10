@@ -1,6 +1,6 @@
-import { stringify, withDefaults } from '../../../utils.js'
+import { withDefaults, deepMerge } from "../../../../templates/utils.js";
 
-const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
+const defaultTsConfig = {
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -23,9 +23,7 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
       {
         "name": "next"
       },
-      ...extraPlugins[0]
     ],
-    ...extraCompilerOptions[0]
   },
   "include": [
     "next-env.d.ts",
@@ -36,9 +34,16 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
   "exclude": [
     "node_modules"
   ]
-})}`
+}
+
+const contents = ({ configOverrides }) => {
+  // Merge the default config with any overrides
+  const finalConfig = deepMerge(defaultTsConfig, configOverrides[0] || {});
+
+  return  `${JSON.stringify(finalConfig, null, 2)}
+`;
+};
 
 export default withDefaults(contents, {
-  extraPlugins: [],
-  extraCompilerOptions: {}
-})
+  configOverrides: {},
+});

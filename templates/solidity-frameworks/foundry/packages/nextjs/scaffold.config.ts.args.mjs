@@ -1,1 +1,3 @@
-export const chainName = 'foundry'
+export const configOverrides = {
+  targetNetworks: ["$$chains.foundry$$"]
+};

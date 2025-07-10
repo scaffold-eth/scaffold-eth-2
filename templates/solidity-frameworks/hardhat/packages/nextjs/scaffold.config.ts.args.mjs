@@ -1,1 +1,3 @@
-export const chainName = 'hardhat'
+export const configOverrides = {
+  targetNetworks: ["$$chains.hardhat$$"]
+};

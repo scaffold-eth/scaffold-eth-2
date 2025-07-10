@@ -1,7 +1,45 @@
-import { withDefaults } from '../../../../../utils.js'
+import { deepMerge, stringify, withDefaults } from '../../../../../utils.js'
 
-const contents = ({ titleTemplate, extraIcons, extraMetadata, thumbnailPath }) => `
+const defaultMetadata = {
+  metadataBase: '$$new URL(baseUrl)$$',
+  title: {
+    default: '$$title$$',
+    template: '$$titleTemplate$$',
+  },
+  description: '$$description$$',
+  openGraph: {
+    title: {
+      default: '$$title$$',
+      template: '$$titleTemplate$$',
+    },
+    description: '$$description$$',
+    images: [
+      {
+        url: '$$imageUrl$$',
+      },
+    ],
+  },
+  twitter: {
+    title: {
+      default: '$$title$$',
+      template: '$$titleTemplate$$',
+    },
+    description: '$$description$$',
+    images: ['$$imageUrl$$'],
+  },
+  icons: {
+    icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+  },
+}
+
+
+const contents = ({ titleTemplate, thumbnailPath, preContent, metadataOverrides }) =>  {
+  
+  const finalMetadata = deepMerge(defaultMetadata, metadataOverrides[0] || {})
+  
+  return `
 import type { Metadata } from "next";
+${preContent[0] || ''}
 
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? \`https://\${process.env.VERCEL_PROJECT_PRODUCTION_URL}\`
@@ -19,45 +57,13 @@ export const getMetadata = ({
 }): Metadata => {
   const imageUrl = \`\${baseUrl}\${imageRelativePath}\`;
 
-  return {
-    metadataBase: new URL(baseUrl),
-    title: {
-      default: title,
-      template: titleTemplate,
-    },
-    description: description,
-    openGraph: {
-      title: {
-        default: title,
-        template: titleTemplate,
-      },
-      description: description,
-      images: [
-        {
-          url: imageUrl,
-        },
-      ],
-    },
-    twitter: {
-      title: {
-        default: title,
-        template: titleTemplate,
-      },
-      description: description,
-      images: [imageUrl],
-    },
-    icons: {
-      icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
-      ${extraIcons[0] ? Object.entries(extraIcons[0]).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join(',\n      ') : ''}
-    },
-    ${extraMetadata[0] ? Object.entries(extraMetadata[0]).map(([key, value]) => `${key}: ${JSON.stringify(value)}`).join(',\n    ') : ''}
-  };
-};
-`
+  return ${stringify(finalMetadata)};
+}`
+}
 
 export default withDefaults(contents, {
-  extraIcons: {},
-  extraMetadata: {},
+  metadataOverrides: {},
   titleTemplate: "%s | Scaffold-ETH 2",
   thumbnailPath: "/thumbnail.jpg",
+  preContent: '',
 })

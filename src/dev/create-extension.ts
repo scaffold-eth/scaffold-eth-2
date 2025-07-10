@@ -79,6 +79,21 @@ const createDirectories = async (filePath: string, projectName: string) => {
   await fs.promises.mkdir(dirPath, { recursive: true });
 };
 
+const normalizeRelativePath = (relativePath: string) => {
+  const pathSegments = relativePath.split(path.sep);
+
+  if (pathSegments[0] === BASE_DIR) {
+    relativePath = pathSegments.slice(1).join(path.sep);
+  } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
+    const framework = pathSegments[1];
+    if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
+      relativePath = pathSegments.slice(2).join(path.sep);
+    }
+  }
+
+  return relativePath;
+};
+
 const findTemplateFiles = async (dir: string, templates: Set<string>) => {
   const files = await fs.promises.readdir(dir, { withFileTypes: true });
   for (const file of files) {
@@ -86,18 +101,9 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
     if (file.isDirectory()) {
       await findTemplateFiles(fullPath, templates);
     } else if (file.name.endsWith(TEMPLATE_FILE_SUFFIX)) {
-      let relativePath = path.relative(templateDirectory, fullPath).replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
-      const pathSegments = relativePath.split(path.sep);
-
-      // Normalize the relative path by stripping the initial parts
-      if (pathSegments[0] === BASE_DIR) {
-        relativePath = pathSegments.slice(1).join(path.sep);
-      } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
-        const framework = pathSegments[1];
-        if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
-          relativePath = pathSegments.slice(2).join(path.sep);
-        }
-      }
+      const relativePath = path
+        .relative(templateDirectory, fullPath)
+        .replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
 
       templates.add(relativePath);
     }
@@ -145,9 +151,40 @@ const copyChanges = async (
       continue;
     }
 
-    if (templates.has(file)) {
+    const templatesArray = Array.from(templates);
+    const normalizedTemplatesArray = templatesArray.map(normalizeRelativePath);
+
+    if (normalizedTemplatesArray.includes(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
-      prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
+      const templateIndex = normalizedTemplatesArray.indexOf(file);
+
+      const templateContent = await fs.promises.readFile(
+        path.join(templateDirectory, `${templatesArray[templateIndex]}.template.mjs`),
+        "utf8",
+      );
+      const defaultArgs = extractWithDefaultsArg(templateContent);
+
+      if (!defaultArgs) {
+        prettyLog.info(`.gitignore and .env files could not be changed`, 3);
+        console.log("\n");
+        continue;
+      }
+
+      const argsFilePath = `${destPath}.args.mjs`;
+      if (fs.existsSync(argsFilePath)) {
+        prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
+        console.log("\n");
+        continue;
+      }
+      await createDirectories(file, projectName);
+      const constants = convertDefaultArgsToConstants(defaultArgs);
+
+      const referenceArgsFileComment = `// Reference the example args file: https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/${file}.args.mjs`;
+      const referenceTemplateComment = `// Reference the template file that will use this file: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
+
+      const fileContent = `${referenceArgsFileComment}\n${referenceTemplateComment}\n\n// Default args:\n${constants}\n`;
+      await fs.promises.writeFile(argsFilePath, fileContent);
+      prettyLog.info(`Created corresponding args file. Please update it: ${argsFilePath}`, 3);
       console.log("\n");
       continue;
     }
@@ -198,6 +235,54 @@ const copyChanges = async (
     prettyLog.success(`Copied: ${file}`, 2);
     console.log("\n");
   }
+};
+
+const extractWithDefaultsArg = (templateContent: string): string | null => {
+  const withDefaultsRegex = /export\s+default\s+withDefaults\s*\(\s*[^,]+,\s*({[\s\S]*?})\s*\)/;
+  const match = templateContent.match(withDefaultsRegex);
+
+  if (!match) {
+    return null;
+  }
+
+  return match[1].trim();
+};
+
+const convertDefaultArgsToConstants = (defaultArgs: string) => {
+  // Remove the outer curly braces and split by commas
+  const content = defaultArgs.replace(/^{|}$/g, "").trim();
+
+  // Split by commas but not inside arrays or objects
+  const lines: string[] = [];
+  let currentLine = "";
+  let bracketCount = 0;
+
+  for (let i = 0; i < content.length; i++) {
+    const char = content[i];
+    if (char === "{" || char === "[") bracketCount++;
+    if (char === "}" || char === "]") bracketCount--;
+
+    if (char === "," && bracketCount === 0) {
+      lines.push(currentLine.trim());
+      currentLine = "";
+    } else {
+      currentLine += char;
+    }
+  }
+  if (currentLine) lines.push(currentLine.trim());
+
+  const constants = lines
+    .map(line => {
+      const colonIndex = line.indexOf(":");
+      if (colonIndex === -1) return null;
+
+      const key = line.slice(0, colonIndex).trim();
+      const value = line.slice(colonIndex + 1).trim();
+      return `export const ${key} = ${value};`;
+    })
+    .filter(Boolean);
+
+  return constants.join("\n");
 };
 
 const main = async (rawArgs: string[]) => {
