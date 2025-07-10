@@ -106,5 +106,11 @@
     "description": "SpeedRunEthereum Challenge: Prediction Markets.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-prediction-markets"
+  },
+  {
+    "extensionFlagValue": "challenge-stablecoins",
+    "description": "SpeedRunEthereum Challenge: Stablecoins.",
+    "repository": "https://github.com/scaffold-eth/se-2-challenges",
+    "branch": "challenge-stablecoins"
   }
 ]
