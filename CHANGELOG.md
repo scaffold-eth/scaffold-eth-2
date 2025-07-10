@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.0
+
+### Major Changes
+
+- adjust level of customization and improved ways to pass args to tmeplates
+
 ## 1.0.0-beta.6
 
 ### Patch Changes
