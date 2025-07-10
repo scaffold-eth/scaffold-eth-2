@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.2.6
+
+### Patch Changes
+
+- 585715d: add stablecoin challenge to curated extensions
+
 ## 0.2.5
 
 ### Patch Changes
