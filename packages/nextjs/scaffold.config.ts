@@ -2,21 +2,21 @@ import * as chains from "viem/chains";
 import { defineChain } from "viem";
 
 // Define Westend Asset Hub chain
-export const westendAssetHub = defineChain({
-  id: 420420421,
-  name: "Westend Asset Hub",
+export const passetHub = defineChain({
+  id: 420420422,
+  name: "Paseo Asset Hub",
   nativeCurrency: {
-    decimals: 18,
-    name: "Westend DOT",
-    symbol: "WND",
+    decimals: 10,
+    name: "Paseo DOT",
+    symbol: "PAS",
   },
   rpcUrls: {
-    default: { http: ["https://westend-asset-hub-eth-rpc.polkadot.io"] },
+    default: { http: ["https://testnet-passet-hub-eth-rpc.polkadot.io"] },
   },
   blockExplorers: {
     default: {
-      name: "Subscan",
-      url: "https://westend-assethub.subscan.io",
+      name: "Blockscout",
+      url: "https://blockscout-passet-hub.parity-testnet.parity.io",
     },
   },
   testnet: true,
@@ -35,7 +35,7 @@ export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [westendAssetHub],
+  targetNetworks: [passetHub],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
@@ -52,7 +52,7 @@ const scaffoldConfig = {
   rpcOverrides: {
     // Example:
     // [chains.mainnet.id]: "https://mainnet.buidlguidl.com",
-    [westendAssetHub.id]: "https://westend-asset-hub-eth-rpc.polkadot.io",
+    [passetHub.id]: "https://testnet-passet-hub-eth-rpc.polkadot.io",
   },
 
   // This is ours WalletConnect's default project ID.
