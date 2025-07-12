@@ -44,7 +44,7 @@ contract YourContract {
      */
     function setGreeting(string memory _newGreeting) public payable {
         // Print data to the hardhat chain console. Remove when deploying to a live network.
-        console.log("Setting new greeting '%s' from %s", _newGreeting, msg.sender);
+        // console.log("Setting new greeting '%s' from %s", _newGreeting, msg.sender);
 
         // Change state variables
         greeting = _newGreeting;
