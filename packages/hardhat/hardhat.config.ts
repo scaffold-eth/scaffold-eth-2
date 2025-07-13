@@ -3,6 +3,7 @@ require('@nomicfoundation/hardhat-toolbox');
 require('@parity/hardhat-polkadot');
 require('hardhat-deploy');
 
+import "hardhat-deploy-ethers";
 import { task } from 'hardhat/config';
 import generateTsAbis from './scripts/generateTsAbis';
 
