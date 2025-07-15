@@ -55,7 +55,8 @@ const config: HardhatUserConfig = {
       },
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+      // url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+      url: "https://mainnet.rpc.buidlguidl.com/",
       accounts: [deployerPrivateKey],
     },
     sepolia: {
