@@ -55,7 +55,7 @@ const config: HardhatUserConfig = {
       },
     },
     mainnet: {
-      url: "https://eth.drpc.org",
+      url: "https://mainnet.rpc.buidlguidl.com",
       accounts: [deployerPrivateKey],
     },
     sepolia: {
