@@ -68,6 +68,7 @@ export type GenericContract = {
   abi: Abi;
   inheritedFunctions?: InheritedFunctions;
   external?: true;
+  deployedOnBlock?: number;
 };
 
 export type GenericContractsDeclaration = {
@@ -291,7 +292,7 @@ export type UseScaffoldEventHistoryConfig<
 > = {
   contractName: TContractName;
   eventName: IsContractDeclarationMissing<string, TEventName>;
-  fromBlock: bigint;
+  fromBlock?: bigint;
   toBlock?: bigint;
   chainId?: AllowedChainIds;
   filters?: EventFilters<TContractName, TEventName>;
