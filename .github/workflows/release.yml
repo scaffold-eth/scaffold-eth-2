@@ -20,22 +20,10 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Check for existing release PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          existing_pr=$(gh pr list --state open --json title --jq '.[] | select(.title == "Version Packages")')
-          if [ -n "$existing_pr" ]; then
-            echo "Release PR already exists."
-            echo "SKIP_RELEASE=true" >> $GITHUB_ENV
-          fi
-
       - name: Install Dependencies
-        if: ${{ env.SKIP_RELEASE != 'true' }}
         run: yarn
 
       - name: Create Release Pull Request or Publish to npm
-        if: ${{ env.SKIP_RELEASE != 'true' }}
         id: changesets
         uses: changesets/action@v1
         with:
