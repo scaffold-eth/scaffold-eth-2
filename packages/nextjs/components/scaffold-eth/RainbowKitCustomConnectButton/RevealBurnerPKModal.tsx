@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { ShieldExclamationIcon } from "@heroicons/react/24/outline";
 import { useCopyToClipboard } from "~~/hooks/scaffold-eth";
 import { getParsedError, notification } from "~~/utils/scaffold-eth";
@@ -6,6 +7,7 @@ const BURNER_WALLET_PK_KEY = "burnerWallet.pk";
 
 export const RevealBurnerPKModal = () => {
   const { copyToClipboard, isCopiedToClipboard } = useCopyToClipboard();
+  const modalCheckboxRef = useRef<HTMLInputElement>(null);
 
   const handleCopyPK = async () => {
     try {
@@ -16,13 +18,14 @@ export const RevealBurnerPKModal = () => {
     } catch (e) {
       const parsedError = getParsedError(e);
       notification.error(parsedError);
+      if (modalCheckboxRef.current) modalCheckboxRef.current.checked = false;
     }
   };
 
   return (
     <>
       <div>
-        <input type="checkbox" id="reveal-burner-pk-modal" className="modal-toggle" />
+        <input type="checkbox" id="reveal-burner-pk-modal" className="modal-toggle" ref={modalCheckboxRef} />
         <label htmlFor="reveal-burner-pk-modal" className="modal cursor-pointer">
           <label className="modal-box relative">
             {/* dummy input to capture event onclick on modal box */}
