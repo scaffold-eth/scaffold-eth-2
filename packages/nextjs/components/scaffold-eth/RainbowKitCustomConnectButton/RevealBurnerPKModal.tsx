@@ -9,7 +9,7 @@ export const RevealBurnerPKModal = () => {
 
   const handleCopyPK = async () => {
     try {
-      const burnerPK = localStorage?.getItem(BURNER_WALLET_PK_KEY);
+      const burnerPK = localStorage?.getItem(BURNER_WALLET_PK_KEY) || sessionStorage?.getItem(BURNER_WALLET_PK_KEY);
       if (!burnerPK) throw new Error("Burner wallet private key not found");
       await copyToClipboard(burnerPK);
       notification.success("Burner wallet private key copied to clipboard");
