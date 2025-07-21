@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
+import { Tooltip } from "~~/app/components/Tooltip";
+import { Button } from "~~/components/Button";
 import { CommonInputProps, InputBase, SIGNED_NUMBER_REGEX } from "~~/components/scaffold-eth";
 import { useDisplayUsdMode } from "~~/hooks/scaffold-eth/useDisplayUsdMode";
 import { useGlobalState } from "~~/services/store/store";
@@ -105,23 +107,20 @@ export const EtherInput = ({
       disabled={disabled}
       prefix={<span className="pl-4 -mr-2 text-accent self-center">{displayUsdMode ? "$" : "Ξ"}</span>}
       suffix={
-        <div
-          className={`${
-            nativeCurrencyPrice > 0
-              ? ""
-              : "tooltip tooltip-secondary before:content-[attr(data-tip)] before:right-[-10px] before:left-auto before:transform-none"
-          }`}
-          data-tip={isNativeCurrencyPriceFetching ? "Fetching price" : "Unable to fetch price"}
+        <Tooltip
+          disabled={nativeCurrencyPrice > 0}
+          content={isNativeCurrencyPriceFetching ? "Fetching price" : "Unable to fetch price"}
         >
-          <button
-            className="btn btn-primary h-[2.2rem] min-h-[2.2rem]"
+          <Button
+            variant="secondary"
+            className="h-[2.2rem] min-h-[2.2rem]"
             onClick={toggleDisplayUsdMode}
             disabled={!displayUsdMode && !nativeCurrencyPrice}
-            type="button"
+            circle
           >
             <ArrowsRightLeftIcon className="h-3 w-3 cursor-pointer" aria-hidden="true" />
-          </button>
-        </div>
+          </Button>
+        </Tooltip>
       }
     />
   );
