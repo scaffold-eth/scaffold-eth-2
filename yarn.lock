@@ -3716,6 +3716,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scaffold-ui/components@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@scaffold-ui/components@npm:0.1.1"
+  dependencies:
+    usehooks-ts: ^3.1.1
+  peerDependencies:
+    "@scaffold-ui/hooks": 0.1.1
+    "@tanstack/react-query": ^5.59.15
+    "@types/react": ^19.0.7
+    react: ^19.0.0
+    viem: ^2.23.0
+    wagmi: ^2.14.11
+  checksum: f62de301ac3724d5b1ef655f95ad45078b714b70be153f815cb8dc9873b425348196eafa2de0b074def7f45a38374bcafce3834b00d9bb61f1f0e0563cdf7deb
+  languageName: node
+  linkType: hard
+
+"@scaffold-ui/hooks@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@scaffold-ui/hooks@npm:0.1.1"
+  dependencies:
+    "@uniswap/sdk-core": ^7.7.2
+    "@uniswap/v2-sdk": ^4.15.2
+    blo: ^1.2.0
+  peerDependencies:
+    "@tanstack/react-query": ^5.59.15
+    "@types/react": ^19.0.7
+    react: ^19.0.0
+    viem: ^2.23.0
+    wagmi: ^2.14.11
+  checksum: e963703eb0933c8ce65ee878e667446158c686c13679c400f696f4117df88b44d4a3bd310871ad69fd591d50c7fcbe46f19b393517c7416cfcf364a4abc94856
+  languageName: node
+  linkType: hard
+
 "@scure/base@npm:^1.1.3, @scure/base@npm:~1.2.2, @scure/base@npm:~1.2.4, @scure/base@npm:~1.2.5":
   version: 1.2.5
   resolution: "@scure/base@npm:1.2.5"
@@ -3901,6 +3934,8 @@ __metadata:
   dependencies:
     "@heroicons/react": ^2.1.5
     "@rainbow-me/rainbowkit": 2.2.7
+    "@scaffold-ui/components": ^0.1.1
+    "@scaffold-ui/hooks": ^0.1.1
     "@tailwindcss/postcss": latest
     "@tanstack/react-query": ^5.59.15
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
@@ -5424,6 +5459,36 @@ __metadata:
     tiny-invariant: ^1.1.0
     toformat: ^2.0.0
   checksum: fde13653021cea136e4e8d2e04e7f45559e5cd64481fcd0b087a9cd674bfe053c05faeb5a844651b20dd0b70717723746c7f82060e99a057de9561800f8f0606
+  languageName: node
+  linkType: hard
+
+"@uniswap/sdk-core@npm:^7.7.1, @uniswap/sdk-core@npm:^7.7.2":
+  version: 7.7.2
+  resolution: "@uniswap/sdk-core@npm:7.7.2"
+  dependencies:
+    "@ethersproject/address": ^5.0.2
+    "@ethersproject/bytes": ^5.7.0
+    "@ethersproject/keccak256": 5.7.0
+    "@ethersproject/strings": 5.7.0
+    big.js: ^5.2.2
+    decimal.js-light: ^2.5.0
+    jsbi: ^3.1.4
+    tiny-invariant: ^1.1.0
+    toformat: ^2.0.0
+  checksum: 1ef25d96e3249909f5642ec048b175fc744f15e395a5e58f5e2b654bd01154e6de6945f5219cb7ab0d86cdffe9ab1a743251ad96f1df9cd48d7ec49d694f790f
+  languageName: node
+  linkType: hard
+
+"@uniswap/v2-sdk@npm:^4.15.2":
+  version: 4.15.2
+  resolution: "@uniswap/v2-sdk@npm:4.15.2"
+  dependencies:
+    "@ethersproject/address": ^5.0.2
+    "@ethersproject/solidity": ^5.0.9
+    "@uniswap/sdk-core": ^7.7.1
+    tiny-invariant: ^1.1.0
+    tiny-warning: ^1.0.3
+  checksum: 0484786ef416a249afb219e6a6868ba7cc3591aafb49d3fc08e60b8cba6f0267214a60f4eca25c0bb347b17d3ef3b0e88ba32791cfa48b771d1b2d574a17b76b
   languageName: node
   linkType: hard
 
@@ -18175,6 +18240,17 @@ __metadata:
   peerDependencies:
     react: ^16.8.0  || ^17 || ^18
   checksum: 4f850c0c5ab408afa52fa2ea2c93c488cd7065c82679eb1fb62cba12ca4c57ff62d52375acc6738823421fe6579ce3adcea1e2dc345ce4f549c593d2e51455b3
+  languageName: node
+  linkType: hard
+
+"usehooks-ts@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "usehooks-ts@npm:3.1.1"
+  dependencies:
+    lodash.debounce: ^4.0.8
+  peerDependencies:
+    react: ^16.8.0  || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: ecc8a678f7f08b1e8caaeeb4601b1cd32709e30f73db65441d09808a5f1488f8d2c38a5bc908aa0c67b6dc35379e4b6b7bcd581df57845f91ab6d95256d765ca
   languageName: node
   linkType: hard
 
