@@ -115,9 +115,9 @@ export const AddressInfoDropdown = ({
           ) : null}
           {connector?.id === BURNER_WALLET_ID ? (
             <li>
-              <label htmlFor="reveal-burner-pk-modal" className="h-8 btn-sm rounded-xl! flex gap-3 py-3">
+              <label htmlFor="reveal-burner-pk-modal" className="h-8 btn-sm rounded-xl! flex gap-3 py-3 text-error">
                 <EyeIcon className="h-6 w-4 ml-2 sm:ml-0" />
-                <span>reveal burner pk</span>
+                <span>Reveal Private Key</span>
               </label>
             </li>
           ) : null}
