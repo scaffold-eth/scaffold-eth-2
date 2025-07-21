@@ -34,11 +34,14 @@ function getFiles(path) {
   });
 }
 
-function parseTransactionRun(filePath) {
+function parseTransactionAndReceiptRun(filePath) {
   try {
     const content = readFileSync(filePath, "utf8");
     const broadcastData = JSON.parse(content);
-    return broadcastData.transactions || [];
+    return {
+      transactions: broadcastData.transactions || [],
+      receipts: broadcastData.receipts || [],
+    };
   } catch (error) {
     console.warn(`Warning: Could not parse ${filePath}:`, error.message);
     return [];
@@ -65,7 +68,7 @@ function getDeploymentHistory(broadcastPath) {
     });
 
   for (const file of runFiles) {
-    const transactions = parseTransactionRun(join(broadcastPath, file));
+    const { transactions, receipts } = parseTransactionAndReceiptRun(join(broadcastPath, file));
 
     for (const tx of transactions) {
       if (tx.transactionType === "CREATE") {
@@ -75,6 +78,7 @@ function getDeploymentHistory(broadcastPath) {
           address: tx.contractAddress,
           deploymentFile: file,
           transaction: tx,
+          receipt: receipts.find((r) => r.transactionHash === tx.hash),
         });
       }
     }
@@ -163,6 +167,7 @@ function processAllDeployments(broadcastPath) {
             timestamp,
             chainId,
             deploymentScript: scriptFolder,
+            deployedOnBlock: deployment.receipt.blockNumber,
           });
         }
       });
@@ -186,6 +191,7 @@ function processAllDeployments(broadcastPath) {
         inheritedFunctions: getInheritedFunctions(artifact),
         deploymentFile: deployment.deploymentFile,
         deploymentScript: deployment.deploymentScript,
+        deployedOnBlock: Number(BigInt(deployment.deployedOnBlock)),
       };
     }
   });
