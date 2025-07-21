@@ -58,7 +58,7 @@ const getEvents = async (
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
- * @param config.fromBlock - the block number to start reading events from (optional if deployedOnBlock is set in deployedContracts.ts for the contract)
+ * @param config.fromBlock - optional block number to start reading events from (defaults to `deployedOnBlock` in deployedContracts.ts if set for contract, otherwise defaults to 0)
  * @param config.toBlock - optional block number to stop reading events at (if not provided, reads until current block)
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param config.filters - filters to be applied to the event (parameterName: value)
