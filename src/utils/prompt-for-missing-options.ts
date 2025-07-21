@@ -1,27 +1,24 @@
 import { Options, RawOptions, SolidityFrameworkChoices } from "../types";
-import inquirer from "inquirer";
+import { input, select } from "@inquirer/prompts";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateNpmName } from "./validate-name";
 
-// default values for unspecified args
-const defaultOptions: RawOptions = {
+const defaultOptions = {
   project: "my-dapp-example",
   solidityFramework: null,
   install: true,
   dev: false,
   externalExtension: null,
   help: false,
-};
+} as const satisfies RawOptions;
 
 export async function promptForMissingOptions(
   options: RawOptions,
   solidityFrameworkChoices: SolidityFrameworkChoices,
 ): Promise<Options> {
-  const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
-  const questions = [
-    {
-      type: "input",
-      name: "project",
+  const project =
+    options.project ??
+    (await input({
       message: "Your project name:",
       default: defaultOptions.project,
       validate: (name: string) => {
@@ -31,21 +28,20 @@ export async function promptForMissingOptions(
         }
         return "Project " + validation.problems[0];
       },
-    },
-    {
-      type: "list",
-      name: "solidityFramework",
+    }));
+
+  const solidityFramework =
+    options.solidityFramework ??
+    (await select({
       message: "What solidity framework do you want to use?",
-      choices: solidityFrameworkChoices,
+      choices: solidityFrameworkChoices.map(choice =>
+        typeof choice === "string" ? { value: choice, name: choice } : choice,
+      ),
       default: SOLIDITY_FRAMEWORKS.HARDHAT,
-    },
-  ];
+    }));
 
-  const answers = await inquirer.prompt(questions, cliAnswers);
-
-  const solidityFramework = options.solidityFramework ?? answers.solidityFramework;
   const mergedOptions: Options = {
-    project: options.project ?? answers.project,
+    project,
     install: options.install,
     dev: options.dev ?? defaultOptions.dev,
     solidityFramework: solidityFramework === "none" ? null : solidityFramework,
