@@ -68,7 +68,9 @@ function getDeploymentHistory(broadcastPath) {
     });
 
   for (const file of runFiles) {
-    const { transactions, receipts } = parseTransactionAndReceiptRun(join(broadcastPath, file));
+    const { transactions, receipts } = parseTransactionAndReceiptRun(
+      join(broadcastPath, file)
+    );
 
     for (const tx of transactions) {
       if (tx.transactionType === "CREATE") {
@@ -243,8 +245,14 @@ function main() {
   // Generate the deployedContracts content
   const fileContent = Object.entries(allGeneratedContracts).reduce(
     (content, [chainId, chainConfig]) => {
+      const cleanedChainConfig = Object.fromEntries(
+        Object.entries(chainConfig).map(([contractName, contractData]) => {
+          const { deploymentFile, deploymentScript, ...rest } = contractData;
+          return [contractName, rest];
+        })
+      );
       return `${content}${parseInt(chainId).toFixed(0)}:${JSON.stringify(
-        chainConfig,
+        cleanedChainConfig,
         null,
         2
       )},`;
