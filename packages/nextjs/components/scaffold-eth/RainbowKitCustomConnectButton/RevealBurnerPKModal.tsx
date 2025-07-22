@@ -39,15 +39,13 @@ export const RevealBurnerPKModal = () => {
               <p className="text-lg font-semibold m-0 p-0">Copy Burner Wallet Private Key</p>
               <div role="alert" className="alert alert-warning mt-4">
                 <ShieldExclamationIcon className="h-6 w-6" />
-                <span className="font-semibold">Warning: Never Share Your Private Key with Anyone!</span>
+                <span className="font-semibold">
+                  Burner wallets are intended for local development only and are not safe for storing real funds.
+                </span>
               </div>
               <p>
                 Your Private Key provides <strong>full access</strong> to your entire wallet and funds. This is
                 currently stored <strong>temporarily</strong> in your browser.
-              </p>
-              <p>
-                Be sure to securely import your Private Key into a more secure wallet if you have a substantial amount
-                of assets.
               </p>
               <button className="btn btn-outline btn-error" onClick={handleCopyPK} disabled={isCopiedToClipboard}>
                 Copy Private Key To Clipboard
