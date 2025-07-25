@@ -58,7 +58,7 @@ const getEvents = async (
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
- * @param config.fromBlock - the block number to start reading events from
+ * @param config.fromBlock - optional block number to start reading events from (defaults to `deployedOnBlock` in deployedContracts.ts if set for contract, otherwise defaults to 0)
  * @param config.toBlock - optional block number to stop reading events at (if not provided, reads until current block)
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
  * @param config.filters - filters to be applied to the event (parameterName: value)
@@ -109,6 +109,8 @@ export const useScaffoldEventHistory = <
 
   const isContractAddressAndClientReady = Boolean(deployedContractData?.address) && Boolean(publicClient);
 
+  const fromBlockValue = fromBlock !== undefined ? fromBlock : BigInt(deployedContractData?.deployedOnBlock || 0);
+
   const query = useInfiniteQuery({
     queryKey: [
       "eventHistory",
@@ -116,7 +118,7 @@ export const useScaffoldEventHistory = <
         contractName,
         address: deployedContractData?.address,
         eventName,
-        fromBlock: fromBlock.toString(),
+        fromBlock: fromBlockValue?.toString(),
         toBlock: toBlock?.toString(),
         chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
@@ -149,9 +151,9 @@ export const useScaffoldEventHistory = <
       return data;
     },
     enabled: enabled && isContractAddressAndClientReady,
-    initialPageParam: fromBlock,
+    initialPageParam: fromBlockValue,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      if (!blockNumber || fromBlock >= blockNumber) return undefined;
+      if (!blockNumber || fromBlockValue >= blockNumber) return undefined;
 
       const lastPageHighestBlock = Math.max(
         Number(lastPageParam),

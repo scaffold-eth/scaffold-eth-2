@@ -68,6 +68,39 @@ Never use any other patterns for contract interaction. The hooks are:
 - useScaffoldReadContract (for reading)
 - useScaffoldWriteContract (for writing)
 
+### Reading events from a contract
+
+Use the \`useScaffoldEventHistory\` (\`packages/nextjs/hooks/scaffold-eth/useScaffoldEventHistory.ts\`) hook.
+
+Example:
+
+\`\`\`typescript
+const {
+  data: events,
+  isLoading,
+  error,
+} = useScaffoldEventHistory({
+  contractName: "YourContract",
+  eventName: "GreetingChange",
+  watch: true, // optional, if true, the hook will watch for new events
+});
+\`\`\`
+
+The \`data\` property consists of an array of events and can be displayed as:
+
+\`\`\`jsx
+<div>
+  {events?.map((event) => (
+    <div key={event.logIndex}>
+      <p>{event.args.greetingSetter}</p>
+      <p>{event.args.newGreeting}</p>
+      <p>{event.args.premium}</p>
+      <p>{event.args.value}</p>
+    </div>
+  ))}
+</div>
+\`\`\`
+
 ### Other Hooks
 SE-2 also provides other hooks to interact with blockchain data: \`useScaffoldWatchContractEvent\`, \`useScaffoldEventHistory\`, \`useDeployedContractInfo\`, \`useScaffoldContract\`, \`useTransactor\`. They live under \`packages/nextjs/hooks/scaffold-eth\`.
 ## Display Components guidelines
