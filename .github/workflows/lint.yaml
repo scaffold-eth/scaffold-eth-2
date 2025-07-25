@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [lts/*]
+        node: [22]
 
     steps:
       - name: Checkout
