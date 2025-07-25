@@ -1,11 +1,19 @@
 # create-eth
 
+## 1.0.2
+
+### Patch Changes
+
+- Use `deployedOnBlock` from deployedContracts in useScaffoldEventHistory (https://github.com/scaffold-eth/scaffold-eth-2/pull/1134)
+- Reveal burner pk option (https://github.com/scaffold-eth/scaffold-eth-2/pull/1137)
+- Add cursor rules example for `useScaffoldEventHistory` (https://github.com/scaffold-eth/scaffold-eth-2/pull/1141)
+
 ## 1.0.1
 
 ### Patch Changes
 
--  fix foundry verify script
--  Add deployedOnBlock to deployedContracts on Hardhat (https://github.com/scaffold-eth/scaffold-eth-2/pull/1132)
+- fix foundry verify script
+- Add deployedOnBlock to deployedContracts on Hardhat (https://github.com/scaffold-eth/scaffold-eth-2/pull/1132)
 - update hardhat mainnet rpc url (https://github.com/scaffold-eth/scaffold-eth-2/pull/1130)
 
 ## 1.0.0
@@ -630,7 +638,6 @@
 ### Patch Changes
 
 - 30d9000:
-
   1. Extract header menu links (#570)
   2. Move Block Explorer to footer (#574)
   3. Remove ExampleUI (pages, components, assets, content) (#578)
@@ -653,7 +660,6 @@
 ### Patch Changes
 
 - 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500)
-
   2. chore: footer missalignment & home page on small screens (#502)
 
   3. Update and typescript version (#499)
@@ -695,7 +701,6 @@
 ### Patch Changes
 
 - 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500
-
   2. chore: footer missalignment on mobile screens #502
 
   3. Update and typescript version #499
