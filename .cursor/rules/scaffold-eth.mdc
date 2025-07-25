@@ -84,7 +84,7 @@ const {
 });
 ```
 
-The `data` property consist an array of events and can be displayed as:
+The `data` property consists of an array of events and can be displayed as:
 
 ```jsx
 <div>
