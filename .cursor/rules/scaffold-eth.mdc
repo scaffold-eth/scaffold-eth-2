@@ -66,7 +66,7 @@ Never use any other patterns for contract interaction. The hooks are:
 - useScaffoldReadContract (for reading)
 - useScaffoldWriteContract (for writing)
 
-### Reading events from contract
+### Reading events from a contract
 
 Use the `useScaffoldEventHistory` (`packages/nextjs/hooks/scaffold-eth/useScaffoldEventHistory.ts`) hook.
 
