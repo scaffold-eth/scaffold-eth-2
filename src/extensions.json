@@ -42,52 +42,52 @@
     "branch": "erc-721"
   },
   {
-    "extensionFlagValue": "challenge-0-simple-nft",
-    "description": "SpeedRunEthereum Challenge 0: Simple NFT Example.",
+    "extensionFlagValue": "challenge-simple-nft-example",
+    "description": "SpeedRunEthereum Challenge: Simple NFT Example.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-0-simple-nft"
+    "branch": "challenge-simple-nft-example"
   },
   {
-    "extensionFlagValue": "challenge-1-decentralized-staking",
-    "description": "SpeedRunEthereum Challenge 1: Decentralized Staking App.",
+    "extensionFlagValue": "challenge-decentralized-staking",
+    "description": "SpeedRunEthereum Challenge: Decentralized Staking App.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-1-decentralized-staking"
+    "branch": "challenge-decentralized-staking"
   },
   {
-    "extensionFlagValue": "challenge-2-token-vendor",
-    "description": "SpeedRunEthereum Challenge 2: Token Vendor.",
+    "extensionFlagValue": "challenge-token-vendor",
+    "description": "SpeedRunEthereum Challenge: Token Vendor.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-2-token-vendor"
+    "branch": "challenge-token-vendor"
   },
   {
-    "extensionFlagValue": "challenge-3-dice-game",
-    "description": "SpeedRunEthereum Challenge 3: Dice Game.",
+    "extensionFlagValue": "challenge-dice-game",
+    "description": "SpeedRunEthereum Challenge: Dice Game.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-3-dice-game"
+    "branch": "challenge-dice-game"
   },
   {
-    "extensionFlagValue": "challenge-4-dex",
-    "description": "SpeedRunEthereum Challenge 4: Build a DEX.",
+    "extensionFlagValue": "challenge-dex",
+    "description": "SpeedRunEthereum Challenge: Build a DEX.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-4-dex"
+    "branch": "challenge-dex"
   },
   {
-    "extensionFlagValue": "challenge-5-state-channels",
-    "description": "SpeedRunEthereum Challenge 5: A State Channel Application.",
+    "extensionFlagValue": "challenge-state-channels",
+    "description": "SpeedRunEthereum Challenge: A State Channel Application.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-5-state-channels"
+    "branch": "challenge-state-channels"
   },
   {
-    "extensionFlagValue": "challenge-6-multisig",
-    "description": "SpeedRunEthereum Challenge 6: Multisig Wallet.",
+    "extensionFlagValue": "challenge-multisig",
+    "description": "SpeedRunEthereum Challenge: Multisig Wallet.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-6-multisig"
+    "branch": "challenge-multisig"
   },
   {
-    "extensionFlagValue": "challenge-7-svg-nft",
-    "description": "SpeedRunEthereum Challenge 7: SVG NFT.",
+    "extensionFlagValue": "challenge-svg-nft",
+    "description": "SpeedRunEthereum Challenge: SVG NFT.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-7-svg-nft"
+    "branch": "challenge-svg-nft"
   },
   {
     "extensionFlagValue": "challenge-over-collateralized-lending",
