@@ -4,6 +4,15 @@ Thank you for investing your time in contributing to Scaffold-ETH 2!
 
 This guide aims to provide an overview of the contribution workflow to help us make the contribution process effective for everyone involved.
 
+# Table of Contents
+* [About the Project](##about-the-project)
+* [Vision](###vision)
+* [Project Status](###project-status)
+* [Rules](###rules)
+* [Getting Started](##getting-started)
+* [Issues](###issues)
+* [Pull Requests](###pull-requests)
+
 ## About the Project
 
 Scaffold-ETH 2 is a minimal and forkable repo providing builders with a starter kit to build decentralized applications on Ethereum.

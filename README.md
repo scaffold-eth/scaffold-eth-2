@@ -17,6 +17,13 @@
 
 ![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
 
+
+# Table of Contents
+* [Requirements](##requirements)
+* [Quickstart](##quickstart)
+* [Documentation](##documentation)
+
+
 ## Requirements
 
 Before you begin, you need to install the following tools:
