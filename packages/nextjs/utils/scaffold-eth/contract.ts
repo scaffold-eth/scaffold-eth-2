@@ -23,6 +23,8 @@ import {
   Log,
   TransactionReceipt,
   WriteContractErrorType,
+  keccak256,
+  toHex,
 } from "viem";
 import { Config, UseReadContractParameters, UseWatchContractEventParameters, UseWriteContractParameters } from "wagmi";
 import { WriteContractParameters, WriteContractReturnType, simulateContract } from "wagmi/actions";
@@ -335,6 +337,68 @@ export type UseScaffoldEventHistoryData<
 
 export type AbiParameterTuple = Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
 
+/**
+ * Enhanced error parsing that creates a lookup table from all deployed contracts
+ * to decode error signatures from any contract in the system
+ */
+const getParsedErrorWithAllAbis = (error: any, chainId: AllowedChainIds): string => {
+  const originalParsedError = getParsedError(error);
+
+  // Check if this is an unrecognized error signature
+  if (originalParsedError.includes("Encoded error signature") && originalParsedError.includes("not found on ABI")) {
+    const signatureMatch = originalParsedError.match(/0x[a-fA-F0-9]{8}/);
+    const signature = signatureMatch ? signatureMatch[0] : "";
+
+    if (signature) {
+      try {
+        // Get all deployed contracts for the current chain
+        const chainContracts = deployedContractsData[chainId];
+        if (chainContracts) {
+          // Build a lookup table of error signatures to error names
+          const errorLookup: Record<string, { name: string; contract: string; signature: string }> = {};
+
+          Object.entries(chainContracts).forEach(([contractName, contract]: [string, any]) => {
+            if (contract.abi) {
+              contract.abi.forEach((item: any) => {
+                if (item.type === "error") {
+                  // Create the proper error signature like Solidity does
+                  const errorName = item.name;
+                  const inputs = item.inputs || [];
+                  const inputTypes = inputs.map((input: any) => input.type).join(",");
+                  const errorSignature = `${errorName}(${inputTypes})`;
+
+                  // Hash the signature and take the first 4 bytes (8 hex chars)
+                  const hash = keccak256(toHex(errorSignature));
+                  const errorSelector = hash.slice(0, 10); // 0x + 8 chars = 10 total
+
+                  errorLookup[errorSelector] = {
+                    name: errorName,
+                    contract: contractName,
+                    signature: errorSignature,
+                  };
+                }
+              });
+            }
+          });
+
+          // Check if we can find the error in our lookup
+          const errorInfo = errorLookup[signature];
+          if (errorInfo) {
+            return `Contract function execution reverted with the following reason:\n${errorInfo.signature} from ${errorInfo.contract} contract`;
+          }
+
+          // If not found in simple lookup, provide a helpful message with context
+          return `${originalParsedError}\n\nThis error occurred when calling a function that internally calls another contract. Check the contract that your function calls internally for more details.`;
+        }
+      } catch (lookupError) {
+        console.log("Failed to create error lookup table:", lookupError);
+      }
+    }
+  }
+
+  return originalParsedError;
+};
+
 export const simulateContractWriteAndNotifyError = async ({
   wagmiConfig,
   writeContractParams: params,
@@ -345,7 +409,9 @@ export const simulateContractWriteAndNotifyError = async ({
   try {
     await simulateContract(wagmiConfig, params);
   } catch (error) {
-    const parsedError = getParsedError(error);
+    const chainId = wagmiConfig.chains[0]?.id as AllowedChainIds;
+    const parsedError = getParsedErrorWithAllAbis(error, chainId);
+
     notification.error(parsedError);
     throw error;
   }
