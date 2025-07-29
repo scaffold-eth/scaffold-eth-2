@@ -155,11 +155,7 @@ export const useScaffoldEventHistory = <
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (!blockNumber || fromBlockValue >= blockNumber) return undefined;
 
-      const lastPageHighestBlock = Math.max(
-        Number(lastPageParam),
-        ...(lastPage || []).map(event => Number(event.blockNumber || 0)),
-      );
-      const nextBlock = BigInt(Math.max(Number(lastPageParam), lastPageHighestBlock) + 1);
+      const nextBlock = lastPageParam + BigInt(blocksBatchSize);
 
       // Don't go beyond the specified toBlock or current block
       const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
