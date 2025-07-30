@@ -184,10 +184,10 @@ export const useScaffoldEventHistory = <
 
   // Determine the starting block for live event polling
   const getStartingBlockForLiveEvents = () => {
-    if (!query.data?.pages) return null;
-
+    if (!query.data?.pages || query.data.pages.flat().length === 0) {
+      return fromBlockValue;
+    }
     const allEvents = query.data.pages.flat();
-    if (allEvents.length === 0) return null;
 
     // Find highest block from historical events
     const highestBlock = Math.max(...allEvents.map(e => Number(e.blockNumber || 0)));
@@ -201,8 +201,7 @@ export const useScaffoldEventHistory = <
     const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
     const startBlock = getStartingBlockForLiveEvents();
 
-    // If we have historical data and we're caught up to current block, start polling
-    return startBlock !== null && startBlock >= maxBlock;
+    return startBlock >= maxBlock;
   };
 
   // Poll for new events when watch mode is enabled
