@@ -111,9 +111,6 @@ export const useScaffoldEventHistory = <
 
   const fromBlockValue = fromBlock !== undefined ? fromBlock : BigInt(deployedContractData?.deployedOnBlock || 0);
 
-  // Use small batch size in watch mode for instant updates
-  const effectiveBatchSize = watch ? 1 : blocksBatchSize;
-
   const query = useInfiniteQuery({
     queryKey: [
       "eventHistory",
@@ -125,7 +122,7 @@ export const useScaffoldEventHistory = <
         toBlock: toBlock?.toString(),
         chainId: selectedNetwork.id,
         filters: JSON.stringify(filters, replacer),
-        blocksBatchSize: effectiveBatchSize.toString(),
+        blocksBatchSize: blocksBatchSize.toString(),
       },
     ],
     queryFn: async ({ pageParam }) => {
@@ -133,7 +130,7 @@ export const useScaffoldEventHistory = <
 
       // Calculate the toBlock for this batch
       let batchToBlock = toBlock;
-      const batchEndBlock = pageParam + BigInt(effectiveBatchSize) - 1n;
+      const batchEndBlock = pageParam + BigInt(blocksBatchSize) - 1n;
       const maxBlock = toBlock || (blockNumber ? BigInt(blockNumber) : undefined);
       if (maxBlock) {
         batchToBlock = batchEndBlock < maxBlock ? batchEndBlock : maxBlock;
@@ -158,7 +155,7 @@ export const useScaffoldEventHistory = <
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (!blockNumber || fromBlockValue >= blockNumber) return undefined;
 
-      const nextBlock = lastPageParam + BigInt(effectiveBatchSize);
+      const nextBlock = lastPageParam + BigInt(blocksBatchSize);
 
       // Don't go beyond the specified toBlock or current block
       const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
@@ -192,7 +189,6 @@ export const useScaffoldEventHistory = <
       return;
     }
 
-    console.log("Triggering next page:");
     query.fetchNextPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockNumber, watch]);
