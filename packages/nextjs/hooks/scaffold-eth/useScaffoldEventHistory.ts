@@ -96,6 +96,7 @@ export const useScaffoldEventHistory = <
   });
   const [liveEvents, setLiveEvents] = useState<any[]>([]);
   const [lastFetchedBlock, setLastFetchedBlock] = useState<bigint | null>(null);
+  const [isPollingActive, setIsPollingActive] = useState(false);
 
   const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedNetwork.id });
 
@@ -151,7 +152,7 @@ export const useScaffoldEventHistory = <
 
       return data;
     },
-    enabled: enabled && isContractAddressAndClientReady,
+    enabled: enabled && isContractAddressAndClientReady && !isPollingActive, // Disable when polling starts
     initialPageParam: fromBlockValue,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (!blockNumber || fromBlockValue >= blockNumber) return undefined;
@@ -193,12 +194,29 @@ export const useScaffoldEventHistory = <
     return BigInt(highestBlock);
   };
 
+  // Check if we're caught up and should start polling
+  const shouldStartPolling = () => {
+    if (!watch || !blockNumber || isPollingActive) return false;
+
+    const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
+    const startBlock = getStartingBlockForLiveEvents();
+
+    // If we have historical data and we're caught up to current block, start polling
+    return startBlock !== null && startBlock >= maxBlock;
+  };
+
   // Poll for new events when watch mode is enabled
   useQuery({
     queryKey: ["liveEvents", contractName, eventName, blockNumber?.toString(), lastFetchedBlock?.toString()],
-    enabled: Boolean(watch && enabled && isContractAddressAndClientReady && blockNumber),
+    enabled: Boolean(
+      watch && enabled && isContractAddressAndClientReady && blockNumber && (shouldStartPolling() || isPollingActive),
+    ),
     queryFn: async () => {
       if (!isContractAddressAndClientReady || !blockNumber) return null;
+
+      if (!isPollingActive && shouldStartPolling()) {
+        setIsPollingActive(true);
+      }
 
       const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
       const startBlock = lastFetchedBlock || getStartingBlockForLiveEvents() || maxBlock;
@@ -228,12 +246,18 @@ export const useScaffoldEventHistory = <
     refetchInterval: false,
   });
 
-  // Manual trigger to fetch next page when previous page completes
+  // Manual trigger to fetch next page when previous page completes (only when not polling)
   useEffect(() => {
-    if (query.status === "success" && query.hasNextPage && !query.isFetchingNextPage && !query.error) {
+    if (
+      !isPollingActive &&
+      query.status === "success" &&
+      query.hasNextPage &&
+      !query.isFetchingNextPage &&
+      !query.error
+    ) {
       query.fetchNextPage();
     }
-  }, [query]);
+  }, [query, isPollingActive]);
 
   // Combine historical data from infinite query with live events from watch hook
   const historicalEvents = query.data?.pages || [];
