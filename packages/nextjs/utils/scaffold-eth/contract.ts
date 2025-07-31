@@ -355,7 +355,7 @@ const getParsedErrorWithAllAbis = (error: any, chainId: AllowedChainIds): string
 
     try {
       // Get all deployed contracts for the current chain
-      const chainContracts = deployedContractsData[chainId];
+      const chainContracts = deployedContractsData[chainId as keyof typeof deployedContractsData];
 
       if (!chainContracts) {
         return originalParsedError;
