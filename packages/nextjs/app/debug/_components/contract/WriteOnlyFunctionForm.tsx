@@ -16,6 +16,7 @@ import {
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { AllowedChainIds } from "~~/utils/scaffold-eth";
 import { simulateContractWriteAndNotifyError } from "~~/utils/scaffold-eth/contract";
 
 type WriteOnlyFunctionFormProps = {
@@ -54,7 +55,11 @@ export const WriteOnlyFunctionForm = ({
           args: getParsedContractFunctionArgs(form),
           value: BigInt(txValue),
         };
-        await simulateContractWriteAndNotifyError({ wagmiConfig, writeContractParams: writeContractObj });
+        await simulateContractWriteAndNotifyError({
+          wagmiConfig,
+          writeContractParams: writeContractObj,
+          chainId: targetNetwork.id as AllowedChainIds,
+        });
 
         const makeWriteWithParams = () => writeContractAsync(writeContractObj);
         await writeTxn(makeWriteWithParams);
