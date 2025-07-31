@@ -402,14 +402,15 @@ const getParsedErrorWithAllAbis = (error: any, chainId: AllowedChainIds): string
 export const simulateContractWriteAndNotifyError = async ({
   wagmiConfig,
   writeContractParams: params,
+  chainId,
 }: {
   wagmiConfig: Config;
   writeContractParams: WriteContractVariables<Abi, string, any[], Config, number>;
+  chainId: AllowedChainIds;
 }) => {
   try {
     await simulateContract(wagmiConfig, params);
   } catch (error) {
-    const chainId = wagmiConfig.chains[0]?.id as AllowedChainIds;
     const parsedError = getParsedErrorWithAllAbis(error, chainId);
 
     notification.error(parsedError);
