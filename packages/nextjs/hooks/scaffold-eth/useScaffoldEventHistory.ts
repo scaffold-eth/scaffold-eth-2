@@ -150,9 +150,6 @@ export const useScaffoldEventHistory = <
         { blockData, transactionData, receiptData },
       );
 
-      // Track the last fetched block to avoid re-fetching when polling starts
-      setLastFetchedBlock(batchToBlock || blockNumber || 0n);
-
       return data;
     },
     enabled: enabled && isContractAddressAndClientReady && !isPollingActive, // Disable when polling starts
@@ -185,10 +182,16 @@ export const useScaffoldEventHistory = <
     },
   });
 
+  // Determine the starting block for live event polling
   const getStartingBlockForLiveEvents = () => {
-    if (!query.data?.pages || query.data.pages.flat().length === 0) return fromBlockValue;
-    if (toBlock) return toBlock;
-    return blockNumber ? BigInt(blockNumber) : fromBlockValue;
+    if (!query.data?.pages || query.data.pages.flat().length === 0) {
+      return fromBlockValue;
+    }
+    const allEvents = query.data.pages.flat();
+
+    // Find highest block from historical events
+    const highestBlock = Math.max(...allEvents.map(e => Number(e.blockNumber || 0)));
+    return BigInt(highestBlock);
   };
 
   // Check if we're caught up and should start polling
