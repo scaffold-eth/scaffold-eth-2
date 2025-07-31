@@ -341,7 +341,7 @@ export type AbiParameterTuple = Extract<AbiParameter, { type: "tuple" | `tuple[$
  * Enhanced error parsing that creates a lookup table from all deployed contracts
  * to decode error signatures from any contract in the system
  */
-const getParsedErrorWithAllAbis = (error: any, chainId: AllowedChainIds): string => {
+export const getParsedErrorWithAllAbis = (error: any, chainId: AllowedChainIds): string => {
   const originalParsedError = getParsedError(error);
 
   // Check if this is an unrecognized error signature
