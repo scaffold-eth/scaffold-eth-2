@@ -1,8 +1,8 @@
 import { Hash, SendTransactionParameters, TransactionReceipt, WalletClient } from "viem";
-import { hardhat } from "viem/chains";
 import { Config, useWalletClient } from "wagmi";
 import { getPublicClient } from "wagmi/actions";
 import { SendTransactionMutate } from "wagmi/query";
+import scaffoldConfig from "~~/scaffold.config";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { AllowedChainIds, getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 import { TransactorFuncOptions, getParsedErrorWithAllAbis } from "~~/utils/scaffold-eth/contract";
@@ -51,7 +51,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
     let transactionHash: Hash | undefined = undefined;
     let transactionReceipt: TransactionReceipt | undefined;
     let blockExplorerTxURL = "";
-    let chainId: number = hardhat.id;
+    let chainId: number = scaffoldConfig.targetNetworks[0].id;
     try {
       chainId = await walletClient.getChainId();
       // Get full transaction from public client
