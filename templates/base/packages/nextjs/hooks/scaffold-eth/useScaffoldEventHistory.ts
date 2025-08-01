@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
@@ -94,7 +94,9 @@ export const useScaffoldEventHistory = <
   const publicClient = usePublicClient({
     chainId: selectedNetwork.id,
   });
-  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [liveEvents, setLiveEvents] = useState<any[]>([]);
+  const [lastFetchedBlock, setLastFetchedBlock] = useState<bigint | null>(null);
+  const [isPollingActive, setIsPollingActive] = useState(false);
 
   const { data: blockNumber } = useBlockNumber({ watch: watch, chainId: selectedNetwork.id });
 
@@ -109,7 +111,14 @@ export const useScaffoldEventHistory = <
 
   const isContractAddressAndClientReady = Boolean(deployedContractData?.address) && Boolean(publicClient);
 
-  const fromBlockValue = fromBlock !== undefined ? fromBlock : BigInt(deployedContractData?.deployedOnBlock || 0);
+  const fromBlockValue =
+    fromBlock !== undefined
+      ? fromBlock
+      : BigInt(
+          deployedContractData && "deployedOnBlock" in deployedContractData
+            ? deployedContractData.deployedOnBlock || 0
+            : 0,
+        );
 
   const query = useInfiniteQuery({
     queryKey: [
@@ -148,18 +157,16 @@ export const useScaffoldEventHistory = <
         { blockData, transactionData, receiptData },
       );
 
+      setLastFetchedBlock(batchToBlock || blockNumber || 0n);
+
       return data;
     },
-    enabled: enabled && isContractAddressAndClientReady,
+    enabled: enabled && isContractAddressAndClientReady && !isPollingActive, // Disable when polling starts
     initialPageParam: fromBlockValue,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       if (!blockNumber || fromBlockValue >= blockNumber) return undefined;
 
-      const lastPageHighestBlock = Math.max(
-        Number(lastPageParam),
-        ...(lastPage || []).map(event => Number(event.blockNumber || 0)),
-      );
-      const nextBlock = BigInt(Math.max(Number(lastPageParam), lastPageHighestBlock) + 1);
+      const nextBlock = lastPageParam + BigInt(blocksBatchSize);
 
       // Don't go beyond the specified toBlock or current block
       const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
@@ -184,28 +191,73 @@ export const useScaffoldEventHistory = <
     },
   });
 
-  useEffect(() => {
-    const shouldSkipEffect = !blockNumber || !watch || isFirstRender;
-    if (shouldSkipEffect) {
-      // skipping on first render, since on first render we should call queryFn with
-      // fromBlock value, not blockNumber
-      if (isFirstRender) setIsFirstRender(false);
-      return;
-    }
+  // Check if we're caught up and should start polling
+  const shouldStartPolling = () => {
+    if (!watch || !blockNumber || isPollingActive) return false;
 
-    query.fetchNextPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockNumber, watch]);
+    return !query.hasNextPage && query.status === "success";
+  };
 
-  // Manual trigger to fetch next page when previous page completes
+  // Poll for new events when watch mode is enabled
+  useQuery({
+    queryKey: ["liveEvents", contractName, eventName, blockNumber?.toString(), lastFetchedBlock?.toString()],
+    enabled: Boolean(
+      watch && enabled && isContractAddressAndClientReady && blockNumber && (shouldStartPolling() || isPollingActive),
+    ),
+    queryFn: async () => {
+      if (!isContractAddressAndClientReady || !blockNumber) return null;
+
+      if (!isPollingActive && shouldStartPolling()) {
+        setIsPollingActive(true);
+      }
+
+      const maxBlock = toBlock && toBlock < blockNumber ? toBlock : blockNumber;
+      const startBlock = lastFetchedBlock || maxBlock;
+
+      // Only fetch if there are new blocks to check
+      if (startBlock >= maxBlock) return null;
+
+      const newEvents = await getEvents(
+        {
+          address: deployedContractData?.address,
+          event,
+          fromBlock: startBlock + 1n,
+          toBlock: maxBlock,
+          args: filters,
+        },
+        publicClient,
+        { blockData, transactionData, receiptData },
+      );
+
+      if (newEvents && newEvents.length > 0) {
+        setLiveEvents(prev => [...newEvents, ...prev]);
+      }
+
+      setLastFetchedBlock(maxBlock);
+      return newEvents;
+    },
+    refetchInterval: false,
+  });
+
+  // Manual trigger to fetch next page when previous page completes (only when not polling)
   useEffect(() => {
-    if (query.status === "success" && query.hasNextPage && !query.isFetchingNextPage && !query.error) {
+    if (
+      !isPollingActive &&
+      query.status === "success" &&
+      query.hasNextPage &&
+      !query.isFetchingNextPage &&
+      !query.error
+    ) {
       query.fetchNextPage();
     }
-  }, [query]);
+  }, [query, isPollingActive]);
+
+  // Combine historical data from infinite query with live events from watch hook
+  const historicalEvents = query.data?.pages || [];
+  const combinedEvents = [...liveEvents, ...historicalEvents] as typeof historicalEvents;
 
   return {
-    data: query.data?.pages,
+    data: combinedEvents,
     status: query.status,
     error: query.error,
     isLoading: query.isLoading,
