@@ -1,5 +1,13 @@
 # create-eth
 
+## 1.0.3
+
+### Patch Changes
+
+- fix: getting deployedOnBlock when no receipt (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1143>)
+-   fix contract interactions error (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1146>)
+-   fix `useScaffoldEventHistory` to properly calculate `nextBlock` (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1144>)
+
 ## 1.0.2
 
 ### Patch Changes
@@ -659,9 +667,7 @@
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500)
-  2. chore: footer missalignment & home page on small screens (#502)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502)
   3. Update and typescript version (#499)
 
   4. fix: header links wrapping icons and text (#510)
@@ -700,9 +706,7 @@
 
 ### Patch Changes
 
-- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500
-  2. chore: footer missalignment on mobile screens #502
-
+- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502
   3. Update and typescript version #499
 
   4. add grid and grid-flow class to li manually #510
