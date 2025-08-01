@@ -1,0 +1,109 @@
+name: Lint Instances
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          [
+            hardhat,
+            foundry,
+            no_solidity_framework,
+            hardhat_with_extension,
+            foundry_with_extension,
+            no_solidity_framework_with_extension,
+          ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set dummy git user
+        run: |
+          git config --global user.name "Dummy User"
+          git config --global user.email "dummy@example.com"
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Install Foundry
+        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          cache: false
+
+      - name: Install foundryup
+        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        run: |
+          curl -L https://foundry.paradigm.xyz -o foundryup-init.sh
+          bash foundryup-init.sh
+          echo "$HOME/.config/.foundry/bin" >> $GITHUB_PATH
+
+      - name: Build
+        run: yarn build
+
+      - name: Install application (Hardhat configuration)
+        if: matrix.config == 'hardhat'
+        run: yarn cli new_project_hardhat -s hardhat
+
+      - name: Install application (Hardhat with extension configuration)
+        if: matrix.config == 'hardhat_with_extension'
+        run: yarn cli new_project_hardhat_with_extension -s hardhat -e scaffold-eth/create-eth-extensions:example
+
+      - name: Install application (Foundry configuration)
+        if: matrix.config == 'foundry'
+        run: |
+          export PATH="$HOME/.config/.foundry/bin:$PATH"
+          yarn cli new_project_foundry -s foundry
+
+      - name: Install application (Foundry with extension configuration)
+        if: matrix.config == 'foundry_with_extension'
+        run: |
+          export PATH="$HOME/.config/.foundry/bin:$PATH"
+          yarn cli new_project_foundry_with_extension -s foundry -e scaffold-eth/create-eth-extensions:example
+
+      - name: Install application (No solidity framework configuration)
+        if: matrix.config == 'no_solidity_framework'
+        run: yarn cli new_project_no_solidity_framework -s none
+
+      - name: Install application (No solidity framework with extension configuration)
+        if: matrix.config == 'no_solidity_framework_with_extension'
+        run: yarn cli new_project_no_solidity_framework_with_extension -s none -e scaffold-eth/create-eth-extensions:example
+
+      - name: Run chain and deploy
+        working-directory: new_project_${{ matrix.config }}
+        if: matrix.config == 'hardhat' || matrix.config == 'foundry' || matrix.config == 'hardhat_with_extension' || matrix.config == 'foundry_with_extension'
+        run: |
+          yarn chain &
+          npx wait-on tcp:8545
+          yarn deploy
+
+      - name: Run linting hardhat package
+        if: matrix.config == 'hardhat' || matrix.config == 'hardhat_with_extension'
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn hardhat:lint --max-warnings=0
+
+      - name: Run linting foundry package
+        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn foundry:lint
+
+      - name: Run linting nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:lint --max-warnings=0
+
+      - name: Check types nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:check-types
