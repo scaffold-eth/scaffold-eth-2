@@ -23,7 +23,6 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     data: ensAddress,
     isLoading: isEnsAddressLoading,
     isError: isEnsAddressError,
-    isSuccess: isEnsAddressSuccess,
   } = useEnsAddress({
     name: settledValue,
     chainId: 1,
@@ -38,7 +37,6 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     data: ensName,
     isLoading: isEnsNameLoading,
     isError: isEnsNameError,
-    isSuccess: isEnsNameSuccess,
   } = useEnsName({
     address: settledValue as Address,
     chainId: 1,
@@ -70,13 +68,7 @@ export const AddressInput = ({ value, name, placeholder, onChange, disabled }: C
     setEnteredEnsName(undefined);
   }, [value]);
 
-  const reFocus =
-    isEnsAddressError ||
-    isEnsNameError ||
-    isEnsNameSuccess ||
-    isEnsAddressSuccess ||
-    ensName === null ||
-    ensAddress === null;
+  const reFocus = isEnsAddressError || isEnsNameError || ensName === null || ensAddress === null;
 
   return (
     <InputBase<Address>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
@@ -52,7 +52,7 @@ export const ReadOnlyFunctionForm = ({
     }
   }, [error]);
 
-  const transformedFunction = transformAbiFunction(abiFunction);
+  const transformedFunction = useMemo(() => transformAbiFunction(abiFunction), [abiFunction]);
   const inputElements = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
