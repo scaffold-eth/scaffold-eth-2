@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { InheritanceTooltip } from "./InheritanceTooltip";
 import { Abi, AbiFunction } from "abitype";
 import { Address, TransactionReceipt } from "viem";
@@ -78,8 +78,7 @@ export const WriteOnlyFunctionForm = ({
     setDisplayedTxResult(txResult);
   }, [txResult]);
 
-  // TODO use `useMemo` to optimize also update in ReadOnlyFunctionForm
-  const transformedFunction = transformAbiFunction(abiFunction);
+  const transformedFunction = useMemo(() => transformAbiFunction(abiFunction), [abiFunction]);
   const inputs = transformedFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
     return (
