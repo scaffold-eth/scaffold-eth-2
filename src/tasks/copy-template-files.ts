@@ -274,7 +274,9 @@ const processTemplatedFiles = async (
         return accumulated;
       }, freshArgs);
 
-      const output = fileTemplate(combinedArgs);
+      console.log("The solidityFramework is:", solidityFramework);
+
+      const output = fileTemplate({ ...combinedArgs, solidityFramework: [solidityFramework || ""] });
 
       const targetPath = path.join(
         targetDir,

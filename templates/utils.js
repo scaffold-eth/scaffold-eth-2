@@ -59,6 +59,9 @@ export const deepMerge = (...args) => {
 
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) => {
+  expectedArgsDefaults.solidityFramework = ""
+  console.log("The expectedArgsDefault are:"
+  )
     const callerFile = getCallerFile();
 
     return receivedArgs => {
