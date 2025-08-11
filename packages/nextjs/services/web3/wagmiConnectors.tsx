@@ -8,6 +8,7 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
+import { porto } from "porto/wagmi";
 import * as chains from "viem/chains";
 import scaffoldConfig from "~~/scaffold.config";
 
@@ -28,16 +29,19 @@ const wallets = [
 /**
  * wagmi connectors for the wagmi context
  */
-export const wagmiConnectors = connectorsForWallets(
-  [
-    {
-      groupName: "Supported Wallets",
-      wallets,
-    },
-  ],
+export const wagmiConnectors = [
+  ...connectorsForWallets(
+    [
+      {
+        groupName: "Supported Wallets",
+        wallets,
+      },
+    ],
 
-  {
-    appName: "scaffold-eth-2",
-    projectId: scaffoldConfig.walletConnectProjectId,
-  },
-);
+    {
+      appName: "scaffold-eth-2",
+      projectId: scaffoldConfig.walletConnectProjectId,
+    },
+  ),
+  ...(targetNetworks.some(network => network.id === (chains.baseSepolia as chains.Chain).id) ? [porto()] : []),
+];
