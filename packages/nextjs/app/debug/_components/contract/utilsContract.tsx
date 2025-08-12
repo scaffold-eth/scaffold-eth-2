@@ -10,6 +10,9 @@ const getFunctionInputKey = (functionName: string, input: AbiParameter, inputInd
 };
 
 const isJsonString = (str: string) => {
+  // Prevent potential ReDoS attacks by limiting string length
+  if (str.length > 10000) return false;
+  
   try {
     JSON.parse(str);
     return true;
@@ -21,6 +24,11 @@ const isJsonString = (str: string) => {
 
 const isBigInt = (str: string) => {
   if (str.trim().length === 0 || str.startsWith("0")) return false;
+  
+  // Prevent potential ReDoS attacks by limiting string length
+  // BigInt can handle very large numbers, but we should limit input size for security
+  if (str.length > 1000) return false;
+  
   try {
     BigInt(str);
     return true;
