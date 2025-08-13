@@ -7,11 +7,6 @@ import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { AllowedChainIds, getBlockExplorerTxLink, notification } from "~~/utils/scaffold-eth";
 import { TransactorFuncOptions, getParsedErrorWithAllAbis } from "~~/utils/scaffold-eth/contract";
 
-type TransactionFunc = (
-  tx: (() => Promise<Hash>) | Parameters<SendTransactionMutate<Config, undefined>>[0],
-  options?: TransactorFuncOptions,
-) => Promise<Hash | undefined>;
-
 /**
  * Custom notification content for TXs.
  */
@@ -20,7 +15,7 @@ const TxnNotification = ({ message, blockExplorerLink }: { message: string; bloc
     <div className={`flex flex-col ml-1 cursor-default`}>
       <p className="my-0">{message}</p>
       {blockExplorerLink && blockExplorerLink.length > 0 ? (
-        <a href={blockExplorerLink} target="_blank" rel="noreferrer" className="block link">
+        <a href={blockExplorerLink} target="_blank" rel="noopener noreferrer" className="block link">
           check out transaction
         </a>
       ) : null}
@@ -113,3 +108,9 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
 
   return result;
 };
+
+// Types kept at the bottom to avoid changing imports order/structure above
+export type TransactionFunc = (
+  tx: (() => Promise<Hash>) | Parameters<SendTransactionMutate<Config, undefined>>[0],
+  options?: TransactorFuncOptions,
+) => Promise<Hash | undefined>;
