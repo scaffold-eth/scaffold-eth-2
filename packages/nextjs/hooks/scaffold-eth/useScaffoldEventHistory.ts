@@ -257,9 +257,14 @@ export const useScaffoldEventHistory = <
   const allEvents = [...liveEvents, ...historicalEvents] as typeof historicalEvents;
 
   // remove duplicates
-  const combinedEvents = allEvents.filter((event, index, self) => {
+  const seenEvents = new Set<string>();
+  const combinedEvents = allEvents.filter(event => {
     const eventKey = `${event?.transactionHash}-${event?.logIndex}-${event?.blockHash}`;
-    return index === self.findIndex(e => `${e?.transactionHash}-${e?.logIndex}-${e?.blockHash}` === eventKey);
+    if (seenEvents.has(eventKey)) {
+      return false;
+    }
+    seenEvents.add(eventKey);
+    return true;
   }) as typeof historicalEvents;
 
   return {
