@@ -80,8 +80,17 @@ function getContractDataFromDeployments() {
     throw Error("At least one other deployment script should exist to generate an actual contract.");
   }
   const output = {} as Record<string, any>;
-  for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
-    const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+  const chainDirectories = getDirectories(DEPLOYMENTS_DIR);
+  for (const chainName of chainDirectories) {
+    let chainId;
+    try {
+      chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      console.log(`No chainId file found for ${chainName}`);
+      continue;
+    }
+
     const contracts = {} as Record<string, any>;
     for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
       const { abi, address, metadata, receipt } = JSON.parse(
