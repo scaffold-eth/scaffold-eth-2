@@ -68,6 +68,18 @@ Never use any other patterns for contract interaction. The hooks are:
 
 ### Reading events from a contract
 
+⚠️ **IMPORTANT**: The `useScaffoldEventHistory` hook uses `getLogs` which can be very expensive on mainnet and L2s, especially for chains with short block times.
+
+**For production applications, consider using indexers instead:**
+- [Ponder](https://ponder.sh/) - Open-source indexing framework
+- [The Graph](https://thegraph.com/) - Decentralized indexing protocol  
+- [Covalent](https://www.covalenthq.com/) - Multi-chain data API
+
+**This hook is best suited for:**
+- Local development (Hardhat/Anvil chains)
+- Testing environments
+- Small event queries on testnets
+
 Use the `useScaffoldEventHistory` (`packages/nextjs/hooks/scaffold-eth/useScaffoldEventHistory.ts`) hook.
 
 Example:
