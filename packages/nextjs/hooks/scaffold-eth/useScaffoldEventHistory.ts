@@ -54,6 +54,18 @@ const getEvents = async (
 };
 
 /**
+ * @deprecated ⚠️ WARNING: This hook uses `getLogs` which can be very expensive on mainnet and L2s, especially for chains with short block times.
+ * 
+ * For production applications, consider using indexers like:
+ * - [Ponder](https://ponder.sh/) - Open-source indexing framework
+ * - [The Graph](https://thegraph.com/) - Decentralized indexing protocol
+ * - [Covalent](https://www.covalenthq.com/) - Multi-chain data API
+ * 
+ * This hook is best suited for:
+ * - Local development (Hardhat/Anvil chains)
+ * - Testing environments
+ * - Small event queries on testnets
+ * 
  * Reads events from a deployed contract
  * @param config - The config settings
  * @param config.contractName - deployed contract name
@@ -89,6 +101,13 @@ export const useScaffoldEventHistory = <
   enabled = true,
   blocksBatchSize = 500,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
+  // Runtime warning for production use
+  if (typeof window !== 'undefined' && (globalThis as any).process?.env?.NODE_ENV === 'production') {
+    console.warn(
+      '⚠️ useScaffoldEventHistory: This hook uses getLogs which can be expensive on mainnet/L2s. ' +
+      'Consider using indexers like Ponder (https://ponder.sh/) for production applications.'
+    );
+  }
   const selectedNetwork = useSelectedNetwork(chainId);
 
   const publicClient = usePublicClient({
