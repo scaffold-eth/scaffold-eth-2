@@ -254,7 +254,18 @@ export const useScaffoldEventHistory = <
 
   // Combine historical data from infinite query with live events from watch hook
   const historicalEvents = query.data?.pages || [];
-  const combinedEvents = [...liveEvents, ...historicalEvents] as typeof historicalEvents;
+  const allEvents = [...liveEvents, ...historicalEvents] as typeof historicalEvents;
+
+  // remove duplicates
+  const seenEvents = new Set<string>();
+  const combinedEvents = allEvents.filter(event => {
+    const eventKey = `${event?.transactionHash}-${event?.logIndex}-${event?.blockHash}`;
+    if (seenEvents.has(eventKey)) {
+      return false;
+    }
+    seenEvents.add(eventKey);
+    return true;
+  }) as typeof historicalEvents;
 
   return {
     data: combinedEvents,
