@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Abi, AbiEvent, ExtractAbiEventNames } from "abitype";
 import { BlockNumber, GetLogsParameters } from "viem";
+import { hardhat } from "viem/chains";
 import { Config, UsePublicClientReturnType, useBlockNumber, usePublicClient } from "wagmi";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
@@ -54,10 +55,9 @@ const getEvents = async (
 };
 
 /**
- * @deprecated This hook is not optimized for production use.
+ * @deprecated **Recommended only for local (hardhat/anvil) chains and development.**
  * It uses getLogs which can overload RPC endpoints (especially on L2s with short block times).
- * **Recommended only for local (hardhat/anvil) chains and development.**
- * For production, use an indexer such as [Ponder](https://ponder.dev) or similar to query contract events efficiently.
+ * For production, use an indexer such as ponder.sh or similar to query contract events efficiently.
  *
  * Reads events from a deployed contract.
  * @param config - The config settings
@@ -95,6 +95,15 @@ export const useScaffoldEventHistory = <
   blocksBatchSize = 500,
 }: UseScaffoldEventHistoryConfig<TContractName, TEventName, TBlockData, TTransactionData, TReceiptData>) => {
   const selectedNetwork = useSelectedNetwork(chainId);
+
+  // Runtime warning for non-local chains
+  useEffect(() => {
+    if (selectedNetwork.id !== hardhat.id) {
+      console.log(
+        "⚠️ useScaffoldEventHistory is not optimized for production use. It can overload RPC endpoints (especially on L2s)",
+      );
+    }
+  }, [selectedNetwork.id]);
 
   const publicClient = usePublicClient({
     chainId: selectedNetwork.id,
