@@ -17,6 +17,16 @@
 
 ![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
 
+---
+
+## ⚠️ Important Note about useScaffoldEventHistory
+
+> **Warning:** `useScaffoldEventHistory` is intended for local development only.  
+> This hook uses `getLogs` and can overload RPC endpoints, especially on production and L2 networks.  
+> **For production, please use a dedicated indexer (e.g., [Ponder](https://ponder.dev)) to query contract events efficiently.**
+
+---
+
 ## Requirements
 
 Before you begin, you need to install the following tools:

@@ -54,7 +54,12 @@ const getEvents = async (
 };
 
 /**
- * Reads events from a deployed contract
+ * @deprecated This hook is not optimized for production use.
+ * It uses getLogs which can overload RPC endpoints (especially on L2s with short block times).
+ * **Recommended only for local (hardhat/anvil) chains and development.**
+ * For production, use an indexer such as [Ponder](https://ponder.dev) or similar to query contract events efficiently.
+ *
+ * Reads events from a deployed contract.
  * @param config - The config settings
  * @param config.contractName - deployed contract name
  * @param config.eventName - name of the event to listen for
