@@ -116,7 +116,11 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       } as WriteContractVariables<Abi, string, any[], Config, number>;
 
       if (!finalConfig?.disableSimulate) {
-        await simulateContractWriteAndNotifyError({ wagmiConfig, writeContractParams: writeContractObject });
+        await simulateContractWriteAndNotifyError({
+          wagmiConfig,
+          writeContractParams: writeContractObject,
+          chainId: selectedNetwork.id as AllowedChainIds,
+        });
       }
 
       const makeWriteWithParams = () =>

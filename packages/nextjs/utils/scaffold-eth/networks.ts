@@ -33,7 +33,7 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.baseGoerli.id]: "base-goerli",
   [chains.baseSepolia.id]: "base-sepolia",
   [chains.celo.id]: "celo-mainnet",
-  [chains.celoAlfajores.id]: "celo-alfajores",
+  [chains.celoSepolia.id]: "celo-sepolia",
 };
 
 export const getAlchemyHttpUrl = (chainId: number) => {
@@ -87,7 +87,7 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.celo.id]: {
     color: "#FCFF52",
   },
-  [chains.celoAlfajores.id]: {
+  [chains.celoSepolia.id]: {
     color: "#476520",
   },
 };
