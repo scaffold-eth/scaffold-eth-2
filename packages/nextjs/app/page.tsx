@@ -5,7 +5,6 @@ import { Address } from "@scaffold-ui/components";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address as SEAddress } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -23,7 +22,6 @@ const Home: NextPage = () => {
             <Address size="base" address={connectedAddress} />
           </div>
           <p className="text-center text-lg">
-            <SEAddress size="base" address={connectedAddress} />
             Get started by editing{" "}
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
               packages/nextjs/app/page.tsx

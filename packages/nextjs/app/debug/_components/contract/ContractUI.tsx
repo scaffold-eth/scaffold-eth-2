@@ -5,7 +5,7 @@ import { useReducer } from "react";
 import { ContractReadMethods } from "./ContractReadMethods";
 import { ContractVariables } from "./ContractVariables";
 import { ContractWriteMethods } from "./ContractWriteMethods";
-import { Address, Balance } from "~~/components/scaffold-eth";
+import { Address, Balance } from "@scaffold-ui/components";
 import { useDeployedContractInfo, useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { ContractName } from "~~/utils/scaffold-eth/contract";
@@ -48,10 +48,12 @@ export const ContractUI = ({ contractName, className = "" }: ContractUIProps) =>
             <div className="flex">
               <div className="flex flex-col gap-1">
                 <span className="font-bold">{contractName}</span>
-                <Address address={deployedContractData.address} onlyEnsOrAddress />
+                <Address address={deployedContractData.address} size="base" onlyEnsOrAddress />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={deployedContractData.address} className="px-0 h-1.5 min-h-[0.375rem]" />
+                  {deployedContractData.address && (
+                    <Balance address={deployedContractData.address} style={{ fontSize: "0.8em" }} />
+                  )}
                 </div>
               </div>
             </div>

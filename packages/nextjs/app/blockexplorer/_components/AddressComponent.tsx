@@ -1,7 +1,8 @@
 import { BackButton } from "./BackButton";
 import { ContractTabs } from "./ContractTabs";
+import { Balance } from "@scaffold-ui/components";
 import { Address as AddressType } from "viem";
-import { Address, Balance } from "~~/components/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth";
 
 export const AddressComponent = ({
   address,
@@ -23,7 +24,7 @@ export const AddressComponent = ({
                 <Address address={address} format="long" onlyEnsOrAddress />
                 <div className="flex gap-1 items-center">
                   <span className="font-bold text-sm">Balance:</span>
-                  <Balance address={address} className="text" />
+                  <Balance address={address} />
                 </div>
               </div>
             </div>
