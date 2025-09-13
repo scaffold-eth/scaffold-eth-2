@@ -34,6 +34,8 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.baseSepolia.id]: "base-sepolia",
   [chains.celo.id]: "celo-mainnet",
   [chains.celoSepolia.id]: "celo-sepolia",
+  [chains.linea.id]: "linea-mainnet",
+  [chains.lineaSepolia.id]: "linea-sepolia",
 };
 
 export const getAlchemyHttpUrl = (chainId: number) => {
@@ -90,7 +92,13 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   [chains.celoSepolia.id]: {
     color: "#476520",
   },
-};
+  [chains.linea.id]: {
+    color: "#0d1117",
+  },
+  [chains.lineaSepolia.id]: {
+    color: "#0d1117",
+  },
+  };
 
 /**
  * Gives the block explorer transaction URL, returns empty string if the network is a local chain

@@ -126,6 +126,14 @@ const config: HardhatUserConfig = {
       url: "https://forno.celo-sepolia.celo-testnet.org/",
       accounts: [deployerPrivateKey],
     },
+    linea:{
+      url:"https://rpc.linea.build",
+      accounts: [deployerPrivateKey],
+    },
+    lineaSepolia:{
+      url:"https://rpc.sepolia.linea.build",
+      accounts: [deployerPrivateKey],
+    }
   },
   // Configuration for harhdat-verify plugin
   etherscan: {
