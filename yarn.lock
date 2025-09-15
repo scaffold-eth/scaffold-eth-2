@@ -3794,9 +3794,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:0.1.2-rc.1":
-  version: 0.1.2-rc.1
-  resolution: "@scaffold-ui/components@npm:0.1.2-rc.1"
+"@scaffold-ui/components@npm:0.1.2-rc.2":
+  version: 0.1.2-rc.2
+  resolution: "@scaffold-ui/components@npm:0.1.2-rc.2"
   dependencies:
     usehooks-ts: ^3.1.1
   peerDependencies:
@@ -3806,7 +3806,7 @@ __metadata:
     react: ^19.0.0
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: fd35e19b415b3cfc7a8b996c3bb2e5a3651a94a8265469f727ea6c3a3e9b1586cc1805cb5e351e06f8405639a99e80d006dc6d62fe629947dde62355b9c7ea07
+  checksum: 080c411b9e34a0d944b39efaf31daa411e47702ae84a15c6a59acf389db8c15820398f2bef9e829fd820478cc6af37486afad7cd5a40b951e047d2b61e09ee50
   languageName: node
   linkType: hard
 
@@ -4012,7 +4012,7 @@ __metadata:
   dependencies:
     "@heroicons/react": ^2.1.5
     "@rainbow-me/rainbowkit": 2.2.8
-    "@scaffold-ui/components": 0.1.2-rc.1
+    "@scaffold-ui/components": 0.1.2-rc.2
     "@scaffold-ui/hooks": 0.1.2-rc.0
     "@tailwindcss/postcss": latest
     "@tanstack/react-query": ^5.59.15
