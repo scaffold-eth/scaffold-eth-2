@@ -1,8 +1,7 @@
 import { BackButton } from "./BackButton";
 import { ContractTabs } from "./ContractTabs";
-import { Balance } from "@scaffold-ui/components";
+import { Address, Balance } from "@scaffold-ui/components";
 import { Address as AddressType } from "viem";
-import { Address } from "~~/components/scaffold-eth";
 
 export const AddressComponent = ({
   address,

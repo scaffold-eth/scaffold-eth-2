@@ -19,7 +19,7 @@ const Home: NextPage = () => {
           </h1>
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
-            <Address size="base" address={connectedAddress} />
+            <Address address={connectedAddress} />
           </div>
           <p className="text-center text-lg">
             Get started by editing{" "}
