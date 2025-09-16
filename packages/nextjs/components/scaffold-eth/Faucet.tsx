@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { Balance } from "@scaffold-ui/components";
 import { Address } from "@scaffold-ui/components";
+import { AddressInput, EtherInput } from "@scaffold-ui/components";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { AddressInput, EtherInput } from "~~/components/scaffold-eth";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -113,7 +113,11 @@ export const Faucet = () => {
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
               />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
+              <EtherInput
+                placeholder="Amount to send"
+                onValueChange={({ valueInEth }) => setSendValue(valueInEth)}
+                style={{ width: "100%" }}
+              />
               <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />
