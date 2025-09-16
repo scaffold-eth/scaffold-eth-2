@@ -73,7 +73,7 @@ function getDeploymentHistory(broadcastPath) {
     );
 
     for (const tx of transactions) {
-      if (tx.transactionType === "CREATE") {
+      if (tx.transactionType === "CREATE" || tx.transactionType === "CREATE2") {
         // Store or update contract deployment info
         deploymentHistory.set(tx.contractAddress, {
           contractName: tx.contractName,
