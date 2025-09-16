@@ -3794,25 +3794,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:0.1.2-rc.2":
+"@scaffold-ui/components@file:../../../scaffold-ui/packages/components::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.1.2-rc.2
-  resolution: "@scaffold-ui/components@npm:0.1.2-rc.2"
+  resolution: "@scaffold-ui/components@file:../../../scaffold-ui/packages/components#../../../scaffold-ui/packages/components::hash=b86a87&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
     usehooks-ts: ^3.1.1
   peerDependencies:
-    "@scaffold-ui/hooks": 0.1.2-rc.0
+    "@scaffold-ui/hooks": "workspace:*"
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.0.0
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 080c411b9e34a0d944b39efaf31daa411e47702ae84a15c6a59acf389db8c15820398f2bef9e829fd820478cc6af37486afad7cd5a40b951e047d2b61e09ee50
+  checksum: db0bf7128c4f4adbf466e47eb47d96a7fa2d3e243713fbc808bce94125a0e79c5a332f4c6db1842cb1dabc264b5cd65f123e55d31d874174d8597cddc7acecf3
   languageName: node
   linkType: hard
 
-"@scaffold-ui/hooks@npm:0.1.2-rc.0":
+"@scaffold-ui/hooks@file:../../../scaffold-ui/packages/hooks::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.1.2-rc.0
-  resolution: "@scaffold-ui/hooks@npm:0.1.2-rc.0"
+  resolution: "@scaffold-ui/hooks@file:../../../scaffold-ui/packages/hooks#../../../scaffold-ui/packages/hooks::hash=0fd2a6&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
     "@uniswap/sdk-core": ^7.7.2
     "@uniswap/v2-sdk": ^4.15.2
@@ -3823,7 +3823,7 @@ __metadata:
     react: ^19.0.0
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 0076a16f620a7b64dde778ff7cf1ace74c94f5655c765d76ffcb202af67011bd8b18ea1cc36849dcd954da73cffb9c02fd7e51e48cea32401cc979734abba047
+  checksum: 75abb307b2ccf1750f06353947967872dc1019ded4dc6bc6baa548a99d890617fb2e2605c84c7179a53e0999d7d2d9d48a4d4c8cdd781db8f2964cfdea3e17f1
   languageName: node
   linkType: hard
 
@@ -4012,8 +4012,8 @@ __metadata:
   dependencies:
     "@heroicons/react": ^2.1.5
     "@rainbow-me/rainbowkit": 2.2.8
-    "@scaffold-ui/components": 0.1.2-rc.2
-    "@scaffold-ui/hooks": 0.1.2-rc.0
+    "@scaffold-ui/components": "file:../../../scaffold-ui/packages/components"
+    "@scaffold-ui/hooks": "file:../../../scaffold-ui/packages/hooks"
     "@tailwindcss/postcss": latest
     "@tanstack/react-query": ^5.59.15
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
