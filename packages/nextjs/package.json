@@ -19,6 +19,7 @@
     "@heroicons/react": "^2.1.5",
     "@rainbow-me/rainbowkit": "2.2.8",
     "@scaffold-ui/components": "file:../../../scaffold-ui/packages/components",
+    "@scaffold-ui/debug-contracts": "file:../../../scaffold-ui/packages/debug-contracts",
     "@scaffold-ui/hooks": "file:../../../scaffold-ui/packages/hooks",
     "@tanstack/react-query": "^5.59.15",
     "@uniswap/sdk-core": "^5.8.2",
