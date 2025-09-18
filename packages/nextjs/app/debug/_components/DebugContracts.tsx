@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import { ContractUI } from "./ContractUI";
 import "@scaffold-ui/debug-contracts/styles.css";
 import { useSessionStorage } from "usehooks-ts";
 import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
-import { ContractUI } from "~~/app/debug/_components/contract";
 import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
 import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
