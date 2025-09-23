@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+mport { useEffect, useRef, useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
 import { Config, UseWriteContractParameters, useAccount, useConfig, useWriteContract } from "wagmi";
@@ -74,6 +74,23 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
   const { chain: accountChain } = useAccount();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
+  const inflightWritesRef = useRef(0);
+  /**
+   * Use a counter to properly reflect mining state when multiple writes run concurrently.
+   * This prevents a racing write from setting isMining to false while another write is still pending.
+   */
+  const beginWrite = () => {
+    inflightWritesRef.current += 1;
+    if (inflightWritesRef.current === 1) {
+      setIsMining(true);
+    }
+  };
+  const endWrite = () => {
+    inflightWritesRef.current = Math.max(0, inflightWritesRef.current - 1);
+    if (inflightWritesRef.current === 0) {
+      setIsMining(false);
+    }
+  };
 
   const wagmiContractWrite = useWriteContract(finalWriteContractParams);
 
@@ -106,7 +123,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     }
 
     try {
-      setIsMining(true);
+      beginWrite();
       const { blockConfirmations, onBlockConfirmation, ...mutateOptions } = options || {};
 
       const writeContractObject = {
@@ -141,7 +158,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     } catch (e: any) {
       throw e;
     } finally {
-      setIsMining(false);
+      endWrite();
     }
   };
 
