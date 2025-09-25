@@ -1,169 +1,93 @@
-//SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0 <0.9.0;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.7.5 <0.9.0;
+pragma abicoder v2;
 
-// Useful for debugging. Remove when deploying to a live network.
-import "hardhat/console.sol";
-
-// Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
-// import "@openzeppelin/contracts/access/Ownable.sol";
-
-/**
- * A smart contract that manages user profiles and allows users to store and retrieve their data
- * It also includes a simple token-like functionality with balances
- * @author BuidlGuidl
- */
 contract MyContract {
-    // State Variables
-    address public immutable owner;
-    uint256 public totalUsers = 0;
-    uint256 public totalTokens = 0;
-    
-    // User profile structure
-    struct UserProfile {
-        string name;
-        string email;
-        uint256 joinDate;
-        bool isActive;
-    }
-    
-    // Mappings
-    mapping(address => UserProfile) public userProfiles;
-    mapping(address => uint256) public userBalances;
-    mapping(address => bool) public registeredUsers;
-    
-    // Events
-    event UserRegistered(address indexed user, string name, string email, uint256 joinDate);
-    event ProfileUpdated(address indexed user, string name, string email);
-    event TokensTransferred(address indexed from, address indexed to, uint256 amount);
-    event TokensMinted(address indexed to, uint256 amount);
+	// State Variables
+	address public immutable owner;
+	string public greeting = "Building Unstoppable Apps!!!";
+	bool public premium = false;
+	uint256 public totalCounter = 0;
+	mapping(address => uint) public userGreetingCounter;
 
-    // Constructor
-    constructor(address _owner) {
-        owner = _owner;
-        console.log("MyContract deployed by:", _owner);
-    }
+	struct NestedStruct {
+		uint a;
+		SimpleStruct[][][] b;
+	}
+	struct SimpleStruct {
+		uint x;
+		uint y;
+	}
 
-    // Modifier: only registered users
-    modifier onlyRegisteredUser() {
-        require(registeredUsers[msg.sender], "User not registered");
-        _;
-    }
+	// State variables
+	NestedStruct public sData;
+	SimpleStruct public tData;
+	uint public valueData;
 
-    // Modifier: only owner
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not the Owner");
-        _;
-    }
+	// Events: a way to emit log statements from smart contract that can be listened to by external parties
+	event GreetingChange(
+		address indexed greetingSetter,
+		string newGreeting,
+		bool premium,
+		uint256 value
+	);
 
-    /**
-     * Register a new user with their profile information
-     * @param _name User's name
-     * @param _email User's email
-     */
-    function registerUser(string memory _name, string memory _email) public {
-        require(!registeredUsers[msg.sender], "User already registered");
-        require(bytes(_name).length > 0, "Name cannot be empty");
-        require(bytes(_email).length > 0, "Email cannot be empty");
-        
-        userProfiles[msg.sender] = UserProfile({
-            name: _name,
-            email: _email,
-            joinDate: block.timestamp,
-            isActive: true
-        });
-        
-        registeredUsers[msg.sender] = true;
-        totalUsers += 1;
-        
-        // Give new users 100 tokens as welcome bonus
-        userBalances[msg.sender] = 100;
-        totalTokens += 100;
-        
-        console.log("User registered:", _name);
-        console.log("User address:", msg.sender);
-        emit UserRegistered(msg.sender, _name, _email, block.timestamp);
-        emit TokensMinted(msg.sender, 100);
-    }
+	// Constructor: Called once on contract deployment
+	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
+	constructor(address _owner) {
+		owner = _owner;
+	}
 
-    /**
-     * Update user profile information
-     * @param _name New name
-     * @param _email New email
-     */
-    function updateProfile(string memory _name, string memory _email) public onlyRegisteredUser {
-        require(bytes(_name).length > 0, "Name cannot be empty");
-        require(bytes(_email).length > 0, "Email cannot be empty");
-        
-        userProfiles[msg.sender].name = _name;
-        userProfiles[msg.sender].email = _email;
-        
-        console.log("Profile updated for user");
-        emit ProfileUpdated(msg.sender, _name, _email);
-    }
+	/**
+	 * Function that allows anyone to change the state variable "greeting" of the contract and increase the counters
+	 *
+	 * @param _newGreeting (string memory) - new greeting to save on the contract
+	 */
+	function setGreeting(string memory _newGreeting) public payable {
+		// Change state variables
+		greeting = _newGreeting;
+		totalCounter += 1;
+		userGreetingCounter[msg.sender] += 1;
 
-    /**
-     * Transfer tokens to another registered user
-     * @param _to Recipient address
-     * @param _amount Amount to transfer
-     */
-    function transferTokens(address _to, uint256 _amount) public onlyRegisteredUser {
-        require(registeredUsers[_to], "Recipient not registered");
-        require(userBalances[msg.sender] >= _amount, "Insufficient balance");
-        require(_amount > 0, "Amount must be greater than 0");
-        
-        userBalances[msg.sender] -= _amount;
-        userBalances[_to] += _amount;
-        
-        console.log("Tokens transferred:", _amount);
-        console.log("From:", msg.sender);
-        console.log("To:", _to);
-        emit TokensTransferred(msg.sender, _to, _amount);
-    }
+		// msg.value: built-in global variable that represents the amount of ether sent with the transaction
+		if (msg.value > 0) {
+			premium = true;
+		} else {
+			premium = false;
+		}
 
-    /**
-     * Mint new tokens (only owner can do this)
-     * @param _to Recipient address
-     * @param _amount Amount to mint
-     */
-    function mintTokens(address _to, uint256 _amount) public onlyOwner {
-        require(registeredUsers[_to], "Recipient not registered");
-        require(_amount > 0, "Amount must be greater than 0");
-        
-        userBalances[_to] += _amount;
-        totalTokens += _amount;
-        
-        console.log("Tokens minted:", _amount);
-        console.log("To address:", _to);
-        emit TokensMinted(_to, _amount);
-    }
+		// emit: keyword used to trigger an event
+		emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, 0);
+	}
 
-    /**
-     * Get user profile information
-     * @param _user User address
-     */
-    function getUserProfile(address _user) public view returns (UserProfile memory) {
-        require(registeredUsers[_user], "User not registered");
-        return userProfiles[_user];
-    }
+	// Function to update the data
+	function updateData(NestedStruct calldata _nestedStruct) public payable {
+		// Update state variables
+		sData = _nestedStruct; // Assigns the entire struct. For dynamic arrays, you might need more complex logic.
+	}
 
-    /**
-     * Get user balance
-     * @param _user User address
-     */
-    function getUserBalance(address _user) public view returns (uint256) {
-        return userBalances[_user];
-    }
+	// Read function which accepts _nestedStruct
+	function totalPassedStruct(
+		NestedStruct calldata _nestedStruct
+	) public pure returns (uint totalA, uint totalX, uint totalY) {
+		totalA = _nestedStruct.a;
+		uint totalXSum = 0;
+		uint totalYSum = 0;
 
-    /**
-     * Check if user is registered
-     * @param _user User address
-     */
-    function isUserRegistered(address _user) public view returns (bool) {
-        return registeredUsers[_user];
-    }
+		for (uint i = 0; i < _nestedStruct.b.length; i++) {
+			for (uint j = 0; j < _nestedStruct.b[i].length; j++) {
+				for (uint k = 0; k < _nestedStruct.b[i][j].length; k++) {
+					totalXSum += _nestedStruct.b[i][j][k].x;
+					totalYSum += _nestedStruct.b[i][j][k].y;
+				}
+			}
+		}
 
-    /**
-     * Function that allows the contract to receive ETH
-     */
-    receive() external payable {}
+		return (totalA, totalXSum, totalYSum);
+	}
+
+	// Function to get the current datahe current data
+	function geAllSData() public view returns (NestedStruct memory) {
+		return (sData);
+	}
 }

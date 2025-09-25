@@ -26,153 +26,61 @@ const deployedContracts = {
             {
               indexed: true,
               internalType: "address",
-              name: "user",
+              name: "greetingSetter",
               type: "address",
             },
             {
               indexed: false,
               internalType: "string",
-              name: "name",
+              name: "newGreeting",
               type: "string",
             },
             {
               indexed: false,
-              internalType: "string",
-              name: "email",
-              type: "string",
-            },
-          ],
-          name: "ProfileUpdated",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "to",
-              type: "address",
+              internalType: "bool",
+              name: "premium",
+              type: "bool",
             },
             {
               indexed: false,
               internalType: "uint256",
-              name: "amount",
+              name: "value",
               type: "uint256",
             },
           ],
-          name: "TokensMinted",
+          name: "GreetingChange",
           type: "event",
         },
         {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "from",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "to",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "amount",
-              type: "uint256",
-            },
-          ],
-          name: "TokensTransferred",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "user",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "name",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "email",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "joinDate",
-              type: "uint256",
-            },
-          ],
-          name: "UserRegistered",
-          type: "event",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_user",
-              type: "address",
-            },
-          ],
-          name: "getUserBalance",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_user",
-              type: "address",
-            },
-          ],
-          name: "getUserProfile",
+          inputs: [],
+          name: "geAllSData",
           outputs: [
             {
               components: [
                 {
-                  internalType: "string",
-                  name: "name",
-                  type: "string",
-                },
-                {
-                  internalType: "string",
-                  name: "email",
-                  type: "string",
-                },
-                {
                   internalType: "uint256",
-                  name: "joinDate",
+                  name: "a",
                   type: "uint256",
                 },
                 {
-                  internalType: "bool",
-                  name: "isActive",
-                  type: "bool",
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "x",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "y",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct MyContract.SimpleStruct[][][]",
+                  name: "b",
+                  type: "tuple[][][]",
                 },
               ],
-              internalType: "struct MyContract.UserProfile",
+              internalType: "struct MyContract.NestedStruct",
               name: "",
               type: "tuple",
             },
@@ -181,40 +89,16 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_user",
-              type: "address",
-            },
-          ],
-          name: "isUserRegistered",
+          inputs: [],
+          name: "greeting",
           outputs: [
             {
-              internalType: "bool",
+              internalType: "string",
               name: "",
-              type: "bool",
+              type: "string",
             },
           ],
           stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_to",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "_amount",
-              type: "uint256",
-            },
-          ],
-          name: "mintTokens",
-          outputs: [],
-          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -231,32 +115,8 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "string",
-              name: "_name",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "_email",
-              type: "string",
-            },
-          ],
-          name: "registerUser",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "registeredUsers",
+          inputs: [],
+          name: "premium",
           outputs: [
             {
               internalType: "bool",
@@ -269,24 +129,11 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "totalTokens",
+          name: "sData",
           outputs: [
             {
               internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalUsers",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
+              name: "a",
               type: "uint256",
             },
           ],
@@ -296,95 +143,168 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "_to",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "_amount",
-              type: "uint256",
+              internalType: "string",
+              name: "_newGreeting",
+              type: "string",
             },
           ],
-          name: "transferTokens",
+          name: "setGreeting",
           outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "_name",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "_email",
-              type: "string",
-            },
-          ],
-          name: "updateProfile",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "userBalances",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "userProfiles",
-          outputs: [
-            {
-              internalType: "string",
-              name: "name",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "email",
-              type: "string",
-            },
-            {
-              internalType: "uint256",
-              name: "joinDate",
-              type: "uint256",
-            },
-            {
-              internalType: "bool",
-              name: "isActive",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
           stateMutability: "payable",
-          type: "receive",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "tData",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "x",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "y",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalCounter",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "a",
+                  type: "uint256",
+                },
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "x",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "y",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct MyContract.SimpleStruct[][][]",
+                  name: "b",
+                  type: "tuple[][][]",
+                },
+              ],
+              internalType: "struct MyContract.NestedStruct",
+              name: "_nestedStruct",
+              type: "tuple",
+            },
+          ],
+          name: "totalPassedStruct",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "totalA",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalX",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "totalY",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "a",
+                  type: "uint256",
+                },
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "x",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "y",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct MyContract.SimpleStruct[][][]",
+                  name: "b",
+                  type: "tuple[][][]",
+                },
+              ],
+              internalType: "struct MyContract.NestedStruct",
+              name: "_nestedStruct",
+              type: "tuple",
+            },
+          ],
+          name: "updateData",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "userGreetingCounter",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "valueData",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
       ],
       inheritedFunctions: {},

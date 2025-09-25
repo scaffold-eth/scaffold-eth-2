@@ -33,11 +33,8 @@ const deployMyContract: DeployFunction = async function (hre: HardhatRuntimeEnvi
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const myContract = await hre.ethers.getContract<Contract>("MyContract", deployer);
+  await hre.ethers.getContract<Contract>("MyContract", deployer);
   console.log("🚀 MyContract deployed successfully!");
-  console.log("📊 Total users:", await myContract.totalUsers());
-  console.log("💰 Total tokens:", await myContract.totalTokens());
-  console.log("👤 Contract owner:", await myContract.owner());
 };
 
 export default deployMyContract;
