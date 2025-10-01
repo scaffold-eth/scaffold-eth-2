@@ -1,4 +1,3 @@
-export * from "./useAnimationConfig";
 export * from "./useContractLogs";
 export * from "./useCopyToClipboard";
 export * from "./useDeployedContractInfo";
