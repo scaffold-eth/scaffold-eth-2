@@ -8,7 +8,7 @@ import { Address as AddressType, createWalletClient, http, parseEther } from "vi
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork, useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 // Account index to use from generated hardhat accounts.
@@ -27,6 +27,7 @@ export const Faucet = () => {
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
+  const { targetNetwork } = useTargetNetwork();
 
   const { chain: ConnectedChain } = useAccount();
 
@@ -100,7 +101,13 @@ export const Faucet = () => {
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} onlyEnsOrAddress />
+                <Address
+                  address={faucetAddress}
+                  onlyEnsOrAddress
+                  blockExplorerAddressLink={
+                    targetNetwork.id === hardhat.id ? `/blockexplorer/address/${faucetAddress}` : undefined
+                  }
+                />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>

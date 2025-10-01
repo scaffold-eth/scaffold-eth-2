@@ -1,6 +1,8 @@
 import { Address } from "@scaffold-ui/components";
 import { QRCodeSVG } from "qrcode.react";
 import { Address as AddressType } from "viem";
+import { hardhat } from "viem/chains";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth";
 
 type AddressQRCodeModalProps = {
   address: AddressType;
@@ -8,6 +10,7 @@ type AddressQRCodeModalProps = {
 };
 
 export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps) => {
+  const { targetNetwork } = useTargetNetwork();
   return (
     <>
       <div>
@@ -22,7 +25,15 @@ export const AddressQRCodeModal = ({ address, modalId }: AddressQRCodeModalProps
             <div className="space-y-3 py-6">
               <div className="flex flex-col items-center gap-6">
                 <QRCodeSVG value={address} size={256} />
-                <Address address={address} format="long" disableAddressLink onlyEnsOrAddress />
+                <Address
+                  address={address}
+                  format="long"
+                  disableAddressLink
+                  onlyEnsOrAddress
+                  blockExplorerAddressLink={
+                    targetNetwork.id === hardhat.id ? `/blockexplorer/address/${address}` : undefined
+                  }
+                />
               </div>
             </div>
           </label>
