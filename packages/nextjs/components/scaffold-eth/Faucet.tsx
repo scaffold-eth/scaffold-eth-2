@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Balance } from "@scaffold-ui/components";
-import { Address } from "@scaffold-ui/components";
-import { AddressInput, EtherInput } from "@scaffold-ui/components";
+import { Address, AddressInput, Balance, EtherInput } from "@scaffold-ui/components";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
