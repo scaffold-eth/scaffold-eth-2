@@ -109,7 +109,7 @@ export const Faucet = () => {
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress ?? ""} />
+                <Balance address={faucetAddress} />
               </div>
             </div>
             <div className="flex flex-col space-y-3">
