@@ -3805,7 +3805,7 @@ __metadata:
 
 "@scaffold-ui/components@file:../../../scaffold-ui/packages/components::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.1.2-rc.3
-  resolution: "@scaffold-ui/components@file:../../../scaffold-ui/packages/components#../../../scaffold-ui/packages/components::hash=66fbe4&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
+  resolution: "@scaffold-ui/components@file:../../../scaffold-ui/packages/components#../../../scaffold-ui/packages/components::hash=b9c9ef&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
     usehooks-ts: ^3.1.1
   peerDependencies:
@@ -3815,7 +3815,7 @@ __metadata:
     react: ^19.0.0
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: de95fcadf12d944e8e631dc49c93cf8277de9b7cf0f31d7cadc968506bae0b6ab968fb75378faab97a2ec4a5a34c4d7c060ae8aed821bf4f7c68083235a55efe
+  checksum: 104d73a19c4b3ce6a3ccbb3d2b0a63b0e16c4ac6a53bccafc031cc5fcf9bd7cb4aff333bb94ec9d749a2e19997c5c7790c8bb9ff6d7236bbcc3147720525258a
   languageName: node
   linkType: hard
 
