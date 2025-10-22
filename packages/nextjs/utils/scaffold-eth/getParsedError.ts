@@ -12,8 +12,8 @@ type ViemError = BaseViemError & {
  * @param error - error object (can be BaseViemError or standard Error)
  * @returns parsed error string
  */
-export const getParsedError = (error: any): string => {
-  const parsedError = error?.walk ? error.walk() : error;
+export const getParsedError = (error: ViemError | Error | unknown): string => {
+  const parsedError = (error as ViemError)?.walk ? (error as ViemError).walk() : error;
 
   if (parsedError instanceof BaseViemError) {
     if (parsedError.details) {
