@@ -91,7 +91,7 @@ export const useTransactor = (_walletClient?: WalletClient): TransactionFunc => 
       );
 
       if (options?.onBlockConfirmation) options.onBlockConfirmation(transactionReceipt);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (notificationId) {
         notification.remove(notificationId);
       }
