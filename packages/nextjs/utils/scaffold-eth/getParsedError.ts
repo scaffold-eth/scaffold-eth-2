@@ -1,8 +1,15 @@
 import { BaseError as BaseViemError, ContractFunctionRevertedError } from "viem";
 
 /**
+ * Type for errors that can be thrown by viem/wagmi
+ */
+type ViemError = BaseViemError & {
+  walk?: () => BaseViemError;
+};
+
+/**
  * Parses an viem/wagmi error to get a displayable string
- * @param e - error object
+ * @param error - error object (can be BaseViemError or standard Error)
  * @returns parsed error string
  */
 export const getParsedError = (error: any): string => {
