@@ -34,7 +34,7 @@ const config: HardhatUserConfig = {
 
           // Generate TypeScript ABIs after successful deployment
           console.log("\n🔄 Generating TypeScript ABIs...");
-          await generateTsAbis(hre);
+          await generateTsAbis();
           console.log("✅ TypeScript ABIs generated successfully!\n");
         },
       }))
