@@ -23,13 +23,10 @@
     "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
-    "@ethersproject/abi": "^5.7.0",
-    "@ethersproject/providers": "^5.7.2",
     "@nomicfoundation/hardhat-ignition": "^3.0.3",
     "@nomicfoundation/hardhat-ignition-viem": "^3.0.3",
     "@nomicfoundation/hardhat-verify": "^3.0.4",
     "@nomicfoundation/hardhat-viem": "^3.0.0",
-    "@typechain/ethers-v5": "^11.1.2",
     "@typechain/hardhat": "^9.1.0",
     "@types/eslint": "^9.6.1",
     "@types/mocha": "^10.0.10",
@@ -41,7 +38,6 @@
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.4",
-    "ethers": "^6.13.2",
     "hardhat": "^3.0.9",
     "prettier": "^3.5.3",
     "prettier-plugin-solidity": "^1.4.1",
@@ -53,7 +49,6 @@
   "dependencies": {
     "@inquirer/password": "^4.0.2",
     "@openzeppelin/contracts": "^5.0.2",
-    "@typechain/ethers-v6": "^0.5.1",
     "dotenv": "^16.4.5",
     "envfile": "^7.1.0",
     "qrcode": "^1.5.4"
