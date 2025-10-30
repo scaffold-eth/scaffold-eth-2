@@ -3803,6 +3803,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scaffold-ui/block-explorer@file:../../../scaffold-ui/packages/block-explorer::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
+  version: 0.0.1
+  resolution: "@scaffold-ui/block-explorer@file:../../../scaffold-ui/packages/block-explorer#../../../scaffold-ui/packages/block-explorer::hash=e73b4e&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
+  dependencies:
+    "@heroicons/react": ^2.2.0
+    react-hot-toast: ^2.5.2
+  peerDependencies:
+    "@scaffold-ui/components": "workspace:*"
+    "@scaffold-ui/hooks": "workspace:*"
+    "@tanstack/react-query": ^5.59.15
+    "@types/react": ^19.0.7
+    react: ^19.0.0
+    viem: ^2.23.0
+    wagmi: ^2.14.11
+  checksum: 5436f0a6bb92c0d781cae8c15c1daee9afb099e57ccd738c649fc51717178bc37442f5c59af1851fe466cf511c0ab880556c418f2da789edadbcad20b90edfcf
+  languageName: node
+  linkType: hard
+
 "@scaffold-ui/components@npm:^0.1.2":
   version: 0.1.2
   resolution: "@scaffold-ui/components@npm:0.1.2"
@@ -4039,6 +4057,7 @@ __metadata:
   dependencies:
     "@heroicons/react": ^2.1.5
     "@rainbow-me/rainbowkit": 2.2.8
+    "@scaffold-ui/block-explorer": "file:../../../scaffold-ui/packages/block-explorer"
     "@scaffold-ui/components": ^0.1.2
     "@scaffold-ui/debug-contracts": ^0.1.1
     "@scaffold-ui/hooks": ^0.1.2
