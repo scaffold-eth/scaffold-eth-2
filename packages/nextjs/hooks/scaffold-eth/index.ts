@@ -1,9 +1,7 @@
-export * from "./useAnimationConfig";
 export * from "./useContractLogs";
 export * from "./useCopyToClipboard";
 export * from "./useDeployedContractInfo";
 export * from "./useFetchBlocks";
-export * from "./useInitializeNativeCurrencyPrice";
 export * from "./useNetworkColor";
 export * from "./useOutsideClick";
 export * from "./useScaffoldContract";
@@ -13,5 +11,4 @@ export * from "./useScaffoldWatchContractEvent";
 export * from "./useScaffoldWriteContract";
 export * from "./useTargetNetwork";
 export * from "./useTransactor";
-export * from "./useWatchBalance";
 export * from "./useSelectedNetwork";
