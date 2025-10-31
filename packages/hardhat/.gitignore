@@ -21,7 +21,7 @@ artifacts-zk
 cache-zk
 
 # deployments
-deployments/localhost
+ignition/deployments/chain-31337
 
 # typescript
 *.tsbuildinfo
