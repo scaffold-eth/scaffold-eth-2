@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Address, AddressInput, Balance, EtherInput } from "@scaffold-ui/components";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
-import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffold-eth";
-import { useTransactor } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork, useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 // Account index to use from generated hardhat accounts.
@@ -25,6 +25,7 @@ export const Faucet = () => {
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
+  const { targetNetwork } = useTargetNetwork();
 
   const { chain: ConnectedChain } = useAccount();
 
@@ -98,7 +99,13 @@ export const Faucet = () => {
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
-                <Address address={faucetAddress} onlyEnsOrAddress />
+                <Address
+                  address={faucetAddress}
+                  onlyEnsOrAddress
+                  blockExplorerAddressLink={
+                    targetNetwork.id === hardhat.id ? `/blockexplorer/address/${faucetAddress}` : undefined
+                  }
+                />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
@@ -111,7 +118,11 @@ export const Faucet = () => {
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
               />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
+              <EtherInput
+                placeholder="Amount to send"
+                onValueChange={({ valueInEth }) => setSendValue(valueInEth)}
+                style={{ width: "100%" }}
+              />
               <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Address } from "@scaffold-ui/components";
 import { Hash, Transaction, TransactionReceipt, formatEther, formatUnits } from "viem";
 import { hardhat } from "viem/chains";
 import { usePublicClient } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { decodeTransactionData, getFunctionDetails } from "~~/utils/scaffold-eth";
 import { replacer } from "~~/utils/scaffold-eth/common";
@@ -64,7 +64,14 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
                   <strong>From:</strong>
                 </td>
                 <td>
-                  <Address address={transaction.from} format="long" onlyEnsOrAddress />
+                  <Address
+                    address={transaction.from}
+                    format="long"
+                    onlyEnsOrAddress
+                    blockExplorerAddressLink={
+                      targetNetwork.id === hardhat.id ? `/blockexplorer/address/${transaction.from}` : undefined
+                    }
+                  />
                 </td>
               </tr>
               <tr>
@@ -73,11 +80,29 @@ const TransactionComp = ({ txHash }: { txHash: Hash }) => {
                 </td>
                 <td>
                   {!receipt?.contractAddress ? (
-                    transaction.to && <Address address={transaction.to} format="long" onlyEnsOrAddress />
+                    transaction.to && (
+                      <Address
+                        address={transaction.to}
+                        format="long"
+                        onlyEnsOrAddress
+                        blockExplorerAddressLink={
+                          targetNetwork.id === hardhat.id ? `/blockexplorer/address/${transaction.to}` : undefined
+                        }
+                      />
+                    )
                   ) : (
                     <span>
                       Contract Creation:
-                      <Address address={receipt.contractAddress} format="long" onlyEnsOrAddress />
+                      <Address
+                        address={receipt.contractAddress}
+                        format="long"
+                        onlyEnsOrAddress
+                        blockExplorerAddressLink={
+                          targetNetwork.id === hardhat.id
+                            ? `/blockexplorer/address/${receipt.contractAddress}`
+                            : undefined
+                        }
+                      />
                     </span>
                   )}
                 </td>
