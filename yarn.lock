@@ -4047,8 +4047,6 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
     "@types/node": ^18.19.50
     "@types/react": ^19.0.7
-    "@uniswap/sdk-core": ^5.8.2
-    "@uniswap/v2-sdk": ^4.6.1
     abitype: 1.0.6
     bgipfs: ^0.0.12
     blo: ^1.2.0
@@ -5551,23 +5549,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uniswap/sdk-core@npm:^5.8.1, @uniswap/sdk-core@npm:^5.8.2":
-  version: 5.8.2
-  resolution: "@uniswap/sdk-core@npm:5.8.2"
-  dependencies:
-    "@ethersproject/address": ^5.0.2
-    "@ethersproject/bytes": ^5.7.0
-    "@ethersproject/keccak256": 5.7.0
-    "@ethersproject/strings": 5.7.0
-    big.js: ^5.2.2
-    decimal.js-light: ^2.5.0
-    jsbi: ^3.1.4
-    tiny-invariant: ^1.1.0
-    toformat: ^2.0.0
-  checksum: fde13653021cea136e4e8d2e04e7f45559e5cd64481fcd0b087a9cd674bfe053c05faeb5a844651b20dd0b70717723746c7f82060e99a057de9561800f8f0606
-  languageName: node
-  linkType: hard
-
 "@uniswap/sdk-core@npm:^7.7.1, @uniswap/sdk-core@npm:^7.7.2":
   version: 7.7.2
   resolution: "@uniswap/sdk-core@npm:7.7.2"
@@ -5595,19 +5576,6 @@ __metadata:
     tiny-invariant: ^1.1.0
     tiny-warning: ^1.0.3
   checksum: 0484786ef416a249afb219e6a6868ba7cc3591aafb49d3fc08e60b8cba6f0267214a60f4eca25c0bb347b17d3ef3b0e88ba32791cfa48b771d1b2d574a17b76b
-  languageName: node
-  linkType: hard
-
-"@uniswap/v2-sdk@npm:^4.6.1":
-  version: 4.6.1
-  resolution: "@uniswap/v2-sdk@npm:4.6.1"
-  dependencies:
-    "@ethersproject/address": ^5.0.2
-    "@ethersproject/solidity": ^5.0.9
-    "@uniswap/sdk-core": ^5.8.1
-    tiny-invariant: ^1.1.0
-    tiny-warning: ^1.0.3
-  checksum: 0d4c1e58feef7d65c143a776447dbe4e0c06c2f2b6877d57b2db3056a4f8c441c503449f5bfa150ac9e02516ef1c6f5fce5bc89a55d637311bc3e5c8e01ef163
   languageName: node
   linkType: hard
 
