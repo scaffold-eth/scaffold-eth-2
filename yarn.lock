@@ -12,6 +12,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@actions/core@npm:^1.10.1":
+  version: 1.11.1
+  resolution: "@actions/core@npm:1.11.1"
+  dependencies:
+    "@actions/exec": ^1.1.1
+    "@actions/http-client": ^2.0.1
+  checksum: 9ac7a3e0b478bfefd862dcb4ddaa1d8c3f9076bb1931d3d280918d1749e7783480c6a009c1b009c8bf5093e2d77d9f4e023d70416145bf246f0071736d4ef839
+  languageName: node
+  linkType: hard
+
+"@actions/exec@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@actions/exec@npm:1.1.1"
+  dependencies:
+    "@actions/io": ^1.0.1
+  checksum: d976e66dd51ab03d76a143da8e1406daa1bcdee06046168e6e0bec681c87a12999eefaad7a81cb81f28e4190610f55a58b8458ae4b82cbaaba13200490f4e8c2
+  languageName: node
+  linkType: hard
+
+"@actions/http-client@npm:^2.0.1":
+  version: 2.2.3
+  resolution: "@actions/http-client@npm:2.2.3"
+  dependencies:
+    tunnel: ^0.0.6
+    undici: ^5.25.4
+  checksum: 5d395df575d30ae599efa10dd715e72944b015e753db61f0a823f737acbb0e99743d4a9f25e812b18ec8cc34f86c73565d075c449e01ffa891577b6595212dde
+  languageName: node
+  linkType: hard
+
+"@actions/io@npm:^1.0.1":
+  version: 1.1.3
+  resolution: "@actions/io@npm:1.1.3"
+  checksum: 42841ac2b8a7afb29456b9edb5534dbe00148893c794bdbc17d29166847c51c884e2a7c087a489a428250a78e7b54bc761ba3b55eb2f97d9600e9193b60caf0b
+  languageName: node
+  linkType: hard
+
 "@adraffy/ens-normalize@npm:1.10.1":
   version: 1.10.1
   resolution: "@adraffy/ens-normalize@npm:1.10.1"
@@ -2292,6 +2328,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jest/schemas@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "@jest/schemas@npm:29.6.3"
+  dependencies:
+    "@sinclair/typebox": ^0.27.8
+  checksum: 910040425f0fc93cd13e68c750b7885590b8839066dfa0cd78e7def07bbb708ad869381f725945d66f2284de5663bbecf63e8fdd856e2ae6e261ba30b1687e93
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.3.5":
   version: 0.3.5
   resolution: "@jridgewell/gen-mapping@npm:0.3.5"
@@ -3138,6 +3183,82 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nomicfoundation/hardhat-keystore@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@nomicfoundation/hardhat-keystore@npm:3.0.3"
+  dependencies:
+    "@noble/ciphers": 1.2.1
+    "@noble/hashes": 1.7.1
+    "@nomicfoundation/hardhat-errors": ^3.0.0
+    "@nomicfoundation/hardhat-utils": ^3.0.5
+    "@nomicfoundation/hardhat-zod-utils": ^3.0.0
+    chalk: ^5.3.0
+    debug: ^4.3.2
+    zod: ^3.23.8
+  peerDependencies:
+    hardhat: ^3.0.0
+  checksum: f6150b81aa56cfc6e14168830fb8007ce174e014469a21a6ec666b401312f384e590c011441bd6782a0f9fb697db4411ea5473b4994d2582e559f5391511e06f
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-network-helpers@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@nomicfoundation/hardhat-network-helpers@npm:3.0.2"
+  dependencies:
+    "@nomicfoundation/hardhat-errors": ^3.0.0
+    "@nomicfoundation/hardhat-utils": ^3.0.5
+  peerDependencies:
+    hardhat: ^3.0.0
+  checksum: 9719fce66fe943cbca9a2b22c86c41c625ffe380f4ddf480ee4b01d05e0a932e431227d6e3a7de6e66fc91daa24277c8de432b3c6eca30be31297cb3d41859b8
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-node-test-reporter@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "@nomicfoundation/hardhat-node-test-reporter@npm:3.0.1"
+  dependencies:
+    "@actions/core": ^1.10.1
+    chalk: ^5.3.0
+    jest-diff: ^29.7.0
+  checksum: 61ae077921cb480bb7586c1d731c8b11993f6a73e5a8385afe7d6e5026e2e932bfbf4d74e9be3310caab34da014aff61e0341a2adffdeec6a4d773a27286b305
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-node-test-runner@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@nomicfoundation/hardhat-node-test-runner@npm:3.0.7"
+  dependencies:
+    "@nomicfoundation/hardhat-errors": ^3.0.2
+    "@nomicfoundation/hardhat-node-test-reporter": ^3.0.0
+    "@nomicfoundation/hardhat-utils": ^3.0.5
+    "@nomicfoundation/hardhat-zod-utils": ^3.0.0
+    tsx: ^4.19.3
+    zod: ^3.23.8
+  peerDependencies:
+    hardhat: ^3.0.0
+  checksum: 603f3b3b41d88b887294f46c33ca99d64c4b02c53cf9f3f92ec499958aba75511b300018f36cf27e7f56e19103c86e875b0b4eb77fbaf2b0f1b39e1b9668c50b
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-toolbox-viem@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@nomicfoundation/hardhat-toolbox-viem@npm:5.0.1"
+  peerDependencies:
+    "@nomicfoundation/hardhat-ignition": ^3.0.0
+    "@nomicfoundation/hardhat-ignition-viem": ^3.0.0
+    "@nomicfoundation/hardhat-keystore": ^3.0.0
+    "@nomicfoundation/hardhat-network-helpers": ^3.0.0
+    "@nomicfoundation/hardhat-node-test-runner": ^3.0.0
+    "@nomicfoundation/hardhat-verify": ^3.0.0
+    "@nomicfoundation/hardhat-viem": ^3.0.0
+    "@nomicfoundation/hardhat-viem-assertions": ^3.0.0
+    "@nomicfoundation/ignition-core": ^3.0.0
+    hardhat: ^3.0.0
+    viem: ^2.30.0
+  checksum: 020a8815907bca74f5735e9052cbf74010e0edccda48f76324325086d3d1235857a2c1986bee3e8dbc4b204ca89952abf181cd3b446c2cf17e232f8b51881846
+  languageName: node
+  linkType: hard
+
 "@nomicfoundation/hardhat-utils@npm:^3.0.0, @nomicfoundation/hardhat-utils@npm:^3.0.1, @nomicfoundation/hardhat-utils@npm:^3.0.2, @nomicfoundation/hardhat-utils@npm:^3.0.3":
   version: 3.0.3
   resolution: "@nomicfoundation/hardhat-utils@npm:3.0.3"
@@ -3151,6 +3272,22 @@ __metadata:
     rfdc: ^1.3.1
     undici: ^6.16.1
   checksum: 3644b0c4e3f7ac5c7cd9f9e3eb783db85ddaff2481bc24a97e8cc34e6f25afbb75dfd7eac73dfe45e68c2ae85322bbd56a986018591faa3b9b4279e754e5fdbb
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-utils@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "@nomicfoundation/hardhat-utils@npm:3.0.5"
+  dependencies:
+    "@streamparser/json-node": ^0.0.22
+    debug: ^4.3.2
+    env-paths: ^2.2.0
+    ethereum-cryptography: ^2.2.1
+    fast-equals: ^5.0.1
+    json-stream-stringify: ^3.1.6
+    rfdc: ^1.3.1
+    undici: ^6.16.1
+  checksum: c41b26b8251bdbdd0c105b5f9cdf02991b559f78b997fc63b1bf4c72daf55ac5062954aa77e2e68e73b7c5d9c8a1cdbe2d02ccc5cb966fe26b654df22b41d691
   languageName: node
   linkType: hard
 
@@ -3170,6 +3307,20 @@ __metadata:
   peerDependencies:
     hardhat: ^3.0.0
   checksum: 7d7e513802f72f27ae5c749c96d20b4ed6dc2741ac61b9f0e8e327ec10e2eff43ba6799c5e8c5e75471d120c6daa82c3c9a1bb4096c663aaaa0f865481ff6680
+  languageName: node
+  linkType: hard
+
+"@nomicfoundation/hardhat-viem-assertions@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@nomicfoundation/hardhat-viem-assertions@npm:3.0.3"
+  dependencies:
+    "@nomicfoundation/hardhat-errors": ^3.0.2
+    "@nomicfoundation/hardhat-utils": ^3.0.5
+  peerDependencies:
+    "@nomicfoundation/hardhat-viem": ^3.0.0
+    hardhat: ^3.0.0
+    viem: ^2.30.0
+  checksum: c6d9dbb2a516c48eea12e3838c4cf073710af20381b06f3d7cb38819e36386feda8c7d021b77ada38d2f866b65cd6aadafb261e59ad9b3888b70738f9299424f
   languageName: node
   linkType: hard
 
@@ -4040,8 +4191,13 @@ __metadata:
     "@inquirer/password": ^4.0.2
     "@nomicfoundation/hardhat-ignition": ^3.0.3
     "@nomicfoundation/hardhat-ignition-viem": ^3.0.3
+    "@nomicfoundation/hardhat-keystore": ^3.0.3
+    "@nomicfoundation/hardhat-network-helpers": ^3.0.2
+    "@nomicfoundation/hardhat-node-test-runner": ^3.0.7
+    "@nomicfoundation/hardhat-toolbox-viem": ^5.0.1
     "@nomicfoundation/hardhat-verify": ^3.0.4
     "@nomicfoundation/hardhat-viem": ^3.0.0
+    "@nomicfoundation/hardhat-viem-assertions": ^3.0.3
     "@openzeppelin/contracts": ^5.0.2
     "@typechain/hardhat": ^9.1.0
     "@types/eslint": ^9.6.1
@@ -4187,6 +4343,13 @@ __metadata:
   version: 0.25.24
   resolution: "@sinclair/typebox@npm:0.25.24"
   checksum: 10219c58f40b8414c50b483b0550445e9710d4fe7b2c4dccb9b66533dd90ba8e024acc776026cebe81e87f06fa24b07fdd7bc30dd277eb9cc386ec50151a3026
+  languageName: node
+  linkType: hard
+
+"@sinclair/typebox@npm:^0.27.8":
+  version: 0.27.8
+  resolution: "@sinclair/typebox@npm:0.27.8"
+  checksum: 00bd7362a3439021aa1ea51b0e0d0a0e8ca1351a3d54c606b115fdcc49b51b16db6e5f43b4fe7a28c38688523e22a94d49dd31168868b655f0d4d50f032d07a1
   languageName: node
   linkType: hard
 
@@ -6525,6 +6688,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ansi-styles@npm:^5.0.0":
+  version: 5.2.0
+  resolution: "ansi-styles@npm:5.2.0"
+  checksum: d7f4e97ce0623aea6bc0d90dcd28881ee04cba06c570b97fd3391bd7a268eedfd9d5e2dd4fdcbdd82b8105df5faf6f24aaedc08eaf3da898e702db5948f63469
+  languageName: node
+  linkType: hard
+
 "ansi-styles@npm:^6.0.0, ansi-styles@npm:^6.1.0, ansi-styles@npm:^6.2.1":
   version: 6.2.1
   resolution: "ansi-styles@npm:6.2.1"
@@ -8070,6 +8240,13 @@ __metadata:
   version: 1.1.0
   resolution: "detect-node-es@npm:1.1.0"
   checksum: e46307d7264644975b71c104b9f028ed1d3d34b83a15b8a22373640ce5ea630e5640b1078b8ea15f202b54641da71e4aa7597093bd4b91f113db520a26a37449
+  languageName: node
+  linkType: hard
+
+"diff-sequences@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "diff-sequences@npm:29.6.3"
+  checksum: f4914158e1f2276343d98ff5b31fc004e7304f5470bf0f1adb2ac6955d85a531a6458d33e87667f98f6ae52ebd3891bb47d420bb48a5bd8b7a27ee25b20e33aa
   languageName: node
   linkType: hard
 
@@ -11330,6 +11507,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jest-diff@npm:^29.7.0":
+  version: 29.7.0
+  resolution: "jest-diff@npm:29.7.0"
+  dependencies:
+    chalk: ^4.0.0
+    diff-sequences: ^29.6.3
+    jest-get-type: ^29.6.3
+    pretty-format: ^29.7.0
+  checksum: 08e24a9dd43bfba1ef07a6374e5af138f53137b79ec3d5cc71a2303515335898888fa5409959172e1e05de966c9e714368d15e8994b0af7441f0721ee8e1bb77
+  languageName: node
+  linkType: hard
+
+"jest-get-type@npm:^29.6.3":
+  version: 29.6.3
+  resolution: "jest-get-type@npm:29.6.3"
+  checksum: 88ac9102d4679d768accae29f1e75f592b760b44277df288ad76ce5bf038c3f5ce3719dea8aa0f035dac30e9eb034b848ce716b9183ad7cc222d029f03e92205
+  languageName: node
+  linkType: hard
+
 "jiti@npm:^2.4.2":
   version: 2.4.2
   resolution: "jiti@npm:2.4.2"
@@ -14105,6 +14301,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pretty-format@npm:^29.7.0":
+  version: 29.7.0
+  resolution: "pretty-format@npm:29.7.0"
+  dependencies:
+    "@jest/schemas": ^29.6.3
+    ansi-styles: ^5.0.0
+    react-is: ^18.0.0
+  checksum: 032c1602383e71e9c0c02a01bbd25d6759d60e9c7cf21937dde8357aa753da348fcec5def5d1002c9678a8524d5fe099ad98861286550ef44de8808cc61e43b6
+  languageName: node
+  linkType: hard
+
 "pretty-ms@npm:7.0.1":
   version: 7.0.1
   resolution: "pretty-ms@npm:7.0.1"
@@ -14447,6 +14654,13 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^18.0.0":
+  version: 18.3.1
+  resolution: "react-is@npm:18.3.1"
+  checksum: e20fe84c86ff172fc8d898251b7cc2c43645d108bf96d0b8edf39b98f9a2cae97b40520ee7ed8ee0085ccc94736c4886294456033304151c3f94978cec03df21
   languageName: node
   linkType: hard
 
@@ -16228,6 +16442,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tunnel@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "tunnel@npm:0.0.6"
+  checksum: c362948df9ad34b649b5585e54ce2838fa583aa3037091aaed66793c65b423a264e5229f0d7e9a95513a795ac2bd4cb72cda7e89a74313f182c1e9ae0b0994fa
+  languageName: node
+  linkType: hard
+
 "type-check@npm:^0.4.0, type-check@npm:~0.4.0":
   version: 0.4.0
   resolution: "type-check@npm:0.4.0"
@@ -16507,6 +16728,15 @@ __metadata:
   dependencies:
     "@fastify/busboy": ^2.0.0
   checksum: a8193132d84540e4dc1895ecc8dbaa176e8a49d26084d6fbe48a292e28397cd19ec5d13bc13e604484e76f94f6e334b2bdc740d5f06a6e50c44072818d0c19f9
+  languageName: node
+  linkType: hard
+
+"undici@npm:^5.25.4":
+  version: 5.29.0
+  resolution: "undici@npm:5.29.0"
+  dependencies:
+    "@fastify/busboy": ^2.0.0
+  checksum: a25b5462c1b6ffb974f5ffc492ffd64146a9983aad0cbda6fde65e2b22f6f1acd43f09beacc66cc47624a113bd0c684ffc60366102b6a21b038fbfafb7d75195
   languageName: node
   linkType: hard
 

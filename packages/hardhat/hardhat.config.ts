@@ -1,12 +1,18 @@
-import type { HardhatUserConfig } from "hardhat/config";
+import { type HardhatUserConfig, configVariable } from "hardhat/config";
 import type { HardhatRuntimeEnvironment } from "hardhat/types/hre";
 import type { TaskArguments } from "hardhat/types/tasks";
 import hardhatIgnitionViemPlugin from "@nomicfoundation/hardhat-ignition-viem";
 import { overrideTask } from "hardhat/config";
 import generateTsAbis from "./scripts/generateTsAbis.js";
+import hardhatToolboxViem from "@nomicfoundation/hardhat-toolbox-viem";
+
+// If not set, it uses ours Alchemy's default API key.
+// You can get your own at https://dashboard.alchemyapi.io
+// TODO: Use configVariable
+const providerApiKey = "cR4WnXePioePZ5fFrnSiR";
 
 const config: HardhatUserConfig = {
-  plugins: [hardhatIgnitionViemPlugin],
+  plugins: [hardhatIgnitionViemPlugin, hardhatToolboxViem],
   solidity: {
     compilers: [
       {
@@ -20,6 +26,20 @@ const config: HardhatUserConfig = {
         },
       },
     ],
+  },
+  networks: {
+    mainnet: {
+      type: "http",
+      chainType: "l1",
+      url: "https://mainnet.rpc.buidlguidl.com",
+      accounts: [configVariable("DEPLOYER_PRIVATE_KEY")],
+    },
+    sepolia: {
+      type: "http",
+      chainType: "l1",
+      url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [configVariable("DEPLOYER_PRIVATE_KEY")],
+    },
   },
   tasks: [
     overrideTask(["ignition", "deploy"])
