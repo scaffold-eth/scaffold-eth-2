@@ -1,12 +1,12 @@
 "use client";
 
 // @refresh reset
-import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
 import { RevealBurnerPKModal } from "./RevealBurnerPKModal";
 import { WrongNetworkDropdown } from "./WrongNetworkDropdown";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Balance } from "@scaffold-ui/components";
 import { Address } from "viem";
 import { useNetworkColor } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
@@ -44,8 +44,15 @@ export const RainbowKitCustomConnectButton = () => {
 
               return (
                 <>
-                  <div className="flex flex-col items-center mr-1">
-                    <Balance address={account.address as Address} className="min-h-0 h-auto" />
+                  <div className="flex flex-col items-center mr-2">
+                    <Balance
+                      address={account.address as Address}
+                      style={{
+                        minHeight: "0",
+                        height: "auto",
+                        fontSize: "0.8em",
+                      }}
+                    />
                     <span className="text-xs" style={{ color: networkColor }}>
                       {chain.name}
                     </span>
