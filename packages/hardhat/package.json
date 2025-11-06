@@ -11,7 +11,7 @@
     "check-types": "tsc --noEmit --incremental",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
-    "deploy": "hardhat ignition deploy ignition/modules/YourContract.ts --network localhost",
+    "deploy": "hardhat ignition deploy ignition/modules/ScaffoldEthDeployModule.ts --network localhost",
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat --no-deploy",
     "format": "prettier --write './**/*.(ts|sol)'",
