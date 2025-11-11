@@ -17,7 +17,7 @@ const generatedContractComment = `
 `;
 
 const DEPLOYMENTS_DIR = "./ignition/deployments";
-// const ARTIFACTS_DIR = "./artifacts";
+const ARTIFACTS_DIR = "./artifacts";
 
 function getDirectories(path: string) {
   return fs
@@ -26,83 +26,140 @@ function getDirectories(path: string) {
     .map(dirent => dirent.name);
 }
 
-function getContractFilenames(path: string) {
-  return fs
-    .readdirSync(path, { withFileTypes: true })
-    .filter(dirent => dirent.isFile() && dirent.name.endsWith(".json"))
-    .map(dirent => dirent.name.split(".")[0]);
+function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
+  for (const sourcePath of Object.keys(sources)) {
+    const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
+    if (sourceName === contractName) {
+      const contractContent = sources[sourcePath].content as string;
+      const regex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
+      const match = contractContent.match(regex);
+
+      if (match) {
+        const inheritancePart = match[2];
+        // Split the inherited contracts by commas to get the list of inherited contracts
+        const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
+
+        return inheritedContracts;
+      }
+      return [];
+    }
+  }
+  return [];
 }
 
-// function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
-//   for (const sourcePath of Object.keys(sources)) {
-//     const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
-//     if (sourceName === contractName) {
-//       const contractContent = sources[sourcePath].content as string;
-//       const regex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
-//       const match = contractContent.match(regex);
+function getInheritedFunctions(
+  sources: Record<string, any>,
+  contractName: string,
+  compiledContracts: Record<string, any>,
+) {
+  const actualSources = getActualSourcesForContract(sources, contractName);
+  const inheritedFunctions = {} as Record<string, any>;
 
-//       if (match) {
-//         const inheritancePart = match[2];
-//         // Split the inherited contracts by commas to get the list of inherited contracts
-//         const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
+  for (const sourceContractName of actualSources) {
+    const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
 
-//         return inheritedContracts;
-//       }
-//       return [];
-//     }
-//   }
-//   return [];
-// }
+    if (sourcePath) {
+      // Extract the actual contract name without .sol extension
+      const cleanContractName = sourceContractName.replace(".sol", "");
 
-// function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
-//   const actualSources = getActualSourcesForContract(sources, contractName);
-//   const inheritedFunctions = {} as Record<string, any>;
+      // Try to find the contract in the compiled output
+      const compiledContract = compiledContracts[sourcePath]?.[cleanContractName];
 
-//   for (const sourceContractName of actualSources) {
-//     const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
-//     if (sourcePath) {
-//       const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
-//       const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
-//       for (const functionAbi of abi) {
-//         if (functionAbi.type === "function") {
-//           inheritedFunctions[functionAbi.name] = sourcePath;
-//         }
-//       }
-//     }
-//   }
+      if (compiledContract?.abi) {
+        for (const functionAbi of compiledContract.abi) {
+          if (functionAbi.type === "function") {
+            inheritedFunctions[functionAbi.name] = sourcePath;
+          }
+        }
+      }
+    }
+  }
 
-//   return inheritedFunctions;
-// }
+  return inheritedFunctions;
+}
+
+function getDeploymentBlockNumbers(journalPath: string): Record<string, number> {
+  const blockNumbers: Record<string, number> = {};
+
+  if (!fs.existsSync(journalPath)) {
+    return blockNumbers;
+  }
+
+  const journalContent = fs.readFileSync(journalPath, "utf-8");
+  const lines = journalContent.split("\n").filter(line => line.trim());
+
+  for (const line of lines) {
+    try {
+      const entry = JSON.parse(line);
+      // Look for TRANSACTION_CONFIRM entries which contain deployment receipt info
+      if (entry.type === "TRANSACTION_CONFIRM" && entry.receipt?.blockNumber && entry.futureId) {
+        blockNumbers[entry.futureId] = entry.receipt.blockNumber;
+      }
+    } catch {
+      // Skip invalid JSON lines
+      continue;
+    }
+  }
+
+  return blockNumbers;
+}
 
 function getContractDataFromDeployments() {
   if (!fs.existsSync(DEPLOYMENTS_DIR)) {
     throw Error("At least one other deployment script should exist to generate an actual contract.");
   }
   const output = {} as Record<string, any>;
-  const chainDirectories = getDirectories(DEPLOYMENTS_DIR);
+  for (const dirName of getDirectories(DEPLOYMENTS_DIR)) {
+    const chainId = dirName.split("-")[1];
 
-  for (const chainDirectory of chainDirectories) {
-    const chainId = chainDirectory.split("-")[1];
+    const arfifactsPath = `${DEPLOYMENTS_DIR}/${dirName}/artifacts`;
+    const journalPath = `${DEPLOYMENTS_DIR}/${dirName}/journal.jsonl`;
+
+    // Get block numbers from journal
+    const blockNumbers = getDeploymentBlockNumbers(journalPath);
+
+    const fileNames = new Set<string>();
+
+    for (const fileName of fs.readdirSync(arfifactsPath)) {
+      const actualFile = fileName.split(".")[0];
+      fileNames.add(actualFile);
+    }
 
     const contracts = {} as Record<string, any>;
-    for (const contractFilename of getContractFilenames(`${DEPLOYMENTS_DIR}/${chainDirectory}/artifacts`)) {
-      const { abi, contractName } = JSON.parse(
-        fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainDirectory}/artifacts/${contractFilename}.json`).toString(),
-      );
-      const deployedAddresses = JSON.parse(
-        fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainDirectory}/deployed_addresses.json`).toString(),
-      );
-      const address = deployedAddresses[contractFilename];
 
-      // const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
-      // TODO
-      const inheritedFunctions = {};
-      // TODO
-      const receipt = {
-        blockNumber: 0,
+    for (const fileName of fileNames) {
+      const JsonFilePath = `${arfifactsPath}/${fileName}.json`;
+      const JsonFileContent = fs.readFileSync(JsonFilePath).toString();
+      const { abi, contractName, buildInfoId } = JSON.parse(JsonFileContent);
+
+      const ignitionBuildInfoPath = `${DEPLOYMENTS_DIR}/${dirName}/build-info/${buildInfoId}.json`;
+      const ignitionBuildInfo = JSON.parse(fs.readFileSync(ignitionBuildInfoPath).toString());
+      const { input } = ignitionBuildInfo;
+
+      const artifactsBuildInfoPath = `${ARTIFACTS_DIR}/build-info/${buildInfoId}.output.json`;
+      let compiledContracts = {};
+      if (fs.existsSync(artifactsBuildInfoPath)) {
+        const artifactsBuildInfo = JSON.parse(fs.readFileSync(artifactsBuildInfoPath).toString());
+        compiledContracts = artifactsBuildInfo.output?.contracts || {};
+      }
+
+      const inheritedFunctions = getInheritedFunctions(input.sources, contractName, compiledContracts);
+
+      const deployedAddresses = fs.readFileSync(`${DEPLOYMENTS_DIR}/${dirName}/deployed_addresses.json`).toString();
+      const deployedAddressesJson = JSON.parse(deployedAddresses);
+      const address = deployedAddressesJson[fileName];
+
+      // Get deployment block number from journal (futureId matches fileName)
+      const deploymentBlock = blockNumbers[fileName];
+
+      contracts[contractName] = {
+        address,
+        abi,
+        inheritedFunctions,
+        ...(deploymentBlock !== undefined && { deployedOnBlock: deploymentBlock }),
       };
-      contracts[contractName] = { address, abi, inheritedFunctions, deployedOnBlock: receipt?.blockNumber };
     }
+
     output[chainId] = contracts;
   }
   return output;
