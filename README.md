@@ -5,15 +5,16 @@
   <a href="https://scaffoldeth.io">Website</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 Scaffold-ETH 2 is an open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
-⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
+⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and TypeScript.
 
 - ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
+- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapping [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts, with TypeScript autocompletion.
 - 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+- 🔎 **Built-in Block Explorer**: Inspect transactions and contract interactions from your local tests directly in the UI.
 
 ![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
 
@@ -29,51 +30,55 @@ Before you begin, you need to install the following tools:
 
 To get started with Scaffold-ETH 2, follow the steps below:
 
-1. Install the latest version of Scaffold-ETH 2
+1. Install the latest version of Scaffold-ETH 2:
 
-```
 npx create-eth@latest
-```
 
-This command will install all the necessary packages and dependencies, so it might take a while.
+text
+
+This command will guide you through an interactive setup and install all the necessary packages and dependencies, so it might take a while.
 
 > [!NOTE]
 > You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
 
 2. Run a local network in the first terminal:
 
-```
 yarn chain
-```
 
-This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
+text
+
+This command starts a local Ethereum network on your machine that you can use for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
 
 3. On a second terminal, deploy the test contract:
 
-```
 yarn deploy
-```
+
+text
 
 This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
 
 4. On a third terminal, start your NextJS app:
 
-```
 yarn start
-```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+text
 
-**What's next**:
+Visit your app at: `http://localhost:3000`.
 
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
+- Use the `Debug Contracts` page to interact with your smart contract.
+- Open the built-in Block Explorer to inspect transactions while you develop.
+- Tweak the app config in `packages/nextjs/scaffold.config.ts`.
+
+**What's next**
+
+Visit the [“What’s next” section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
 
 - Edit your smart contracts
 - Edit your deployment scripts
 - Customize your frontend
 - Edit the app config
-- Writing and running tests
-- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
+- Write and run tests
+- [Set up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
 
 ## Documentation
 
@@ -85,4 +90,4 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 
 We welcome contributions to Scaffold-ETH 2!
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+Please see [CONTRIBUTING.md](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
