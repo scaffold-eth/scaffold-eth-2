@@ -39,6 +39,17 @@ const Home: NextPage = () => {
           <input type="text" placeholder="0 MON" className="input !input-error rounded-md w-full" disabled />
         </div>
       </div>
+
+      <div className="grid grid-cols-8 gap-x-4 m-5">
+        <div className="col-span-4">Wallet NFT Count</div>
+        <div className="col-span-4">
+          <button className="btn">Add Monad Network</button>
+        </div>
+        <div className="col-span-4">
+          {" "}
+          <input type="text" placeholder="0 NFT" className="input !input-error rounded-md w-100" disabled />
+        </div>
+      </div>
     </>
   );
 };
