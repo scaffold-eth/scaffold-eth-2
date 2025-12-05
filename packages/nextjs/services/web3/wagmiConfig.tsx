@@ -20,14 +20,18 @@ export const wagmiConfig = createConfig({
     let rpcFallbacks = [http()];
 
     const rpcOverrideUrl = (scaffoldConfig.rpcOverrides as ScaffoldConfig["rpcOverrides"])?.[chain.id];
+    // Extra fallback for mainnet.
+    const mainnetFallbackWithDefaultRPC = [http("https://mainnet.rpc.buidlguidl.com")];
     if (rpcOverrideUrl) {
-      rpcFallbacks = [http(rpcOverrideUrl), http()];
+      rpcFallbacks = [http(rpcOverrideUrl), ...(chain.id === mainnet.id ? mainnetFallbackWithDefaultRPC : []), http()];
     } else {
       const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
       if (alchemyHttpUrl) {
         const isUsingDefaultKey = scaffoldConfig.alchemyApiKey === DEFAULT_ALCHEMY_API_KEY;
         // If using default Scaffold-ETH 2 API key, we prioritize the default RPC
-        rpcFallbacks = isUsingDefaultKey ? [http(), http(alchemyHttpUrl)] : [http(alchemyHttpUrl), http()];
+        rpcFallbacks = isUsingDefaultKey
+          ? [...(chain.id === mainnet.id ? mainnetFallbackWithDefaultRPC : []), http(), http(alchemyHttpUrl)]
+          : [http(alchemyHttpUrl), ...(chain.id === mainnet.id ? mainnetFallbackWithDefaultRPC : []), http()];
       }
     }
 
