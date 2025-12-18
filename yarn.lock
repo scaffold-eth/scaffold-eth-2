@@ -2781,10 +2781,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:15.5.7":
-  version: 15.5.7
-  resolution: "@next/env@npm:15.5.7"
-  checksum: 10/11f971691018bd62a5bf253fc843fb2a6cf1431468f5c3a9d4d41753a6ff3e8bf7f539f46aba3f58f8bac59e681bf05fb5d771ac08d7dbd966a601257e1368bf
+"@next/env@npm:15.5.9":
+  version: 15.5.9
+  resolution: "@next/env@npm:15.5.9"
+  checksum: 10/962329701343c2617c85ae99ef35adfd9e8f7b58d9c0316f2f0857f82875a91ef3151ef0743c50964b0066aa3d1214c5193cf229f7757d7c9329f7fb95605a4a
   languageName: node
   linkType: hard
 
@@ -3914,54 +3914,53 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@scaffold-ui/components@npm:0.1.5"
-  dependencies:
-    usehooks-ts: "npm:^3.1.1"
+"@scaffold-ui/components@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "@scaffold-ui/components@npm:0.1.7"
   peerDependencies:
-    "@scaffold-ui/hooks": 0.1.4
+    "@scaffold-ui/hooks": 0.1.5
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
-    react: ^19.0.0
+    react: ^19.0.1
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/7c9536e5087535d4beb079ea4c25bdfbc18b4030562384b2f72dcb270f7f4c844ca2762de5755b4854db944ce7739d71445f74e111f5224fc5cb0990a4a42e6a
+  checksum: 10/3332e623d34453d6f3a5d407294508b7d3bdeca8bb9333a68f6a1d8815c2989a37748fe9f210cff6e9dd91e64ea38392e01bda4d9acbbd12d1905ca77b4f5e70
   languageName: node
   linkType: hard
 
-"@scaffold-ui/debug-contracts@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@scaffold-ui/debug-contracts@npm:0.1.4"
+"@scaffold-ui/debug-contracts@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@scaffold-ui/debug-contracts@npm:0.1.6"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
     react-hot-toast: "npm:^2.5.2"
   peerDependencies:
-    "@scaffold-ui/components": 0.1.5
-    "@scaffold-ui/hooks": 0.1.4
+    "@scaffold-ui/components": 0.1.7
+    "@scaffold-ui/hooks": 0.1.5
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
-    react: ^19.0.0
+    react: ^19.0.1
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/e2c221acde2ed913dbdb1312c50ef83397c5abe07363d13c452c63762e1f74d979e74adde74d4c77c577a34b5d7947b90d9933173dc4034178a1b826df668591
+  checksum: 10/6ebe883624f45b136b2b2432f082a6bab2c11851ccdd4dd1857464491595c94b28c46e2f429810102d5fdb8507a17a025a7ad1bd2983c59911ac32aa8c27a44a
   languageName: node
   linkType: hard
 
-"@scaffold-ui/hooks@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@scaffold-ui/hooks@npm:0.1.4"
+"@scaffold-ui/hooks@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@scaffold-ui/hooks@npm:0.1.5"
   dependencies:
     "@uniswap/sdk-core": "npm:^7.7.2"
     "@uniswap/v2-sdk": "npm:^4.15.2"
     blo: "npm:^1.2.0"
+    usehooks-ts: "npm:^3.1.1"
   peerDependencies:
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
-    react: ^19.0.0
+    react: ^19.0.1
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/7f0e3a2678824173d86e3e027723b2877a74c297bbb799b07e54fb32c1e0322da810c8295f99060a347f32d9fe6d94c12d4514fe1c91b34af6a3a9f57d6184e8
+  checksum: 10/21d82eeb8e9b3f223ef7003712ad0c611b7fdd1b0a0ef46366b8e68136ac452ab62dc9b651c585cb654d14e717eb8e426c5d4aa31e1f7d38ca4a17b4351cf7de
   languageName: node
   linkType: hard
 
@@ -4151,9 +4150,9 @@ __metadata:
     "@heroicons/react": "npm:^2.1.5"
     "@rainbow-me/rainbowkit": "npm:2.2.9"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
-    "@scaffold-ui/components": "npm:^0.1.5"
-    "@scaffold-ui/debug-contracts": "npm:^0.1.4"
-    "@scaffold-ui/hooks": "npm:^0.1.4"
+    "@scaffold-ui/components": "npm:^0.1.7"
+    "@scaffold-ui/debug-contracts": "npm:^0.1.6"
+    "@scaffold-ui/hooks": "npm:^0.1.5"
     "@tailwindcss/postcss": "npm:latest"
     "@tanstack/react-query": "npm:^5.59.15"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
@@ -4169,14 +4168,14 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.1"
     eslint-plugin-prettier: "npm:^5.2.4"
     kubo-rpc-client: "npm:^5.0.2"
-    next: "npm:^15.2.6"
+    next: "npm:^15.2.8"
     next-nprogress-bar: "npm:^2.3.13"
     next-themes: "npm:^0.3.0"
     postcss: "npm:^8.4.45"
     prettier: "npm:^3.5.3"
     qrcode.react: "npm:^4.0.1"
-    react: "npm:^19.0.1"
-    react-dom: "npm:^19.0.1"
+    react: "npm:^19.2.3"
+    react-dom: "npm:^19.2.3"
     react-hot-toast: "npm:^2.4.0"
     tailwindcss: "npm:^4.1.3"
     type-fest: "npm:^4.26.1"
@@ -14916,11 +14915,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^15.2.6":
-  version: 15.5.7
-  resolution: "next@npm:15.5.7"
+"next@npm:^15.2.8":
+  version: 15.5.9
+  resolution: "next@npm:15.5.9"
   dependencies:
-    "@next/env": "npm:15.5.7"
+    "@next/env": "npm:15.5.9"
     "@next/swc-darwin-arm64": "npm:15.5.7"
     "@next/swc-darwin-x64": "npm:15.5.7"
     "@next/swc-linux-arm64-gnu": "npm:15.5.7"
@@ -14971,7 +14970,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10/bfac0cbac41b36227ec91d3a0727561f73dfc35d6a78eafd0200528ef95fa2e9d2dba5a8c8922864b4f4e4321ae6a07c6cf8f5766ac3192ad03e68516c3a458a
+  checksum: 10/ac27b82de08c9720e8e99cd64102af5e30306a8c861630d50da347a02c288cc441273ada64875c47e7a4d5991ff69cc92b23e906ce3271f9835a7911a0f060cc
   languageName: node
   linkType: hard
 
@@ -16791,14 +16790,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.0.1":
-  version: 19.2.1
-  resolution: "react-dom@npm:19.2.1"
+"react-dom@npm:^19.2.3":
+  version: 19.2.3
+  resolution: "react-dom@npm:19.2.3"
   dependencies:
     scheduler: "npm:^0.27.0"
   peerDependencies:
-    react: ^19.2.1
-  checksum: 10/cceea7104bd3ad52e2f6377f47c4b346244c1263917fd95745e31647ff8ab23b16f719c2bfc8bcf2a6c802ecb9c9e81f08b09e3447e1f49bc27368283ed299ba
+    react: ^19.2.3
+  checksum: 10/5780f6d4c8e8ece09f82c5500ba2d55e01c30b5273f9281734d7d3b65013cd1fa52ec4e4436e5248c0a9e5bc340836044051168bbad8d7eac4d33ee6c2a867a1
   languageName: node
   linkType: hard
 
@@ -16912,10 +16911,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.0.1":
-  version: 19.2.1
-  resolution: "react@npm:19.2.1"
-  checksum: 10/7c7ab0f40b98e87e1466bea8c28564c5f3c384506cbda93d24788d32b40bf6059c991687c7e90a396b11f09223a779a81b1188af9acd839aaa0a672987c13107
+"react@npm:^19.2.3":
+  version: 19.2.3
+  resolution: "react@npm:19.2.3"
+  checksum: 10/d16b7f35c0d35a56f63d9d1693819762e4abc479c57dd6310298920bed3820fcec7e17a99d44983416d8f5049143ea45b8005d3ab8324bae8973224400502b08
   languageName: node
   linkType: hard
 
