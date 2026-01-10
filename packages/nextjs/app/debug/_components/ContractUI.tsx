@@ -1,19 +1,3 @@
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
 "use client";
 
 // @refresh reset
@@ -25,171 +9,18 @@ import { ContractName } from "~~/utils/scaffold-eth/contract";
 /**
  * ContractUI
  *
- * Client-side wrapper component for rendering an interactive UI
+ * Client-side wrapper component that renders an interactive UI
  * for a deployed smart contract.
  *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
+ * Behavior:
+ * - Accepts a contract name as input
+ * - Resolves the active target network
+ * - Loads deployed contract metadata (ABI and address)
+ * - Shows a loading indicator while data is being fetched
+ * - Renders a generic contract interaction UI once ready
  *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
- */
-
-/**
- * ContractUI
- *
- * Client-side wrapper component for rendering an interactive UI
- * for a deployed smart contract.
- *
- * High-level flow:
- * 1. Receives a contract name as input
- * 2. Determines the currently selected target network
- * 3. Fetches deployed contract metadata (ABI + address) for that network
- * 4. Displays a loading state while contract data is being resolved
- * 5. Renders a generic Contract UI once deployment data is available
- *
- * This component acts as a bridge between network configuration,
- * deployed contract information, and the debug contract interaction UI.
+ * Acts as a bridge between network configuration, deployed
+ * contract information, and the debug contract interaction UI.
  */
 
 type ContractUIProps = {

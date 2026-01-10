@@ -8,6 +8,22 @@ import { BarsArrowUpIcon } from "@heroicons/react/20/solid";
 import { ContractName, GenericContract } from "~~/utils/scaffold-eth/contract";
 import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
 
+/**
+ * DebugContracts
+ *
+ * Main client-side container for the debug contracts page.
+ *
+ * Responsibilities:
+ * - Fetches all deployed contracts using useAllContracts
+ * - Sorts and displays available contract names
+ * - Persists the selected contract in session storage
+ * - Renders contract selection controls when multiple contracts exist
+ * - Delegates rendering of the active contract UI to ContractUI
+ *
+ * Acts as the orchestration layer between contract metadata and
+ * the interactive debug contract UI.
+ */
+
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 
 export function DebugContracts() {
