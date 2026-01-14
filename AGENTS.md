@@ -7,9 +7,7 @@ This file provides guidance to coding agents working in this repository.
 Scaffold-ETH 2 (SE-2) is a starter kit for building dApps on Ethereum. It's a yarn monorepo with two main packages:
 
 - **packages/hardhat**: Solidity framework for smart contracts (Hardhat with hardhat-deploy)
-- **packages/nextjs**: React frontend (Next.js App Router, not Pages Router)
-
-Tech stack: NextJS, RainbowKit, Wagmi, Viem, TypeScript, Tailwind CSS with DaisyUI.
+- **packages/nextjs**: React frontend (Next.js App Router, not Pages Router, RainbowKit, Wagmi, Viem, TypeScript, Tailwind CSS with DaisyUI)
 
 ## Common Commands
 
