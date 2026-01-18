@@ -52,6 +52,33 @@ This command starts a local Ethereum network that runs on your local machine and
 
 ```
 yarn deploy
+## Beginner Wallet Connect Example
+
+This example shows how to connect a wallet and read data from a deployed contract using Scaffold-ETH 2.
+
+```tsx
+import { useAccount } from "wagmi";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+
+export default function Example() {
+  const { address, isConnected } = useAccount();
+
+  const { data: greeting } = useScaffoldReadContract({
+    contractName: "YourContract",
+    functionName: "greeting",
+  });
+
+  if (!isConnected) return <p>Please connect your wallet.</p>;
+
+  return (
+    <div>
+      <p>Connected: {address}</p>
+      <p>Greeting: {greeting}</p>
+    </div>
+  );
+}
+
+
 ```
 
 This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
