@@ -81,8 +81,9 @@ const { data: totalCounter } = useScaffoldReadContract({
 #### Writing to Contracts
 
 ```typescript
-const { writeContractAsync, isPending } =
-  useScaffoldWriteContract("YourContract");
+const { writeContractAsync, isPending } = useScaffoldWriteContract({
+  contractName: "YourContract",
+});
 
 await writeContractAsync({
   functionName: "setGreeting",
