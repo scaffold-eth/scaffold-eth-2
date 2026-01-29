@@ -176,9 +176,12 @@ export default Home;
 
 Make comments that add information. Avoid redundant JSDoc for simple functions.
 
+## Documentation
+
+Use **Context7 MCP** tools to fetch up-to-date documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Hardhat, Next.js, etc.). Context7 is configured as an MCP server and provides access to indexed documentation with code examples.
+
 ## Specialized Agents
 
 Use these specialized agents for specific tasks:
 
 - **`grumpy-carlos-code-reviewer`**: Use this agent for code reviews before finalizing changes
-- **`docs-fetcher-summarizer`**: Use this agent when you need to fetch documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Hardhat, etc.)
