@@ -180,5 +180,5 @@ Make comments that add information. Avoid redundant JSDoc for simple functions.
 
 Use these specialized agents for specific tasks:
 
-- **`grump-carlos-code-reviewer`**: Use this agent for code reviews before finalizing changes
+- **`grumpy-carlos-code-reviewer`**: Use this agent for code reviews before finalizing changes
 - **`docs-fetcher-summarizer`**: Use this agent when you need to fetch documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Hardhat, etc.)
