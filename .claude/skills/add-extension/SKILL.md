@@ -22,11 +22,17 @@ Workflow notes:
 Available options to pass through:
 - --dry-run: Preview changes only
 - --force: Reinstall if already installed
-- --framework hardhat|foundry: Choose framework for dual-framework extensions
+- -s, --solidity-framework hardhat|foundry: Choose framework (only used if project has neither)
 - --local <path>: Use local extension repo
 - --verbose: Show detailed errors
 
+Framework selection:
+- If project has hardhat → uses hardhat from extension (no prompt)
+- If project has foundry → uses foundry from extension (no prompt)
+- If project has neither → prompts for framework choice or uses -s/--solidity-framework flag
+- Cannot install different framework than what project already has
+
 Examples:
-- /add-extension erc-20 --framework hardhat
+- /add-extension erc-20 -s hardhat
 - /add-extension subgraph --dry-run
-- /add-extension ponder --framework hardhat
+- /add-extension ponder --solidity-framework hardhat

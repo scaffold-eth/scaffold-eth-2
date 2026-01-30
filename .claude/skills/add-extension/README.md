@@ -26,14 +26,14 @@ SE-2 projects can only add extensions at init via `create-eth`. No mechanism exi
 # Preview changes
 /add-extension subgraph --dry-run
 
-# Choose framework (for dual-framework extensions)
-/add-extension ponder --framework hardhat
+# Force reinstall
+/add-extension erc-20 --force
+
+# Choose framework (only needed if project has neither hardhat nor foundry)
+/add-extension ponder -s hardhat
 
 # Local dev
 /add-extension erc-721 --local ../create-eth-extensions
-
-# Force reinstall
-/add-extension erc-20 --force
 ```
 
 ### Options
@@ -45,7 +45,7 @@ SE-2 projects can only add extensions at init via `create-eth`. No mechanism exi
 | `--yes` | Skip confirmation prompts |
 | `--verbose` | Detailed error messages |
 | `--local <path>` | Use local extension path |
-| `--framework <name>` | Choose hardhat or foundry |
+| `-s, --solidity-framework <name>` | Choose hardhat or foundry (only if project has neither) |
 
 ## Available Extensions
 
@@ -59,11 +59,19 @@ Run `/add-extension --help` for latest list.
 
 1. **Validation** - Detects SE-2 project (checks scaffold.config.ts)
 2. **Fetch** - Clones extension branch from `scaffold-eth/create-eth-extensions`
-3. **Framework Selection** - Prompts if extension has both hardhat/foundry
+3. **Framework Selection** - Uses project's existing framework (hardhat/foundry). Only prompts if project has neither.
 4. **Analysis** - Compares extension vs existing project files
 5. **Merge** - Copies new files, prompts for modified files, merges package.json
 6. **Track** - Adds extension to `package.json` `scaffoldEth.extensions`
 7. **Install** - Runs `yarn install` for new dependencies
+
+### Framework Handling
+
+When an extension supports both Hardhat and Foundry:
+- **Project has Hardhat** → Automatically uses Hardhat files (no prompt)
+- **Project has Foundry** → Automatically uses Foundry files (no prompt)
+- **Project has neither** → Prompts for framework choice or uses `-s/--solidity-framework` flag
+- **Prevents mismatches** → Errors if `-s/--solidity-framework` flag doesn't match project
 
 ### File Handling
 

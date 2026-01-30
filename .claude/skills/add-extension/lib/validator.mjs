@@ -10,14 +10,14 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 /**
  * Detects if current directory is a valid Scaffold-ETH-2 project
  * @param {string} cwd - Current working directory
- * @returns {{ valid: boolean, reason?: string, framework?: 'hardhat' | 'foundry' }}
+ * @returns {{ valid: boolean, reason?: string, solidityFramework?: 'hardhat' | 'foundry' }}
  */
 export function detectSE2Project(cwd) {
   // Primary check: scaffold.config.ts exists
   const scaffoldConfig = path.join(cwd, 'packages', 'nextjs', 'scaffold.config.ts');
   if (fs.existsSync(scaffoldConfig)) {
-    const framework = detectFramework(cwd);
-    return { valid: true, framework };
+    const solidityFramework = detectSolidityFramework(cwd);
+    return { valid: true, solidityFramework };
   }
 
   // Secondary check: packages structure
@@ -27,8 +27,8 @@ export function detectSE2Project(cwd) {
   const foundryDir = path.join(packagesDir, 'foundry');
 
   if (fs.existsSync(nextjsDir) && (fs.existsSync(hardhatDir) || fs.existsSync(foundryDir))) {
-    const framework = fs.existsSync(hardhatDir) ? 'hardhat' : 'foundry';
-    return { valid: true, framework };
+    const solidityFramework = fs.existsSync(hardhatDir) ? 'hardhat' : 'foundry';
+    return { valid: true, solidityFramework };
   }
 
   // Tertiary check: yarn workspaces with @se-2 pattern
@@ -40,7 +40,7 @@ export function detectSE2Project(cwd) {
         return {
           valid: true,
           reason: 'Detected via workspace pattern',
-          framework: detectFramework(cwd)
+          solidityFramework: detectSolidityFramework(cwd)
         };
       }
     } catch (error) {
@@ -55,11 +55,11 @@ export function detectSE2Project(cwd) {
 }
 
 /**
- * Detects which framework (hardhat/foundry) the project uses
+ * Detects which solidity framework (hardhat/foundry) the project uses
  * @param {string} cwd - Current working directory
  * @returns {'hardhat' | 'foundry' | undefined}
  */
-function detectFramework(cwd) {
+function detectSolidityFramework(cwd) {
   const hardhatDir = path.join(cwd, 'packages', 'hardhat');
   const foundryDir = path.join(cwd, 'packages', 'foundry');
 

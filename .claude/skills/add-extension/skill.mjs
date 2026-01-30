@@ -70,7 +70,7 @@ async function main() {
       process.exit(1);
     }
 
-    console.log(`✓ Detected SE-2 project (${projectCheck.framework || 'unknown'})`);
+    console.log(`✓ Detected SE-2 project (${projectCheck.solidityFramework || 'unknown'})`);
 
     // 3. Check if already installed
     if (checkExtensionInstalled(extensionName, cwd)) {
@@ -97,25 +97,38 @@ async function main() {
     const frameworks = detectFrameworks(extension.files);
 
     if (frameworks.hasBoth) {
-      let chosenFramework = options.framework;
+      let chosenFramework = null;
 
-      // Validate pre-specified framework
-      if (chosenFramework && !['hardhat', 'foundry'].includes(chosenFramework)) {
-        console.error(`❌ Invalid framework: ${chosenFramework}. Must be 'hardhat' or 'foundry'.`);
-        extension.cleanup();
-        process.exit(1);
-      }
+      // Check if project already has a solidity framework
+      if (projectCheck.solidityFramework) {
+        // Project has a framework - use it and don't allow override
+        chosenFramework = projectCheck.solidityFramework;
+        console.log(`\n✓ Using ${chosenFramework} (detected from project)\n`);
 
-      // Auto-detect from project if not specified
-      if (!chosenFramework && projectCheck.framework) {
-        chosenFramework = projectCheck.framework;
-        console.log(`\n✓ Auto-selected ${chosenFramework} (detected from project)\n`);
-      }
+        // Error if --solidity-framework flag tries to override
+        if (options.solidityFramework && options.solidityFramework !== chosenFramework) {
+          console.error(`❌ Cannot install ${options.solidityFramework} files - project uses ${chosenFramework}`);
+          extension.cleanup();
+          process.exit(1);
+        }
+      } else {
+        // No framework detected - ask user to choose
+        chosenFramework = options.solidityFramework;
 
-      // Prompt if still not specified
-      if (!chosenFramework) {
-        chosenFramework = await promptFrameworkChoice();
-        console.log(`\n✓ Selected ${chosenFramework}\n`);
+        // Validate framework if provided
+        if (chosenFramework && !['hardhat', 'foundry'].includes(chosenFramework)) {
+          console.error(`❌ Invalid framework: ${chosenFramework}. Must be 'hardhat' or 'foundry'.`);
+          extension.cleanup();
+          process.exit(1);
+        }
+
+        // Prompt if not specified
+        if (!chosenFramework) {
+          chosenFramework = await promptFrameworkChoice();
+          console.log(`\n✓ Selected ${chosenFramework}\n`);
+        } else {
+          console.log(`\n✓ Using ${chosenFramework} (specified via --solidity-framework)\n`);
+        }
       }
 
       filesToUse = filterByFramework(extension.files, chosenFramework);
@@ -209,7 +222,7 @@ function parseOptions(args) {
     yes: false,
     verbose: false,
     local: null,
-    framework: null
+    solidityFramework: null
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -235,8 +248,9 @@ function parseOptions(args) {
       case '-l':
         options.local = args[++i];
         break;
-      case '--framework':
-        options.framework = args[++i];
+      case '--solidity-framework':
+      case '-s':
+        options.solidityFramework = args[++i];
         break;
     }
   }
@@ -264,17 +278,17 @@ Usage:
 Examples:
   claude /add-extension erc-20
   claude /add-extension subgraph --dry-run
-  claude /add-extension ponder --framework hardhat
+  claude /add-extension ponder -s hardhat
   claude /add-extension erc-721 --local ../create-eth-extensions
 
 Options:
-  -d, --dry-run          Preview changes without applying
-  -f, --force            Reinstall if already installed
-  -y, --yes              Skip confirmation prompts
-  -v, --verbose          Show detailed error messages
-  -l, --local <path>     Use local extension path (for development)
-  --framework <name>     Choose framework (hardhat or foundry) for extensions with both
-  -h, --help             Show this help message
+  -d, --dry-run                  Preview changes without applying
+  -f, --force                    Reinstall if already installed
+  -y, --yes                      Skip confirmation prompts
+  -v, --verbose                  Show detailed error messages
+  -l, --local <path>             Use local extension path (for development)
+  -s, --solidity-framework <fw>  Choose framework (hardhat or foundry) for extensions with both
+  -h, --help                     Show this help message
 
 Available Extensions:
   ${extensions.join(', ')}
