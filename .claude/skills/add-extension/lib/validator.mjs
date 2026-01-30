@@ -3,9 +3,6 @@ import path from 'path';
 import https from 'https';
 
 const EXTENSIONS_URL = 'https://raw.githubusercontent.com/scaffold-eth/create-eth/main/src/extensions/create-eth-extensions.ts';
-let extensionsCache = null;
-let cacheTimestamp = null;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 /**
  * Detects if current directory is a valid Scaffold-ETH-2 project
@@ -96,11 +93,6 @@ export function checkExtensionInstalled(extensionName, cwd) {
  * @returns {Promise<string[]>} - Array of extension names
  */
 async function fetchExtensionsList() {
-  // Check cache
-  if (extensionsCache && cacheTimestamp && (Date.now() - cacheTimestamp < CACHE_TTL)) {
-    return extensionsCache;
-  }
-
   return new Promise((resolve, reject) => {
     https.get(EXTENSIONS_URL, (res) => {
       let data = '';
@@ -125,10 +117,6 @@ async function fetchExtensionsList() {
             resolve(fallback);
             return;
           }
-
-          // Update cache
-          extensionsCache = extensions;
-          cacheTimestamp = Date.now();
 
           resolve(extensions);
         } catch (error) {
