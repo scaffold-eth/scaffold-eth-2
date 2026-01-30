@@ -16,9 +16,18 @@ export const DEFAULT_EXTENSIONS_REPO = 'https://github.com/scaffold-eth/create-e
 
 export const VALID_FRAMEWORKS = ['hardhat', 'foundry'];
 
-// Fallback for offline mode (subset of most common extensions)
+// Fallback for offline mode
 export const FALLBACK_EXTENSIONS = [
+  // Core extensions (11)
   'subgraph', 'x402', 'eip-712', 'ponder', 'erc-20',
   'eip-5792', 'randao', 'erc-721', 'porto', 'envio', 'drizzle-neon',
-  'challenge-token-vendor', 'challenge-dice-game', 'challenge-dex'
+  // Challenge extensions (13)
+  'challenge-tokenization', 'challenge-crowdfunding', 'challenge-token-vendor',
+  'challenge-dice-game', 'challenge-dex', 'challenge-state-channels',
+  'challenge-multisig', 'challenge-svg-nft', 'challenge-oracles',
+  'challenge-over-collateralized-lending', 'challenge-prediction-markets',
+  'challenge-stablecoins', 'challenge-zk-voting',
+  // Organization extensions (4)
+  'metamask/erc-7715-extension', 'metamask/gator-extension',
+  'signinwithethereum/scaffold-siwe-ext', 'ethereumidentitykit/scaffold-efp-ext'
 ];

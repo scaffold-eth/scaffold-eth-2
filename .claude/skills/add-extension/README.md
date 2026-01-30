@@ -29,11 +29,9 @@ Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post
 
 ## Available Extensions
 
-Fetched dynamically from [create-eth-extensions](https://github.com/scaffold-eth/create-eth/blob/main/src/extensions/create-eth-extensions.ts):
+Fetched dynamically from [create-eth](https://github.com/scaffold-eth/create-eth/blob/main/src/extensions/create-eth-extensions.ts):
 
-`subgraph`, `x402`, `eip-712`, `ponder`, `erc-20`, `eip-5792`, `randao`, `erc-721`, `porto`, `envio`, `drizzle-neon`
-
-Run `/add-extension --help` for current list.
+Run `/add-extension --list` for current list with repository details.
 
 ## How It Works
 
