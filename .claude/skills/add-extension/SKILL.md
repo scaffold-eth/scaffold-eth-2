@@ -6,34 +6,49 @@ allowed-tools: Bash, Read
 user-invocable: true
 ---
 
-Merge the $0 extension into this Scaffold-ETH-2 project using the add-extension merger tool.
+Merge the `$0` extension into this Scaffold-ETH-2 project.
 
-Steps:
-1. Validate we're in an SE-2 project root
-2. Run the merger script: `node .claude/skills/add-extension/skill.mjs $0 $@`
-3. Review the output and report any issues
-4. For .args files when manual change needed: ask yes/no to auto-merge with suggested changes
-5. Summarize what was added/modified
-6. After all merges complete (including manual), ask if user wants to run `yarn install` if dependencies changed
+## Execution
 
-Workflow notes:
-- Don't ask permission for changes in `.tmp` folder
-- If manual inspection of extension files needed, use `.claude/skills/add-extension/.tmp`, NOT `/tmp`
+Run the merger script:
+```bash
+node .claude/skills/add-extension/skill.mjs $0 $@
+```
 
-Available options to pass through:
-- --dry-run: Preview changes only
-- --force: Reinstall if already installed
-- -s, --solidity-framework hardhat|foundry: Choose framework (only used if project has neither)
-- --local <path>: Use local extension repo
-- --verbose: Show detailed errors
+## Post-Merge Tasks
 
-Framework selection:
-- If project has hardhat → uses hardhat from extension (no prompt)
-- If project has foundry → uses foundry from extension (no prompt)
-- If project has neither → prompts for framework choice or uses -s/--solidity-framework flag
-- Cannot install different framework than what project already has
+1. Review the output for any skipped files needing manual merge
+2. If manual merges needed, help user resolve conflicts
+3. Remind user to run `yarn install` if dependencies changed
+4. Summarize what was added/modified
 
-Examples:
-- /add-extension erc-20 -s hardhat
-- /add-extension subgraph --dry-run
-- /add-extension ponder --solidity-framework hardhat
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--dry-run`, `-d` | Preview only |
+| `--force`, `-f` | Reinstall if installed |
+| `--yes`, `-y` | Skip prompts |
+| `--verbose`, `-v` | Detailed errors |
+| `--local`, `-l` | Local extension path |
+| `-s`, `--solidity-framework` | Choose hardhat/foundry |
+
+## Framework Selection
+
+- Project has hardhat → uses hardhat files (no prompt)
+- Project has foundry → uses foundry files (no prompt)
+- Project has neither → prompts or uses `-s` flag
+- Flag mismatch with project → errors
+
+## Notes
+
+- Temp files are in `.claude/skills/add-extension/.tmp`, not `/tmp`
+- Don't ask permission for `.tmp` folder operations
+
+## Examples
+
+```bash
+/add-extension erc-20
+/add-extension subgraph --dry-run
+/add-extension ponder -s hardhat --yes
+```

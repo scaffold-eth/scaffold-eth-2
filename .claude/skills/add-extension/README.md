@@ -2,83 +2,64 @@
 
 Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post-creation.
 
-## Repositories
-
-**IMPORTANT - Core Repos:**
-- **create-eth**: https://github.com/scaffold-eth/create-eth
-  - Main SE-2 creation CLI
-  - Extension list: `src/extensions/create-eth-extensions.ts`
-- **create-eth-extensions**: https://github.com/scaffold-eth/create-eth-extensions
-  - Extension source repo (each extension is a git branch)
-  - Structure: `extension/` folder contains files with `.args.mjs` merge instructions alongside target files
-  - Example: `extension/README.md.args.mjs`, `extension/packages/nextjs/components/Header.tsx.args.mjs`
-
-## Problem
-
-SE-2 projects can only add extensions at init via `create-eth`. No mechanism exists to add extensions post-creation.
-
-## Usage
+## Quick Start
 
 ```bash
-# Basic usage (in SE-2 project root)
+# In SE-2 project root
 /add-extension erc-20
 
-# Preview changes
+# Preview changes first
 /add-extension subgraph --dry-run
 
-# Force reinstall
-/add-extension erc-20 --force
-
-# Choose framework (only needed if project has neither hardhat nor foundry)
-/add-extension ponder -s hardhat
-
-# Local dev
-/add-extension erc-721 --local ../create-eth-extensions
+# Skip confirmation prompts
+/add-extension ponder --yes
 ```
 
-### Options
+## Options
 
-| Flag | Description |
-|------|-------------|
-| `--dry-run` | Preview changes without applying |
-| `--force` | Reinstall even if installed |
-| `--yes` | Skip confirmation prompts |
-| `--verbose` | Detailed error messages |
-| `--local <path>` | Use local extension path |
-| `-s, --solidity-framework <name>` | Choose hardhat or foundry (only if project has neither) |
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--dry-run` | `-d` | Preview changes without applying |
+| `--force` | `-f` | Reinstall even if already installed |
+| `--yes` | `-y` | Skip confirmation prompts |
+| `--verbose` | `-v` | Show detailed error messages |
+| `--local <path>` | `-l` | Use local extension repo path |
+| `--solidity-framework <name>` | `-s` | Choose hardhat/foundry (only if project has neither) |
 
 ## Available Extensions
 
-Fetched dynamically from [create-eth repository](https://github.com/scaffold-eth/create-eth/blob/main/src/extensions/create-eth-extensions.ts):
+Fetched dynamically from [create-eth-extensions](https://github.com/scaffold-eth/create-eth/blob/main/src/extensions/create-eth-extensions.ts):
 
 `subgraph`, `x402`, `eip-712`, `ponder`, `erc-20`, `eip-5792`, `randao`, `erc-721`, `porto`, `envio`, `drizzle-neon`
 
-Run `/add-extension --help` for latest list.
+Run `/add-extension --help` for current list.
 
 ## How It Works
 
-1. **Validation** - Detects SE-2 project (checks scaffold.config.ts)
+1. **Validate** - Checks for SE-2 project (scaffold.config.ts)
 2. **Fetch** - Clones extension branch from `scaffold-eth/create-eth-extensions`
-3. **Framework Selection** - Uses project's existing framework (hardhat/foundry). Only prompts if project has neither.
-4. **Analysis** - Compares extension vs existing project files
-5. **Merge** - Copies new files, prompts for modified files, merges package.json
-6. **Track** - Adds extension to `package.json` `scaffoldEth.extensions`
-7. **Install** - Runs `yarn install` for new dependencies
+3. **Framework** - Auto-detects hardhat/foundry from project
+4. **Analyze** - Compares extension files vs project
+5. **Merge** - Copies new files, merges package.json, prompts for conflicts
+6. **Track** - Records extension in `package.json` under `scaffoldEth.extensions`
 
 ### Framework Handling
 
-When an extension supports both Hardhat and Foundry:
-- **Project has Hardhat** → Automatically uses Hardhat files (no prompt)
-- **Project has Foundry** → Automatically uses Foundry files (no prompt)
-- **Project has neither** → Prompts for framework choice or uses `-s/--solidity-framework` flag
-- **Prevents mismatches** → Errors if `-s/--solidity-framework` flag doesn't match project
+| Project State | Behavior |
+|---------------|----------|
+| Has Hardhat | Uses Hardhat files automatically |
+| Has Foundry | Uses Foundry files automatically |
+| Has neither | Prompts or uses `-s` flag |
+| Flag mismatch | Errors (won't install wrong framework) |
 
 ### File Handling
 
-- **New files** → Copied directly
-- **Modified files** → Manual merge (Claude assists)
-- **package.json** → Auto-merged (scripts, dependencies)
-- **.args.mjs** → Template-based merge via create-eth utils
+| File Type | Action |
+|-----------|--------|
+| New files | Copied directly |
+| package.json | Auto-merged (deps, scripts) |
+| `.args.mjs` files | Template-based merge |
+| Other conflicts | Manual merge (Claude assists) |
 
 ## Extension Tracking
 
@@ -92,42 +73,24 @@ Installed extensions tracked in `package.json`:
 }
 ```
 
-Prevents duplicate installs.
-
-## Requirements
-
-- SE-2 project root
-- Git repo recommended
-- Yarn (not npm)
-
 ## Architecture
 
 ```
 .claude/skills/add-extension/
-├── skill.mjs                 # Entry point
-├── lib/
-│   ├── validator.mjs         # SE-2 detection & validation
-│   ├── fetcher.mjs           # GitHub/local fetching
-│   ├── analyzer.mjs          # File diff analysis
-│   ├── merger.mjs            # Change application
-│   ├── extensionTracker.mjs  # Extension tracking & args
-│   ├── templateMerger.mjs    # Template-based merging
-│   └── create-eth-utils/     # Utils from create-eth
+├── skill.mjs              # Entry point & CLI
+├── SKILL.md               # Claude skill definition
+├── README.md              # This file
+└── lib/
+    ├── constants.mjs      # Shared constants (URLs, fallbacks)
+    ├── templateUtils.mjs  # Shared utilities
+    ├── validator.mjs      # SE-2 detection & extension validation
+    ├── fetcher.mjs        # GitHub/local extension fetching
+    ├── analyzer.mjs       # File diff & framework detection
+    ├── merger.mjs         # File operations & package.json merge
+    ├── extensionTracker.mjs  # Extension tracking & args loading
+    ├── templateMerger.mjs # Template-based file generation
+    └── create-eth-utils/  # Utils copied from create-eth
 ```
-
-### Key Modules
-
-**validator.mjs** - Detects SE-2 projects, validates extension names against live repo list (5min cache)
-
-**fetcher.mjs** - Clones extension branches from GitHub or uses local path
-
-**analyzer.mjs** - Compares files, detects frameworks, builds changeset
-
-**merger.mjs** - Applies changes: copy new, prompt modified, merge package.json
-
-**extensionTracker.mjs** - Tracks installed extensions, loads/merges .args.mjs
-
-**templateMerger.mjs** - Renders templates with merged args from all extensions
 
 ## Example Output
 
@@ -143,38 +106,47 @@ Extension Changes Summary:
 New files (5):
   + packages/nextjs/app/erc20/page.tsx
   + packages/hardhat/contracts/ERC20Token.sol
-  ...
-
-Modified files (1):
-  ~ packages/nextjs/components/Header.tsx
 
 package.json changes:
-  Dependencies: + @openzeppelin/contracts@^5.0.0
-  Scripts: + deploy:erc20
+  Dependencies:
+    + @openzeppelin/contracts@^5.0.0
+  Scripts:
+    + deploy:erc20
 
 📝 Applying changes...
 ✓ Tracked extension in package.json
-✓ Dependencies installed
 
 ==================================================
 Extension "erc-20" merge complete!
 ==================================================
 
 ✓ Applied: 6 files
-⚠ Skipped: 1 file (manual merge needed)
 
 Next steps:
-  1. Review and merge skipped files
-  2. Test application
+  1. Run yarn install
+  2. Test your application
   3. Commit changes
 ```
 
 ## Development
 
 ```bash
-# Test locally
-node /path/to/skill.mjs erc-20 --dry-run
+# Test locally with dry-run
+node .claude/skills/add-extension/skill.mjs erc-20 --dry-run
 
-# Via Claude Code
-/add-extension erc-20 --local ../create-eth-extensions
+# Test with local extension repo
+/add-extension erc-721 --local ../create-eth-extensions --dry-run
 ```
+
+## Source Repositories
+
+| Repo | Purpose |
+|------|---------|
+| [create-eth](https://github.com/scaffold-eth/create-eth) | SE-2 CLI, extension list |
+| [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) | Extension source (each extension = git branch) |
+
+## Requirements
+
+- SE-2 project root directory
+- Git installed
+- Yarn (not npm)
