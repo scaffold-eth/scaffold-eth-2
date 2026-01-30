@@ -18,6 +18,7 @@ Steps:
 
 Workflow notes:
 - Don't ask permission for changes in `.tmp` folder
+- If manual inspection of extension files needed, use `.claude/skills/add-extension/.tmp`, NOT `/tmp`
 
 Available options to pass through:
 - --dry-run: Preview changes only
