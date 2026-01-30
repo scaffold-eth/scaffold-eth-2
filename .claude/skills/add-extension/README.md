@@ -19,6 +19,7 @@ Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post
 
 | Flag | Short | Description |
 |------|-------|-------------|
+| `--list` | `-L` | List all available extensions with repo info |
 | `--dry-run` | `-d` | Preview changes without applying |
 | `--force` | `-f` | Reinstall even if already installed |
 | `--yes` | `-y` | Skip confirmation prompts |
@@ -37,11 +38,12 @@ Run `/add-extension --help` for current list.
 ## How It Works
 
 1. **Validate** - Checks for SE-2 project (scaffold.config.ts)
-2. **Fetch** - Clones extension branch from `scaffold-eth/create-eth-extensions`
-3. **Framework** - Auto-detects hardhat/foundry from project
-4. **Analyze** - Compares extension files vs project
-5. **Merge** - Copies new files, merges package.json, prompts for conflicts
-6. **Track** - Records extension in `package.json` under `scaffoldEth.extensions`
+2. **Registry** - Fetches extension config (repository URL, branch) from [create-eth](https://github.com/scaffold-eth/create-eth/blob/main/src/extensions/index.ts)
+3. **Fetch** - Clones extension branch from the repository defined in registry
+4. **Framework** - Auto-detects hardhat/foundry from project
+5. **Analyze** - Compares extension files vs project
+6. **Merge** - Copies new files, merges package.json, prompts for conflicts
+7. **Track** - Records extension in `package.json` under `scaffoldEth.extensions`
 
 ### Framework Handling
 
@@ -142,8 +144,10 @@ node .claude/skills/add-extension/skill.mjs erc-20 --dry-run
 
 | Repo | Purpose |
 |------|---------|
-| [create-eth](https://github.com/scaffold-eth/create-eth) | SE-2 CLI, extension list |
-| [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) | Extension source (each extension = git branch) |
+| [create-eth](https://github.com/scaffold-eth/create-eth) | SE-2 CLI, extension registry (defines repo+branch for each extension) |
+| [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) | Default extension source (each extension = git branch) |
+
+Extensions are fetched from whatever repository is defined in the registry. Currently all point to `create-eth-extensions`, but the system supports any repository URL.
 
 ## Requirements
 

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { EXTENSIONS_URL, FALLBACK_EXTENSIONS } from './constants.mjs';
+import { REGISTRY_URLS, FALLBACK_EXTENSIONS, DEFAULT_EXTENSIONS_REPO } from './constants.mjs';
 
 /**
  * Detects if current directory is a valid Scaffold-ETH-2 project
@@ -88,12 +88,13 @@ export function checkExtensionInstalled(extensionName, cwd) {
 }
 
 /**
- * Fetches extensions list from create-eth repo
- * @returns {Promise<string[]>} - Array of extension names
+ * Fetches a single registry file
+ * @param {string} url - Registry URL
+ * @returns {Promise<Map<string, { repository: string, branch: string }>>}
  */
-async function fetchExtensionsList() {
+function fetchSingleRegistry(url) {
   return new Promise((resolve) => {
-    https.get(EXTENSIONS_URL, (res) => {
+    https.get(url, (res) => {
       let data = '';
 
       res.on('data', (chunk) => {
@@ -102,48 +103,98 @@ async function fetchExtensionsList() {
 
       res.on('end', () => {
         try {
-          // Parse TypeScript file to extract extensionFlagValue fields
-          const matches = data.matchAll(/extensionFlagValue:\s*["']([^"']+)["']/g);
-          const extensions = Array.from(matches, m => m[1]);
+          const registry = new Map();
 
-          if (extensions.length === 0) {
-            console.warn('Failed to parse extensions list, using fallback');
-            resolve(FALLBACK_EXTENSIONS);
-            return;
+          // Match extension objects with their fields
+          const objectPattern = /\{\s*extensionFlagValue:\s*["']([^"']+)["'][^}]*repository:\s*["']([^"']+)["'](?:[^}]*branch:\s*["']([^"']+)["'])?[^}]*\}/g;
+          let match;
+
+          while ((match = objectPattern.exec(data)) !== null) {
+            const [, name, repository, branch] = match;
+            // Default to 'main' if no branch specified
+            registry.set(name, { repository, branch: branch || 'main' });
           }
 
-          resolve(extensions);
+          resolve(registry);
         } catch (error) {
-          console.warn(`Failed to parse extensions list: ${error.message}, using fallback`);
-          resolve(FALLBACK_EXTENSIONS);
+          resolve(new Map());
         }
       });
-    }).on('error', (error) => {
-      console.warn(`Failed to fetch extensions list: ${error.message}, using fallback`);
-      resolve(FALLBACK_EXTENSIONS);
+    }).on('error', () => {
+      resolve(new Map());
     });
   });
 }
 
 /**
- * Validates extension name against known extensions
+ * Fetches extensions registry from all create-eth registry files
+ * @returns {Promise<Map<string, { repository: string, branch: string }>>}
+ */
+async function fetchExtensionsRegistry() {
+  const registries = await Promise.all(REGISTRY_URLS.map(fetchSingleRegistry));
+
+  // Merge all registries
+  const merged = new Map();
+  for (const registry of registries) {
+    for (const [name, config] of registry) {
+      merged.set(name, config);
+    }
+  }
+
+  if (merged.size === 0) {
+    console.warn('Failed to parse extensions registry, using fallback');
+    return buildFallbackRegistry();
+  }
+
+  return merged;
+}
+
+/**
+ * Builds fallback registry from FALLBACK_EXTENSIONS
+ * @returns {Map<string, { repository: string, branch: string }>}
+ */
+function buildFallbackRegistry() {
+  const registry = new Map();
+
+  for (const name of FALLBACK_EXTENSIONS) {
+    registry.set(name, { repository: DEFAULT_EXTENSIONS_REPO, branch: name });
+  }
+
+  return registry;
+}
+
+/**
+ * Gets all extensions from registry
+ * @returns {Promise<Map<string, { repository: string, branch: string }>>}
+ */
+export async function getExtensionsRegistry() {
+  return fetchExtensionsRegistry();
+}
+
+/**
+ * Validates extension name and returns its config from registry
  * @param {string} extensionName - Extension to validate
- * @returns {Promise<{ valid: boolean, reason?: string, extensions?: string[] }>}
+ * @returns {Promise<{ valid: boolean, reason?: string, extensions?: string[], config?: { repository: string, branch: string } }>}
  */
 export async function validateExtensionName(extensionName) {
   if (!extensionName || typeof extensionName !== 'string') {
     return { valid: false, reason: 'Extension name is required' };
   }
 
-  const knownExtensions = await fetchExtensionsList();
+  const registry = await fetchExtensionsRegistry();
+  const extensions = Array.from(registry.keys());
 
-  if (!knownExtensions.includes(extensionName)) {
+  if (!registry.has(extensionName)) {
     return {
       valid: false,
-      reason: `Unknown extension "${extensionName}". Known: ${knownExtensions.join(', ')}`,
-      extensions: knownExtensions
+      reason: `Unknown extension "${extensionName}". Known: ${extensions.join(', ')}`,
+      extensions
     };
   }
 
-  return { valid: true, extensions: knownExtensions };
+  return {
+    valid: true,
+    extensions,
+    config: registry.get(extensionName)
+  };
 }

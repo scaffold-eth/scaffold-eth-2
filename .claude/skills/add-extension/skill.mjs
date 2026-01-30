@@ -15,7 +15,8 @@ import readline from 'readline';
 import {
   detectSE2Project,
   checkExtensionInstalled,
-  validateExtensionName
+  validateExtensionName,
+  getExtensionsRegistry
 } from './lib/validator.mjs';
 import { fetchExtension, cleanupAllTemp } from './lib/fetcher.mjs';
 import {
@@ -45,16 +46,24 @@ async function main() {
     process.exit(0);
   }
 
+  // List extensions
+  if (extensionName === '--list' || extensionName === '-L') {
+    await listExtensions();
+    process.exit(0);
+  }
+
   try {
     console.log(`\n🏗️  Scaffold-ETH-2 Extension Merger`);
     console.log(`Adding extension: ${extensionName}\n`);
 
-    // 1. Validate extension name
+    // 1. Validate extension name and get config from registry
     const nameValidation = await validateExtensionName(extensionName);
     if (!nameValidation.valid) {
       console.error(`❌ ${nameValidation.reason}`);
       process.exit(1);
     }
+
+    const extensionConfig = nameValidation.config;
 
     // 2. Detect SE-2 project
     const cwd = process.cwd();
@@ -81,7 +90,11 @@ async function main() {
     // 4. Fetch extension files
     let extension;
     try {
-      extension = await fetchExtension(extensionName, options);
+      extension = await fetchExtension(extensionName, {
+        ...options,
+        repository: extensionConfig.repository,
+        branch: extensionConfig.branch
+      });
       console.log(`✓ Fetched extension (${extension.files.length} files)\n`);
     } catch (error) {
       console.error(`❌ ${error.message}`);
@@ -277,11 +290,30 @@ Options:
   -v, --verbose                  Show detailed error messages
   -l, --local <path>             Use local extension path (for development)
   -s, --solidity-framework <fw>  Choose framework (hardhat or foundry) for extensions with both
+  -L, --list                     List all available extensions with details
   -h, --help                     Show this help message
 
 Available Extensions:
   ${extensions.join(', ')}
 `);
+}
+
+/**
+ * Lists all available extensions with their repository info
+ */
+async function listExtensions() {
+  console.log('\n📦 Available Extensions\n');
+
+  const registry = await getExtensionsRegistry();
+
+  for (const [name, config] of registry) {
+    const repoName = config.repository.replace('https://github.com/', '');
+    console.log(`  ${name}`);
+    console.log(`    repo: ${repoName}`);
+    console.log(`    branch: ${config.branch}\n`);
+  }
+
+  console.log(`Total: ${registry.size} extensions`);
 }
 
 // Run if called directly

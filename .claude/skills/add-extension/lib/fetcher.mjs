@@ -2,17 +2,17 @@ import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
-import { REPO_URL } from './constants.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMP_DIR = path.join(__dirname, '..', '.tmp');
 
 /**
  * Fetches extension files from GitHub or local path
- * @param {string} extensionName - Name of extension (branch name)
+ * @param {string} extensionName - Name of extension
  * @param {object} options - Fetch options
  * @param {string} [options.local] - Local path to extension
- * @param {string} [options.branch] - Override branch name
+ * @param {string} [options.repository] - Repository URL from registry
+ * @param {string} [options.branch] - Branch name from registry
  * @returns {Promise<{ path: string, files: string[], cleanup: Function }>}
  */
 export async function fetchExtension(extensionName, options = {}) {
@@ -20,19 +20,27 @@ export async function fetchExtension(extensionName, options = {}) {
     return fetchLocalExtension(options.local);
   }
 
-  return fetchGitHubExtension(extensionName, options.branch || extensionName);
+  const repository = options.repository;
+  const branch = options.branch || extensionName;
+
+  if (!repository) {
+    throw new Error('Repository URL required for extension fetch');
+  }
+
+  return fetchGitHubExtension(extensionName, repository, branch);
 }
 
 /**
  * Fetches extension from GitHub branch
  * @param {string} extensionName - Extension name for display
+ * @param {string} repository - Repository URL
  * @param {string} branchName - Git branch to clone
  * @returns {Promise<{ path: string, files: string[], cleanup: Function }>}
  */
-async function fetchGitHubExtension(extensionName, branchName) {
+async function fetchGitHubExtension(extensionName, repository, branchName) {
   const targetDir = path.join(TEMP_DIR, `${extensionName}-${Date.now()}`);
 
-  console.log(`Fetching ${extensionName} from GitHub (branch: ${branchName})...`);
+  console.log(`Fetching ${extensionName} from ${repository} (branch: ${branchName})...`);
 
   try {
     // Use spawnSync with array args to prevent command injection
@@ -41,7 +49,7 @@ async function fetchGitHubExtension(extensionName, branchName) {
       '--depth', '1',
       '--single-branch',
       '--branch', branchName,
-      REPO_URL,
+      repository,
       targetDir
     ], { stdio: 'pipe' });
 
