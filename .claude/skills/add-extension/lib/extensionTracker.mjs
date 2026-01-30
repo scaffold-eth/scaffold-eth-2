@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { pathToFileURL } from 'url';
+import { spawnSync, execSync } from 'child_process';
+import { inferTemplatePath, loadArgsFile, getMergeType } from './templateUtils.mjs';
+import { CREATE_ETH_REPO } from './constants.mjs';
 
 /**
  * Tracks installed extensions and merges their args for templates
@@ -37,20 +39,24 @@ export async function loadMergedArgs(extensions, targetFilePath, extensionsRepoP
     return {};
   }
 
-  const { execSync } = await import('child_process');
-  const currentBranch = execSync('git branch --show-current', {
+  const currentBranch = spawnSync('git', ['branch', '--show-current'], {
     cwd: extensionsRepoPath,
     encoding: 'utf8'
-  }).trim();
+  }).stdout.trim();
 
   // Load args from each installed extension
   for (const extName of extensions) {
     try {
-      // Switch to extension branch
-      execSync(`git checkout ${extName}`, {
+      // Switch to extension branch (use spawnSync to prevent injection)
+      const checkoutResult = spawnSync('git', ['checkout', extName], {
         cwd: extensionsRepoPath,
         stdio: 'ignore'
       });
+
+      if (checkoutResult.status !== 0) {
+        console.warn(`  ⚠ Failed to checkout ${extName}`);
+        continue;
+      }
 
       const argsPath = path.join(
         extensionsRepoPath,
@@ -74,14 +80,10 @@ export async function loadMergedArgs(extensions, targetFilePath, extensionsRepoP
   }
 
   // Restore original branch
-  try {
-    execSync(`git checkout ${currentBranch}`, {
-      cwd: extensionsRepoPath,
-      stdio: 'ignore'
-    });
-  } catch (error) {
-    // Ignore
-  }
+  spawnSync('git', ['checkout', currentBranch], {
+    cwd: extensionsRepoPath,
+    stdio: 'ignore'
+  });
 
   // Fetch template defaults to determine merge types
   const templateDefaults = await getTemplateDefaults(targetFilePath);
@@ -103,32 +105,17 @@ function mergeArgs(allArgs, templateDefaults = {}) {
     for (const [key, value] of Object.entries(args)) {
       if (key === 'default') continue;
 
-      // Determine merge strategy based on template default type
-      const defaultValue = templateDefaults[key];
-      const defaultType = Array.isArray(defaultValue) ? 'array' : typeof defaultValue;
+      const mergeType = getMergeType(templateDefaults[key]);
 
-      if (defaultType === 'string') {
-        // String: concatenate
-        if (!merged[key]) {
-          merged[key] = '';
-        }
-        merged[key] += (merged[key] ? '\n' : '') + value;
-      } else if (defaultType === 'array') {
-        // Array: push
-        if (!merged[key]) {
-          merged[key] = [];
-        }
-        if (Array.isArray(value)) {
-          merged[key].push(...value);
-        }
-      } else if (defaultType === 'object') {
-        // Object: merge
-        if (!merged[key]) {
-          merged[key] = {};
-        }
-        merged[key] = { ...merged[key], ...value };
+      if (mergeType === 'string') {
+        merged[key] = (merged[key] || '') + (merged[key] ? '\n' : '') + value;
+      } else if (mergeType === 'array') {
+        if (!merged[key]) merged[key] = [];
+        if (Array.isArray(value)) merged[key].push(...value);
+      } else if (mergeType === 'object') {
+        merged[key] = { ...(merged[key] || {}), ...value };
       } else {
-        // Unknown type or no default: last one wins
+        // Unknown type: last one wins
         merged[key] = value;
       }
     }
@@ -141,7 +128,6 @@ function mergeArgs(allArgs, templateDefaults = {}) {
  * Gets relative path for args file
  */
 function getRelativePathForArgs(targetFilePath) {
-  // Extract relative path from absolute target path
   const packagesIndex = targetFilePath.lastIndexOf('/packages/');
   if (packagesIndex !== -1) {
     return targetFilePath.substring(packagesIndex + 1);
@@ -156,36 +142,17 @@ function getRelativePathForArgs(targetFilePath) {
 }
 
 /**
- * Loads args from a .args.mjs file
- * @param {string} argsFilePath - Path to args file
- * @param {number} cacheBuster - Timestamp to force reload
- */
-async function loadArgsFile(argsFilePath, cacheBuster = 0) {
-  try {
-    const fileUrl = pathToFileURL(argsFilePath).href + `?v=${cacheBuster}`;
-    const module = await import(fileUrl);
-    return module;
-  } catch (error) {
-    return null;
-  }
-}
-
-/**
  * Gets template defaults to determine arg types for merging
  * @param {string} targetFilePath - Target file path
  * @returns {Promise<object>} - Default values from template
  */
 export async function getTemplateDefaults(targetFilePath) {
   try {
-    // Infer template path
-    const templatePath = inferTemplatePathForDefaults(targetFilePath);
+    const templatePath = inferTemplatePath(targetFilePath);
     if (!templatePath) {
       return {};
     }
 
-    // Fetch template from GitHub
-    const { execSync } = await import('child_process');
-    const CREATE_ETH_REPO = 'https://raw.githubusercontent.com/scaffold-eth/create-eth/main';
     const url = `${CREATE_ETH_REPO}/${templatePath}`;
 
     const templateContent = execSync(`curl -sL "${url}"`, {
@@ -198,7 +165,6 @@ export async function getTemplateDefaults(targetFilePath) {
     }
 
     // Parse the expectedArgsDefaults from withDefaults call
-    // Match: withDefaults(contents, { key: value, ... })
     const match = templateContent.match(/withDefaults\s*\([^,]+,\s*(\{[\s\S]*?\})\s*\)/);
     if (!match) {
       return {};
@@ -213,35 +179,4 @@ export async function getTemplateDefaults(targetFilePath) {
   } catch (error) {
     return {};
   }
-}
-
-/**
- * Infers template path from target file path (for fetching defaults)
- */
-function inferTemplatePathForDefaults(targetFilePath) {
-  let relativePath = targetFilePath;
-
-  const packagesIndex = relativePath.lastIndexOf('/packages/');
-  if (packagesIndex !== -1) {
-    relativePath = relativePath.substring(packagesIndex + 1);
-  } else {
-    const fileName = path.basename(relativePath);
-    if (fileName === 'README.md' || fileName === '.gitignore') {
-      relativePath = fileName;
-    } else {
-      return null;
-    }
-  }
-
-  relativePath = relativePath.replace(/\\/g, '/');
-
-  if (relativePath.startsWith('packages/')) {
-    return `templates/base/${relativePath}.template.mjs`;
-  }
-
-  if (relativePath === 'README.md' || relativePath === '.gitignore') {
-    return `templates/base/${relativePath}.template.mjs`;
-  }
-
-  return null;
 }

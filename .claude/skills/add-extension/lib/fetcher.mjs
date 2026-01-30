@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
+import { REPO_URL } from './constants.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_URL = 'https://github.com/scaffold-eth/create-eth-extensions.git';
 const TEMP_DIR = path.join(__dirname, '..', '.tmp');
 
 /**
@@ -35,11 +35,20 @@ async function fetchGitHubExtension(extensionName, branchName) {
   console.log(`Fetching ${extensionName} from GitHub (branch: ${branchName})...`);
 
   try {
-    // Clean shallow clone of specific branch
-    execSync(
-      `git clone --depth 1 --single-branch --branch ${branchName} ${REPO_URL} "${targetDir}"`,
-      { stdio: 'pipe' }
-    );
+    // Use spawnSync with array args to prevent command injection
+    const result = spawnSync('git', [
+      'clone',
+      '--depth', '1',
+      '--single-branch',
+      '--branch', branchName,
+      REPO_URL,
+      targetDir
+    ], { stdio: 'pipe' });
+
+    if (result.status !== 0) {
+      const stderr = result.stderr?.toString() || 'Unknown error';
+      throw new Error(stderr);
+    }
 
     const extensionPath = path.join(targetDir, 'extension');
 
@@ -100,14 +109,15 @@ function getExtensionFiles(dir, baseDir = dir) {
     const fullPath = path.join(dir, entry.name);
     const relativePath = path.relative(baseDir, fullPath);
 
-    // Skip git files, node_modules, etc. (but allow .template.mjs and .args.mjs files)
+    // Skip node_modules
     if (entry.name === 'node_modules') {
       continue;
     }
 
+    // Skip dotfiles except .template.mjs and .args.mjs
     if (entry.name.startsWith('.')) {
-      // Allow .template.mjs and .args.mjs files (like .gitignore.template.mjs)
-      if (!entry.name.endsWith('.template.mjs') && !entry.name.endsWith('.args.mjs')) {
+      const isTemplateFile = entry.name.endsWith('.template.mjs') || entry.name.endsWith('.args.mjs');
+      if (!isTemplateFile) {
         continue;
       }
     }

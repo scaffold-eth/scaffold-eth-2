@@ -11,10 +11,7 @@
  *   claude /add-extension <extension-name> --local /path/to/extension
  */
 
-import path from 'path';
-import { fileURLToPath } from 'url';
 import readline from 'readline';
-import fs from 'fs';
 import {
   detectSE2Project,
   checkExtensionInstalled,
@@ -32,8 +29,7 @@ import {
   trackExtension,
   showSummary
 } from './lib/merger.mjs';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { VALID_FRAMEWORKS, FALLBACK_EXTENSIONS } from './lib/constants.mjs';
 
 /**
  * Main skill entry point
@@ -92,37 +88,31 @@ async function main() {
       process.exit(1);
     }
 
-    // 4.5. Check for framework choice
+    // 5. Check for framework choice
     let filesToUse = extension.files;
     const frameworks = detectFrameworks(extension.files);
 
     if (frameworks.hasBoth) {
       let chosenFramework = null;
 
-      // Check if project already has a solidity framework
       if (projectCheck.solidityFramework) {
-        // Project has a framework - use it and don't allow override
         chosenFramework = projectCheck.solidityFramework;
         console.log(`\n✓ Using ${chosenFramework} (detected from project)\n`);
 
-        // Error if --solidity-framework flag tries to override
         if (options.solidityFramework && options.solidityFramework !== chosenFramework) {
           console.error(`❌ Cannot install ${options.solidityFramework} files - project uses ${chosenFramework}`);
           extension.cleanup();
           process.exit(1);
         }
       } else {
-        // No framework detected - ask user to choose
         chosenFramework = options.solidityFramework;
 
-        // Validate framework if provided
-        if (chosenFramework && !['hardhat', 'foundry'].includes(chosenFramework)) {
+        if (chosenFramework && !VALID_FRAMEWORKS.includes(chosenFramework)) {
           console.error(`❌ Invalid framework: ${chosenFramework}. Must be 'hardhat' or 'foundry'.`);
           extension.cleanup();
           process.exit(1);
         }
 
-        // Prompt if not specified
         if (!chosenFramework) {
           chosenFramework = await promptFrameworkChoice();
           console.log(`\n✓ Selected ${chosenFramework}\n`);
@@ -135,22 +125,21 @@ async function main() {
       console.log(`Filtered to ${filesToUse.length} files for ${chosenFramework}\n`);
     }
 
-    // 5. Analyze changes
+    // 6. Analyze changes
     const changes = analyzeChanges(extension.path, filesToUse, cwd);
     const summary = generateChangeSummary(changes);
     console.log(summary);
 
-    // 6. Dry run exit
+    // 7. Dry run exit
     if (options.dryRun) {
       console.log('🔍 Dry run complete. No changes made.\n');
       extension.cleanup();
       process.exit(0);
     }
 
-    // 7. Apply changes
+    // 8. Apply changes
     console.log('\n📝 Applying changes...');
 
-    // Only use local path if explicitly provided
     const extensionsRepoPath = options.local || undefined;
 
     const result = await mergeFiles(changes, cwd, {
@@ -166,7 +155,7 @@ async function main() {
     // 10. Show summary
     showSummary(result, extensionName);
 
-    // 12. Cleanup
+    // 11. Cleanup
     extension.cleanup();
 
   } catch (error) {
@@ -179,9 +168,8 @@ async function main() {
   }
 }
 
-
 /**
- * Prompts user to choose framework
+ * Prompts user to choose framework with validation
  * @returns {Promise<string>} - 'hardhat' or 'foundry'
  */
 async function promptFrameworkChoice() {
@@ -191,24 +179,29 @@ async function promptFrameworkChoice() {
   });
 
   return new Promise((resolve) => {
-    console.log('\n📦 This extension supports both Hardhat and Foundry.');
-    console.log('Which framework do you want to install?');
-    console.log('  1) Hardhat (Solidity)');
-    console.log('  2) Foundry');
+    const askQuestion = () => {
+      console.log('\n📦 This extension supports both Hardhat and Foundry.');
+      console.log('Which framework do you want to install?');
+      console.log('  1) Hardhat');
+      console.log('  2) Foundry');
 
-    rl.question('\nChoice (1 or 2): ', (answer) => {
-      rl.close();
-      const choice = answer.trim();
+      rl.question('\nChoice (1 or 2): ', (answer) => {
+        const choice = answer.trim().toLowerCase();
 
-      if (choice === '1' || choice.toLowerCase() === 'hardhat') {
-        resolve('hardhat');
-      } else if (choice === '2' || choice.toLowerCase() === 'foundry') {
-        resolve('foundry');
-      } else {
-        console.log('Invalid choice, defaulting to Hardhat');
-        resolve('hardhat');
-      }
-    });
+        if (choice === '1' || choice === 'hardhat') {
+          rl.close();
+          resolve('hardhat');
+        } else if (choice === '2' || choice === 'foundry') {
+          rl.close();
+          resolve('foundry');
+        } else {
+          console.log('Invalid choice. Please enter 1 or 2.');
+          askQuestion();
+        }
+      });
+    };
+
+    askQuestion();
   });
 }
 
@@ -262,12 +255,8 @@ function parseOptions(args) {
  * Shows help message
  */
 async function showHelp() {
-  // Fetch available extensions
   const validation = await validateExtensionName('_dummy_');
-  const extensions = validation.extensions || [
-    'subgraph', 'x402', 'eip-712', 'ponder', 'erc-20',
-    'eip-5792', 'randao', 'erc-721', 'porto', 'envio', 'drizzle-neon'
-  ];
+  const extensions = validation.extensions || FALLBACK_EXTENSIONS;
 
   console.log(`
 🏗️  Scaffold-ETH-2 Extension Merger

@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-
-const EXTENSIONS_URL = 'https://raw.githubusercontent.com/scaffold-eth/create-eth/main/src/extensions/create-eth-extensions.ts';
+import { EXTENSIONS_URL, FALLBACK_EXTENSIONS } from './constants.mjs';
 
 /**
  * Detects if current directory is a valid Scaffold-ETH-2 project
@@ -28,7 +27,7 @@ export function detectSE2Project(cwd) {
     return { valid: true, solidityFramework };
   }
 
-  // Tertiary check: yarn workspaces with @se-2 pattern
+  // Tertiary check: yarn workspaces with packages/* pattern
   const packageJsonPath = path.join(cwd, 'package.json');
   if (fs.existsSync(packageJsonPath)) {
     try {
@@ -93,7 +92,7 @@ export function checkExtensionInstalled(extensionName, cwd) {
  * @returns {Promise<string[]>} - Array of extension names
  */
 async function fetchExtensionsList() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     https.get(EXTENSIONS_URL, (res) => {
       let data = '';
 
@@ -108,29 +107,20 @@ async function fetchExtensionsList() {
           const extensions = Array.from(matches, m => m[1]);
 
           if (extensions.length === 0) {
-            // Fallback to hardcoded list if parsing fails
-            const fallback = [
-              'subgraph', 'x402', 'eip-712', 'ponder', 'erc-20',
-              'eip-5792', 'randao', 'erc-721', 'porto', 'envio', 'drizzle-neon'
-            ];
             console.warn('Failed to parse extensions list, using fallback');
-            resolve(fallback);
+            resolve(FALLBACK_EXTENSIONS);
             return;
           }
 
           resolve(extensions);
         } catch (error) {
-          reject(new Error(`Failed to parse extensions list: ${error.message}`));
+          console.warn(`Failed to parse extensions list: ${error.message}, using fallback`);
+          resolve(FALLBACK_EXTENSIONS);
         }
       });
     }).on('error', (error) => {
-      // Fallback to hardcoded list on network error
-      const fallback = [
-        'subgraph', 'x402', 'eip-712', 'ponder', 'erc-20',
-        'eip-5792', 'randao', 'erc-721', 'porto', 'envio', 'drizzle-neon'
-      ];
       console.warn(`Failed to fetch extensions list: ${error.message}, using fallback`);
-      resolve(fallback);
+      resolve(FALLBACK_EXTENSIONS);
     });
   });
 }

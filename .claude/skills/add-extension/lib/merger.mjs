@@ -9,10 +9,6 @@ import { applyTemplateMerge, applyStandaloneTemplate, previewTemplateMerge } fro
  * @param {ChangeSet} changes - Changes from analyzer
  * @param {string} projectPath - Project root path
  * @param {object} options - Merge options
- * @param {boolean} [options.dryRun] - Don't actually write files
- * @param {boolean} [options.autoYes] - Skip prompts, approve all
- * @param {string} [options.extensionName] - Name of extension being installed
- * @param {string} [options.extensionsRepoPath] - Path to create-eth-extensions repo
  * @returns {Promise<{ applied: string[], skipped: string[], errors: string[] }>}
  */
 export async function mergeFiles(changes, projectPath, options = {}) {
@@ -37,17 +33,15 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
-  // 2. Apply .args.mjs merges (template-based only) - with confirmation
-  if (changes.argsMerges && changes.argsMerges.length > 0) {
+  // 2. Apply .args.mjs merges (template-based only)
+  if (changes.argsMerges?.length > 0) {
     console.log('\nMerging files with .args.mjs instructions...');
     for (const merge of changes.argsMerges) {
       try {
         if (!options.dryRun) {
           let applied = false;
 
-          // Apply template-based merge (requires extension info)
           if (options.extensionName && options.extensionsRepoPath) {
-            // Preview the merge first
             const preview = await previewTemplateMerge(
               merge.argsFile,
               merge.targetFile,
@@ -57,8 +51,8 @@ export async function mergeFiles(changes, projectPath, options = {}) {
             );
 
             if (preview.success) {
-              // Ask user for confirmation
-              const confirmed = await promptArgsMerge(merge.targetPath, preview);
+              // Skip prompt if --yes flag is set
+              const confirmed = options.yes || await promptArgsMerge(merge.targetPath, preview);
 
               if (confirmed) {
                 applied = await applyTemplateMerge(
@@ -66,7 +60,8 @@ export async function mergeFiles(changes, projectPath, options = {}) {
                   merge.targetFile,
                   projectPath,
                   options.extensionsRepoPath,
-                  options.extensionName
+                  options.extensionName,
+                  { verbose: options.verbose }
                 );
               } else {
                 result.skipped.push(merge.targetPath);
@@ -93,8 +88,8 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
-  // 2.5. Apply standalone .template.mjs files (without .args.mjs)
-  if (changes.templateMerges && changes.templateMerges.length > 0) {
+  // 3. Apply standalone .template.mjs files
+  if (changes.templateMerges?.length > 0) {
     console.log('\nGenerating files from standalone templates...');
     for (const merge of changes.templateMerges) {
       try {
@@ -102,7 +97,8 @@ export async function mergeFiles(changes, projectPath, options = {}) {
           const applied = await applyStandaloneTemplate(
             merge.templateFile,
             merge.targetFile,
-            projectPath
+            projectPath,
+            { verbose: options.verbose }
           );
 
           if (applied) {
@@ -122,7 +118,7 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
-  // 3. Handle modified files (needs Claude to merge)
+  // 4. Handle modified files (needs manual merge)
   if (changes.modified.length > 0) {
     console.log('\nModified files detected (manual merge required):');
     for (const file of changes.modified) {
@@ -132,12 +128,12 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     console.log('\nUse Claude to merge these files manually.');
   }
 
-  // 4. Merge package.json
+  // 5. Merge package.json
   if (changes.packageJson) {
     console.log('\nMerging package.json...');
     try {
       if (!options.dryRun) {
-        await mergePackageJson(changes.packageJson, projectPath);
+        mergePackageJson(changes.packageJson, projectPath);
       }
       result.applied.push('package.json');
       console.log('  ✓ package.json updated');
@@ -147,13 +143,13 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
-  // 5. Merge workspace package.json files
-  if (changes.workspacePackages && changes.workspacePackages.length > 0) {
+  // 6. Merge workspace package.json files
+  if (changes.workspacePackages?.length > 0) {
     console.log('\nMerging workspace package.json files...');
     for (const wp of changes.workspacePackages) {
       try {
         if (!options.dryRun) {
-          await mergePackageJson(wp.changes, path.dirname(wp.projectFile));
+          mergePackageJson(wp.changes, path.dirname(wp.projectFile));
         }
         result.applied.push(wp.path);
         console.log(`  ✓ ${wp.path}`);
@@ -164,7 +160,7 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
-  // 6. Append README content
+  // 7. Append README content
   if (changes.readme) {
     console.log('\nREADME.md needs manual update');
     result.skipped.push('README.md');
@@ -175,9 +171,6 @@ export async function mergeFiles(changes, projectPath, options = {}) {
 
 /**
  * Prompts user to confirm .args merge with preview
- * @param {string} targetPath - Target file path
- * @param {object} preview - Preview object with changes
- * @returns {Promise<boolean>} - true if user confirms
  */
 async function promptArgsMerge(targetPath, preview) {
   const rl = readline.createInterface({
@@ -215,8 +208,6 @@ async function promptArgsMerge(targetPath, preview) {
 
 /**
  * Copies a file, creating directories as needed
- * @param {string} source - Source file path
- * @param {string} dest - Destination file path
  */
 function copyFile(source, dest) {
   const dir = path.dirname(dest);
@@ -227,59 +218,37 @@ function copyFile(source, dest) {
 }
 
 /**
- * Merges package.json changes
- * @param {object} changes - package.json changes from analyzer
- * @param {string} projectPath - Project root path
+ * Merges a single package.json section
  */
-async function mergePackageJson(changes, projectPath) {
+function mergePackageSection(pkg, section, changes, sectionLabel) {
+  if (Object.keys(changes).length === 0) return;
+
+  pkg[section] = pkg[section] || {};
+  for (const [name, value] of Object.entries(changes)) {
+    if (typeof value === 'string') {
+      pkg[section][name] = value;
+    } else {
+      console.warn(`  ⚠ ${sectionLabel} conflict: ${name} (keeping ${value.current})`);
+    }
+  }
+}
+
+/**
+ * Merges package.json changes (synchronous)
+ */
+function mergePackageJson(changes, projectPath) {
   const pkgPath = path.join(projectPath, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
-  // Merge dependencies
-  if (Object.keys(changes.dependencies).length > 0) {
-    pkg.dependencies = pkg.dependencies || {};
-    for (const [name, version] of Object.entries(changes.dependencies)) {
-      if (typeof version === 'string') {
-        pkg.dependencies[name] = version;
-      } else {
-        // Conflict - keep current, warn
-        console.warn(`  ⚠ Dependency conflict: ${name} (keeping ${version.current})`);
-      }
-    }
-  }
+  mergePackageSection(pkg, 'dependencies', changes.dependencies, 'Dependency');
+  mergePackageSection(pkg, 'devDependencies', changes.devDependencies, 'DevDependency');
+  mergePackageSection(pkg, 'scripts', changes.scripts, 'Script');
 
-  // Merge devDependencies
-  if (Object.keys(changes.devDependencies).length > 0) {
-    pkg.devDependencies = pkg.devDependencies || {};
-    for (const [name, version] of Object.entries(changes.devDependencies)) {
-      if (typeof version === 'string') {
-        pkg.devDependencies[name] = version;
-      } else {
-        console.warn(`  ⚠ DevDependency conflict: ${name} (keeping ${version.current})`);
-      }
-    }
-  }
-
-  // Merge scripts
-  if (Object.keys(changes.scripts).length > 0) {
-    pkg.scripts = pkg.scripts || {};
-    for (const [name, script] of Object.entries(changes.scripts)) {
-      if (typeof script === 'string') {
-        pkg.scripts[name] = script;
-      } else {
-        console.warn(`  ⚠ Script conflict: ${name} (keeping current)`);
-      }
-    }
-  }
-
-  // Write back
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
 }
 
 /**
  * Updates package.json to track installed extension
- * @param {string} extensionName - Extension name
- * @param {string} projectPath - Project root path
  */
 export function trackExtension(extensionName, projectPath) {
   const pkgPath = path.join(projectPath, 'package.json');
@@ -297,8 +266,6 @@ export function trackExtension(extensionName, projectPath) {
 
 /**
  * Runs yarn install
- * @param {string} projectPath - Project root path
- * @param {boolean} silent - Suppress output
  */
 export function runYarnInstall(projectPath, silent = false) {
   console.log('\nInstalling dependencies...');
@@ -316,8 +283,6 @@ export function runYarnInstall(projectPath, silent = false) {
 
 /**
  * Generates final summary
- * @param {object} result - Merge result
- * @param {string} extensionName - Extension name
  */
 export function showSummary(result, extensionName) {
   console.log('\n' + '='.repeat(50));

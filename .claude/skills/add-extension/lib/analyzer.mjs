@@ -27,7 +27,6 @@ export function filterByFramework(extensionFiles, framework) {
   const otherFramework = framework === 'hardhat' ? 'foundry' : 'hardhat';
 
   return extensionFiles.filter(file => {
-    // Keep all files except those in the other framework's packages dir
     return !file.startsWith(`packages/${otherFramework}/`);
   });
 }
@@ -58,7 +57,7 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
   );
 
   for (const file of extensionFiles) {
-    // Handle .args.mjs files - these contain merge instructions for existing files
+    // Handle .args.mjs files
     if (file.endsWith('.args.mjs')) {
       const targetFile = file.replace('.args.mjs', '');
       const argsFilePath = path.join(extensionPath, file);
@@ -76,7 +75,6 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     if (file.endsWith('.template.mjs')) {
       const targetFile = file.replace('.template.mjs', '');
 
-      // Only process if there's no corresponding .args.mjs
       if (!argsFiles.has(targetFile)) {
         const templateFilePath = path.join(extensionPath, file);
         const targetFilePath = path.join(projectPath, targetFile);
@@ -93,17 +91,15 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     const extensionFilePath = path.join(extensionPath, file);
     const projectFilePath = path.join(projectPath, file);
 
-    // Special handling for package.json files
+    // Root package.json
     if (file === 'package.json') {
       changes.packageJson = analyzePackageJson(extensionFilePath, projectFilePath);
       continue;
     }
 
-    // Handle workspace package.json files (packages/*/package.json)
+    // Workspace package.json files
     if (file.endsWith('package.json') && file.includes('packages/')) {
-      // Check if the workspace package.json already exists
       if (fs.existsSync(projectFilePath)) {
-        // Existing workspace package.json - merge it
         const pkgChanges = analyzePackageJson(extensionFilePath, projectFilePath);
         if (pkgChanges) {
           changes.workspacePackages.push({
@@ -114,7 +110,6 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
           });
         }
       } else {
-        // New workspace package.json - copy as new file
         changes.new.push({
           path: file,
           extensionFile: extensionFilePath,
@@ -124,9 +119,8 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
       continue;
     }
 
-    // Special handling for README
+    // README handling
     if (file === 'README.md' || file.endsWith('README.md.args.mjs')) {
-      // We'll handle README separately for appending content
       if (fs.existsSync(projectFilePath.replace('.args.mjs', ''))) {
         changes.readme = {
           extension: extensionFilePath,
@@ -136,16 +130,14 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
       continue;
     }
 
-    // Check if file exists in project
+    // Regular files
     if (fs.existsSync(projectFilePath)) {
-      // File exists - needs merging
       changes.modified.push({
         path: file,
         extensionFile: extensionFilePath,
         projectFile: projectFilePath
       });
     } else {
-      // New file - can copy directly
       changes.new.push({
         path: file,
         extensionFile: extensionFilePath,
@@ -159,9 +151,6 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
 
 /**
  * Analyzes package.json differences
- * @param {string} extensionPkgPath - Extension package.json path
- * @param {string} projectPkgPath - Project package.json path
- * @returns {{ dependencies: object, devDependencies: object, scripts: object } | null}
  */
 function analyzePackageJson(extensionPkgPath, projectPkgPath) {
   if (!fs.existsSync(extensionPkgPath)) {
@@ -181,49 +170,11 @@ function analyzePackageJson(extensionPkgPath, projectPkgPath) {
       workspaces: null
     };
 
-    // Find new/updated dependencies
-    if (extensionPkg.dependencies) {
-      for (const [name, version] of Object.entries(extensionPkg.dependencies)) {
-        if (!projectPkg.dependencies?.[name]) {
-          changes.dependencies[name] = version;
-        } else if (projectPkg.dependencies[name] !== version) {
-          changes.dependencies[name] = {
-            current: projectPkg.dependencies[name],
-            new: version
-          };
-        }
-      }
-    }
+    // Analyze each section
+    analyzePkgSection(extensionPkg.dependencies, projectPkg.dependencies, changes.dependencies);
+    analyzePkgSection(extensionPkg.devDependencies, projectPkg.devDependencies, changes.devDependencies);
+    analyzePkgSection(extensionPkg.scripts, projectPkg.scripts, changes.scripts);
 
-    // Find new/updated devDependencies
-    if (extensionPkg.devDependencies) {
-      for (const [name, version] of Object.entries(extensionPkg.devDependencies)) {
-        if (!projectPkg.devDependencies?.[name]) {
-          changes.devDependencies[name] = version;
-        } else if (projectPkg.devDependencies[name] !== version) {
-          changes.devDependencies[name] = {
-            current: projectPkg.devDependencies[name],
-            new: version
-          };
-        }
-      }
-    }
-
-    // Find new/updated scripts
-    if (extensionPkg.scripts) {
-      for (const [name, script] of Object.entries(extensionPkg.scripts)) {
-        if (!projectPkg.scripts?.[name]) {
-          changes.scripts[name] = script;
-        } else if (projectPkg.scripts[name] !== script) {
-          changes.scripts[name] = {
-            current: projectPkg.scripts[name],
-            new: script
-          };
-        }
-      }
-    }
-
-    // Check if there are any changes
     const hasChanges =
       Object.keys(changes.dependencies).length > 0 ||
       Object.keys(changes.devDependencies).length > 0 ||
@@ -237,15 +188,45 @@ function analyzePackageJson(extensionPkgPath, projectPkgPath) {
 }
 
 /**
+ * Analyzes differences in a package.json section
+ */
+function analyzePkgSection(extSection, projSection, changes) {
+  if (!extSection) return;
+
+  for (const [name, value] of Object.entries(extSection)) {
+    if (!projSection?.[name]) {
+      changes[name] = value;
+    } else if (projSection[name] !== value) {
+      changes[name] = {
+        current: projSection[name],
+        new: value
+      };
+    }
+  }
+}
+
+/**
+ * Formats dependency changes for display
+ */
+function formatDependencyChanges(deps, indent = '    ') {
+  const lines = [];
+  for (const [name, version] of Object.entries(deps)) {
+    if (typeof version === 'string') {
+      lines.push(`${indent}+ ${name}@${version}`);
+    } else {
+      lines.push(`${indent}~ ${name}: ${version.current} → ${version.new}`);
+    }
+  }
+  return lines;
+}
+
+/**
  * Generates a human-readable summary of changes
  * @param {ChangeSet} changes - Change set from analyzeChanges
  * @returns {string}
  */
 export function generateChangeSummary(changes) {
-  const lines = [];
-
-  lines.push('Extension Changes Summary:');
-  lines.push('');
+  const lines = ['Extension Changes Summary:', ''];
 
   if (changes.new.length > 0) {
     lines.push(`New files (${changes.new.length}):`);
@@ -265,85 +246,56 @@ export function generateChangeSummary(changes) {
 
     if (Object.keys(pkg.dependencies).length > 0) {
       lines.push('  Dependencies:');
-      Object.entries(pkg.dependencies).forEach(([name, version]) => {
-        if (typeof version === 'string') {
-          lines.push(`    + ${name}@${version}`);
-        } else {
-          lines.push(`    ~ ${name}: ${version.current} → ${version.new}`);
-        }
-      });
+      lines.push(...formatDependencyChanges(pkg.dependencies));
     }
 
     if (Object.keys(pkg.devDependencies).length > 0) {
       lines.push('  DevDependencies:');
-      Object.entries(pkg.devDependencies).forEach(([name, version]) => {
-        if (typeof version === 'string') {
-          lines.push(`    + ${name}@${version}`);
-        } else {
-          lines.push(`    ~ ${name}: ${version.current} → ${version.new}`);
-        }
-      });
+      lines.push(...formatDependencyChanges(pkg.devDependencies));
     }
 
     if (Object.keys(pkg.scripts).length > 0) {
       lines.push('  Scripts:');
-      Object.entries(pkg.scripts).forEach(([name, script]) => {
-        if (typeof script === 'string') {
-          lines.push(`    + ${name}`);
-        } else {
-          lines.push(`    ~ ${name}`);
-        }
-      });
+      for (const [name, script] of Object.entries(pkg.scripts)) {
+        lines.push(typeof script === 'string' ? `    + ${name}` : `    ~ ${name}`);
+      }
     }
 
     lines.push('');
   }
 
   if (changes.readme) {
-    lines.push('README.md will be updated with extension docs');
-    lines.push('');
+    lines.push('README.md will be updated with extension docs', '');
   }
 
   if (changes.workspacePackages.length > 0) {
     lines.push('Workspace package.json changes:');
-    changes.workspacePackages.forEach(wp => {
+    for (const wp of changes.workspacePackages) {
       lines.push(`  ${wp.path}:`);
       const pkg = wp.changes;
 
       if (Object.keys(pkg.dependencies).length > 0) {
-        Object.entries(pkg.dependencies).forEach(([name, version]) => {
-          if (typeof version === 'string') {
-            lines.push(`    + ${name}@${version}`);
-          } else {
-            lines.push(`    ~ ${name}: ${version.current} → ${version.new}`);
-          }
-        });
+        lines.push(...formatDependencyChanges(pkg.dependencies));
       }
 
       if (Object.keys(pkg.devDependencies).length > 0) {
-        Object.entries(pkg.devDependencies).forEach(([name, version]) => {
-          if (typeof version === 'string') {
-            lines.push(`    + ${name}@${version}`);
-          } else {
-            lines.push(`    ~ ${name}: ${version.current} → ${version.new}`);
-          }
-        });
+        lines.push(...formatDependencyChanges(pkg.devDependencies));
       }
 
       if (Object.keys(pkg.scripts).length > 0) {
         lines.push(`    Scripts: ${Object.keys(pkg.scripts).join(', ')}`);
       }
-    });
+    }
     lines.push('');
   }
 
-  if (changes.argsMerges && changes.argsMerges.length > 0) {
+  if (changes.argsMerges?.length > 0) {
     lines.push(`Files to merge via .args.mjs (${changes.argsMerges.length}):`);
     changes.argsMerges.forEach(m => lines.push(`  ~ ${m.targetPath}`));
     lines.push('');
   }
 
-  if (changes.templateMerges && changes.templateMerges.length > 0) {
+  if (changes.templateMerges?.length > 0) {
     lines.push(`Files to generate from templates (${changes.templateMerges.length}):`);
     changes.templateMerges.forEach(m => lines.push(`  + ${m.targetPath}`));
     lines.push('');
@@ -354,11 +306,11 @@ export function generateChangeSummary(changes) {
 
 /**
  * @typedef {object} ChangeSet
- * @property {Array<{path: string, extensionFile: string, projectFile: string}>} new - New files to create
- * @property {Array<{path: string, extensionFile: string, projectFile: string}>} modified - Files to merge
- * @property {object | null} packageJson - package.json changes
- * @property {Array<{path: string, extensionFile: string, projectFile: string, changes: object}>} workspacePackages - Workspace package.json changes
- * @property {object | null} readme - README changes
- * @property {Array<{argsFile: string, targetFile: string, targetPath: string}>} argsMerges - .args.mjs files to apply
- * @property {Array<{templateFile: string, targetFile: string, targetPath: string}>} templateMerges - Standalone .template.mjs files to apply
+ * @property {Array<{path: string, extensionFile: string, projectFile: string}>} new
+ * @property {Array<{path: string, extensionFile: string, projectFile: string}>} modified
+ * @property {object | null} packageJson
+ * @property {Array<{path: string, extensionFile: string, projectFile: string, changes: object}>} workspacePackages
+ * @property {object | null} readme
+ * @property {Array<{argsFile: string, targetFile: string, targetPath: string}>} argsMerges
+ * @property {Array<{templateFile: string, targetFile: string, targetPath: string}>} templateMerges
  */
