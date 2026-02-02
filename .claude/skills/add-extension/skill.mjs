@@ -163,7 +163,7 @@ async function main() {
 
     // 9. Track extension
     trackExtension(extensionName, cwd);
-    console.log(`\n✓ Tracked extension in package.json`);
+    console.log(`\n✓ Tracked extension in scaffold.extensions.json`);
 
     // 10. Show summary
     showSummary(result, extensionName);

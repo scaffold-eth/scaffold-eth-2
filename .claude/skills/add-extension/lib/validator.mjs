@@ -71,18 +71,18 @@ function detectSolidityFramework(cwd) {
  * @returns {boolean}
  */
 export function checkExtensionInstalled(extensionName, cwd) {
-  const packageJsonPath = path.join(cwd, 'package.json');
+  const extPath = path.join(cwd, 'scaffold.extensions.json');
 
-  if (!fs.existsSync(packageJsonPath)) {
+  if (!fs.existsSync(extPath)) {
     return false;
   }
 
   try {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-    const installedExtensions = packageJson.scaffoldEth?.extensions || [];
+    const data = JSON.parse(fs.readFileSync(extPath, 'utf8'));
+    const installedExtensions = data.extensions || [];
     return installedExtensions.includes(extensionName);
   } catch (error) {
-    console.error('Error reading package.json:', error.message);
+    console.error('Error reading scaffold.extensions.json:', error.message);
     return false;
   }
 }

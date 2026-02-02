@@ -294,20 +294,26 @@ function registerNewWorkspaces(newWorkspaces, projectPath) {
 }
 
 /**
- * Updates package.json to track installed extension
+ * Tracks installed extension in scaffold.extensions.json
  */
 export function trackExtension(extensionName, projectPath) {
-  const pkgPath = path.join(projectPath, 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+  const extPath = path.join(projectPath, 'scaffold.extensions.json');
 
-  pkg.scaffoldEth = pkg.scaffoldEth || {};
-  pkg.scaffoldEth.extensions = pkg.scaffoldEth.extensions || [];
-
-  if (!pkg.scaffoldEth.extensions.includes(extensionName)) {
-    pkg.scaffoldEth.extensions.push(extensionName);
+  let data = { extensions: [] };
+  if (fs.existsSync(extPath)) {
+    try {
+      data = JSON.parse(fs.readFileSync(extPath, 'utf8'));
+      data.extensions = data.extensions || [];
+    } catch {
+      data = { extensions: [] };
+    }
   }
 
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+  if (!data.extensions.includes(extensionName)) {
+    data.extensions.push(extensionName);
+  }
+
+  fs.writeFileSync(extPath, JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
 /**

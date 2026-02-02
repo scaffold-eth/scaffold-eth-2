@@ -41,7 +41,7 @@ Run `/add-extension --list` for current list with repository details.
 4. **Framework** - Auto-detects hardhat/foundry from project
 5. **Analyze** - Compares extension files vs project
 6. **Merge** - Copies new files, merges package.json, prompts for conflicts
-7. **Track** - Records extension in `package.json` under `scaffoldEth.extensions`
+7. **Track** - Records extension in `scaffold.extensions.json`
 
 ### Framework Handling
 
@@ -63,13 +63,11 @@ Run `/add-extension --list` for current list with repository details.
 
 ## Extension Tracking
 
-Installed extensions tracked in `package.json`:
+Installed extensions tracked in `scaffold.extensions.json`:
 
 ```json
 {
-  "scaffoldEth": {
-    "extensions": ["erc-20", "subgraph"]
-  }
+  "extensions": ["erc-20", "subgraph"]
 }
 ```
 
@@ -114,7 +112,7 @@ package.json changes:
     + deploy:erc20
 
 📝 Applying changes...
-✓ Tracked extension in package.json
+✓ Tracked extension in scaffold.extensions.json
 
 ==================================================
 Extension "erc-20" merge complete!

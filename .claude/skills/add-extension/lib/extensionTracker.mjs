@@ -9,18 +9,22 @@ import { CREATE_ETH_REPO } from './constants.mjs';
  */
 
 /**
- * Gets list of installed extensions from package.json
+ * Gets list of installed extensions from scaffold.extensions.json
  * @param {string} projectPath - Project root path
  * @returns {string[]} - Array of extension names
  */
 export function getInstalledExtensions(projectPath) {
-  const pkgPath = path.join(projectPath, 'package.json');
-  if (!fs.existsSync(pkgPath)) {
+  const extPath = path.join(projectPath, 'scaffold.extensions.json');
+  if (!fs.existsSync(extPath)) {
     return [];
   }
 
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  return pkg.scaffoldEth?.extensions || [];
+  try {
+    const data = JSON.parse(fs.readFileSync(extPath, 'utf8'));
+    return data.extensions || [];
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -128,9 +132,11 @@ function mergeArgs(allArgs, templateDefaults = {}) {
  * Gets relative path for args file
  */
 function getRelativePathForArgs(targetFilePath) {
-  const packagesIndex = targetFilePath.lastIndexOf('/packages/');
+  // Normalize path separators for cross-platform compatibility
+  const normalized = targetFilePath.replace(/\\/g, '/');
+  const packagesIndex = normalized.lastIndexOf('/packages/');
   if (packagesIndex !== -1) {
-    return targetFilePath.substring(packagesIndex + 1);
+    return normalized.substring(packagesIndex + 1);
   }
 
   const fileName = path.basename(targetFilePath);
