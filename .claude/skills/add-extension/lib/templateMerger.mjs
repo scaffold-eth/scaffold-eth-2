@@ -155,7 +155,13 @@ async function fetchTemplate(templatePath) {
     }
 
     const url = `${CREATE_ETH_REPO}/${templatePath}`;
-    const content = execSync(`curl -sL "${url}"`, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+    // Use cross-platform curl command (works on Windows 10+ and Unix systems)
+    const curlCmd = process.platform === 'win32' ? 'curl.exe' : 'curl';
+    const content = execSync(`${curlCmd} -sL "${url}"`, {
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+      windowsHide: true  // Hide console window on Windows
+    });
 
     if (content.includes('404: Not Found') || content.trim().startsWith('<!DOCTYPE')) {
       return null;

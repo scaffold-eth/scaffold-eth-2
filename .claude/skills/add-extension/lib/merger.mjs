@@ -160,6 +160,23 @@ export async function mergeFiles(changes, projectPath, options = {}) {
     }
   }
 
+  // 6.5. Register new workspaces in root package.json
+  if (changes.newWorkspaces?.length > 0) {
+    console.log('\nRegistering new workspaces...');
+    try {
+      if (!options.dryRun) {
+        registerNewWorkspaces(changes.newWorkspaces, projectPath);
+      }
+      for (const workspace of changes.newWorkspaces) {
+        result.applied.push(workspace);
+        console.log(`  ✓ ${workspace}`);
+      }
+    } catch (error) {
+      result.errors.push(`workspaces: ${error.message}`);
+      console.error(`  ✗ Failed to register workspaces: ${error.message}`);
+    }
+  }
+
   // 7. Append README content
   if (changes.readme) {
     console.log('\nREADME.md needs manual update');
@@ -243,6 +260,35 @@ function mergePackageJson(changes, projectPath) {
   mergePackageSection(pkg, 'dependencies', changes.dependencies, 'Dependency');
   mergePackageSection(pkg, 'devDependencies', changes.devDependencies, 'DevDependency');
   mergePackageSection(pkg, 'scripts', changes.scripts, 'Script');
+
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+}
+
+/**
+ * Registers new workspace packages in root package.json
+ */
+function registerNewWorkspaces(newWorkspaces, projectPath) {
+  const pkgPath = path.join(projectPath, 'package.json');
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+
+  // Handle both string array and object format for workspaces
+  let workspacesList;
+  if (Array.isArray(pkg.workspaces)) {
+    workspacesList = pkg.workspaces;
+  } else if (pkg.workspaces?.packages) {
+    workspacesList = pkg.workspaces.packages;
+  } else {
+    // No workspaces field, create one
+    pkg.workspaces = { packages: [] };
+    workspacesList = pkg.workspaces.packages;
+  }
+
+  // Add new workspaces if not already present
+  for (const workspace of newWorkspaces) {
+    if (!workspacesList.includes(workspace)) {
+      workspacesList.push(workspace);
+    }
+  }
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
 }

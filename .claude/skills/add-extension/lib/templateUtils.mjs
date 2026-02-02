@@ -13,7 +13,8 @@ import { pathToFileURL } from 'url';
  * @returns {string | null} - Template path or null if cannot infer
  */
 export function inferTemplatePath(targetFilePath) {
-  let relativePath = targetFilePath;
+  // Normalize path separators for cross-platform compatibility
+  let relativePath = targetFilePath.replace(/\\/g, '/');
 
   // Extract relative path
   const packagesIndex = relativePath.lastIndexOf('/packages/');
@@ -27,8 +28,6 @@ export function inferTemplatePath(targetFilePath) {
       return null;
     }
   }
-
-  relativePath = relativePath.replace(/\\/g, '/');
 
   // Map to template location
   if (relativePath.startsWith('packages/')) {

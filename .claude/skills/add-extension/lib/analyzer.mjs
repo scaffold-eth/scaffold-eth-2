@@ -7,8 +7,14 @@ import path from 'path';
  * @returns {{ hasHardhat: boolean, hasFoundry: boolean, hasBoth: boolean }}
  */
 export function detectFrameworks(extensionFiles) {
-  const hasHardhat = extensionFiles.some(f => f.startsWith('packages/hardhat/'));
-  const hasFoundry = extensionFiles.some(f => f.startsWith('packages/foundry/'));
+  const hasHardhat = extensionFiles.some(f => {
+    const normalized = f.replace(/\\/g, '/');
+    return normalized.startsWith('packages/hardhat/');
+  });
+  const hasFoundry = extensionFiles.some(f => {
+    const normalized = f.replace(/\\/g, '/');
+    return normalized.startsWith('packages/foundry/');
+  });
 
   return {
     hasHardhat,
@@ -27,7 +33,8 @@ export function filterByFramework(extensionFiles, framework) {
   const otherFramework = framework === 'hardhat' ? 'foundry' : 'hardhat';
 
   return extensionFiles.filter(file => {
-    return !file.startsWith(`packages/${otherFramework}/`);
+    const normalized = file.replace(/\\/g, '/');
+    return !normalized.startsWith(`packages/${otherFramework}/`);
   });
 }
 
@@ -44,6 +51,7 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     modified: [],
     packageJson: null,
     workspacePackages: [],
+    newWorkspaces: [], // Track new workspace directories
     readme: null,
     argsMerges: [],
     templateMerges: []
@@ -98,7 +106,8 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     }
 
     // Workspace package.json files
-    if (file.endsWith('package.json') && file.includes('packages/')) {
+    const normalizedFile = file.replace(/\\/g, '/');
+    if (file.endsWith('package.json') && normalizedFile.includes('packages/')) {
       if (fs.existsSync(projectFilePath)) {
         const pkgChanges = analyzePackageJson(extensionFilePath, projectFilePath);
         if (pkgChanges) {
@@ -145,6 +154,22 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
       });
     }
   }
+
+  // Detect new workspace packages
+  const newPackageDirs = new Set();
+  for (const file of extensionFiles) {
+    // Normalize path separators for cross-platform compatibility
+    const normalizedFile = file.replace(/\\/g, '/');
+    const match = normalizedFile.match(/^packages\/([^/]+)\//);
+    if (match) {
+      const pkgName = match[1];
+      const pkgDir = path.join(projectPath, 'packages', pkgName);
+      if (!fs.existsSync(pkgDir)) {
+        newPackageDirs.add(`packages/${pkgName}`);
+      }
+    }
+  }
+  changes.newWorkspaces = Array.from(newPackageDirs);
 
   return changes;
 }
@@ -301,6 +326,12 @@ export function generateChangeSummary(changes) {
     lines.push('');
   }
 
+  if (changes.newWorkspaces?.length > 0) {
+    lines.push(`New workspaces to register (${changes.newWorkspaces.length}):`);
+    changes.newWorkspaces.forEach(w => lines.push(`  + ${w}`));
+    lines.push('');
+  }
+
   return lines.join('\n');
 }
 
@@ -310,6 +341,7 @@ export function generateChangeSummary(changes) {
  * @property {Array<{path: string, extensionFile: string, projectFile: string}>} modified
  * @property {object | null} packageJson
  * @property {Array<{path: string, extensionFile: string, projectFile: string, changes: object}>} workspacePackages
+ * @property {string[]} newWorkspaces
  * @property {object | null} readme
  * @property {Array<{argsFile: string, targetFile: string, targetPath: string}>} argsMerges
  * @property {Array<{templateFile: string, targetFile: string, targetPath: string}>} templateMerges
