@@ -27,7 +27,6 @@ node .claude/skills/add-extension/skill.mjs $0 $@
 | Flag | Description |
 |------|-------------|
 | `--dry-run`, `-d` | Preview only |
-| `--force`, `-f` | Reinstall if installed |
 | `--yes`, `-y` | Skip prompts |
 | `--verbose`, `-v` | Detailed errors |
 | `--local`, `-l` | Local extension path |

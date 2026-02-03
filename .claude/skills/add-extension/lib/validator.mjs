@@ -64,28 +64,6 @@ function detectSolidityFramework(cwd) {
   return undefined;
 }
 
-/**
- * Checks if an extension is already installed
- * @param {string} extensionName - Extension to check
- * @param {string} cwd - Current working directory
- * @returns {boolean}
- */
-export function checkExtensionInstalled(extensionName, cwd) {
-  const extPath = path.join(cwd, 'scaffold.extensions.json');
-
-  if (!fs.existsSync(extPath)) {
-    return false;
-  }
-
-  try {
-    const data = JSON.parse(fs.readFileSync(extPath, 'utf8'));
-    const installedExtensions = data.extensions || [];
-    return installedExtensions.includes(extensionName);
-  } catch (error) {
-    console.error('Error reading scaffold.extensions.json:', error.message);
-    return false;
-  }
-}
 
 /**
  * Fetches a single registry file

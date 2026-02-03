@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { pathToFileURL, fileURLToPath } from 'url';
 import { execSync } from 'child_process';
-import { getInstalledExtensions, loadMergedArgs, getTemplateDefaults } from './extensionTracker.mjs';
+import { getTemplateDefaults } from './extensionTracker.mjs';
 import {
   inferTemplatePath,
   generateSimpleDiff,
@@ -25,30 +25,25 @@ const UTILS_PATH = path.join(__dirname, 'create-eth-utils/utils.js');
  * Core template merge logic (shared by preview and apply)
  * @returns {Promise<{ success: boolean, generatedContent?: string, reason?: string }>}
  */
-async function processTemplateMerge(argsFilePath, targetFilePath, projectPath, extensionsRepoPath, currentExtensionName) {
-  const installedExtensions = getInstalledExtensions(projectPath);
-  const mergedArgs = await loadMergedArgs(installedExtensions, targetFilePath, extensionsRepoPath);
+async function processTemplateMerge(argsFilePath, targetFilePath) {
   const templateDefaults = await getTemplateDefaults(targetFilePath);
+  const mergedArgs = {};
 
-  // Add current extension's args if not already installed
-  if (!installedExtensions.includes(currentExtensionName)) {
-    const currentArgs = await loadArgsFile(argsFilePath);
-    if (currentArgs) {
-      for (const [key, value] of Object.entries(currentArgs)) {
-        if (key === 'default') continue;
+  const currentArgs = await loadArgsFile(argsFilePath);
+  if (currentArgs) {
+    for (const [key, value] of Object.entries(currentArgs)) {
+      if (key === 'default') continue;
 
-        const mergeType = getMergeType(templateDefaults[key]);
+      const mergeType = getMergeType(templateDefaults[key]);
 
-        if (mergeType === 'string') {
-          mergedArgs[key] = (mergedArgs[key] || '') + (mergedArgs[key] ? '\n' : '') + value;
-        } else if (mergeType === 'array') {
-          if (!mergedArgs[key]) mergedArgs[key] = [];
-          if (Array.isArray(value)) mergedArgs[key].push(...value);
-        } else if (mergeType === 'object') {
-          mergedArgs[key] = { ...(mergedArgs[key] || {}), ...value };
-        } else {
-          mergedArgs[key] = value;
-        }
+      if (mergeType === 'string') {
+        mergedArgs[key] = value;
+      } else if (mergeType === 'array') {
+        mergedArgs[key] = Array.isArray(value) ? value : [value];
+      } else if (mergeType === 'object') {
+        mergedArgs[key] = value;
+      } else {
+        mergedArgs[key] = value;
       }
     }
   }
@@ -78,9 +73,9 @@ async function processTemplateMerge(argsFilePath, targetFilePath, projectPath, e
 /**
  * Previews .args.mjs merge without applying changes
  */
-export async function previewTemplateMerge(argsFilePath, targetFilePath, projectPath, extensionsRepoPath, currentExtensionName) {
+export async function previewTemplateMerge(argsFilePath, targetFilePath) {
   try {
-    const result = await processTemplateMerge(argsFilePath, targetFilePath, projectPath, extensionsRepoPath, currentExtensionName);
+    const result = await processTemplateMerge(argsFilePath, targetFilePath);
 
     if (!result.success) {
       return result;
@@ -114,9 +109,9 @@ export async function previewTemplateMerge(argsFilePath, targetFilePath, project
 /**
  * Applies .args.mjs merge using create-eth template
  */
-export async function applyTemplateMerge(argsFilePath, targetFilePath, projectPath, extensionsRepoPath, currentExtensionName, options = {}) {
+export async function applyTemplateMerge(argsFilePath, targetFilePath, options = {}) {
   try {
-    const result = await processTemplateMerge(argsFilePath, targetFilePath, projectPath, extensionsRepoPath, currentExtensionName);
+    const result = await processTemplateMerge(argsFilePath, targetFilePath);
 
     if (!result.success) {
       console.log(`  [template] ${result.reason}`);

@@ -41,33 +41,22 @@ export async function mergeFiles(changes, projectPath, options = {}) {
         if (!options.dryRun) {
           let applied = false;
 
-          if (options.extensionName && options.extensionsRepoPath) {
-            const preview = await previewTemplateMerge(
-              merge.argsFile,
-              merge.targetFile,
-              projectPath,
-              options.extensionsRepoPath,
-              options.extensionName
-            );
+          const preview = await previewTemplateMerge(merge.argsFile, merge.targetFile);
 
-            if (preview.success) {
-              // Skip prompt if --yes flag is set
-              const confirmed = options.yes || await promptArgsMerge(merge.targetPath, preview);
+          if (preview.success) {
+            // Skip prompt if --yes flag is set
+            const confirmed = options.yes || await promptArgsMerge(merge.targetPath, preview);
 
-              if (confirmed) {
-                applied = await applyTemplateMerge(
-                  merge.argsFile,
-                  merge.targetFile,
-                  projectPath,
-                  options.extensionsRepoPath,
-                  options.extensionName,
-                  { verbose: options.verbose }
-                );
-              } else {
-                result.skipped.push(merge.targetPath);
-                console.log(`  ⊘ ${merge.targetPath} (user declined)`);
-                continue;
-              }
+            if (confirmed) {
+              applied = await applyTemplateMerge(
+                merge.argsFile,
+                merge.targetFile,
+                { verbose: options.verbose }
+              );
+            } else {
+              result.skipped.push(merge.targetPath);
+              console.log(`  ⊘ ${merge.targetPath} (user declined)`);
+              continue;
             }
           }
 
@@ -291,29 +280,6 @@ function registerNewWorkspaces(newWorkspaces, projectPath) {
   }
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
-}
-
-/**
- * Tracks installed extension in scaffold.extensions.json
- */
-export function trackExtension(extensionName, projectPath) {
-  const extPath = path.join(projectPath, 'scaffold.extensions.json');
-
-  let data = { extensions: [] };
-  if (fs.existsSync(extPath)) {
-    try {
-      data = JSON.parse(fs.readFileSync(extPath, 'utf8'));
-      data.extensions = data.extensions || [];
-    } catch {
-      data = { extensions: [] };
-    }
-  }
-
-  if (!data.extensions.includes(extensionName)) {
-    data.extensions.push(extensionName);
-  }
-
-  fs.writeFileSync(extPath, JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
 /**

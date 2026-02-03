@@ -14,7 +14,6 @@
 import readline from 'readline';
 import {
   detectSE2Project,
-  checkExtensionInstalled,
   validateExtensionName,
   getExtensionsRegistry
 } from './lib/validator.mjs';
@@ -27,7 +26,6 @@ import {
 } from './lib/analyzer.mjs';
 import {
   mergeFiles,
-  trackExtension,
   showSummary
 } from './lib/merger.mjs';
 import { VALID_FRAMEWORKS, FALLBACK_EXTENSIONS } from './lib/constants.mjs';
@@ -77,17 +75,7 @@ async function main() {
 
     console.log(`✓ Detected SE-2 project (${projectCheck.solidityFramework || 'unknown'})`);
 
-    // 3. Check if already installed
-    if (checkExtensionInstalled(extensionName, cwd)) {
-      console.warn(`\n⚠️  Extension "${extensionName}" is already installed.`);
-      if (!options.force) {
-        console.log('Use --force to reinstall.\n');
-        process.exit(0);
-      }
-      console.log('Reinstalling (--force)...\n');
-    }
-
-    // 4. Fetch extension files
+    // 3. Fetch extension files
     let extension;
     try {
       extension = await fetchExtension(extensionName, {
@@ -101,7 +89,7 @@ async function main() {
       process.exit(1);
     }
 
-    // 5. Check for framework choice
+    // 4. Check for framework choice
     let filesToUse = extension.files;
     const frameworks = detectFrameworks(extension.files);
 
@@ -138,19 +126,19 @@ async function main() {
       console.log(`Filtered to ${filesToUse.length} files for ${chosenFramework}\n`);
     }
 
-    // 6. Analyze changes
+    // 5. Analyze changes
     const changes = analyzeChanges(extension.path, filesToUse, cwd);
     const summary = generateChangeSummary(changes);
     console.log(summary);
 
-    // 7. Dry run exit
+    // 6. Dry run exit
     if (options.dryRun) {
       console.log('🔍 Dry run complete. No changes made.\n');
       extension.cleanup();
       process.exit(0);
     }
 
-    // 8. Apply changes
+    // 7. Apply changes
     console.log('\n📝 Applying changes...');
 
     const extensionsRepoPath = options.local || undefined;
@@ -161,14 +149,10 @@ async function main() {
       extensionsRepoPath
     });
 
-    // 9. Track extension
-    trackExtension(extensionName, cwd);
-    console.log(`\n✓ Tracked extension in scaffold.extensions.json`);
-
-    // 10. Show summary
+    // 8. Show summary
     showSummary(result, extensionName);
 
-    // 11. Cleanup
+    // 9. Cleanup
     extension.cleanup();
 
   } catch (error) {
@@ -224,7 +208,6 @@ async function promptFrameworkChoice() {
 function parseOptions(args) {
   const options = {
     dryRun: false,
-    force: false,
     yes: false,
     verbose: false,
     local: null,
@@ -237,10 +220,6 @@ function parseOptions(args) {
       case '--dry-run':
       case '-d':
         options.dryRun = true;
-        break;
-      case '--force':
-      case '-f':
-        options.force = true;
         break;
       case '--yes':
       case '-y':
@@ -285,7 +264,6 @@ Examples:
 
 Options:
   -d, --dry-run                  Preview changes without applying
-  -f, --force                    Reinstall if already installed
   -y, --yes                      Skip confirmation prompts
   -v, --verbose                  Show detailed error messages
   -l, --local <path>             Use local extension path (for development)

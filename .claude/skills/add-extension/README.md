@@ -21,7 +21,6 @@ Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post
 |------|-------|-------------|
 | `--list` | `-L` | List all available extensions with repo info |
 | `--dry-run` | `-d` | Preview changes without applying |
-| `--force` | `-f` | Reinstall even if already installed |
 | `--yes` | `-y` | Skip confirmation prompts |
 | `--verbose` | `-v` | Show detailed error messages |
 | `--local <path>` | `-l` | Use local extension repo path |
@@ -41,7 +40,6 @@ Run `/add-extension --list` for current list with repository details.
 4. **Framework** - Auto-detects hardhat/foundry from project
 5. **Analyze** - Compares extension files vs project
 6. **Merge** - Copies new files, merges package.json, prompts for conflicts
-7. **Track** - Records extension in `scaffold.extensions.json`
 
 ### Framework Handling
 
@@ -60,16 +58,6 @@ Run `/add-extension --list` for current list with repository details.
 | package.json | Auto-merged (deps, scripts) |
 | `.args.mjs` files | Template-based merge |
 | Other conflicts | Manual merge (Claude assists) |
-
-## Extension Tracking
-
-Installed extensions tracked in `scaffold.extensions.json`:
-
-```json
-{
-  "extensions": ["erc-20", "subgraph"]
-}
-```
 
 ## Architecture
 
@@ -112,7 +100,6 @@ package.json changes:
     + deploy:erc20
 
 📝 Applying changes...
-✓ Tracked extension in scaffold.extensions.json
 
 ==================================================
 Extension "erc-20" merge complete!
