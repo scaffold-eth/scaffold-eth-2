@@ -1733,6 +1733,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/deepmerge@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "@fastify/deepmerge@npm:3.2.0"
+  checksum: 26ce3bfdb988e1b5f83d2fab28c168d026850894557007c79755435a58bbe12aa66ad75c676cbdea0b31fdfd586a109aff8a115747a202c3410c9412d483388d
+  languageName: node
+  linkType: hard
+
 "@gemini-wallet/core@npm:0.3.2":
   version: 0.3.2
   resolution: "@gemini-wallet/core@npm:0.3.2"
@@ -17406,6 +17413,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@fastify/deepmerge": ^3.1.0
     husky: ^9.1.6
     lint-staged: ^15.2.10
   languageName: unknown

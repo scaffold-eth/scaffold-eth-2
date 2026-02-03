@@ -48,12 +48,18 @@
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "ipfs": "yarn workspace @se-2/nextjs ipfs",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
-    "verify": "yarn hardhat:verify"
+    "verify": "yarn hardhat:verify",
+    "drizzle-kit": "yarn workspace @se-2/nextjs drizzle-kit",
+    "db:seed": "yarn workspace @se-2/nextjs db:seed",
+    "db:wipe": "yarn workspace @se-2/nextjs db:wipe"
   },
   "packageManager": "yarn@3.2.3",
   "devDependencies": {
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10"
+  },
+  "dependencies": {
+    "@fastify/deepmerge": "^3.1.0"
   },
   "engines": {
     "node": ">=20.18.3"
