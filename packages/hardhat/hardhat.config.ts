@@ -127,7 +127,7 @@ const config: HardhatUserConfig = {
       accounts: [deployerPrivateKey],
     },
   },
-  // Configuration for harhdat-verify plugin
+  // Configuration for hardhat-verify plugin
   etherscan: {
     apiKey: `${etherscanApiKey}`,
   },
