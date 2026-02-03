@@ -186,7 +186,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
   return {
     ...wagmiContractWrite,
     isMining,
-    // Overwrite wagmi's writeContactAsync
+    // Overwrite wagmi's writeContractAsync
     writeContractAsync: sendContractWriteAsyncTx,
     // Overwrite wagmi's writeContract
     writeContract: sendContractWriteTx,
