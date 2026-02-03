@@ -57,11 +57,34 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     templateMerges: []
   };
 
+  // Get existing workspaces from root package.json to avoid duplicates
+  const existingWorkspaces = new Set();
+  try {
+    const rootPkgPath = path.join(projectPath, 'package.json');
+    if (fs.existsSync(rootPkgPath)) {
+      const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, 'utf8'));
+      if (Array.isArray(rootPkg.workspaces)) {
+        rootPkg.workspaces.forEach(w => existingWorkspaces.add(w));
+      } else if (rootPkg.workspaces?.packages) {
+        rootPkg.workspaces.packages.forEach(w => existingWorkspaces.add(w));
+      }
+    }
+  } catch (error) {
+    // If we can't read root package.json, continue anyway
+  }
+
   // Track which .template.mjs files have corresponding .args.mjs files
   const argsFiles = new Set(
     extensionFiles
       .filter(f => f.endsWith('.args.mjs'))
       .map(f => f.replace('.args.mjs', ''))
+  );
+
+  // Track packages with package.json for workspace detection
+  const extensionPackages = new Set(
+    extensionFiles
+      .filter(f => f.replace(/\\/g, '/').match(/^packages\/([^/]+)\/package\.json$/))
+      .map(f => f.replace(/\\/g, '/').match(/^packages\/([^/]+)\//)[1])
   );
 
   for (const file of extensionFiles) {
@@ -155,21 +178,19 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     }
   }
 
-  // Detect new workspace packages
-  const newPackageDirs = new Set();
-  for (const file of extensionFiles) {
-    // Normalize path separators for cross-platform compatibility
-    const normalizedFile = file.replace(/\\/g, '/');
-    const match = normalizedFile.match(/^packages\/([^/]+)\//);
-    if (match) {
-      const pkgName = match[1];
-      const pkgDir = path.join(projectPath, 'packages', pkgName);
-      if (!fs.existsSync(pkgDir)) {
-        newPackageDirs.add(`packages/${pkgName}`);
-      }
+  // Detect new workspace packages that need registration
+  // Add packages that: (1) have a package.json in extension, (2) aren't already registered
+  for (const pkgName of extensionPackages) {
+    const workspaceKey = `packages/${pkgName}`;
+
+    // Skip if already registered in root package.json
+    if (existingWorkspaces.has(workspaceKey)) {
+      continue;
     }
+
+    // Register as new workspace (even if directory exists but isn't registered)
+    changes.newWorkspaces.push(workspaceKey);
   }
-  changes.newWorkspaces = Array.from(newPackageDirs);
 
   return changes;
 }

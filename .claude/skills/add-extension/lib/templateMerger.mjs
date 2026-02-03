@@ -14,7 +14,7 @@ import {
 import { CREATE_ETH_REPO } from './constants.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TEMP_DIR = path.join(__dirname, '.tmp');
+const TEMP_DIR = path.join(__dirname, '..', '.tmp');
 const UTILS_PATH = path.join(__dirname, 'create-eth-utils/utils.js');
 
 /**
