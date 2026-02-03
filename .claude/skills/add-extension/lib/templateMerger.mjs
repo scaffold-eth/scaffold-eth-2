@@ -14,7 +14,7 @@ import {
 import { CREATE_ETH_REPO } from './constants.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const TEMPLATE_CACHE_DIR = path.join(__dirname, '.cache/templates');
+const TEMP_DIR = path.join(__dirname, '.tmp');
 const UTILS_PATH = path.join(__dirname, 'create-eth-utils/utils.js');
 
 /**
@@ -140,34 +140,21 @@ export async function applyTemplateMerge(argsFilePath, targetFilePath, options =
 }
 
 /**
- * Fetches template from GitHub with caching
+ * Fetches template from GitHub
  */
 async function fetchTemplate(templatePath) {
   try {
-    const cachePath = path.join(TEMPLATE_CACHE_DIR, templatePath);
-    if (fs.existsSync(cachePath)) {
-      return fs.readFileSync(cachePath, 'utf8');
-    }
-
     const url = `${CREATE_ETH_REPO}/${templatePath}`;
-    // Use cross-platform curl command (works on Windows 10+ and Unix systems)
     const curlCmd = process.platform === 'win32' ? 'curl.exe' : 'curl';
     const content = execSync(`${curlCmd} -sL "${url}"`, {
       encoding: 'utf8',
       maxBuffer: 10 * 1024 * 1024,
-      windowsHide: true  // Hide console window on Windows
+      windowsHide: true
     });
 
     if (content.includes('404: Not Found') || content.trim().startsWith('<!DOCTYPE')) {
       return null;
     }
-
-    // Cache the template
-    const cacheDir = path.dirname(cachePath);
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir, { recursive: true });
-    }
-    fs.writeFileSync(cachePath, content, 'utf8');
 
     return content;
   } catch (error) {
@@ -180,13 +167,12 @@ async function fetchTemplate(templatePath) {
  */
 async function executeTemplate(templateContent, args = null) {
   try {
-    const tempDir = path.join(TEMPLATE_CACHE_DIR, 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
+    if (!fs.existsSync(TEMP_DIR)) {
+      fs.mkdirSync(TEMP_DIR, { recursive: true });
     }
 
     const rewrittenTemplate = rewriteUtilsImport(templateContent);
-    const tempFile = path.join(tempDir, uniqueTempName('template', '.mjs'));
+    const tempFile = path.join(TEMP_DIR, uniqueTempName('template', '.mjs'));
     fs.writeFileSync(tempFile, rewrittenTemplate, 'utf8');
 
     const templateModule = await import(pathToFileURL(tempFile).href);
@@ -276,11 +262,3 @@ export async function applyStandaloneTemplate(templateFilePath, targetFilePath, 
   }
 }
 
-/**
- * Clears template cache
- */
-export function clearTemplateCache() {
-  if (fs.existsSync(TEMPLATE_CACHE_DIR)) {
-    fs.rmSync(TEMPLATE_CACHE_DIR, { recursive: true, force: true });
-  }
-}
