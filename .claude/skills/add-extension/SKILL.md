@@ -17,10 +17,15 @@ node .claude/skills/add-extension/skill.mjs $0 $@
 
 ## Post-Merge Tasks
 
-1. Review the output for any skipped files needing manual merge
-2. If manual merges needed, help user resolve conflicts
-3. Remind user to run `yarn install` if dependencies changed
-4. Summarize what was added/modified
+1. Review output for skipped files needing manual merge
+2. Help user resolve conflicts if any
+3. Run `yarn install` only if dependencies were added
+4. Summarize what was added
+
+## On Failure
+
+- If extension not found: suggest `--list` to see available extensions
+- If not SE-2 project: confirm user is in project root
 
 ## Options
 

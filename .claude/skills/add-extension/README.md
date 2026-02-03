@@ -2,6 +2,8 @@
 
 Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post-creation.
 
+**Requirements:** SE-2 project root, Git, Yarn
+
 ## Quick Start
 
 ```bash
@@ -62,20 +64,12 @@ Run `/add-extension --list` for current list with repository details.
 ## Architecture
 
 ```
-.claude/skills/add-extension/
-├── skill.mjs              # Entry point & CLI
-├── SKILL.md               # Claude skill definition
-├── README.md              # This file
-└── lib/
-    ├── constants.mjs      # Shared constants (URLs, fallbacks)
-    ├── templateUtils.mjs  # Shared utilities
-    ├── validator.mjs      # SE-2 detection & extension validation
-    ├── fetcher.mjs        # GitHub/local extension fetching
-    ├── analyzer.mjs       # File diff & framework detection
-    ├── merger.mjs         # File operations & package.json merge
-    ├── extensionTracker.mjs  # Extension tracking & args loading
-    ├── templateMerger.mjs # Template-based file generation
-    └── create-eth-utils/  # Utils copied from create-eth
+skill.mjs          → CLI entry point
+lib/validator.mjs  → SE-2 detection, registry fetching
+lib/fetcher.mjs    → Git clone / local path handling
+lib/analyzer.mjs   → File diff, framework detection
+lib/merger.mjs     → Apply changes, package.json merge
+lib/templateMerger.mjs → .args.mjs / .template.mjs processing
 ```
 
 ## Example Output
@@ -85,19 +79,18 @@ Run `/add-extension --list` for current list with repository details.
 Adding extension: erc-20
 
 ✓ Detected SE-2 project (hardhat)
-✓ Fetched extension (23 files)
+✓ Fetched extension (8 files)
 
 Extension Changes Summary:
 
-New files (5):
+New files (3):
+  + packages/hardhat/contracts/SE2Token.sol
+  + packages/hardhat/deploy/01_deploy_se2_token.ts
   + packages/nextjs/app/erc20/page.tsx
-  + packages/hardhat/contracts/ERC20Token.sol
 
-package.json changes:
-  Dependencies:
-    + @openzeppelin/contracts@^5.0.0
-  Scripts:
-    + deploy:erc20
+Files to merge via .args.mjs (2):
+  ~ README.md
+  ~ packages/nextjs/components/Header.tsx
 
 📝 Applying changes...
 
@@ -105,12 +98,11 @@ package.json changes:
 Extension "erc-20" merge complete!
 ==================================================
 
-✓ Applied: 6 files
+✓ Applied: 5 files
 
 Next steps:
-  1. Run yarn install
-  2. Test your application
-  3. Commit changes
+  1. Test your application
+  2. Commit changes
 ```
 
 ## Development
@@ -130,10 +122,4 @@ node .claude/skills/add-extension/skill.mjs erc-20 --dry-run
 | [create-eth](https://github.com/scaffold-eth/create-eth) | SE-2 CLI, extension registry (defines repo+branch for each extension) |
 | [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) | Default extension source (each extension = git branch) |
 
-Extensions are fetched from whatever repository is defined in the registry. Currently all point to `create-eth-extensions`, but the system supports any repository URL.
-
-## Requirements
-
-- SE-2 project root directory
-- Git installed
-- Yarn (not npm)
+Extensions are fetched from whatever repository is defined in the registry.
