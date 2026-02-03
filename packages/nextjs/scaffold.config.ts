@@ -19,7 +19,7 @@ const scaffoldConfig = {
   // it has no effect if you only target the local network (default is 4000)
   pollingInterval: 3000,
 
-  // This is ours Alchemy's default API key.
+  // This is our Alchemy's default API key.
   // You can get your own at https://dashboard.alchemyapi.io
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
@@ -32,7 +32,7 @@ const scaffoldConfig = {
     // [chains.mainnet.id]: "https://mainnet.rpc.buidlguidl.com",
   },
 
-  // This is ours WalletConnect's default project ID.
+  // This is our WalletConnect's default project ID.
   // You can get your own at https://cloud.walletconnect.com
   // It's recommended to store it in an env variable:
   // .env.local for local testing, and in the Vercel/system env config for live apps.
