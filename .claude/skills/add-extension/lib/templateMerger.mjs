@@ -27,25 +27,18 @@ const UTILS_PATH = path.join(__dirname, 'create-eth-utils/utils.js');
  */
 async function processTemplateMerge(argsFilePath, targetFilePath) {
   const templateDefaults = await getTemplateDefaults(targetFilePath);
-  const mergedArgs = {};
-
   const currentArgs = await loadArgsFile(argsFilePath);
-  if (currentArgs) {
-    for (const [key, value] of Object.entries(currentArgs)) {
-      if (key === 'default') continue;
 
-      const mergeType = getMergeType(templateDefaults[key]);
+  if (!currentArgs) {
+    return { success: false, reason: 'Could not load args file' };
+  }
 
-      if (mergeType === 'string') {
-        mergedArgs[key] = value;
-      } else if (mergeType === 'array') {
-        mergedArgs[key] = Array.isArray(value) ? value : [value];
-      } else if (mergeType === 'object') {
-        mergedArgs[key] = value;
-      } else {
-        mergedArgs[key] = value;
-      }
-    }
+  // Copy args, ensuring arrays where template expects arrays
+  const mergedArgs = {};
+  for (const [key, value] of Object.entries(currentArgs)) {
+    if (key === 'default') continue;
+    const expectsArray = getMergeType(templateDefaults[key]) === 'array';
+    mergedArgs[key] = expectsArray && !Array.isArray(value) ? [value] : value;
   }
 
   if (Object.keys(mergedArgs).length === 0) {
@@ -208,25 +201,24 @@ function rewriteUtilsImport(templateContent) {
 
 /**
  * Converts args from .args.mjs to template format
+ * Templates expect all values wrapped in arrays
  */
 function convertArgsToTemplateFormat(args) {
-  const converted = {};
+  const defaults = {
+    solidityFramework: [''],
+    logoTitle: ['Scaffold-ETH'],
+    logoSubtitle: ['Ethereum dev stack']
+  };
+
+  const converted = { ...defaults };
 
   for (const [key, value] of Object.entries(args)) {
     if (key === 'default') continue;
 
-    // For extra*Objects, wrap array at index 0
-    if (key.match(/^extra.+Objects$/i) && Array.isArray(value)) {
-      converted[key] = [value];
-    } else {
-      converted[key] = Array.isArray(value) ? value : [value];
-    }
+    // extra*Objects: wrap entire array at index 0; others: ensure array
+    const isExtraObjects = /^extra.+Objects$/i.test(key) && Array.isArray(value);
+    converted[key] = isExtraObjects ? [value] : (Array.isArray(value) ? value : [value]);
   }
-
-  // Add global args with defaults
-  converted.solidityFramework = converted.solidityFramework || [''];
-  converted.logoTitle = converted.logoTitle || ['Scaffold-ETH'];
-  converted.logoSubtitle = converted.logoSubtitle || ['Ethereum dev stack'];
 
   return converted;
 }

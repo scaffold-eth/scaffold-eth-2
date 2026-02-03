@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { normalizePath } from './templateUtils.mjs';
 
 /**
  * Detects if extension has both hardhat and foundry packages
@@ -7,20 +8,10 @@ import path from 'path';
  * @returns {{ hasHardhat: boolean, hasFoundry: boolean, hasBoth: boolean }}
  */
 export function detectFrameworks(extensionFiles) {
-  const hasHardhat = extensionFiles.some(f => {
-    const normalized = f.replace(/\\/g, '/');
-    return normalized.startsWith('packages/hardhat/');
-  });
-  const hasFoundry = extensionFiles.some(f => {
-    const normalized = f.replace(/\\/g, '/');
-    return normalized.startsWith('packages/foundry/');
-  });
+  const hasHardhat = extensionFiles.some(f => normalizePath(f).startsWith('packages/hardhat/'));
+  const hasFoundry = extensionFiles.some(f => normalizePath(f).startsWith('packages/foundry/'));
 
-  return {
-    hasHardhat,
-    hasFoundry,
-    hasBoth: hasHardhat && hasFoundry
-  };
+  return { hasHardhat, hasFoundry, hasBoth: hasHardhat && hasFoundry };
 }
 
 /**
@@ -30,12 +21,8 @@ export function detectFrameworks(extensionFiles) {
  * @returns {string[]} - Filtered file list
  */
 export function filterByFramework(extensionFiles, framework) {
-  const otherFramework = framework === 'hardhat' ? 'foundry' : 'hardhat';
-
-  return extensionFiles.filter(file => {
-    const normalized = file.replace(/\\/g, '/');
-    return !normalized.startsWith(`packages/${otherFramework}/`);
-  });
+  const exclude = framework === 'hardhat' ? 'packages/foundry/' : 'packages/hardhat/';
+  return extensionFiles.filter(f => !normalizePath(f).startsWith(exclude));
 }
 
 /**
@@ -81,10 +68,12 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
   );
 
   // Track packages with package.json for workspace detection
+  const pkgPattern = /^packages\/([^/]+)\/package\.json$/;
   const extensionPackages = new Set(
     extensionFiles
-      .filter(f => f.replace(/\\/g, '/').match(/^packages\/([^/]+)\/package\.json$/))
-      .map(f => f.replace(/\\/g, '/').match(/^packages\/([^/]+)\//)[1])
+      .map(f => normalizePath(f).match(pkgPattern))
+      .filter(Boolean)
+      .map(m => m[1])
   );
 
   for (const file of extensionFiles) {
@@ -129,7 +118,7 @@ export function analyzeChanges(extensionPath, extensionFiles, projectPath) {
     }
 
     // Workspace package.json files
-    const normalizedFile = file.replace(/\\/g, '/');
+    const normalizedFile = normalizePath(file);
     if (file.endsWith('package.json') && normalizedFile.includes('packages/')) {
       if (fs.existsSync(projectFilePath)) {
         const pkgChanges = analyzePackageJson(extensionFilePath, projectFilePath);

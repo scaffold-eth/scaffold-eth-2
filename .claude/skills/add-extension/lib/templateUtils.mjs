@@ -8,13 +8,21 @@ import { pathToFileURL } from 'url';
  */
 
 /**
+ * Normalizes file path separators to forward slashes
+ * @param {string} filePath - Path to normalize
+ * @returns {string}
+ */
+export function normalizePath(filePath) {
+  return filePath.replace(/\\/g, '/');
+}
+
+/**
  * Infers template path from target file path
  * @param {string} targetFilePath - Target file path
  * @returns {string | null} - Template path or null if cannot infer
  */
 export function inferTemplatePath(targetFilePath) {
-  // Normalize path separators for cross-platform compatibility
-  let relativePath = targetFilePath.replace(/\\/g, '/');
+  let relativePath = normalizePath(targetFilePath);
 
   // Extract relative path
   const packagesIndex = relativePath.lastIndexOf('/packages/');
