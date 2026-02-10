@@ -85,129 +85,49 @@ Extract the string inside the template literal and write it to `targetFile`. If 
 
 ## How .args.mjs Exports Work
 
-Extensions use `.args.mjs` files to modify existing project files. Each file exports named constants that correspond to specific insertion points in the target file. Here are all the patterns used by real extensions:
+Extensions use `.args.mjs` files to modify existing project files. Each file exports named constants that correspond to specific insertion points in the target file's `.template.mjs` in the create-eth repo.
 
-### `preContent` (string)
+**Instead of relying on hardcoded pattern docs, use sub-agents to dynamically fetch template sources and docs from create-eth. This keeps the main context clean and always uses up-to-date information.**
 
-**What it does**: Adds import statements or code at the top of the file.
+### Step 2a: Fetch Template Context (use `fetch-template-context` sub-agent)
 
-**How to apply**: Add the string content as import lines near the top of the target file, after existing imports.
+**Collect all `targetFile` values from `args_merge` tasks** and delegate to the `fetch-template-context` sub-agent. It fetches the create-eth template registry, finds each matching `.template.mjs`, and returns the template source with an explanation of how each arg is consumed.
 
-Example `.args.mjs`:
-```javascript
-export const preContent = `import { TokenBalance } from "../components/TokenBalance";`;
+Invoke it via the Task tool:
+```
+subagent_type: "fetch-template-context"
+prompt: "Fetch template context for these target files: packages/nextjs/components/Header.tsx, packages/nextjs/app/page.tsx, packages/nextjs/scaffold.config.ts"
 ```
 
-Apply to `Header.tsx`: Add the import line after the existing imports block.
+The sub-agent returns for each file:
+1. **The `.template.mjs` source** -- shows the template function and how each arg is interpolated
+2. **An example `.args.mjs`** -- a real-world example of how extensions provide values
+3. **How each arg is used** -- where it's inserted and what type it expects
 
-### `postContent` (string)
+Use this information to apply the args from the extension's `.args.mjs` to the existing project file.
 
-**What it does**: Appends content to the end of the file.
+### Step 2b: Fetch General Docs (use `fetch-extension-docs` sub-agent, run once if needed)
 
-**How to apply**: Add the string content at the end of the target file, before any final export statement.
+If the template source is unclear, or if you encounter `withDefaults`, `$$` expressions, or unfamiliar patterns, delegate to the `fetch-extension-docs` sub-agent for deeper context:
 
-### `extraMenuLinksObjects` (array)
-
-**What it does**: Adds menu items to `Header.tsx`'s navigation.
-
-**How to apply**: Find the `menuLinks` array in `packages/nextjs/components/Header.tsx` and add the new objects to it.
-
-Example `.args.mjs`:
-```javascript
-export const extraMenuLinksObjects = [
-  { label: "Token", href: "/token", icon: "BanknotesIcon" }
-];
+```
+subagent_type: "fetch-extension-docs"
+prompt: "Fetch the create-eth templating and extension docs"
 ```
 
-Apply: Add the object(s) to the `menuLinks` array, typically after the existing entries and before the closing `]`.
+It fetches and distills `TEMPLATING.md` and `THIRD-PARTY-EXTENSION.md` from create-eth, returning key information about:
+- How template files and args files relate to each other
+- The `withDefaults` utility and argument passing
+- Rules for template args (string args, object overrides, `$$` convention)
+- How `package.json` merging works
+- Extension folder anatomy
 
-### `menuObjects` (string)
+### When No Template Is Found
 
-**What it does**: Alternative pattern — adds menu items as a raw string (not an array).
-
-**How to apply**: Same as `extraMenuLinksObjects` but the value is a string representation. Parse or insert it into the `menuLinks` array.
-
-### `configOverrides` (object)
-
-**What it does**: Merges configuration into `packages/nextjs/scaffold.config.ts`.
-
-**How to apply**: Read the scaffold config, find the `scaffoldConfig` object, and merge each key from `configOverrides` into it.
-
-Example `.args.mjs`:
-```javascript
-export const configOverrides = {
-  targetNetworks: ["$$chains.baseSepolia$$"],
-  pollingInterval: 5000
-};
-```
-
-**Important**: `$$expr$$` markers mean raw code — see "The $$ Convention" below.
-
-### `skipLocalChainInTargetNetworks` (boolean)
-
-**What it does**: When `true`, the `targetNetworks` in `configOverrides` should **replace** (not append to) the existing `targetNetworks` array.
-
-**How to apply**: If `true` and `configOverrides.targetNetworks` exists, replace the entire `targetNetworks` array. If `false` or absent, append the new networks after existing ones.
-
-### `fullContentOverride` (string)
-
-**What it does**: Completely replaces the target file's content.
-
-**How to apply**: Write the string as the entire file content, replacing whatever was there before. This is commonly used for `README.md`.
-
-### `extraContents` (string)
-
-**What it does**: Appends content to the end of a file (commonly `README.md`).
-
-**How to apply**: Append the string to the end of the existing file content with a newline separator.
-
-### `additionalVars` (string)
-
-**What it does**: Adds environment variables to `.env.example`.
-
-**How to apply**: Append the string to the end of the `.env.example` file. Each line is typically a `KEY=value` pair or a comment.
-
-### `deploymentsLogic` (string)
-
-**What it does**: Adds deployment logic to `packages/foundry/script/Deploy.s.sol`.
-
-**How to apply**: Find the `run()` function in `Deploy.s.sol` and add the deployment code inside it, typically after existing deployments. The content includes Solidity statements.
-
-### `description` (string)
-
-**What it does**: Replaces or sets the description text in a page component.
-
-**How to apply**: Find the description/subtitle text in the target page file and replace it with this string.
-
-### `externalExtensionName` (string)
-
-**What it does**: Sets the extension display name in page titles or headings.
-
-**How to apply**: Find the extension name placeholder in the target page and replace it.
-
-### `logoTitle` (string)
-
-**What it does**: Changes the app title in `Header.tsx`.
-
-**How to apply**: Find the logo title text (default: `"Scaffold-ETH"`) in Header.tsx and replace it.
-
-### `logoSubtitle` (string)
-
-**What it does**: Changes the app subtitle in `Header.tsx`.
-
-**How to apply**: Find the logo subtitle text (default: `"Ethereum dev stack"`) in Header.tsx and replace it.
-
-### `imports` (string)
-
-**What it does**: Adds import statements. Similar to `preContent` but specifically for imports.
-
-**How to apply**: Add the import lines after existing imports in the target file.
-
-### Unknown exports
-
-If you encounter an export name not listed above, use your best judgment:
-- If the name suggests it's a string to prepend/append, do that
+If the sub-agent reports no template for a target file, use your best judgment:
+- If the export name suggests it's a string to prepend/append, do that
 - If the name suggests it's a configuration value, merge it into the appropriate config object
+- `fullContentOverride` always means: replace the entire file content
 - If unsure, show the user the export and ask how to apply it
 
 ## The `$$` Convention
