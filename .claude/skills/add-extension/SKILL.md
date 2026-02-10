@@ -81,7 +81,7 @@ const contents = () => `
 export default contents;
 ```
 
-Extract the string inside the template literal and write it to `targetFile`. If the target file exists, merge intelligently.
+Extract the string inside the template literal, replace any `${...}` template expressions with reasonable defaults, and write the result to `targetFile`. If the target file exists, merge intelligently. Templates may use `withDefaults` -- ignore that wrapper and focus on the content inside the backticks.
 
 ## How .args.mjs Exports Work
 
@@ -153,45 +153,12 @@ targetNetworks: ["chains.baseSepolia"],  // WRONG - don't quote it
 
 The `$$` markers are delimiters only — strip them and use the expression as bare code. If the target file needs the corresponding import (e.g., `import { chains } from ...`), check if it already exists and add it if missing.
 
-## Handling Standalone .template.mjs Files
-
-Standalone templates (without a corresponding `.args.mjs`) contain a function that returns a template literal with the file content. Example:
-
-```javascript
-import { withDefaults } from "../../utils.js";
-
-const contents = ({ solidityFramework }) => `
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-contract MyContract { }
-`;
-
-export default withDefaults(contents, { solidityFramework: "" });
-```
-
-To process:
-1. Extract the template literal content (the string between the backticks in the `contents` function)
-2. Replace any `${...}` template expressions with reasonable defaults
-3. Write the result to the target file
-
 ## Handling Missing Target Files
 
 If an `args_merge` task targets a file that does not exist in the project:
 - For `fullContentOverride`: create the file with the provided content
 - For other exports: create the file with a reasonable default structure, then apply the exports
 - If unsure, inform the user and ask how to proceed
-
-## Handling Conflicts
-
-When merging a `file_conflict` or `args_merge` where the target already exists:
-
-1. **Read the existing project file** to understand current state
-2. **Merge intelligently** — preserve existing functionality, add new code from the extension
-3. **Don't duplicate** — if the extension adds an import that already exists, skip it
-4. **Maintain style** — match the existing code style (indentation, quotes, etc.)
-5. **Imports**: union both sets, keeping both the project's and extension's imports
-6. **Array items**: append new items, don't replace existing ones (unless `skipLocalChainInTargetNetworks` is true)
-7. **Config objects**: deep merge, extension values win for new keys
 
 ## Step 3: Post-Merge
 
