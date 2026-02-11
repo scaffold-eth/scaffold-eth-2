@@ -72,7 +72,7 @@ lib/constants.mjs  - Registry URLs, fallback extensions
 
 ```bash
 # Test locally with dry-run
-node .claude/skills/add-extension/skill.mjs erc-20 --dry-run
+node .agents/skills/add-extension/skill.mjs erc-20 --dry-run
 
 # Test with local extension repo
 /add-extension erc-721 --local ../create-eth-extensions --dry-run

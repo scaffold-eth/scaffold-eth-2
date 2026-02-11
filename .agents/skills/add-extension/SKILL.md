@@ -12,7 +12,7 @@ a Node.js script handles deterministic operations, then you handle intelligent f
 ## Step 1: Run the Script
 
 ```bash
-node .claude/skills/add-extension/skill.mjs $0 $@
+node .agents/skills/add-extension/skill.mjs $0 $@
 ```
 
 The script will:
@@ -199,7 +199,7 @@ After processing all AI merge tasks:
 
 ## Notes
 
-- Temp files are in `.claude/skills/add-extension/.tmp`
+- Temp files are in `.agents/skills/add-extension/.tmp`
 - The script cleans up temp files after outputting JSON (argsContent is inlined)
 - Don't ask permission for `.tmp` folder operations
 
