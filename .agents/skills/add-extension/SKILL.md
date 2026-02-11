@@ -6,8 +6,8 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 user-invocable: true
 ---
 
-Merge the `$0` extension into this Scaffold-ETH-2 project using a hybrid approach:
-a Node.js script handles deterministic operations, then you handle intelligent file merging.
+Merge the `$0` extension into this Scaffold-ETH-2 project.
+A Node.js script handles deterministic operations, then you handle intelligent file merging.
 
 ## Step 1: Run the Script
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * /add-extension - Scaffold-ETH-2 Extension Merger (Hybrid)
+ * /add-extension - Scaffold-ETH-2 Extension Merger
  *
  * Handles deterministic operations (fetch, copy, package.json merge),
  * then outputs structured AI merge tasks for Claude to process.
@@ -46,7 +46,7 @@ async function main() {
   }
 
   try {
-    console.log(`\nScaffold-ETH-2 Extension Merger (Hybrid)`);
+    console.log(`\nScaffold-ETH-2 Extension Merger`);
     console.log(`Adding extension: ${extensionName}\n`);
 
     // 1. Validate extension name
@@ -321,7 +321,7 @@ async function showHelp() {
   }
 
   console.log(`
-Scaffold-ETH-2 Extension Merger (Hybrid)
+Scaffold-ETH-2 Extension Merger
 
 Usage:
   claude /add-extension <extension-name> [options]

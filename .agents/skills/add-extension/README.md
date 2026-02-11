@@ -1,8 +1,8 @@
-# /add-extension - SE-2 Extension Merger (Hybrid)
+# /add-extension - SE-2 Extension Merger
 
 Claude Code skill for adding Scaffold-ETH-2 extensions to existing projects post-creation.
 
-Uses a **hybrid approach**: a Node.js script handles deterministic operations (fetch, copy, package.json merge), while Claude handles intelligent file merging (.args.mjs processing).
+A Node.js script handles deterministic operations (fetch, copy, package.json merge), while the AI agent handles intelligent file merging (.args.mjs processing).
 
 **Requirements:** SE-2 project root, Git, Yarn
 
