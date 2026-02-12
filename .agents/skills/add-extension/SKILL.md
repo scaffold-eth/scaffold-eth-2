@@ -181,8 +181,6 @@ After processing all AI merge tasks:
 | `--verbose` | `-v` | Show detailed error messages |
 | `--local <path>` | `-l` | Use local extension path (for development) |
 | `--solidity-framework <fw>` | `-s` | Choose hardhat/foundry |
-| `--list` | `-L` | List all available extensions |
-| `--help` | `-h` | Show help message |
 
 ## Framework Selection
 

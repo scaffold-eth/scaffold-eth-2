@@ -36,33 +36,14 @@ function readArgsFile(argsFilePath) {
   const content = fs.readFileSync(argsFilePath, 'utf8');
   const exports = [];
 
-  // Match named exports: export const name = value
   const exportPattern = /export\s+const\s+(\w+)\s*=/g;
   let match;
 
   while ((match = exportPattern.exec(content)) !== null) {
-    const name = match[1];
-    const afterEquals = content.slice(match.index + match[0].length).trimStart();
-    const type = inferExportType(afterEquals);
-    exports.push({ name, type });
+    exports.push({ name: match[1] });
   }
 
   return { argsContent: content, exports };
-}
-
-/**
- * Infers the type of an export value by peeking at the first non-whitespace character
- * @param {string} valueStart - Content after the "=" sign
- * @returns {string} - 'string' | 'array' | 'object' | 'boolean' | 'unknown'
- */
-function inferExportType(valueStart) {
-  const firstChar = valueStart[0];
-  if (firstChar === '`' || firstChar === '"' || firstChar === "'") return 'string';
-  if (firstChar === '[') return 'array';
-  if (firstChar === '{') return 'object';
-  if (valueStart.startsWith('true') || valueStart.startsWith('false')) return 'boolean';
-  if (/^\d/.test(firstChar)) return 'number';
-  return 'unknown';
 }
 
 /**
@@ -266,116 +247,32 @@ function analyzePkgSection(extSection, projSection, changes) {
 }
 
 /**
- * Formats dependency changes for display
- */
-function formatDependencyChanges(deps, indent = '    ') {
-  const lines = [];
-  for (const [name, version] of Object.entries(deps)) {
-    if (typeof version === 'string') {
-      lines.push(`${indent}+ ${name}@${version}`);
-    } else {
-      lines.push(`${indent}~ ${name}: ${version.current} -> ${version.new}`);
-    }
-  }
-  return lines;
-}
-
-/**
  * Generates a human-readable summary of changes
- * @param {ChangeSet} changes - Change set from analyzeChanges
- * @returns {string}
  */
 export function generateChangeSummary(changes) {
   const lines = ['Extension Changes Summary:', ''];
 
-  if (changes.new.length > 0) {
-    lines.push(`New files (${changes.new.length}):`);
-    changes.new.forEach(f => lines.push(`  + ${f.path}`));
-    lines.push('');
-  }
+  const sections = [
+    [changes.new, 'New files', f => `  + ${f.path}`],
+    [changes.modified, 'Modified files', f => `  ~ ${f.path}`],
+    [changes.argsMerges, 'AI merge (.args.mjs)', m => `  ~ ${m.targetPath} [${m.exports.map(e => e.name).join(', ')}]`],
+    [changes.templateMerges, 'Standalone templates', m => `  + ${m.targetPath}`],
+    [changes.workspacePackages, 'Workspace package.json', wp => `  ~ ${wp.path}`],
+    [changes.newWorkspaces, 'New workspaces', w => `  + ${w}`],
+  ];
 
-  if (changes.modified.length > 0) {
-    lines.push(`Modified files (${changes.modified.length}):`);
-    changes.modified.forEach(f => lines.push(`  ~ ${f.path}`));
-    lines.push('');
+  for (const [items, label, fmt] of sections) {
+    if (items?.length > 0) {
+      lines.push(`${label} (${items.length}):`);
+      items.forEach(item => lines.push(fmt(item)));
+      lines.push('');
+    }
   }
 
   if (changes.packageJson) {
-    lines.push('package.json changes:');
-    const pkg = changes.packageJson;
-
-    if (Object.keys(pkg.dependencies).length > 0) {
-      lines.push('  Dependencies:');
-      lines.push(...formatDependencyChanges(pkg.dependencies));
-    }
-
-    if (Object.keys(pkg.devDependencies).length > 0) {
-      lines.push('  DevDependencies:');
-      lines.push(...formatDependencyChanges(pkg.devDependencies));
-    }
-
-    if (Object.keys(pkg.scripts).length > 0) {
-      lines.push('  Scripts:');
-      for (const [name, script] of Object.entries(pkg.scripts)) {
-        lines.push(typeof script === 'string' ? `    + ${name}` : `    ~ ${name}`);
-      }
-    }
-
-    lines.push('');
-  }
-
-  if (changes.workspacePackages.length > 0) {
-    lines.push('Workspace package.json changes:');
-    for (const wp of changes.workspacePackages) {
-      lines.push(`  ${wp.path}:`);
-      const pkg = wp.changes;
-
-      if (Object.keys(pkg.dependencies).length > 0) {
-        lines.push(...formatDependencyChanges(pkg.dependencies));
-      }
-
-      if (Object.keys(pkg.devDependencies).length > 0) {
-        lines.push(...formatDependencyChanges(pkg.devDependencies));
-      }
-
-      if (Object.keys(pkg.scripts).length > 0) {
-        lines.push(`    Scripts: ${Object.keys(pkg.scripts).join(', ')}`);
-      }
-    }
-    lines.push('');
-  }
-
-  if (changes.argsMerges?.length > 0) {
-    lines.push(`Files requiring AI merge via .args.mjs (${changes.argsMerges.length}):`);
-    changes.argsMerges.forEach(m => {
-      const exportNames = m.exports.map(e => e.name).join(', ');
-      lines.push(`  ~ ${m.targetPath} [exports: ${exportNames}]`);
-    });
-    lines.push('');
-  }
-
-  if (changes.templateMerges?.length > 0) {
-    lines.push(`Standalone templates requiring AI merge (${changes.templateMerges.length}):`);
-    changes.templateMerges.forEach(m => lines.push(`  + ${m.targetPath}`));
-    lines.push('');
-  }
-
-  if (changes.newWorkspaces?.length > 0) {
-    lines.push(`New workspaces to register (${changes.newWorkspaces.length}):`);
-    changes.newWorkspaces.forEach(w => lines.push(`  + ${w}`));
+    lines.push('package.json: dependencies/scripts will be merged');
     lines.push('');
   }
 
   return lines.join('\n');
 }
-
-/**
- * @typedef {object} ChangeSet
- * @property {Array<{path: string, extensionFile: string, projectFile: string}>} new
- * @property {Array<{path: string, extensionFile: string, projectFile: string}>} modified
- * @property {object | null} packageJson
- * @property {Array<{path: string, extensionFile: string, projectFile: string, changes: object}>} workspacePackages
- * @property {string[]} newWorkspaces
- * @property {Array<{argsFile: string, targetFile: string, targetPath: string, argsContent: string, exports: Array<{name: string, type: string}>}>} argsMerges
- * @property {Array<{templateFile: string, targetFile: string, targetPath: string}>} templateMerges
- */

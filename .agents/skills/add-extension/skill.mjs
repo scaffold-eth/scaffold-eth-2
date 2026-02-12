@@ -1,21 +1,10 @@
 #!/usr/bin/env node
 
-/**
- * /add-extension - Scaffold-ETH-2 Extension Merger
- *
- * Handles deterministic operations (fetch, copy, package.json merge),
- * then outputs structured AI merge tasks for Claude to process.
- *
- * Usage:
- *   node skill.mjs <extension-name> [options]
- */
-
 import fs from 'fs';
 import readline from 'readline';
 import {
   detectSE2Project,
-  validateExtensionName,
-  getExtensionsRegistry
+  validateExtensionName
 } from './lib/validator.mjs';
 import { fetchExtension, cleanupAllTemp } from './lib/fetcher.mjs';
 import {
@@ -28,21 +17,16 @@ import {
   applyDeterministicChanges,
   showSummary
 } from './lib/merger.mjs';
-import { VALID_FRAMEWORKS, FALLBACK_EXTENSIONS } from './lib/constants.mjs';
+import { VALID_FRAMEWORKS } from './lib/constants.mjs';
 
 async function main() {
   const args = process.argv.slice(2);
   const extensionName = args[0];
   const options = parseOptions(args.slice(1));
 
-  if (!extensionName || extensionName === '--help' || extensionName === '-h') {
-    await showHelp();
-    process.exit(0);
-  }
-
-  if (extensionName === '--list' || extensionName === '-L') {
-    await listExtensions();
-    process.exit(0);
+  if (!extensionName) {
+    console.error('Usage: node skill.mjs <extension-name> [options]');
+    process.exit(1);
   }
 
   try {
@@ -309,55 +293,6 @@ function parseOptions(args) {
   }
 
   return options;
-}
-
-async function showHelp() {
-  let extensions;
-  try {
-    const registry = await getExtensionsRegistry();
-    extensions = Array.from(registry.keys());
-  } catch {
-    extensions = FALLBACK_EXTENSIONS;
-  }
-
-  console.log(`
-Scaffold-ETH-2 Extension Merger
-
-Usage:
-  claude /add-extension <extension-name> [options]
-
-Examples:
-  claude /add-extension erc-20
-  claude /add-extension subgraph --dry-run
-  claude /add-extension ponder -s hardhat
-  claude /add-extension erc-721 --local ../create-eth-extensions
-
-Options:
-  -d, --dry-run                  Preview changes without applying
-  -v, --verbose                  Show detailed error messages
-  -l, --local <path>             Use local extension path (for development)
-  -s, --solidity-framework <fw>  Choose framework (hardhat or foundry)
-  -L, --list                     List all available extensions with details
-  -h, --help                     Show this help message
-
-Available Extensions:
-  ${extensions.join(', ')}
-`);
-}
-
-async function listExtensions() {
-  console.log('\nAvailable Extensions\n');
-
-  const registry = await getExtensionsRegistry();
-
-  for (const [name, config] of registry) {
-    const repoName = config.repository.replace('https://github.com/', '');
-    console.log(`  ${name}`);
-    console.log(`    repo: ${repoName}`);
-    console.log(`    branch: ${config.branch}\n`);
-  }
-
-  console.log(`Total: ${registry.size} extensions`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

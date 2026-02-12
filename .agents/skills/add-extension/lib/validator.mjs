@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { REGISTRY_URLS, FALLBACK_EXTENSIONS, DEFAULT_EXTENSIONS_REPO } from './constants.mjs';
+import { REGISTRY_URLS } from './constants.mjs';
 
 /**
  * Detects if current directory is a valid Scaffold-ETH-2 project
@@ -120,33 +120,10 @@ async function fetchExtensionsRegistry() {
   }
 
   if (merged.size === 0) {
-    console.warn('Failed to parse extensions registry, using fallback');
-    return buildFallbackRegistry();
+    throw new Error('Failed to fetch extensions registry. Check your network connection.');
   }
 
   return merged;
-}
-
-/**
- * Builds fallback registry from FALLBACK_EXTENSIONS
- * @returns {Map<string, { repository: string, branch: string }>}
- */
-function buildFallbackRegistry() {
-  const registry = new Map();
-
-  for (const name of FALLBACK_EXTENSIONS) {
-    registry.set(name, { repository: DEFAULT_EXTENSIONS_REPO, branch: name });
-  }
-
-  return registry;
-}
-
-/**
- * Gets all extensions from registry
- * @returns {Promise<Map<string, { repository: string, branch: string }>>}
- */
-export async function getExtensionsRegistry() {
-  return fetchExtensionsRegistry();
 }
 
 /**
