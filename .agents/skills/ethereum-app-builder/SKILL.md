@@ -30,10 +30,10 @@ Check the [scaffold-eth-2](https://github.com/scaffold-eth/scaffold-eth-2) repos
 
 Known reference skills:
 
-- [**Ponder**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/skills/ponder/SKILL.md) -- Blockchain event indexing with Ponder, including SE-2 integration, schema setup, and GraphQL API
-- [**ERC-20**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/skills/erc-20/SKILL.md) -- ERC-20 fungible token contract with OpenZeppelin, deployment, and token interaction UI
-- [**ERC-721**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/skills/erc-721/SKILL.md) -- ERC-721 NFT contract with OpenZeppelin, deployment, minting, and gallery UI
-- [**EIP-5792**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/skills/eip-5792/SKILL.md) -- Batched transactions via EIP-5792 wallet_sendCalls with wagmi experimental hooks
+- [**Ponder**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/.agents/skills/ponder/SKILL.md) -- Blockchain event indexing with Ponder, including SE-2 integration, schema setup, and GraphQL API
+- [**ERC-20**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/.agents/skills/erc-20/SKILL.md) -- ERC-20 fungible token contract with OpenZeppelin, deployment, and token interaction UI
+- [**ERC-721**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/.agents/skills/erc-721/SKILL.md) -- ERC-721 NFT contract with OpenZeppelin, deployment, minting, and gallery UI
+- [**EIP-5792**](https://raw.githubusercontent.com/scaffold-eth/scaffold-eth-2/main/.agents/skills/eip-5792/SKILL.md) -- Batched transactions via EIP-5792 wallet_sendCalls with wagmi experimental hooks
 
 ## Step 4: Build the User's Idea
 
