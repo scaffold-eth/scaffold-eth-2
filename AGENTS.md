@@ -218,8 +218,19 @@ Make comments that add information. Avoid redundant JSDoc for simple functions.
 
 Use **Context7 MCP** tools to fetch up-to-date documentation for any library (Wagmi, Viem, RainbowKit, DaisyUI, Hardhat, Next.js, etc.). Context7 is configured as an MCP server and provides access to indexed documentation with code examples.
 
-## Specialized Agents
+## Skills & Agents Index
 
-Use these specialized agents for specific tasks:
+IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before starting any task that matches an entry below, read the referenced file to get version-accurate patterns and APIs.
 
-- **`grumpy-carlos-code-reviewer`**: Use this agent for code reviews before finalizing changes
+**Skills** (read `.agents/skills/<name>/SKILL.md` before implementing):
+
+- **erc-20** — fungible tokens, decimals, approve patterns, OpenZeppelin ERC-20
+- **erc-721** — NFTs, metadata standards, royalties (ERC-2981), ERC721A, soulbound
+- **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
+- **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
+- **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
+- **solidity-security** — security audits, reentrancy, access control, gas optimization
+
+**Agents** (in `.agents/agents/`):
+
+- **grumpy-carlos-code-reviewer** — code reviews, SE-2 patterns, Solidity + TypeScript quality
