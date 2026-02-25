@@ -226,6 +226,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 
 - **erc-20** — fungible tokens, decimals, approve patterns, OpenZeppelin ERC-20
 - **erc-721** — NFTs, metadata standards, royalties (ERC-2981), ERC721A, soulbound
+- **eip-712** — typed structured data signing, off-chain signatures, signature verification
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
 - **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
 - **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
