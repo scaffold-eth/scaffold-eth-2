@@ -516,21 +516,6 @@ export function useSiwe() {
 
 **Server-side session checks.** To protect API routes or server components, use `getIronSession` with the same `sessionOptions` and check `session.isLoggedIn`. Don't rely on client-side checks alone for sensitive operations.
 
-## SE-2 Integration
-
-### Header navigation
-
-If the user wants a dedicated SIWE page, add a nav link to the SE-2 header menu. The `LockClosedIcon` from `@heroicons/react/24/outline` is a natural fit for authentication.
-
-### Frontend
-
-The `useSiwe` hook provides everything needed to build auth UI. It can be integrated into any existing page or as a standalone page:
-
-- **Sign-in button** — call `signIn()` when `isWalletConnected && !isSignedIn`
-- **Auth status** — show the authenticated address using `Address` from `@scaffold-ui/components`
-- **Protected content** — conditionally render based on `isSignedIn`
-- **Sign-out** — call `signOut()` to destroy the session
-
 The hook returns these properties:
 
 | Property            | Type                  | Description                                      |

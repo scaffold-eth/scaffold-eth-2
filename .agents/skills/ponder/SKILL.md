@@ -234,13 +234,7 @@ These are standard Ponder project files, nothing SE-2-specific, just needed for 
 - **`tsconfig.json`**: standard strict TS config with `moduleResolution: "bundler"`, `module: "ESNext"`, `target: "ES2022"`
 - **`.gitignore`**: should include `node_modules`, `.ponder`, `/generated/`
 
-## SE-2 Integration
-
-### Header navigation
-
-The SE-2 header has a menu links array. Add a navigation tab for the Ponder page. Pick an appropriate icon from `@heroicons/react/24/outline` that fits the context of data indexing.
-
-### Frontend
+## Frontend
 
 The frontend needs a page to display Ponder-indexed data. Use `graphql-request` and `@tanstack/react-query` (both available in SE-2) to query the Ponder API. The GraphQL query shape depends on what you defined in `ponder.schema.ts`. Ponder auto-generates queries from your schema, with each `onchainTable` getting a pluralized query with `items`, `orderBy`, and `orderDirection` support.
 

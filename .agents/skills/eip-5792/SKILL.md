@@ -131,13 +131,7 @@ This is the main source of confusion with EIP-5792. Not all wallets behave the s
 
 **Graceful degradation is important.** The UI should work for both EIP-5792 and non-EIP-5792 wallets. Use SE-2's standard `useScaffoldWriteContract` for individual calls as a fallback, and only show the batch button when `useCapabilities` succeeds. Consider offering a "switch to Coinbase Wallet" prompt when the connected wallet doesn't support EIP-5792.
 
-## SE-2 Integration
-
-### Header navigation
-
-Add a tab to the SE-2 header menu for the EIP-5792 demo page. Pick an appropriate icon from `@heroicons/react/24/outline`.
-
-### Frontend
+## Frontend
 
 Build a page that demonstrates both individual and batched contract interactions. The key UX pattern:
 

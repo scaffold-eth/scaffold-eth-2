@@ -220,19 +220,6 @@ export async function POST(req: Request) {
 
 **On-chain verification.** For verifying EIP-712 signatures in Solidity (e.g., meta-transactions, permits), use OpenZeppelin's `EIP712` base contract and `ECDSA.recover`. The domain separator must be constructed identically in both the contract and the frontend. This is a more advanced pattern — see the [OpenZeppelin EIP-712 docs](https://docs.openzeppelin.com/contracts/5.x/api/utils#EIP712).
 
-## SE-2 Integration
-
-### Header navigation
-
-If the user wants a dedicated page, add a nav link to the SE-2 header menu. Pick an appropriate icon from `@heroicons/react/24/outline`.
-
-### Frontend
-
-The signing and verification patterns above can be integrated into any existing page or component — they don't require a dedicated page. Adapt to what the user is building:
-
-- **Standalone demo page**: create a new page under `packages/nextjs/app/` with inputs for constructing typed data, a sign button, and verify buttons (frontend + backend)
-- **Integrated into existing flow**: add signing/verification directly into an existing form, checkout, or approval flow
-
 ## How to Test
 
 1. Start the frontend: `yarn start`
