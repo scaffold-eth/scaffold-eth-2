@@ -7,9 +7,7 @@ description: "Add an ERC-721 NFT contract to a Scaffold-ETH 2 project. Use when 
 
 ## Prerequisites
 
-This skill is designed for Scaffold-ETH 2 (SE-2) projects. Since these skills live inside the SE-2 repo, you should already be in one.
-
-How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
+Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
 
 ## Overview
 
