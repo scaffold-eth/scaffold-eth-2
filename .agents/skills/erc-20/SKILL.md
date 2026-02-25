@@ -17,26 +17,6 @@ How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `pa
 
 For anything not covered here, refer to the [OpenZeppelin ERC-20 docs](https://docs.openzeppelin.com/contracts/5.x/api/token/erc20) or search the web. This skill focuses on what's hard to discover: SE-2 integration specifics, common pitfalls, and ERC-20 gotchas that trip up both humans and AI.
 
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, @scaffold-ui/components, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-SE-2 uses `@scaffold-ui/components` for blockchain/Ethereum components (addresses, balances, etc.) and DaisyUI + Tailwind for general component and styling.
-
-The deployment scripts go alongside the existing deploy scripts, and the frontend page goes in the nextjs package. After deployment, `deployedContracts.ts` auto-generates the ABI and address, so the frontend can interact with the token using SE-2's scaffold hooks (`useScaffoldReadContract`, `useScaffoldWriteContract`).
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
-
 ## Dependencies
 
 OpenZeppelin contracts are already included in SE-2's Hardhat and Foundry setups, so no additional dependency installation is needed. If for some reason they're missing:
@@ -87,16 +67,6 @@ If referencing older tutorials or code, note these breaking changes in OpenZeppe
 - **`increaseAllowance()` and `decreaseAllowance()` were removed** from the base contract.
 - **Custom errors** replaced revert strings (e.g. `ERC20InsufficientBalance` instead of `require(balance >= amount, "...")`)
 - **Explicit named imports are required**: `import {ERC20} from "..."` not `import "..."`
-
-## Deployment
-
-### Hardhat
-
-Deploy script goes in `packages/hardhat/deploy/`. SE-2 uses `hardhat-deploy`, so the script exports a `DeployFunction`. Use a filename like `01_deploy_my_token.ts` (numbered to control deploy order). The `autoMine` flag speeds up local deployments.
-
-### Foundry
-
-Add a deploy script in `packages/foundry/script/` and wire it into the main `Deploy.s.sol`. SE-2's Foundry setup uses a `ScaffoldETHDeploy` base contract and `DeployHelpers.s.sol`. Import and call the new deploy script from `Deploy.s.sol`'s run function.
 
 ## Decimals: The Most Common Source of Bugs
 
