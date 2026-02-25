@@ -85,7 +85,9 @@ function getSessionPassword(): string {
   if (secret && secret.length >= 32) return secret;
 
   if (process.env.NODE_ENV === "production") {
-    throw new Error("IRON_SESSION_SECRET must be set in production (32+ chars)");
+    throw new Error(
+      "IRON_SESSION_SECRET must be set in production (32+ chars)",
+    );
   }
   // Dev-only fallback
   return "complex_password_at_least_32_characters_long_for_dev";
@@ -123,7 +125,8 @@ const siweConfig = {
 } as const;
 
 export default siweConfig;
-export const { sessionDurationDays, messageExpirationMinutes, statement } = siweConfig;
+export const { sessionDurationDays, messageExpirationMinutes, statement } =
+  siweConfig;
 ```
 
 ### API Route: Nonce (`packages/nextjs/app/api/siwe/nonce/route.ts`)
@@ -140,7 +143,10 @@ import { SiweSessionData, defaultSession, sessionOptions } from "~~/utils/siwe";
 
 export async function GET() {
   try {
-    const session = await getIronSession<SiweSessionData>(await cookies(), sessionOptions);
+    const session = await getIronSession<SiweSessionData>(
+      await cookies(),
+      sessionOptions,
+    );
 
     // Reset session and generate fresh nonce
     session.isLoggedIn = defaultSession.isLoggedIn;
@@ -153,7 +159,10 @@ export async function GET() {
     return NextResponse.json({ nonce: session.nonce });
   } catch (error) {
     console.error("Nonce generation error:", error);
-    return NextResponse.json({ error: "Failed to generate nonce" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to generate nonce" },
+      { status: 500 },
+    );
   }
 }
 ```
@@ -169,7 +178,18 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { type Chain, createPublicClient, http } from "viem";
 import { parseSiweMessage, verifySiweMessage } from "viem/siwe";
-import { mainnet, polygon, optimism, arbitrum, base, gnosis, scroll, zkSync, sepolia, hardhat } from "viem/chains";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+  gnosis,
+  scroll,
+  zkSync,
+  sepolia,
+  hardhat,
+} from "viem/chains";
 import { SiweSessionData, sessionOptions } from "~~/utils/siwe";
 
 // Add/remove chains your app supports — needed for ERC-6492 smart wallet verification
@@ -188,16 +208,25 @@ const SUPPORTED_CHAINS: Record<number, Chain> = {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getIronSession<SiweSessionData>(await cookies(), sessionOptions);
+    const session = await getIronSession<SiweSessionData>(
+      await cookies(),
+      sessionOptions,
+    );
     const { message, signature } = await req.json();
 
     if (!message || !signature) {
-      return NextResponse.json({ error: "Missing message or signature" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing message or signature" },
+        { status: 400 },
+      );
     }
 
     const storedNonce = session.nonce;
     if (!storedNonce) {
-      return NextResponse.json({ error: "No nonce found. Request /api/siwe/nonce first." }, { status: 400 });
+      return NextResponse.json(
+        { error: "No nonce found. Request /api/siwe/nonce first." },
+        { status: 400 },
+      );
     }
 
     const parsedMessage = parseSiweMessage(message);
@@ -206,14 +235,20 @@ export async function POST(req: NextRequest) {
     // ensure Host is forwarded correctly, or replace with a hardcoded expected domain.
     const expectedDomain = req.headers.get("host");
     if (!expectedDomain) {
-      return NextResponse.json({ error: "Missing Host header" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing Host header" },
+        { status: 400 },
+      );
     }
 
     // Create a client for the chain to support ERC-6492 (smart wallet) verification
     const chainId = parsedMessage.chainId;
     const chain = chainId ? SUPPORTED_CHAINS[chainId] : undefined;
     if (!chain) {
-      return NextResponse.json({ error: `Unsupported chain: ${chainId}` }, { status: 400 });
+      return NextResponse.json(
+        { error: `Unsupported chain: ${chainId}` },
+        { status: 400 },
+      );
     }
 
     const client = createPublicClient({ chain, transport: http() });
@@ -225,7 +260,10 @@ export async function POST(req: NextRequest) {
     });
 
     if (!isValid) {
-      return NextResponse.json({ error: "Signature verification failed" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Signature verification failed" },
+        { status: 401 },
+      );
     }
 
     // Create authenticated session
@@ -260,7 +298,10 @@ import { cookies } from "next/headers";
 import { SiweSessionData, defaultSession, sessionOptions } from "~~/utils/siwe";
 
 export async function GET() {
-  const session = await getIronSession<SiweSessionData>(await cookies(), sessionOptions);
+  const session = await getIronSession<SiweSessionData>(
+    await cookies(),
+    sessionOptions,
+  );
 
   if (session.isLoggedIn) {
     return NextResponse.json({
@@ -275,7 +316,10 @@ export async function GET() {
 }
 
 export async function DELETE() {
-  const session = await getIronSession<SiweSessionData>(await cookies(), sessionOptions);
+  const session = await getIronSession<SiweSessionData>(
+    await cookies(),
+    sessionOptions,
+  );
   session.destroy();
   return NextResponse.json(defaultSession);
 }
@@ -322,7 +366,7 @@ export function useSiwe() {
     try {
       const res = await fetch("/api/siwe/session");
       const data = await res.json();
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isSignedIn: data.isLoggedIn ?? false,
         address: data.address,
@@ -331,7 +375,7 @@ export function useSiwe() {
         isLoading: false,
       }));
     } catch {
-      setState(prev => ({ ...prev, isLoading: false }));
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
   }, []);
 
@@ -347,7 +391,7 @@ export function useSiwe() {
     if (!isConnected && hasSeenWalletConnected.current && state.isSignedIn) {
       // Wallet disconnected after being connected — sign out
       fetch("/api/siwe/session", { method: "DELETE" }).then(() => {
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           isSignedIn: false,
           address: undefined,
@@ -361,11 +405,11 @@ export function useSiwe() {
 
   const signIn = useCallback(async () => {
     if (!connectedAddress || !chainId) {
-      setState(prev => ({ ...prev, error: "Wallet not connected" }));
+      setState((prev) => ({ ...prev, error: "Wallet not connected" }));
       return;
     }
 
-    setState(prev => ({ ...prev, isLoading: true, error: undefined }));
+    setState((prev) => ({ ...prev, isLoading: true, error: undefined }));
     try {
       // 1. Fetch nonce
       const nonceRes = await fetch("/api/siwe/nonce");
@@ -382,7 +426,9 @@ export function useSiwe() {
         version: "1",
         statement,
         issuedAt: now,
-        expirationTime: new Date(now.getTime() + messageExpirationMinutes * 60 * 1000),
+        expirationTime: new Date(
+          now.getTime() + messageExpirationMinutes * 60 * 1000,
+        ),
       });
 
       // 3. Sign with wallet
@@ -401,7 +447,7 @@ export function useSiwe() {
       }
 
       const result = await verifyRes.json();
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isSignedIn: true,
         address: result.address,
@@ -411,7 +457,7 @@ export function useSiwe() {
         isLoading: false,
       }));
     } catch (e) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
         error: e instanceof Error ? e.message : "Sign-in failed",
@@ -421,7 +467,7 @@ export function useSiwe() {
 
   const signOut = useCallback(async () => {
     await fetch("/api/siwe/session", { method: "DELETE" });
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isSignedIn: false,
       address: undefined,
@@ -444,6 +490,7 @@ export function useSiwe() {
 ```
 
 **Key hook behaviors:**
+
 - Checks session on mount so refreshing the page preserves auth state
 - Auto-signs out when wallet disconnects or address changes
 - Uses a `hasSeenWalletConnected` ref to avoid false auto-logout on initial page load (when wallet reconnects asynchronously)
@@ -486,26 +533,29 @@ The `useSiwe` hook provides everything needed to build auth UI. It can be integr
 
 The hook returns these properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `isSignedIn` | `boolean` | Whether user has an active SIWE session |
-| `address` | `string \| undefined` | Authenticated wallet address |
-| `chainId` | `number \| undefined` | Chain ID from signed message |
-| `signedInAt` | `string \| undefined` | ISO timestamp of sign-in |
-| `isLoading` | `boolean` | Loading state during sign-in/session check |
-| `error` | `string \| undefined` | Error message from last operation |
-| `siweMessage` | `string \| undefined` | The raw SIWE message that was signed |
-| `isWalletConnected` | `boolean` | Whether any wallet is currently connected |
-| `connectedAddress` | `string \| undefined` | Current wallet address (may differ from session) |
-| `signIn` | `() => Promise<void>` | Initiate SIWE sign-in flow |
-| `signOut` | `() => Promise<void>` | Destroy session and sign out |
-| `checkSession` | `() => Promise<void>` | Manually recheck session state |
+| Property            | Type                  | Description                                      |
+| ------------------- | --------------------- | ------------------------------------------------ |
+| `isSignedIn`        | `boolean`             | Whether user has an active SIWE session          |
+| `address`           | `string \| undefined` | Authenticated wallet address                     |
+| `chainId`           | `number \| undefined` | Chain ID from signed message                     |
+| `signedInAt`        | `string \| undefined` | ISO timestamp of sign-in                         |
+| `isLoading`         | `boolean`             | Loading state during sign-in/session check       |
+| `error`             | `string \| undefined` | Error message from last operation                |
+| `siweMessage`       | `string \| undefined` | The raw SIWE message that was signed             |
+| `isWalletConnected` | `boolean`             | Whether any wallet is currently connected        |
+| `connectedAddress`  | `string \| undefined` | Current wallet address (may differ from session) |
+| `signIn`            | `() => Promise<void>` | Initiate SIWE sign-in flow                       |
+| `signOut`           | `() => Promise<void>` | Destroy session and sign out                     |
+| `checkSession`      | `() => Promise<void>` | Manually recheck session state                   |
 
-## Development
+## How to Test
 
 1. Start the frontend: `yarn start`
 2. Connect a wallet — MetaMask, Coinbase Wallet, and the burner wallet all support `personal_sign` which is what SIWE uses
 3. Click "Sign In" — review the SIWE message in the wallet popup, confirm
 4. The session persists across page refreshes (encrypted cookie)
 5. Disconnect wallet or click "Sign Out" to end the session
-6. For production: set `IRON_SESSION_SECRET` environment variable to a secure 32+ character random string
+
+## Production:
+
+1. In production make sure to set `IRON_SESSION_SECRET` environment variable to a secure 32+ character random string

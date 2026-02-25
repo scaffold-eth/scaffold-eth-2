@@ -233,7 +233,7 @@ The signing and verification patterns above can be integrated into any existing 
 - **Standalone demo page**: create a new page under `packages/nextjs/app/` with inputs for constructing typed data, a sign button, and verify buttons (frontend + backend)
 - **Integrated into existing flow**: add signing/verification directly into an existing form, checkout, or approval flow
 
-## Development
+## How to Test
 
 1. Start the frontend: `yarn start`
 2. Connect a wallet — the burner wallet, MetaMask, Coinbase Wallet all support `eth_signTypedData_v4`

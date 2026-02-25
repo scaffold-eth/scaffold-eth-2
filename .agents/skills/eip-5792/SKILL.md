@@ -147,7 +147,7 @@ Build a page that demonstrates both individual and batched contract interactions
 4. **Status display** — use `useShowCallsStatus` to show batch result
 5. **Wallet detection** — conditionally show/disable batch UI based on `useCapabilities`
 
-## Development
+## How to Test
 
 1. Deploy the contract: `yarn deploy`
 2. Start the frontend: `yarn start`

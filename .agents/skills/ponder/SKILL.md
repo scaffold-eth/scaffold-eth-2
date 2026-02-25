@@ -272,7 +272,7 @@ const fetchData = async () => {
 const { data } = useQuery({ queryKey: ["ponder-data"], queryFn: fetchData });
 ```
 
-## Development & Deployment
+## Development & Production
 
 - `yarn ponder:dev` starts the dev server with hot reload. GraphiQL explorer available at `http://localhost:42069` for testing queries interactively.
 - For production deployment, see [Ponder deployment docs](https://ponder.sh/docs/production/railway). Key things: set `PONDER_RPC_URL_{chainId}` with a production RPC, optionally configure `DATABASE_URL` for Postgres (defaults to PGlite in dev), and point the frontend's `NEXT_PUBLIC_PONDER_URL` to the deployed Ponder URL.
