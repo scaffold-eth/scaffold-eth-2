@@ -146,6 +146,10 @@ SE-2 also provides other hooks to interact with blockchain data: `useScaffoldWat
 - `EtherInput`: Number input with ETH/USD conversion toggle
 - `IntegerInput`: Integer-only input with wei conversion
 
+### Notifications & Error Handling
+
+Use `notification` from `~~/utils/scaffold-eth` for success/error/warning feedback and `getParsedError` for readable error messages.
+
 ### Styling
 
 **Use DaisyUI classes** for building frontend components.
