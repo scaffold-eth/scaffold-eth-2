@@ -73,9 +73,7 @@ Use this exact text (it's identical across all skills):
 ```markdown
 ## Prerequisites
 
-This skill is designed for Scaffold-ETH 2 (SE-2) projects. Since these skills live inside the SE-2 repo, you should already be in one.
-
-How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
+Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
 ```
 
 #### 4. Overview
@@ -84,36 +82,7 @@ How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `pa
 - Link to the official docs/website.
 - Explicitly state: "This skill focuses on SE-2 integration specifics and gotchas, not a complete reference. For anything not covered here, refer to [official docs link] or search the web."
 
-#### 5. SE-2 Project Context
-
-Use this boilerplate (consistent across all skills), then add 1-2 sentences specific to how this extension integrates:
-
-```markdown
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-SE-2 uses `@scaffold-ui/components` for blockchain/Ethereum components (addresses, balances, etc.) and DaisyUI + Tailwind for general component and styling.
-```
-
-Then add extension-specific integration context. For example:
-- If it adds a new workspace: "Ponder gets added as a new workspace at `packages/ponder/`..."
-- If it's contract-only: "The deployment scripts go alongside the existing deploy scripts..."
-- If it modifies existing files: explain what gets modified and why.
-
-Always end with: "Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly."
-
-#### 6. Dependencies & Scripts (only if the extension adds something)
+#### 5. Dependencies & Scripts (only if the extension adds something)
 
 **Only include this section if the extension actually adds new dependencies, scripts, workspace packages, or environment variables.** If it uses only what SE-2 already provides (OpenZeppelin, wagmi, viem, etc.), skip this section entirely. Don't write "No new dependencies needed" - absence means nothing extra.
 
@@ -127,7 +96,7 @@ Extract this from the extension's `package.json` files and `.env.example.args.mj
 
 Important: Check npm or official docs for the **latest versions** of packages before hardcoding versions. Use `latest` or provide a minimum version with `^` prefix.
 
-#### 7. Smart Contract (only if the extension adds contracts)
+#### 6. Smart Contract (only if the extension adds contracts)
 
 Skip this section if the extension is frontend-only or integration-only. Don't write "No contract changes needed."
 
@@ -138,25 +107,7 @@ When included:
 - List available extensions/variations the user might want.
 - Extract the contract logic from the extension's Solidity files, but **generalize it** - the skill should teach the pattern, not copy a specific implementation.
 
-#### 8. Deployment (only if contracts are involved)
-
-Skip if no contracts. When included, cover both flavors briefly:
-
-```markdown
-## Deployment
-
-### Hardhat
-
-Deploy script goes in `packages/hardhat/deploy/`. SE-2 uses `hardhat-deploy`, so the script exports a `DeployFunction`. Use a filename like `01_deploy_{{name}}.ts` (numbered to control deploy order). The `autoMine` flag speeds up local deployments.
-
-### Foundry
-
-Add a deploy script in `packages/foundry/script/` and wire it into the main `Deploy.s.sol`. SE-2's Foundry setup uses a `ScaffoldETHDeploy` base contract and `DeployHelpers.s.sol`. Import and call the new deploy script from `Deploy.s.sol`'s run function.
-```
-
-Only add detail beyond this if the extension has non-standard deployment requirements.
-
-#### 9. Domain-Specific Content (THE CORE)
+#### 7. Domain-Specific Content (THE CORE)
 
 This is the most important section and varies entirely by extension. This is where you add:
 
@@ -173,45 +124,32 @@ Guidelines for this section:
 - **Reference real exploits or incidents** where they add educational value.
 - **Link to official docs** for deep dives beyond what you cover.
 - **Don't duplicate official docs.** Focus on what's hard to discover and what's specific to SE-2 integration.
+- **Don't duplicate AGENTS.md.** SE-2 project context (flavors, file paths, hooks, components, styling, notifications) is already documented in `AGENTS.md` which is always loaded. Don't repeat it in the skill. Only mention SE-2 tools when showing skill-specific usage patterns.
 - **Verify burner wallet support before claiming it doesn't work.** SE-2's burner wallet (`burner-connector` package) supports more than you'd expect (`eth_signTypedData_v4`, `wallet_sendCalls`, `wallet_getCallsStatus`, etc.). Check the actual implementation at `packages/nextjs/node_modules/burner-connector/dist/esm/burnerConnector/burner.js` before writing gotchas about burner wallet limitations. Only mention a limitation if you've confirmed it in the code.
 
-#### 10. SE-2 Integration
+#### 8. Frontend (only if the skill adds unique composition patterns)
 
-This section should describe **how** the extension's functionality connects to SE-2's frontend, not dictate a rigid page layout. The user may want a dedicated page, or they may want to integrate into an existing page/component. Don't assume either.
+**Only include this section if the skill has frontend integration patterns that aren't obvious from the code examples above.** For example:
 
-```markdown
-## SE-2 Integration
+- A multi-step UX flow composing several hooks together (e.g., EIP-5792's read → individual write → batched write → status → wallet detection pattern)
+- A new data-fetching pattern (e.g., Ponder's GraphQL + react-query integration)
+- A skill-specific hook API reference table
 
-### Header navigation
+**Do NOT include this section if it would just repeat what AGENTS.md already covers** (scaffold hooks, `@scaffold-ui/components`, DaisyUI styling, notifications). If the code examples above already show how the frontend works, skip this section.
 
-If the user wants a dedicated page, add a nav link to the SE-2 header menu. Pick an appropriate icon from `@heroicons/react/24/outline`.
+#### 9. How to Test
 
-### Frontend
-
-Describe the key integration patterns — how the extension's data/functionality surfaces in the UI. Don't prescribe a specific page structure. Instead, explain what the user can build and what SE-2 tools are available.
-```
-
-Reference SE-2's specific tools (only mention those relevant to this extension):
-- **Hooks**: `useScaffoldReadContract`, `useScaffoldWriteContract`, `useScaffoldEventHistory`, `useDeployedContractInfo`, `useScaffoldContract`
-- **Components**: `@scaffold-ui/components` (Address, Balance, AddressInput, EtherInput, IntegerInput)
-- **Styling**: DaisyUI + Tailwind (not raw Tailwind)
-- **Notifications**: `notification` utility from `~~/utils/scaffold-eth`
-- **Error handling**: `getParsedError` for readable error messages
-
-**Don't force specific icons, page layouts, or component hierarchies.** The skill should teach the patterns and let the agent adapt to what the user actually needs.
-
-#### 11. Development & Deployment
-
-Brief section on the development workflow:
+Brief section on how to test the skill's functionality locally:
 - What commands to run (using SE-2's `yarn` scripts)
-- Any special dev setup (Docker, external services, API keys)
-- Production deployment notes if relevant
+- What to click/interact with to verify it works
+- How to test failure cases
+
+If the skill has production deployment concerns (env vars, external services, API keys), add a separate `## Production` subsection.
 
 ### Content philosophy
 
 **DO include:**
 - Everything an AI agent needs to implement this feature from zero in an SE-2 project
-- SE-2-specific integration patterns (hooks, components, file paths, monorepo structure)
 - Gotchas that trip up both humans and AI (real-world edge cases, version mismatches, non-obvious behaviors)
 - Code examples as **syntax references** with comments like "adapt to the project's actual contracts"
 - Tables for structured data (type mappings, comparisons, well-known addresses)
@@ -223,6 +161,7 @@ Brief section on the development workflow:
 - Boilerplate files verbatim (describe what they need, let the agent generate them)
 - The extension's `.args.mjs` merging logic (that's the old system - we're replacing it)
 - Unnecessary code comments or JSDoc on simple functions
+- **Anything already in AGENTS.md** — SE-2 project context, hook names, UI components, styling conventions, notification utilities, deployment patterns (Hardhat/Foundry). The agent always has AGENTS.md loaded; duplicating it wastes tokens and creates drift.
 - **Negative statements about what's NOT needed.** Don't write "No new dependencies required" or "No contract changes needed" - just omit that section entirely. Each skill is loaded independently; the agent assumes nothing extra is needed unless told otherwise. Only mention something if there's an action to take.
 
 ### Formatting conventions
@@ -239,12 +178,11 @@ Brief section on the development workflow:
 Before finalizing, verify:
 
 - [ ] YAML frontmatter has descriptive `name` and `description` with trigger phrases
-- [ ] Prerequisites section uses the exact boilerplate
-- [ ] SE-2 Project Context section uses the boilerplate + extension-specific additions
+- [ ] Prerequisites uses the exact `scaffold.config.ts` check with `docs.scaffoldeth.io/SKILL.md` fallback
+- [ ] No SE-2 project context boilerplate (that's in AGENTS.md)
+- [ ] No duplicated AGENTS.md content (hooks, components, styling, notifications, deployment patterns)
 - [ ] All SE-2 hooks use correct names (`useScaffoldReadContract` not `useScaffoldContractRead`)
 - [ ] Import paths use `~~` alias (e.g., `~~/hooks/scaffold-eth`)
-- [ ] Styling mentions DaisyUI, not raw Tailwind
-- [ ] Components reference `@scaffold-ui/components`
 - [ ] Both Hardhat and Foundry flavors are covered where relevant
 - [ ] Code examples are generalized syntax references, not rigid templates
 - [ ] Gotchas section exists with real, practical pitfalls
@@ -252,9 +190,9 @@ Before finalizing, verify:
 - [ ] Official docs are linked for anything beyond SE-2 specifics
 - [ ] No `.args.mjs` merging logic leaks into the skill
 - [ ] The skill reads as a self-contained guide, not a diff or patch
-- [ ] "Look at the actual project structure" reminder is included in SE-2 context
 - [ ] **No "nothing needed" statements** - sections that don't apply are omitted, not mentioned as absent
 - [ ] Every section earns its place - if it doesn't tell the agent to DO something, cut it
+- [ ] Frontend section only exists if it adds composition patterns not obvious from code examples
 
 ### Reference: Extensions available for migration
 
@@ -262,7 +200,6 @@ These branches in `create-eth-extensions` have NOT been migrated yet:
 
 | Branch | Type | Description |
 |--------|------|-------------|
-| ~~`eip-712`~~ | ~~Frontend/Crypto~~ | ~~EIP-712 typed structured data signing~~ (migrated) |
 | `subgraph` | Indexer | The Graph subgraph integration |
 | `envio` | Indexer | Envio HyperIndex integration |
 | `onchainkit` | Framework | Coinbase OnchainKit integration |
@@ -277,6 +214,7 @@ Already migrated (for reference, look at their SKILL.md files in `.agents/skills
 - `erc-721` -> `.agents/skills/erc-721/SKILL.md`
 - `eip-5792` -> `.agents/skills/eip-5792/SKILL.md`
 - `eip-712` -> `.agents/skills/eip-712/SKILL.md`
+- `siwe` -> `.agents/skills/siwe/SKILL.md`
 
 ### Example workflow
 
