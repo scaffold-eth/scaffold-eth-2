@@ -17,26 +17,6 @@ How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `pa
 
 This skill covers integrating SIWE into an SE-2 project using [viem's native SIWE utilities](https://viem.sh/docs/siwe/utilities/createSiweMessage) and [iron-session](https://github.com/vvo/iron-session) for encrypted cookie-based sessions. This skill focuses on SE-2 integration specifics and gotchas, not a complete reference. For anything not covered here, refer to the [EIP-4361 spec](https://eips.ethereum.org/EIPS/eip-4361) or [viem SIWE docs](https://viem.sh/docs/siwe/utilities/createSiweMessage).
 
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, @scaffold-ui/components, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-SE-2 uses `@scaffold-ui/components` for blockchain/Ethereum components (addresses, balances, etc.) and DaisyUI + Tailwind for general component and styling.
-
-SIWE is a frontend-only integration — all files go in `packages/nextjs/`. It adds three API routes (nonce, verify, session), a custom hook, a config file, and utility helpers. No smart contracts or deployment scripts needed.
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
-
 ## Dependencies
 
 Add `iron-session` to the nextjs workspace for encrypted cookie-based session management:
@@ -505,8 +485,6 @@ The `useSiwe` hook provides everything needed to build auth UI. It can be integr
 - **Auth status** — show the authenticated address using `Address` from `@scaffold-ui/components`
 - **Protected content** — conditionally render based on `isSignedIn`
 - **Sign-out** — call `signOut()` to destroy the session
-
-Use SE-2's `notification` utility from `~~/utils/scaffold-eth` for success/error feedback. Style with DaisyUI classes (`btn`, `alert`, `card`, `badge`, etc.).
 
 The hook returns these properties:
 

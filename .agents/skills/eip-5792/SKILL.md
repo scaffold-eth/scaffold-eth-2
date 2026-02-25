@@ -17,24 +17,6 @@ How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `pa
 
 This skill covers integrating EIP-5792 batched transactions into an SE-2 project using [wagmi's EIP-5792 hooks](https://wagmi.sh/react/api/hooks/useWriteContracts). For anything not covered here, refer to the [EIP-5792 docs](https://www.eip5792.xyz/) or [wagmi docs](https://wagmi.sh/). This skill focuses on SE-2 integration specifics and the wallet compatibility gotchas that trip people up.
 
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-The deployment scripts go alongside the existing deploy scripts, and the frontend page goes in the nextjs package. After deployment, `deployedContracts.ts` auto-generates the ABI and address, so the frontend can interact with contracts using SE-2's scaffold hooks (`useScaffoldReadContract`, `useScaffoldWriteContract`) for individual calls and wagmi's EIP-5792 hooks for batched calls.
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
-
 ## Dependencies
 
 No new dependencies needed. SE-2 already includes wagmi, which has the EIP-5792 hooks. The experimental hooks live at `wagmi/experimental`:
@@ -157,7 +139,7 @@ This is the main source of confusion with EIP-5792. Not all wallets behave the s
 
 Add a tab to the SE-2 header menu for the EIP-5792 demo page. Pick an appropriate icon from `@heroicons/react/24/outline`.
 
-### Frontend page
+### Frontend
 
 Build a page that demonstrates both individual and batched contract interactions. The key UX pattern:
 
@@ -166,8 +148,6 @@ Build a page that demonstrates both individual and batched contract interactions
 3. **Batched writes** — use `useWriteContracts` for the EIP-5792 batch (only enabled when wallet supports it)
 4. **Status display** — use `useShowCallsStatus` to show batch result
 5. **Wallet detection** — conditionally show/disable batch UI based on `useCapabilities`
-
-Use SE-2's `notification` utility (`~~/utils/scaffold-eth`) for success/error feedback and `getParsedError` for readable error messages. SE-2 uses `@scaffold-ui/components` for blockchain components and DaisyUI + Tailwind for general styling.
 
 ## Development
 

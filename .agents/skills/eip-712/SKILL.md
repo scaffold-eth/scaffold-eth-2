@@ -17,26 +17,6 @@ How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `pa
 
 This skill covers integrating EIP-712 signing and verification (both frontend and backend) into an SE-2 project using [wagmi hooks](https://wagmi.sh/react/api/hooks/useSignTypedData) and [viem utilities](https://viem.sh/docs/actions/public/verifyTypedData). This skill focuses on SE-2 integration specifics and gotchas, not a complete reference. For anything not covered here, refer to the [EIP-712 specification](https://eips.ethereum.org/EIPS/eip-712) or the [wagmi](https://wagmi.sh/) / [viem](https://viem.sh/) docs.
 
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, @scaffold-ui/components, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-SE-2 uses `@scaffold-ui/components` for blockchain/Ethereum components (addresses, balances, etc.) and DaisyUI + Tailwind for general component and styling.
-
-All files go in `packages/nextjs/`: a utility module for type definitions, a page for the signing UI, and optionally a Next.js API route for backend verification.
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
-
 ## EIP-712 Concepts
 
 ### Domain separator
@@ -254,8 +234,6 @@ The signing and verification patterns above can be integrated into any existing 
 
 - **Standalone demo page**: create a new page under `packages/nextjs/app/` with inputs for constructing typed data, a sign button, and verify buttons (frontend + backend)
 - **Integrated into existing flow**: add signing/verification directly into an existing form, checkout, or approval flow
-
-Use SE-2's `notification` utility from `~~/utils/scaffold-eth` for success/error feedback and `getParsedError` for readable error messages. Style with DaisyUI + Tailwind.
 
 ## Development
 
