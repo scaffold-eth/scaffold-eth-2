@@ -73,9 +73,9 @@ Use this exact text (it's identical across all skills):
 ```markdown
 ## Prerequisites
 
-This skill is designed for Scaffold-ETH 2 (SE-2) projects. If the user is **not already inside an SE-2 project**, use the `ethereum-app-builder` skill from this same skill package to scaffold one first, then come back here to add {{EXTENSION_NAME}}.
+This skill is designed for Scaffold-ETH 2 (SE-2) projects. Since these skills live inside the SE-2 repo, you should already be in one.
 
-How to check: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
+How to verify: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
 ```
 
 #### 4. Overview
