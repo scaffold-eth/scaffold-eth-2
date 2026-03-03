@@ -9,9 +9,13 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { rainbowkitBurnerWallet } from "burner-connector";
 import * as chains from "viem/chains";
-import scaffoldConfig from "~~/scaffold.config";
+import scaffoldConfig, { type ScaffoldConfig } from "~~/scaffold.config";
 
-const { onlyLocalBurnerWallet, targetNetworks } = scaffoldConfig;
+const { burnerWalletMode, targetNetworks } = scaffoldConfig as ScaffoldConfig;
+
+const hasLocalTargetNetwork = targetNetworks.some(network => network.id === (chains.hardhat as chains.Chain).id);
+const showBurnerWallet =
+  burnerWalletMode !== "disabled" && (burnerWalletMode === "allNetworks" || hasLocalTargetNetwork);
 
 const wallets = [
   metaMaskWallet,
@@ -20,9 +24,7 @@ const wallets = [
   baseAccount,
   rainbowWallet,
   safeWallet,
-  ...(!targetNetworks.some(network => network.id !== (chains.hardhat as chains.Chain).id) || !onlyLocalBurnerWallet
-    ? [rainbowkitBurnerWallet]
-    : []),
+  ...(showBurnerWallet ? [rainbowkitBurnerWallet] : []),
 ];
 
 /**

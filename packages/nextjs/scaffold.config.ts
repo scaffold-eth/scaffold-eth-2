@@ -6,7 +6,7 @@ export type ScaffoldConfig = {
   alchemyApiKey: string;
   rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
-  onlyLocalBurnerWallet: boolean;
+  burnerWalletMode: "localOnly" | "allNetworks" | "disabled";
 };
 
 export const DEFAULT_ALCHEMY_API_KEY = "cR4WnXePioePZ5fFrnSiR";
@@ -38,8 +38,11 @@ const scaffoldConfig = {
   // .env.local for local testing, and in the Vercel/system env config for live apps.
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
-  // Only show the Burner Wallet when running on hardhat network
-  onlyLocalBurnerWallet: true,
+  // Configure Burner Wallet visibility:
+  // - "localOnly": only show when local chain is configured
+  // - "allNetworks": show on any configured target networks
+  // - "disabled": completely disable
+  burnerWalletMode: "localOnly",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
