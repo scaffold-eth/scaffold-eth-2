@@ -13,9 +13,9 @@ import scaffoldConfig, { type ScaffoldConfig } from "~~/scaffold.config";
 
 const { burnerWalletMode, targetNetworks } = scaffoldConfig as ScaffoldConfig;
 
-const hasLocalTargetNetwork = targetNetworks.some(network => network.id === (chains.hardhat as chains.Chain).id);
+const hasOnlyLocalTargetNetworks = targetNetworks.every(network => network.id === (chains.hardhat as chains.Chain).id);
 const showBurnerWallet =
-  burnerWalletMode !== "disabled" && (burnerWalletMode === "allNetworks" || hasLocalTargetNetwork);
+  burnerWalletMode !== "disabled" && (burnerWalletMode === "allNetworks" || hasOnlyLocalTargetNetworks);
 
 const wallets = [
   metaMaskWallet,

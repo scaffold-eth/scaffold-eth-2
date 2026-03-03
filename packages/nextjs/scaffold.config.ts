@@ -39,7 +39,7 @@ const scaffoldConfig = {
   walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || "3a8170812b534d0ff9d794f19a901d64",
 
   // Configure Burner Wallet visibility:
-  // - "localOnly": only show when local chain is configured
+  // - "localOnly": only show when all target networks are local (hardhat/anvil)
   // - "allNetworks": show on any configured target networks
   // - "disabled": completely disable
   burnerWalletMode: "localOnly",
