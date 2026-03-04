@@ -6,7 +6,7 @@ export type ScaffoldConfig = {
   alchemyApiKey: string;
   rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
-  burnerWalletMode: "localOnly" | "allNetworks" | "disabled";
+  burnerWalletMode: "localNetworksOnly" | "allNetworks" | "disabled";
 };
 
 export const DEFAULT_ALCHEMY_API_KEY = "cR4WnXePioePZ5fFrnSiR";
@@ -42,7 +42,7 @@ const scaffoldConfig = {
   // - "localOnly": only show when all target networks are local (hardhat/anvil)
   // - "allNetworks": show on any configured target networks
   // - "disabled": completely disable
-  burnerWalletMode: "localOnly",
+  burnerWalletMode: "localNetworksOnly",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;
