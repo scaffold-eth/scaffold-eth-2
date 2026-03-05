@@ -237,6 +237,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
+- **subgraph** — The Graph subgraph integration, blockchain event indexing, GraphQL APIs
 - **solidity-security** — security audits, reentrancy, access control, gas optimization
 
 **Agents** (in `.agents/agents/`):
