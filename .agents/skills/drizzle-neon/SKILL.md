@@ -297,9 +297,16 @@ export async function POST(request: NextRequest) {
 
 ### Client-side API service
 
+Use `@tanstack/react-query` (already included in SE-2) for client-side data fetching and mutations:
+
 ```typescript
 // packages/nextjs/services/api/users.ts
 import type { User } from "~~/services/database/repositories/users";
+
+export async function fetchUsers(): Promise<User[]> {
+  const res = await fetch("/api/users");
+  return res.json();
+}
 
 export async function createUserAPIRequest(user: User) {
   return await fetch("/api/users", {
@@ -307,6 +314,25 @@ export async function createUserAPIRequest(user: User) {
     body: JSON.stringify(user),
   });
 }
+```
+
+```tsx
+// In a client component
+"use client";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createUserAPIRequest, fetchUsers } from "~~/services/api/users";
+
+const { data: users, isLoading } = useQuery({
+  queryKey: ["users"],
+  queryFn: fetchUsers,
+});
+
+const queryClient = useQueryClient();
+const { mutateAsync: createUser } = useMutation({
+  mutationFn: createUserAPIRequest,
+  onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+});
 ```
 
 ## Database Workflow
