@@ -235,6 +235,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
 - **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
+- **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **solidity-security** — security audits, reentrancy, access control, gas optimization
 
 **Agents** (in `.agents/agents/`):
