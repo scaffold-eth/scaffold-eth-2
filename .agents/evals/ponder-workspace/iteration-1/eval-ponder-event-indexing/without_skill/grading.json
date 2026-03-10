@@ -1,0 +1,61 @@
+{
+  "eval_id": 0,
+  "eval_name": "ponder-event-indexing",
+  "variant": "without_skill",
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "Hardcodes ABI from local abis/YourContract.ts file. Hardcodes contract address as '0x5FbDB2315678afecb367f032d93F642f64180aa3'. No bridge to SE-2's deployedContracts.ts"
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "Hardcodes chainId: 31337 and 'localhost' network name. No import from scaffoldConfig"
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "package.json name: '@se-2/ponder' — correct"
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": false,
+      "evidence": "Uses OLD import style: 'import { ponder } from \"@/generated\"' and 'import { greetingChange } from \"../ponder.schema\"'. Virtual modules not used"
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "Uses onchainTable from @ponder/core — correct API (though from old package name)"
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "ponder.on('YourContract:GreetingChange', ...) — correct format"
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "context.db.insert(greetingChange).values({...}) — correct current API"
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": false,
+      "evidence": "Uses OLD express-style: ponder.use('/graphql', graphql()) — not Hono. No Hono import, no app creation"
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root has ponder:dev, ponder:start, ponder:codegen proxy scripts"
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": false,
+      "evidence": "No ponder-env.d.ts file created. Virtual module types won't resolve"
+    }
+  ],
+  "pass_rate": 0.5,
+  "passed": 5,
+  "failed": 5,
+  "total": 10
+}

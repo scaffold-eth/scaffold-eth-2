@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "skill_name": "drizzle-neon",
+    "skill_path": ".agents/skills/drizzle-neon",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-10T00:00:00Z",
+    "evals_run": ["drizzle-db-integration"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "drizzle-db-integration",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10,
+        "time_seconds": 219.6, "tokens": 46554, "tool_calls": 50, "errors": 0
+      },
+      "expectations": [
+        {"text": "Tri-driver pattern (Neon serverless/HTTP/pg)", "passed": true, "evidence": "postgresClient.ts has all 3 drivers with NEXT_RUNTIME detection"},
+        {"text": "Lazy proxy pattern for deferred connection", "passed": true, "evidence": "Uses Proxy object with getDb() called on property access"},
+        {"text": "casing: 'snake_case' in both config AND client", "passed": true, "evidence": "Set in drizzle.config.ts and all 3 drizzle() calls"},
+        {"text": "Files at services/database/ path", "passed": true, "evidence": "services/database/config/, repositories/ structure"},
+        {"text": "Repository pattern for DB access", "passed": true, "evidence": "repositories/users.ts with CRUD functions"},
+        {"text": "Root proxy scripts (drizzle-kit, db:seed, db:wipe)", "passed": true, "evidence": "All 3 proxy scripts in root package.json"},
+        {"text": "Docker Compose for local PostgreSQL", "passed": true, "evidence": "docker-compose.yml with postgres:16"},
+        {"text": "Uses .env.development (SE-2 convention)", "passed": true, "evidence": ".env.development with POSTGRES_URL"},
+        {"text": "Production safety guard", "passed": true, "evidence": "PRODUCTION_DATABASE_HOSTNAME in postgresClient.ts"},
+        {"text": "All required dependencies", "passed": true, "evidence": "drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg"}
+      ]
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "drizzle-db-integration",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0, "passed": 0, "failed": 10, "total": 10,
+        "time_seconds": 189.4, "tokens": 38464, "tool_calls": 45, "errors": 0
+      },
+      "expectations": [
+        {"text": "Tri-driver pattern (Neon serverless/HTTP/pg)", "passed": false, "evidence": "Only neon-http driver. No NEXT_RUNTIME detection, no local pg support"},
+        {"text": "Lazy proxy pattern for deferred connection", "passed": false, "evidence": "Eager init: throws if no DATABASE_URL on import"},
+        {"text": "casing: 'snake_case' in both config AND client", "passed": false, "evidence": "Missing from both — will cause silent column name mismatches"},
+        {"text": "Files at services/database/ path", "passed": false, "evidence": "Used /db/ instead of /services/database/"},
+        {"text": "Repository pattern for DB access", "passed": false, "evidence": "No repository layer; queries inline in API routes"},
+        {"text": "Root proxy scripts (drizzle-kit, db:seed, db:wipe)", "passed": false, "evidence": "No root-level proxy scripts"},
+        {"text": "Docker Compose for local PostgreSQL", "passed": false, "evidence": "No docker-compose.yml — no local dev story"},
+        {"text": "Uses .env.development (SE-2 convention)", "passed": false, "evidence": "Uses .env.example/.env.local pattern"},
+        {"text": "Production safety guard", "passed": false, "evidence": "No safety guard — seed/wipe could hit production"},
+        {"text": "All required dependencies", "passed": false, "evidence": "Missing pg, dotenv, @types/pg, drizzle-seed"}
+      ],
+      "notes": ["Model chose Drizzle+Neon independently but missed every SE-2 integration pattern"]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 219.6, "stddev": 0.0, "min": 219.6, "max": 219.6},
+      "tokens": {"mean": 46554, "stddev": 0, "min": 46554, "max": 46554}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.0, "stddev": 0.0, "min": 0.0, "max": 0.0},
+      "time_seconds": {"mean": 189.4, "stddev": 0.0, "min": 189.4, "max": 189.4},
+      "tokens": {"mean": 38464, "stddev": 0, "min": 38464, "max": 38464}
+    },
+    "delta": {
+      "pass_rate": "+1.00",
+      "time_seconds": "+30.2",
+      "tokens": "+8090"
+    }
+  },
+  "notes": [
+    "LARGEST DELTA: 100% vs 0% — model knows Drizzle but misses every SE-2 integration pattern",
+    "All 10 assertions are discriminating — none pass without the skill",
+    "Without skill, casing mismatch would cause silent data corruption",
+    "Without skill, no local dev story (no Docker, no pg driver)",
+    "Model independently chose Drizzle+Neon — skill value is integration, not library selection"
+  ]
+}

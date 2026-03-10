@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "skill_name": "eip-5792",
+    "skill_path": ".agents/skills/eip-5792",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-10T00:00:00Z",
+    "evals_run": ["eip5792-batch-txns"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "eip5792-batch-txns",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10,
+        "time_seconds": 176.4, "tokens": 41444, "tool_calls": 30, "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses useWriteContracts (not useSendCalls)", "passed": true, "evidence": "import { useWriteContracts } from 'wagmi/experimental'"},
+        {"text": "Uses useCapabilities for wallet detection", "passed": true, "evidence": "import { useCapabilities } from 'wagmi/experimental'"},
+        {"text": "Uses useShowCallsStatus for status", "passed": true, "evidence": "import { useShowCallsStatus } from 'wagmi/experimental'"},
+        {"text": "Graceful fallback for non-EIP-5792 wallets", "passed": true, "evidence": "Both batch AND individual transaction buttons"},
+        {"text": "Batch button disabled when unsupported", "passed": true, "evidence": "disabled={... || !isEIP5792Wallet}"},
+        {"text": "ERC20 contract created", "passed": true, "evidence": "BatchToken.sol with approve+transferWithTracking"},
+        {"text": "Deploy script created", "passed": true, "evidence": "01_deploy_batch_token.ts"},
+        {"text": "Frontend page created", "passed": true, "evidence": "/batch-tokens page"},
+        {"text": "SE-2 scaffold hooks used", "passed": true, "evidence": "useScaffoldReadContract, useScaffoldWriteContract, useDeployedContractInfo"},
+        {"text": "No new dependencies needed", "passed": true, "evidence": "wagmi 2.19.5 already has EIP-5792 hooks"}
+      ]
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "eip5792-batch-txns",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6, "passed": 6, "failed": 4, "total": 10,
+        "time_seconds": 342.1, "tokens": 73048, "tool_calls": 72, "errors": 0
+      },
+      "expectations": [
+        {"text": "Uses useWriteContracts (not useSendCalls)", "passed": false, "evidence": "Used useSendCalls + manual encodeFunctionData with hacky MAX_CONTRACTS=5 padded hooks"},
+        {"text": "Uses useCapabilities for wallet detection", "passed": true, "evidence": "useBatchCallsCapabilities wraps useCapabilities"},
+        {"text": "Uses useShowCallsStatus for status", "passed": false, "evidence": "Not used — no batch status display"},
+        {"text": "Graceful fallback for non-EIP-5792 wallets", "passed": false, "evidence": "Only batch button, no individual transaction alternative"},
+        {"text": "Batch button disabled when unsupported", "passed": false, "evidence": "Button NOT checking isSupported — would fail at runtime"},
+        {"text": "ERC20 contract created", "passed": true, "evidence": "BatchToken.sol created"},
+        {"text": "Deploy script created", "passed": true, "evidence": "01_deploy_batch_token.ts"},
+        {"text": "Frontend page created", "passed": true, "evidence": "/batch-transfer page"},
+        {"text": "SE-2 scaffold hooks used", "passed": true, "evidence": "useScaffoldReadContract, useScaffoldWriteContract used"},
+        {"text": "No new dependencies needed", "passed": true, "evidence": "No new deps added"}
+      ],
+      "notes": ["Used lower-level useSendCalls requiring manual encoding", "No graceful degradation for unsupported wallets", "Spent 2x time and tokens exploring/building custom hooks"]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 176.4, "stddev": 0.0, "min": 176.4, "max": 176.4},
+      "tokens": {"mean": 41444, "stddev": 0, "min": 41444, "max": 41444}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.6, "stddev": 0.0, "min": 0.6, "max": 0.6},
+      "time_seconds": {"mean": 342.1, "stddev": 0.0, "min": 342.1, "max": 342.1},
+      "tokens": {"mean": 73048, "stddev": 0, "min": 73048, "max": 73048}
+    },
+    "delta": {"pass_rate": "+0.40", "time_seconds": "-165.7", "tokens": "-31604"}
+  },
+  "notes": [
+    "Smallest delta among Tier 1 (40%) — model has decent EIP-5792 knowledge",
+    "Main skill value: UX patterns (fallback, capability detection, status display)",
+    "Without skill: 2x time (342s vs 176s) and 1.8x tokens (73k vs 41k) — significant exploration overhead",
+    "Without skill: hacky MAX_CONTRACTS=5 padded hook pattern shows model struggling with React hooks rules"
+  ]
+}

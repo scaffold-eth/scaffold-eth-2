@@ -1,0 +1,107 @@
+{
+  "metadata": {
+    "skill_name": "x402",
+    "skill_path": ".agents/skills/x402",
+    "executor_model": "claude-opus-4-6",
+    "analyzer_model": "claude-opus-4-6",
+    "timestamp": "2026-03-10T00:00:00Z",
+    "evals_run": ["x402-api-monetization"],
+    "runs_per_configuration": 1
+  },
+
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "x402-api-monetization",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 184.3,
+        "tokens": 39805,
+        "tool_calls": 40,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "middleware.ts file exists in packages/nextjs/", "passed": true, "evidence": "packages/nextjs/middleware.ts created with full x402 v2 middleware implementation"},
+        {"text": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": true, "evidence": "Imports paymentProxy from @x402/next, HTTPFacilitatorClient and x402ResourceServer from @x402/core/server"},
+        {"text": "Calls registerExactEvmScheme(server) in middleware", "passed": true, "evidence": "Line 14: registerExactEvmScheme(server) correctly registers EVM scheme"},
+        {"text": "Uses CAIP-2 network format (eip155:84532) not legacy names", "passed": true, "evidence": ".env.development contains NETWORK=eip155:84532"},
+        {"text": "Creates paywall with createPaywall().withNetwork(evmPaywall)", "passed": true, "evidence": "Lines 17-24: createPaywall().withNetwork(evmPaywall).withConfig({...}).build()"},
+        {"text": "A protected API route handler exists", "passed": true, "evidence": "packages/nextjs/app/api/payment/data/route.ts created"},
+        {"text": "Environment variables for facilitator, wallet, network configured", "passed": true, "evidence": ".env.development has NEXT_PUBLIC_FACILITATOR_URL, RESOURCE_WALLET_ADDRESS, NETWORK"},
+        {"text": "x402 packages added to nextjs package.json", "passed": true, "evidence": "@x402/core ^2.2.0, @x402/evm ^2.2.0, @x402/next ^2.2.0, @x402/paywall ^2.2.0"},
+        {"text": "Middleware matcher covers protected routes", "passed": true, "evidence": "matcher: [\"/api/payment/:path*\", \"/payment/:path*\"]"},
+        {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "targetNetworks: [chains.baseSepolia] — replaced chains.hardhat"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "x402-api-monetization",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 5,
+        "failed": 5,
+        "total": 10,
+        "time_seconds": 324.2,
+        "tokens": 57391,
+        "tool_calls": 61,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "middleware.ts file exists in packages/nextjs/", "passed": true, "evidence": "packages/nextjs/middleware.ts created"},
+        {"text": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": false, "evidence": "Uses v1 'paymentMiddleware' from 'x402-next'. Missing paymentProxy, x402ResourceServer, HTTPFacilitatorClient"},
+        {"text": "Calls registerExactEvmScheme(server) in middleware", "passed": false, "evidence": "No registerExactEvmScheme call. Uses old v1 paymentMiddleware() pattern"},
+        {"text": "Uses CAIP-2 network format (eip155:84532) not legacy names", "passed": false, "evidence": "Uses legacy name 'base-sepolia' in x402.config.ts instead of CAIP-2 eip155:84532"},
+        {"text": "Creates paywall with createPaywall().withNetwork(evmPaywall)", "passed": false, "evidence": "No createPaywall() or evmPaywall usage. No paywall UI for browser visitors"},
+        {"text": "A protected API route handler exists", "passed": true, "evidence": "packages/nextjs/app/api/premium-data/route.ts created"},
+        {"text": "Environment variables for facilitator, wallet, network configured", "passed": true, "evidence": ".env.example has X402_PAY_TO_ADDRESS, X402_FACILITATOR_URL, NEXT_PUBLIC_X402_NETWORK"},
+        {"text": "x402 packages added to nextjs package.json", "passed": false, "evidence": "Wrong package names: 'x402-fetch' and 'x402-next' (non-scoped). Should be @x402/core, @x402/next, @x402/evm, @x402/paywall"},
+        {"text": "Middleware matcher covers protected routes", "passed": true, "evidence": "matcher: [\"/api/premium-data/:path*\"]"},
+        {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "targetNetworks includes chains.baseSepolia (but also kept chains.hardhat)"}
+      ],
+      "notes": [
+        "Used wrong/nonexistent package names (x402-next, x402-fetch instead of @x402/core, @x402/next)",
+        "Used v1 API pattern (paymentMiddleware) instead of v2 (paymentProxy + x402ResourceServer)",
+        "Used legacy network name 'base-sepolia' instead of CAIP-2 format 'eip155:84532'",
+        "Kept chains.hardhat in targetNetworks alongside baseSepolia — skill warns against this",
+        "Created a custom useX402Payment hook — creative but uses wrong client library"
+      ]
+    }
+  ],
+
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 184.3, "stddev": 0.0, "min": 184.3, "max": 184.3},
+      "tokens": {"mean": 39805, "stddev": 0, "min": 39805, "max": 39805}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.5, "stddev": 0.0, "min": 0.5, "max": 0.5},
+      "time_seconds": {"mean": 324.2, "stddev": 0.0, "min": 324.2, "max": 324.2},
+      "tokens": {"mean": 57391, "stddev": 0, "min": 57391, "max": 57391}
+    },
+    "delta": {
+      "pass_rate": "+0.50",
+      "time_seconds": "-139.9",
+      "tokens": "-17586"
+    }
+  },
+
+  "notes": [
+    "STRONG SIGNAL: 5 of 10 assertions failed without skill — all in Capability Uplift areas (v2 API, CAIP-2, EVM scheme, paywall, package names)",
+    "All 5 passing assertions without skill are structural (file exists, env vars configured, matcher present, baseSepolia added) — model gets the general concept right",
+    "Without skill, model used WRONG package names (x402-next, x402-fetch instead of @x402/core, @x402/next) — these packages likely don't exist on npm",
+    "Without skill, model used v1/hallucinated API (paymentMiddleware) instead of v2 (paymentProxy + x402ResourceServer + HTTPFacilitatorClient)",
+    "Without skill, model used legacy network name 'base-sepolia' instead of CAIP-2 'eip155:84532'",
+    "With-skill run was FASTER (184s vs 324s) and used FEWER tokens (40k vs 57k) — skill reduces exploration/guessing overhead",
+    "Non-discriminating assertions: middleware-exists, api-route-created, matcher-config — both variants pass these (model knows the general pattern)",
+    "Most discriminating assertions: v2-api-imports, register-evm-scheme, correct-dependencies, paywall-setup, caip2-network — only pass with skill"
+  ]
+}
