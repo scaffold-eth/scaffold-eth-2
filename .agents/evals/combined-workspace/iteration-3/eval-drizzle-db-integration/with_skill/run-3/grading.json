@@ -1,0 +1,121 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": true,
+      "evidence": "postgresClient.ts implements all three branches: (1) URL contains 'neondb' + NEXT_RUNTIME set -> drizzleNeon with NeonPool (neon-serverless), (2) URL contains 'neondb' + no NEXT_RUNTIME -> drizzleNeonHttp with neon() (neon-http), (3) else -> drizzle with pg Pool (node-postgres). All three driver imports are present: `drizzle as drizzleNeonHttp` from 'drizzle-orm/neon-http', `drizzle as drizzleNeon` from 'drizzle-orm/neon-serverless', `drizzle` from 'drizzle-orm/node-postgres'."
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": true,
+      "evidence": "postgresClient.ts lines 43-54: `const dbProxy = new Proxy({}, { get: (_, prop) => { if (prop === 'close') return closeDb; const db = getDb(); return db[prop as keyof typeof db]; } })`. Module-level state starts null: `let dbInstance = null; let poolInstance = null;`. Connection is only established on first property access via getDb()."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": true,
+      "evidence": "drizzle.config.ts line 13: `casing: \"snake_case\"` in defineConfig(). postgresClient.ts sets `casing: \"snake_case\"` in all three drizzle() calls: neon-serverless (line 21), neon-http (line 24), and node-postgres (line 29)."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "Output files confirm the directory structure: postgresClient.ts and schema.ts at services/database/config/, repositories--users.ts at services/database/repositories/, seed.ts and wipe.ts at services/database/. Summary.md explicitly lists all paths under packages/nextjs/services/database/."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": true,
+      "evidence": "repositories--users.ts exports typed CRUD functions: getAllUsers() using db.query.users.findMany(), getUserById(id) using db.query.users.findFirst() with eq(), createUser(user) using db.insert(users).values(user).returning(). Uses InferSelectModel and InferInsertModel for type safety. API route and page both import from the repository, not directly from db."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": true,
+      "evidence": "root--package.json contains all three: \"db:seed\": \"yarn workspace @se-2/nextjs db:seed\", \"db:wipe\": \"yarn workspace @se-2/nextjs db:wipe\", \"drizzle-kit\": \"yarn workspace @se-2/nextjs drizzle-kit\"."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": true,
+      "evidence": "docker-compose.yml defines postgres:16 service with POSTGRES_PASSWORD: mysecretpassword, port mapping 5432:5432, and persistent volume ./data/db:/var/lib/postgresql/data. The gitignore output adds 'data' to prevent committing volume data."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": true,
+      "evidence": "env.development output contains POSTGRES_URL with local connection string. drizzle.config.ts, seed.ts, and wipe.ts all use `dotenv.config({ path: '.env.development' })`. No .env.local file exists in outputs."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": true,
+      "evidence": "postgresClient.ts line 8: `export const PRODUCTION_DATABASE_HOSTNAME = \"your-production-database-hostname\"`. seed.ts lines 8-11: checks `process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME)` and exits with 'Cannot seed production database!'. wipe.ts lines 9-12: same guard with 'Cannot wipe production database!'. Both call process.exit(1)."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": true,
+      "evidence": "nextjs--package.json dependencies: drizzle-orm (^0.44.0), @neondatabase/serverless (^1.0.0), pg (^8.16.0), dotenv (^17.0.0). devDependencies: drizzle-kit (^0.31.0), drizzle-seed (^0.3.0), tsx (^4.20.0), @types/pg (^8). All 8 required packages present in correct sections."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 205.2
+  },
+  "claims": [
+    {
+      "claim": "The implementation follows the SKILL.md reference patterns exactly",
+      "type": "quality",
+      "verified": true,
+      "evidence": "postgresClient.ts matches the reference implementation from SKILL.md almost line-for-line, including tri-driver pattern, lazy proxy, PRODUCTION_DATABASE_HOSTNAME export, and closeDb function. All file paths, dependencies, scripts, and configurations match the skill specification."
+    },
+    {
+      "claim": "The users page uses Server Actions for form submission",
+      "type": "factual",
+      "verified": true,
+      "evidence": "users--page.tsx uses 'use server' directive inside the form action and calls revalidatePath('/users') after creating a user, following the Next.js Server Actions pattern from the skill."
+    },
+    {
+      "claim": "A client-side API service is provided for react-query integration",
+      "type": "factual",
+      "verified": true,
+      "evidence": "services--api--users.ts exports fetchUsers() and createUserAPIRequest() with proper error handling, suitable for @tanstack/react-query consumption."
+    },
+    {
+      "claim": "The wipe script uses drizzle-seed's reset() function",
+      "type": "process",
+      "verified": true,
+      "evidence": "wipe.ts imports `{ reset } from 'drizzle-seed'` and calls `await reset(db, schema)` to clear all tables."
+    },
+    {
+      "claim": "closeDb() properly cleans up connections",
+      "type": "quality",
+      "verified": true,
+      "evidence": "postgresClient.ts closeDb() calls `await poolInstance.end()`, then sets both poolInstance and dbInstance to null. Both seed.ts and wipe.ts call closeDb() after their operations complete."
+    },
+    {
+      "claim": "API route includes input validation",
+      "type": "factual",
+      "verified": true,
+      "evidence": "api--users--route.ts POST handler validates: `if (!name || typeof name !== 'string')` returns 400 status. Both GET and POST handlers have try/catch with error logging."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks that the schema.ts uses camelCase property names (e.g., 'createdAt') that rely on the snake_case casing config to map to snake_case column names. This is the core use case for the casing config, and a mismatch would cause silent query failures. Consider adding an assertion like 'Schema uses camelCase properties with explicit snake_case column overrides where needed'."
+      },
+      {
+        "assertion": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+        "reason": "The guard uses a placeholder value 'your-production-database-hostname' which never matches any real URL, making it a no-op until manually configured. The assertion passes because the mechanism exists, but it provides zero protection out of the box. This is more of a skill design concern than an eval weakness, though."
+      },
+      {
+        "reason": "No assertion checks for the API route (app/api/users/route.ts) or the client-side API service (services/api/users.ts). An implementation could satisfy all 10 assertions while missing the REST API layer entirely, since the repository pattern assertion only checks the repository, not its consumers."
+      }
+    ],
+    "overall": "The 10 assertions cover the core architectural decisions comprehensively. The main gaps are the API route layer and schema casing consistency, though these are secondary to the infrastructure patterns being tested."
+  }
+}

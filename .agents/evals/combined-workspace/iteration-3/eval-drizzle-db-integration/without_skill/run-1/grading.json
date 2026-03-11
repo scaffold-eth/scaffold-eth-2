@@ -1,0 +1,117 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": false,
+      "evidence": "server/db/index.ts hardcodes a single driver: `import { drizzle } from \"drizzle-orm/neon-http\"` and `import { neon } from \"@neondatabase/serverless\"`. There is no auto-detection logic based on URL format or NEXT_RUNTIME. No reference to `pg` (node-postgres) or `@neondatabase/serverless` websocket driver exists. The file is only 10 lines long with a single code path."
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": false,
+      "evidence": "server/db/index.ts eagerly creates the connection at module scope: `const sql = neon(process.env.DATABASE_URL);` and `export const db = drizzle(sql, { schema });` execute immediately on import. There is no Proxy, lazy initialization, or deferred connection pattern."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": false,
+      "evidence": "drizzle.config.ts has no `casing` property \u2014 it only contains schema, out, dialect, and dbCredentials. server/db/index.ts calls `drizzle(sql, { schema })` with no casing option. Grepping for 'snake_case' or 'casing' across the nextjs package (excluding node_modules) returned no matches."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "Three files exist at packages/nextjs/services/database/: index.ts (barrel export), api.ts (typed fetch functions), hooks.ts (React Query hooks). Verified via `ls -la` of the actual worktree directory."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": false,
+      "evidence": "There is no repository abstraction layer. The API routes in app/api/users/route.ts and app/api/users/[address]/route.ts directly import `db` and `users` schema, then call `db.select().from(users)`, `db.insert(users)`, `db.update(users)`, `db.delete(users)` inline. No dedicated repository file, class, or module exists. Grepping for 'repository' or 'Repository' returned no matches."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": false,
+      "evidence": "Root package.json has db:generate, db:migrate, db:push, and db:studio proxy scripts, but does NOT have db:seed or db:wipe scripts. There is also no drizzle-kit direct proxy script. The expectation specifically requires db:seed and db:wipe, which are absent."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": false,
+      "evidence": "No docker-compose file was found in the project (excluding node_modules). `find` for docker-compose* at up to 3 levels depth returned only files inside node_modules/bgipfs/templates/. The implementation assumes a hosted Neon database with no local PostgreSQL option."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": false,
+      "evidence": "The implementation uses .env.local, not .env.development. The .env.example file says 'copy this file, rename it to .env.local'. The server/db/index.ts error message says 'Please add it to your .env.local file.' No .env.development file was found."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": false,
+      "evidence": "No PRODUCTION_DATABASE_HOSTNAME check or any production safety guard exists anywhere in the codebase. Grepping for 'PRODUCTION_DATABASE_HOSTNAME', 'production.*guard', or 'prod.*safety' returned zero matches."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": false,
+      "evidence": "packages/nextjs/package.json has drizzle-orm (dependencies), @neondatabase/serverless (dependencies), drizzle-kit (devDependencies), and tsx (devDependencies). However, it is MISSING: pg, dotenv, drizzle-seed, and @types/pg. Only 4 of 8 required dependencies are present."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  },
+  "timing": {
+    "total_duration_seconds": 395.5
+  },
+  "execution_metrics": {
+    "total_tokens": 62918,
+    "tool_uses": 78
+  },
+  "claims": [
+    {
+      "claim": "TypeScript type check passes (yarn next:check-types)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Cannot verify from available outputs \u2014 no CI log or check-types output was captured"
+    },
+    {
+      "claim": "ESLint passes (yarn next:lint)",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Cannot verify from available outputs \u2014 no lint output was captured"
+    },
+    {
+      "claim": "Uses Neon HTTP driver for serverless-compatible PostgreSQL",
+      "type": "factual",
+      "verified": true,
+      "evidence": "server/db/index.ts imports from 'drizzle-orm/neon-http' and '@neondatabase/serverless'"
+    },
+    {
+      "claim": "Full CRUD operations in API routes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "API routes implement GET (list/fetch), POST (create/update), PUT (update), DELETE (remove) with proper error handling and address validation"
+    },
+    {
+      "claim": "React Query hooks with cache invalidation",
+      "type": "factual",
+      "verified": true,
+      "evidence": "hooks.ts uses useMutation with onSuccess callbacks that call queryClient.invalidateQueries({ queryKey: USERS_KEY })"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Repository pattern for database access",
+        "reason": "This assertion is somewhat ambiguous \u2014 the services/database/ layer with api.ts and hooks.ts could be considered a form of repository pattern for client-side access. The expectation should clarify whether it means a server-side repository abstraction (encapsulating Drizzle queries) or a client-side data access layer. A more discriminating assertion would specify: 'A dedicated repository module at server/db/repositories/ that encapsulates all Drizzle query logic, with API routes delegating to it.'"
+      },
+      {
+        "assertion": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+        "reason": "The implementation does have root proxy scripts (db:generate, db:migrate, db:push, db:studio) which demonstrates the right pattern. The expectation specifically checks for db:seed and db:wipe which are seeding/cleanup scripts \u2014 these are distinct concerns from the proxy script pattern itself. Consider splitting into: (1) proxy scripts exist for drizzle-kit commands, and (2) seed/wipe convenience scripts exist."
+      }
+    ],
+    "overall": "The without-skill execution produced a functional but basic Drizzle+Neon integration. It missed nearly all of the sophisticated architectural expectations (tri-driver, lazy proxy, casing, Docker, production safety, repository pattern). These expectations clearly differentiate skill-guided vs. unguided implementations \u2014 a 10% pass rate strongly suggests the skill provides substantial value for these advanced patterns."
+  }
+}

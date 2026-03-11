@@ -1,0 +1,117 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": true,
+      "evidence": "Line 2 of packages/ponder/ponder.config.ts: `import deployedContracts from \"../nextjs/contracts/deployedContracts\";` — imports and uses deployedContracts to build the Ponder contract config dynamically (lines 7, 23-37)."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": true,
+      "evidence": "Line 3 of packages/ponder/ponder.config.ts: `import scaffoldConfig from \"../nextjs/scaffold.config\";` — uses `scaffoldConfig.targetNetworks[0]` on line 5 to determine the target network for chain and contract configuration."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/ponder/package.json line 2: `\"name\": \"@se-2/ponder\"`. Root package.json also lists `\"packages/ponder\"` in the workspaces array and references `@se-2/ponder` in proxy scripts."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "src/index.ts uses `import { ponder } from \"ponder:registry\"` and `import { greetingChange } from \"ponder:schema\"`. src/api/index.ts uses `import { db } from \"ponder:api\"` and `import schema from \"ponder:schema\"`. All three virtual modules are used."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts line 1: `import { onchainTable } from \"ponder\";` — uses `onchainTable(\"greeting_change\", (t) => ({...}))` to define the schema, not the older `createSchema` API."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts line 4: `ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => {` — uses the correct `ContractName:EventName` format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts lines 5-13: `await context.db.insert(greetingChange).values({ id: event.id, greetingSetter: event.args.greetingSetter, ... });` — uses the modern insert API with `.values()` chaining."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "src/api/index.ts creates a Hono app: `const app = new Hono();` and uses `app.use(\"/graphql\", graphql({ db, schema }));` with `export default app;`. Package.json includes `\"hono\": \"^4.5.0\"` as a dependency."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json lines 53-58 contain: `\"ponder:dev\": \"yarn workspace @se-2/ponder dev\"`, `\"ponder:start\": \"yarn workspace @se-2/ponder start\"`, `\"ponder:codegen\": \"yarn workspace @se-2/ponder codegen\"`, `\"ponder:serve\": \"yarn workspace @se-2/ponder serve\"`, `\"ponder:lint\": \"yarn workspace @se-2/ponder lint\"`, `\"ponder:typecheck\": \"yarn workspace @se-2/ponder typecheck\"`."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": true,
+      "evidence": "File exists at packages/ponder/ponder-env.d.ts with proper type declarations for all three virtual modules: `ponder:registry`, `ponder:schema`, and `ponder:api`. Includes correct type mapping using `Virtual.Registry`, `Virtual.Drizzle`, and `Virtual.Schema`."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 38,
+    "total_steps": 38,
+    "errors_encountered": 0,
+    "output_chars": 0,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "total_duration_seconds": 179.7
+  },
+  "claims": [
+    {
+      "claim": "The executor read the SKILL.md before implementing",
+      "type": "process",
+      "verified": true,
+      "evidence": "Transcript shows the first tool call was Read of `.agents/skills/ponder/SKILL.md`, and the full skill content was returned and used as a guide."
+    },
+    {
+      "claim": "The ponder config dynamically builds contracts from SE-2 deployed contracts",
+      "type": "quality",
+      "verified": true,
+      "evidence": "ponder.config.ts uses Object.fromEntries and Object.keys to iterate over all deployed contracts for the target network, extracting abi, address, and startBlock for each."
+    },
+    {
+      "claim": "The schema table matches the GreetingChange event structure",
+      "type": "factual",
+      "verified": true,
+      "evidence": "The schema includes greetingSetter (hex), newGreeting (text), premium (boolean), value (bigint), timestamp (integer), blockNumber (bigint) — matching the typical YourContract GreetingChange event args plus block metadata."
+    },
+    {
+      "claim": "The implementation closely follows the skill file patterns",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Comparing the created files against SKILL.md reference patterns, the implementation is nearly identical in structure — ponder.config.ts, schema, handler, and API files all follow the documented patterns closely."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "ponder-env.d.ts type declaration file exists",
+        "reason": "This assertion only checks existence. Since the file is mostly boilerplate, existence is a reasonable bar, but checking that it declares all three virtual modules (ponder:registry, ponder:schema, ponder:api) would be more discriminating."
+      },
+      {
+        "reason": "No assertion checks whether the ponder package was added to the root package.json workspaces array. Without this, yarn would not recognize the package. In this run, it was correctly added (line 9 of root package.json), but a missing workspace entry would silently break the setup."
+      },
+      {
+        "reason": "No assertion checks the schema field types match the actual contract event signature. The schema could use incorrect column types (e.g., t.text() instead of t.hex() for addresses) and all current assertions would still pass."
+      }
+    ],
+    "overall": "The assertions are well-structured and cover the key integration points. The main gap is the lack of workspace registration check and schema correctness verification. The existing assertions are discriminating enough that a poorly implemented solution would fail multiple checks."
+  }
+}

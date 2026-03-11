@@ -1,0 +1,72 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": true,
+      "evidence": "Line 8 of page.tsx: `import { useCapabilities, useWriteContracts } from \"wagmi/experimental\";` and line 58: `const { writeContractsAsync, isPending: isBatchPending } = useWriteContracts();` \u2014 used correctly with contracts array containing approve+transfer calls."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": true,
+      "evidence": "Line 8 imports useCapabilities from wagmi/experimental. Lines 51-52: `const { isSuccess: isEIP5792Wallet, data: walletCapabilities } = useCapabilities({ account: connectedAddress });` and line 55 checks `walletCapabilities?.[chainId!]?.atomicBatch?.supported`."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "No import or usage of useShowCallsStatus anywhere in the codebase. The page uses loading spinners and notifications for status feedback instead."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": true,
+      "evidence": "Lines 122-152 implement `handleIndividualApproveAndTransfer` which performs approve then transfer as two separate transactions via `useScaffoldWriteContract`. Lines 246-269 conditionally render either the batch button or the fallback button based on `isBatchingSupported`. The fallback button text reads 'Approve + Transfer (2 txns)'."
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": true,
+      "evidence": "Lines 246-269: When `isBatchingSupported` is false, the batch button is not rendered at all \u2014 instead, the fallback individual transaction button is shown. This is stronger than just disabling: the batch button is completely replaced with the fallback button. The batch button itself (line 250) is disabled when `isBatchPending || !recipient || !amount`."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol inherits from OpenZeppelin ERC20 which provides approve and transfer. The batch call in page.tsx (lines 97-110) calls approve then transfer on the BatchToken contract. The contract also has an open mint function for testing."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "File `packages--hardhat--deploy--01_deploy_batch_token.ts` exists with proper hardhat-deploy pattern: uses `hre.getNamedAccounts()`, `hre.deployments.deploy()`, and sets `deployBatchToken.tags = [\"BatchToken\"]`."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "File `packages--nextjs--app--batch-transfer--page.tsx` is a full 279-line page with token info card, mint card, and batch approve+transfer card. Header.tsx was modified to add navigation link to '/batch-transfer'."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "Line 9 imports `useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract` from `~~/hooks/scaffold-eth`. Uses useScaffoldReadContract for balanceOf (line 22), name (line 28), symbol (line 33), and allowance (line 39). Uses useScaffoldWriteContract for mint and fallback approve/transfer (line 46). Uses useDeployedContractInfo to get contract ABI/address for batch calls (line 19)."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "All EIP-5792 hooks (useWriteContracts, useCapabilities) are imported from 'wagmi/experimental' which is already part of the wagmi package. No package.json modifications were output. Summary confirms build passed without adding dependencies."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add useShowCallsStatus from wagmi/experimental to display the batch transaction status (pending/confirmed) in a more user-friendly way, rather than relying solely on loading spinners and notifications.",
+      "The implementation correctly uses useWriteContracts but misses the companion useShowCallsStatus hook which would provide wallet-native status tracking for the batch call."
+    ],
+    "overall": "Strong implementation that covers 9 of 10 expectations. The core EIP-5792 pattern is correctly implemented with useWriteContracts and useCapabilities, graceful fallback is well done, and SE-2 patterns are followed properly. The only gap is the missing useShowCallsStatus hook for batch transaction status display."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

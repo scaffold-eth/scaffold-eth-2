@@ -1,0 +1,17 @@
+{
+  "eval_id": 3,
+  "eval_name": "eip5792-batch-txns",
+  "prompt": "I want to add EIP-5792 batch transaction support to my SE-2 dApp. Create an ERC20 token contract and a frontend page where users can approve and transfer tokens in a single batch transaction using wallet_sendCalls.",
+  "assertions": [
+    "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+    "Uses useCapabilities for wallet EIP-5792 support detection",
+    "Uses useShowCallsStatus for batch transaction status display",
+    "Provides graceful fallback for wallets without EIP-5792 support",
+    "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+    "ERC20 smart contract with approve+transfer pattern created",
+    "Hardhat deploy script created",
+    "Frontend page with batch UI created",
+    "Uses SE-2 scaffold hooks for contract interaction",
+    "No new npm dependencies needed (wagmi already has EIP-5792 hooks)"
+  ]
+}

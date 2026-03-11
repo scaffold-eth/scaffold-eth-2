@@ -1,0 +1,138 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": true,
+      "evidence": "ponder--ponder.config.ts line 2: `import deployedContracts from \"../nextjs/contracts/deployedContracts\";` and line 7: `const deployedContractsForNetwork = deployedContracts[targetNetwork.id];` \u2014 actively used to build contract config on lines 23-38."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": true,
+      "evidence": "ponder--ponder.config.ts line 3: `import scaffoldConfig from \"../nextjs/scaffold.config\";` and line 5: `const targetNetwork = scaffoldConfig.targetNetworks[0];` \u2014 used for chain ID, name, and RPC URL fallback throughout the config."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "ponder--package.json line 2: `\"name\": \"@se-2/ponder\"`. Root package.json workspaces array includes `packages/ponder`. Follows the same @se-2/ naming convention as @se-2/nextjs and @se-2/hardhat."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "All three virtual modules used: ponder--src--YourContract.ts imports from `ponder:registry` (line 1) and `ponder:schema` (line 2). ponder--src--api--index.ts imports from `ponder:api` (line 1) and `ponder:schema` (line 2)."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder--ponder.schema.ts line 1: `import { onchainTable } from \"ponder\";` and line 3: `export const greetingChange = onchainTable(\"greeting_change\", (t) => ({...}));` \u2014 uses the modern onchainTable API with proper column definitions (text, hex, boolean, bigint, integer types)."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "ponder--src--YourContract.ts line 4: `ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => {` \u2014 correct colon-separated ContractName:EventName format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "ponder--src--YourContract.ts lines 5-13: `await context.db.insert(greetingChange).values({ id: event.id, greetingSetter: event.args.greetingSetter, newGreeting: event.args.newGreeting, premium: event.args.premium, value: event.args.value, timestamp: Number(event.block.timestamp), blockNumber: event.block.number });` \u2014 modern Drizzle-style insert API."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "ponder--src--api--index.ts: imports `{ Hono } from \"hono\"`, creates `const app = new Hono();`, registers middleware `app.use(\"/graphql\", graphql({ db, schema }));`, exports `app` as default. hono ^4.5.0 listed as a dependency in ponder--package.json."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "root--package.json lines 52-57 contain six proxy scripts: `ponder:dev`, `ponder:start`, `ponder:codegen`, `ponder:serve`, `ponder:lint`, `ponder:typecheck` \u2014 all using `yarn workspace @se-2/ponder <cmd>` pattern."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": true,
+      "evidence": "ponder--ponder-env.d.ts exists with 30 lines declaring all three virtual modules: `ponder:registry` (exports Virtual.Registry<config, schema>), `ponder:schema` (exports Virtual.Schema<schema>), and `ponder:api` (exports Virtual.Drizzle<schema> db). The file is substantive with correct type generics."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "total_tool_calls": 36,
+    "output_chars": 20999,
+    "transcript_chars": 181369
+  },
+  "timing": {
+    "total_tokens": 44509,
+    "tool_uses": 36,
+    "executor_duration_seconds": 181.4,
+    "total_duration_seconds": 181.4
+  },
+  "claims": [
+    {
+      "claim": "Frontend page displays indexed events in a DaisyUI table with auto-refresh every 5 seconds",
+      "type": "quality",
+      "verified": true,
+      "evidence": "nextjs--app--events--page.tsx uses @tanstack/react-query with `refetchInterval: 5000` and renders a `<table className=\"table table-zebra w-full\">` with columns for Setter, Greeting, Premium, Value (ETH), Block, and Time."
+    },
+    {
+      "claim": "Uses SE-2's Address component for displaying addresses",
+      "type": "factual",
+      "verified": true,
+      "evidence": "events/page.tsx line 4 imports `Address` from `@scaffold-ui/components` and line 108 uses `<Address address={greeting.greetingSetter} chain={targetNetwork} />`."
+    },
+    {
+      "claim": "Header.tsx modified to add Events navigation link",
+      "type": "factual",
+      "verified": true,
+      "evidence": "nextjs--components--Header.tsx menuLinks array includes `{ label: \"Events\", href: \"/events\", icon: <MagnifyingGlassIcon className=\"h-4 w-4\" /> }` at lines 28-32."
+    },
+    {
+      "claim": "graphql and graphql-request dependencies added to nextjs package",
+      "type": "factual",
+      "verified": true,
+      "evidence": "nextjs--package.json includes `\"graphql\": \"^16.9.0\"` (line 29) and `\"graphql-request\": \"^7.1.0\"` (line 30)."
+    },
+    {
+      "claim": "Ponder config dynamically picks up all deployed contracts",
+      "type": "quality",
+      "verified": true,
+      "evidence": "ponder.config.ts uses `Object.keys(deployedContractsForNetwork)` and `Object.fromEntries` with `.map()` to dynamically configure all contracts, including ABI, address, and startBlock."
+    },
+    {
+      "claim": "Error handling for missing deployed contracts",
+      "type": "factual",
+      "verified": true,
+      "evidence": "ponder.config.ts lines 8-12: throws descriptive error if `deployedContractsForNetwork` is falsy."
+    },
+    {
+      "claim": "All 14 output files present in outputs directory",
+      "type": "factual",
+      "verified": true,
+      "evidence": "ls of outputs directory shows 14 files: 13 code/config files plus summary.md."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks that the schema fields match the actual GreetingChange event args from YourContract (greetingSetter, newGreeting, premium, value). An implementation could use onchainTable with completely wrong column names and still pass all 10 assertions."
+      },
+      {
+        "reason": "No assertion verifies that a frontend page exists to display the indexed data. The implementation includes a well-built events page with graphql-request, react-query, and DaisyUI table \u2014 none of which is checked by any expectation."
+      },
+      {
+        "reason": "No assertion checks that the ponder package is added to the root workspaces array. Proxy scripts without the workspace entry would fail at runtime, but the assertion only checks script presence."
+      },
+      {
+        "assertion": "Uses context.db.insert(table).values({}) for writes",
+        "reason": "This assertion is good because it's discriminating \u2014 it distinguishes the modern Ponder Drizzle-style write API from the older `context.entities.Table.create({})` pattern. No change needed."
+      }
+    ],
+    "overall": "All 10 assertions are substantive and discriminating, requiring genuine knowledge of modern Ponder APIs (onchainTable, Hono, context.db.insert, virtual modules). The main gap is that no assertion verifies schema field correctness relative to the contract events, and the frontend integration (a significant part of the deliverable) is completely unchecked."
+  }
+}

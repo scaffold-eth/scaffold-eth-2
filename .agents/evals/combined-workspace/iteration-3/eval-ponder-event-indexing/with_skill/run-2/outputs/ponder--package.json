@@ -1,0 +1,28 @@
+{
+  "name": "@se-2/ponder",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ponder dev",
+    "start": "ponder start",
+    "db": "ponder db",
+    "codegen": "ponder codegen",
+    "serve": "ponder serve",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "ponder": "latest",
+    "hono": "^4.5.0",
+    "viem": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "eslint": "^8.54.0",
+    "eslint-config-ponder": "latest",
+    "typescript": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=18.18"
+  }
+}

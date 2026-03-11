@@ -1,0 +1,4 @@
+node_modules/
+generated/
+.ponder/
+.env.local

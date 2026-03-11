@@ -1,0 +1,69 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": true,
+      "evidence": "ponder.config.ts line 2: import deployedContracts from \"../nextjs/contracts/deployedContracts\"; \u2014 correctly imports from the SE-2 nextjs package and uses it to build contract configs with ABI, address, and startBlock."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": true,
+      "evidence": "ponder.config.ts line 3: import scaffoldConfig from \"../nextjs/scaffold.config\"; \u2014 uses scaffoldConfig.targetNetworks[0] to determine the target network for chain and contract configuration."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages--ponder--package.json line 2: \"name\": \"@se-2/ponder\" \u2014 follows the @se-2/ workspace naming convention. Root package.json also includes \"packages/ponder\" in workspaces."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "YourContract.ts uses: import { ponder } from \"ponder:registry\" and import { greetingChange } from \"ponder:schema\". api/index.ts uses: import { db } from \"ponder:api\" and import schema from \"ponder:schema\". All three virtual modules are used."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts line 1: import { onchainTable } from \"ponder\"; \u2014 uses onchainTable to define the greetingChange table with typed columns (text, hex, boolean, bigint, integer)."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "YourContract.ts line 4: ponder.on(\"YourContract:GreetingChange\", ...) \u2014 uses the correct ContractName:EventName format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "YourContract.ts line 5: await context.db.insert(greetingChange).values({ id: event.id, greetingSetter: event.args.greetingSetter, ... }); \u2014 uses the correct Drizzle-style insert pattern."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "api/index.ts: imports Hono from \"hono\", creates const app = new Hono(), and sets up app.use(\"/graphql\", graphql({ db, schema })). Exports default app. This is the correct modern Hono-based pattern."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json includes multiple ponder proxy scripts: ponder:dev, ponder:start, ponder:codegen, ponder:serve, ponder:lint, ponder:typecheck \u2014 all using \"yarn workspace @se-2/ponder\" pattern."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": true,
+      "evidence": "ponder-env.d.ts exists with 51 lines declaring modules for ponder:registry, ponder:schema, and ponder:api with full type definitions including Virtual.Registry, Virtual.Schema, Virtual.Drizzle, and related types."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "All 10 expectations pass. The Ponder integration is comprehensive and well-structured: ponder.config.ts correctly reads both deployedContracts and scaffoldConfig from the SE-2 nextjs package, the package follows workspace naming conventions, all modern Ponder APIs are used (onchainTable, virtual module imports, Drizzle-style db writes, Hono-based API), the root package.json has proper proxy scripts, and the type declaration file is complete."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

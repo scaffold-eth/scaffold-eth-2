@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "strict": true,
+    "rootDir": ".",
+    "composite": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", ".ponder"]
+}

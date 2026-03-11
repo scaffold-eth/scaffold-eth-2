@@ -1,0 +1,73 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "ponder.config.ts imports ABI from a local ./abis/YourContract file and uses a hardcoded chainId 31337 with an env var for the address. It does NOT import or read deployedContracts from the SE-2 nextjs package (packages/nextjs/contracts/deployedContracts.ts)."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "ponder.config.ts hardcodes the localhost chain with id 31337 and an env-var RPC URL. There is no import of scaffoldConfig from packages/nextjs/scaffold.config.ts for network detection."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/ponder/package.json has \"name\": \"@se-2/ponder\", which follows the SE-2 workspace naming convention (@se-2/<package>)."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "src/index.ts imports from 'ponder:registry' and 'ponder:schema'. src/api/index.ts imports from 'ponder:api' and 'ponder:schema'. All three virtual module imports are used."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts uses: import { index, onchainTable } from 'ponder'; and exports greetingChange = onchainTable('greeting_change', ...). No createSchema usage."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts uses: ponder.on('YourContract:GreetingChange', async ({ event, context }) => { ... }), which follows the ContractName:EventName format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts uses: await context.db.insert(greetingChange).values({ id: ..., greetingSetter, newGreeting, premium, value, blockNumber, timestamp, transactionHash })."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "src/api/index.ts creates a Hono app: const app = new Hono(); with app.use('/', graphql({ db, schema })); and exports default app. Uses hono package which is also listed as a dependency."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json includes: \"ponder:dev\": \"yarn workspace @se-2/ponder dev\", \"ponder:start\": \"yarn workspace @se-2/ponder start\", \"ponder:codegen\": \"yarn workspace @se-2/ponder codegen\"."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": false,
+      "evidence": "No ponder-env.d.ts file exists in the outputs directory. The tsconfig.json references 'ponder-env.d.ts' in its include array, but the actual file was not created."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 3,
+    "total": 10,
+    "pass_rate": 0.7
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Import deployedContracts from the SE-2 nextjs package to dynamically read contract ABIs and addresses instead of hardcoding them or using separate ABI files.",
+      "Import scaffoldConfig from packages/nextjs/scaffold.config.ts to detect the target network dynamically instead of hardcoding localhost/31337.",
+      "Create a ponder-env.d.ts type declaration file that provides type definitions for Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api). This is standard in Ponder projects and was referenced in tsconfig.json but never created."
+    ],
+    "overall": "The implementation covers core Ponder functionality well (7/10): correct use of onchainTable, virtual module imports, Hono-based API, ContractName:EventName handler format, and context.db.insert pattern. However, it fails on SE-2 integration points \u2014 it doesn't read from deployedContracts or scaffoldConfig, choosing instead to hardcode values and use environment variables. The missing ponder-env.d.ts file is a minor but important omission for TypeScript support."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

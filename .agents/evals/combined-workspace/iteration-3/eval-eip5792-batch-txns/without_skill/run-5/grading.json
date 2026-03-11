@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": false,
+      "evidence": "The implementation uses `useSendCalls` from wagmi (line 8 of page.tsx: `import { useAccount, useCallsStatus, useSendCalls } from \"wagmi\"`) with manual `encodeFunctionData` for approve and transfer calls. It does NOT use `useWriteContracts` which is the higher-level hook that handles ABI encoding automatically."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": false,
+      "evidence": "There is no import or usage of `useCapabilities` anywhere in the output files. The page imports only `useAccount`, `useCallsStatus`, and `useSendCalls` from wagmi. No wallet capability detection is performed."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "The implementation uses `useCallsStatus` (line 46 of page.tsx) for status tracking, not `useShowCallsStatus`. `useShowCallsStatus` is a different hook that triggers wallet-native UI for displaying call status. The code instead builds custom status display UI with badges and receipt rendering."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": false,
+      "evidence": "There is no fallback mechanism. Without `useCapabilities` to detect EIP-5792 support, the page will simply fail with an error notification if the wallet doesn't support `wallet_sendCalls`. No alternative single-transaction flow is provided \u2014 only a try/catch that displays the error after the fact."
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": false,
+      "evidence": "The batch button's disabled condition (line 220) is `disabled={isSendingBatch || !connectedAddress || !batchTokenContract}`. It checks for pending state, wallet connection, and contract deployment, but does NOT check for EIP-5792 capability support."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol is a standard ERC20 contract inheriting OpenZeppelin's ERC20 and Ownable, with mint functionality. The frontend encodes both `approve` and `transfer` calls using `erc20Abi` (lines 87-97 of page.tsx), implementing the approve+transfer batch pattern."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "File `packages--hardhat--deploy--01_deploy_batch_token.ts` is a proper hardhat-deploy script using `DeployFunction`, `hre.getNamedAccounts()`, `hre.deployments.deploy()`, with tags `[\"BatchToken\"]` and initial supply of 1,000,000 tokens."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "File `packages--nextjs--app--batch-transfer--page.tsx` is a complete Next.js page at `/batch-transfer` with token info display, recipient address input (AddressInput), amount input (IntegerInput), batch approve & transfer button, transaction status card, and a 'How It Works' explanatory section. Header.tsx was also modified to add a navigation link."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "The page uses `useScaffoldReadContract` for reading token balance (line 22), token name (line 28), token symbol (line 33), and allowance (line 38). It uses `useDeployedContractInfo` (line 20) and `useTargetNetwork` (line 14) from `~~/hooks/scaffold-eth`. Uses `notification` from `~~/utils/scaffold-eth` and components from `@scaffold-ui/components` (AddressDisplay, AddressInput, IntegerInput)."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "All imports come from existing dependencies: wagmi (useSendCalls, useCallsStatus, useAccount), viem (encodeFunctionData, erc20Abi, formatEther, parseEther), and SE-2's internal hooks/components. No new packages are installed or referenced."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 5,
+    "total": 10,
+    "pass_rate": 0.5
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Replace `useSendCalls` with `useWriteContracts` hook which is the higher-level abstraction that handles ABI encoding and is the recommended approach for EIP-5792 batch contract interactions.",
+      "Add `useCapabilities` hook to detect whether the connected wallet supports EIP-5792 (wallet_sendCalls / atomicBatch), and use this to conditionally enable/disable the batch functionality.",
+      "Add `useShowCallsStatus` hook to leverage wallet-native status display UI for batch transactions, in addition to or instead of the custom status display built with useCallsStatus.",
+      "Implement a graceful fallback that uses standard `useScaffoldWriteContract` for separate approve and transfer transactions when the wallet does not support EIP-5792.",
+      "Add the EIP-5792 capability check to the batch button's disabled condition so users without compatible wallets see a disabled button with an explanatory tooltip."
+    ],
+    "overall": "The implementation covers the structural requirements well (smart contract, deploy script, frontend page, SE-2 patterns, no extra dependencies) but misses all five EIP-5792-specific best practices. It uses the lower-level `useSendCalls` instead of `useWriteContracts`, lacks wallet capability detection via `useCapabilities`, doesn't use `useShowCallsStatus` for status display, and provides no fallback or conditional disabling for wallets without EIP-5792 support. This results in a 50% pass rate."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

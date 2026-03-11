@@ -1,0 +1,22 @@
+{
+  "name": "@se-2/ponder",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ponder dev",
+    "start": "ponder start",
+    "serve": "ponder serve",
+    "codegen": "ponder codegen"
+  },
+  "dependencies": {
+    "ponder": "^0.10",
+    "viem": "2.39.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

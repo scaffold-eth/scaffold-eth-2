@@ -1,0 +1,121 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "ponder.config.ts imports ABI from a local file './abis/YourContractAbi' and uses a hardcoded address from env var PONDER_YOUR_CONTRACT_ADDRESS. It does NOT import or read deployedContracts from the SE-2 nextjs package (packages/nextjs/contracts/deployedContracts.ts). The ABI is manually duplicated rather than sourced from SE-2's auto-generated contracts."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "ponder.config.ts hardcodes chainId 31337 and RPC URL 'http://127.0.0.1:8545'. It does NOT import or reference scaffoldConfig from packages/nextjs/scaffold.config.ts for network detection. The chain configuration is entirely static and independent of SE-2's scaffold config."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/ponder/package.json has '\"name\": \"@se-2/ponder\"' which follows the SE-2 workspace convention (e.g., @se-2/hardhat, @se-2/nextjs). The root package.json also includes 'packages/ponder' in the workspaces array."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "src/index.ts uses 'import { ponder } from \"ponder:registry\"' and 'import { greetingChange } from \"ponder:schema\"'. src/api/index.ts uses 'import { db } from \"ponder:api\"' and 'import schema from \"ponder:schema\"'. All three virtual module imports (ponder:registry, ponder:schema, ponder:api) are present."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts imports and uses onchainTable: 'import { index, onchainTable } from \"ponder\"' and 'export const greetingChange = onchainTable(\"greeting_change\", ...)'. This is the modern Ponder API, not the deprecated createSchema."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts uses ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => { ... }), which is the correct 'ContractName:EventName' format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts uses 'await context.db.insert(greetingChange).values({ id: ..., greetingSetter: event.args.greetingSetter, ... })' which is the correct modern Ponder write pattern."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "src/api/index.ts creates a Hono app: 'import { Hono } from \"hono\"; const app = new Hono(); app.use(\"/graphql\", graphql({ db, schema })); export default app;'. This is the modern Hono-based API pattern, not the old express-style."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json contains: '\"ponder:dev\": \"yarn workspace @se-2/ponder dev\"', '\"ponder:start\": \"yarn workspace @se-2/ponder start\"', '\"ponder:serve\": \"yarn workspace @se-2/ponder serve\"', '\"ponder:codegen\": \"yarn workspace @se-2/ponder codegen\"'. All four proxy scripts are present."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": false,
+      "evidence": "No ponder-env.d.ts file was found in the packages/ponder directory. A glob search for '*.d.ts' and a find for 'ponder-env*' both returned no results. The tsconfig.json also does not reference any ponder-env.d.ts file."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 3,
+    "total": 10,
+    "pass_rate": 0.7
+  },
+  "execution_metrics": {
+    "tool_calls": 52,
+    "total_tokens": 46258,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "total_duration_seconds": 284.1
+  },
+  "claims": [
+    {
+      "claim": "The Ponder indexer listens for GreetingChange events from YourContract",
+      "type": "factual",
+      "verified": true,
+      "evidence": "src/index.ts has ponder.on('YourContract:GreetingChange', ...) handler that processes the event and inserts into the database."
+    },
+    {
+      "claim": "GraphQL API is exposed at /graphql endpoint",
+      "type": "factual",
+      "verified": true,
+      "evidence": "src/api/index.ts has app.use('/graphql', graphql({ db, schema }))"
+    },
+    {
+      "claim": "Frontend page queries the Ponder GraphQL API and displays events",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Output files show nextjs--app--events--page.tsx and nextjs--app--events--_components--EventsDisplay.tsx were created. Header.tsx was modified to add Events navigation link."
+    },
+    {
+      "claim": "The ABI matches the YourContract smart contract",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The ABI in abis/YourContractAbi.ts includes the GreetingChange event with matching parameters (greetingSetter indexed address, newGreeting string, premium bool, value uint256), matching the Solidity contract's event definition."
+    },
+    {
+      "claim": "Uses environment variables for configuration",
+      "type": "factual",
+      "verified": true,
+      "evidence": "ponder.config.ts uses process.env.PONDER_RPC_URL_31337 and process.env.PONDER_YOUR_CONTRACT_ADDRESS. .env.example and .env.local files were created."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+        "reason": "This is a strong discriminating assertion that tests SE-2 integration quality. Without it, the ponder config requires manual ABI duplication and address management, which defeats the purpose of integrating with SE-2's auto-generated deployment data. The executor correctly set up a working Ponder indexer but missed this SE-2-specific integration."
+      },
+      {
+        "assertion": "ponder-env.d.ts type declaration file exists",
+        "reason": "This is a reasonable assertion for a complete Ponder setup since ponder-env.d.ts provides type declarations for the virtual module imports (ponder:registry, ponder:schema, ponder:api). Without it, TypeScript may not recognize these imports. However, newer Ponder versions (0.9+) may handle this differently, so this assertion could be version-sensitive."
+      },
+      {
+        "reason": "No assertion checks whether the schema fields match the actual GreetingChange event parameters from the smart contract. An indexer with mismatched schema fields would be non-functional but would pass all current assertions."
+      }
+    ],
+    "overall": "The assertions are generally well-designed. The SE-2 integration assertions (1 and 2) are excellent discriminators that test whether the implementation truly leverages SE-2's architecture vs just being a standalone Ponder setup. The technical Ponder API assertions (4-8) correctly test for modern Ponder patterns."
+  }
+}

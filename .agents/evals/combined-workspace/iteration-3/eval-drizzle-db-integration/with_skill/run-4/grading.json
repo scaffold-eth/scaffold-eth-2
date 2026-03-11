@@ -1,0 +1,73 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": true,
+      "evidence": "postgresClient.ts checks process.env.POSTGRES_URL?.includes('neondb') to distinguish Neon vs local pg, then checks process.env.NEXT_RUNTIME to choose between Neon serverless (NeonPool + drizzleNeon) and Neon HTTP (neon + drizzleNeonHttp). Local pg uses node-postgres Pool. All three drivers are imported and conditionally used."
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": true,
+      "evidence": "postgresClient.ts uses a Proxy object (lines 43-52) that only calls getDb() when a property is accessed. The dbInstance starts as null and is only initialized on first access via getDb(). The exported 'db' is the proxy, not a direct connection."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": true,
+      "evidence": "drizzle.config.ts has 'casing: \"snake_case\"' in defineConfig (line 13). postgresClient.ts has 'casing: \"snake_case\"' in all three drizzle() initialization calls: drizzleNeon (line 21), drizzleNeonHttp (line 24), and drizzle for local pg (line 29)."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "Files are organized under services/database/: config/schema.ts, config/postgresClient.ts, repositories/users.ts, seed.ts, wipe.ts. The drizzle.config.ts references './services/database/config/schema.ts' and './services/database/migrations'. The summary confirms paths like 'packages/nextjs/services/database/config/schema.ts'."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": true,
+      "evidence": "users-repository.ts (at services/database/repositories/users.ts) implements a repository pattern with typed functions: getAllUsers(), getUserById(id), createUser(user). It exports a User type from InferInsertModel. API routes and page components import from the repository rather than accessing db directly."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": true,
+      "evidence": "root-package.json contains: '\"drizzle-kit\": \"yarn workspace @se-2/nextjs drizzle-kit\"', '\"db:seed\": \"yarn workspace @se-2/nextjs db:seed\"', '\"db:wipe\": \"yarn workspace @se-2/nextjs db:wipe\"' (lines 52-54)."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": true,
+      "evidence": "docker-compose.yml defines a postgres:16 service with port 5432 mapped, POSTGRES_PASSWORD set, and a volume mount at ./data/db:/var/lib/postgresql/data. The .gitignore includes 'data' directory to exclude the Docker volume."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": true,
+      "evidence": "env.development file contains the POSTGRES_URL connection string. drizzle.config.ts loads dotenv with path '.env.development' (line 4). seed.ts and wipe.ts also load dotenv with path '.env.development'. No .env.local file exists in outputs."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": true,
+      "evidence": "postgresClient.ts exports 'PRODUCTION_DATABASE_HOSTNAME = \"your-production-database-hostname\"' (line 8). Both seed.ts and wipe.ts import this constant and check 'process.env.POSTGRES_URL?.includes(PRODUCTION_DATABASE_HOSTNAME)' before executing, aborting with an error if matched."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": true,
+      "evidence": "nextjs-package.json dependencies include: drizzle-orm (^0.44.0), @neondatabase/serverless (^1.0.0), pg (^8.16.0), dotenv (^17.0.0). devDependencies include: drizzle-kit (^0.31.0), drizzle-seed (^0.3.0), tsx (^4.20.0), @types/pg (^8). All 8 required packages are present in the correct dependency sections."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "The PRODUCTION_DATABASE_HOSTNAME is set to a placeholder string 'your-production-database-hostname' which requires manual configuration. Consider adding a comment or documentation note about this.",
+      "The Neon detection relies on URL containing 'neondb' which could be fragile if Neon changes their hostname format. A more explicit environment variable for driver selection could be more robust.",
+      "The docker-compose.yml uses version '3' which is deprecated in newer Docker Compose versions. Consider removing the version field or updating to a newer spec."
+    ],
+    "overall": "Excellent implementation. All 10 expectations pass with clear, well-structured code. The tri-driver pattern correctly handles all three connection modes. The lazy proxy pattern prevents eager connections. Snake_case casing is consistently applied across both config and all client initializations. The repository pattern, proxy scripts, Docker setup, .env.development convention, production safety guards, and dependency placement all meet the specified requirements."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

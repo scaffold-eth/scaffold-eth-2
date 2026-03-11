@@ -1,0 +1,17 @@
+{
+  "eval_id": 2,
+  "eval_name": "ponder-event-indexing",
+  "prompt": "I want to index events from my YourContract smart contract using Ponder. Set up a Ponder indexer that listens for GreetingChange events and exposes them via a GraphQL API.",
+  "assertions": [
+    "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+    "ponder.config.ts reads scaffoldConfig for network detection",
+    "Package named @se-2/ponder following SE-2 workspace convention",
+    "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+    "Schema uses onchainTable (not older createSchema API)",
+    "Handler uses 'ContractName:EventName' format",
+    "Uses context.db.insert(table).values({}) for writes",
+    "Hono-based API setup for GraphQL (not old express-style)",
+    "Root package.json has ponder proxy scripts",
+    "ponder-env.d.ts type declaration file exists"
+  ]
+}

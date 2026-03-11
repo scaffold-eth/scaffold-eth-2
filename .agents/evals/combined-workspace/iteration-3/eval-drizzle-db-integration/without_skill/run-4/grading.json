@@ -1,0 +1,78 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": false,
+      "evidence": "server__db__index.ts only uses @neondatabase/serverless with neon-http driver. No auto-detection logic, no NEXT_RUNTIME check, no local pg fallback. Hardcodes single driver: const sql = neon(process.env.DATABASE_URL); export const db = drizzle(sql, { schema });"
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": false,
+      "evidence": "server__db__index.ts eagerly creates neon client and drizzle instance at module scope. No Proxy, no lazy initialization, no deferred connection pattern."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": false,
+      "evidence": "drizzle.config.ts has no casing property. Client init drizzle(sql, { schema }) also has no casing option. Column names are manually snake_cased in schema but no casing config is set."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "services__database__users.ts exists, representing packages/nextjs/services/database/users.ts."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": false,
+      "evidence": "services/database/users.ts is a client-side HTTP fetch wrapper. API routes directly use inline drizzle queries with no repository abstraction layer."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": false,
+      "evidence": "Root package.json has db:generate, db:migrate, db:push, db:studio. Missing the specifically required scripts: drizzle-kit (direct proxy), db:seed, and db:wipe."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": false,
+      "evidence": "No docker-compose file exists in the outputs. Only Neon cloud PostgreSQL is supported."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": false,
+      "evidence": ".env.example instructs renaming to .env.local. summary.md says create .env.local. server__db__index.ts error references .env.local. No mention of .env.development."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": false,
+      "evidence": "No PRODUCTION_DATABASE_HOSTNAME check or any production safety guard in any file. Only checks if DATABASE_URL is set."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": false,
+      "evidence": "Present: drizzle-orm, @neondatabase/serverless, dotenv, drizzle-kit. Missing: pg, drizzle-seed, tsx, @types/pg (4 of 8 required packages absent)."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add tri-driver auto-detection using URL scheme and NEXT_RUNTIME to choose between Neon serverless, Neon HTTP, or local pg.",
+      "Use JavaScript Proxy for lazy db initialization to defer connection until first use.",
+      "Set casing: 'snake_case' in both drizzle.config.ts and drizzle() client call.",
+      "Create server-side repository modules to encapsulate database queries separate from route handlers.",
+      "Add Docker Compose for local PostgreSQL development.",
+      "Use .env.development instead of .env.local per SE-2 convention.",
+      "Add PRODUCTION_DATABASE_HOSTNAME safety guard to prevent accidental production operations.",
+      "Add missing dependencies: pg, drizzle-seed, tsx, @types/pg."
+    ],
+    "overall": "Scored 1/10. Only the services/database/ path convention passed. The implementation is a minimal Drizzle+Neon integration lacking all advanced patterns: no tri-driver detection, no lazy proxy, no casing config, no repository pattern, no Docker Compose, no .env.development, no production guard, and missing half the required dependencies."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

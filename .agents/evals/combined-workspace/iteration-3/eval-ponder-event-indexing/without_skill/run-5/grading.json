@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "ponder.config.ts imports ABI from a local file './abis/YourContractAbi' and hardcodes the contract address as '0x5FbDB2315678afecb367f032d93F642f64180aa3'. It does not import or reference deployedContracts from the SE-2 nextjs package."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "ponder.config.ts hardcodes the chain configuration (id: 31337, localhost) and does not import or reference scaffoldConfig from the SE-2 nextjs package for network detection."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages--ponder--package.json has '\"name\": \"@se-2/ponder\"' which follows the SE-2 workspace naming convention (@se-2/<package>). Root package.json workspaces include 'packages/ponder' and scripts reference 'yarn workspace @se-2/ponder'."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": false,
+      "evidence": "src/index.ts uses 'import { ponder } from \"ponder:registry\"' and 'import { greetingChange } from \"ponder:schema\"', but ponder:api is completely absent -- no API route file exists anywhere in the outputs. The expectation explicitly lists all three virtual modules and only 2 of 3 are present."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts uses 'import { index, onchainTable } from \"ponder\"' and defines the table with 'export const greetingChange = onchainTable(\"greeting_change\", ...)'. This is the modern API, not the deprecated createSchema."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts uses 'ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => { ... })' which follows the 'ContractName:EventName' format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts uses 'await context.db.insert(greetingChange).values({ id: ..., greetingSetter: ..., ... })' which is the correct modern Ponder write API."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": false,
+      "evidence": "No API route file exists in the outputs. There is no file importing from 'ponder:api' or setting up Hono. The implementation relies on Ponder's built-in auto-generated GraphQL API (served at port 42069) rather than creating a custom Hono-based API file."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json includes: 'ponder:dev', 'ponder:start', 'ponder:serve', 'ponder:codegen' scripts that all proxy to 'yarn workspace @se-2/ponder <command>'."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": false,
+      "evidence": "No ponder-env.d.ts file exists in the outputs directory. File search returned no results for any *env.d* or *ponder-env* pattern."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 5,
+    "total": 10,
+    "pass_rate": 0.5
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Import deployedContracts from the SE-2 nextjs package to dynamically read ABI and contract addresses instead of hardcoding them.",
+      "Import scaffoldConfig from the SE-2 nextjs package for network detection instead of hardcoding chain ID 31337.",
+      "Create a ponder-env.d.ts file to declare types for Ponder virtual modules (ponder:registry, ponder:schema, ponder:api).",
+      "Create an API route file (e.g., src/api/index.ts) that uses Hono from 'ponder:api' to set up the GraphQL endpoint explicitly, rather than relying solely on Ponder's auto-generated GraphQL.",
+      "Without skill guidance, the agent missed SE-2-specific integration patterns (deployedContracts, scaffoldConfig) and some modern Ponder conventions (Hono API routes, type declarations, ponder:api virtual module)."
+    ],
+    "overall": "The output achieves 50% pass rate. Core Ponder functionality is implemented correctly: onchainTable schema, ContractName:EventName handler format, context.db.insert write pattern, proper package naming, and root proxy scripts. However, it fails on SE-2-specific integration (no deployedContracts or scaffoldConfig imports), modern Ponder API setup (no Hono-based API route, missing ponder:api virtual module), and type declarations (no ponder-env.d.ts). The implementation is functional but hardcoded rather than dynamically integrated with the SE-2 ecosystem."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

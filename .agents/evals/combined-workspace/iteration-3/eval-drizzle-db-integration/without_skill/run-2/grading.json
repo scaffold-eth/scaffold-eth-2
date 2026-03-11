@@ -1,0 +1,116 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": false,
+      "evidence": "db/index.ts only uses `@neondatabase/serverless` with `drizzle-orm/neon-http`. There is no detection of NEXT_RUNTIME, no switching between neon-serverless (WebSocket) vs neon-http, and no local `pg` driver path. The implementation hardcodes a single driver strategy."
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": false,
+      "evidence": "db/index.ts creates the neon client and drizzle instance at module scope: `const sql = neon(process.env.DATABASE_URL); export const db = drizzle(sql, { schema });`. There is no Proxy, no lazy initialization, and no deferred connection. The connection is eagerly established on import."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": false,
+      "evidence": "drizzle.config.ts has no `casing` property \u2014 it only sets schema, out, dialect, and dbCredentials. db/index.ts calls `drizzle(sql, { schema })` with no `casing` option. Neither location specifies `casing: 'snake_case'`."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "The directory packages/nextjs/services/database/ exists and contains api.ts, hooks.ts, index.ts, and types.ts. Verified via both filesystem listing and reading the actual file contents."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": false,
+      "evidence": "The services/database/ layer is a client-side API service (fetch wrappers around /api/users endpoints) with React Query hooks, not a repository pattern. The API routes in app/api/users/ call drizzle directly \u2014 there is no repository abstraction layer (e.g., a UserRepository class/module that encapsulates database queries). The db access is inlined in route handlers."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": false,
+      "evidence": "The root package.json has no drizzle-related scripts at all. The db:* scripts (db:generate, db:migrate, db:seed, db:studio, db:push) are only in packages/nextjs/package.json. There is no db:wipe script anywhere, and no root-level proxy scripts for drizzle-kit or db:seed."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": false,
+      "evidence": "No docker-compose file exists in the project (outside of node_modules). The only docker-compose files found are in packages/nextjs/node_modules/bgipfs/templates/ which are unrelated. The setup instructions reference only Neon cloud, not local PostgreSQL via Docker."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": false,
+      "evidence": "No .env.development file exists anywhere in the worktree. The .env.example file was modified to add DATABASE_URL, and the summary.md instructions reference `.env.local` for setup. The SE-2 convention of .env.development was not followed."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": false,
+      "evidence": "Grep for PRODUCTION_DATABASE_HOSTNAME across the entire worktree returned no matches. There is no production safety guard checking the database hostname before destructive operations like seeding or wiping."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": false,
+      "evidence": "packages/nextjs/package.json has drizzle-orm (dep), @neondatabase/serverless (dep), and drizzle-kit (devDep). Missing from package.json: pg, dotenv, drizzle-seed, tsx, @types/pg. The seed script uses `npx tsx` rather than declaring tsx as a dependency. Only 3 of 8 required dependencies are present."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  },
+  "execution_metrics": {
+    "total_tool_calls": 49,
+    "output_chars": 8500,
+    "transcript_chars": 212884
+  },
+  "timing": {
+    "total_duration_seconds": 327.2,
+    "total_tokens": 45297
+  },
+  "claims": [
+    {
+      "claim": "Database connection singleton using Neon serverless driver",
+      "type": "quality",
+      "verified": false,
+      "evidence": "While the db instance is created once at module scope, it is not a true singleton pattern (no getInstance(), no null-check). It's a simple module-level export that eagerly connects."
+    },
+    {
+      "claim": "Full CRUD support via API routes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "API routes at /api/users (GET, POST) and /api/users/[address] (GET, PUT, DELETE) exist and the services/database/api.ts provides corresponding fetch wrappers."
+    },
+    {
+      "claim": "React Query-based hooks for data fetching with automatic cache invalidation",
+      "type": "factual",
+      "verified": true,
+      "evidence": "hooks.ts uses @tanstack/react-query with useQuery and useMutation, and mutation hooks call queryClient.invalidateQueries on success."
+    },
+    {
+      "claim": "Edge-compatible, serverless PostgreSQL access",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Uses neon-http driver which is edge-compatible, but the eager module-level initialization with a throw on missing DATABASE_URL would cause issues in edge/serverless cold starts where the env var check runs at import time regardless of whether the module is needed."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Repository pattern for database access",
+        "reason": "This assertion is somewhat ambiguous \u2014 it could be interpreted broadly (any structured data access layer) or strictly (a Repository class encapsulating queries). The services/database/ layer could be argued as a form of repository if the bar is 'organized data access'. Consider clarifying whether the expectation means a server-side repository wrapping drizzle queries, or if the API service layer counts."
+      },
+      {
+        "assertion": "Files at services/database/ path (SE-2 convention)",
+        "reason": "This assertion passed but the files at services/database/ are client-side fetch wrappers, not the database connection/query layer. The actual database code lives at db/. The assertion only checks path existence, not whether database logic resides there. A stronger assertion would verify that the database connection and query logic (not just API wrappers) lives under services/database/."
+      },
+      {
+        "reason": "No assertion checks whether the API routes actually compile or handle errors correctly. The implementation creates routes but their correctness is not verified."
+      }
+    ],
+    "overall": "The assertions are well-targeted at specific architectural patterns (tri-driver, lazy proxy, casing convention) that require genuine understanding of Drizzle+Neon best practices. The without-skill run missed almost all of them (1/10 pass), which shows good discrimination. The services/database/ assertion could be tightened to ensure the right kind of code lives there."
+  }
+}
