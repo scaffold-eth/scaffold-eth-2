@@ -1,0 +1,63 @@
+{
+  "eval_id": 0,
+  "eval_name": "ponder-event-indexing",
+  "variant": "with_skill",
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": true,
+      "evidence": "Imports deployedContracts from '../nextjs/contracts/deployedContracts' and dynamically builds contract config from it"
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": true,
+      "evidence": "Imports scaffoldConfig from '../nextjs/scaffold.config' and uses targetNetworks[0] for chain config"
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "package.json name: '@se-2/ponder'"
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "Handler: import from 'ponder:registry' and 'ponder:schema'. API: import from 'ponder:api' and 'ponder:schema'"
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "import { onchainTable } from 'ponder' \u2014 correct v0.7+ API"
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "ponder.on('YourContract:GreetingChange', ...) \u2014 correct format"
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "context.db.insert(greetingChange).values({...}) \u2014 correct current API"
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "const app = new Hono(); app.use('/graphql', graphql({ db, schema })) \u2014 correct v0.7+ Hono pattern"
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root has ponder:dev, ponder:start, ponder:codegen and other proxy scripts"
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": true,
+      "evidence": "packages/ponder/ponder-env.d.ts created for virtual module type support"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

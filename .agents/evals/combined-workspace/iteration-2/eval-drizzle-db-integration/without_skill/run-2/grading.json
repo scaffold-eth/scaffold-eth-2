@@ -1,0 +1,18 @@
+{
+  "eval_id": 1,
+  "eval_name": "drizzle-db-integration",
+  "variant": "without_skill",
+  "expectations": [
+    {"text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME", "passed": true, "evidence": "client.ts lines 56-81: checks isNeonUrl() and NEXT_RUNTIME==='edge' for Neon serverless, isNeon && !isLocal for Neon HTTP, falls through to drizzleNodePg for local pg"},
+    {"text": "Lazy proxy pattern: db instance doesn't eagerly connect on import", "passed": true, "evidence": "client.ts lines 88-95: export const db = new Proxy({} as DbClient, { get(_target, prop, receiver) { if (!_db) { _db = createClient(); } return Reflect.get(_db, prop, receiver); } })"},
+    {"text": "casing snake_case: set in BOTH drizzle.config.ts AND client initialization", "passed": true, "evidence": "drizzle.config.ts line 12: casing: \"snake_case\". client.ts line 23: const CASING = \"snake_case\" used in all three driver calls"},
+    {"text": "Files at services/database/ path: SE-2 convention", "passed": true, "evidence": "All database files under packages/nextjs/services/database/ including client.ts, drizzle.config.ts, schema/, repositories/, seed/, migrations/"},
+    {"text": "Repository pattern: for database access", "passed": true, "evidence": "repositories/userRepository.ts: exports userRepository with findAll, findById, findByAddress, create, update, updateByAddress, delete, upsertByAddress methods"},
+    {"text": "Root proxy scripts for drizzle-kit commands (db:seed, db:wipe, etc.)", "passed": true, "evidence": "Root package.json lines 52-60: db:generate, db:migrate, db:push, db:pull, db:studio, db:seed, db:wipe, db:up, db:down all proxy to yarn workspace @se-2/nextjs"},
+    {"text": "Docker Compose for local PostgreSQL development", "passed": true, "evidence": "packages/nextjs/docker-compose.yml: postgres:16-alpine service on port 5432"},
+    {"text": ".env.development: SE-2 convention, not .env.local", "passed": true, "evidence": "packages/nextjs/.env.development exists with DATABASE_URL"},
+    {"text": "Production safety guard: PRODUCTION_DATABASE_HOSTNAME check", "passed": true, "evidence": "client.ts lines 44-54: checks process.env.PRODUCTION_DATABASE_HOSTNAME, throws error if databaseUrl contains that hostname"},
+    {"text": "All required dependencies: drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, @types/pg, tsx", "passed": true, "evidence": "packages/nextjs/package.json: drizzle-orm, @neondatabase/serverless, pg, dotenv in deps; drizzle-kit, drizzle-seed, @types/pg, tsx in devDeps"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

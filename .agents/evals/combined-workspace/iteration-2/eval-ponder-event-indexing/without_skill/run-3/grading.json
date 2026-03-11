@@ -1,0 +1,18 @@
+{
+  "eval_id": 2,
+  "eval_name": "ponder-event-indexing",
+  "variant": "without_skill",
+  "expectations": [
+    {"text": "Config reads deployedContracts from SE-2 nextjs package", "passed": true, "evidence": "ponder.config.ts line 3: import deployedContracts from \"../nextjs/contracts/deployedContracts\";"},
+    {"text": "Config reads scaffoldConfig for network detection", "passed": true, "evidence": "ponder.config.ts line 4: import scaffoldConfig from \"../nextjs/scaffold.config\"; and line 6: const targetNetwork = scaffoldConfig.targetNetworks[0];"},
+    {"text": "Package named @se-2/ponder: SE-2 workspace convention", "passed": true, "evidence": "packages/ponder/package.json line 2: \"name\": \"@se-2/ponder\""},
+    {"text": "Virtual module imports: ponder:registry, ponder:schema, ponder:api", "passed": true, "evidence": "src/index.ts imports from \"ponder:registry\", src/schema.ts imports from \"ponder:schema\", src/api/index.ts imports from \"ponder:api\""},
+    {"text": "onchainTable schema API (not older createSchema)", "passed": true, "evidence": "src/schema.ts line 1: import { onchainTable } from \"ponder:schema\"; line 3: export const greetingChange = onchainTable(\"greeting_change\", ...)"},
+    {"text": "ContractName:EventName handler format: e.g., 'YourContract:GreetingChange'", "passed": true, "evidence": "src/index.ts line 4: ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => {"},
+    {"text": "context.db.insert().values() for writes", "passed": true, "evidence": "src/index.ts lines 5-16: await context.db.insert(greetingChange).values({...})"},
+    {"text": "Hono-based API setup (not old express-style)", "passed": true, "evidence": "package.json has \"hono\": \"^4\" dependency; src/api/index.ts uses ponder.get() with c.json() Hono-style response pattern"},
+    {"text": "Root package.json proxy scripts: ponder:dev, ponder:start, etc.", "passed": true, "evidence": "Root package.json lines 53-56: ponder:dev, ponder:start, ponder:serve, ponder:codegen"},
+    {"text": "ponder-env.d.ts type declaration file exists", "passed": true, "evidence": "File exists at packages/ponder/ponder-env.d.ts with declare module blocks for ponder:registry, ponder:schema, and ponder:api"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

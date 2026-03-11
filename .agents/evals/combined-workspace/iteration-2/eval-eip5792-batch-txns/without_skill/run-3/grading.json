@@ -1,0 +1,18 @@
+{
+  "eval_id": 3,
+  "eval_name": "eip5792-batch-txns",
+  "variant": "without_skill",
+  "expectations": [
+    {"text": "useWriteContracts hook (not useSendCalls or custom encoding)", "passed": true, "evidence": "page.tsx line 7: imported from wagmi, line 64: const { writeContractsAsync } = useWriteContracts()"},
+    {"text": "useCapabilities hook for wallet EIP-5792 support detection", "passed": true, "evidence": "page.tsx line 7: imported from wagmi, line 57: const { data: capabilities } = useCapabilities()"},
+    {"text": "useShowCallsStatus hook for batch transaction status display", "passed": true, "evidence": "page.tsx line 7: imported from wagmi, line 67: const { showCallsStatus } = useShowCallsStatus()"},
+    {"text": "Graceful fallback for wallets without EIP-5792 support", "passed": true, "evidence": "handleFallbackApproveAndTransfer does sequential approve then transfer; fallback button rendered when not supported"},
+    {"text": "Batch button disabled when wallet doesn't support EIP-5792", "passed": true, "evidence": "page.tsx line 243: disabled={true} in !isAtomicBatchSupported branch"},
+    {"text": "ERC20 contract created with approve+transfer pattern", "passed": true, "evidence": "BatchToken.sol inherits OpenZeppelin ERC20; batch call uses both approve and transfer"},
+    {"text": "Deploy script created (Hardhat deploy script)", "passed": true, "evidence": "01_deploy_batch_token.ts with DeployFunction, tags=['BatchToken']"},
+    {"text": "Frontend page created with batch UI", "passed": true, "evidence": "packages/nextjs/app/batch/page.tsx: 280-line page with full batch UI"},
+    {"text": "SE-2 scaffold hooks used: useScaffoldReadContract, useScaffoldWriteContract, useDeployedContractInfo", "passed": true, "evidence": "All three imported from ~~/hooks/scaffold-eth; useDeployedContractInfo at line 19, useScaffoldReadContract at lines 22/29/35/41, useScaffoldWriteContract at lines 48/52"},
+    {"text": "No new dependencies added (wagmi already has EIP-5792 hooks)", "passed": true, "evidence": "No package.json changes; all EIP-5792 hooks from existing wagmi 2.19.5"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

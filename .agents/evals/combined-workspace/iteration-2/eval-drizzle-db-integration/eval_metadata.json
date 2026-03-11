@@ -1,0 +1,5 @@
+{
+  "eval_id": 1,
+  "eval_name": "drizzle-db-integration",
+  "prompt": "I need to add a PostgreSQL database to my SE-2 dApp. I want to store user data off-chain using Drizzle ORM with Neon PostgreSQL. Set up the full database integration including schema, migrations, and API routes."
+}
