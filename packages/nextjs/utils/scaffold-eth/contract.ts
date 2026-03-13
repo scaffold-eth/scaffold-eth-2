@@ -12,8 +12,6 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import type { Simplify } from "type-fest";
-import type { MergeDeepRecord } from "type-fest/source/merge-deep";
 import {
   Address,
   Block,
@@ -32,6 +30,9 @@ import { WriteContractVariables } from "wagmi/query";
 import deployedContractsData from "~~/contracts/deployedContracts";
 import externalContractsData from "~~/contracts/externalContracts";
 import scaffoldConfig from "~~/scaffold.config";
+
+type MergeDeepRecord<L, R, O extends Record<string, any> = Record<string, never>> = L & R & O;
+type Simplify<T> = { [K in keyof T]: T[K] } & {};
 
 type AddExternalFlag<T> = {
   [ChainId in keyof T]: {
@@ -191,6 +192,7 @@ export type UseScaffoldReadConfig<
   contractName: TContractName;
   chainId?: AllowedChainIds;
   watch?: boolean;
+  contractAddress?: Address;
 } & IsContractDeclarationMissing<
   Partial<UseReadContractParameters>,
   {
