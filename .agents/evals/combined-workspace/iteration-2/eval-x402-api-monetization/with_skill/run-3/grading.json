@@ -1,0 +1,18 @@
+{
+  "eval_id": 0,
+  "eval_name": "x402-api-monetization",
+  "variant": "with_skill",
+  "expectations": [
+    {"text": "middleware.ts file exists in packages/nextjs/", "passed": true, "evidence": "File exists at packages/nextjs/middleware.ts (verified via Read tool, 48 lines)"},
+    {"text": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": true, "evidence": "middleware.ts line 1: import { paymentProxy } from \"@x402/next\"; line 2: import { HTTPFacilitatorClient, x402ResourceServer } from \"@x402/core/server\""},
+    {"text": "Calls registerExactEvmScheme(server) in middleware", "passed": true, "evidence": "middleware.ts line 3: import { registerExactEvmScheme } from \"@x402/evm/exact/server\"; line 14: registerExactEvmScheme(server);"},
+    {"text": "Uses CAIP-2 network format (eip155:84532) not legacy names", "passed": true, "evidence": ".env.development line 11: NETWORK=eip155:84532; middleware.ts line 9: const network = process.env.NETWORK as `${string}:${string}`"},
+    {"text": "Creates paywall with createPaywall().withNetwork(evmPaywall)", "passed": true, "evidence": "middleware.ts lines 4-5: import { createPaywall } from \"@x402/paywall\"; import { evmPaywall } from \"@x402/paywall/evm\"; lines 17-24: const paywall = createPaywall().withNetwork(evmPaywall).withConfig({...}).build();"},
+    {"text": "A protected API route handler exists", "passed": true, "evidence": "File packages/nextjs/app/api/payment/builder/route.ts exists with export async function GET() returning NextResponse.json(data)"},
+    {"text": "Environment variables for facilitator, wallet, network configured", "passed": true, "evidence": ".env.development contains NEXT_PUBLIC_FACILITATOR_URL=https://x402.org/facilitator, RESOURCE_WALLET_ADDRESS=0xYourAddressHere, NETWORK=eip155:84532"},
+    {"text": "x402 packages added to nextjs package.json", "passed": true, "evidence": "packages/nextjs/package.json lines 41-44: @x402/core ^2.2.0, @x402/evm ^2.2.0, @x402/next ^2.2.0, @x402/paywall ^2.2.0"},
+    {"text": "Middleware matcher covers protected routes", "passed": true, "evidence": "middleware.ts lines 46-48: export const config = { matcher: [\"/api/payment/:path*\"] }"},
+    {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "scaffold.config.ts line 16: targetNetworks: [chains.baseSepolia],"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

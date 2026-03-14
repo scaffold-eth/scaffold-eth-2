@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "skill_name": "SE-2 Tier 1 Skills",
+    "skill_path": ".agents/skills/",
+    "executor_model": "claude-opus-4-6",
+    "analyzer_model": "claude-opus-4-6",
+    "timestamp": "2026-03-10T00:00:00Z",
+    "evals_run": ["x402-api-monetization", "drizzle-db-integration", "ponder-event-indexing", "eip5792-batch-txns"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0, "eval_name": "x402 — API Monetization",
+      "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 184.3, "tokens": 39805, "tool_calls": 40, "errors": 0},
+      "expectations": [
+        {"text": "middleware.ts exists", "passed": true, "evidence": "Created with full v2 middleware"},
+        {"text": "v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": true, "evidence": "All v2 imports correct"},
+        {"text": "registerExactEvmScheme called", "passed": true, "evidence": "registerExactEvmScheme(server) on line 14"},
+        {"text": "CAIP-2 network format (eip155:84532)", "passed": true, "evidence": "NETWORK=eip155:84532 in .env.development"},
+        {"text": "Paywall setup (createPaywall + evmPaywall)", "passed": true, "evidence": "createPaywall().withNetwork(evmPaywall).withConfig({...}).build()"},
+        {"text": "Protected API route exists", "passed": true, "evidence": "app/api/payment/data/route.ts"},
+        {"text": "Environment variables configured", "passed": true, "evidence": "FACILITATOR_URL, RESOURCE_WALLET_ADDRESS, NETWORK"},
+        {"text": "Correct @x402/* package names", "passed": true, "evidence": "@x402/core, @x402/evm, @x402/next, @x402/paywall"},
+        {"text": "Middleware matcher covers routes", "passed": true, "evidence": "matcher covers /api/payment/ and /payment/"},
+        {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "chains.baseSepolia (replaced hardhat)"}
+      ]
+    },
+    {
+      "eval_id": 0, "eval_name": "x402 — API Monetization",
+      "configuration": "without_skill", "run_number": 1,
+      "result": {"pass_rate": 0.5, "passed": 5, "failed": 5, "total": 10, "time_seconds": 324.2, "tokens": 57391, "tool_calls": 61, "errors": 0},
+      "expectations": [
+        {"text": "middleware.ts exists", "passed": true, "evidence": "Created"},
+        {"text": "v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": false, "evidence": "Used v1 'paymentMiddleware' from wrong package 'x402-next'"},
+        {"text": "registerExactEvmScheme called", "passed": false, "evidence": "Not called — used old v1 pattern"},
+        {"text": "CAIP-2 network format (eip155:84532)", "passed": false, "evidence": "Used legacy 'base-sepolia' name"},
+        {"text": "Paywall setup (createPaywall + evmPaywall)", "passed": false, "evidence": "No paywall — raw 402 JSON for browsers"},
+        {"text": "Protected API route exists", "passed": true, "evidence": "app/api/premium-data/route.ts"},
+        {"text": "Environment variables configured", "passed": true, "evidence": "Has env vars (different names)"},
+        {"text": "Correct @x402/* package names", "passed": false, "evidence": "Wrong: x402-fetch, x402-next (non-scoped, likely nonexistent)"},
+        {"text": "Middleware matcher covers routes", "passed": true, "evidence": "matcher present"},
+        {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "baseSepolia added (but kept hardhat too)"}
+      ],
+      "notes": [
+        "Hallucinated package names: used non-scoped 'x402-fetch' and 'x402-next' instead of @x402/core, @x402/next — yarn install would fail immediately",
+        "Used v1 API that no longer exists: 'paymentMiddleware' instead of v2's paymentProxy + x402ResourceServer + HTTPFacilitatorClient",
+        "Missing registerExactEvmScheme — v2 requires explicit EVM scheme registration, v1 didn't have this concept",
+        "Used legacy network name 'base-sepolia' instead of CAIP-2 format 'eip155:84532' — middleware would silently fail to match",
+        "No paywall UI: browser visitors to protected pages get raw 402 JSON instead of a payment prompt",
+        "Root cause: model's training data predates x402 v2 release, confidently generates v1 code as if current",
+        "43% slower (324s vs 184s) and 31% more expensive (57k vs 40k tokens) — spent time exploring wrong APIs"
+      ]
+    },
+    {
+      "eval_id": 1, "eval_name": "drizzle-neon — Database Integration",
+      "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 219.6, "tokens": 46554, "tool_calls": 50, "errors": 0},
+      "expectations": [
+        {"text": "Tri-driver pattern (Neon serverless/HTTP/pg)", "passed": true, "evidence": "All 3 drivers with NEXT_RUNTIME detection"},
+        {"text": "Lazy proxy for deferred connection", "passed": true, "evidence": "Proxy object with getDb()"},
+        {"text": "casing: 'snake_case' in config AND client", "passed": true, "evidence": "Set in both locations"},
+        {"text": "Files at services/database/ path", "passed": true, "evidence": "SE-2 convention followed"},
+        {"text": "Repository pattern for DB access", "passed": true, "evidence": "repositories/users.ts with CRUD"},
+        {"text": "Root proxy scripts", "passed": true, "evidence": "drizzle-kit, db:seed, db:wipe"},
+        {"text": "Docker Compose for local dev", "passed": true, "evidence": "docker-compose.yml with postgres:16"},
+        {"text": ".env.development (SE-2 convention)", "passed": true, "evidence": "Created with POSTGRES_URL"},
+        {"text": "Production safety guard", "passed": true, "evidence": "PRODUCTION_DATABASE_HOSTNAME"},
+        {"text": "All required dependencies", "passed": true, "evidence": "8 packages in correct dep groups"}
+      ]
+    },
+    {
+      "eval_id": 1, "eval_name": "drizzle-neon — Database Integration",
+      "configuration": "without_skill", "run_number": 1,
+      "result": {"pass_rate": 0.0, "passed": 0, "failed": 10, "total": 10, "time_seconds": 189.4, "tokens": 38464, "tool_calls": 45, "errors": 0},
+      "expectations": [
+        {"text": "Tri-driver pattern (Neon serverless/HTTP/pg)", "passed": false, "evidence": "Only neon-http — no local dev, breaks in serverless"},
+        {"text": "Lazy proxy for deferred connection", "passed": false, "evidence": "Eager init throws on import"},
+        {"text": "casing: 'snake_case' in config AND client", "passed": false, "evidence": "Missing from both — silent data corruption"},
+        {"text": "Files at services/database/ path", "passed": false, "evidence": "Used /db/ instead"},
+        {"text": "Repository pattern for DB access", "passed": false, "evidence": "Queries inline in routes"},
+        {"text": "Root proxy scripts", "passed": false, "evidence": "Not added to root"},
+        {"text": "Docker Compose for local dev", "passed": false, "evidence": "No docker-compose.yml"},
+        {"text": ".env.development (SE-2 convention)", "passed": false, "evidence": "Used .env.example/.env.local"},
+        {"text": "Production safety guard", "passed": false, "evidence": "Could wipe production"},
+        {"text": "All required dependencies", "passed": false, "evidence": "Missing pg, dotenv, @types/pg, drizzle-seed"}
+      ],
+      "notes": [
+        "LARGEST DELTA: 0/10 without skill — every single assertion failed, all 10 are discriminating",
+        "Model independently chose Drizzle + Neon (good library selection!) but missed ALL SE-2 integration patterns",
+        "Single neon-http driver only: breaks in serverless Edge runtime, no local Docker development possible",
+        "Eager DB init throws on import — crashes 'next build' in CI where no database is available",
+        "Missing casing: 'snake_case' in BOTH config AND client — causes silent data corruption (queries return wrong columns)",
+        "No Docker Compose: zero local development story, assumes always-available cloud Neon database",
+        "No production safety guard: db:seed and db:wipe scripts could destroy production data",
+        "Used /db/ path instead of SE-2's services/database/ convention",
+        "Missing 4 of 8 required packages: pg, dotenv, @types/pg, drizzle-seed",
+        "Root cause: model knows both libraries individually but integration layer (tri-driver, lazy proxy, casing, safety) is SE-2-specific knowledge",
+        "Only skill where with-skill was slower (+31s) — because it implemented MORE things correctly, not because it struggled"
+      ]
+    },
+    {
+      "eval_id": 2, "eval_name": "ponder — Event Indexing",
+      "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 154.6, "tokens": 34966, "tool_calls": 35, "errors": 0},
+      "expectations": [
+        {"text": "Config reads deployedContracts from SE-2", "passed": true, "evidence": "Imports from '../nextjs/contracts/deployedContracts'"},
+        {"text": "Config reads scaffoldConfig for network", "passed": true, "evidence": "Uses targetNetworks[0] dynamically"},
+        {"text": "Package named @se-2/ponder", "passed": true, "evidence": "Correct workspace naming"},
+        {"text": "Virtual module imports (ponder:registry, ponder:schema)", "passed": true, "evidence": "All virtual modules used"},
+        {"text": "onchainTable schema API", "passed": true, "evidence": "import from 'ponder' (correct package)"},
+        {"text": "ContractName:EventName handler format", "passed": true, "evidence": "'YourContract:GreetingChange'"},
+        {"text": "context.db.insert().values() for writes", "passed": true, "evidence": "Correct current API"},
+        {"text": "Hono-based API (not express-style)", "passed": true, "evidence": "new Hono() + graphql middleware"},
+        {"text": "Root proxy scripts", "passed": true, "evidence": "6 ponder:* scripts"},
+        {"text": "ponder-env.d.ts exists", "passed": true, "evidence": "Type declarations created"}
+      ]
+    },
+    {
+      "eval_id": 2, "eval_name": "ponder — Event Indexing",
+      "configuration": "without_skill", "run_number": 1,
+      "result": {"pass_rate": 0.5, "passed": 5, "failed": 5, "total": 10, "time_seconds": 212.6, "tokens": 42728, "tool_calls": 50, "errors": 0},
+      "expectations": [
+        {"text": "Config reads deployedContracts from SE-2", "passed": false, "evidence": "Hardcoded ABI and address"},
+        {"text": "Config reads scaffoldConfig for network", "passed": false, "evidence": "Hardcoded chainId 31337"},
+        {"text": "Package named @se-2/ponder", "passed": true, "evidence": "Correct"},
+        {"text": "Virtual module imports (ponder:registry, ponder:schema)", "passed": false, "evidence": "OLD: @/generated and file imports"},
+        {"text": "onchainTable schema API", "passed": true, "evidence": "Correct (from @ponder/core)"},
+        {"text": "ContractName:EventName handler format", "passed": true, "evidence": "Correct"},
+        {"text": "context.db.insert().values() for writes", "passed": true, "evidence": "Correct"},
+        {"text": "Hono-based API (not express-style)", "passed": false, "evidence": "OLD: ponder.use() express-style"},
+        {"text": "Root proxy scripts", "passed": true, "evidence": "Added"},
+        {"text": "ponder-env.d.ts exists", "passed": false, "evidence": "Not created"}
+      ],
+      "notes": [
+        "Used OLD @ponder/core package instead of current 'ponder' — package was renamed in v0.7",
+        "Used OLD @/generated file imports instead of v0.7+ virtual modules (ponder:registry, ponder:schema)",
+        "Used OLD express-style API: ponder.use('/graphql', graphql()) instead of v0.7+ Hono: new Hono() + app.use()",
+        "Hardcoded ABI in local file instead of reading SE-2's deployedContracts.ts — every redeploy breaks the indexer",
+        "Hardcoded chainId: 31337 and 'localhost' instead of reading scaffoldConfig.targetNetworks[0] — can't switch networks",
+        "No ponder-env.d.ts — TypeScript can't resolve virtual module imports, red squiggles everywhere",
+        "Root cause: model's knowledge straddles the Ponder v0.7 boundary. Concepts correct (onchainTable, handlers), but wiring (imports, API, package name) is pre-v0.7",
+        "Delta breaks down: ~30% from version issues, ~20% from missing SE-2 bridge (deployedContracts + scaffoldConfig)",
+        "27% faster with skill (155s vs 213s) — fastest eval overall due to contained scope"
+      ]
+    },
+    {
+      "eval_id": 3, "eval_name": "eip-5792 — Batch Transactions",
+      "configuration": "with_skill", "run_number": 1,
+      "result": {"pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 176.4, "tokens": 41444, "tool_calls": 30, "errors": 0},
+      "expectations": [
+        {"text": "useWriteContracts (not useSendCalls)", "passed": true, "evidence": "wagmi/experimental import"},
+        {"text": "useCapabilities for wallet detection", "passed": true, "evidence": "wagmi/experimental import"},
+        {"text": "useShowCallsStatus for batch status", "passed": true, "evidence": "wagmi/experimental import"},
+        {"text": "Graceful fallback for unsupported wallets", "passed": true, "evidence": "Both batch AND individual buttons"},
+        {"text": "Batch button disabled when unsupported", "passed": true, "evidence": "Checks !isEIP5792Wallet"},
+        {"text": "ERC20 contract created", "passed": true, "evidence": "BatchToken.sol"},
+        {"text": "Deploy script created", "passed": true, "evidence": "01_deploy_batch_token.ts"},
+        {"text": "Frontend page created", "passed": true, "evidence": "/batch-tokens page"},
+        {"text": "SE-2 scaffold hooks used", "passed": true, "evidence": "useScaffoldReadContract, useScaffoldWriteContract"},
+        {"text": "No new dependencies needed", "passed": true, "evidence": "wagmi already has EIP-5792"}
+      ]
+    },
+    {
+      "eval_id": 3, "eval_name": "eip-5792 — Batch Transactions",
+      "configuration": "without_skill", "run_number": 1,
+      "result": {"pass_rate": 0.6, "passed": 6, "failed": 4, "total": 10, "time_seconds": 342.1, "tokens": 73048, "tool_calls": 72, "errors": 0},
+      "expectations": [
+        {"text": "useWriteContracts (not useSendCalls)", "passed": false, "evidence": "Used useSendCalls + manual encoding + hacky padded hooks"},
+        {"text": "useCapabilities for wallet detection", "passed": true, "evidence": "useBatchCallsCapabilities wraps useCapabilities"},
+        {"text": "useShowCallsStatus for batch status", "passed": false, "evidence": "Not used"},
+        {"text": "Graceful fallback for unsupported wallets", "passed": false, "evidence": "Only batch button, no fallback"},
+        {"text": "Batch button disabled when unsupported", "passed": false, "evidence": "Not checking isSupported"},
+        {"text": "ERC20 contract created", "passed": true, "evidence": "BatchToken.sol"},
+        {"text": "Deploy script created", "passed": true, "evidence": "Created"},
+        {"text": "Frontend page created", "passed": true, "evidence": "/batch-transfer page"},
+        {"text": "SE-2 scaffold hooks used", "passed": true, "evidence": "Hooks used correctly"},
+        {"text": "No new dependencies needed", "passed": true, "evidence": "No new deps"}
+      ],
+      "notes": [
+        "Smallest delta (40%) — model has strongest baseline knowledge here, 6/10 without skill",
+        "All 4 failures are UX patterns, not technical API issues: fallback, status display, defensive disabling",
+        "Used lower-level useSendCalls requiring manual encodeFunctionData instead of high-level useWriteContracts",
+        "Created hacky MAX_CONTRACTS=5 pattern: pre-generates 5 hook instances to work around React rules of hooks — fragile and wasteful",
+        "No graceful fallback: only batch button, users with non-EIP-5792 wallets (like MetaMask) can't use the feature at all",
+        "Batch button not checking wallet support: clicking with unsupported wallet throws runtime error instead of being disabled",
+        "No useShowCallsStatus: users can't see per-call status in wallet UI after batch submission",
+        "LARGEST efficiency gap: 49% slower (342s vs 176s), 43% more expensive (73k vs 41k tokens), 58% more tool calls (72 vs 30)",
+        "Root cause: model treats EIP-5792 as purely technical. Skill adds the human layer — what happens when things aren't supported",
+        "Highest non-discriminating count (6/10) — model knows contracts, deploys, scaffold hooks, and capability detection well"
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 183.7, "stddev": 23.3, "min": 154.6, "max": 219.6},
+      "tokens": {"mean": 40692, "stddev": 4189, "min": 34966, "max": 46554}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.4, "stddev": 0.22, "min": 0.0, "max": 0.6},
+      "time_seconds": {"mean": 267.1, "stddev": 62.0, "min": 189.4, "max": 342.1},
+      "tokens": {"mean": 53159, "stddev": 13400, "min": 38464, "max": 73048}
+    },
+    "delta": {
+      "pass_rate": "+0.60",
+      "time_seconds": "-83.4",
+      "tokens": "-12467"
+    }
+  },
+  "notes": [
+    "ALL 4 SKILLS: 100% pass rate with skill — skills reliably guide correct implementation across diverse domains",
+    "Average delta: +60% — skills provide substantial capability uplift on integration-heavy tasks",
+    "Three distinct failure patterns identified without skills:",
+    "  1. STALE API (x402, ponder): model uses wrong/old package names and API surfaces — code won't even install",
+    "  2. MISSING INTEGRATION (drizzle-neon): model knows libraries but misses all SE-2-specific wiring — 0/10 without skill",
+    "  3. MISSING UX (eip-5792): model implements the technical feature but misses fallbacks, status, and defensive UX",
+    "Skills make models FASTER (avg 184s vs 267s, -31%) and CHEAPER (avg 41k vs 53k tokens, -23%)",
+    "Top discriminating patterns: correct package names, current API versions, SE-2 bridges (deployedContracts/scaffoldConfig), multi-environment patterns, safety guards",
+    "Non-discriminating: file creation, general architecture knowledge, SE-2 basics (hooks, DaisyUI), workspace naming, deploy scripts",
+    "Most dangerous without-skill failure: drizzle casing mismatch causes SILENT data corruption — no errors, just wrong data",
+    "Most wasteful without-skill failure: eip-5792 used 73k tokens (1.8x) exploring dead ends with useSendCalls + padded hooks hack"
+  ]
+}

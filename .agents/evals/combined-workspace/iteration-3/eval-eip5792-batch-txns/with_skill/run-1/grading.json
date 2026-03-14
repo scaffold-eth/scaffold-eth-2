@@ -1,0 +1,126 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": true,
+      "evidence": "In packages/nextjs/app/batch/page.tsx line 8: `import { useCapabilities, useWriteContracts } from \"wagmi/experimental\";` and line 30: `const { writeContractsAsync, isPending: isBatchPending } = useWriteContracts();`. The batch call at lines 75-90 uses writeContractsAsync with a contracts array containing approve and transfer calls. No useSendCalls or custom encoding found."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": true,
+      "evidence": "In packages/nextjs/app/batch/page.tsx line 8: imported from `wagmi/experimental`, and lines 25-27: `const { isSuccess: isEIP5792Wallet, data: walletCapabilities } = useCapabilities({ account: connectedAddress });`. The `isEIP5792Wallet` flag is used throughout the page to conditionally render UI and enable/disable the batch button."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "useShowCallsStatus is NOT imported or used anywhere in the frontend code. Searched the entire packages/nextjs directory with no results. The skill file (.agents/skills/eip-5792/SKILL.md) documents this hook and recommends using it for batch status display, but the implementation only uses notification.success to display the batch ID rather than invoking the wallet's native status UI."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": true,
+      "evidence": "In packages/nextjs/app/batch/page.tsx lines 99-125: `handleIndividualApproveAndTransfer` function performs approve then transfer as two separate SE-2 scaffold write contract calls. Lines 257-266 render a fallback 'Approve & Transfer (2 transactions)' button. Lines 190-196 show an informational message when EIP-5792 is not detected: 'Your wallet does not support EIP-5792. You can still approve and transfer individually using the fallback method below.'"
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": true,
+      "evidence": "In packages/nextjs/app/batch/page.tsx line 251: `disabled={!isFormValid || isBatchPending || !isEIP5792Wallet || !batchTokenContract}`. The `!isEIP5792Wallet` condition ensures the batch button is disabled when the wallet doesn't support EIP-5792."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "packages/hardhat/contracts/BatchToken.sol is an ERC20 contract inheriting from OpenZeppelin's ERC20. It has `approve` and `transfer` inherited from ERC20, plus a custom `mint` function. The frontend batches `approve` + `transfer` calls together at lines 77-89 of page.tsx. The contract is a legitimate ERC20 with owner-restricted minting and initial supply of 1000 tokens."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_batch_token.ts exists with proper hardhat-deploy pattern: imports HardhatRuntimeEnvironment and DeployFunction types, uses getNamedAccounts/deployments, deploys 'BatchToken' with deployer as constructor arg, and has `deployBatchToken.tags = [\"BatchToken\"]`."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "packages/nextjs/app/batch/page.tsx is a 276-line React page component with: token info card (name, symbol, supply, balance), wallet capabilities detection card (EIP-5792 badge, paymaster badge), and batch transfer form (recipient address input, amount input with max button, batch button, fallback button). Header.tsx was also modified to add a 'Batch Transfer' navigation link at /batch."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "In packages/nextjs/app/batch/page.tsx: useScaffoldReadContract used 4 times (lines 33-52 for name, symbol, balanceOf, totalSupply), useScaffoldWriteContract used twice (lines 55-61 for fallback approve and transfer), useDeployedContractInfo used once (line 22 to get contract address/ABI for batch calls). All imported from '~~/hooks/scaffold-eth'. Also uses notification from '~~/utils/scaffold-eth' and AddressInput from '@scaffold-ui/components'."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "No changes to any package.json file. Git diff of packages/nextjs/package.json shows no modifications. The imports `useCapabilities` and `useWriteContracts` come from `wagmi/experimental` which is already part of the wagmi package included in SE-2."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 44,
+    "total_steps": 44,
+    "errors_encountered": 0,
+    "output_chars": 16000,
+    "transcript_chars": 0
+  },
+  "timing": {
+    "total_tokens": 49403,
+    "tool_uses": 44,
+    "executor_duration_seconds": 285.8,
+    "total_duration_seconds": 285.8
+  },
+  "claims": [
+    {
+      "claim": "Solidity contracts compile successfully (yarn compile passes)",
+      "type": "process",
+      "verified": true,
+      "evidence": "Summary.md states 'yarn compile passes with 8 files'. The contract uses standard OpenZeppelin ERC20 which is a well-tested pattern."
+    },
+    {
+      "claim": "TypeScript type-checking passes (yarn next:check-types clean)",
+      "type": "process",
+      "verified": true,
+      "evidence": "Summary.md states this. Cannot verify independently but the code uses correct hook signatures."
+    },
+    {
+      "claim": "ESLint/Prettier linting passes",
+      "type": "process",
+      "verified": true,
+      "evidence": "Summary.md states 'yarn next:lint clean, yarn next:format applied'."
+    },
+    {
+      "claim": "The page uses AddressInput for recipient input with validation and ENS resolution",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Line 215 of page.tsx: `<AddressInput value={recipient} onChange={setRecipient} placeholder=\"0x...\" />`"
+    },
+    {
+      "claim": "DaisyUI styling used throughout",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Page uses card, badge, btn, form-control, input, divider, and other DaisyUI classes throughout the component."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Uses useShowCallsStatus for batch transaction status display",
+        "reason": "This is a good discriminating assertion. The implementation missed this hook entirely, relying instead on a simple notification.success with the batch ID. The skill file clearly recommends useShowCallsStatus for native wallet status UI, so this catches a genuine gap."
+      },
+      {
+        "reason": "No assertion checks whether the approve+transfer batch pattern is semantically correct. The current implementation approves the recipient for N tokens and then transfers N tokens to the recipient. In practice, approve is typically used to grant a third-party spender permission, not the recipient directly. A transfer doesn't require prior approval. This is a common misconception about ERC20 patterns when demonstrating batch transactions. A more discriminating eval would check that the batch demonstrates a realistic use case (e.g., approve a DEX contract then have the DEX pull tokens, or approve then transferFrom via a different address)."
+      },
+      {
+        "reason": "No assertion verifies that the page is accessible via navigation (Header.tsx modification). The implementation does add a nav link, which is good UX, but it's not checked."
+      }
+    ],
+    "overall": "The assertions are generally solid and cover the key technical requirements well. The main gap is the semantic correctness of the approve+transfer pattern — the implementation batches approve(recipient) + transfer(recipient) which doesn't represent a realistic use case for batching (transfer alone would suffice; approve is for third-party spenders). This is worth adding as an assertion since it tests whether the developer truly understands the ERC20 pattern vs. just mechanically combining two calls."
+  }
+}

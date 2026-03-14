@@ -1,0 +1,74 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": false,
+      "evidence": "server/db/index.ts only uses @neondatabase/serverless with neon-http driver. No detection of URL scheme or NEXT_RUNTIME, no conditional logic for selecting between Neon serverless WebSocket, Neon HTTP, or local pg. It hardcodes a single driver: `const sql = neon(process.env.DATABASE_URL); export const db = drizzle(sql, { schema });`"
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": false,
+      "evidence": "server/db/index.ts eagerly creates the neon connection and drizzle instance at module scope: `const sql = neon(process.env.DATABASE_URL); export const db = drizzle(sql, { schema });`. There is no lazy proxy, no Proxy object, and no deferred initialization. The db connects immediately on import."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": false,
+      "evidence": "drizzle.config.ts has no casing option: `defineConfig({ schema, out, dialect, dbCredentials })`. The drizzle client initialization in server/db/index.ts also has no casing option: `drizzle(sql, { schema })`. While the schema manually uses snake_case column names (e.g., `created_at`), the explicit `casing: 'snake_case'` configuration is absent from both config files."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "Three files exist at services/database/ path: packages--nextjs--services--database--api.ts, packages--nextjs--services--database--hooks.ts, packages--nextjs--services--database--index.ts. These provide the client-side API wrapper, react-query hooks, and barrel export."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": false,
+      "evidence": "API routes in app/api/users/route.ts and app/api/users/[id]/route.ts directly call `db.select().from(users)`, `db.insert(users)`, `db.update(users)`, `db.delete(users)` inline. There is no separate repository class or module that abstracts the database queries. The services/database/ layer is a client-side fetch wrapper, not a server-side repository pattern."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": false,
+      "evidence": "No root package.json file exists in the outputs. The nextjs package.json has db:generate, db:migrate, db:push, db:studio scripts but no db:seed or db:wipe. There are no proxy scripts at the root level, and no seed/wipe functionality is present at all."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": false,
+      "evidence": "No docker-compose.yml or any Docker-related file exists in the outputs. The summary.md setup instructions only mention using Neon cloud: 'Create a Neon PostgreSQL database at https://neon.tech'. No local PostgreSQL development option is provided."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": false,
+      "evidence": "The .env.example file instructs users to 'copy this file, rename it to .env.local'. The summary.md also says: 'Copy the connection string to packages/nextjs/.env.local as DATABASE_URL'. There is no .env.development file or reference to it."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": false,
+      "evidence": "No reference to PRODUCTION_DATABASE_HOSTNAME anywhere in the outputs. The server/db/index.ts only checks if DATABASE_URL is set: `if (!process.env.DATABASE_URL) { throw new Error(...) }`. No hostname validation or production safety mechanism exists."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": false,
+      "evidence": "packages/nextjs/package.json has drizzle-orm (dependency), @neondatabase/serverless (dependency), and drizzle-kit (devDependency). Missing: pg, dotenv, drizzle-seed, tsx, @types/pg. Only 3 of the 8 required packages are present."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "The implementation is a basic Drizzle + Neon HTTP setup without the advanced patterns expected by the evaluation. It lacks the tri-driver pattern, lazy proxy, snake_case config, repository pattern, Docker support, and production safety guards.",
+      "Without the skill file guidance, the agent defaulted to the simplest possible Neon integration - a single hardcoded neon-http driver with no flexibility for different environments.",
+      "The services/database/ convention was followed, which shows the agent understood some SE-2 patterns, but the server-side architecture is minimal.",
+      "The agent should have been prompted or guided to consider local development (Docker/pg), production safety, and proper configuration patterns."
+    ],
+    "overall": "Very poor score (1/10). The output is a functional but minimal Drizzle + Neon integration that only meets the services/database/ path convention. It completely lacks the sophisticated patterns expected: tri-driver auto-detection, lazy proxy, explicit snake_case casing config, repository abstraction, root proxy scripts, Docker Compose, .env.development usage, production safety guards, and several required dependencies. This demonstrates the significant gap between a naive implementation and the skill-guided approach."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "eval_id": 0,
+  "eval_name": "eip5792-batch-txns",
+  "variant": "with_skill",
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": true,
+      "evidence": "import { useWriteContracts } from 'wagmi/experimental' — correct high-level EIP-5792 hook that handles ABI encoding automatically"
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": true,
+      "evidence": "import { useCapabilities } from 'wagmi/experimental' — detects wallet capabilities and checks for EIP-5792 support"
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": true,
+      "evidence": "import { useShowCallsStatus } from 'wagmi/experimental' — provides showCallsStatusAsync to display batch status in wallet UI"
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": true,
+      "evidence": "Has both 'Batch: Approve + Transfer (EIP-5792)' button AND 'Individual: Approve, then Transfer (2 txns)' fallback button with divider"
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": true,
+      "evidence": "disabled={isBatchPending || !connectedAddress || !isEIP5792Wallet} — explicitly checks EIP-5792 support"
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol with approve(), transferWithTracking(), mint() functions and TransferTracked event"
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "01_deploy_batch_token.ts with tag 'BatchToken'"
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "/batch-tokens page with wallet capabilities card, token info, transfer form, batch status"
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "useScaffoldReadContract for balanceOf/name/symbol/decimals/allowance, useScaffoldWriteContract for fallback, useDeployedContractInfo for batch"
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "No dependencies added to package.json — wagmi 2.19.5 already ships experimental EIP-5792 hooks"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 10,
+  "failed": 0,
+  "total": 10
+}

@@ -1,0 +1,5 @@
+{
+  "eval_id": 3,
+  "eval_name": "eip5792-batch-txns",
+  "prompt": "I want to add EIP-5792 batch transaction support to my SE-2 dApp. Create an ERC20 token contract and a frontend page where users can approve and transfer tokens in a single batch transaction using wallet_sendCalls."
+}

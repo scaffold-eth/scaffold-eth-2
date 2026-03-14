@@ -1,0 +1,119 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "ponder.config.ts does NOT import deployedContracts from the nextjs package. Instead, it hardcodes the contract address with an env variable fallback: `const YOUR_CONTRACT_ADDRESS = (process.env.PONDER_YOUR_CONTRACT_ADDRESS as `0x${string}`) ?? \"0x5FbDB2315678afecb367f032d93F642f64180aa3\"`. There is no import from packages/nextjs/contracts/deployedContracts.ts anywhere in the config."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "ponder.config.ts does NOT import or reference scaffoldConfig. The chain configuration is hardcoded: `id: 31337` and `transport: http(process.env.PONDER_RPC_URL_1 ?? \"http://127.0.0.1:8545\")`. There is no dynamic network detection based on scaffoldConfig.targetNetworks."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/ponder/package.json contains `\"name\": \"@se-2/ponder\"`, matching the SE-2 workspace naming convention (e.g., @se-2/hardhat, @se-2/nextjs)."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "src/index.ts uses `import { ponder } from \"ponder:registry\"` and `import { greetingChange, greetingSender } from \"ponder:schema\"`. src/api/index.ts uses `import { ponder } from \"ponder:registry\"`. The ponder:api module is not used, but ponder:registry is the correct modern import for API route setup."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts imports `import { index, onchainTable } from \"ponder\"` and defines tables using `onchainTable(\"greeting_change\", ...)` and `onchainTable(\"greeting_sender\", ...)`. No use of the deprecated createSchema API."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts uses `ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => { ... })` which is the correct ContractName:EventName format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts uses `await context.db.insert(greetingChange).values({ id, greetingSetter, ... })` and `await context.db.insert(greetingSender).values({ ... }).onConflictDoUpdate(...)`. Both follow the modern Ponder insert API pattern."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "src/api/index.ts uses `ponder.use(\"/graphql\", graphql())` and `ponder.use(\"/\", graphql())` with `import { graphql } from \"ponder\"`. The ponder.use() method is the Hono-based routing approach. Additionally, `hono` v4 is listed as a dependency in package.json."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "Root package.json contains three ponder proxy scripts: `\"ponder:dev\": \"yarn workspace @se-2/ponder dev\"`, `\"ponder:start\": \"yarn workspace @se-2/ponder start\"`, and `\"ponder:codegen\": \"yarn workspace @se-2/ponder codegen\"`."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": true,
+      "evidence": "packages/ponder/ponder-env.d.ts exists with content: `/// <reference types=\"@ponder/core/virtual\" />` which provides type checking and editor autocomplete for Ponder virtual modules."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  },
+  "execution_metrics": {
+    "total_tokens": 73564,
+    "tool_uses": 80,
+    "duration_ms": 388997,
+    "total_duration_seconds": 389.0
+  },
+  "timing": {
+    "executor_duration_seconds": 389.0,
+    "total_duration_seconds": 389.0
+  },
+  "claims": [
+    {
+      "claim": "The implementation indexes GreetingChange events from YourContract",
+      "type": "factual",
+      "verified": true,
+      "evidence": "src/index.ts registers a handler for \"YourContract:GreetingChange\" that inserts records into greetingChange and greetingSender tables."
+    },
+    {
+      "claim": "Two database tables are defined: greeting_change and greeting_sender",
+      "type": "factual",
+      "verified": true,
+      "evidence": "ponder.schema.ts defines both tables using onchainTable: greeting_change with 8 fields and greeting_sender with 5 fields."
+    },
+    {
+      "claim": "The frontend queries the Ponder GraphQL API using custom React hooks",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Output files include usePonderQuery.ts, useGreetingEvents.ts, and useGreetingSenders.ts hooks in packages/nextjs/hooks/ponder/, and frontend page components in packages/nextjs/app/events/."
+    },
+    {
+      "claim": "Sender aggregation tracks greeting count, last greeting, and total ETH value",
+      "type": "factual",
+      "verified": true,
+      "evidence": "greetingSender table has greetingCount, lastGreeting, lastTimestamp, and totalValue fields. The handler uses onConflictDoUpdate to increment count and accumulate value."
+    },
+    {
+      "claim": "ABI is stored locally rather than read from deployedContracts",
+      "type": "process",
+      "verified": true,
+      "evidence": "ponder.config.ts imports from './abis/YourContractAbi' and the file packages/ponder/abis/YourContractAbi.ts exists with a hardcoded ABI. This duplicates data available in deployedContracts.ts."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+        "reason": "The expectation lists three specific imports (ponder:registry, ponder:schema, ponder:api) but the implementation only uses two of them (ponder:registry and ponder:schema). The ponder:api import is not used anywhere. The assertion could be more precise about which virtual modules are required vs. optional, since modern Ponder versions use ponder:registry for API routes rather than ponder:api."
+      },
+      {
+        "reason": "No assertion checks whether the ABI is dynamically sourced from deployedContracts vs. hardcoded. The implementation duplicates the entire ABI in packages/ponder/abis/YourContractAbi.ts rather than reading it from the shared deployedContracts.ts, which goes against SE-2's DRY principle. Expectations 1 and 2 partially cover this, but a specific ABI-sourcing assertion would be valuable."
+      }
+    ],
+    "overall": "The two SE-2 integration expectations (reading deployedContracts and scaffoldConfig) are strong discriminating assertions that correctly caught the implementation taking a simpler hardcoded approach rather than integrating with the existing SE-2 infrastructure. The remaining 8 assertions are solid checks of Ponder-specific patterns."
+  }
+}

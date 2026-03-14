@@ -1,0 +1,18 @@
+{
+  "eval_id": 3,
+  "eval_name": "eip5792-batch-txns",
+  "variant": "with_skill",
+  "expectations": [
+    {"text": "useWriteContracts hook (not useSendCalls or custom encoding)", "passed": true, "evidence": "page.tsx line 7: import { useCapabilities, useWriteContracts } from \"wagmi/experimental\"; and line 72: const { writeContractsAsync, isPending: isBatchPending, data: batchId } = useWriteContracts();"},
+    {"text": "useCapabilities hook for wallet EIP-5792 support detection", "passed": true, "evidence": "page.tsx line 7: imported from wagmi/experimental, line 24: const { isSuccess: isEIP5792Wallet, data: walletCapabilities } = useCapabilities({ account: connectedAddress });"},
+    {"text": "useShowCallsStatus hook for batch transaction status display", "passed": true, "evidence": "page.tsx line 8: import { useShowCallsStatus } from \"wagmi/experimental\"; and line 73: const { showCallsStatusAsync } = useShowCallsStatus();"},
+    {"text": "Graceful fallback for wallets without EIP-5792 support", "passed": true, "evidence": "page.tsx lines 121-149: individual handleIndividualApprove and handleIndividualTransfer using useScaffoldWriteContract; lines 254-281: fallback UI section"},
+    {"text": "Batch button disabled when wallet doesn't support EIP-5792", "passed": true, "evidence": "page.tsx line 240: disabled={!isEIP5792Wallet || !isValidInput || isBatchPending || !batchTokenContract}"},
+    {"text": "ERC20 contract created with approve+transfer pattern", "passed": true, "evidence": "BatchToken.sol: contract BatchToken is ERC20 with approve and transfer; batch call lines 94-107 calls both"},
+    {"text": "Deploy script created (Hardhat deploy script)", "passed": true, "evidence": "01_deploy_batch_token.ts with DeployFunction type, uses hre.deployments.deploy, tagged [\"BatchToken\"]"},
+    {"text": "Frontend page created with batch UI", "passed": true, "evidence": "packages/nextjs/app/batch-transfer/page.tsx: full page with token info, wallet capability status, transfer form"},
+    {"text": "SE-2 scaffold hooks used: useScaffoldReadContract, useScaffoldWriteContract, useDeployedContractInfo", "passed": true, "evidence": "page.tsx lines 12-14: all three imported from ~~/hooks/scaffold-eth; used throughout"},
+    {"text": "No new dependencies added (wagmi already has EIP-5792 hooks)", "passed": true, "evidence": "No changes to package.json files; all imports from wagmi/experimental which is part of existing wagmi dependency"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

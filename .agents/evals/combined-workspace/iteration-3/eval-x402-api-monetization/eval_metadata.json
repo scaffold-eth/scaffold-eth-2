@@ -1,0 +1,17 @@
+{
+  "eval_id": 0,
+  "eval_name": "x402-api-monetization",
+  "prompt": "I want to monetize an API endpoint in my SE-2 dApp with micropayments. When someone calls my API, they should pay a small amount of USDC to access the data.",
+  "assertions": [
+    "middleware.ts file exists in packages/nextjs/",
+    "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)",
+    "Calls registerExactEvmScheme(server) in middleware",
+    "Uses CAIP-2 network format (eip155:84532) not legacy names",
+    "Creates paywall with createPaywall().withNetwork(evmPaywall)",
+    "A protected API route handler exists",
+    "Environment variables for facilitator, wallet, network configured",
+    "x402 packages added to nextjs package.json",
+    "Middleware matcher covers protected routes",
+    "scaffold.config.ts targets baseSepolia"
+  ]
+}

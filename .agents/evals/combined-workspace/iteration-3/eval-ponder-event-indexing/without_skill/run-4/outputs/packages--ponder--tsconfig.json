@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "strict": true,
+    "rootDir": ".",
+    "composite": true
+  },
+  "include": ["ponder-env.d.ts", "ponder.config.ts", "ponder.schema.ts", "src/**/*.ts"]
+}

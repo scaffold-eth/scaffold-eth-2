@@ -1,0 +1,79 @@
+{
+  "skill_name": "x402",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I want to monetize an API endpoint in my SE-2 dApp with micropayments. When someone calls my API, they should pay a small amount of USDC to access the data.",
+      "expected_output": "A working x402 integration with middleware.ts, protected API route, env vars, and correct v2 API usage",
+      "files": [],
+      "assertions": [
+        {
+          "id": "middleware-exists",
+          "description": "middleware.ts file exists in packages/nextjs/",
+          "type": "file_exists",
+          "path": "packages/nextjs/middleware.ts"
+        },
+        {
+          "id": "v2-api-imports",
+          "description": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient) not v1",
+          "type": "content_match",
+          "file": "packages/nextjs/middleware.ts",
+          "patterns": ["paymentProxy", "x402ResourceServer", "HTTPFacilitatorClient"]
+        },
+        {
+          "id": "register-evm-scheme",
+          "description": "Calls registerExactEvmScheme(server) in middleware to enable EVM payment processing",
+          "type": "content_match",
+          "file": "packages/nextjs/middleware.ts",
+          "patterns": ["registerExactEvmScheme"]
+        },
+        {
+          "id": "caip2-network",
+          "description": "Uses CAIP-2 network identifier format (eip155:84532) not legacy names like 'base-sepolia'",
+          "type": "content_match",
+          "patterns": ["eip155:84532"]
+        },
+        {
+          "id": "paywall-setup",
+          "description": "Creates paywall UI with createPaywall().withNetwork(evmPaywall) pattern",
+          "type": "content_match",
+          "file": "packages/nextjs/middleware.ts",
+          "patterns": ["createPaywall", "evmPaywall"]
+        },
+        {
+          "id": "api-route-created",
+          "description": "A protected API route handler exists (under /api/payment/ or similar)",
+          "type": "file_exists_glob",
+          "pattern": "packages/nextjs/app/api/payment/**/*.ts"
+        },
+        {
+          "id": "env-vars-configured",
+          "description": "Environment variables for facilitator URL, wallet address, and network are set up",
+          "type": "content_match",
+          "patterns": ["FACILITATOR_URL", "RESOURCE_WALLET_ADDRESS", "NETWORK"]
+        },
+        {
+          "id": "correct-dependencies",
+          "description": "x402 packages (@x402/core, @x402/evm, @x402/next, @x402/paywall) added to nextjs package.json",
+          "type": "content_match",
+          "file": "packages/nextjs/package.json",
+          "patterns": ["@x402/core", "@x402/next"]
+        },
+        {
+          "id": "matcher-config",
+          "description": "Next.js middleware matcher config covers the protected routes",
+          "type": "content_match",
+          "file": "packages/nextjs/middleware.ts",
+          "patterns": ["matcher"]
+        },
+        {
+          "id": "scaffold-config-basesepolia",
+          "description": "scaffold.config.ts targets baseSepolia for x402 (not hardhat localhost)",
+          "type": "content_match",
+          "file": "packages/nextjs/scaffold.config.ts",
+          "patterns": ["baseSepolia"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": false,
+      "evidence": "The implementation uses `useSendCalls` from wagmi (line 6 of BatchTransferForm.tsx: `import { useAccount, useSendCalls, useWaitForCallsStatus } from \"wagmi\"`) with manual `encodeFunctionData` encoding instead of `useWriteContracts` from `wagmi/experimental`. The calls are passed as `{ to, data }` objects with pre-encoded data rather than the higher-level `useWriteContracts` interface that accepts `{ address, abi, functionName, args }`."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": false,
+      "evidence": "There is no import or usage of `useCapabilities` anywhere in the codebase. Grep of the worktree's nextjs directory shows only `useSendCalls` and `useWaitForCallsStatus` \u2014 no capability detection is performed."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "The implementation uses `useWaitForCallsStatus` (line 47 of BatchTransferForm.tsx) to poll for batch status, not `useShowCallsStatus`. While `useWaitForCallsStatus` does display status information, it is a different hook \u2014 `useShowCallsStatus` delegates to the wallet's native status UI, whereas `useWaitForCallsStatus` is a polling-based approach with custom UI rendering."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": false,
+      "evidence": "There is no fallback mechanism. The implementation only provides the batch path via `useSendCalls`. There is no `useScaffoldWriteContract` fallback for wallets that don't support EIP-5792. No conditional rendering checks wallet capabilities before showing batch UI. The summary.md mentions 'wagmi/viem provide a fallback that sends the calls sequentially' but this is a claim about wagmi internals, not an explicit graceful degradation UI pattern in the code."
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": false,
+      "evidence": "The batch button's `disabled` prop on line 213 is: `disabled={isSendingCalls || !connectedAddress || !recipientAddress || !amount}`. There is no EIP-5792 capability check in the disabled condition. Without `useCapabilities`, the button is always enabled for connected wallets regardless of EIP-5792 support."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol exists at `packages/hardhat/contracts/BatchToken.sol`. It is a valid ERC-20 contract inheriting OpenZeppelin's ERC20, with a constructor that mints 1,000,000 tokens to the initial owner. The frontend BatchTransferForm.tsx implements the approve+transferFrom pattern by encoding two calls: `approve(recipient, amount)` and `transferFrom(sender, recipient, amount)` using viem's `encodeFunctionData` with `erc20Abi`."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "File `packages/hardhat/deploy/01_deploy_batch_token.ts` exists in the worktree. It follows the hardhat-deploy pattern correctly: uses `DeployFunction`, gets `deployer` from named accounts, deploys 'BatchToken' with `args: [deployer]`, includes `log: true` and `autoMine: true`, and has `deployBatchToken.tags = [\"BatchToken\"]`."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "Two frontend files were created: `packages/nextjs/app/batch-transfer/page.tsx` (the Next.js page) and `packages/nextjs/app/batch-transfer/_components/BatchTransferForm.tsx` (the main form component). The page renders a title, description, and the BatchTransferForm component. The form includes recipient address input, amount input, batch preview, send button, and transaction status display. The Header.tsx was also modified to add a 'Batch Transfer' navigation link."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "BatchTransferForm.tsx imports and uses several SE-2 scaffold hooks: `useScaffoldReadContract` for reading `balanceOf`, `decimals`, `symbol`, and `allowance` (lines 21-43); `useDeployedContractInfo` for getting the deployed contract address (line 19); `useTargetNetwork` for chain information (line 13). It also uses SE-2 utilities: `notification` from `~~/utils/scaffold-eth` and `getParsedError` from `~~/utils/scaffold-eth/getParsedError`, and SE-2 UI components `AddressInput`, `IntegerInput`, `Address` from `@scaffold-ui/components`."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "The implementation imports `useSendCalls` and `useWaitForCallsStatus` directly from `wagmi` (line 6 of BatchTransferForm.tsx), which is already a dependency in package.json at version 2.19.5. No new dependencies were added to package.json."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 5,
+    "total": 10,
+    "pass_rate": 0.5
+  },
+  "execution_metrics": {
+    "total_tool_calls": 68,
+    "output_chars": 17800,
+    "transcript_chars": 328300
+  },
+  "timing": {
+    "executor_duration_seconds": 337.2,
+    "total_duration_seconds": 337.2
+  },
+  "claims": [
+    {
+      "claim": "Both operations execute atomically when supported by the wallet",
+      "type": "quality",
+      "verified": false,
+      "evidence": "The implementation uses `useSendCalls` which sends raw encoded call data. While the summary.md claims atomic execution, `useSendCalls` is a lower-level hook than `useWriteContracts`. The atomicity depends on the wallet implementation, and no capability check is done to verify this."
+    },
+    {
+      "claim": "For wallets that don't natively support batching, wagmi/viem provide a fallback that sends the calls sequentially",
+      "type": "factual",
+      "verified": false,
+      "evidence": "This claim in summary.md about wagmi's built-in sequential fallback for `useSendCalls` is not verified from the code. The wagmi docs indicate that `useSendCalls` corresponds to `wallet_sendCalls` JSON-RPC method, which would simply fail for wallets that don't support EIP-5792. The implementation provides no explicit fallback."
+    },
+    {
+      "claim": "Uses useScaffoldReadContract to show current contract values",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Confirmed in BatchTransferForm.tsx lines 21-43: four useScaffoldReadContract calls for balanceOf, decimals, symbol, and allowance."
+    },
+    {
+      "claim": "The deployer receives an initial supply of 1,000,000 tokens",
+      "type": "factual",
+      "verified": true,
+      "evidence": "BatchToken.sol line 13: `_mint(_initialOwner, 1_000_000 * 10 ** decimals())` and deploy script passes `deployer` as the constructor argument."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+        "reason": "This assertion is quite specific about the hook name. Both `useWriteContracts` and `useSendCalls` implement EIP-5792's `wallet_sendCalls` under the hood. `useWriteContracts` is higher-level (accepts ABI+functionName), while `useSendCalls` is lower-level (accepts raw encoded data). The assertion could be more precise about WHY `useWriteContracts` is preferred \u2014 it provides type safety and avoids manual encoding errors."
+      },
+      {
+        "assertion": "Uses useShowCallsStatus for batch transaction status display",
+        "reason": "The implementation used `useWaitForCallsStatus` which actually provides MORE functionality (polling + data) than `useShowCallsStatus` (which just opens the wallet's native UI). Both are valid EIP-5792 approaches. The assertion could clarify whether wallet-native UI delegation or custom status UI is the goal."
+      },
+      {
+        "reason": "No assertion checks whether the approve+transferFrom pattern is logically correct. The current implementation approves the recipient to spend tokens, then calls transferFrom(sender, recipient, amount) \u2014 but transferFrom requires the CALLER to have allowance, and the caller IS the sender. The approve sets allowance for the recipient, but the transferFrom is called by the sender. In a batch context this would fail because the sender approved the recipient, but then the sender (not the recipient) is calling transferFrom. The correct pattern would be approve(spender, amount) where spender is a contract, or just use transfer() directly. This functional correctness issue goes uncaught."
+      }
+    ],
+    "overall": "The assertions effectively distinguish between implementations that use the recommended hooks (useWriteContracts, useCapabilities, useShowCallsStatus) versus alternatives. However, functional correctness of the approve+transferFrom batching logic is not tested \u2014 the current implementation has a logical flaw where the approve target and transferFrom caller don't align properly."
+  }
+}

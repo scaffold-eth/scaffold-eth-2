@@ -1,0 +1,61 @@
+{
+  "eval_id": 0,
+  "eval_name": "x402-api-monetization",
+  "variant": "without_skill",
+  "expectations": [
+    {
+      "text": "middleware.ts file exists in packages/nextjs/",
+      "passed": true,
+      "evidence": "packages/nextjs/middleware.ts created — middleware file exists"
+    },
+    {
+      "text": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)",
+      "passed": false,
+      "evidence": "Uses 'paymentMiddleware' from 'x402-next' (v1 API). Missing paymentProxy, x402ResourceServer, HTTPFacilitatorClient — all v2 constructs"
+    },
+    {
+      "text": "Calls registerExactEvmScheme(server) in middleware",
+      "passed": false,
+      "evidence": "No registerExactEvmScheme call anywhere. Uses old v1 paymentMiddleware() pattern which doesn't require explicit scheme registration"
+    },
+    {
+      "text": "Uses CAIP-2 network format (eip155:84532) not legacy names",
+      "passed": false,
+      "evidence": "Uses legacy name 'base-sepolia' in x402.config.ts (line 29). CAIP-2 format eip155:84532 not used anywhere"
+    },
+    {
+      "text": "Creates paywall with createPaywall().withNetwork(evmPaywall)",
+      "passed": false,
+      "evidence": "No createPaywall() or evmPaywall usage. Middleware has no paywall UI — browser visitors would get raw 402 JSON responses"
+    },
+    {
+      "text": "A protected API route handler exists",
+      "passed": true,
+      "evidence": "packages/nextjs/app/api/premium-data/route.ts created — functionally equivalent protected route"
+    },
+    {
+      "text": "Environment variables for facilitator, wallet, network configured",
+      "passed": true,
+      "evidence": ".env.example has X402_PAY_TO_ADDRESS, X402_FACILITATOR_URL, NEXT_PUBLIC_X402_NETWORK — different names but same purpose"
+    },
+    {
+      "text": "x402 packages added to nextjs package.json",
+      "passed": false,
+      "evidence": "Uses wrong package names: 'x402-fetch' and 'x402-next' (non-scoped, likely v1 or nonexistent). Should be @x402/core, @x402/next, @x402/evm, @x402/paywall"
+    },
+    {
+      "text": "Middleware matcher covers protected routes",
+      "passed": true,
+      "evidence": "matcher: [\"/api/premium-data/:path*\"] — covers the created route"
+    },
+    {
+      "text": "scaffold.config.ts targets baseSepolia",
+      "passed": true,
+      "evidence": "targetNetworks includes chains.baseSepolia — though also kept chains.hardhat (skill warns against this)"
+    }
+  ],
+  "pass_rate": 0.5,
+  "passed": 5,
+  "failed": 5,
+  "total": 10
+}

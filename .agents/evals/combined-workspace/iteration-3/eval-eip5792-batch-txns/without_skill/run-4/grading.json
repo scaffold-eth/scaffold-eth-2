@@ -1,0 +1,75 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": false,
+      "evidence": "Both frontend pages (batch-send_page.tsx and packages--nextjs--app--batch-transfer--page.tsx) use useSendCalls from wagmi with manual encodeFunctionData, not useWriteContracts. Import: 'import { useAccount, useSendCalls, useWaitForCallsStatus } from \"wagmi\"'. The expectation specifically requires useWriteContracts and explicitly disallows useSendCalls."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": false,
+      "evidence": "Neither frontend page imports or uses useCapabilities. No capability detection is performed anywhere in the output files. The code does not check whether the connected wallet supports EIP-5792 before attempting to use it."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "The code uses useWaitForCallsStatus (a polling-based hook) instead of useShowCallsStatus (which leverages the wallet's native UI for status display). Import: 'import { useAccount, useSendCalls, useWaitForCallsStatus } from \"wagmi\"'. useShowCallsStatus is not imported or used anywhere."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": false,
+      "evidence": "There is no fallback mechanism for wallets that don't support EIP-5792. The batch-transfer page has a text note 'Not all wallets support EIP-5792 yet' but provides no actual fallback UI or alternative transaction flow (e.g., sequential individual transactions). Without useCapabilities detection, the code cannot even determine if fallback is needed."
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": false,
+      "evidence": "The batch button is disabled only when 'isBatchPending || !connectedAddress'. There is no check for EIP-5792 capability support. Without useCapabilities, the code has no way to detect and conditionally disable the button based on wallet EIP-5792 support."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol is a standard ERC20 contract inheriting from OpenZeppelin's ERC20. It mints 1,000,000 tokens to the initial owner. The frontend uses this contract with approve+transfer pattern via batch calls (encodeFunctionData with erc20Abi for both 'approve' and 'transfer' function calls)."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "01_deploy_batch_token.ts is a proper Hardhat deploy script using DeployFunction type, getNamedAccounts(), hre.deployments.deploy(), with proper tags ['BatchToken']. It deploys the BatchToken contract with the deployer as the initial owner."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "Two versions of the frontend page exist: batch-send_page.tsx and packages--nextjs--app--batch-transfer--page.tsx. Both provide a complete batch UI with token info display, spender/recipient address inputs, amount input, batch submit button, and status display. The Header.tsx files add navigation links to the batch page."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "Both frontend pages use SE-2 scaffold hooks: useScaffoldReadContract for reading balanceOf, symbol, decimals, allowance; useDeployedContractInfo for getting contract address; useTargetNetwork for network info. Imports from '~~/hooks/scaffold-eth' and '~~/utils/scaffold-eth'. Also uses @scaffold-ui/components (Address, AddressInput, IntegerInput)."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "All imports are from existing dependencies: wagmi (useSendCalls, useWaitForCallsStatus, useAccount), viem (encodeFunctionData, erc20Abi, parseUnits), @scaffold-ui/components, and SE-2 internal hooks. No new packages are installed or referenced. The summary.md confirms using 'wagmi's useSendCalls hook (stable API in wagmi 2.19.5, not experimental)'."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 5,
+    "total": 10,
+    "pass_rate": 0.5
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Use useWriteContracts hook instead of useSendCalls for a higher-level abstraction that handles ABI encoding automatically without needing manual encodeFunctionData calls",
+      "Add useCapabilities hook to detect wallet EIP-5792 support before attempting batch transactions",
+      "Replace useWaitForCallsStatus with useShowCallsStatus to leverage the wallet's native transaction status UI",
+      "Implement a graceful fallback path (e.g., sequential useScaffoldWriteContract calls) for wallets that don't support EIP-5792",
+      "Use the capabilities data from useCapabilities to conditionally disable the batch button and show a fallback UI when the wallet lacks EIP-5792 support"
+    ],
+    "overall": "The implementation covers the basic infrastructure well (ERC20 contract, deploy script, frontend page, SE-2 hooks, no extra dependencies) but misses the key EIP-5792 best practices. It uses the lower-level useSendCalls with manual encoding instead of useWriteContracts, lacks wallet capability detection via useCapabilities, doesn't use useShowCallsStatus for status display, and provides no fallback for unsupported wallets. The result is a functional but incomplete EIP-5792 integration that would fail for users with wallets that don't support the standard."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "eval_id": 2,
+  "eval_name": "ponder-event-indexing",
+  "prompt": "I want to index events from my YourContract smart contract using Ponder. Set up a Ponder indexer that listens for GreetingChange events and exposes them via a GraphQL API."
+}

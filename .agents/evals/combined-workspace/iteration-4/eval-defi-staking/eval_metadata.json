@@ -1,0 +1,17 @@
+{
+  "eval_id": 4,
+  "eval_name": "defi-staking",
+  "prompt": "Build a staking dApp where users can stake an ERC-20 token and earn rewards over time. Include the smart contract and a frontend to stake, unstake, and view rewards.",
+  "assertions": [
+    "Staking contract has stake, withdraw, and getReward (or claimReward) functions",
+    "Reward calculation uses rewardPerToken stored pattern (not naive block-by-block)",
+    "ReentrancyGuard (nonReentrant) applied to stake and withdraw functions",
+    "Separate ERC-20 token contract exists for the staking token",
+    "Frontend page shows staking, unstaking, and rewards viewing",
+    "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+    "Proper Hardhat deploy script(s) exist in packages/hardhat/deploy/",
+    "Events emitted for stake, withdraw, and reward claim actions",
+    "updateReward modifier or equivalent pattern updates rewards before state changes",
+    "Contracts compile successfully with valid Solidity syntax"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": false,
+      "evidence": "server-db-index.ts hardcodes a single driver: `import { neon } from '@neondatabase/serverless'; import { drizzle } from 'drizzle-orm/neon-http';`. There is no URL inspection, no NEXT_RUNTIME check, and no conditional logic to select between Neon serverless WebSocket, Neon HTTP, or local pg drivers. The connection is fixed to neon-http only."
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": false,
+      "evidence": "server-db-index.ts eagerly creates the connection at module scope: `const sql = neon(process.env.DATABASE_URL); export const db = drizzle(sql, { schema });`. There is no Proxy, no lazy getter, and no deferred initialization. Importing this module immediately invokes neon() and drizzle()."
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": false,
+      "evidence": "drizzle.config.ts has no `casing` property \u2014 it only defines `out`, `schema`, `dialect`, and `dbCredentials`. The drizzle() call in server-db-index.ts is `drizzle(sql, { schema })` with no casing option. While the schema manually maps column names like `created_at` in timestamp definitions, the Drizzle `casing: 'snake_case'` config option is absent from both locations."
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "Output files services-database-api.ts and services-database-queries.ts contain substantive code at the services/database/ path. api.ts has typed fetch functions (fetchUsers, fetchUserById, fetchUserByAddress, createUser, updateUser, deleteUser) and queries.ts has react-query hooks (useUsers, useUserByAddress, useCreateUser, useUpdateUser, useDeleteUser) with query key factory and cache invalidation. The database page imports confirm the path: `import { ... } from '~~/services/database/queries'`."
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": false,
+      "evidence": "There is no repository abstraction. API routes in api-users-route.ts and api-users-id-route.ts use Drizzle ORM queries directly (e.g., `db.select().from(users).where(eq(users.address, address.toLowerCase()))` and `db.insert(users).values({...}).returning()`). The services/database/ files are client-side fetch wrappers over HTTP, not server-side repository modules. No repository class or function collection encapsulates database operations."
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": false,
+      "evidence": "Root package.json has db:generate, db:migrate, db:push, db:seed, and db:studio proxy scripts, but there is no db:wipe script. There is also no direct drizzle-kit proxy script. The expectation specifically requires db:wipe which is absent."
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": false,
+      "evidence": "No docker-compose.yml or Docker-related content exists in any output file. The implementation is Neon-cloud-only. The summary.md instructs users to 'Create a Neon PostgreSQL database at https://neon.tech' with no local PostgreSQL development option provided."
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": false,
+      "evidence": "The env.example file explicitly says 'For local development, copy this file, rename it to .env.local, and fill in the values.' The summary.md also instructs 'Copy the connection string to packages/nextjs/.env.local as DATABASE_URL'. No .env.development file or reference exists anywhere in the outputs."
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": false,
+      "evidence": "No PRODUCTION_DATABASE_HOSTNAME check exists anywhere in the output files. The only safety guard in server-db-index.ts is `if (!process.env.DATABASE_URL) { throw new Error(...) }`, which checks for presence but provides no production hostname verification or destructive operation protection."
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": false,
+      "evidence": "Present in nextjs-package.json: drizzle-orm (dependencies), @neondatabase/serverless (dependencies), dotenv (devDependencies), drizzle-kit (devDependencies), tsx (devDependencies). Missing: pg (no local PostgreSQL driver at all), drizzle-seed (not listed \u2014 seed script manually inserts data instead of using drizzle-seed utilities), @types/pg (not listed \u2014 no TypeScript types for pg). 5 of 8 required dependencies are present; 3 are absent."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 9,
+    "total": 10,
+    "pass_rate": 0.1
+  },
+  "execution_metrics": {
+    "tool_calls": {},
+    "total_tool_calls": 53,
+    "total_steps": 0,
+    "errors_encountered": 0,
+    "output_chars": 25600,
+    "transcript_chars": 91389
+  },
+  "timing": {
+    "total_duration_seconds": 335.6
+  },
+  "claims": [
+    {
+      "claim": "Full off-chain PostgreSQL database integration using Drizzle ORM with Neon serverless PostgreSQL",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The implementation creates a working Drizzle ORM setup with Neon serverless, including schema, connection module, API routes, client-side hooks, seed/migration scripts, and a UI page. However it is Neon-HTTP-only with no multi-driver support."
+    },
+    {
+      "claim": "Uses hardhat default addresses for seed data",
+      "type": "factual",
+      "verified": true,
+      "evidence": "server-db-seed.ts uses 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266, 0x70997970c51812dc3a010c7d01b50e0d17dc79c8, 0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc which are standard Hardhat account addresses."
+    },
+    {
+      "claim": "React-query hooks with automatic cache invalidation on mutations",
+      "type": "factual",
+      "verified": true,
+      "evidence": "services-database-queries.ts uses useQueryClient() and queryClient.invalidateQueries({queryKey: userKeys.all}) in onSuccess callbacks of useCreateUser, useUpdateUser, and useDeleteUser mutations."
+    },
+    {
+      "claim": "Database management UI page uses DaisyUI components and SE-2 patterns",
+      "type": "quality",
+      "verified": true,
+      "evidence": "app-database-page.tsx uses DaisyUI classes throughout: card, card-body, card-title, btn btn-primary, btn-error, btn-success, btn-ghost, input input-bordered, textarea textarea-bordered, alert alert-info, table, form-control, label, label-text, loading loading-spinner. It also uses SE-2 patterns: Address component from @scaffold-ui/components, notification from ~~/utils/scaffold-eth, useTargetNetwork hook, NextPage type."
+    },
+    {
+      "claim": "CRUD API routes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "api-users-route.ts handles GET (list all / filter by address) and POST (create user with address validation and duplicate detection). api-users-id-route.ts handles GET (single user by ID), PUT (update), and DELETE. All CRUD operations are present with proper error handling and status codes."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Files at services/database/ path (SE-2 convention)",
+        "reason": "This assertion is the easiest to satisfy \u2014 placing files in the right directory is a low bar. Consider also checking for specific patterns like react-query key factories, typed API service functions, or proper separation between api.ts (fetch layer) and queries.ts (react-query hooks) to ensure the content follows SE-2 conventions, not just the path."
+      },
+      {
+        "assertion": "Repository pattern for database access",
+        "reason": "The assertion is somewhat vague. It would be more discriminating to check for a specific file pattern (e.g., server/db/repositories/users.ts or server/db/queries/users.ts) that exports functions like findUserByAddress() which encapsulate raw Drizzle queries, kept separate from API route handlers."
+      },
+      {
+        "reason": "No assertion checks whether the schema uses proper Drizzle type inference patterns ($inferSelect/$inferInsert), which the implementation actually does well (exports User and NewUser types). This positive outcome goes unmeasured."
+      },
+      {
+        "reason": "No assertion checks the quality of the API routes \u2014 e.g., whether they validate Ethereum address format, handle unique constraint violations, or use proper HTTP status codes. The implementation does all of these well but they are not verified."
+      }
+    ],
+    "overall": "The without-skill run scored 1/10, demonstrating the eval's strong discriminating power. The implementation is a functional but basic Neon-HTTP-only Drizzle integration without any of the sophisticated production patterns expected: no tri-driver auto-detection, no lazy proxy, no snake_case casing config, no Docker Compose, no production safety guards, and missing several dependencies. The expectations are well-designed to distinguish between a naive implementation and a production-ready one informed by the skill."
+  }
+}

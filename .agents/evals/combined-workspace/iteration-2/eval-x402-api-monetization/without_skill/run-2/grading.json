@@ -1,0 +1,18 @@
+{
+  "eval_id": 0,
+  "eval_name": "x402-api-monetization",
+  "variant": "without_skill",
+  "expectations": [
+    {"text": "middleware.ts file exists in packages/nextjs/", "passed": true, "evidence": "File exists at packages/nextjs/middleware.ts"},
+    {"text": "Uses x402 v2 API (paymentProxy, x402ResourceServer, HTTPFacilitatorClient)", "passed": true, "evidence": "middleware.ts: import { paymentProxy } from '@x402/next'; import { x402ResourceServer, HTTPFacilitatorClient } from '@x402/core/server'"},
+    {"text": "Calls registerExactEvmScheme(server) in middleware", "passed": true, "evidence": "middleware.ts line 3: import { registerExactEvmScheme } from '@x402/evm/exact/server'; line 21: registerExactEvmScheme(server)"},
+    {"text": "Uses CAIP-2 network format (eip155:84532) not legacy names", "passed": true, "evidence": "middleware.ts line 10: const NETWORK = process.env.X402_NETWORK || 'eip155:84532'"},
+    {"text": "Creates paywall with createPaywall().withNetwork(evmPaywall)", "passed": true, "evidence": "middleware.ts: import { createPaywall } from '@x402/paywall'; import { evmPaywall } from '@x402/paywall/evm'; createPaywall().withNetwork(evmPaywall).withConfig({testnet: true}).build()"},
+    {"text": "A protected API route handler exists", "passed": true, "evidence": "packages/nextjs/app/api/protected/data/route.ts with exported GET handler"},
+    {"text": "Environment variables for facilitator, wallet, network configured", "passed": true, "evidence": ".env.example has FACILITATOR_URL, RESOURCE_WALLET_ADDRESS, X402_NETWORK"},
+    {"text": "x402 packages added to nextjs package.json", "passed": true, "evidence": "package.json: @x402/core: ^0.1.0, @x402/evm: ^0.1.0, @x402/next: ^0.1.0, @x402/paywall: ^0.1.0"},
+    {"text": "Middleware matcher covers protected routes", "passed": true, "evidence": "middleware.ts: export const config = { matcher: ['/api/protected/:path*'] }"},
+    {"text": "scaffold.config.ts targets baseSepolia", "passed": true, "evidence": "scaffold.config.ts: targetNetworks: [chains.baseSepolia]"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

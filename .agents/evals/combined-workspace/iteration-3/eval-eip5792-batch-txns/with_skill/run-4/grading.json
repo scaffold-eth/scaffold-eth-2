@@ -1,0 +1,72 @@
+{
+  "expectations": [
+    {
+      "text": "Uses useWriteContracts hook (not useSendCalls or custom encoding)",
+      "passed": true,
+      "evidence": "Both page files import and use `useWriteContracts` from `wagmi/experimental`. In batch-transfer_page.tsx line 8: `import { useCapabilities, useWriteContracts } from \"wagmi/experimental\";` and line 29: `const { writeContractsAsync, isPending: isBatchPending } = useWriteContracts();`. The packages--nextjs version also uses the same pattern at line 8 and line 59. No useSendCalls or custom encoding is used."
+    },
+    {
+      "text": "Uses useCapabilities for wallet EIP-5792 support detection",
+      "passed": true,
+      "evidence": "Both page files import and use `useCapabilities` from `wagmi/experimental`. In batch-transfer_page.tsx lines 24-26: `const { isSuccess: isEIP5792Wallet } = useCapabilities({ account: connectedAddress });`. The packages--nextjs version at lines 19-21 also uses `useCapabilities` with `isSuccess: isEIP5792Wallet` and `data: walletCapabilities`."
+    },
+    {
+      "text": "Uses useShowCallsStatus for batch transaction status display",
+      "passed": false,
+      "evidence": "Neither page file imports or uses `useShowCallsStatus`. The batch-transfer_page.tsx file only imports `useCapabilities` and `useWriteContracts` from wagmi/experimental. The packages--nextjs version similarly does not use `useShowCallsStatus`. Transaction status is shown via `notification` utility instead."
+    },
+    {
+      "text": "Provides graceful fallback for wallets without EIP-5792 support",
+      "passed": true,
+      "evidence": "Both page files implement a fallback. In batch-transfer_page.tsx, lines 147-189 define `handleIndividualApproveAndTransfer` using `useScaffoldWriteContract` for sequential approve then transfer with step-by-step notifications. The UI conditionally renders batch vs individual buttons based on `isEIP5792Wallet` (lines 289-313). The packages--nextjs version similarly provides individual approve (line 93) and transfer (line 110) functions with separate buttons below a divider (lines 226-250)."
+    },
+    {
+      "text": "Batch button conditionally disabled when wallet doesn't support EIP-5792",
+      "passed": true,
+      "evidence": "In batch-transfer_page.tsx, the batch button is only rendered when `isEIP5792Wallet` is true (line 289 conditional rendering). In the packages--nextjs version, the batch button is explicitly disabled with `disabled={!isEIP5792Wallet || isBatchPending || !recipient || !amount}` at line 207. Both approaches effectively prevent batch usage when EIP-5792 is not supported."
+    },
+    {
+      "text": "ERC20 smart contract with approve+transfer pattern created",
+      "passed": true,
+      "evidence": "BatchToken.sol extends OpenZeppelin's ERC20: `contract BatchToken is ERC20`. It inherits standard approve() and transfer() functions from ERC20. The batch-transfer page uses both approve and transfer in the batch call (lines 121-133 in batch-transfer_page.tsx). The contract includes a mint function for testing. Both versions of the contract file confirm this."
+    },
+    {
+      "text": "Hardhat deploy script created",
+      "passed": true,
+      "evidence": "01_deploy_batch_token.ts is a proper Hardhat deploy script using `hardhat-deploy` plugin. It imports `HardhatRuntimeEnvironment` and `DeployFunction`, uses `hre.getNamedAccounts()` and `hre.deployments.deploy()`, sets `autoMine: true`, and exports with `deployBatchToken.tags = [\"BatchToken\"]`. Both versions of the deploy script confirm this."
+    },
+    {
+      "text": "Frontend page with batch UI created",
+      "passed": true,
+      "evidence": "batch-transfer_page.tsx (and its packages-- counterpart) is a full Next.js page with batch UI including: token info display, mint section, batch approve+transfer form with recipient address input, amount input, batch and fallback buttons, and explanatory content. The Header.tsx was also modified to include a 'Batch Transfer' navigation link at line 24-27."
+    },
+    {
+      "text": "Uses SE-2 scaffold hooks for contract interaction",
+      "passed": true,
+      "evidence": "Both page files use SE-2 scaffold hooks: `useScaffoldReadContract` for reading contract state (name, symbol, decimals, balanceOf, allowance), `useScaffoldWriteContract` for individual write operations (mint, approve, transfer fallback), and `useDeployedContractInfo` to get contract ABI/address for batch calls. All imported from `~~/hooks/scaffold-eth`."
+    },
+    {
+      "text": "No new npm dependencies needed (wagmi already has EIP-5792 hooks)",
+      "passed": true,
+      "evidence": "The implementation only imports from `wagmi/experimental` (useCapabilities, useWriteContracts), `wagmi` (useAccount), `viem` (formatUnits, parseUnits), and SE-2's existing hooks/utilities. No new package installations are mentioned in the summary, and no package.json changes appear in the outputs. All hooks used are already available in wagmi's experimental module."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add `useShowCallsStatus` from wagmi/experimental to display real-time batch transaction status (pending, confirmed, etc.) instead of relying solely on notification toasts. This hook provides a richer UX for tracking multi-call batch transactions.",
+      "The implementation has two sets of output files (short names like BatchToken.sol and long names like packages--hardhat--contracts--BatchToken.sol) with slightly different implementations. The packages-- versions appear to be an alternative variant. The primary files are well-structured and follow SE-2 conventions closely."
+    ],
+    "overall": "Strong implementation that hits 9 of 10 expectations. The core EIP-5792 pattern is correctly implemented with useWriteContracts for batching and useCapabilities for wallet detection. The graceful fallback with individual scaffold hooks is well done. The only gap is the missing useShowCallsStatus hook for batch transaction status display, which would provide better UX feedback for tracking the state of batch calls as they process."
+  },
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  }
+}

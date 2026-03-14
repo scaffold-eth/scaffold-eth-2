@@ -1,0 +1,114 @@
+{
+  "expectations": [
+    {
+      "text": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+      "passed": false,
+      "evidence": "ponder.config.ts imports the ABI from a local './abis/YourContract' file and uses a hardcoded address '0x5FbDB2315678afecb367f032d93F642f64180aa3' (with env var override). There is no import of deployedContracts from the SE-2 nextjs package. The ABI was manually copied into packages/ponder/abis/YourContract.ts rather than reading it from packages/nextjs/contracts/deployedContracts.ts."
+    },
+    {
+      "text": "ponder.config.ts reads scaffoldConfig for network detection",
+      "passed": false,
+      "evidence": "ponder.config.ts hardcodes chainId 31337 and the localhost network configuration. There is no import of scaffoldConfig from packages/nextjs/scaffold.config.ts. Grep for 'scaffoldConfig' in the ponder package returned no matches."
+    },
+    {
+      "text": "Package named @se-2/ponder following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/ponder/package.json contains '\"name\": \"@se-2/ponder\"', matching the SE-2 workspace naming convention (e.g., @se-2/hardhat, @se-2/nextjs)."
+    },
+    {
+      "text": "Uses Ponder virtual module imports (ponder:registry, ponder:schema, ponder:api)",
+      "passed": true,
+      "evidence": "src/index.ts imports from 'ponder:registry' and 'ponder:schema'. src/api/index.ts imports from 'ponder:api' and 'ponder:schema'. All three virtual module imports are present and used correctly."
+    },
+    {
+      "text": "Schema uses onchainTable (not older createSchema API)",
+      "passed": true,
+      "evidence": "ponder.schema.ts uses 'import { onchainTable, index } from \"ponder\";' and defines the table with 'export const greetingChange = onchainTable(\"greeting_change\", ...)'. This is the modern API, not the deprecated createSchema."
+    },
+    {
+      "text": "Handler uses 'ContractName:EventName' format",
+      "passed": true,
+      "evidence": "src/index.ts contains 'ponder.on(\"YourContract:GreetingChange\", async ({ event, context }) => { ... })' which uses the correct 'ContractName:EventName' format."
+    },
+    {
+      "text": "Uses context.db.insert(table).values({}) for writes",
+      "passed": true,
+      "evidence": "src/index.ts contains 'await context.db.insert(greetingChange).values({ id: ..., greetingSetter: ..., ... })' which is the correct modern Ponder write API pattern."
+    },
+    {
+      "text": "Hono-based API setup for GraphQL (not old express-style)",
+      "passed": true,
+      "evidence": "src/api/index.ts creates a Hono app with 'const app = new Hono();' and uses 'app.use(\"/graphql\", graphql({ db, schema }));'. The package.json includes 'hono' as a dependency at '^4.0.0'. This is the modern Hono-based API pattern, not the old express-style."
+    },
+    {
+      "text": "Root package.json has ponder proxy scripts",
+      "passed": true,
+      "evidence": "The root package.json contains three ponder proxy scripts: '\"ponder:dev\": \"yarn workspace @se-2/ponder dev\"', '\"ponder:start\": \"yarn workspace @se-2/ponder start\"', and '\"ponder:codegen\": \"yarn workspace @se-2/ponder codegen\"'."
+    },
+    {
+      "text": "ponder-env.d.ts type declaration file exists",
+      "passed": false,
+      "evidence": "No ponder-env.d.ts file exists in the ponder package. A full file listing of packages/ponder/ shows only: .env.example, .env.local, .gitignore, abis/YourContract.ts, package.json, ponder.config.ts, ponder.schema.ts, src/api/index.ts, src/index.ts, tsconfig.json. No .d.ts files at all."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 3,
+    "total": 10,
+    "pass_rate": 0.7
+  },
+  "execution_metrics": {
+    "total_tool_calls": 47,
+    "total_tokens": 48640
+  },
+  "timing": {
+    "total_duration_seconds": 255.0
+  },
+  "claims": [
+    {
+      "claim": "The Ponder indexer stores each event's data in a database and exposes it through a GraphQL API",
+      "type": "quality",
+      "verified": true,
+      "evidence": "The schema defines a greeting_change table with proper columns, the handler inserts data on events, and the API sets up a GraphQL endpoint via Hono middleware."
+    },
+    {
+      "claim": "A frontend page at /events displays indexed events",
+      "type": "factual",
+      "verified": true,
+      "evidence": "packages-nextjs-app-events-page.tsx exists in the outputs directory, and the Header.tsx was modified to add an Events navigation link."
+    },
+    {
+      "claim": "ABI is read from deployedContracts",
+      "type": "process",
+      "verified": false,
+      "evidence": "The ABI was manually duplicated into packages/ponder/abis/YourContract.ts rather than reading from deployedContracts.ts. This means the ABI and address can drift out of sync with what's actually deployed."
+    },
+    {
+      "claim": "Uses ponder ^0.10",
+      "type": "factual",
+      "verified": true,
+      "evidence": "package.json shows '\"ponder\": \"^0.10\"' in dependencies."
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [],
+    "needs_review": [],
+    "workarounds": []
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "ponder.config.ts reads deployedContracts from SE-2 nextjs package",
+        "reason": "This is a strong discriminating assertion. Without this integration, the ponder config contains a hardcoded address that will break when the contract is redeployed. It correctly catches a real integration gap."
+      },
+      {
+        "assertion": "ponder-env.d.ts type declaration file exists",
+        "reason": "In modern Ponder (0.10+), ponder-env.d.ts is auto-generated by 'ponder codegen' and may not need to be committed. The assertion should clarify whether it expects the file to be pre-created or just to exist after codegen. Consider checking tsconfig.json for correct Ponder type configuration instead."
+      },
+      {
+        "reason": "No assertion checks whether the ABI in abis/YourContract.ts actually matches the deployed contract's ABI. Since the executor duplicated it manually, there's a risk of the ABI being wrong or incomplete."
+      }
+    ],
+    "overall": "The assertions cover the important Ponder API patterns well (virtual modules, onchainTable, Hono, handler format). The SE-2 integration assertions (deployedContracts, scaffoldConfig) are valuable discriminators that correctly identify a common failure mode \u2014 hardcoding values instead of reading from the SE-2 ecosystem."
+  }
+}

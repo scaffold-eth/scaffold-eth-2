@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+      "passed": false,
+      "evidence": "Contract imports ERC20 and Ownable from OpenZeppelin but does NOT use ERC20Capped extension. Instead, it implements cap logic manually with an immutable `cap` variable and a require check in the mint function."
+    },
+    {
+      "text": "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+      "passed": true,
+      "evidence": "The mint function uses `external onlyOwner` modifier: `function mint(address _to, uint256 _amount) external onlyOwner`"
+    },
+    {
+      "text": "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+      "passed": true,
+      "evidence": "Constructor uses `Ownable(_owner)` pattern with _owner passed as constructor arg. Deploy script passes `deployer` as the owner argument, which is effectively msg.sender. This is the v5 pattern."
+    },
+    {
+      "text": "Frontend page includes mint functionality (owner can mint tokens)",
+      "passed": true,
+      "evidence": "Token page at packages/nextjs/app/token/page.tsx includes a mint section with AddressInput for recipient, IntegerInput for amount, and a Mint button. It's conditionally rendered only for the owner (isOwner check)."
+    },
+    {
+      "text": "Frontend page includes transfer functionality (send tokens to another address)",
+      "passed": true,
+      "evidence": "Token page includes a Transfer Tokens section with AddressInput for recipient, IntegerInput for amount, and a Transfer button that calls the ERC20 transfer function."
+    },
+    {
+      "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "Deploy script at packages/hardhat/deploy/01_deploy_capped_token.ts exists with proper structure, uses deployer account, passes constructor args, and has tags."
+    },
+    {
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "Frontend imports and uses useScaffoldReadContract for name, symbol, totalSupply, cap, owner, balanceOf and useScaffoldWriteContract for mint and transfer operations."
+    },
+    {
+      "text": "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+      "passed": true,
+      "evidence": "Frontend uses formatEther for displaying totalSupply, cap, and balance. Uses parseEther when calling mint and transfer to convert user input to wei."
+    },
+    {
+      "text": "Contract compiles successfully with valid Solidity syntax",
+      "passed": true,
+      "evidence": "Contract has valid Solidity syntax with pragma ^0.8.20, proper imports, correct inheritance pattern, and standard function implementations. No syntax errors present."
+    },
+    {
+      "text": "Cap is enforced (cannot mint beyond max supply)",
+      "passed": true,
+      "evidence": "The mint function includes `require(totalSupply() + _amount <= cap, \"Cap exceeded\")` which prevents minting beyond the cap of 1,000,000 tokens set in the deploy script."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  }
+}

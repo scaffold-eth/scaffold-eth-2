@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+      "passed": true,
+      "evidence": "useAuthSession.ts imports createSiweMessage from 'viem/siwe'. verify/route.ts uses parseSiweMessage from 'viem/siwe' and publicClient.verifySiweMessage(). nonce/route.ts uses generateSiweNonce from 'viem/siwe'. No siwe npm package is used."
+    },
+    {
+      "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+      "passed": true,
+      "evidence": "iron-session ^8.0.4 added to package.json. All API routes use getIronSession from 'iron-session' with sessionOptions that include password, cookieName 'scaffold-eth-siwe-session', and httpOnly/secure cookie options."
+    },
+    {
+      "text": "Implements nonce-first flow: server generates nonce before client signs",
+      "passed": true,
+      "evidence": "In useAuthSession.ts signIn(), the client first fetches /api/auth/nonce to get a server-generated nonce (using generateSiweNonce()), stores it in the session, then creates the SIWE message with that nonce, signs it, and sends to /api/auth/verify."
+    },
+    {
+      "text": "API routes exist for nonce generation, signature verification, and session check",
+      "passed": true,
+      "evidence": "Four API routes exist: /api/auth/nonce (GET - nonce generation), /api/auth/verify (POST - signature verification), /api/auth/session (GET - session check), /api/auth/logout (POST - session destruction)."
+    },
+    {
+      "text": "Domain validation against Host header in verify route",
+      "passed": false,
+      "evidence": "The verify route at app/api/auth/verify/route.ts does not validate the domain from the parsed SIWE message against the Host header of the request. It only checks nonce and signature validity but skips domain validation."
+    },
+    {
+      "text": "Nonce is cleared after successful verification (single-use)",
+      "passed": true,
+      "evidence": "In verify/route.ts line 38: 'session.nonce = undefined;' is set after successful verification and before session.save(), ensuring single-use nonces."
+    },
+    {
+      "text": "Session persists across page refreshes (cookie-based, not just client state)",
+      "passed": true,
+      "evidence": "Sessions use iron-session with httpOnly cookies (cookieName: 'scaffold-eth-siwe-session'). The /api/auth/session GET route reads from the cookie-based session. The useAuthSession hook fetches session state from the server on mount via useQuery."
+    },
+    {
+      "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+      "passed": true,
+      "evidence": "useAuthSession hook at packages/nextjs/hooks/scaffold-eth/useAuthSession.ts encapsulates the full auth flow: session fetching, signIn (nonce + sign + verify), signOut, auto-logout on disconnect, and exposes isAuthenticated, isLoading, session, signIn, signOut."
+    },
+    {
+      "text": "Frontend shows sign-in/sign-out UI with session status",
+      "passed": true,
+      "evidence": "app/login/page.tsx shows a full auth UI: connect wallet prompt when disconnected, Sign-In with Ethereum button when connected but not authenticated, authenticated status badge with address display and Sign Out button when authenticated. Added to Header.tsx navigation as 'Login' link."
+    },
+    {
+      "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+      "passed": true,
+      "evidence": "useAuthSession.ts lines 85-92: useEffect watches isConnected and address changes. When wallet disconnects (!isConnected && session?.isLoggedIn) or address changes, it auto-calls signOut() which hits /api/auth/logout and clears client state."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  }
+}

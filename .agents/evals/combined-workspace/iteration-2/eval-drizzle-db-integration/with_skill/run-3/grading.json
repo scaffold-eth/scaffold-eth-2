@@ -1,0 +1,18 @@
+{
+  "eval_id": 1,
+  "eval_name": "drizzle-db-integration",
+  "variant": "with_skill",
+  "expectations": [
+    {"text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME", "passed": true, "evidence": "postgresClient.ts lines 16-30: checks NEXT_RUNTIME and neondb in URL to select between drizzle-orm/neon-serverless, drizzle-orm/neon-http, and drizzle-orm/node-postgres"},
+    {"text": "Lazy proxy pattern: db instance doesn't eagerly connect on import", "passed": true, "evidence": "postgresClient.ts lines 43-54: new Proxy({}, { get: (_, prop) => { const db = getDb(); ... } }) - getDb() only called on first property access"},
+    {"text": "casing snake_case: set in BOTH drizzle.config.ts AND client initialization", "passed": true, "evidence": "drizzle.config.ts line 13: casing: 'snake_case'; postgresClient.ts lines 21, 24, 29: all three drizzle() calls include casing: 'snake_case'"},
+    {"text": "Files at services/database/ path: SE-2 convention", "passed": true, "evidence": "All database files under packages/nextjs/services/database/: config/postgresClient.ts, config/schema.ts, repositories/users.ts, seed.ts, wipe.ts"},
+    {"text": "Repository pattern: for database access", "passed": true, "evidence": "packages/nextjs/services/database/repositories/users.ts: exports getAllUsers(), getUserById(), createUser() functions"},
+    {"text": "Root proxy scripts for drizzle-kit commands (db:seed, db:wipe, etc.)", "passed": true, "evidence": "Root package.json lines 52-54: drizzle-kit, db:seed, db:wipe scripts present"},
+    {"text": "Docker Compose for local PostgreSQL development", "passed": true, "evidence": "docker-compose.yml at project root with postgres:16 image, port 5432"},
+    {"text": ".env.development: SE-2 convention, not .env.local", "passed": true, "evidence": "packages/nextjs/.env.development exists; drizzle.config.ts loads dotenv({ path: '.env.development' })"},
+    {"text": "Production safety guard: PRODUCTION_DATABASE_HOSTNAME check", "passed": true, "evidence": "postgresClient.ts exports PRODUCTION_DATABASE_HOSTNAME; seed.ts and wipe.ts check and throw error"},
+    {"text": "All required dependencies: drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, @types/pg, tsx", "passed": true, "evidence": "packages/nextjs/package.json has all 8 in deps/devDeps"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

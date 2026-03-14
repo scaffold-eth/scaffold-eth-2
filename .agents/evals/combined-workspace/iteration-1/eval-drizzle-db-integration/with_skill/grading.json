@@ -1,0 +1,61 @@
+{
+  "eval_id": 0,
+  "eval_name": "drizzle-db-integration",
+  "variant": "with_skill",
+  "expectations": [
+    {
+      "text": "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+      "passed": true,
+      "evidence": "postgresClient.ts has all 3 drivers: NeonPool+drizzleNeon for NEXT_RUNTIME+neondb, neon()+drizzleNeonHttp for scripts+neondb, Pool+drizzle for local postgres"
+    },
+    {
+      "text": "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+      "passed": true,
+      "evidence": "Uses Proxy object with getDb() called on property access — connection deferred until first query"
+    },
+    {
+      "text": "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+      "passed": true,
+      "evidence": "drizzle.config.ts line 13: casing: 'snake_case'. postgresClient.ts: all 3 drizzle() calls have { schema, casing: 'snake_case' }"
+    },
+    {
+      "text": "Files at services/database/ path (SE-2 convention)",
+      "passed": true,
+      "evidence": "services/database/config/schema.ts, services/database/config/postgresClient.ts, services/database/repositories/users.ts, services/database/seed.ts, services/database/wipe.ts"
+    },
+    {
+      "text": "Repository pattern for database access",
+      "passed": true,
+      "evidence": "services/database/repositories/users.ts with getAllUsers, getUserById, getUserByWalletAddress, createUser"
+    },
+    {
+      "text": "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+      "passed": true,
+      "evidence": "Root package.json has drizzle-kit, db:seed, db:wipe proxying to @se-2/nextjs workspace"
+    },
+    {
+      "text": "Docker Compose for local PostgreSQL development",
+      "passed": true,
+      "evidence": "docker-compose.yml at project root with postgres:16 image, port 5432, volume mount"
+    },
+    {
+      "text": "Uses .env.development (SE-2 convention) not .env.local",
+      "passed": true,
+      "evidence": ".env.development created with POSTGRES_URL=postgresql://postgres:mysecretpassword@localhost:5432/postgres"
+    },
+    {
+      "text": "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+      "passed": true,
+      "evidence": "postgresClient.ts line 8: export const PRODUCTION_DATABASE_HOSTNAME = 'your-production-database-hostname'"
+    },
+    {
+      "text": "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)",
+      "passed": true,
+      "evidence": "All 8 packages present: drizzle-orm, @neondatabase/serverless, pg, dotenv in deps; drizzle-kit, drizzle-seed, @types/pg, tsx in devDeps"
+    }
+  ],
+  "pass_rate": 1.0,
+  "passed": 10,
+  "failed": 0,
+  "total": 10
+}

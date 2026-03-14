@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "drizzle-db-integration",
+  "prompt": "I need to add a PostgreSQL database to my SE-2 dApp. I want to store user data off-chain using Drizzle ORM with Neon PostgreSQL. Set up the full database integration including schema, migrations, and API routes.",
+  "assertions": [
+    "Tri-driver pattern: auto-detects Neon serverless vs Neon HTTP vs local pg based on URL and NEXT_RUNTIME",
+    "Lazy proxy pattern: db instance doesn't eagerly connect on import",
+    "casing: 'snake_case' set in BOTH drizzle.config.ts AND client initialization",
+    "Files at services/database/ path (SE-2 convention)",
+    "Repository pattern for database access",
+    "Root package.json has proxy scripts (drizzle-kit, db:seed, db:wipe)",
+    "Docker Compose for local PostgreSQL development",
+    "Uses .env.development (SE-2 convention) not .env.local",
+    "Production safety guard (PRODUCTION_DATABASE_HOSTNAME)",
+    "All required dependencies in correct locations (drizzle-orm, @neondatabase/serverless, pg, dotenv, drizzle-kit, drizzle-seed, tsx, @types/pg)"
+  ]
+}

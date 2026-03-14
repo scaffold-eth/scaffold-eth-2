@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "siwe-wallet-auth",
+  "prompt": "Add login to my dApp. Users should authenticate with their wallet and the session should persist across page refreshes.",
+  "assertions": [
+    "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+    "Uses iron-session or equivalent for encrypted cookie-based sessions",
+    "Implements nonce-first flow: server generates nonce before client signs",
+    "API routes exist for nonce generation, signature verification, and session check",
+    "Domain validation against Host header in verify route",
+    "Nonce is cleared after successful verification (single-use)",
+    "Session persists across page refreshes (cookie-based, not just client state)",
+    "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+    "Frontend shows sign-in/sign-out UI with session status",
+    "Handles wallet disconnect gracefully (auto-logout or session invalidation)"
+  ]
+}

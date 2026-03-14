@@ -1,0 +1,18 @@
+{
+  "eval_id": 3,
+  "eval_name": "eip5792-batch-txns",
+  "variant": "without_skill",
+  "expectations": [
+    {"text": "useWriteContracts hook (not useSendCalls or custom encoding)", "passed": true, "evidence": "page.tsx line 5: imported from wagmi; line 59: const { writeContractsAsync } = useWriteContracts()"},
+    {"text": "useCapabilities hook for wallet EIP-5792 support detection", "passed": true, "evidence": "page.tsx line 5: imported from wagmi; line 21: const { data: capabilities } = useCapabilities()"},
+    {"text": "useShowCallsStatus hook for batch transaction status display", "passed": true, "evidence": "page.tsx line 6: import { useShowCallsStatus } from 'wagmi/experimental'; line 74: used"},
+    {"text": "Graceful fallback for wallets without EIP-5792 support", "passed": true, "evidence": "handleFallbackApproveAndTransfer sends approve then transfer as two separate txns; fallback button shown when !isEip5792Supported"},
+    {"text": "Batch button disabled when wallet doesn't support EIP-5792", "passed": true, "evidence": "page.tsx line 227: disabled={!isEip5792Supported || ...}"},
+    {"text": "ERC20 contract created with approve+transfer pattern", "passed": true, "evidence": "BatchToken.sol extends OpenZeppelin ERC20; batch call includes both approve and transfer"},
+    {"text": "Deploy script created (Hardhat deploy script)", "passed": true, "evidence": "01_deploy_batch_token.ts with DeployFunction, tags=['BatchToken']"},
+    {"text": "Frontend page created with batch UI", "passed": true, "evidence": "packages/nextjs/app/batch-transfer/page.tsx: 314-line page with full UI"},
+    {"text": "SE-2 scaffold hooks used: useScaffoldReadContract, useScaffoldWriteContract, useDeployedContractInfo", "passed": true, "evidence": "All three imported from ~~/hooks/scaffold-eth and used throughout"},
+    {"text": "No new dependencies added (wagmi already has EIP-5792 hooks)", "passed": true, "evidence": "No package.json changes; all hooks from existing wagmi"}
+  ],
+  "summary": {"passed": 10, "failed": 0, "total": 10, "pass_rate": 1.0}
+}

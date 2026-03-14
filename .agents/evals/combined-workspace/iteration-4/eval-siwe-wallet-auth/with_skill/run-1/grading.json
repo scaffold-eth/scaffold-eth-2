@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+      "passed": true,
+      "evidence": "useSiwe.ts imports createSiweMessage from 'viem/siwe'; verify/route.ts imports parseSiweMessage and verifySiweMessage from 'viem/siwe'; nonce/route.ts imports generateSiweNonce from 'viem/siwe'. No imports from the 'siwe' npm package found anywhere."
+    },
+    {
+      "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+      "passed": true,
+      "evidence": "iron-session ^8.0.4 in package.json. All three API routes (nonce, verify, session) use getIronSession from 'iron-session'. Session config in utils/siwe.ts sets httpOnly, sameSite, secure cookies with 7-day maxAge."
+    },
+    {
+      "text": "Implements nonce-first flow: server generates nonce before client signs",
+      "passed": true,
+      "evidence": "useSiwe.ts signIn() fetches /api/siwe/nonce first (step 1), then creates the SIWE message with that nonce (step 2), then signs (step 3), then verifies (step 4). Server generates nonce via generateSiweNonce() in nonce/route.ts."
+    },
+    {
+      "text": "API routes exist for nonce generation, signature verification, and session check",
+      "passed": true,
+      "evidence": "Three API routes exist: /api/siwe/nonce/route.ts (GET - nonce generation), /api/siwe/verify/route.ts (POST - signature verification), /api/siwe/session/route.ts (GET - session check, DELETE - sign out)."
+    },
+    {
+      "text": "Domain validation against Host header in verify route",
+      "passed": true,
+      "evidence": "verify/route.ts line 40-43: extracts expectedDomain from req.headers.get('host'), returns 400 if missing, then passes domain: expectedDomain to verifySiweMessage() for validation."
+    },
+    {
+      "text": "Nonce is cleared after successful verification (single-use)",
+      "passed": true,
+      "evidence": "verify/route.ts line 69: 'session.nonce = undefined; // Clear nonce — one-time use' followed by session.save()."
+    },
+    {
+      "text": "Session persists across page refreshes (cookie-based, not just client state)",
+      "passed": true,
+      "evidence": "iron-session stores session in encrypted httpOnly cookies. useSiwe.ts checkSession() fetches /api/siwe/session on mount (useEffect) to restore session state from cookies across page refreshes."
+    },
+    {
+      "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+      "passed": true,
+      "evidence": "hooks/useSiwe.ts exports useSiwe() hook that encapsulates signIn, signOut, checkSession, and session state management. Returns isSignedIn, isLoading, error, address, signIn, signOut, etc."
+    },
+    {
+      "text": "Frontend shows sign-in/sign-out UI with session status",
+      "passed": true,
+      "evidence": "app/page.tsx renders a 'Wallet Authentication' card with conditional UI: when signed in shows 'Signed In' badge, authenticated address, sign-out button; when not signed in shows 'Sign In with Ethereum' button. Error messages displayed when present."
+    },
+    {
+      "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+      "passed": true,
+      "evidence": "useSiwe.ts lines 54-70: useEffect watches isConnected; when wallet disconnects after being connected and user is signed in, it calls DELETE /api/siwe/session and resets local state (auto-logout)."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}
