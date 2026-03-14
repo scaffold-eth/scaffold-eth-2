@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Staking contract has stake, withdraw, and getReward (or claimReward) functions",
+      "passed": true,
+      "evidence": "Staker.sol has stake() (line 76), unstake() (line 84), and claimReward() (line 93) functions."
+    },
+    {
+      "text": "Reward calculation uses rewardPerToken stored pattern (not naive block-by-block)",
+      "passed": true,
+      "evidence": "Staker.sol uses rewardPerTokenStored (line 28), rewardPerToken() view function (line 57), and userRewardPerTokenPaid mapping (line 30) — the standard Synthetix-style rewardPerToken stored pattern."
+    },
+    {
+      "text": "ReentrancyGuard (nonReentrant) applied to stake and withdraw functions",
+      "passed": true,
+      "evidence": "Contract inherits ReentrancyGuard (line 19). stake() has nonReentrant modifier (line 76), unstake() has nonReentrant (line 84), and claimReward() also has nonReentrant (line 93)."
+    },
+    {
+      "text": "Separate ERC-20 token contract exists for the staking token",
+      "passed": true,
+      "evidence": "StakeToken.sol is a separate ERC20 contract (inherits ERC20, Ownable) with mint functionality, deployed independently in the deploy script."
+    },
+    {
+      "text": "Frontend page shows staking, unstaking, and rewards viewing",
+      "passed": true,
+      "evidence": "packages/nextjs/app/staking/page.tsx has Stake Tokens card (line 197), Unstake Tokens card (line 227), and Claim Rewards card (line 257) with rewards display."
+    },
+    {
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "Frontend imports and uses useScaffoldReadContract for balanceOf, earned, totalStaked, rewardRate (lines 24-54) and useScaffoldWriteContract for StakeToken and Staker (lines 57-63)."
+    },
+    {
+      "text": "Proper Hardhat deploy script(s) exist in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_staking.ts deploys StakeToken and Staker contracts, funds the staker with reward tokens, and transfers test tokens to a user. Uses proper hardhat-deploy pattern with tags."
+    },
+    {
+      "text": "Events emitted for stake, withdraw, and reward claim actions",
+      "passed": true,
+      "evidence": "Staker.sol emits Staked event (line 81), Unstaked event (line 90), and RewardClaimed event (line 98). Events declared on lines 38-41."
+    },
+    {
+      "text": "updateReward modifier or equivalent pattern updates rewards before state changes",
+      "passed": true,
+      "evidence": "updateReward modifier (lines 111-119) updates rewardPerTokenStored, lastUpdateTime, and user rewards before executing function body. Applied to stake, unstake, and claimReward."
+    },
+    {
+      "text": "Contracts compile successfully with valid Solidity syntax",
+      "passed": true,
+      "evidence": "Running 'yarn compile' returned 'Nothing to compile' (already compiled) with no errors, confirming valid Solidity syntax."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

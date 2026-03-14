@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+      "passed": false,
+      "evidence": "Both useAuth.ts and the API routes import from the 'siwe' npm package (SiweMessage, generateNonce), not from viem's native SIWE utilities."
+    },
+    {
+      "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+      "passed": true,
+      "evidence": "utils/auth/session.ts imports getIronSession from 'iron-session' and configures it with httpOnly, secure cookies under the name 'siwe-session'."
+    },
+    {
+      "text": "Implements nonce-first flow: server generates nonce before client signs",
+      "passed": true,
+      "evidence": "useAuth.ts signIn() fetches /api/auth/nonce first to get a server-generated nonce, then includes it in the SiweMessage before signing."
+    },
+    {
+      "text": "API routes exist for nonce generation, signature verification, and session check",
+      "passed": true,
+      "evidence": "Four API routes exist: /api/auth/nonce (GET), /api/auth/verify (POST), /api/auth/session (GET), and /api/auth/logout (POST)."
+    },
+    {
+      "text": "Domain validation against Host header in verify route",
+      "passed": false,
+      "evidence": "The verify route (route.ts) does not check the message domain against the request Host header. It calls siweMessage.verify({ signature, nonce }) but does not pass or validate the domain."
+    },
+    {
+      "text": "Nonce is cleared after successful verification (single-use)",
+      "passed": true,
+      "evidence": "In verify/route.ts, after successful verification, session.nonce is set to undefined and saved (line 22-23). Also cleared on nonce mismatch (line 14)."
+    },
+    {
+      "text": "Session persists across page refreshes (cookie-based, not just client state)",
+      "passed": true,
+      "evidence": "iron-session stores session data in encrypted httpOnly cookies. The useAuth hook calls checkSession() on mount to restore state from the server-side session."
+    },
+    {
+      "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+      "passed": true,
+      "evidence": "hooks/scaffold-eth/useAuth.ts exports useAuth hook that encapsulates signIn, logout, session checking, and state management."
+    },
+    {
+      "text": "Frontend shows sign-in/sign-out UI with session status",
+      "passed": true,
+      "evidence": "app/login/page.tsx shows conditional UI: loading spinner, authenticated state with address and sign-out button, wallet-not-connected prompt, and sign-in button."
+    },
+    {
+      "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+      "passed": true,
+      "evidence": "useAuth.ts has a useEffect that watches isConnected and address; when wallet disconnects or address changes while authenticated, it calls logout() automatically."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}

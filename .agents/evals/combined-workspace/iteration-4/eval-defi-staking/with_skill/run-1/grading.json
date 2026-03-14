@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Staking contract has stake, withdraw, and getReward (or claimReward) functions",
+      "passed": true,
+      "evidence": "StakingRewards.sol has stake() at line 66, withdraw() at line 74, and getReward() at line 83."
+    },
+    {
+      "text": "Reward calculation uses rewardPerToken stored pattern (not naive block-by-block)",
+      "passed": true,
+      "evidence": "Synthetix-style pattern: rewardPerTokenStored state variable, rewardPerToken() function computing accumulated rewards, userRewardPerTokenPaid mapping, and earned() function using the difference."
+    },
+    {
+      "text": "ReentrancyGuard (nonReentrant) applied to stake and withdraw functions",
+      "passed": true,
+      "evidence": "Contract inherits ReentrancyGuard. stake() has 'nonReentrant' modifier (line 66), withdraw() has 'nonReentrant' (line 74), getReward() also has it (line 83)."
+    },
+    {
+      "text": "Separate ERC-20 token contract exists for the staking token",
+      "passed": true,
+      "evidence": "StakeToken.sol is a separate ERC20 contract with mint functionality, used as both staking and rewards token."
+    },
+    {
+      "text": "Frontend page shows staking, unstaking, and rewards viewing",
+      "passed": true,
+      "evidence": "packages/nextjs/app/staking/page.tsx has stake input/button, withdraw input/button, displays staked balance, earned rewards, and claim rewards button."
+    },
+    {
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "Frontend imports and uses useScaffoldReadContract for balances/earned/totalSupply/rewardRate/balanceOf/allowance, and useScaffoldWriteContract for StakingRewards and StakeToken interactions."
+    },
+    {
+      "text": "Proper Hardhat deploy script(s) exist in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_staking.ts deploys StakeToken and StakingRewards, funds the rewards contract with 500k tokens, uses hardhat-deploy pattern with tags."
+    },
+    {
+      "text": "Events emitted for stake, withdraw, and reward claim actions",
+      "passed": true,
+      "evidence": "Events declared: Staked, Withdrawn, RewardPaid, RewardRateUpdated. Emitted in stake() (line 71), withdraw() (line 80), getReward() (line 88)."
+    },
+    {
+      "text": "updateReward modifier or equivalent pattern updates rewards before state changes",
+      "passed": true,
+      "evidence": "updateReward modifier (lines 40-49) updates rewardPerTokenStored, lastUpdateTime, and per-user rewards/userRewardPerTokenPaid before function body. Applied to stake, withdraw, and getReward."
+    },
+    {
+      "text": "Contracts compile successfully with valid Solidity syntax",
+      "passed": true,
+      "evidence": "yarn compile output: 'Compiled 2 Solidity files successfully (evm target: paris).'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

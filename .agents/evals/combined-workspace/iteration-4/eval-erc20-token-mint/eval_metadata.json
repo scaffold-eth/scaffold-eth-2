@@ -1,0 +1,17 @@
+{
+  "eval_id": 3,
+  "eval_name": "erc20-token-mint",
+  "prompt": "Create an ERC-20 token in my SE-2 project with capped supply, minting restricted to the owner, and a frontend page to mint and transfer tokens.",
+  "assertions": [
+    "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+    "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+    "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+    "Frontend page includes mint functionality (owner can mint tokens)",
+    "Frontend page includes transfer functionality (send tokens to another address)",
+    "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+    "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+    "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+    "Contract compiles successfully with valid Solidity syntax",
+    "Cap is enforced (cannot mint beyond max supply)"
+  ]
+}

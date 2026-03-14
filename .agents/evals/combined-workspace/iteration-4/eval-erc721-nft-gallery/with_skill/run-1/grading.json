@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+      "passed": true,
+      "evidence": "OnChainNFT.sol imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns like Ownable(_owner) constructor and _requireOwned."
+    },
+    {
+      "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+      "passed": true,
+      "evidence": "tokenURI function generates SVG via _generateSVG, encodes it as base64, wraps in JSON with data:image/svg+xml;base64 image field, and returns as data:application/json;base64."
+    },
+    {
+      "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+      "passed": true,
+      "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH to mint') where MINT_PRICE = 0.01 ether."
+    },
+    {
+      "text": "Gallery page displays minted NFTs with their SVG images",
+      "passed": true,
+      "evidence": "packages/nextjs/app/nft-gallery/page.tsx renders NFTCard components that parse base64 tokenURI metadata and display the SVG image via <img src={metadata.image}>. Supports both 'All NFTs' and 'My NFTs' views."
+    },
+    {
+      "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+      "passed": false,
+      "evidence": "The contract does not override _update at all. It inherits ERC721Enumerable (which internally overrides _update in OZ v5), but the contract itself has no custom transfer logic via _update. No _beforeTokenTransfer either, which is correct for v5, but the expectation specifically asks for a _update override."
+    },
+    {
+      "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper DeployFunction, deploys OnChainNFT with deployer as owner arg, and has tags = ['OnChainNFT']."
+    },
+    {
+      "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "nft-gallery/page.tsx uses useScaffoldReadContract for tokenURI, ownerOf, totalSupply, MINT_PRICE, MAX_SUPPLY, balanceOf, tokenOfOwnerByIndex, and useScaffoldWriteContract for mintItem."
+    },
+    {
+      "text": "Token ID counter is managed correctly (no off-by-one errors)",
+      "passed": true,
+      "evidence": "tokenIdCounter starts at 0, is incremented before _safeMint (tokenIdCounter++; uint256 newTokenId = tokenIdCounter), so first token is ID 1. Gallery iterates from 1n to totalSupply inclusive, matching the token ID range."
+    },
+    {
+      "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+      "passed": true,
+      "evidence": "Running 'yarn compile' returned 'Nothing to compile / No need to generate any newer typings' indicating successful prior compilation with no errors."
+    },
+    {
+      "text": "NFT metadata JSON includes required fields: name, description, image",
+      "passed": true,
+      "evidence": "tokenURI returns JSON with name ('OnChain NFT #N'), description ('A fully on-chain generative SVG NFT.'), and image ('data:image/svg+xml;base64,...'). Also includes attributes array."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  }
+}

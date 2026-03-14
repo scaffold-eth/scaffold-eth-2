@@ -1,0 +1,17 @@
+{
+  "eval_id": 0,
+  "eval_name": "eip712-typed-signing",
+  "prompt": "Add off-chain message signing to my SE-2 project. Users should sign a structured message (like a vote or an order) and the smart contract should verify the signature on-chain.",
+  "assertions": [
+    "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+    "Uses useSignTypedData from wagmi for wallet signing",
+    "Uses 'as const' on domain and type objects for TypeScript type inference",
+    "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+    "Domain separator includes at minimum name and version fields",
+    "primaryType correctly matches a key in the types object",
+    "Smart contract implements on-chain EIP-712 signature verification",
+    "Creates a Next.js page with signing UI and verification display",
+    "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+    "Handles wallet not connected state gracefully (no crash when address is undefined)"
+  ]
+}

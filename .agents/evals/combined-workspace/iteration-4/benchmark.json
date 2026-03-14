@@ -1,0 +1,1428 @@
+{
+  "metadata": {
+    "skill_name": "SE-2 Tier 2+3 Skills",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-03-14T13:04:37Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 658.6,
+        "tokens": 44222,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Staking contract has stake, withdraw, and getReward (or claimReward) functions",
+          "passed": true,
+          "evidence": "StakingRewards.sol has stake() at line 66, withdraw() at line 74, and getReward() at line 83."
+        },
+        {
+          "text": "Reward calculation uses rewardPerToken stored pattern (not naive block-by-block)",
+          "passed": true,
+          "evidence": "Synthetix-style pattern: rewardPerTokenStored state variable, rewardPerToken() function computing accumulated rewards, userRewardPerTokenPaid mapping, and earned() function using the difference."
+        },
+        {
+          "text": "ReentrancyGuard (nonReentrant) applied to stake and withdraw functions",
+          "passed": true,
+          "evidence": "Contract inherits ReentrancyGuard. stake() has 'nonReentrant' modifier (line 66), withdraw() has 'nonReentrant' (line 74), getReward() also has it (line 83)."
+        },
+        {
+          "text": "Separate ERC-20 token contract exists for the staking token",
+          "passed": true,
+          "evidence": "StakeToken.sol is a separate ERC20 contract with mint functionality, used as both staking and rewards token."
+        },
+        {
+          "text": "Frontend page shows staking, unstaking, and rewards viewing",
+          "passed": true,
+          "evidence": "packages/nextjs/app/staking/page.tsx has stake input/button, withdraw input/button, displays staked balance, earned rewards, and claim rewards button."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Frontend imports and uses useScaffoldReadContract for balances/earned/totalSupply/rewardRate/balanceOf/allowance, and useScaffoldWriteContract for StakingRewards and StakeToken interactions."
+        },
+        {
+          "text": "Proper Hardhat deploy script(s) exist in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_staking.ts deploys StakeToken and StakingRewards, funds the rewards contract with 500k tokens, uses hardhat-deploy pattern with tags."
+        },
+        {
+          "text": "Events emitted for stake, withdraw, and reward claim actions",
+          "passed": true,
+          "evidence": "Events declared: Staked, Withdrawn, RewardPaid, RewardRateUpdated. Emitted in stake() (line 71), withdraw() (line 80), getReward() (line 88)."
+        },
+        {
+          "text": "updateReward modifier or equivalent pattern updates rewards before state changes",
+          "passed": true,
+          "evidence": "updateReward modifier (lines 40-49) updates rewardPerTokenStored, lastUpdateTime, and per-user rewards/userRewardPerTokenPaid before function body. Applied to stake, withdraw, and getReward."
+        },
+        {
+          "text": "Contracts compile successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "yarn compile output: 'Compiled 2 Solidity files successfully (evm target: paris).'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 410.3,
+        "tokens": 38650,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+          "passed": true,
+          "evidence": "packages/nextjs/utils/eip-712.ts exports EIP_712_DOMAIN, EIP_712_TYPES, and generateVoteMessage. Both the page (sign-vote/page.tsx) and the backend API route (api/verify/route.ts) import from this shared module."
+        },
+        {
+          "text": "Uses useSignTypedData from wagmi for wallet signing",
+          "passed": true,
+          "evidence": "page.tsx line 8: import { useSignTypedData } from 'wagmi'; line 36: const { signTypedDataAsync } = useSignTypedData(); used in handleSign at line 119."
+        },
+        {
+          "text": "Uses 'as const' on domain and type objects for TypeScript type inference",
+          "passed": true,
+          "evidence": "eip-712.ts line 8: EIP_712_DOMAIN declared with 'as const'; line 17: EIP_712_TYPES declared with 'as const'."
+        },
+        {
+          "text": "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+          "passed": true,
+          "evidence": "Backend (api/verify/route.ts line 2) imports recoverTypedDataAddress from viem and uses it at line 23. Solidity contract (VoteVerifier.sol line 50) uses ECDSA.recover(digest, signature)."
+        },
+        {
+          "text": "Domain separator includes at minimum name and version fields",
+          "passed": true,
+          "evidence": "eip-712.ts lines 5-8: EIP_712_DOMAIN has name: 'VoteVerifier' and version: '1'. The Solidity constructor at line 36 also passes ('VoteVerifier', '1') to EIP712."
+        },
+        {
+          "text": "primaryType correctly matches a key in the types object",
+          "passed": true,
+          "evidence": "EIP_712_TYPES has a 'Vote' key. primaryType is set to 'Vote' in page.tsx line 122 and api/verify/route.ts line 26."
+        },
+        {
+          "text": "Smart contract implements on-chain EIP-712 signature verification",
+          "passed": true,
+          "evidence": "VoteVerifier.sol inherits EIP712, computes structHash with VOTE_TYPEHASH, calls _hashTypedDataV4(structHash), and recovers the signer with ECDSA.recover. Both submitVote (state-changing) and verifyVote (view) functions implement this."
+        },
+        {
+          "text": "Creates a Next.js page with signing UI and verification display",
+          "passed": true,
+          "evidence": "packages/nextjs/app/sign-vote/page.tsx is a full Next.js page with a signing form (proposal ID, support radio buttons, reason textarea) and verification display (frontend wagmi verification, on-chain view call, backend API verification, signature display)."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "page.tsx line 13: imports useScaffoldReadContract and useScaffoldWriteContract. Used at lines 37, 68, 88, 95 for writeContractAsync, verifyVote, getProposalVotes, and hasVoted respectively."
+        },
+        {
+          "text": "Handles wallet not connected state gracefully (no crash when address is undefined)",
+          "passed": true,
+          "evidence": "page.tsx line 102: handleSign checks if (!connectedAddress) and shows notification.error. Line 261: Sign button is disabled when !connectedAddress and shows 'Connect Wallet to Sign'. generateVoteMessage accepts undefined voter and falls back to zero address."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 300.8,
+        "tokens": 38753,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+          "passed": true,
+          "evidence": "packages/nextjs/utils/eip-712.ts exports EIP_712_DOMAIN, EIP_712_TYPES, and generateVoteMessage. These are imported by both the signing page (app/signature-verify/page.tsx) and the backend verification route (app/api/verify-vote/route.ts), avoiding duplication."
+        },
+        {
+          "text": "Uses useSignTypedData from wagmi for wallet signing",
+          "passed": true,
+          "evidence": "page.tsx imports useSignTypedData from wagmi and uses signTypedDataAsync with domain, types, primaryType, and message parameters."
+        },
+        {
+          "text": "Uses 'as const' on domain and type objects for TypeScript type inference",
+          "passed": true,
+          "evidence": "In utils/eip-712.ts, both EIP_712_DOMAIN and EIP_712_TYPES are declared with 'as const' assertions."
+        },
+        {
+          "text": "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+          "passed": true,
+          "evidence": "Backend route (app/api/verify-vote/route.ts) uses recoverTypedDataAddress from viem. The smart contract (SignatureVerifier.sol) uses ECDSA.recover from OpenZeppelin. Both verification methods are implemented."
+        },
+        {
+          "text": "Domain separator includes at minimum name and version fields",
+          "passed": true,
+          "evidence": "EIP_712_DOMAIN in utils/eip-712.ts has name: 'SignatureVerifier' and version: '1'. The contract constructor also passes EIP712('SignatureVerifier', '1')."
+        },
+        {
+          "text": "primaryType correctly matches a key in the types object",
+          "passed": true,
+          "evidence": "primaryType is 'Vote' in all usages (signTypedDataAsync, useVerifyTypedData, recoverTypedDataAddress), which matches the 'Vote' key in EIP_712_TYPES."
+        },
+        {
+          "text": "Smart contract implements on-chain EIP-712 signature verification",
+          "passed": true,
+          "evidence": "SignatureVerifier.sol extends EIP712, computes VOTE_TYPEHASH, builds structHash with abi.encode, calls _hashTypedDataV4 for the digest, and uses ECDSA.recover to verify the signer. Both verifyAndRecordVote (state-changing) and verifyVoteSignature (view) functions exist."
+        },
+        {
+          "text": "Creates a Next.js page with signing UI and verification display",
+          "passed": true,
+          "evidence": "app/signature-verify/page.tsx provides a full UI with vote form (proposal ID, support radio, reason textarea), a sign button, and three verification methods (frontend via useVerifyTypedData, backend via API route, on-chain via contract call), plus a vote tally display."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "page.tsx uses useScaffoldReadContract for votesFor, votesAgainst, totalVotes, and hasVoted. Uses useScaffoldWriteContract for submitVote (verifyAndRecordVote). Also uses useDeployedContractInfo and useTargetNetwork."
+        },
+        {
+          "text": "Handles wallet not connected state gracefully (no crash when address is undefined)",
+          "passed": true,
+          "evidence": "handleSign checks 'if (!connectedAddress)' and shows a notification error. The sign button is disabled when !connectedAddress. The voter address display is conditionally rendered with '{connectedAddress && (...)}'. handleOnChainVerify also checks !connectedAddress."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 1730.7,
+        "tokens": 34592,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+          "passed": true,
+          "evidence": "CappedToken.sol imports ERC20 and ERC20Capped from @openzeppelin/contracts (v5.0.2), contract inherits ERC20Capped."
+        },
+        {
+          "text": "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+          "passed": true,
+          "evidence": "mint() function has `onlyOwner` modifier: `function mint(address to, uint256 amount) external onlyOwner`"
+        },
+        {
+          "text": "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+          "passed": true,
+          "evidence": "Constructor uses Ownable(initialOwner) where initialOwner is passed as parameter. Deploy script passes deployer as initialOwner, which is equivalent to msg.sender pattern for v5."
+        },
+        {
+          "text": "Frontend page includes mint functionality (owner can mint tokens)",
+          "passed": true,
+          "evidence": "token/page.tsx has a Mint Tokens card with AddressInput for recipient, IntegerInput for amount, and a Mint button that calls writeMint with functionName 'mint'. Disabled for non-owners."
+        },
+        {
+          "text": "Frontend page includes transfer functionality (send tokens to another address)",
+          "passed": true,
+          "evidence": "token/page.tsx has a Transfer Tokens card with AddressInput for recipient, IntegerInput for amount, and a Transfer button that calls writeTransfer with functionName 'transfer'."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_capped_token.ts exists with proper DeployFunction, deployer account, cap of 1M tokens, and 'CappedToken' tag."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Frontend imports and uses useScaffoldReadContract (for name, symbol, totalSupply, cap, owner, balanceOf) and useScaffoldWriteContract (for mint and transfer) from '~~/hooks/scaffold-eth'."
+        },
+        {
+          "text": "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+          "passed": true,
+          "evidence": "Frontend imports formatEther and parseEther from viem. Uses formatEther for displaying totalSupply, cap, and userBalance. Uses parseEther when submitting mint and transfer amounts."
+        },
+        {
+          "text": "Contract compiles successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "Contract syntax is valid Solidity with correct OZ v5 patterns: proper imports, inheritance order (ERC20Capped, Ownable), constructor chaining, and required _update override for ERC20/ERC20Capped diamond. Could not run compiler due to missing node_modules, but syntax analysis confirms validity."
+        },
+        {
+          "text": "Cap is enforced (cannot mint beyond max supply)",
+          "passed": true,
+          "evidence": "Contract inherits ERC20Capped and overrides _update to call super._update which routes to ERC20Capped._update, enforcing the cap check on every mint/transfer. Cap is set in constructor via ERC20Capped(cap)."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 243.1,
+        "tokens": 30112,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+          "passed": true,
+          "evidence": "CappedToken.sol imports ERC20 and ERC20Capped from @openzeppelin/contracts and extends both. Uses v5 _update override pattern."
+        },
+        {
+          "text": "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+          "passed": true,
+          "evidence": "mint() function has `external onlyOwner` modifier: `function mint(address to, uint256 amount) external onlyOwner`"
+        },
+        {
+          "text": "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+          "passed": true,
+          "evidence": "Constructor uses `Ownable(initialOwner)` with initialOwner passed as constructor arg. Deploy script passes deployer as initialOwner. This is the correct OZ v5 pattern."
+        },
+        {
+          "text": "Frontend page includes mint functionality (owner can mint tokens)",
+          "passed": true,
+          "evidence": "token/page.tsx has a mint section with AddressInput for recipient, IntegerInput for amount, and calls writeMint with functionName 'mint'. Only shown when isOwner is true."
+        },
+        {
+          "text": "Frontend page includes transfer functionality (send tokens to another address)",
+          "passed": true,
+          "evidence": "token/page.tsx has a transfer section with AddressInput for recipient, IntegerInput for amount, and calls writeTransfer with functionName 'transfer'."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_capped_token.ts exists with proper DeployFunction structure, deployer account, args [deployer, cap], and tag 'CappedToken'."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "token/page.tsx imports and uses useScaffoldReadContract for name, symbol, totalSupply, cap, owner, balanceOf and useScaffoldWriteContract for mint and transfer."
+        },
+        {
+          "text": "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+          "passed": true,
+          "evidence": "Uses parseEther() when sending mint/transfer amounts and formatEther() when displaying totalSupply, cap, and userBalance. Token has 18 decimals (ERC20 default), so formatEther/parseEther is correct."
+        },
+        {
+          "text": "Contract compiles successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "Contract has valid Solidity syntax, correct OZ v5 imports, proper _update override for ERC20/ERC20Capped, and the @openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol file exists in node_modules."
+        },
+        {
+          "text": "Cap is enforced (cannot mint beyond max supply)",
+          "passed": true,
+          "evidence": "Contract extends ERC20Capped which enforces cap in _update(). The _update override calls super._update() which routes to ERC20Capped._update() that checks `totalSupply() <= cap()`. Cap set to 1,000,000 tokens in deploy script."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 2133.6,
+        "tokens": 46490,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+          "passed": true,
+          "evidence": "OnChainNFT.sol imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns like Ownable(_owner) constructor and _requireOwned."
+        },
+        {
+          "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+          "passed": true,
+          "evidence": "tokenURI function generates SVG via _generateSVG, encodes it as base64, wraps in JSON with data:image/svg+xml;base64 image field, and returns as data:application/json;base64."
+        },
+        {
+          "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+          "passed": true,
+          "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH to mint') where MINT_PRICE = 0.01 ether."
+        },
+        {
+          "text": "Gallery page displays minted NFTs with their SVG images",
+          "passed": true,
+          "evidence": "packages/nextjs/app/nft-gallery/page.tsx renders NFTCard components that parse base64 tokenURI metadata and display the SVG image via <img src={metadata.image}>. Supports both 'All NFTs' and 'My NFTs' views."
+        },
+        {
+          "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+          "passed": false,
+          "evidence": "The contract does not override _update at all. It inherits ERC721Enumerable (which internally overrides _update in OZ v5), but the contract itself has no custom transfer logic via _update. No _beforeTokenTransfer either, which is correct for v5, but the expectation specifically asks for a _update override."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper DeployFunction, deploys OnChainNFT with deployer as owner arg, and has tags = ['OnChainNFT']."
+        },
+        {
+          "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "nft-gallery/page.tsx uses useScaffoldReadContract for tokenURI, ownerOf, totalSupply, MINT_PRICE, MAX_SUPPLY, balanceOf, tokenOfOwnerByIndex, and useScaffoldWriteContract for mintItem."
+        },
+        {
+          "text": "Token ID counter is managed correctly (no off-by-one errors)",
+          "passed": true,
+          "evidence": "tokenIdCounter starts at 0, is incremented before _safeMint (tokenIdCounter++; uint256 newTokenId = tokenIdCounter), so first token is ID 1. Gallery iterates from 1n to totalSupply inclusive, matching the token ID range."
+        },
+        {
+          "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+          "passed": true,
+          "evidence": "Running 'yarn compile' returned 'Nothing to compile / No need to generate any newer typings' indicating successful prior compilation with no errors."
+        },
+        {
+          "text": "NFT metadata JSON includes required fields: name, description, image",
+          "passed": true,
+          "evidence": "tokenURI returns JSON with name ('OnChain NFT #N'), description ('A fully on-chain generative SVG NFT.'), and image ('data:image/svg+xml;base64,...'). Also includes attributes array."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 253.7,
+        "tokens": 32703,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+          "passed": true,
+          "evidence": "Contract imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns: Ownable(msg.sender) constructor arg, _requireOwned()."
+        },
+        {
+          "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+          "passed": true,
+          "evidence": "tokenURI() generates SVG via generateSVG(), base64-encodes it as data:image/svg+xml;base64, wraps in JSON metadata, and returns as data:application/json;base64."
+        },
+        {
+          "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+          "passed": true,
+          "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH sent') with MINT_PRICE = 0.01 ether."
+        },
+        {
+          "text": "Gallery page displays minted NFTs with their SVG images",
+          "passed": true,
+          "evidence": "packages/nextjs/app/gallery/page.tsx has NFTCard component that parses base64 tokenURI metadata and renders the SVG image via <img src={metadata.image}>. Gallery grid shows all minted tokens."
+        },
+        {
+          "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+          "passed": false,
+          "evidence": "Contract does not have any _update override or _beforeTokenTransfer. ERC721Enumerable inherits _update internally, but there is no custom transfer customization in the contract. Neither _update nor _beforeTokenTransfer appears in the contract source."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper hardhat-deploy pattern: DeployFunction, getNamedAccounts, deploy() call, and tags."
+        },
+        {
+          "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Gallery page uses useScaffoldReadContract for totalSupply, MINT_PRICE, MAX_SUPPLY, tokenURI, ownerOf and useScaffoldWriteContract for mintItem."
+        },
+        {
+          "text": "Token ID counter is managed correctly (no off-by-one errors)",
+          "passed": true,
+          "evidence": "tokenIdCounter starts at 0, is incremented before minting (tokenIdCounter++; uint256 newTokenId = tokenIdCounter;), so first token is ID 1. Frontend generates IDs with Array.from({length: totalSupply}, (_, i) => BigInt(i + 1)), correctly starting from 1."
+        },
+        {
+          "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+          "passed": false,
+          "evidence": "Compilation fails with 'Stack too deep' error at line 85 in generateSVG() function. Too many local variables in the function cause the EVM stack limit to be exceeded."
+        },
+        {
+          "text": "NFT metadata JSON includes required fields: name, description, image",
+          "passed": true,
+          "evidence": "tokenURI returns JSON with name ('OnChainNFT #<id>'), description ('A unique on-chain generative SVG NFT.'), and image (base64 SVG data URI)."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 405.4,
+        "tokens": 37883,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+          "passed": true,
+          "evidence": "useSiwe.ts imports createSiweMessage from 'viem/siwe'; verify/route.ts imports parseSiweMessage and verifySiweMessage from 'viem/siwe'; nonce/route.ts imports generateSiweNonce from 'viem/siwe'. No imports from the 'siwe' npm package found anywhere."
+        },
+        {
+          "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+          "passed": true,
+          "evidence": "iron-session ^8.0.4 in package.json. All three API routes (nonce, verify, session) use getIronSession from 'iron-session'. Session config in utils/siwe.ts sets httpOnly, sameSite, secure cookies with 7-day maxAge."
+        },
+        {
+          "text": "Implements nonce-first flow: server generates nonce before client signs",
+          "passed": true,
+          "evidence": "useSiwe.ts signIn() fetches /api/siwe/nonce first (step 1), then creates the SIWE message with that nonce (step 2), then signs (step 3), then verifies (step 4). Server generates nonce via generateSiweNonce() in nonce/route.ts."
+        },
+        {
+          "text": "API routes exist for nonce generation, signature verification, and session check",
+          "passed": true,
+          "evidence": "Three API routes exist: /api/siwe/nonce/route.ts (GET - nonce generation), /api/siwe/verify/route.ts (POST - signature verification), /api/siwe/session/route.ts (GET - session check, DELETE - sign out)."
+        },
+        {
+          "text": "Domain validation against Host header in verify route",
+          "passed": true,
+          "evidence": "verify/route.ts line 40-43: extracts expectedDomain from req.headers.get('host'), returns 400 if missing, then passes domain: expectedDomain to verifySiweMessage() for validation."
+        },
+        {
+          "text": "Nonce is cleared after successful verification (single-use)",
+          "passed": true,
+          "evidence": "verify/route.ts line 69: 'session.nonce = undefined; // Clear nonce \u2014 one-time use' followed by session.save()."
+        },
+        {
+          "text": "Session persists across page refreshes (cookie-based, not just client state)",
+          "passed": true,
+          "evidence": "iron-session stores session in encrypted httpOnly cookies. useSiwe.ts checkSession() fetches /api/siwe/session on mount (useEffect) to restore session state from cookies across page refreshes."
+        },
+        {
+          "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+          "passed": true,
+          "evidence": "hooks/useSiwe.ts exports useSiwe() hook that encapsulates signIn, signOut, checkSession, and session state management. Returns isSignedIn, isLoading, error, address, signIn, signOut, etc."
+        },
+        {
+          "text": "Frontend shows sign-in/sign-out UI with session status",
+          "passed": true,
+          "evidence": "app/page.tsx renders a 'Wallet Authentication' card with conditional UI: when signed in shows 'Signed In' badge, authenticated address, sign-out button; when not signed in shows 'Sign In with Ethereum' button. Error messages displayed when present."
+        },
+        {
+          "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+          "passed": true,
+          "evidence": "useSiwe.ts lines 54-70: useEffect watches isConnected; when wallet disconnects after being connected and user is signed in, it calls DELETE /api/siwe/session and resets local state (auto-logout)."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 441.5,
+        "tokens": 46165,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+          "passed": true,
+          "evidence": "hooks/useSiwe.ts imports createSiweMessage from 'viem/siwe'; api/siwe/verify/route.ts imports parseSiweMessage and verifySiweMessage from 'viem/siwe'; api/siwe/nonce/route.ts imports generateSiweNonce from 'viem/siwe'. No usage of the siwe npm package."
+        },
+        {
+          "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+          "passed": true,
+          "evidence": "All API routes import getIronSession from 'iron-session'. utils/siwe.ts configures SessionOptions with encrypted cookie settings (httpOnly, sameSite, secure, password-based encryption)."
+        },
+        {
+          "text": "Implements nonce-first flow: server generates nonce before client signs",
+          "passed": true,
+          "evidence": "In hooks/useSiwe.ts signIn(): step 1 fetches nonce from /api/siwe/nonce, step 2 creates SIWE message with that nonce, step 3 signs, step 4 verifies. Server generates nonce via generateSiweNonce() in nonce/route.ts."
+        },
+        {
+          "text": "API routes exist for nonce generation, signature verification, and session check",
+          "passed": true,
+          "evidence": "Three API routes exist: app/api/siwe/nonce/route.ts (GET), app/api/siwe/verify/route.ts (POST), app/api/siwe/session/route.ts (GET for check, DELETE for logout)."
+        },
+        {
+          "text": "Domain validation against Host header in verify route",
+          "passed": true,
+          "evidence": "verify/route.ts line 40-43: extracts expectedDomain from req.headers.get('host'), returns 400 if missing, and passes it to verifySiweMessage as the domain parameter for validation."
+        },
+        {
+          "text": "Nonce is cleared after successful verification (single-use)",
+          "passed": true,
+          "evidence": "verify/route.ts line 69: session.nonce = undefined after successful verification, then session.save() is called. This ensures single-use nonces."
+        },
+        {
+          "text": "Session persists across page refreshes (cookie-based, not just client state)",
+          "passed": true,
+          "evidence": "iron-session stores session data in encrypted HTTP-only cookies with 7-day maxAge. The useSiwe hook calls checkSession on mount (useEffect with checkSession), which fetches /api/siwe/session to restore state from the cookie."
+        },
+        {
+          "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+          "passed": true,
+          "evidence": "hooks/useSiwe.ts exports useSiwe() hook that encapsulates the full auth flow: session check, signIn, signOut, auto-logout on disconnect, and exposes state (isSignedIn, address, chainId, error, isLoading)."
+        },
+        {
+          "text": "Frontend shows sign-in/sign-out UI with session status",
+          "passed": true,
+          "evidence": "app/login/page.tsx renders three states: wallet not connected (prompt to connect), signed in (shows address, signedInAt, sign-out button with alert-success), and not signed in (shows connected address, sign-in button, error display)."
+        },
+        {
+          "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+          "passed": true,
+          "evidence": "hooks/useSiwe.ts lines 54-70: useEffect watches isConnected and state.isSignedIn. When wallet disconnects after having been connected (tracked via hasSeenWalletConnected ref), it calls DELETE /api/siwe/session and resets local state."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 1474.8,
+        "tokens": 33474,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reviews the existing YourContract.sol code before suggesting changes",
+          "passed": true,
+          "evidence": "Transcript shows the agent read both the SKILL.md and the original YourContract.sol before making any changes. The first tool calls are Read for both files."
+        },
+        {
+          "text": "Identifies at least 2 potential security considerations or improvements",
+          "passed": true,
+          "evidence": "Agent identified 7 issues: floating pragma, CEI violation in withdraw(), missing input validation in setGreeting(), missing zero-address validation in constructor, hardhat console.log import, no event emission for withdraw(), and inconsistent uint type."
+        },
+        {
+          "text": "Applies checks-effects-interactions pattern where applicable",
+          "passed": true,
+          "evidence": "The withdraw() function was refactored to cache balance in a local variable first (CHECKS), emit event before external call (EFFECTS), then do the external call last (INTERACTIONS). setGreeting() also has explicit CHECKS/EFFECTS comments and validates input before state changes."
+        },
+        {
+          "text": "Suggests or implements access control improvements (Ownable, modifiers)",
+          "passed": true,
+          "evidence": "The isOwner modifier was improved from require(msg.sender == owner, 'Not the Owner') to use a custom error (if (msg.sender != owner) revert NotTheOwner()). Constructor now validates _owner != address(0). The modifier pattern was retained and improved with gas-efficient custom errors."
+        },
+        {
+          "text": "Implements the suggested fixes in the actual contract code",
+          "passed": true,
+          "evidence": "Git diff confirms all 7 identified issues were implemented in the actual YourContract.sol file: pinned pragma, zero-address check, empty greeting check, CEI pattern in withdraw, EtherWithdrawn event, removed console.log import, changed uint to uint256."
+        },
+        {
+          "text": "Mentions input validation for function parameters",
+          "passed": true,
+          "evidence": "Agent added input validation for setGreeting (empty string check: if (bytes(_newGreeting).length == 0) revert EmptyGreeting()) and for constructor (_owner == address(0) check). Both were identified in the audit and implemented."
+        },
+        {
+          "text": "Contract still compiles after fixes are applied",
+          "passed": false,
+          "evidence": "Agent attempted compilation multiple times but could not get it to work due to worktree node_modules/symlink issues. Agent acknowledged 'Compilation could not be verified because the git worktree lacks its own node_modules.' However, the contract code appears syntactically correct and should compile -- but this was not verified."
+        },
+        {
+          "text": "Suggests event emission for state-changing functions if missing",
+          "passed": true,
+          "evidence": "Agent identified that withdraw() was missing event emission and added 'event EtherWithdrawn(address indexed to, uint256 amount)' with 'emit EtherWithdrawn(owner, balance)' before the external call in withdraw()."
+        },
+        {
+          "text": "Does not introduce new vulnerabilities with the fixes",
+          "passed": true,
+          "evidence": "The changes are all standard security improvements. Custom errors replace require strings (gas savings), CEI pattern properly applied, input validation added. The EtherWithdrawn event is emitted before the external call which is correct CEI. No new vulnerabilities introduced."
+        },
+        {
+          "text": "Provides clear explanation of each vulnerability and its fix",
+          "passed": true,
+          "evidence": "Agent provided a numbered list of all 7 findings with clear descriptions in both the inline audit discussion and the final summary. Each issue was named, explained (e.g., 'Floating Pragma -- Uses >=0.8.0 <0.9.0 instead of a pinned version'), and the fix was described."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 1802.2,
+        "tokens": 43274,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Staking contract has stake, withdraw, and getReward (or claimReward) functions",
+          "passed": true,
+          "evidence": "Staker.sol has stake() (line 76), unstake() (line 84), and claimReward() (line 93) functions."
+        },
+        {
+          "text": "Reward calculation uses rewardPerToken stored pattern (not naive block-by-block)",
+          "passed": true,
+          "evidence": "Staker.sol uses rewardPerTokenStored (line 28), rewardPerToken() view function (line 57), and userRewardPerTokenPaid mapping (line 30) \u2014 the standard Synthetix-style rewardPerToken stored pattern."
+        },
+        {
+          "text": "ReentrancyGuard (nonReentrant) applied to stake and withdraw functions",
+          "passed": true,
+          "evidence": "Contract inherits ReentrancyGuard (line 19). stake() has nonReentrant modifier (line 76), unstake() has nonReentrant (line 84), and claimReward() also has nonReentrant (line 93)."
+        },
+        {
+          "text": "Separate ERC-20 token contract exists for the staking token",
+          "passed": true,
+          "evidence": "StakeToken.sol is a separate ERC20 contract (inherits ERC20, Ownable) with mint functionality, deployed independently in the deploy script."
+        },
+        {
+          "text": "Frontend page shows staking, unstaking, and rewards viewing",
+          "passed": true,
+          "evidence": "packages/nextjs/app/staking/page.tsx has Stake Tokens card (line 197), Unstake Tokens card (line 227), and Claim Rewards card (line 257) with rewards display."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Frontend imports and uses useScaffoldReadContract for balanceOf, earned, totalStaked, rewardRate (lines 24-54) and useScaffoldWriteContract for StakeToken and Staker (lines 57-63)."
+        },
+        {
+          "text": "Proper Hardhat deploy script(s) exist in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_staking.ts deploys StakeToken and Staker contracts, funds the staker with reward tokens, and transfers test tokens to a user. Uses proper hardhat-deploy pattern with tags."
+        },
+        {
+          "text": "Events emitted for stake, withdraw, and reward claim actions",
+          "passed": true,
+          "evidence": "Staker.sol emits Staked event (line 81), Unstaked event (line 90), and RewardClaimed event (line 98). Events declared on lines 38-41."
+        },
+        {
+          "text": "updateReward modifier or equivalent pattern updates rewards before state changes",
+          "passed": true,
+          "evidence": "updateReward modifier (lines 111-119) updates rewardPerTokenStored, lastUpdateTime, and user rewards before executing function body. Applied to stake, unstake, and claimReward."
+        },
+        {
+          "text": "Contracts compile successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "Running 'yarn compile' returned 'Nothing to compile' (already compiled) with no errors, confirming valid Solidity syntax."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 486.2,
+        "tokens": 38887,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+          "passed": false,
+          "evidence": "No shared utility module exists. VOTE_TYPES is defined inline in packages/nextjs/app/signature/page.tsx and the domain object is constructed inline in the handleSign function. The Solidity contract defines its own VOTE_TYPEHASH separately. There is no shared module that both signing and verification reference."
+        },
+        {
+          "text": "Uses useSignTypedData from wagmi for wallet signing",
+          "passed": true,
+          "evidence": "page.tsx line 7: import { useAccount, useSignTypedData } from 'wagmi'; and line 35: const { signTypedDataAsync } = useSignTypedData(); used in handleSign."
+        },
+        {
+          "text": "Uses 'as const' on domain and type objects for TypeScript type inference",
+          "passed": false,
+          "evidence": "VOTE_TYPES on line 16-23 uses 'as const', but the domain object constructed in handleSign (lines 86-91) does not use 'as const'. Only partial compliance."
+        },
+        {
+          "text": "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+          "passed": true,
+          "evidence": "EIP712Verifier.sol uses ECDSA.recover(digest, signature) on lines 57 and 96 for both verifyAndRecordVote and verifySigner functions."
+        },
+        {
+          "text": "Domain separator includes at minimum name and version fields",
+          "passed": true,
+          "evidence": "Frontend domain (page.tsx lines 87-91) includes name: 'EIP712Verifier', version: '1', chainId, and verifyingContract. Solidity constructor (line 41): EIP712('EIP712Verifier', '1')."
+        },
+        {
+          "text": "primaryType correctly matches a key in the types object",
+          "passed": true,
+          "evidence": "page.tsx line 93: primaryType: 'Vote' matches the key 'Vote' in VOTE_TYPES defined on line 17."
+        },
+        {
+          "text": "Smart contract implements on-chain EIP-712 signature verification",
+          "passed": true,
+          "evidence": "EIP712Verifier.sol inherits from OpenZeppelin's EIP712, computes struct hash with VOTE_TYPEHASH, uses _hashTypedDataV4(structHash), and recovers signer with ECDSA.recover. Both verifyAndRecordVote (state-changing) and verifySigner (view) functions implement verification."
+        },
+        {
+          "text": "Creates a Next.js page with signing UI and verification display",
+          "passed": true,
+          "evidence": "packages/nextjs/app/signature/page.tsx provides a full signing UI with proposal ID input, support radio buttons, reason textarea, sign button, signature display, and verification/submission section showing recovered signer address."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "page.tsx uses useScaffoldReadContract for nonces, getVoteCount, getVoteResults, and verifySigner. Uses useScaffoldWriteContract for verifyAndRecordVote. Also uses useDeployedContractInfo."
+        },
+        {
+          "text": "Handles wallet not connected state gracefully (no crash when address is undefined)",
+          "passed": true,
+          "evidence": "handleSign checks if (!connectedAddress || !deployedContractData) and shows notification.error. The sign button is disabled when !connectedAddress. useScaffoldReadContract for nonces passes connectedAddress which may be undefined but wagmi handles that gracefully. nonce uses ?? 0n fallback."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 332.9,
+        "tokens": 48478,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+          "passed": false,
+          "evidence": "No shared utility module exists. The domain and types are defined inline in sign-vote/page.tsx only. The only file referencing EIP-712 domain/types in the nextjs package is the page component itself. Verification is handled entirely on-chain in the Solidity contract, so there is no frontend duplication, but there is also no shared utility module."
+        },
+        {
+          "text": "Uses useSignTypedData from wagmi for wallet signing",
+          "passed": true,
+          "evidence": "page.tsx line 7: import { useAccount, useSignTypedData } from 'wagmi'; and line 15: const { signTypedDataAsync } = useSignTypedData(); used in handleSign."
+        },
+        {
+          "text": "Uses 'as const' on domain and type objects for TypeScript type inference",
+          "passed": false,
+          "evidence": "No 'as const' assertions found in sign-vote/page.tsx. The domain and types objects are defined inline in the signTypedDataAsync call without const assertions."
+        },
+        {
+          "text": "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+          "passed": true,
+          "evidence": "EIP712VoteVerifier.sol line 77: address recoveredSigner = ECDSA.recover(digest, signature); uses OpenZeppelin's ECDSA.recover for on-chain verification."
+        },
+        {
+          "text": "Domain separator includes at minimum name and version fields",
+          "passed": true,
+          "evidence": "Solidity constructor: EIP712('EIP712VoteVerifier', '1'). Frontend domain object includes name: 'EIP712VoteVerifier', version: '1', chainId, and verifyingContract."
+        },
+        {
+          "text": "primaryType correctly matches a key in the types object",
+          "passed": true,
+          "evidence": "In page.tsx the signTypedDataAsync call uses primaryType: 'Vote' and types: { Vote: [...] } - they match correctly."
+        },
+        {
+          "text": "Smart contract implements on-chain EIP-712 signature verification",
+          "passed": true,
+          "evidence": "EIP712VoteVerifier.sol extends OpenZeppelin EIP712, uses _hashTypedDataV4 to create the digest, and ECDSA.recover to verify the signer matches the voter. The submitVoteWithSignature function implements full on-chain verification."
+        },
+        {
+          "text": "Creates a Next.js page with signing UI and verification display",
+          "passed": true,
+          "evidence": "packages/nextjs/app/sign-vote/page.tsx contains a full page with signing form (proposal ID, vote direction, reason), signature display, on-chain submission button, and a proposal tally viewer section."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "page.tsx uses useScaffoldReadContract for getProposalTally and hasVoted, and useScaffoldWriteContract for submitVoteWithSignature. Also uses useDeployedContractInfo."
+        },
+        {
+          "text": "Handles wallet not connected state gracefully (no crash when address is undefined)",
+          "passed": true,
+          "evidence": "handleSign checks if (!connectedAddress) and shows notification.error. The sign button is disabled when !connectedAddress. The args to useScaffoldReadContract for hasVoted pass connectedAddress which can be undefined but won't crash since the hook handles it."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 1486.0,
+        "tokens": 35815,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+          "passed": false,
+          "evidence": "Contract imports ERC20 and Ownable from OpenZeppelin but does NOT use ERC20Capped extension. Instead, it implements cap logic manually with an immutable `cap` variable and a require check in the mint function."
+        },
+        {
+          "text": "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+          "passed": true,
+          "evidence": "The mint function uses `external onlyOwner` modifier: `function mint(address _to, uint256 _amount) external onlyOwner`"
+        },
+        {
+          "text": "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+          "passed": true,
+          "evidence": "Constructor uses `Ownable(_owner)` pattern with _owner passed as constructor arg. Deploy script passes `deployer` as the owner argument, which is effectively msg.sender. This is the v5 pattern."
+        },
+        {
+          "text": "Frontend page includes mint functionality (owner can mint tokens)",
+          "passed": true,
+          "evidence": "Token page at packages/nextjs/app/token/page.tsx includes a mint section with AddressInput for recipient, IntegerInput for amount, and a Mint button. It's conditionally rendered only for the owner (isOwner check)."
+        },
+        {
+          "text": "Frontend page includes transfer functionality (send tokens to another address)",
+          "passed": true,
+          "evidence": "Token page includes a Transfer Tokens section with AddressInput for recipient, IntegerInput for amount, and a Transfer button that calls the ERC20 transfer function."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "Deploy script at packages/hardhat/deploy/01_deploy_capped_token.ts exists with proper structure, uses deployer account, passes constructor args, and has tags."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Frontend imports and uses useScaffoldReadContract for name, symbol, totalSupply, cap, owner, balanceOf and useScaffoldWriteContract for mint and transfer operations."
+        },
+        {
+          "text": "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+          "passed": true,
+          "evidence": "Frontend uses formatEther for displaying totalSupply, cap, and balance. Uses parseEther when calling mint and transfer to convert user input to wei."
+        },
+        {
+          "text": "Contract compiles successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "Contract has valid Solidity syntax with pragma ^0.8.20, proper imports, correct inheritance pattern, and standard function implementations. No syntax errors present."
+        },
+        {
+          "text": "Cap is enforced (cannot mint beyond max supply)",
+          "passed": true,
+          "evidence": "The mint function includes `require(totalSupply() + _amount <= cap, \"Cap exceeded\")` which prevents minting beyond the cap of 1,000,000 tokens set in the deploy script."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 383.6,
+        "tokens": 30723,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-20 contract with ERC20Capped extension",
+          "passed": true,
+          "evidence": "CappedToken.sol imports @openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol and inherits from ERC20Capped. Uses pragma ^0.8.20 and v5 patterns."
+        },
+        {
+          "text": "Minting is restricted to owner (onlyOwner modifier or equivalent access control)",
+          "passed": true,
+          "evidence": "mint function uses 'external onlyOwner' modifier: function mint(address to, uint256 amount) external onlyOwner"
+        },
+        {
+          "text": "Constructor uses Ownable(msg.sender) pattern (v5, not parameterless Ownable())",
+          "passed": true,
+          "evidence": "Constructor uses Ownable(initialOwner) pattern, and deploy script passes deployer as initialOwner. This is the v5 pattern (parameterized Ownable), not the v4 parameterless Ownable()."
+        },
+        {
+          "text": "Frontend page includes mint functionality (owner can mint tokens)",
+          "passed": true,
+          "evidence": "Token page has a mint section with AddressInput for recipient, IntegerInput for amount, and handleMint function calling writeCappedToken with functionName 'mint'. Conditionally shown only to owner."
+        },
+        {
+          "text": "Frontend page includes transfer functionality (send tokens to another address)",
+          "passed": true,
+          "evidence": "Token page has a transfer section with AddressInput for recipient, IntegerInput for amount, and handleTransfer function calling writeTransfer with functionName 'transfer'."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_capped_token.ts exists with proper hardhat-deploy format, deployer account, tags, and constructor args."
+        },
+        {
+          "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Frontend uses useScaffoldReadContract for name, symbol, totalSupply, cap, owner, balanceOf and useScaffoldWriteContract for mint and transfer."
+        },
+        {
+          "text": "Handles token decimals correctly in frontend (formatUnits/parseUnits or formatEther/parseEther)",
+          "passed": true,
+          "evidence": "Uses formatEther for display (totalSupply, cap, connectedBalance) and parseEther for input (mint and transfer amounts). Since the token uses default 18 decimals, formatEther/parseEther is correct."
+        },
+        {
+          "text": "Contract compiles successfully with valid Solidity syntax",
+          "passed": true,
+          "evidence": "Solidity syntax is valid: proper imports, inheritance (ERC20Capped, Ownable), constructor chaining ERC20(name, symbol) ERC20Capped(cap) Ownable(initialOwner), and mint function calling _mint."
+        },
+        {
+          "text": "Cap is enforced (cannot mint beyond max supply)",
+          "passed": true,
+          "evidence": "ERC20Capped._mint internally checks cap enforcement. The contract calls _mint which is overridden by ERC20Capped to enforce the cap. Deploy script sets cap to parseEther('1000000')."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 1756.0,
+        "tokens": 39270,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+          "passed": true,
+          "evidence": "Contract imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns: Ownable(initialOwner) in constructor, _requireOwned() in tokenURI."
+        },
+        {
+          "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+          "passed": true,
+          "evidence": "tokenURI() generates SVG via generateSVG(), encodes it as data:image/svg+xml;base64, then wraps it in a JSON metadata object encoded as data:application/json;base64. Full on-chain generative SVG with background, circles, polygon, and token label."
+        },
+        {
+          "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+          "passed": true,
+          "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH sent') where MINT_PRICE = 0.01 ether."
+        },
+        {
+          "text": "Gallery page displays minted NFTs with their SVG images",
+          "passed": true,
+          "evidence": "packages/nextjs/app/nft-gallery/page.tsx has NftCard component that parses base64 tokenURI, extracts the image field, and renders it as <img src={metadata.image}>. Gallery grid displays cards with pagination."
+        },
+        {
+          "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+          "passed": false,
+          "evidence": "The contract does not implement any custom _update override. It inherits ERC721Enumerable which internally uses _update in OZ v5, but the contract itself has no transfer customization logic. No _beforeTokenTransfer is used either (which is correct for v5), but the expectation requires an explicit _update override."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper hardhat-deploy pattern: uses getNamedAccounts, deployments.deploy, passes deployer as constructor arg, has tags = ['OnChainNFT']."
+        },
+        {
+          "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "Gallery page imports and uses useScaffoldReadContract for tokenURI, ownerOf, tokenMinter, totalMinted, MAX_SUPPLY, MINT_PRICE, and useScaffoldWriteContract for mintItem. All from ~~/hooks/scaffold-eth."
+        },
+        {
+          "text": "Token ID counter is managed correctly (no off-by-one errors)",
+          "passed": true,
+          "evidence": "_nextTokenId starts at 0 (default). mintItem() assigns tokenId = _nextTokenId, then increments. First token is ID 0, totalMinted() returns _nextTokenId which equals the count of minted tokens. No off-by-one issues."
+        },
+        {
+          "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+          "passed": true,
+          "evidence": "Contract uses valid Solidity ^0.8.20, proper OZ v5 imports (ERC721, ERC721Enumerable, Ownable, Strings, Base64), correct constructor syntax with super calls, and _requireOwned. ERC721Enumerable handles _update and _increaseBalance overrides internally. No conflicting inheritance."
+        },
+        {
+          "text": "NFT metadata JSON includes required fields: name, description, image",
+          "passed": true,
+          "evidence": "_buildJsonMetadata returns JSON with name ('OnChain NFT #<id>'), description ('A fully on-chain generative SVG NFT.'), and image (base64 SVG data URI). Also includes attributes array with Minter trait."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 370.1,
+        "tokens": 36635,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+          "passed": true,
+          "evidence": "Contract imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns: Ownable(initialOwner) constructor and _requireOwned()."
+        },
+        {
+          "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+          "passed": true,
+          "evidence": "tokenURI() generates SVG via generateSVG(), base64-encodes it, wraps in JSON with data:image/svg+xml;base64 prefix, then returns data:application/json;base64 encoded result. Lines 42-63 of OnchainNFT.sol."
+        },
+        {
+          "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+          "passed": true,
+          "evidence": "mintItem() has require(msg.value >= mintPrice, 'Not enough ETH to mint') with mintPrice = 0.01 ether. Line 30."
+        },
+        {
+          "text": "Gallery page displays minted NFTs with their SVG images",
+          "passed": true,
+          "evidence": "nft-gallery/page.tsx renders NFTCard components for each tokenId, fetching tokenURI and decoding metadata to display SVG images via <img src={metadata.image}>. Lines 30-55."
+        },
+        {
+          "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+          "passed": false,
+          "evidence": "The contract does not override _update for any transfer customization. ERC721Enumerable inherits _update internally, but the contract itself has no custom _update override. No _beforeTokenTransfer either (which is correct for v5, but no transfer customization is implemented)."
+        },
+        {
+          "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+          "passed": true,
+          "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper DeployFunction structure, passes deployer as constructor arg, and has tags = ['OnchainNFT']."
+        },
+        {
+          "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+          "passed": true,
+          "evidence": "nft-gallery/page.tsx imports and uses useScaffoldReadContract for tokenURI, ownerOf, tokenMinter, totalSupply, mintPrice, and useScaffoldWriteContract for minting. Line 8."
+        },
+        {
+          "text": "Token ID counter is managed correctly (no off-by-one errors)",
+          "passed": true,
+          "evidence": "_nextTokenId starts at 0 (default), tokenId = _nextTokenId then increments, so first token is 0, second is 1, etc. Frontend creates tokenIds from 0 to supply-1. No off-by-one."
+        },
+        {
+          "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+          "passed": true,
+          "evidence": "Could not run compiler (no node_modules in worktree), but syntax is valid Solidity 0.8.20, all imports are standard OZ v5 paths, constructor patterns match v5 (Ownable(initialOwner)), and _requireOwned is the v5 method. No syntax errors detected."
+        },
+        {
+          "text": "NFT metadata JSON includes required fields: name, description, image",
+          "passed": true,
+          "evidence": "tokenURI builds JSON with 'name': 'Onchain NFT #<id>', 'description': 'A fully on-chain SVG NFT with unique generative art.', 'image': 'data:image/svg+xml;base64,...'. Lines 48-57."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.9,
+        "passed": 9,
+        "failed": 1,
+        "total": 10,
+        "time_seconds": 2194.0,
+        "tokens": 49482,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+          "passed": true,
+          "evidence": "useAuthSession.ts imports createSiweMessage from 'viem/siwe'. verify/route.ts uses parseSiweMessage from 'viem/siwe' and publicClient.verifySiweMessage(). nonce/route.ts uses generateSiweNonce from 'viem/siwe'. No siwe npm package is used."
+        },
+        {
+          "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+          "passed": true,
+          "evidence": "iron-session ^8.0.4 added to package.json. All API routes use getIronSession from 'iron-session' with sessionOptions that include password, cookieName 'scaffold-eth-siwe-session', and httpOnly/secure cookie options."
+        },
+        {
+          "text": "Implements nonce-first flow: server generates nonce before client signs",
+          "passed": true,
+          "evidence": "In useAuthSession.ts signIn(), the client first fetches /api/auth/nonce to get a server-generated nonce (using generateSiweNonce()), stores it in the session, then creates the SIWE message with that nonce, signs it, and sends to /api/auth/verify."
+        },
+        {
+          "text": "API routes exist for nonce generation, signature verification, and session check",
+          "passed": true,
+          "evidence": "Four API routes exist: /api/auth/nonce (GET - nonce generation), /api/auth/verify (POST - signature verification), /api/auth/session (GET - session check), /api/auth/logout (POST - session destruction)."
+        },
+        {
+          "text": "Domain validation against Host header in verify route",
+          "passed": false,
+          "evidence": "The verify route at app/api/auth/verify/route.ts does not validate the domain from the parsed SIWE message against the Host header of the request. It only checks nonce and signature validity but skips domain validation."
+        },
+        {
+          "text": "Nonce is cleared after successful verification (single-use)",
+          "passed": true,
+          "evidence": "In verify/route.ts line 38: 'session.nonce = undefined;' is set after successful verification and before session.save(), ensuring single-use nonces."
+        },
+        {
+          "text": "Session persists across page refreshes (cookie-based, not just client state)",
+          "passed": true,
+          "evidence": "Sessions use iron-session with httpOnly cookies (cookieName: 'scaffold-eth-siwe-session'). The /api/auth/session GET route reads from the cookie-based session. The useAuthSession hook fetches session state from the server on mount via useQuery."
+        },
+        {
+          "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+          "passed": true,
+          "evidence": "useAuthSession hook at packages/nextjs/hooks/scaffold-eth/useAuthSession.ts encapsulates the full auth flow: session fetching, signIn (nonce + sign + verify), signOut, auto-logout on disconnect, and exposes isAuthenticated, isLoading, session, signIn, signOut."
+        },
+        {
+          "text": "Frontend shows sign-in/sign-out UI with session status",
+          "passed": true,
+          "evidence": "app/login/page.tsx shows a full auth UI: connect wallet prompt when disconnected, Sign-In with Ethereum button when connected but not authenticated, authenticated status badge with address display and Sign Out button when authenticated. Added to Header.tsx navigation as 'Login' link."
+        },
+        {
+          "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+          "passed": true,
+          "evidence": "useAuthSession.ts lines 85-92: useEffect watches isConnected and address changes. When wallet disconnects (!isConnected && session?.isLoggedIn) or address changes, it auto-calls signOut() which hits /api/auth/logout and clears client state."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 2,
+      "result": {
+        "pass_rate": 0.8,
+        "passed": 8,
+        "failed": 2,
+        "total": 10,
+        "time_seconds": 312.5,
+        "tokens": 37188,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Uses viem's native SIWE utilities (createSiweMessage, verifySiweMessage) NOT the siwe npm package",
+          "passed": false,
+          "evidence": "Both useAuth.ts and the API routes import from the 'siwe' npm package (SiweMessage, generateNonce), not from viem's native SIWE utilities."
+        },
+        {
+          "text": "Uses iron-session or equivalent for encrypted cookie-based sessions",
+          "passed": true,
+          "evidence": "utils/auth/session.ts imports getIronSession from 'iron-session' and configures it with httpOnly, secure cookies under the name 'siwe-session'."
+        },
+        {
+          "text": "Implements nonce-first flow: server generates nonce before client signs",
+          "passed": true,
+          "evidence": "useAuth.ts signIn() fetches /api/auth/nonce first to get a server-generated nonce, then includes it in the SiweMessage before signing."
+        },
+        {
+          "text": "API routes exist for nonce generation, signature verification, and session check",
+          "passed": true,
+          "evidence": "Four API routes exist: /api/auth/nonce (GET), /api/auth/verify (POST), /api/auth/session (GET), and /api/auth/logout (POST)."
+        },
+        {
+          "text": "Domain validation against Host header in verify route",
+          "passed": false,
+          "evidence": "The verify route (route.ts) does not check the message domain against the request Host header. It calls siweMessage.verify({ signature, nonce }) but does not pass or validate the domain."
+        },
+        {
+          "text": "Nonce is cleared after successful verification (single-use)",
+          "passed": true,
+          "evidence": "In verify/route.ts, after successful verification, session.nonce is set to undefined and saved (line 22-23). Also cleared on nonce mismatch (line 14)."
+        },
+        {
+          "text": "Session persists across page refreshes (cookie-based, not just client state)",
+          "passed": true,
+          "evidence": "iron-session stores session data in encrypted httpOnly cookies. The useAuth hook calls checkSession() on mount to restore state from the server-side session."
+        },
+        {
+          "text": "Creates a custom hook (useSiwe or similar) encapsulating the auth flow",
+          "passed": true,
+          "evidence": "hooks/scaffold-eth/useAuth.ts exports useAuth hook that encapsulates signIn, logout, session checking, and state management."
+        },
+        {
+          "text": "Frontend shows sign-in/sign-out UI with session status",
+          "passed": true,
+          "evidence": "app/login/page.tsx shows conditional UI: loading spinner, authenticated state with address and sign-out button, wallet-not-connected prompt, and sign-in button."
+        },
+        {
+          "text": "Handles wallet disconnect gracefully (auto-logout or session invalidation)",
+          "passed": true,
+          "evidence": "useAuth.ts has a useEffect that watches isConnected and address; when wallet disconnects or address changes while authenticated, it calls logout() automatically."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 721.8,
+        "tokens": 23538,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Reviews the existing YourContract.sol code before suggesting changes",
+          "passed": true,
+          "evidence": "The agent read the contract file at packages/hardhat/contracts/YourContract.sol (tool_use_id toolu_01DXhsL3AmmkHcw2JLripf6U) before making any edits, and also re-read it after edits to verify correctness."
+        },
+        {
+          "text": "Identifies at least 2 potential security considerations or improvements",
+          "passed": true,
+          "evidence": "The agent identified 7 issues: (1) reentrancy in withdraw(), (2) no input validation on setGreeting(), (3) unchecked arithmetic, (4) withdraw sends entire balance with no event, (5) no zero-address check on owner, (6) missing withdrawal events, (7) misleading premium state. The summary.md documents 6 of these with fixes."
+        },
+        {
+          "text": "Applies checks-effects-interactions pattern where applicable",
+          "passed": true,
+          "evidence": "In the modified withdraw() function, the balance check (check) and event emission (effect) happen before the external call owner.call{value: balance}('') (interaction). The summary explicitly notes: 'Emitting before the call follows the checks-effects-interactions pattern.'"
+        },
+        {
+          "text": "Suggests or implements access control improvements (Ownable, modifiers)",
+          "passed": true,
+          "evidence": "The agent improved the existing isOwner modifier by replacing require(msg.sender == owner, 'Not the Owner') with a custom error pattern: if (msg.sender != owner) revert NotOwner(). The modifier is applied to withdraw(). A nonReentrant modifier was also added."
+        },
+        {
+          "text": "Implements the suggested fixes in the actual contract code",
+          "passed": true,
+          "evidence": "The git diff shows all fixes were implemented: nonReentrant modifier, zero-address check in constructor, empty greeting validation, Withdrawal event, NoBalance check, custom errors replacing require strings. The contract was written via the Write tool."
+        },
+        {
+          "text": "Mentions input validation for function parameters",
+          "passed": true,
+          "evidence": "The agent added input validation for setGreeting: 'if (bytes(_newGreeting).length == 0) revert EmptyGreeting();' and for the constructor: 'if (_owner == address(0)) revert ZeroAddress();'. Both are documented in the summary."
+        },
+        {
+          "text": "Contract still compiles after fixes are applied",
+          "passed": true,
+          "evidence": "The agent attempted compilation but failed due to missing node_modules in the worktree (not a contract syntax error). Independent verification confirms the modified contract compiles successfully: 'Compiled 1 Solidity file successfully (evm target: paris).'"
+        },
+        {
+          "text": "Suggests event emission for state-changing functions if missing",
+          "passed": true,
+          "evidence": "The agent added a Withdrawal event: 'event Withdrawal(address indexed to, uint256 amount);' and emits it in withdraw() before the external call. The summary explains: 'The withdraw() function had no event emission, making it impossible to track withdrawals via off-chain monitoring.'"
+        },
+        {
+          "text": "Does not introduce new vulnerabilities with the fixes",
+          "passed": true,
+          "evidence": "The fixes are sound: the reentrancy guard uses a standard lock pattern, CEI is followed in withdraw(), custom errors are gas-efficient, input validation is proper. The contract compiles and maintains backward compatibility with existing function signatures."
+        },
+        {
+          "text": "Provides clear explanation of each vulnerability and its fix",
+          "passed": true,
+          "evidence": "The summary.md provides detailed explanations for all 6 fixes with severity ratings, vulnerability descriptions, and fix descriptions. It also includes an 'Items Reviewed But Not Changed' section explaining why certain issues were left as-is."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.96,
+        "stddev": 0.0699,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 805.25,
+        "stddev": 700.2892,
+        "min": 243.1,
+        "max": 2133.6
+      },
+      "tokens": {
+        "mean": 38304.4,
+        "stddev": 5772.6857,
+        "min": 30112,
+        "max": 46490
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.9,
+        "stddev": 0.0816,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 984.53,
+        "stddev": 738.6389,
+        "min": 312.5,
+        "max": 2194.0
+      },
+      "tokens": {
+        "mean": 38329.0,
+        "stddev": 7747.1006,
+        "min": 23538,
+        "max": 49482
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.06",
+      "time_seconds": "-179.3",
+      "tokens": "-25"
+    }
+  },
+  "notes": []
+}

@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+      "passed": true,
+      "evidence": "Contract imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns: Ownable(msg.sender) constructor arg, _requireOwned()."
+    },
+    {
+      "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+      "passed": true,
+      "evidence": "tokenURI() generates SVG via generateSVG(), base64-encodes it as data:image/svg+xml;base64, wraps in JSON metadata, and returns as data:application/json;base64."
+    },
+    {
+      "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+      "passed": true,
+      "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH sent') with MINT_PRICE = 0.01 ether."
+    },
+    {
+      "text": "Gallery page displays minted NFTs with their SVG images",
+      "passed": true,
+      "evidence": "packages/nextjs/app/gallery/page.tsx has NFTCard component that parses base64 tokenURI metadata and renders the SVG image via <img src={metadata.image}>. Gallery grid shows all minted tokens."
+    },
+    {
+      "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+      "passed": false,
+      "evidence": "Contract does not have any _update override or _beforeTokenTransfer. ERC721Enumerable inherits _update internally, but there is no custom transfer customization in the contract. Neither _update nor _beforeTokenTransfer appears in the contract source."
+    },
+    {
+      "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper hardhat-deploy pattern: DeployFunction, getNamedAccounts, deploy() call, and tags."
+    },
+    {
+      "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "Gallery page uses useScaffoldReadContract for totalSupply, MINT_PRICE, MAX_SUPPLY, tokenURI, ownerOf and useScaffoldWriteContract for mintItem."
+    },
+    {
+      "text": "Token ID counter is managed correctly (no off-by-one errors)",
+      "passed": true,
+      "evidence": "tokenIdCounter starts at 0, is incremented before minting (tokenIdCounter++; uint256 newTokenId = tokenIdCounter;), so first token is ID 1. Frontend generates IDs with Array.from({length: totalSupply}, (_, i) => BigInt(i + 1)), correctly starting from 1."
+    },
+    {
+      "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+      "passed": false,
+      "evidence": "Compilation fails with 'Stack too deep' error at line 85 in generateSVG() function. Too many local variables in the function cause the EVM stack limit to be exceeded."
+    },
+    {
+      "text": "NFT metadata JSON includes required fields: name, description, image",
+      "passed": true,
+      "evidence": "tokenURI returns JSON with name ('OnChainNFT #<id>'), description ('A unique on-chain generative SVG NFT.'), and image (base64 SVG data URI)."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}
