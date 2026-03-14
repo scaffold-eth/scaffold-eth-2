@@ -1,8 +1,10 @@
 # SE-2 Agent Skill Evals
 
-A/B benchmark of SE-2 agent skills: does giving Claude a SKILL.md file improve implementation quality? Tested 4 Tier 1 skills across 3 iterations, culminating in 40 independently-graded runs.
+A/B benchmark of SE-2 agent skills: does giving Claude a SKILL.md file improve implementation quality? Tested across 4 iterations covering all 3 tiers (10 skills, 60 independently-graded runs).
 
-## Final Results (Iteration 3)
+## Final Results
+
+### Tier 1 (Iteration 3) — High Capability Uplift
 
 | Skill | With Skill (5 runs) | Without Skill (5 runs) | Delta |
 |-------|---------------------|------------------------|-------|
@@ -11,6 +13,18 @@ A/B benchmark of SE-2 agent skills: does giving Claude a SKILL.md file improve i
 | eip-5792 | 88% | 50% | +38pp |
 | ponder | 100% | 68% | +32pp |
 | **Overall** | **97%** | **42%** | **+55pp** |
+
+### Tier 2+3 (Iteration 4) — Mostly Encoded Preference
+
+| Skill | Tier | With Skill | Without Skill | Delta |
+|-------|------|-----------|---------------|-------|
+| eip-712 | 2 | 100% (2 runs) | 80% (2 runs) | +20pp |
+| siwe | 2 | 100% (2 runs) | 85% (2 runs) | +15pp |
+| erc-20 | 2 | 100% (2 runs) | 95% (2 runs) | +5pp |
+| erc-721 | 2 | 85% (2 runs) | 90% (2 runs) | -5pp |
+| defi-protocol-templates | 3 | 100% (1 run) | 100% (1 run) | 0pp |
+| solidity-security | 3 | 90% (1 run) | 100% (1 run) | -10pp |
+| **Overall** | | **96%** | **90%** | **+6pp** |
 
 ## Directory Structure
 

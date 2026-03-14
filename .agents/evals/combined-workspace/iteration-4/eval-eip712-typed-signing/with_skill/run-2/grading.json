@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Creates a shared utility module for EIP-712 domain/types (not duplicated between signing and verification)",
+      "passed": true,
+      "evidence": "packages/nextjs/utils/eip-712.ts exports EIP_712_DOMAIN, EIP_712_TYPES, and generateVoteMessage. These are imported by both the signing page (app/signature-verify/page.tsx) and the backend verification route (app/api/verify-vote/route.ts), avoiding duplication."
+    },
+    {
+      "text": "Uses useSignTypedData from wagmi for wallet signing",
+      "passed": true,
+      "evidence": "page.tsx imports useSignTypedData from wagmi and uses signTypedDataAsync with domain, types, primaryType, and message parameters."
+    },
+    {
+      "text": "Uses 'as const' on domain and type objects for TypeScript type inference",
+      "passed": true,
+      "evidence": "In utils/eip-712.ts, both EIP_712_DOMAIN and EIP_712_TYPES are declared with 'as const' assertions."
+    },
+    {
+      "text": "Backend or on-chain verification uses recoverTypedDataAddress from viem OR ECDSA.recover in Solidity",
+      "passed": true,
+      "evidence": "Backend route (app/api/verify-vote/route.ts) uses recoverTypedDataAddress from viem. The smart contract (SignatureVerifier.sol) uses ECDSA.recover from OpenZeppelin. Both verification methods are implemented."
+    },
+    {
+      "text": "Domain separator includes at minimum name and version fields",
+      "passed": true,
+      "evidence": "EIP_712_DOMAIN in utils/eip-712.ts has name: 'SignatureVerifier' and version: '1'. The contract constructor also passes EIP712('SignatureVerifier', '1')."
+    },
+    {
+      "text": "primaryType correctly matches a key in the types object",
+      "passed": true,
+      "evidence": "primaryType is 'Vote' in all usages (signTypedDataAsync, useVerifyTypedData, recoverTypedDataAddress), which matches the 'Vote' key in EIP_712_TYPES."
+    },
+    {
+      "text": "Smart contract implements on-chain EIP-712 signature verification",
+      "passed": true,
+      "evidence": "SignatureVerifier.sol extends EIP712, computes VOTE_TYPEHASH, builds structHash with abi.encode, calls _hashTypedDataV4 for the digest, and uses ECDSA.recover to verify the signer. Both verifyAndRecordVote (state-changing) and verifyVoteSignature (view) functions exist."
+    },
+    {
+      "text": "Creates a Next.js page with signing UI and verification display",
+      "passed": true,
+      "evidence": "app/signature-verify/page.tsx provides a full UI with vote form (proposal ID, support radio, reason textarea), a sign button, and three verification methods (frontend via useVerifyTypedData, backend via API route, on-chain via contract call), plus a vote tally display."
+    },
+    {
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "page.tsx uses useScaffoldReadContract for votesFor, votesAgainst, totalVotes, and hasVoted. Uses useScaffoldWriteContract for submitVote (verifyAndRecordVote). Also uses useDeployedContractInfo and useTargetNetwork."
+    },
+    {
+      "text": "Handles wallet not connected state gracefully (no crash when address is undefined)",
+      "passed": true,
+      "evidence": "handleSign checks 'if (!connectedAddress)' and shows a notification error. The sign button is disabled when !connectedAddress. The voter address display is conditionally rendered with '{connectedAddress && (...)}'. handleOnChainVerify also checks !connectedAddress."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

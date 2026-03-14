@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+      "passed": true,
+      "evidence": "Contract imports from @openzeppelin/contracts/token/ERC721/ERC721.sol and @openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol. Uses OZ v5 patterns: Ownable(initialOwner) in constructor, _requireOwned() in tokenURI."
+    },
+    {
+      "text": "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+      "passed": true,
+      "evidence": "tokenURI() generates SVG via generateSVG(), encodes it as data:image/svg+xml;base64, then wraps it in a JSON metadata object encoded as data:application/json;base64. Full on-chain generative SVG with background, circles, polygon, and token label."
+    },
+    {
+      "text": "Minting requires payment (msg.value >= mintPrice or similar)",
+      "passed": true,
+      "evidence": "mintItem() has require(msg.value >= MINT_PRICE, 'Not enough ETH sent') where MINT_PRICE = 0.01 ether."
+    },
+    {
+      "text": "Gallery page displays minted NFTs with their SVG images",
+      "passed": true,
+      "evidence": "packages/nextjs/app/nft-gallery/page.tsx has NftCard component that parses base64 tokenURI, extracts the image field, and renders it as <img src={metadata.image}>. Gallery grid displays cards with pagination."
+    },
+    {
+      "text": "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+      "passed": false,
+      "evidence": "The contract does not implement any custom _update override. It inherits ERC721Enumerable which internally uses _update in OZ v5, but the contract itself has no transfer customization logic. No _beforeTokenTransfer is used either (which is correct for v5), but the expectation requires an explicit _update override."
+    },
+    {
+      "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+      "passed": true,
+      "evidence": "packages/hardhat/deploy/01_deploy_onchain_nft.ts exists with proper hardhat-deploy pattern: uses getNamedAccounts, deployments.deploy, passes deployer as constructor arg, has tags = ['OnChainNFT']."
+    },
+    {
+      "text": "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "passed": true,
+      "evidence": "Gallery page imports and uses useScaffoldReadContract for tokenURI, ownerOf, tokenMinter, totalMinted, MAX_SUPPLY, MINT_PRICE, and useScaffoldWriteContract for mintItem. All from ~~/hooks/scaffold-eth."
+    },
+    {
+      "text": "Token ID counter is managed correctly (no off-by-one errors)",
+      "passed": true,
+      "evidence": "_nextTokenId starts at 0 (default). mintItem() assigns tokenId = _nextTokenId, then increments. First token is ID 0, totalMinted() returns _nextTokenId which equals the count of minted tokens. No off-by-one issues."
+    },
+    {
+      "text": "Contract compiles successfully (valid Solidity syntax and imports)",
+      "passed": true,
+      "evidence": "Contract uses valid Solidity ^0.8.20, proper OZ v5 imports (ERC721, ERC721Enumerable, Ownable, Strings, Base64), correct constructor syntax with super calls, and _requireOwned. ERC721Enumerable handles _update and _increaseBalance overrides internally. No conflicting inheritance."
+    },
+    {
+      "text": "NFT metadata JSON includes required fields: name, description, image",
+      "passed": true,
+      "evidence": "_buildJsonMetadata returns JSON with name ('OnChain NFT #<id>'), description ('A fully on-chain generative SVG NFT.'), and image (base64 SVG data URI). Also includes attributes array with Minter trait."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  }
+}

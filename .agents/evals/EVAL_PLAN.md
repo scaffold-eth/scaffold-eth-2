@@ -43,6 +43,21 @@ We analyzed all 11 SE-2 agent skills to determine whether they provide **Capabil
 | **Tier 2** | eip-712, siwe, erc-721, erc-20 | 2× each | Mixed — moderate expected delta |
 | **Tier 3** | defi-protocol-templates, solidity-security | 1× each | High EP — sanity check only |
 
+### Data-Backed Tier Classification (Post-Evaluation)
+
+**Tier 1 — Confirmed (iteration 3, +55pp avg delta):**
+Skills provide genuine capability uplift. Model cannot implement correctly without them because of custom SE-2 bridges, new APIs, and integration patterns not in training data.
+
+**Tier 2 — Partially Confirmed (iteration 4, +6pp avg delta):**
+- **eip-712 (+20pp)**: Skill adds shared utility module pattern and `as const` for TypeScript inference. Model knows EIP-712 but structures code differently without guidance. Keep as Tier 2.
+- **siwe (+15pp)**: Skill prevents installing wrong package (`siwe` vs viem native) and ensures domain validation. Model inconsistently knows viem's SIWE utilities. Keep as Tier 2.
+- **erc-721 (-5pp)**: No demonstrated value. Model already handles on-chain SVG, OZ v5, ERC721Enumerable correctly. **Recommend reclassifying to Tier 3.**
+- **erc-20 (+5pp)**: Marginal — only consistent advantage is using `ERC20Capped` extension vs manual cap. **Recommend reclassifying to Tier 3.**
+
+**Tier 3 — Confirmed (iteration 4, 0pp avg delta):**
+- **defi-protocol-templates (0pp)**: Zero delta. Model produces identical Synthetix-style staking. **Consider deprecating or converting to checklist.**
+- **solidity-security (-10pp)**: Negative delta. Model's security knowledge is already strong. **Consider deprecating or converting to checklist.**
+
 ---
 
 ## Detailed Plan

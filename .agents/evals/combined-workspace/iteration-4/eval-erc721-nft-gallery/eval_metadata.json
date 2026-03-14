@@ -1,0 +1,17 @@
+{
+  "eval_id": 2,
+  "eval_name": "erc721-nft-gallery",
+  "prompt": "Build an NFT contract in my SE-2 project with on-chain SVG metadata, minting with a price, and a gallery page to display minted NFTs.",
+  "assertions": [
+    "Uses OpenZeppelin v5 ERC-721 contract (import from @openzeppelin/contracts/token/ERC721/)",
+    "Implements on-chain SVG metadata via tokenURI returning base64-encoded JSON with SVG image",
+    "Minting requires payment (msg.value >= mintPrice or similar)",
+    "Gallery page displays minted NFTs with their SVG images",
+    "Uses _update override for transfer customization (not _beforeTokenTransfer which was removed in v5)",
+    "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+    "Frontend uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+    "Token ID counter is managed correctly (no off-by-one errors)",
+    "Contract compiles successfully (valid Solidity syntax and imports)",
+    "NFT metadata JSON includes required fields: name, description, image"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "eval_id": 5,
+  "eval_name": "solidity-security-audit",
+  "prompt": "Audit my YourContract for security vulnerabilities and suggest improvements. Then implement the fixes.",
+  "assertions": [
+    "Reviews the existing YourContract.sol code before suggesting changes",
+    "Identifies at least 2 potential security considerations or improvements",
+    "Applies checks-effects-interactions pattern where applicable",
+    "Suggests or implements access control improvements (Ownable, modifiers)",
+    "Implements the suggested fixes in the actual contract code",
+    "Mentions input validation for function parameters",
+    "Contract still compiles after fixes are applied",
+    "Suggests event emission for state-changing functions if missing",
+    "Does not introduce new vulnerabilities with the fixes",
+    "Provides clear explanation of each vulnerability and its fix"
+  ]
+}
