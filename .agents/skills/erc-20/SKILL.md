@@ -11,7 +11,7 @@ Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current w
 
 ## Gotchas the Model Tends to Miss
 
-The model already knows ERC-20 well (OpenZeppelin v5, deployment, SE-2 hooks, frontend). This skill exists only for specific pitfalls.
+This skill exists only for specific pitfalls
 
 ### 1. Use `ERC20Capped` for Max Supply — Don't Implement Manually
 
