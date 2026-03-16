@@ -15,7 +15,7 @@ Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current w
 
 This skill covers integrating x402 into SE-2 using Next.js middleware. For the full protocol spec and advanced usage, refer to the [x402 docs](https://docs.cdp.coinbase.com/x402/welcome) or the [GitHub repo](https://github.com/coinbase/x402). This skill focuses on SE-2 integration specifics and gotchas.
 
-## Dependencies & Scripts
+## Dependencies
 
 ### NextJS package
 
@@ -49,13 +49,7 @@ If the user wants a CLI script to test API routes programmatically, add to `pack
 }
 ```
 
-### Root package.json scripts
-
-```json
-{
-  "send402request": "yarn workspace @se-2/hardhat send402request"
-}
-```
+Add to root `package.json`: `"send402request": "yarn workspace @se-2/hardhat send402request"`
 
 ### Environment variables
 
@@ -85,8 +79,6 @@ targetNetworks: [chains.baseSepolia],
 
 ## x402 Protocol Flow
 
-Understanding the flow is critical for debugging:
-
 ```
 Client GET /api/protected
     → Server: no X-PAYMENT header → responds 402 + PAYMENT-REQUIRED header
@@ -99,13 +91,11 @@ Client GET /api/protected + X-PAYMENT header
     → Facilitator: executes the USDC transfer onchain
 ```
 
-Key insight: **The user never sends a transaction themselves.** They sign an EIP-712 message authorizing a USDC transfer. The facilitator executes it after the server confirms content was delivered. This is why x402 payments are instant from the user's perspective.
+Key insight: **The user never sends a transaction themselves.** They sign an EIP-712 message authorizing a USDC transfer. The facilitator executes it after the server confirms content was delivered.
 
 ## Middleware Configuration
 
 The core of x402 integration is `middleware.ts` in the Next.js app root. The v2 API uses `paymentProxy` from `@x402/next` with explicit server and paywall setup.
-
-### Basic middleware
 
 ```typescript
 // packages/nextjs/middleware.ts
@@ -172,95 +162,28 @@ export const config = {
 };
 ```
 
-### Route configuration
-
-Each route maps to a resource config with `accepts` (payment requirements), `description`, and `mimeType`:
-
-```typescript
-{
-  "/api/data/*": {
-    accepts: [
-      {
-        scheme: "exact",           // payment scheme
-        price: "$0.01",            // USDC amount (dollar string)
-        network: "eip155:84532",   // CAIP-2 network ID
-        payTo: "0x...",            // recipient address
-      },
-    ],
-    description: "Premium data endpoint",
-    mimeType: "application/json",
-  },
-}
-```
-
-Multiple `accepts` entries can offer different payment options (different networks, assets, or prices) for the same route.
-
-### Server and paywall setup
-
-The v2 API separates concerns into three objects:
-
-| Object | Role | Required |
-|--------|------|----------|
-| `HTTPFacilitatorClient` | Communicates with the facilitator service for verify/settle | Yes |
-| `x402ResourceServer` | Orchestrates the payment flow (verify → serve → settle) | Yes |
-| `createPaywall().build()` | Renders a payment UI for browser visitors | Optional (API-only routes don't need it) |
-
-The `registerExactEvmScheme(server)` call enables EVM payment processing. Without it, the server won't understand EVM payment payloads.
-
 ## CAIP-2 Network Identifiers
 
-The v2 API uses [CAIP-2](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-2.md) network identifiers instead of plain names. Format: `eip155:{chainId}` for EVM chains.
+The v2 API uses [CAIP-2](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-2.md) network identifiers — format: `eip155:{chainId}` for EVM chains.
 
-| CAIP-2 ID | Chain | Type | Notes |
-|-----------|-------|------|-------|
-| `eip155:8453` | Base | Mainnet | Recommended for production — lowest fees |
-| `eip155:84532` | Base Sepolia | Testnet | Default for development — [Circle faucet](https://faucet.circle.com/) for test USDC |
-| `eip155:137` | Polygon | Mainnet | |
-| `eip155:80002` | Polygon Amoy | Testnet | |
-| `eip155:43114` | Avalanche | Mainnet | |
-| `eip155:43113` | Avalanche Fuji | Testnet | |
-| `eip155:2741` | Abstract | Mainnet | |
-| `eip155:11124` | Abstract Testnet | Testnet | |
-| `eip155:1` | Ethereum | Mainnet | |
-| `eip155:11155111` | Sepolia | Testnet | |
+| CAIP-2 ID | Chain | Notes |
+|-----------|-------|-------|
+| `eip155:84532` | Base Sepolia | Default for development — [Circle faucet](https://faucet.circle.com/) for test USDC |
+| `eip155:8453` | Base | Recommended for production — lowest fees |
 
 Legacy network names (`base-sepolia`, `base`, etc.) may still work for backwards compatibility, but prefer CAIP-2 format. For the full list of supported networks, check the [x402 docs](https://docs.cdp.coinbase.com/x402/welcome).
 
-**For SE-2 development, use `eip155:84532` (Base Sepolia).** Make sure `scaffold.config.ts` targets `chains.baseSepolia`.
-
 ## Gotchas & Common Pitfalls
 
-**Facilitator is required.** x402 doesn't do peer-to-peer payments. The facilitator service verifies signatures and executes settlements. For testnet, `https://x402.org/facilitator` works without signup. For production on mainnet, you may need to run your own or use a hosted facilitator — check [x402 docs](https://docs.cdp.coinbase.com/x402/welcome).
+**Facilitator is required.** x402 doesn't do peer-to-peer payments. The facilitator service verifies signatures and executes settlements. For testnet, `https://x402.org/facilitator` works without signup. For production, you may need to run your own — check [x402 docs](https://docs.cdp.coinbase.com/x402/welcome).
 
-**Register the EVM scheme on both server and client.** The server needs `registerExactEvmScheme(server)` in middleware.ts, and the CLI client needs `registerExactEvmScheme(client, { signer })` from `@x402/evm/exact/client`. Without this, payment payloads won't be understood.
+**Register the EVM scheme.** The server needs `registerExactEvmScheme(server)` in middleware.ts. Without this, payment payloads won't be understood.
 
-**Payments are in USDC by default.** The `$0.01` price syntax means USDC. For other assets, use explicit `amount` + `asset` in the accepts config.
-
-**Users need USDC on the right chain.** If a user visits a protected page without USDC on Base Sepolia, the paywall will show but they can't pay. Set `testnet: true` in paywall config for testnet chains.
-
-**`middleware.ts` runs on ALL matching routes, including prefetches.** Next.js prefetches links, which can trigger 402 responses for protected pages. This is expected — the actual payment only happens when the user interacts with the paywall.
-
-**Browser vs API behavior differs.** When a browser hits a protected page route, the paywall UI handles the payment flow client-side. For API routes, it returns a 402 response with a `PAYMENT-REQUIRED` header (base64-encoded JSON) that programmatic clients (like `@x402/fetch`) process automatically.
+**Payments are in USDC by default.** The `$0.01` price syntax means USDC.
 
 **Don't use `hardhat` localhost as the network.** The facilitator can't verify or settle payments on a local chain. Always use a testnet (`eip155:84532`) even during development.
 
 **The `matcher` in `middleware.ts` must cover protected routes.** If you add a new protected route in the routes config but forget to add it to `matcher`, the middleware won't run on that route.
-
-**Type declarations may be needed for Hardhat scripts.** The `@x402/*` packages use ESM exports which may not resolve cleanly in Hardhat's CommonJS environment. Add a declaration file if you get type errors:
-
-```typescript
-// packages/hardhat/x402.d.ts
-declare module "@x402/fetch" {
-  export class x402Client { constructor(); }
-  export function wrapFetchWithPayment(fetchFn: typeof fetch, client: x402Client): typeof fetch;
-}
-
-declare module "@x402/evm/exact/client" {
-  import type { Account } from "viem/accounts";
-  import type { x402Client } from "@x402/fetch";
-  export function registerExactEvmScheme(client: x402Client, config: { signer: Account }): void;
-}
-```
 
 ## CLI Payment Script
 
@@ -272,53 +195,36 @@ import { privateKeyToAccount } from "viem/accounts";
 import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
 import { registerExactEvmScheme } from "@x402/evm/exact/client";
 
-const API_URL = "http://localhost:3000/api/payment/builder";
-
 async function main() {
-  // Use SE-2's deployer account (yarn generate / yarn account:import)
   const privateKey = process.env.DEPLOYER_PRIVATE_KEY as `0x${string}`;
-  if (!privateKey) {
-    console.log("No deployer key found. Run `yarn generate` first.");
-    return;
-  }
+  if (!privateKey) { console.log("No deployer key. Run `yarn generate` first."); return; }
 
   const signer = privateKeyToAccount(privateKey);
-
-  // Create x402 client and register EVM payment scheme
   const client = new x402Client();
   registerExactEvmScheme(client, { signer });
 
   const fetchWithPayment = wrapFetchWithPayment(fetch, client);
-
-  console.log("Sending x402 request from", signer.address);
-
-  const response = await fetchWithPayment(API_URL, { method: "GET" });
-  const body = await response.json();
-  console.log("Response:", body);
-
-  // Check settlement receipt
-  const paymentResponse = response.headers.get("PAYMENT-RESPONSE");
-  if (paymentResponse) {
-    console.log("Payment settled:", paymentResponse);
-  }
+  const response = await fetchWithPayment("http://localhost:3000/api/payment/builder", { method: "GET" });
+  console.log("Response:", await response.json());
 }
 
 main().catch(console.error);
 ```
 
+> **Note:** Register the EVM scheme on the client side too — `registerExactEvmScheme(client, { signer })` from `@x402/evm/exact/client`.
+
 ## How to Test
 
 1. Set `targetNetworks: [chains.baseSepolia]` in `scaffold.config.ts`
-2. Configure `.env.development` (or `.env.local`) with facilitator URL, pay-to address, and `NETWORK=eip155:84532`
+2. Configure `.env.development` with facilitator URL, pay-to address, and `NETWORK=eip155:84532`
 3. `yarn start` — visit `http://localhost:3000`
-4. Navigate to a protected page route — you should see the x402 paywall
-5. To test API routes: `curl http://localhost:3000/api/payment/builder` should return a 402 response with `PAYMENT-REQUIRED` header
-6. To test paid access: `yarn send402request` (needs a funded wallet on Base Sepolia — get test USDC from [Circle faucet](https://faucet.circle.com/))
+4. Navigate to a protected page — you should see the x402 paywall
+5. To test API routes: `curl http://localhost:3000/api/payment/builder` should return 402 with `PAYMENT-REQUIRED` header
+6. To test paid access: `yarn send402request` (needs funded wallet on Base Sepolia — get test USDC from [Circle faucet](https://faucet.circle.com/))
 
 ### Production
 
-- Switch `NETWORK` to `eip155:8453` (Base mainnet) or another mainnet CAIP-2 ID
+- Switch `NETWORK` to `eip155:8453` (Base mainnet)
 - Update `scaffold.config.ts` to target the mainnet chain
 - Set `RESOURCE_WALLET_ADDRESS` to your production payment receiver
 - Set `testnet: false` in paywall config
-- Consider running your own facilitator or using a production-grade hosted one

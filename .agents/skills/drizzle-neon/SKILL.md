@@ -13,7 +13,7 @@ Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current w
 
 [Drizzle ORM](https://orm.drizzle.team/) is a TypeScript ORM for SQL databases with a type-safe query builder. [Neon](https://neon.tech/) is a serverless PostgreSQL platform. This skill integrates both into SE-2, with a smart database client that auto-detects the environment (local Postgres via Docker, Neon serverless, or Neon HTTP) and uses the optimal driver.
 
-For Drizzle API reference beyond what's covered here, refer to the [Drizzle docs](https://orm.drizzle.team/docs/overview). For Neon specifics, see the [Neon docs](https://neon.tech/docs). This skill focuses on SE-2 integration patterns and the dual-driver architecture.
+For Drizzle API reference beyond what's covered here, refer to the [Drizzle docs](https://orm.drizzle.team/docs/overview). For Neon specifics, see the [Neon docs](https://neon.tech/docs). This skill focuses on SE-2 integration patterns and the tri-driver architecture.
 
 ## Dependencies & Scripts
 
@@ -158,7 +158,7 @@ export const db = dbProxy as ReturnType<typeof getDb> & { close: () => Promise<v
 
 ## Schema Definition
 
-Define tables in `packages/nextjs/services/database/config/schema.ts`. Drizzle schemas are plain TypeScript — no decorators, no magic:
+Define tables in `packages/nextjs/services/database/config/schema.ts`:
 
 ```typescript
 // packages/nextjs/services/database/config/schema.ts
@@ -170,23 +170,7 @@ export const users = pgTable("users", {
 });
 ```
 
-### Drizzle column types reference
-
-| PostgreSQL | Drizzle | Notes |
-|-----------|---------|-------|
-| `uuid` | `uuid()` | Use `.defaultRandom()` for auto-generated |
-| `varchar(n)` | `varchar({ length: n })` | |
-| `text` | `text()` | Unlimited length |
-| `integer` | `integer()` | |
-| `bigint` | `bigint()` | For large numbers (not JS BigInt by default) |
-| `boolean` | `boolean()` | |
-| `timestamp` | `timestamp()` | Use `.defaultNow()` for created_at |
-| `jsonb` | `jsonb()` | Typed with `.$type<MyType>()` |
-| `serial` | `serial()` | Auto-incrementing integer |
-
-Column modifiers: `.primaryKey()`, `.notNull()`, `.default(value)`, `.defaultRandom()`, `.defaultNow()`, `.unique()`, `.references(() => otherTable.id)`.
-
-For the full schema API, see [Drizzle schema docs](https://orm.drizzle.team/docs/sql-schema-declaration).
+For the full column types and schema API, see [Drizzle schema docs](https://orm.drizzle.team/docs/sql-schema-declaration).
 
 ## Drizzle Config
 
@@ -214,7 +198,7 @@ export default defineConfig({
 
 ## Repository Pattern
 
-The extension uses a repository pattern at `packages/nextjs/services/database/repositories/`. Each entity gets its own file with typed CRUD functions:
+Use a repository pattern at `packages/nextjs/services/database/repositories/`. Each entity gets its own file with typed CRUD functions:
 
 ```typescript
 // packages/nextjs/services/database/repositories/users.ts
@@ -240,121 +224,48 @@ export async function createUser(user: User) {
 }
 ```
 
-Key Drizzle type utilities:
-- `InferInsertModel<typeof table>` — type for inserting (optional fields for defaults)
-- `InferSelectModel<typeof table>` — type for query results (all fields required)
-
 ## Using the Database in Next.js
 
-### Server Components (recommended)
+Server components can import repository functions directly — no API route needed:
 
-Server components can call repository functions directly — no API route needed:
+```typescript
+// packages/nextjs/app/users/page.tsx — Server Component
+import { getAllUsers, createUser } from "~~/services/database/repositories/users";
 
-```tsx
-// packages/nextjs/app/users/page.tsx
-import { revalidatePath } from "next/cache";
-import { createUser, getAllUsers } from "~~/services/database/repositories/users";
-
-export default async function UsersPage() {
-  const users = await getAllUsers();
-
-  return (
-    <div className="flex flex-col items-center p-8">
-      <h1 className="text-2xl font-semibold mb-4">Users</h1>
-      {users.map(user => (
-        <div key={user.id} className="p-3 bg-base-200 rounded">{user.name}</div>
-      ))}
-
-      {/* Server Action for mutations */}
-      <form action={async (formData: FormData) => {
-        "use server";
-        const name = formData.get("name") as string;
-        if (!name) return;
-        await createUser({ name });
-        revalidatePath("/users");
-      }}>
-        <input type="text" name="name" className="input input-bordered" />
-        <button type="submit" className="btn btn-primary">Add</button>
-      </form>
-    </div>
-  );
-}
+const users = await getAllUsers(); // Direct DB access in server components
 ```
 
-### API Routes (for client-side mutations)
+For client-side mutations, create an API route that calls the repository:
 
 ```typescript
 // packages/nextjs/app/api/users/route.ts
-import { NextRequest, NextResponse } from "next/server";
 import { createUser } from "~~/services/database/repositories/users";
 
 export async function POST(request: NextRequest) {
   const { name } = await request.json();
-  const user = await createUser(name);
+  const user = await createUser({ name });
   return NextResponse.json(user);
 }
 ```
 
-### Client-side API service
-
-Use `@tanstack/react-query` (already included in SE-2) for client-side data fetching and mutations:
-
-```typescript
-// packages/nextjs/services/api/users.ts
-import type { User } from "~~/services/database/repositories/users";
-
-export async function fetchUsers(): Promise<User[]> {
-  const res = await fetch("/api/users");
-  return res.json();
-}
-
-export async function createUserAPIRequest(user: User) {
-  return await fetch("/api/users", {
-    method: "POST",
-    body: JSON.stringify(user),
-  });
-}
-```
-
-```tsx
-// In a client component
-"use client";
-
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createUserAPIRequest, fetchUsers } from "~~/services/api/users";
-
-const { data: users, isLoading } = useQuery({
-  queryKey: ["users"],
-  queryFn: fetchUsers,
-});
-
-const queryClient = useQueryClient();
-const { mutateAsync: createUser } = useMutation({
-  mutationFn: createUserAPIRequest,
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
-});
-```
+SE-2 already includes `@tanstack/react-query` — use `useQuery` and `useMutation` for client-side data fetching and mutations against these API routes.
 
 ## Database Workflow
 
-### Development iteration (fast, no migrations)
-
 ```bash
+# Development (fast, no migrations)
 docker compose up -d                  # Start local Postgres
 yarn drizzle-kit push                 # Push schema directly to DB
-yarn drizzle-kit studio               # Open Drizzle Studio UI at https://local.drizzle.studio
+yarn drizzle-kit studio               # Open Drizzle Studio UI
 yarn db:seed                          # Seed with test data
 yarn db:wipe                          # Reset all tables
-```
 
-### Production migrations (stable schema)
-
-```bash
+# Production (stable schema)
 yarn drizzle-kit generate             # Generate SQL migration files
 yarn drizzle-kit migrate              # Apply migrations to DB
 ```
 
-> **`push` vs `generate` + `migrate`:** Use `push` during active development to iterate quickly. Switch to `generate` + `migrate` when the schema is stable and you need reproducible, version-controlled migrations. Never use `push` in production.
+Use `push` during active development. Switch to `generate` + `migrate` when the schema is stable. Never use `push` in production.
 
 ## Gotchas & Common Pitfalls
 
@@ -364,23 +275,18 @@ yarn drizzle-kit migrate              # Apply migrations to DB
 
 **Docker must be running for local development.** If `docker compose up` hasn't been run, the database connection will fail. The `.env.development` points to `localhost:5432`.
 
-**Production safety guard.** The `drizzle.config.ts` and seed/wipe scripts check if the connection URL points to production (via `PRODUCTION_DATABASE_HOSTNAME`). Update `your-production-database-hostname` in `postgresClient.ts` to your actual Neon project hostname to enable this protection.
+**Production safety guard.** The seed/wipe scripts should check if the connection URL points to production (via `PRODUCTION_DATABASE_HOSTNAME`). Update `your-production-database-hostname` in `postgresClient.ts` to your actual Neon project hostname to enable this protection.
 
-**Drizzle Kit runs from the nextjs package directory.** All `drizzle-kit` commands (push, generate, migrate, studio) use the config at `packages/nextjs/drizzle.config.ts`. The root `yarn drizzle-kit` script proxies to this.
-
-**Neon free tier has connection limits.** If you see connection errors in production, ensure you're using the serverless driver (auto-selected when URL contains `neondb`) which uses WebSocket multiplexing.
-
-**`drizzle-seed` is a dev dependency.** The `reset()` function from `drizzle-seed` is used in the wipe script. It's only needed for development — don't ship it to production.
+**Use `.env.development` not `.env.local`.** SE-2 convention is `.env.development` for local env vars.
 
 ## How to Test
 
 1. `docker compose up -d` — start local Postgres
 2. `yarn drizzle-kit push` — apply schema to local DB
 3. `yarn start` — start Next.js
-4. Visit `http://localhost:3000/users` — should show empty user list
-5. Add a user via the form — should appear in the list after submit
-6. `yarn db:seed` — adds test data
-7. `yarn drizzle-kit studio` — inspect data at `https://local.drizzle.studio`
+4. Visit the users page — should show empty list, add a user via the form
+5. `yarn db:seed` — seed with test data
+6. `yarn drizzle-kit studio` — inspect data at `https://local.drizzle.studio`
 
 ### Production (Neon)
 
