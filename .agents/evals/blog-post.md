@@ -115,3 +115,62 @@ Start with 5 runs. We tried 1, then 3, then 5. In hindsight, 5 is the right numb
 Check which assertions actually discriminate. Some of our assertions pass with and without skills, which means they're not measuring anything useful. Others fail without skills every single time. Those are the ones that tell you what the skill is actually doing.
 
 The final numbers: 97% pass rate with skills, 42% without, 55 percentage point improvement, 40% faster, 21% cheaper in tokens. You can look at the raw data and grading files in our `.agents/evals/combined-workspace/iteration-3/` directory if you want to dig into the specifics.
+
+## Iteration 4: not all skills are created equal
+
+The first three iterations tested our tier 1 skills — drizzle, x402, ponder, eip-5792. These are skills for libraries that are either brand new (Claude's training data has the wrong API) or encode SE-2-specific conventions that don't exist anywhere public. The +55pp delta made sense: we were filling genuine knowledge gaps.
+
+But we had six more skills sitting in the repo: eip-712, siwe, erc-20, erc-721, defi-protocol-templates, and solidity-security. These cover well-established standards. ERC-20 has been around since 2015. Solidity security patterns like CEI and ReentrancyGuard are in every tutorial. We suspected these skills were mostly encoding our preferences rather than teaching the model things it doesn't know. So we ran iteration 4 to find out.
+
+Same methodology as iteration 3: separate executor and grader, no assertions visible during execution, AGENTS.md skill index stripped for baseline runs. 20 total runs across 6 skills.
+
+### The numbers told a clear story
+
+| Skill | Tier | With Skill | Without Skill | Delta |
+|-------|:----:|:----------:|:-------------:|:-----:|
+| eip-712 | 2 | 100% | 80% | +20pp |
+| siwe | 2 | 100% | 85% | +15pp |
+| erc-20 | 2 | 100% | 95% | +5pp |
+| erc-721 | 2 | 85% | 90% | -5pp |
+| defi-protocol-templates | 3 | 100% | 100% | 0pp |
+| solidity-security | 3 | 90% | 100% | -10pp |
+| **Overall** | | **96%** | **90%** | **+6pp** |
+
+Compare that with tier 1: 97% vs 42%, +55pp. The tier 2+3 delta is +6pp. The model already knows this stuff.
+
+### What the +6pp actually means
+
+The overall delta is small, but it's not uniform. Two skills showed real value, and four showed none.
+
+**eip-712 (+20pp)** consistently added two things the model misses: a shared utility module that keeps domain and type definitions in one place (preventing contract/frontend mismatch), and `as const` on type objects for proper TypeScript inference. The model knows EIP-712, knows OpenZeppelin's EIP712 + ECDSA, knows wagmi's `useSignTypedData`. But it structures the code differently without the skill — duplicating type definitions across files instead of centralizing them.
+
+**siwe (+15pp)** caught a genuine capability gap. Without the skill, the model inconsistently reaches for the `siwe` npm package instead of viem's native SIWE utilities. Viem's support is newer, and the model's training data seems to straddle the transition. The skill also consistently added domain validation in the verify route, which the model sometimes skips.
+
+**erc-20 (+5pp)** was within noise. The only difference: with the skill, the model always uses `ERC20Capped`; without it, the model sometimes implements cap logic manually. Both approaches work.
+
+**erc-721 (-5pp)** was slightly worse with the skill. Both configurations produced nearly identical implementations — on-chain SVG, base64 encoding, ERC721Enumerable, paid minting, OZ v5. In one with-skill run, the agent hit a stack-too-deep compilation failure.
+
+**defi-protocol-templates (0pp)** and **solidity-security (-10pp)** showed zero or negative value. Both with and without skill, the model produces Synthetix-style staking with `rewardPerTokenStored`, uses `ReentrancyGuard`, follows CEI, emits events. The skills were reference implementations for things the model already has memorized.
+
+### Consistency over capability
+
+The interesting pattern for tier 2 skills is that the value isn't about what the model *can* do, but about what it *consistently* does. Without the siwe skill, run-1 used viem SIWE correctly but run-2 reached for the `siwe` npm package. Without the eip-712 skill, the model never creates a shared utility module across both runs. With the skill, both patterns are 100% consistent.
+
+For tier 1 skills, the model *can't* do the right thing without the skill — it doesn't know the current Ponder API or SE-2's tri-driver pattern. For tier 2 skills, the model *can* do the right thing, it just doesn't always choose to.
+
+### What we did with this data
+
+We trimmed aggressively. The four skills with delta ≤ 5pp (erc-20, erc-721, defi-protocol-templates, solidity-security) were removed entirely. For eip-712 and siwe, we cut everything the model already knows and kept only the discriminating content: the shared utility module pattern, `as const` requirement, viem SIWE guidance, and domain validation. Total reduction across all six skills: 2,123 lines down to 365 (83% cut).
+
+The lesson: not every skill needs to be a comprehensive reference document. If the model already knows 90% of a topic, the skill only needs to encode the 10% it doesn't. And if it knows 100%, the skill is dead weight — context tokens spent for zero return.
+
+### The full picture across four iterations
+
+| Iteration | What we learned | Runs |
+|:---------:|-----------------|:----:|
+| 1 | Skills show strong signal (n=1, independent grading) | 8 |
+| 2 | Self-grading is broken — 60pp inflation from grading bias | 24 |
+| 3 | Tier 1 skills: +55pp delta, near-zero variance | 40 |
+| 4 | Tier 2+3 skills: +6pp delta, value is consistency not capability | 20 |
+
+92 total agent runs later, we have a framework for deciding what goes in a skill file: if the model consistently gets it wrong without the skill, keep it. If it gets it right most of the time, trim or remove. The eval data makes this a mechanical decision rather than a vibes call.
