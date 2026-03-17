@@ -16,8 +16,11 @@ const interfaces = chainMetaData
     }, {} as ContractsInterfaces)
   : {};
 
+export { isContractCreationBytecode } from "./decodeTxDataUtils";
+import { isContractCreationBytecode } from "./decodeTxDataUtils";
+
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
-  if (tx.input.length >= 10 && !tx.input.startsWith("0x60e06040")) {
+  if (tx.input.length >= 10 && !isContractCreationBytecode(tx.input)) {
     let foundInterface = false;
     for (const [, contractAbi] of Object.entries(interfaces)) {
       try {
