@@ -11,11 +11,17 @@ Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current w
 
 ## Critical: Use viem's Native SIWE — NOT the `siwe` npm Package
 
-Viem provides all SIWE utilities natively via `viem/siwe`. **Do not install the `siwe` npm package** — it pulls in `ethers` as a peer dependency, which is unnecessary since SE-2 already uses viem.
+Viem provides all SIWE utilities natively via `viem/siwe`. **Do not install the `siwe` npm package**. It pulls in `ethers` as a peer dependency, which is unnecessary since SE-2 already uses viem.
 
-Use these imports:
+Here are some commonly useful imports (but check official docs for any updates or alternatives):
+
 ```typescript
-import { createSiweMessage, parseSiweMessage, verifySiweMessage, generateSiweNonce } from "viem/siwe";
+import {
+  createSiweMessage,
+  parseSiweMessage,
+  verifySiweMessage,
+  generateSiweNonce,
+} from "viem/siwe";
 ```
 
 ## Dependencies
@@ -24,7 +30,7 @@ import { createSiweMessage, parseSiweMessage, verifySiweMessage, generateSiweNon
 yarn workspace @se-2/nextjs add iron-session
 ```
 
-## Three Things the Model Gets Wrong Without This Skill
+## Gotchas
 
 ### 1. Domain Validation in the Verify Route
 
@@ -42,7 +48,7 @@ const isValid = await verifySiweMessage(client, {
   message,
   signature,
   nonce: storedNonce,
-  domain: expectedDomain,  // CRITICAL — validates domain match
+  domain: expectedDomain, // CRITICAL — validates domain match
 });
 ```
 
@@ -67,11 +73,16 @@ export const defaultSession: SiweSessionData = { isLoggedIn: false };
 // Lazy getter — defers env var evaluation to request time
 export function getSessionOptions(): SessionOptions {
   const secret = process.env.IRON_SESSION_SECRET;
-  const password = (secret && secret.length >= 32)
-    ? secret
-    : process.env.NODE_ENV === "production"
-      ? (() => { throw new Error("IRON_SESSION_SECRET must be set in production (32+ chars)"); })()
-      : "complex_password_at_least_32_characters_long_for_dev";
+  const password =
+    secret && secret.length >= 32
+      ? secret
+      : process.env.NODE_ENV === "production"
+        ? (() => {
+            throw new Error(
+              "IRON_SESSION_SECRET must be set in production (32+ chars)",
+            );
+          })()
+        : "complex_password_at_least_32_characters_long_for_dev";
 
   return {
     password,
@@ -100,7 +111,7 @@ useEffect(() => {
   if (!isConnected && hasSeenWalletConnected.current && state.isSignedIn) {
     // Wallet actually disconnected — sign out
     fetch("/api/siwe/session", { method: "DELETE" }).then(() => {
-      setState(prev => ({ ...prev, isSignedIn: false, address: undefined }));
+      setState((prev) => ({ ...prev, isSignedIn: false, address: undefined }));
     });
   }
 }, [isConnected, state.isSignedIn]);
@@ -122,6 +133,7 @@ const SUPPORTED_CHAINS: Record<number, Chain> = {
 
 // In verify route:
 const chain = SUPPORTED_CHAINS[parsedMessage.chainId!];
-if (!chain) return NextResponse.json({ error: "Unsupported chain" }, { status: 400 });
+if (!chain)
+  return NextResponse.json({ error: "Unsupported chain" }, { status: 400 });
 const client = createPublicClient({ chain, transport: http() });
 ```
