@@ -1,0 +1,54 @@
+{
+  "expectations": [
+    {
+      "text": "ABI copy bridge script exists that reads deployedContracts.ts and outputs ABIs to packages/subgraph/abis/",
+      "passed": true,
+      "evidence": "packages/subgraph/scripts/abi_copy.ts reads from '../nextjs/contracts/deployedContracts.ts' and writes ABI files to './abis/' directory (e.g., 'abis/localhost_YourContract.json')."
+    },
+    {
+      "text": "Docker compose file includes Graph Node, IPFS (ipfs/kubo), and PostgreSQL with correct image versions",
+      "passed": true,
+      "evidence": "packages/subgraph/graph-node/docker-compose.yml has three services: graph-node (image: graphprotocol/graph-node:v0.41.1), ipfs (image: ipfs/kubo:v0.39.0), and postgres (image: postgres). All three required services are present with pinned versions for graph-node and ipfs/kubo."
+    },
+    {
+      "text": "subgraph.yaml event signature includes 'indexed' keyword: GreetingChange(indexed address,string,bool,uint256)",
+      "passed": true,
+      "evidence": "subgraph.yaml line 23: 'event: GreetingChange(indexed address,string,bool,uint256)' matches the expected signature exactly."
+    },
+    {
+      "text": "AssemblyScript mapping uses BigInt.fromI32() for arithmetic (not number literals)",
+      "passed": true,
+      "evidence": "src/mapping.ts uses 'BigInt.fromI32(1)' for initializing greetingCount and 'sender.greetingCount.plus(BigInt.fromI32(1))' for incrementing. No raw number literals are used for arithmetic."
+    },
+    {
+      "text": "Package named @se-2/subgraph following SE-2 workspace convention",
+      "passed": true,
+      "evidence": "packages/subgraph/package.json line 2: '\"name\": \"@se-2/subgraph\"'. Root package.json references it via 'yarn workspace @se-2/subgraph' in proxy scripts."
+    },
+    {
+      "text": "Root package.json has subgraph proxy scripts (subgraph:run-node, subgraph:local-ship, etc.)",
+      "passed": true,
+      "evidence": "Root package.json contains: subgraph:abi-copy, subgraph:build, subgraph:clean-node, subgraph:codegen, subgraph:create-local, subgraph:local-ship, subgraph:run-node, subgraph:stop-node, subgraph:test. All proxy to @se-2/subgraph workspace."
+    },
+    {
+      "text": "Graph Client configuration (.graphclientrc.yml) exists in nextjs package",
+      "passed": false,
+      "evidence": "No .graphclientrc.yml file exists anywhere in the repository. Glob for 'packages/nextjs/.graphclient*' returned no results. The nextjs package.json has a 'client': 'graphclient build' script but no configuration file for it."
+    },
+    {
+      "text": "Frontend component imports from ~~/.graphclient for generated artifacts",
+      "passed": true,
+      "evidence": "packages/nextjs/app/subgraph/page.tsx line 32: 'const { execute, GetGreetingsDocument } = await import(\"~~/.graphclient\");' - uses dynamic import from ~~/.graphclient path."
+    },
+    {
+      "text": "local-ship script chains abi-copy -> codegen -> build -> deploy-local",
+      "passed": true,
+      "evidence": "packages/subgraph/package.json line 14: '\"local-ship\": \"yarn abi-copy && yarn codegen && yarn build --network localhost && yarn deploy-local\"' chains all four steps in the correct order."
+    },
+    {
+      "text": "Docker compose uses host.docker.internal:8545 for ethereum RPC endpoint",
+      "passed": true,
+      "evidence": "docker-compose.yml line 22: 'ethereum: \"localhost:http://host.docker.internal:8545\"'. Also includes extra_hosts mapping 'host.docker.internal:host-gateway' for Linux compatibility."
+    }
+  ]
+}
