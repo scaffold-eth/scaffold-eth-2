@@ -9,9 +9,9 @@ description: "Add an ERC-721 NFT contract to a Scaffold-ETH 2 project. Use when 
 
 Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
 
-## Gotchas the Model Tends to Miss
+## Gotchas
 
-The model already knows ERC-721 well (OpenZeppelin v5, on-chain SVG, base64 metadata, ERC721Enumerable, deploy scripts, SE-2 hooks). This skill exists only to catch specific pitfalls.
+Key pitfalls and gotchas to watch for when working with ERC-721.
 
 ### 1. `_safeMint` Reentrancy
 
