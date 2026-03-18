@@ -1,0 +1,55 @@
+{
+  "eval_id": 2,
+  "eval_name": "erc20-stablecoin-6dec",
+  "prompt": "Create a stablecoin token called SilverDollar (SLVR) in my SE-2 project with 6 decimals, capped supply of 10 million tokens, gasless approvals, minting restricted to the owner, and a frontend page to mint and transfer tokens. Display balances with proper decimal formatting.",
+  "assertions": [
+    {
+      "id": "erc20-permit",
+      "text": "Contract includes ERC20Permit extension (ERC-2612) for gasless approvals. Must import and inherit ERC20Permit.",
+      "rationale": "Prompt says 'gasless approvals'. Skill explicitly calls ERC20Permit 'effectively standard for new tokens'. Without skill, model may try other approaches.",
+      "source": "damu-review"
+    },
+    {
+      "id": "six-decimals-contract",
+      "text": "Contract overrides decimals() to return 6, not the default 18.",
+      "rationale": "Prompt says '6 decimals'. Must override the function.",
+      "source": "prompt"
+    },
+    {
+      "id": "dynamic-decimals-frontend",
+      "text": "Frontend uses formatUnits/parseUnits with 6 (or reads decimals from contract), NOT formatEther/parseEther.",
+      "rationale": "With 6 decimals, formatEther would display completely wrong values. This is the core of Damu's finding.",
+      "source": "damu-review"
+    },
+    {
+      "id": "named-imports",
+      "text": "Uses named imports: import {ERC20} from '...' syntax, NOT wildcard imports.",
+      "rationale": "Now in AGENTS.md. Should pass for both configs. Sanity check that AGENTS.md guidance works.",
+      "source": "agents-md"
+    },
+    {
+      "id": "update-override",
+      "text": "Has _update override with correct specifier when combining ERC20 + ERC20Capped (and ERC20Permit if present should NOT be in the override list).",
+      "rationale": "Now in AGENTS.md. Should pass for both configs.",
+      "source": "agents-md"
+    },
+    {
+      "id": "erc20-capped",
+      "text": "Uses ERC20Capped extension for max supply, not manual cap.",
+      "rationale": "Baseline — model knows this.",
+      "source": "baseline"
+    },
+    {
+      "id": "se2-hooks",
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract).",
+      "rationale": "Baseline sanity check.",
+      "source": "baseline"
+    },
+    {
+      "id": "mint-transfer-ui",
+      "text": "Frontend includes both mint and transfer functionality.",
+      "rationale": "Baseline sanity check.",
+      "source": "baseline"
+    }
+  ]
+}

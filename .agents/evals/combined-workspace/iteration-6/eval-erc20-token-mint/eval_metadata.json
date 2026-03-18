@@ -1,0 +1,67 @@
+{
+  "eval_id": 1,
+  "eval_name": "erc20-token-mint-damu-assertions",
+  "prompt": "Create an ERC-20 token called GoldToken (GOLD) in my SE-2 project with capped supply of 1 million tokens, minting restricted to the owner, and a frontend page to mint and transfer tokens. Show token balances properly formatted.",
+  "assertions": [
+    {
+      "id": "named-imports",
+      "text": "Uses named imports for OpenZeppelin contracts: import {ERC20} from '...' syntax, NOT import '...' wildcard imports",
+      "rationale": "OZ v5 requires named imports. Without the skill, model often uses wildcard import syntax.",
+      "source": "damu-review"
+    },
+    {
+      "id": "erc20-permit",
+      "text": "Contract includes ERC20Permit extension (ERC-2612) for gasless approvals via off-chain signatures",
+      "rationale": "Skill says ERC20Permit is 'effectively standard for new tokens now'. Without the skill, model rarely includes it unprompted.",
+      "source": "damu-review"
+    },
+    {
+      "id": "dynamic-decimals",
+      "text": "Frontend reads decimals() from the contract and uses formatUnits(value, decimals) / parseUnits(amount, decimals) — NOT hardcoded formatEther/parseEther",
+      "rationale": "Skill teaches using dynamic decimals for robustness. Without the skill, model defaults to formatEther/parseEther assuming 18 decimals.",
+      "source": "damu-review"
+    },
+    {
+      "id": "format-helper",
+      "text": "Frontend has a centralized formatting helper function (e.g., formatGold, formatToken) rather than inline formatting scattered across the component",
+      "rationale": "Skill's decimals guidance encourages a single formatting function. Without the skill, formatting is usually done inline at each display point.",
+      "source": "damu-review"
+    },
+    {
+      "id": "update-override",
+      "text": "The _update function override specifier is correctly scoped — lists only the parent contracts that actually override _update (not extra ones like ERC20Permit that don't)",
+      "rationale": "With ERC20Permit added, a common mistake is including it in the override specifier even though it doesn't override _update in OZ v5.",
+      "source": "damu-review"
+    },
+    {
+      "id": "erc20-capped",
+      "text": "Uses OpenZeppelin's ERC20Capped extension for max supply enforcement, not a manual cap implementation",
+      "rationale": "This was the only discriminating assertion from iteration-4. Keep it.",
+      "source": "iteration-4"
+    },
+    {
+      "id": "se2-hooks",
+      "text": "Uses SE-2 hooks (useScaffoldReadContract/useScaffoldWriteContract) for contract interaction",
+      "rationale": "Baseline assertion — should pass regardless. Included as sanity check.",
+      "source": "baseline"
+    },
+    {
+      "id": "deploy-script",
+      "text": "Proper Hardhat deploy script exists in packages/hardhat/deploy/",
+      "rationale": "Baseline assertion — should pass regardless. Included as sanity check.",
+      "source": "baseline"
+    },
+    {
+      "id": "mint-transfer-ui",
+      "text": "Frontend page includes both mint and transfer functionality",
+      "rationale": "Baseline assertion — should pass regardless. Included as sanity check.",
+      "source": "baseline"
+    },
+    {
+      "id": "ownable-v5",
+      "text": "Constructor uses Ownable(initialOwner) pattern (OZ v5), not parameterless Ownable()",
+      "rationale": "Baseline assertion — should pass regardless. Included as sanity check.",
+      "source": "baseline"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "named-imports: Uses named imports for OpenZeppelin contracts with curly braces",
+      "passed": true,
+      "evidence": "import {ERC20} from \"@openzeppelin/contracts/token/ERC20/ERC20.sol\"; import {ERC20Capped} from ...; import {Ownable} from ..."
+    },
+    {
+      "text": "erc20-permit: Contract includes ERC20Permit extension (ERC-2612)",
+      "passed": false,
+      "evidence": "Contract only inherits ERC20Capped and Ownable. No ERC20Permit import or inheritance."
+    },
+    {
+      "text": "dynamic-decimals: Frontend reads decimals() from contract and uses formatUnits/parseUnits with dynamic decimals",
+      "passed": false,
+      "evidence": "Uses hardcoded 18: formatUnits(amount, 18) and parseUnits(mintAmount, 18). No decimals() read from contract."
+    },
+    {
+      "text": "format-helper: Frontend has a centralized formatting helper function",
+      "passed": true,
+      "evidence": "formatTokenAmount defined at line 94, called at lines 118, 119, 130 for totalSupply, cap, and connectedBalance."
+    },
+    {
+      "text": "update-override: The _update function override specifier is correctly scoped",
+      "passed": true,
+      "evidence": "No ERC20Permit used, so assertion is N/A (pass by default). _update override(ERC20, ERC20Capped) is present and correct."
+    },
+    {
+      "text": "erc20-capped: Uses OpenZeppelin's ERC20Capped extension",
+      "passed": true,
+      "evidence": "import {ERC20Capped} from \"@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol\"; contract GoldToken is ERC20Capped, Ownable"
+    },
+    {
+      "text": "se2-hooks: Uses SE-2 hooks for contract interaction",
+      "passed": true,
+      "evidence": "Uses useScaffoldReadContract for name, symbol, totalSupply, cap, owner, balanceOf. Uses useScaffoldWriteContract for mint and transfer."
+    },
+    {
+      "text": "deploy-script: Proper Hardhat deploy script exists",
+      "passed": true,
+      "evidence": "01_deploy_gold_token.ts with DeployFunction, getNamedAccounts, deploy('GoldToken', {from: deployer, args: [deployer]}), tags."
+    },
+    {
+      "text": "mint-transfer-ui: Frontend includes both mint and transfer functionality",
+      "passed": true,
+      "evidence": "handleMint function with mint UI (lines 60-75, 137-173) and handleTransfer function with transfer UI (lines 77-92, 175-209)."
+    },
+    {
+      "text": "ownable-v5: Constructor uses Ownable(initialOwner) pattern (OZ v5)",
+      "passed": true,
+      "evidence": "constructor(address initialOwner) ... Ownable(initialOwner) — passes owner address to Ownable constructor."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}
