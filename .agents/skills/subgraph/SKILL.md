@@ -137,6 +137,7 @@ dataSources:
 ```
 
 **Key fields to update per project:**
+
 - `name` — must match the contract name in `deployedContracts.ts`
 - `address` — auto-updated by `abi-copy` script for localhost
 - `eventHandlers` — must match the exact Solidity event signatures (parameter names don't matter, types and order do)
@@ -221,29 +222,45 @@ import type { Abi } from "viem";
 const DEPLOYED_CONTRACTS_FILE = "../nextjs/contracts/deployedContracts.ts";
 const GRAPH_DIR = "./";
 
-function publishContract(contractName: string, contractObject: { address: string; abi: Abi }, networkName: string) {
+function publishContract(
+  contractName: string,
+  contractObject: { address: string; abi: Abi },
+  networkName: string,
+) {
   const graphConfigPath = `${GRAPH_DIR}/networks.json`;
-  let graphConfig = fs.existsSync(graphConfigPath) ? JSON.parse(fs.readFileSync(graphConfigPath, "utf8")) : {};
+  let graphConfig = fs.existsSync(graphConfigPath)
+    ? JSON.parse(fs.readFileSync(graphConfigPath, "utf8"))
+    : {};
 
   if (!graphConfig[networkName]) graphConfig[networkName] = {};
   graphConfig[networkName][contractName] = { address: contractObject.address };
 
   fs.writeFileSync(graphConfigPath, JSON.stringify(graphConfig, null, 2));
   if (!fs.existsSync(`${GRAPH_DIR}/abis`)) fs.mkdirSync(`${GRAPH_DIR}/abis`);
-  fs.writeFileSync(`${GRAPH_DIR}/abis/${networkName}_${contractName}.json`, JSON.stringify(contractObject.abi, null, 2));
+  fs.writeFileSync(
+    `${GRAPH_DIR}/abis/${networkName}_${contractName}.json`,
+    JSON.stringify(contractObject.abi, null, 2),
+  );
 }
 
 async function main() {
   const fileContent = fs.readFileSync(DEPLOYED_CONTRACTS_FILE, "utf8");
-  const match = fileContent.match(/const deployedContracts = ({[^;]+}) as const;/s);
+  const match = fileContent.match(
+    /const deployedContracts = ({[^;]+}) as const;/s,
+  );
   if (!match?.[1]) throw new Error("Failed to find deployedContracts");
 
   // Parse the TS object literal as JSON (add quotes around keys, remove trailing commas)
-  let json = match[1].replace(/(\w+)(?=\s*:)/g, '"$1"').replace(/,(?=\s*[}\]])/g, "");
+  let json = match[1]
+    .replace(/(\w+)(?=\s*:)/g, '"$1"')
+    .replace(/,(?=\s*[}\]])/g, "");
   const contracts = JSON.parse(json);
   const localContracts = contracts[31337];
 
-  if (!localContracts) { console.error("No contracts for local network."); return; }
+  if (!localContracts) {
+    console.error("No contracts for local network.");
+    return;
+  }
 
   for (const name in localContracts) {
     publishContract(name, localContracts[name], "localhost");
@@ -251,7 +268,10 @@ async function main() {
   console.log("Published contracts to subgraph package.");
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 ```
 
 ## Graph Client (Frontend Queries)
@@ -298,15 +318,19 @@ After running `yarn graphclient:build`, import the generated client. Use TanStac
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { GetGreetingsDocument, execute } from "~~/.graphclient";
 
 async function fetchGreetings() {
-  const { execute, GetGreetingsDocument } = await import("~~/.graphclient");
   const result = await execute(GetGreetingsDocument, {});
   return result.data?.greetings ?? [];
 }
 
 const GreetingsTable = () => {
-  const { data: greetings = [], isLoading, error } = useQuery({
+  const {
+    data: greetings = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["subgraph-greetings"],
     queryFn: fetchGreetings,
   });
