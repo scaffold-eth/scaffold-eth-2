@@ -27,7 +27,7 @@ Create `packages/subgraph/package.json`:
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "abi-copy": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/abi_copy.ts",
+    "abi-copy": "tsx scripts/abi_copy.ts",
     "codegen": "graph codegen",
     "build": "graph build",
     "graph": "graph",
@@ -44,7 +44,7 @@ Create `packages/subgraph/package.json`:
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.98.0",
     "@graphprotocol/graph-ts": "^0.38.0",
-    "ts-node": "^10.9.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.7.0"
   },
   "devDependencies": {
@@ -97,7 +97,7 @@ The Graph requires three services: a Graph Node, IPFS, and PostgreSQL. Create `p
 
 - **graph-node**: `graphprotocol/graph-node:v0.41.1` — ports 8000 (GraphQL), 8001, 8020 (admin), 8030, 8040. Set `ethereum: "localhost:http://host.docker.internal:8545"` to connect to the local chain. Add `extra_hosts: ["host.docker.internal:host-gateway"]`.
 - **ipfs**: `ipfs/kubo:v0.39.0` (not the legacy `ipfs/go-ipfs`) — port 5001, volume `./data/ipfs:/data/ipfs`
-- **postgres**: `postgres` — port 5432, volume `./data/postgres:/var/lib/postgresql/data`. Credentials: user `graph-node`, password `let-me-in`, db `graph-node`.
+- **postgres**: `postgres` — port 5432, volume `./data/postgres:/var/lib/postgresql/data`. Credentials: user `graph-node`, password `let-me-in`, db `graph-node`. **Must set `POSTGRES_INITDB_ARGS: "--locale=C --encoding=UTF8"`** — graph-node requires the C locale and will panic on startup otherwise.
 
 The graph-node environment also needs: `postgres_host: postgres`, `postgres_user/pass/db`, `ipfs: "ipfs:5001"`, `GRAPH_LOG: info`.
 
@@ -137,6 +137,7 @@ dataSources:
 ```
 
 **Key fields to update per project:**
+
 - `name` — must match the contract name in `deployedContracts.ts`
 - `address` — auto-updated by `abi-copy` script for localhost
 - `eventHandlers` — must match the exact Solidity event signatures (parameter names don't matter, types and order do)
@@ -158,7 +159,7 @@ type Greeting @entity(immutable: true) {
   transactionHash: String!
 }
 
-type Sender @entity {
+type Sender @entity(immutable: false) {
   id: ID!
   address: Bytes!
   greetings: [Greeting!] @derivedFrom(field: "sender")
@@ -178,7 +179,7 @@ import { GreetingChange } from "../generated/YourContract/YourContract";
 import { Greeting, Sender } from "../generated/schema";
 
 export function handleGreetingChange(event: GreetingChange): void {
-  let senderString = event.params.greetingSetter.toHexString();
+  const senderString = event.params.greetingSetter.toHexString();
   let sender = Sender.load(senderString);
 
   if (sender === null) {
@@ -190,7 +191,7 @@ export function handleGreetingChange(event: GreetingChange): void {
     sender.greetingCount = sender.greetingCount.plus(BigInt.fromI32(1));
   }
 
-  let greeting = new Greeting(
+  const greeting = new Greeting(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
   greeting.greeting = event.params.newGreeting;
@@ -216,33 +217,50 @@ Create `packages/subgraph/scripts/abi_copy.ts` — this script parses the deploy
 ```typescript
 // packages/subgraph/scripts/abi_copy.ts
 import * as fs from "fs";
+import type { Abi } from "viem";
 
 const DEPLOYED_CONTRACTS_FILE = "../nextjs/contracts/deployedContracts.ts";
 const GRAPH_DIR = "./";
 
-function publishContract(contractName: string, contractObject: { address: string; abi: any[] }, networkName: string) {
+function publishContract(
+  contractName: string,
+  contractObject: { address: string; abi: Abi },
+  networkName: string,
+) {
   const graphConfigPath = `${GRAPH_DIR}/networks.json`;
-  let graphConfig = fs.existsSync(graphConfigPath) ? JSON.parse(fs.readFileSync(graphConfigPath, "utf8")) : {};
+  let graphConfig = fs.existsSync(graphConfigPath)
+    ? JSON.parse(fs.readFileSync(graphConfigPath, "utf8"))
+    : {};
 
   if (!graphConfig[networkName]) graphConfig[networkName] = {};
   graphConfig[networkName][contractName] = { address: contractObject.address };
 
   fs.writeFileSync(graphConfigPath, JSON.stringify(graphConfig, null, 2));
   if (!fs.existsSync(`${GRAPH_DIR}/abis`)) fs.mkdirSync(`${GRAPH_DIR}/abis`);
-  fs.writeFileSync(`${GRAPH_DIR}/abis/${networkName}_${contractName}.json`, JSON.stringify(contractObject.abi, null, 2));
+  fs.writeFileSync(
+    `${GRAPH_DIR}/abis/${networkName}_${contractName}.json`,
+    JSON.stringify(contractObject.abi, null, 2),
+  );
 }
 
 async function main() {
   const fileContent = fs.readFileSync(DEPLOYED_CONTRACTS_FILE, "utf8");
-  const match = fileContent.match(/const deployedContracts = ({[^;]+}) as const;/s);
+  const match = fileContent.match(
+    /const deployedContracts = ({[^;]+}) as const;/s,
+  );
   if (!match?.[1]) throw new Error("Failed to find deployedContracts");
 
   // Parse the TS object literal as JSON (add quotes around keys, remove trailing commas)
-  let json = match[1].replace(/(\w+)(?=\s*:)/g, '"$1"').replace(/,(?=\s*[}\]])/g, "");
+  let json = match[1]
+    .replace(/(\w+)(?=\s*:)/g, '"$1"')
+    .replace(/,(?=\s*[}\]])/g, "");
   const contracts = JSON.parse(json);
   const localContracts = contracts[31337];
 
-  if (!localContracts) { console.error("No contracts for local network."); return; }
+  if (!localContracts) {
+    console.error("No contracts for local network.");
+    return;
+  }
 
   for (const name in localContracts) {
     publishContract(name, localContracts[name], "localhost");
@@ -250,7 +268,10 @@ async function main() {
   console.log("Published contracts to subgraph package.");
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 ```
 
 ## Graph Client (Frontend Queries)
@@ -291,29 +312,28 @@ query GetGreetings {
 
 ### Using in components
 
-After running `yarn graphclient:build`, import the generated client:
+After running `yarn graphclient:build`, import the generated client. Use TanStack Query (already available in SE-2) for data fetching:
 
 ```tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { GetGreetingsDocument, execute } from "~~/.graphclient";
 
-const GreetingsTable = () => {
-  const [data, setData] = useState<any>(null);
+async function fetchGreetings() {
+  const result = await execute(GetGreetingsDocument, {});
+  return result.data?.greetings ?? [];
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!execute || !GetGreetingsDocument) return;
-      try {
-        const { data: result } = await execute(GetGreetingsDocument, {});
-        setData(result);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchData();
-  }, []);
+const GreetingsTable = () => {
+  const {
+    data: greetings = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["subgraph-greetings"],
+    queryFn: fetchGreetings,
+  });
 
   // Render data...
 };
