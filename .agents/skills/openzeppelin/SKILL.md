@@ -49,7 +49,11 @@ Browse the library's directory structure to discover available components. Key d
 ### Step 2: Read the source file for the component you need
 
 Look at:
-- **Import syntax**: how the library's own files import each other — mirror that style in your contract
+- **Import syntax**: how the library's own files import each other — mirror that style. OZ v5+ uses named imports:
+  ```solidity
+  // ✅ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+  // ❌ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+  ```
 - **`virtual` functions**: only these can be overridden. Functions that were virtual in one version may not be in another
 - **Constructor parameters**: what must be passed during deployment
 - **NatSpec comments**: `NOTE: This function is not virtual, {X} should be overridden instead` — follow these
