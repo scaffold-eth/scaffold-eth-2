@@ -228,17 +228,14 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 
 **Skills** (read `.agents/skills/<name>/SKILL.md` before implementing):
 
-- **erc-20** — fungible tokens, decimals, approve patterns, OpenZeppelin ERC-20
-- **erc-721** — NFTs, metadata standards, royalties (ERC-2981), ERC721A, soulbound
-- **eip-712** — typed structured data signing, off-chain signatures, signature verification
+- **openzeppelin** — OpenZeppelin Contracts integration, library-first development, pattern discovery from installed source. Use for any contract using OZ (tokens, access control, security primitives)
+- **erc-721** — NFT-specific pitfalls: `_safeMint` reentrancy, on-chain SVG stack-too-deep, marketplace metadata `attributes`, IPFS base URI trailing slash
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
 - **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
-- **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
 - **subgraph** — The Graph subgraph integration, blockchain event indexing, GraphQL APIs
-- **solidity-security** — security audits, reentrancy, access control, gas optimization
 
 **Agents** (in `.agents/agents/`):
 
