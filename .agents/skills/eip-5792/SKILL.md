@@ -11,26 +11,19 @@ Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current w
 
 ## Overview
 
-[EIP-5792](https://eips.ethereum.org/EIPS/eip-5792) (Wallet Call API) lets apps send batched onchain write calls to wallets via `wallet_sendCalls`, check their status with `wallet_getCallsStatus`, and query wallet capabilities with `wallet_getCapabilities`. This replaces the one-tx-at-a-time pattern of `eth_sendTransaction`.
-
-This skill covers integrating EIP-5792 batched transactions into an SE-2 project using [wagmi's EIP-5792 hooks](https://wagmi.sh/react/api/hooks/useWriteContracts). For anything not covered here, refer to the [EIP-5792 docs](https://www.eip5792.xyz/) or [wagmi docs](https://wagmi.sh/). This skill focuses on SE-2 integration specifics and the wallet compatibility gotchas that trip people up.
-
-## Dependencies
-
-No new dependencies needed. SE-2 already includes wagmi, which has the EIP-5792 hooks. The experimental hooks live at `wagmi/experimental`:
+[EIP-5792](https://eips.ethereum.org/EIPS/eip-5792) (Wallet Call API) lets apps send batched onchain write calls to wallets via `wallet_sendCalls`. No new dependencies needed — SE-2 already includes wagmi, which has the EIP-5792 hooks at `wagmi/experimental`:
 
 - [`useWriteContracts`](https://wagmi.sh/react/api/hooks/useWriteContracts) — batch multiple contract calls into one wallet request
 - [`useCapabilities`](https://wagmi.sh/react/api/hooks/useCapabilities) — detect what the connected wallet supports (batching, paymasters, etc.)
 - [`useShowCallsStatus`](https://wagmi.sh/react/api/hooks/useShowCallsStatus) — ask the wallet to display status of a batch
 
-> **Import paths are moving.** `useCapabilities` and `useShowCallsStatus` have been promoted to `wagmi` (stable). `useWriteContracts` is still in `wagmi/experimental` as of early 2026. Always check the [wagmi docs](https://wagmi.sh/) for the current import paths — they may have changed.
+> **Import paths are moving.** `useCapabilities` and `useShowCallsStatus` have been promoted to `wagmi` (stable). `useWriteContracts` is still in `wagmi/experimental` as of early 2026. Always check the [wagmi docs](https://wagmi.sh/) for the current import paths.
 
 ## Smart Contract
 
-EIP-5792 works with any contract — there's nothing special about the contract side. The point is batching multiple calls (to one or more contracts) into a single wallet interaction. For a demo, a simple contract with two or more state-changing functions works well so users can see them batched:
+EIP-5792 works with any contract — the point is batching multiple calls into a single wallet interaction. A simple contract with two or more state-changing functions works well for demonstrating batching:
 
 ```solidity
-// Syntax reference — adapt to the user's actual needs
 contract BatchExample {
     string public greeting = "Hello!";
     uint256 public counter = 0;
@@ -66,11 +59,11 @@ const { isSuccess: isEIP5792Wallet, data: walletCapabilities } = useCapabilities
 const isPaymasterSupported = walletCapabilities?.[chainId]?.paymasterService?.supported;
 ```
 
-`isSuccess` being `true` means the wallet responded to `wallet_getCapabilities` — i.e., it's EIP-5792 compliant. The `data` object is keyed by chain ID, with each chain listing its supported capabilities.
+`isSuccess` being `true` means the wallet responded to `wallet_getCapabilities` — i.e., it's EIP-5792 compliant.
 
 ### Batching contract calls
 
-Use `useWriteContracts` to send multiple calls in one wallet interaction. You need the contract ABI and address — get these from SE-2's `useDeployedContractInfo` hook:
+Use `useWriteContracts` to send multiple calls in one wallet interaction. Get the contract ABI and address from SE-2's `useDeployedContractInfo` hook:
 
 ```tsx
 import { useWriteContracts } from "wagmi/experimental";
@@ -94,56 +87,38 @@ const result = await writeContractsAsync({
       functionName: "incrementCounter",
     },
   ],
-  // Optional: add capabilities like paymaster
+  // Optional: add paymaster capability if supported by the wallet
   capabilities: isPaymasterSupported ? {
     paymasterService: { url: paymasterURL }
   } : undefined,
 });
 ```
 
-The `result` contains an `id` that can be used to check status.
-
 ### Showing batch status
-
-Use `useShowCallsStatus` to let the wallet display the status of a batch:
 
 ```tsx
 import { useShowCallsStatus } from "wagmi/experimental";
 
 const { showCallsStatusAsync } = useShowCallsStatus();
-// After getting a batch ID from writeContractsAsync:
 await showCallsStatusAsync({ id: batchId });
 ```
 
-This opens the wallet's native UI for showing transaction status — the app doesn't need to build its own status tracker.
+## Wallet Compatibility & Graceful Fallback
 
-## Wallet Compatibility Gotchas
+**Graceful degradation is critical.** The UI must work for both EIP-5792 and non-EIP-5792 wallets:
+- Use SE-2's `useScaffoldWriteContract` for individual calls as fallback
+- Only show/enable the batch button when `useCapabilities` succeeds (`isEIP5792Wallet`)
+- Consider a "switch to Coinbase Wallet" prompt for unsupported wallets
 
-This is the main source of confusion with EIP-5792. Not all wallets behave the same way:
+**Capabilities vary by chain.** Always check `walletCapabilities?.[chainId]` for the specific chain, not just whether the wallet is EIP-5792 compliant in general.
 
-**SE-2's burner wallet supports EIP-5792 with sequential (non-atomic) calls.** It handles `wallet_sendCalls` by executing calls one at a time. However, advanced capabilities like paymasters and atomic execution aren't supported on the burner wallet or local chain. Test those features on a live testnet with a compliant wallet.
+**SE-2's burner wallet supports EIP-5792** with sequential (non-atomic) calls. Advanced capabilities like paymasters require a live testnet with a compliant wallet (Coinbase Wallet has the most complete implementation).
 
-**Coinbase Wallet is the most complete implementation.** It supports batching, paymasters (via [ERC-7677](https://eips.ethereum.org/EIPS/eip-7677)), and atomic execution. [MetaMask has partial support](https://www.eip5792.xyz/ecosystem/wallets). Check the [EIP-5792 ecosystem page](https://www.eip5792.xyz/ecosystem/wallets) for the current list.
-
-**Capabilities vary by chain.** A wallet might support paymasters on Base but not on Ethereum mainnet. Always check `walletCapabilities?.[chainId]` for the specific chain the user is on, not just whether the wallet is EIP-5792 compliant in general.
-
-**Paymaster integration (ERC-7677) is optional.** If you want gas sponsorship, you need a paymaster service URL. This is passed as a `capability` in the `writeContracts` call. The paymaster service is external to SE-2 — you'll need to set one up (e.g., via [Coinbase Developer Platform](https://docs.cdp.coinbase.com/paymaster/docs/welcome) or other providers).
-
-**Graceful degradation is important.** The UI should work for both EIP-5792 and non-EIP-5792 wallets. Use SE-2's standard `useScaffoldWriteContract` for individual calls as a fallback, and only show the batch button when `useCapabilities` succeeds. Consider offering a "switch to Coinbase Wallet" prompt when the connected wallet doesn't support EIP-5792.
-
-## Frontend
-
-Build a page that demonstrates both individual and batched contract interactions. The key UX pattern:
-
-1. **Read state** — use `useScaffoldReadContract` to show current contract values (these update after transactions)
-2. **Individual writes** — use `useScaffoldWriteContract` for single calls (works with any wallet)
-3. **Batched writes** — use `useWriteContracts` for the EIP-5792 batch (only enabled when wallet supports it)
-4. **Status display** — use `useShowCallsStatus` to show batch result
-5. **Wallet detection** — conditionally show/disable batch UI based on `useCapabilities`
+**Paymaster integration (ERC-7677) is optional.** If you want gas sponsorship, you need a paymaster service URL passed as a `capability` in the `writeContracts` call. The paymaster service is external to SE-2.
 
 ## How to Test
 
 1. Deploy the contract: `yarn deploy`
 2. Start the frontend: `yarn start`
-3. For basic batching: use any wallet on localhost
+3. For basic batching: use any wallet on localhost (SE-2's burner wallet works)
 4. For advanced capabilities (paymasters, atomic execution): deploy to a live testnet and connect with an [EIP-5792 compliant wallet](https://www.eip5792.xyz/ecosystem/wallets)

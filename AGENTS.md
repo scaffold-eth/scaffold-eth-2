@@ -233,6 +233,9 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
 - **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
+- **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
+- **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
+- **subgraph** — The Graph subgraph integration, blockchain event indexing, GraphQL APIs
 
 **Agents** (in `.agents/agents/`):
 
