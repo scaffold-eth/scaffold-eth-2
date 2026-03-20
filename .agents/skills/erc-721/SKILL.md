@@ -57,6 +57,24 @@ The `attributes` array in NFT metadata JSON is not in the ERC-721 EIP but is the
 }
 ```
 
-### 4. IPFS Base URI Trailing Slash
+### 4. Required Overrides with ERC721Enumerable
+
+When combining `ERC721` + `ERC721Enumerable`, both define `_update` and `_increaseBalance`. You must explicitly override them or the contract won't compile:
+
+```solidity
+function _update(address to, uint256 tokenId, address auth) internal override(ERC721, ERC721Enumerable) returns (address) {
+    return super._update(to, tokenId, auth);
+}
+
+function _increaseBalance(address account, uint128 amount) internal override(ERC721, ERC721Enumerable) {
+    super._increaseBalance(account, amount);
+}
+
+function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
+    return super.supportsInterface(interfaceId);
+}
+```
+
+### 5. IPFS Base URI Trailing Slash
 
 OpenZeppelin's `tokenURI()` concatenates `_baseURI() + tokenId.toString()`. If the base URI is `ipfs://QmCID` without a trailing slash, token 42 becomes `ipfs://QmCID42` instead of `ipfs://QmCID/42`.
