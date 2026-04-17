@@ -148,7 +148,11 @@ export default defineConfig({
   },
   tasks: [
     overrideTask("deploy")
+      .addFlag({ name: "reset", description: "Force re-deploy even if contracts haven't changed" })
       .setInlineAction(async (args, _hre, runSuper) => {
+        if (args.reset) {
+          process.env.HARDHAT_DEPLOY_RESET = "true";
+        }
         await runSuper(args);
         await generateTsAbis();
       })

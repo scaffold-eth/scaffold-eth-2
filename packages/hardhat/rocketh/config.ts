@@ -16,9 +16,20 @@ export const config = {
   },
 } as const satisfies UserConfig;
 
+// TODO: Remove this wrapper when hardhat-deploy adds native --reset support
+// Tracking issue: https://github.com/wighawag/hardhat-deploy/issues/592
+const deployWithReset = ((env: any) => {
+  const deployFn = deployExtension.deploy(env);
+  return (name: any, args: any, options?: any) => {
+    const isReset = process.env.HARDHAT_DEPLOY_RESET === "true";
+    return deployFn(name, args, { ...options, alwaysOverride: isReset || options?.alwaysOverride });
+  };
+}) as typeof deployExtension.deploy;
+
 const extensions = {
   ...deployExtension,
   ...readExecuteExtension,
+  deploy: deployWithReset,
 };
 export { extensions };
 
