@@ -11,7 +11,7 @@
     "check-types": "tsc --noEmit --incremental",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
-    "deploy": "ts-node scripts/runHardhatDeployWithPK.ts",
+    "deploy": "tsx scripts/runHardhatDeployWithPK.ts",
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat",
     "format": "prettier --write './**/*.(ts|sol)'",
@@ -57,7 +57,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-solidity": "^1.4.1",
     "rocketh": "^0.19",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.2"
   },
   "dependencies": {

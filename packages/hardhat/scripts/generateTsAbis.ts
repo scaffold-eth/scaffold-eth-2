@@ -8,7 +8,6 @@
 
 import * as fs from "fs";
 import prettier from "prettier";
-import { DeployFunction } from "hardhat-deploy/types";
 
 const generatedContractComment = `
 /**
@@ -44,9 +43,7 @@ function getActualSourcesForContract(sources: Record<string, any>, contractName:
 
       if (match) {
         const inheritancePart = match[2];
-        // Split the inherited contracts by commas to get the list of inherited contracts
         const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
-
         return inheritedContracts;
       }
       return [];
@@ -84,10 +81,20 @@ function getContractDataFromDeployments() {
   for (const chainName of chainDirectories) {
     let chainId;
     try {
-      chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+      const chainFilePath = `${DEPLOYMENTS_DIR}/${chainName}/.chain`;
+      const chainIdFilePath = `${DEPLOYMENTS_DIR}/${chainName}/.chainId`;
+      if (fs.existsSync(chainFilePath)) {
+        const chainData = JSON.parse(fs.readFileSync(chainFilePath).toString());
+        chainId = chainData.chainId;
+      } else if (fs.existsSync(chainIdFilePath)) {
+        chainId = fs.readFileSync(chainIdFilePath).toString().trim();
+      } else {
+        console.log(`No chain file found for ${chainName}`);
+        continue;
+      }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.log(`No chainId file found for ${chainName}`);
+      console.log(`Error reading chain data for ${chainName}`);
       continue;
     }
 
@@ -108,7 +115,7 @@ function getContractDataFromDeployments() {
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
  * This script should be run last.
  */
-const generateTsAbis: DeployFunction = async function () {
+async function generateTsAbis() {
   const TARGET_DIR = "../nextjs/contracts/";
   const allContractsData = getContractDataFromDeployments();
 
@@ -131,6 +138,6 @@ const generateTsAbis: DeployFunction = async function () {
   );
 
   console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
-};
+}
 
-export default generateTsAbis;
+generateTsAbis();

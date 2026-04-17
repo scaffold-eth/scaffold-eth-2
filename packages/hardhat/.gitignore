@@ -20,7 +20,8 @@ artifacts
 artifacts-zk
 cache-zk
 
-# deployments
+# local deployments
+deployments/default
 deployments/localhost
 
 # typescript
