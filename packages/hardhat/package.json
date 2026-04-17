@@ -1,6 +1,7 @@
 {
   "name": "@se-2/hardhat",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "account": "hardhat run scripts/listAccount.ts",
     "account:generate": "hardhat run scripts/generateAccount.ts",
