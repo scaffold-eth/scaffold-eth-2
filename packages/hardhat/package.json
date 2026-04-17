@@ -19,7 +19,7 @@
     "hardhat-verify": "hardhat verify",
     "lint": "eslint",
     "lint-staged": "eslint",
-    "test": "REPORT_GAS=true hardhat test --network hardhat",
+    "test": "hardhat test --network hardhat",
     "verify": "hardhat etherscan-verify"
   },
   "devDependencies": {
