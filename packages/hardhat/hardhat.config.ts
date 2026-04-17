@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { defineConfig } from "hardhat/config";
 import hardhatToolbox from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
+import HardhatDeploy from "hardhat-deploy";
 
 // If not set, it uses the hardhat account 0 private key.
 // You can generate a random account with `yarn generate` or `yarn account:import` to import your existing PK
@@ -16,10 +17,10 @@ const deployerPrivateKey =
 const providerApiKey = process.env.ALCHEMY_API_KEY || "cR4WnXePioePZ5fFrnSiR";
 
 export default defineConfig({
-  plugins: [hardhatToolbox],
+  plugins: [hardhatToolbox, HardhatDeploy],
   solidity: {
-    compilers: [
-      {
+    profiles: {
+      default: {
         version: "0.8.30",
         settings: {
           optimizer: {
@@ -28,6 +29,14 @@ export default defineConfig({
             runs: 200,
           },
         },
+      },
+    },
+  },
+  generateTypedArtifacts: {
+    destinations: [
+      {
+        folder: "./generated",
+        mode: "typescript",
       },
     ],
   },

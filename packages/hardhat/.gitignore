@@ -8,8 +8,9 @@ node_modules
 coverage
 coverage.json
 
-# generated contract types (hardhat-typechain)
+# generated contract types
 types
+generated
 
 # hardhat files
 cache
