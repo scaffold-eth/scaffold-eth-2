@@ -17,7 +17,23 @@ const generatedContractComment = `
 `;
 
 const DEPLOYMENTS_DIR = "./deployments";
-const ARTIFACTS_DIR = "./artifacts";
+const BUILD_INFO_DIR = "./artifacts/build-info";
+
+function getBuildInfoContracts(): Record<string, Record<string, any>> {
+  if (!fs.existsSync(BUILD_INFO_DIR)) return {};
+  const outputFiles = fs.readdirSync(BUILD_INFO_DIR).filter(f => f.endsWith(".output.json"));
+  const contracts: Record<string, Record<string, any>> = {};
+  for (const file of outputFiles) {
+    const data = JSON.parse(fs.readFileSync(`${BUILD_INFO_DIR}/${file}`).toString());
+    const compiledContracts = data.output?.contracts || {};
+    for (const [sourcePath, contractMap] of Object.entries(compiledContracts) as [string, Record<string, any>][]) {
+      contracts[sourcePath] = contractMap;
+    }
+  }
+  return contracts;
+}
+
+const buildInfoContracts = getBuildInfoContracts();
 
 function getDirectories(path: string) {
   return fs
@@ -60,10 +76,12 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
     const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
     if (sourcePath) {
       const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
-      const { abi } = JSON.parse(fs.readFileSync(`${ARTIFACTS_DIR}/${sourcePath}/${sourceName}.json`).toString());
-      for (const functionAbi of abi) {
-        if (functionAbi.type === "function") {
-          inheritedFunctions[functionAbi.name] = sourcePath;
+      const abi = buildInfoContracts[sourcePath]?.[sourceName!]?.abi;
+      if (abi) {
+        for (const functionAbi of abi) {
+          if (functionAbi.type === "function") {
+            inheritedFunctions[functionAbi.name] = sourcePath;
+          }
         }
       }
     }
