@@ -104,7 +104,10 @@ function getContractDataFromDeployments() {
         fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/${contractName}.json`).toString(),
       );
       const inheritedFunctions = metadata ? getInheritedFunctions(JSON.parse(metadata).sources, contractName) : {};
-      contracts[contractName] = { address, abi, inheritedFunctions, deployedOnBlock: receipt?.blockNumber };
+
+      // normalize the blockNumber to number, here we get it as hex
+      const blockNumber = receipt?.blockNumber != null ? Number(receipt.blockNumber) : undefined;
+      contracts[contractName] = { address, abi, inheritedFunctions, deployedOnBlock: blockNumber };
     }
     output[chainId] = contracts;
   }
