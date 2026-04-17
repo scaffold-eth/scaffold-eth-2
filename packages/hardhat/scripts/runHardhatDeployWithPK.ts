@@ -33,8 +33,8 @@ async function main() {
     }
   }
 
-  // Run hardhat deploy (skip gas price prompts on local networks)
-  const deployArgs = ["deploy", ...process.argv.slice(2)];
+  // Run hardhat deploy (compilation already handled by the npm script)
+  const deployArgs = ["deploy", "--no-compile", ...process.argv.slice(2)];
   if (isLocalNetwork) {
     deployArgs.push("--skip-prompts");
   }

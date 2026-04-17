@@ -11,7 +11,7 @@
     "check-types": "tsc --noEmit --incremental",
     "clean": "hardhat clean",
     "compile": "hardhat compile",
-    "deploy": "tsx scripts/runHardhatDeployWithPK.ts",
+    "deploy": "hardhat compile && tsx scripts/runHardhatDeployWithPK.ts",
     "flatten": "hardhat flatten",
     "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat",
     "format": "prettier --write './**/*.(ts|sol)'",
