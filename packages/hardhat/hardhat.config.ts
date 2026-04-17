@@ -1,7 +1,8 @@
 import "dotenv/config";
-import { defineConfig } from "hardhat/config";
+import { defineConfig, overrideTask } from "hardhat/config";
 import hardhatToolbox from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
 import HardhatDeploy from "hardhat-deploy";
+import generateTsAbis from "./scripts/generateTsAbis.js";
 
 // If not set, it uses the hardhat account 0 private key.
 // You can generate a random account with `yarn generate` or `yarn account:import` to import your existing PK
@@ -145,4 +146,12 @@ export default defineConfig({
       accounts: [deployerPrivateKey],
     },
   },
+  tasks: [
+    overrideTask("deploy")
+      .setInlineAction(async (args, _hre, runSuper) => {
+        await runSuper(args);
+        await generateTsAbis();
+      })
+      .build(),
+  ],
 });

@@ -115,7 +115,7 @@ function getContractDataFromDeployments() {
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts
  * This script should be run last.
  */
-async function generateTsAbis() {
+export default async function generateTsAbis() {
   const TARGET_DIR = "../nextjs/contracts/";
   const allContractsData = getContractDataFromDeployments();
 
@@ -140,4 +140,10 @@ async function generateTsAbis() {
   console.log(`📝 Updated TypeScript contract definition file on ${TARGET_DIR}deployedContracts.ts`);
 }
 
-generateTsAbis();
+// Run directly when executed as a script (e.g. `hardhat run scripts/generateTsAbis.ts`)
+// but not when imported by hardhat.config.ts for the task override
+const isDirectRun =
+  process.argv[1]?.includes("generateTsAbis") || process.argv.some(arg => arg.includes("generateTsAbis"));
+if (isDirectRun) {
+  generateTsAbis();
+}

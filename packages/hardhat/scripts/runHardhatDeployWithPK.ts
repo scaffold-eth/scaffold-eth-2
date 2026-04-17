@@ -46,21 +46,7 @@ async function main() {
   });
 
   hardhat.on("exit", code => {
-    if (code !== 0) {
-      process.exit(code || 1);
-      return;
-    }
-
-    // Generate TypeScript ABIs for the frontend after successful deploy
-    const generate = spawn("hardhat", ["run", "scripts/generateTsAbis.ts"], {
-      stdio: "inherit",
-      env: process.env,
-      shell: process.platform === "win32",
-    });
-
-    generate.on("exit", genCode => {
-      process.exit(genCode || 0);
-    });
+    process.exit(code || 0);
   });
 }
 
