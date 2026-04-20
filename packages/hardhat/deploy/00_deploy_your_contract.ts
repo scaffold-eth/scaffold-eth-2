@@ -21,12 +21,16 @@ export default deployScript(
     */
     const { deployer } = env.namedAccounts;
 
-    await env.deploy("YourContract", {
+    const yourContract = await env.deploy("YourContract", {
       account: deployer,
       artifact: artifacts.YourContract,
       // Contract constructor arguments
       args: [deployer],
     });
+
+    // Read back from the deployed contract
+    const greeting = await env.read(yourContract, { functionName: "greeting" });
+    console.log("👋 Initial greeting:", greeting);
   },
   {
     // Tags are useful if you have multiple deploy files and only want to run one of them.
