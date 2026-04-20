@@ -3,7 +3,6 @@ import { privateKey } from "@rocketh/signer";
 import * as deployExtension from "@rocketh/deploy";
 import * as readExecuteExtension from "@rocketh/read-execute";
 
-// Named accounts — deployer at index 0, matching SE-2's v1 pattern
 export const config = {
   accounts: {
     deployer: {

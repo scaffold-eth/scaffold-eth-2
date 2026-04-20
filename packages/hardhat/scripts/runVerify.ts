@@ -5,11 +5,6 @@ const DEFAULT_ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
 /**
  * Forwards `yarn verify --network <name> [args]` to the rocketh-verify CLI.
- *
- * Translates hardhat's --network flag to rocketh's -e (environment) flag so the
- * DX matches `yarn deploy --network X`. Defaults the subcommand to `etherscan`
- * when none is passed. Falls back to a shared ETHERSCAN_API_KEY so beginners
- * can verify out of the box — set your own in .env for production.
  */
 async function main() {
   const argv = process.argv.slice(2);
