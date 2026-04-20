@@ -63,16 +63,6 @@ export default defineConfig({
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
-    arbitrum: {
-      type: "http",
-      url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
-    arbitrumSepolia: {
-      type: "http",
-      url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
     optimism: {
       type: "http",
       url: `https://opt-mainnet.g.alchemy.com/v2/${providerApiKey}`,
@@ -83,36 +73,6 @@ export default defineConfig({
       url: `https://opt-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
-    polygon: {
-      type: "http",
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonAmoy: {
-      type: "http",
-      url: `https://polygon-amoy.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonZkEvm: {
-      type: "http",
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
-    polygonZkEvmCardona: {
-      type: "http",
-      url: `https://polygonzkevm-cardona.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
-    },
-    gnosis: {
-      type: "http",
-      url: "https://rpc.gnosischain.com",
-      accounts: [deployerPrivateKey],
-    },
-    chiado: {
-      type: "http",
-      url: "https://rpc.chiadochain.net",
-      accounts: [deployerPrivateKey],
-    },
     base: {
       type: "http",
       url: "https://mainnet.base.org",
@@ -121,6 +81,16 @@ export default defineConfig({
     baseSepolia: {
       type: "http",
       url: "https://sepolia.base.org",
+      accounts: [deployerPrivateKey],
+    },
+    arbitrum: {
+      type: "http",
+      url: `https://arb-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    arbitrumSepolia: {
+      type: "http",
+      url: `https://arb-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
     scrollSepolia: {
@@ -141,6 +111,36 @@ export default defineConfig({
     celoSepolia: {
       type: "http",
       url: "https://forno.celo-sepolia.celo-testnet.org/",
+      accounts: [deployerPrivateKey],
+    },
+    polygon: {
+      type: "http",
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    polygonAmoy: {
+      type: "http",
+      url: `https://polygon-amoy.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    gnosis: {
+      type: "http",
+      url: "https://rpc.gnosischain.com",
+      accounts: [deployerPrivateKey],
+    },
+    chiado: {
+      type: "http",
+      url: "https://rpc.chiadochain.net",
+      accounts: [deployerPrivateKey],
+    },
+    polygonZkEvm: {
+      type: "http",
+      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
+      accounts: [deployerPrivateKey],
+    },
+    polygonZkEvmCardona: {
+      type: "http",
+      url: `https://polygonzkevm-cardona.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
   },
