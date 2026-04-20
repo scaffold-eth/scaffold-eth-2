@@ -20,7 +20,7 @@
     "lint": "eslint",
     "lint-staged": "eslint",
     "test": "hardhat test --network hardhat",
-    "verify": "hardhat etherscan-verify"
+    "verify": "tsx scripts/runVerify.ts"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -40,6 +40,7 @@
     "@rocketh/node": "^0.19",
     "@rocketh/read-execute": "^0.19",
     "@rocketh/signer": "^0.19",
+    "@rocketh/verifier": "^0.19",
     "@types/eslint": "^9.6.1",
     "@types/mocha": "^10.0.10",
     "@types/prettier": "^3.0.0",

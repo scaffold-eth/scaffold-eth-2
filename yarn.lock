@@ -4642,6 +4642,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rocketh/verifier@npm:^0.19":
+  version: 0.19.3
+  resolution: "@rocketh/verifier@npm:0.19.3"
+  dependencies:
+    "@rocketh/core": 0.19.0
+    "@types/fs-extra": ^11.0.4
+    "@types/qs": ^6.14.0
+    chalk: 5.6.2
+    commander: ^14.0.3
+    fs-extra: ^11.3.3
+    ldenv: ^0.3.16
+    neoqs: ^6.13.0
+  peerDependencies:
+    "@rocketh/node": 0.19.3
+  bin:
+    rocketh-verify: dist/cli.js
+  checksum: 1fa5ce5071417d6c8efcbc395ecd2ea171b679bdfdb43a92004a7ff9131848e239709d050ed8946fb4635167c895bcbd355d0c846dd5e3f29fc5f4ea4e3c7b25
+  languageName: node
+  linkType: hard
+
 "@rolldown/binding-android-arm64@npm:1.0.0-rc.1":
   version: 1.0.0-rc.1
   resolution: "@rolldown/binding-android-arm64@npm:1.0.0-rc.1"
@@ -4977,6 +4997,7 @@ __metadata:
     "@rocketh/node": ^0.19
     "@rocketh/read-execute": ^0.19
     "@rocketh/signer": ^0.19
+    "@rocketh/verifier": ^0.19
     "@types/eslint": ^9.6.1
     "@types/mocha": ^10.0.10
     "@types/prettier": ^3.0.0
@@ -6755,6 +6776,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/fs-extra@npm:^11.0.4":
+  version: 11.0.4
+  resolution: "@types/fs-extra@npm:11.0.4"
+  dependencies:
+    "@types/jsonfile": "*"
+    "@types/node": "*"
+  checksum: 242cb84157631f057f76495c8220707541882c00a00195b603d937fb55e471afecebcb089bab50233ed3a59c69fd68bf65c1f69dd7fafe2347e139cc15b9b0e5
+  languageName: node
+  linkType: hard
+
 "@types/http-cache-semantics@npm:^4.0.4":
   version: 4.0.4
   resolution: "@types/http-cache-semantics@npm:4.0.4"
@@ -6780,6 +6811,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/jsonfile@npm:*":
+  version: 6.1.4
+  resolution: "@types/jsonfile@npm:6.1.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: 309fda20eb5f1cf68f2df28931afdf189c5e7e6bec64ac783ce737bb98908d57f6f58757ad5da9be37b815645a6f914e2d4f3ac66c574b8fe1ba6616284d0e97
   languageName: node
   linkType: hard
 
@@ -6904,6 +6944,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d92c1d3e77406bf13a03ec521b2ffb1ac99b2e6ea3a17cad670f2610f62e1293554c57e4074bb2fd4e9369f475f863b69e0ae8c543cb049c4a3c1b0c2d92522a
+  languageName: node
+  linkType: hard
+
+"@types/qs@npm:^6.14.0":
+  version: 6.15.0
+  resolution: "@types/qs@npm:6.15.0"
+  checksum: 871162881f1c83e61d0c8c243c65549be5dddf33a6911f3324edeebd4087207b1174644da9a3afaa20cf494c5288d2a1ece09e10e4822f755339f14a05c339ea
   languageName: node
   linkType: hard
 
@@ -11800,6 +11847,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-extra@npm:^11.3.3":
+  version: 11.3.4
+  resolution: "fs-extra@npm:11.3.4"
+  dependencies:
+    graceful-fs: ^4.2.0
+    jsonfile: ^6.0.1
+    universalify: ^2.0.0
+  checksum: 3d1453db564b20ad58adf7c9583d0821546bd05e158865407fa2767af774ad8353418118655005f48c5bd0dbda19ea4bd053f8a5dcef2ce2e97580f7a039a221
+  languageName: node
+  linkType: hard
+
 "fs-extra@npm:^7.0.0":
   version: 7.0.1
   resolution: "fs-extra@npm:7.0.1"
@@ -15060,6 +15118,13 @@ __metadata:
   version: 1.0.0
   resolution: "negotiator@npm:1.0.0"
   checksum: 20ebfe79b2d2e7cf9cbc8239a72662b584f71164096e6e8896c8325055497c96f6b80cd22c258e8a2f2aa382a787795ec3ee8b37b422a302c7d4381b0d5ecfbb
+  languageName: node
+  linkType: hard
+
+"neoqs@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "neoqs@npm:6.13.0"
+  checksum: 2b1ba202dbe839f80fae3065b08f3fdcb8993af720340ffd71a4136c5c084c81f691bcc04594e1547b1ff2562f458367427da7f4bcca0c6b8a8d214a329a377e
   languageName: node
   linkType: hard
 
