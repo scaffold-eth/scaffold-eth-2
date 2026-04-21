@@ -28,5 +28,6 @@ export default defineConfig([
         },
       ],
     },
+    ignores: [".next", "next-env.d.ts"],
   },
 ]);
