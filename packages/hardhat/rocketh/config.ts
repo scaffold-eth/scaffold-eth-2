@@ -26,7 +26,6 @@ const deployWithReset = ((env: any) => {
 }) as typeof deployExtension.deploy;
 
 const extensions = {
-  ...deployExtension,
   ...readExecuteExtension,
   deploy: deployWithReset,
 };
