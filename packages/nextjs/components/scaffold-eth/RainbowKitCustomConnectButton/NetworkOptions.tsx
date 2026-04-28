@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-import { useAccount, useSwitchChain } from "wagmi";
+import { useConnection, useSwitchChain } from "wagmi";
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid";
 import { getNetworkColor } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
@@ -11,8 +11,8 @@ type NetworkOptionsProps = {
 };
 
 export const NetworkOptions = ({ hidden = false }: NetworkOptionsProps) => {
-  const { switchChain } = useSwitchChain();
-  const { chain } = useAccount();
+  const { mutate: switchChain } = useSwitchChain();
+  const { chain } = useConnection();
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
 

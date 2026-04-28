@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Address, AddressInput, Balance, EtherInput } from "@scaffold-ui/components";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTargetNetwork, useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
@@ -27,7 +27,7 @@ export const Faucet = () => {
   const [sendValue, setSendValue] = useState("");
   const { targetNetwork } = useTargetNetwork();
 
-  const { chain: ConnectedChain } = useAccount();
+  const { chain: ConnectedChain } = useConnection();
 
   const faucetTxn = useTransactor(localWalletClient);
 

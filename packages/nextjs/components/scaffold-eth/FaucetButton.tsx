@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useWatchBalance } from "@scaffold-ui/hooks";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
@@ -21,7 +21,7 @@ const localWalletClient = createWalletClient({
  * FaucetButton button which lets you grab eth.
  */
 export const FaucetButton = () => {
-  const { address, chain: ConnectedChain } = useAccount();
+  const { address, chain: ConnectedChain } = useConnection();
 
   const { data: balance } = useWatchBalance({ address, chain: hardhat });
 
