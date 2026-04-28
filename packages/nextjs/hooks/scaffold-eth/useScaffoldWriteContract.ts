@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MutateOptions } from "@tanstack/react-query";
 import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { Config, UseWriteContractParameters, useAccount, useConfig, useWriteContract } from "wagmi";
+import { Config, UseWriteContractParameters, useConnection, useConfig, useWriteContract } from "wagmi";
 import { WriteContractErrorType, WriteContractReturnType } from "wagmi/actions";
 import { WriteContractVariables } from "wagmi/query";
 import { useSelectedNetwork } from "~~/hooks/scaffold-eth";
@@ -71,7 +71,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     }
   }, [configOrName]);
 
-  const { chain: accountChain } = useAccount();
+  const { chain: accountChain } = useConnection();
   const writeTx = useTransactor();
   const [isMining, setIsMining] = useState(false);
 
