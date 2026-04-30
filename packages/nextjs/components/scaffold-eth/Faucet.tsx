@@ -99,13 +99,7 @@ export const Faucet = () => {
             <div className="flex space-x-4">
               <div>
                 <span className="text-sm font-bold">From:</span>
-                <Address
-                  address={faucetAddress}
-                  onlyEnsOrAddress
-                  blockExplorerAddressLink={
-                    targetNetwork.id === hardhat.id ? `/blockexplorer/address/${faucetAddress}` : undefined
-                  }
-                />
+                <Address address={faucetAddress} onlyEnsOrAddress chain={targetNetwork} />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
