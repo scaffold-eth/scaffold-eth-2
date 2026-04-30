@@ -1746,7 +1746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bignumber@npm:^5.6.2, @ethersproject/bignumber@npm:^5.8.0":
+"@ethersproject/bignumber@npm:^5.5.0, @ethersproject/bignumber@npm:^5.6.2, @ethersproject/bignumber@npm:^5.8.0":
   version: 5.8.0
   resolution: "@ethersproject/bignumber@npm:5.8.0"
   dependencies:
@@ -4638,44 +4638,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "@scaffold-ui/components@npm:0.1.8"
+"@scaffold-ui/components@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "@scaffold-ui/components@npm:0.1.10"
   peerDependencies:
-    "@scaffold-ui/hooks": 0.1.6
+    "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/944330958c24817d00372ffb8ad2efab78b0287531dcc53efde0d6fd4e5c6c6c1f7fa90e53c4acbe3a4b44d945e04c15f996e0555ff0447868c6b2dd6951f841
+  checksum: 10/e2a61b134c4d5b57b45d1baae89aa8bed041c14bc646b6686190c1e00ea34ae7ff3078e4b5e61b139b57572232ebc057255ac0f6f0d4f978ed1d79568edee867
   languageName: node
   linkType: hard
 
-"@scaffold-ui/debug-contracts@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@scaffold-ui/debug-contracts@npm:0.1.7"
+"@scaffold-ui/debug-contracts@npm:^0.1.9":
+  version: 0.1.9
+  resolution: "@scaffold-ui/debug-contracts@npm:0.1.9"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
     react-hot-toast: "npm:^2.5.2"
   peerDependencies:
-    "@scaffold-ui/components": 0.1.8
-    "@scaffold-ui/hooks": 0.1.6
+    "@scaffold-ui/components": 0.1.10
+    "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/cf3a66250896d1a9376a3b20ca2c5f0a7ac1bed16dcbd9e535e2124b8b7ac6cbe989780682a7c6da2161b432817818ac80efeb53fed43477517f51c17b3a6fee
+  checksum: 10/286e84123f98b46aca224cb4197801b9f0f2a6be884c2366f3c7e6e41b357f4c038120b75ee5620f4975b706db11526ef6d548609008c8f8837c19a1bacfedb6
   languageName: node
   linkType: hard
 
-"@scaffold-ui/hooks@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@scaffold-ui/hooks@npm:0.1.6"
+"@scaffold-ui/hooks@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@scaffold-ui/hooks@npm:0.1.8"
   dependencies:
     "@uniswap/sdk-core": "npm:^7.7.2"
-    "@uniswap/v2-sdk": "npm:^4.15.2"
+    "@uniswap/v2-sdk": "npm:4.19.1"
     blo: "npm:^1.2.0"
     usehooks-ts: "npm:^3.1.1"
   peerDependencies:
@@ -4684,7 +4684,7 @@ __metadata:
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/62133dda170bbd3665ac516c4560f16fbb806d339db2728d6bb47290cbe0ae70464158d6eeb4b1d3d6e6125f3a179607c73e100edfffeda6c027f2a7a5b118bd
+  checksum: 10/9a05fb3ea24605cbc233cb20fb733ed0d007c0a674928c27f360ccbc3551136875c1723c7c992e8b80e10190be85b1a6e65ac9fe5202eb4d90f84957ab8d2939
   languageName: node
   linkType: hard
 
@@ -4847,9 +4847,9 @@ __metadata:
     "@heroicons/react": "npm:^2.1.5"
     "@rainbow-me/rainbowkit": "npm:2.2.9"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
-    "@scaffold-ui/components": "npm:^0.1.8"
-    "@scaffold-ui/debug-contracts": "npm:^0.1.7"
-    "@scaffold-ui/hooks": "npm:^0.1.6"
+    "@scaffold-ui/components": "npm:^0.1.10"
+    "@scaffold-ui/debug-contracts": "npm:^0.1.9"
+    "@scaffold-ui/hooks": "npm:^0.1.8"
     "@tailwindcss/postcss": "npm:latest"
     "@tanstack/react-query": "npm:^5.59.15"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
@@ -6931,7 +6931,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uniswap/sdk-core@npm:^7.7.1, @uniswap/sdk-core@npm:^7.7.2":
+"@uniswap/sdk-core@npm:^7.12.1":
+  version: 7.13.0
+  resolution: "@uniswap/sdk-core@npm:7.13.0"
+  dependencies:
+    "@ethersproject/address": "npm:^5.0.2"
+    "@ethersproject/bignumber": "npm:^5.5.0"
+    "@ethersproject/bytes": "npm:^5.7.0"
+    "@ethersproject/keccak256": "npm:5.7.0"
+    "@ethersproject/strings": "npm:5.7.0"
+    big.js: "npm:^5.2.2"
+    decimal.js-light: "npm:^2.5.0"
+    jsbi: "npm:^3.1.4"
+    tiny-invariant: "npm:^1.1.0"
+    toformat: "npm:^2.0.0"
+    tslib: "npm:^2.3.0"
+  checksum: 10/b4fa02a61e25cc974742b93c3f3804a20b28479eb2693acc26cc360fd935092feb73d24bc210376860968529649a81374e267549fca85d102b07462f1c0a3e20
+  languageName: node
+  linkType: hard
+
+"@uniswap/sdk-core@npm:^7.7.2":
   version: 7.7.2
   resolution: "@uniswap/sdk-core@npm:7.7.2"
   dependencies:
@@ -6948,16 +6967,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uniswap/v2-sdk@npm:^4.15.2":
-  version: 4.15.2
-  resolution: "@uniswap/v2-sdk@npm:4.15.2"
+"@uniswap/v2-sdk@npm:4.19.1":
+  version: 4.19.1
+  resolution: "@uniswap/v2-sdk@npm:4.19.1"
   dependencies:
     "@ethersproject/address": "npm:^5.0.2"
     "@ethersproject/solidity": "npm:^5.0.9"
-    "@uniswap/sdk-core": "npm:^7.7.1"
+    "@uniswap/sdk-core": "npm:^7.12.1"
     tiny-invariant: "npm:^1.1.0"
     tiny-warning: "npm:^1.0.3"
-  checksum: 10/44b1cd634a6c92559562af61963772ad2f39b353bf2bc7332137e20cf88a4f67d861bf647370dcdb4e7e0c8cbe1480bc491a1e0dc7d3795f3f1636a7c4604ce3
+  checksum: 10/ea7e56548320e0646b8a6c5bc559c22ca1de61752d7ed202b4f42e47f5ebc07e4d309011513ff7eaabdaba6b56030368a265d0679d70032b5c6d1f7f108ff8f6
   languageName: node
   linkType: hard
 
@@ -18803,7 +18822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.1, tslib@npm:^2.6.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1":
+"tslib@npm:^2.0.1, tslib@npm:^2.3.0, tslib@npm:^2.6.0, tslib@npm:^2.8.0, tslib@npm:^2.8.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
