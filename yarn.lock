@@ -3988,41 +3988,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:^0.1.9":
-  version: 0.1.9
-  resolution: "@scaffold-ui/components@npm:0.1.9"
+"@scaffold-ui/components@npm:^0.1.10":
+  version: 0.1.10
+  resolution: "@scaffold-ui/components@npm:0.1.10"
   peerDependencies:
-    "@scaffold-ui/hooks": 0.1.7
+    "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/af6927aa0f188a6dd57364b1b9b3f58f97197fb8b856d1b175dacb617278c69487e4eee8fa8e88f9f58828fad3457e6bf3b232d680334461bc4264e199503812
+  checksum: 10/e2a61b134c4d5b57b45d1baae89aa8bed041c14bc646b6686190c1e00ea34ae7ff3078e4b5e61b139b57572232ebc057255ac0f6f0d4f978ed1d79568edee867
   languageName: node
   linkType: hard
 
-"@scaffold-ui/debug-contracts@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "@scaffold-ui/debug-contracts@npm:0.1.8"
+"@scaffold-ui/debug-contracts@npm:^0.1.9":
+  version: 0.1.9
+  resolution: "@scaffold-ui/debug-contracts@npm:0.1.9"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
     react-hot-toast: "npm:^2.5.2"
   peerDependencies:
-    "@scaffold-ui/components": 0.1.9
-    "@scaffold-ui/hooks": 0.1.7
+    "@scaffold-ui/components": 0.1.10
+    "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/ddcdbd60b54b23e1452ca3009c89df97fe978cc982d1a09866f097456f5a189a7784ffe9f97648ac601f4939bea268e2ac8a2bdc7a28eae75cad2ebdc87b22f2
+  checksum: 10/286e84123f98b46aca224cb4197801b9f0f2a6be884c2366f3c7e6e41b357f4c038120b75ee5620f4975b706db11526ef6d548609008c8f8837c19a1bacfedb6
   languageName: node
   linkType: hard
 
-"@scaffold-ui/hooks@npm:^0.1.7":
-  version: 0.1.7
-  resolution: "@scaffold-ui/hooks@npm:0.1.7"
+"@scaffold-ui/hooks@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@scaffold-ui/hooks@npm:0.1.8"
   dependencies:
     "@uniswap/sdk-core": "npm:^7.7.2"
     "@uniswap/v2-sdk": "npm:4.19.1"
@@ -4034,7 +4034,7 @@ __metadata:
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/ceab64fced7c8fd48376dd1a30854fe3ef9203ac38448b6d31c9ad7d5e51e6e961c428bf89cb1d4efa1d9a9107c5e75fa989fd2ac9a6685c663f72705276c902
+  checksum: 10/9a05fb3ea24605cbc233cb20fb733ed0d007c0a674928c27f360ccbc3551136875c1723c7c992e8b80e10190be85b1a6e65ac9fe5202eb4d90f84957ab8d2939
   languageName: node
   linkType: hard
 
@@ -4224,9 +4224,9 @@ __metadata:
     "@heroicons/react": "npm:^2.2.0"
     "@rainbow-me/rainbowkit": "npm:2.2.9"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
-    "@scaffold-ui/components": "npm:^0.1.9"
-    "@scaffold-ui/debug-contracts": "npm:^0.1.8"
-    "@scaffold-ui/hooks": "npm:^0.1.7"
+    "@scaffold-ui/components": "npm:^0.1.10"
+    "@scaffold-ui/debug-contracts": "npm:^0.1.9"
+    "@scaffold-ui/hooks": "npm:^0.1.8"
     "@tailwindcss/postcss": "npm:^4.2.4"
     "@tanstack/react-query": "npm:^5.59.15"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
