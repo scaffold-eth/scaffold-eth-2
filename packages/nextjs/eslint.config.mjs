@@ -25,4 +25,16 @@ export default defineConfig([
     },
     ignores: [".next", "next-env.d.ts"],
   },
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-deprecated": "warn",
+    },
+  },
 ]);
