@@ -4617,23 +4617,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rocketh/verifier@npm:^0.19":
-  version: 0.19.3
-  resolution: "@rocketh/verifier@npm:0.19.3"
+"@rocketh/verifier@npm:^0.19.4":
+  version: 0.19.4
+  resolution: "@rocketh/verifier@npm:0.19.4"
   dependencies:
-    "@rocketh/core": "npm:0.19.0"
+    "@rocketh/core": "npm:0.19.1"
     "@types/fs-extra": "npm:^11.0.4"
-    "@types/qs": "npm:^6.14.0"
+    "@types/qs": "npm:^6.15.0"
     chalk: "npm:5.6.2"
     commander: "npm:^14.0.3"
-    fs-extra: "npm:^11.3.3"
-    ldenv: "npm:^0.3.16"
+    fs-extra: "npm:^11.3.4"
+    ldenv: "npm:^0.5.0"
     neoqs: "npm:^6.13.0"
   peerDependencies:
-    "@rocketh/node": 0.19.3
+    "@rocketh/node": 0.19.4
   bin:
     rocketh-verify: dist/cli.js
-  checksum: 10/c0877ac0e111195e1a9e2f5e1e23925eb2a4d94538523d5934f3a3a91b7a77b45863c077e7562adc402ed67212abccfcb2eb1b945a8ca7dcd07c87c62945aa2a
+  checksum: 10/1032cdff5134debe05bc868b10348e8dfa56e215ac0479e9b78db08dd9e8c32df962988a251fccf09ec2ec66d1e9b3034cec9d50550511b28878d1dd60a32f36
   languageName: node
   linkType: hard
 
@@ -4970,7 +4970,7 @@ __metadata:
     "@rocketh/node": "npm:^0.19.4"
     "@rocketh/read-execute": "npm:^0.19.1"
     "@rocketh/signer": "npm:^0.19"
-    "@rocketh/verifier": "npm:^0.19"
+    "@rocketh/verifier": "npm:^0.19.4"
     "@types/eslint": "npm:^9.6.1"
     "@types/mocha": "npm:^10.0.10"
     "@types/prettier": "npm:^3.0.0"
@@ -6920,7 +6920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:^6.14.0":
+"@types/qs@npm:^6.15.0":
   version: 6.15.0
   resolution: "@types/qs@npm:6.15.0"
   checksum: 10/871162881f1c83e61d0c8c243c65549be5dddf33a6911f3324edeebd4087207b1174644da9a3afaa20cf494c5288d2a1ece09e10e4822f755339f14a05c339ea
@@ -11832,7 +11832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^11.3.3":
+"fs-extra@npm:^11.3.4":
   version: 11.3.4
   resolution: "fs-extra@npm:11.3.4"
   dependencies:
@@ -13924,18 +13924,6 @@ __metadata:
   dependencies:
     language-subtag-registry: "npm:^0.3.20"
   checksum: 10/d3a7c14b694e67f519153d6df6cb200681648d38d623c3bfa9d6a66a5ec5493628acb88e9df5aceef3cf1902ab263a205e7d59ee4cf1d6bb67e707b83538bd6d
-  languageName: node
-  linkType: hard
-
-"ldenv@npm:^0.3.16":
-  version: 0.3.16
-  resolution: "ldenv@npm:0.3.16"
-  dependencies:
-    dotenv: "npm:^16.0.3"
-    dotenv-expand: "npm:^10.0.0"
-  bin:
-    ldenv: dist/cli.cjs
-  checksum: 10/f370e7a1cc46776ef60170e53daf7b8188c913140d230fef5fd536918300c4636447c2c006162bb6a307bf446302e274d8fd145f268cc4f72c510461fe0da81c
   languageName: node
   linkType: hard
 
