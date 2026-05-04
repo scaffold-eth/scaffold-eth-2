@@ -4121,6 +4121,150 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@parcel/watcher-android-arm64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-android-arm64@npm:2.5.6"
+  conditions: os=android & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-darwin-arm64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-darwin-arm64@npm:2.5.6"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-darwin-x64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-darwin-x64@npm:2.5.6"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-freebsd-x64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-freebsd-x64@npm:2.5.6"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm-glibc@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-arm-glibc@npm:2.5.6"
+  conditions: os=linux & cpu=arm & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm-musl@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-arm-musl@npm:2.5.6"
+  conditions: os=linux & cpu=arm & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm64-glibc@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-arm64-glibc@npm:2.5.6"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-arm64-musl@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-arm64-musl@npm:2.5.6"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-x64-glibc@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-x64-glibc@npm:2.5.6"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-linux-x64-musl@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-linux-x64-musl@npm:2.5.6"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-arm64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-win32-arm64@npm:2.5.6"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-ia32@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-win32-ia32@npm:2.5.6"
+  conditions: os=win32 & cpu=ia32
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher-win32-x64@npm:2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher-win32-x64@npm:2.5.6"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@parcel/watcher@npm:^2.5.6":
+  version: 2.5.6
+  resolution: "@parcel/watcher@npm:2.5.6"
+  dependencies:
+    "@parcel/watcher-android-arm64": "npm:2.5.6"
+    "@parcel/watcher-darwin-arm64": "npm:2.5.6"
+    "@parcel/watcher-darwin-x64": "npm:2.5.6"
+    "@parcel/watcher-freebsd-x64": "npm:2.5.6"
+    "@parcel/watcher-linux-arm-glibc": "npm:2.5.6"
+    "@parcel/watcher-linux-arm-musl": "npm:2.5.6"
+    "@parcel/watcher-linux-arm64-glibc": "npm:2.5.6"
+    "@parcel/watcher-linux-arm64-musl": "npm:2.5.6"
+    "@parcel/watcher-linux-x64-glibc": "npm:2.5.6"
+    "@parcel/watcher-linux-x64-musl": "npm:2.5.6"
+    "@parcel/watcher-win32-arm64": "npm:2.5.6"
+    "@parcel/watcher-win32-ia32": "npm:2.5.6"
+    "@parcel/watcher-win32-x64": "npm:2.5.6"
+    detect-libc: "npm:^2.0.3"
+    is-glob: "npm:^4.0.3"
+    node-addon-api: "npm:^7.0.0"
+    node-gyp: "npm:latest"
+    picomatch: "npm:^4.0.3"
+  dependenciesMeta:
+    "@parcel/watcher-android-arm64":
+      optional: true
+    "@parcel/watcher-darwin-arm64":
+      optional: true
+    "@parcel/watcher-darwin-x64":
+      optional: true
+    "@parcel/watcher-freebsd-x64":
+      optional: true
+    "@parcel/watcher-linux-arm-glibc":
+      optional: true
+    "@parcel/watcher-linux-arm-musl":
+      optional: true
+    "@parcel/watcher-linux-arm64-glibc":
+      optional: true
+    "@parcel/watcher-linux-arm64-musl":
+      optional: true
+    "@parcel/watcher-linux-x64-glibc":
+      optional: true
+    "@parcel/watcher-linux-x64-musl":
+      optional: true
+    "@parcel/watcher-win32-arm64":
+      optional: true
+    "@parcel/watcher-win32-ia32":
+      optional: true
+    "@parcel/watcher-win32-x64":
+      optional: true
+  checksum: 10/00e027ef6bd67239bd63d63d062363a0263377a3de3114c29f0f717076616b3a03fd67902a70ba52dbb7241efc27498a8f1da983aa41280c454b9c1246a6f191
+  languageName: node
+  linkType: hard
+
 "@paulmillr/qr@npm:^0.2.1":
   version: 0.2.1
   resolution: "@paulmillr/qr@npm:0.2.1"
@@ -4401,52 +4545,64 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rocketh/deploy@npm:^0.19":
+"@rocketh/core@npm:0.19.1":
   version: 0.19.1
-  resolution: "@rocketh/deploy@npm:0.19.1"
+  resolution: "@rocketh/core@npm:0.19.1"
   dependencies:
-    "@rocketh/core": "npm:0.19.0"
-    abitype: "npm:^1.2.3"
+    abitype: "npm:^1.2.4"
     eip-1193: "npm:^0.6.5"
     named-logs: "npm:^0.4.1"
-    viem: "npm:^2.45.1"
-  checksum: 10/9c2a06a4595a15d3bd0bbd3b8f72f9e11d719310af318d6f778aeb955578bbef462de289a044c5da9e90329d4459ebf68dcd4fedb01d5147711ae1857046d487
+    viem: "npm:^2.48.2"
+  checksum: 10/b6f736a1fabe307bea515edb0c684cbb33c8dd3295c7712c4f15d80b5ad13fdb5bec8856c682a27f4b9d3a0f299fa7f02aa941cbea2e60bc5aa22295497199ef
   languageName: node
   linkType: hard
 
-"@rocketh/node@npm:^0.19":
-  version: 0.19.3
-  resolution: "@rocketh/node@npm:0.19.3"
+"@rocketh/deploy@npm:^0.19.2":
+  version: 0.19.2
+  resolution: "@rocketh/deploy@npm:0.19.2"
   dependencies:
-    "@rocketh/core": "npm:0.19.0"
+    "@rocketh/core": "npm:0.19.1"
+    abitype: "npm:^1.2.4"
+    eip-1193: "npm:^0.6.5"
+    named-logs: "npm:^0.4.1"
+    viem: "npm:^2.48.2"
+  checksum: 10/20c95e0b083685f3f6cbf1deae80606733a710e2d3881fce6a67733f6b8199068d21b8fc676b73dfe2cc8284eb8946821cb4a0d6bd12b82abd8ee9a9b96f6a8d
+  languageName: node
+  linkType: hard
+
+"@rocketh/node@npm:^0.19.4":
+  version: 0.19.4
+  resolution: "@rocketh/node@npm:0.19.4"
+  dependencies:
+    "@rocketh/core": "npm:0.19.1"
     "@types/prompts": "npm:^2.4.9"
     change-case: "npm:^5.4.4"
     commander: "npm:^14.0.3"
     eip-1193: "npm:^0.6.5"
-    ldenv: "npm:^0.3.16"
+    ldenv: "npm:^0.5.0"
     named-logs: "npm:^0.4.1"
     named-logs-console: "npm:^0.5.1"
     prompts: "npm:^2.4.2"
     tsx: "npm:^4.21.0"
-    viem: "npm:^2.45.1"
+    viem: "npm:^2.48.2"
   peerDependencies:
-    rocketh: 0.19.3
+    rocketh: 0.19.4
   bin:
     rocketh: dist/cli.js
-  checksum: 10/f156695afa3c8eb06ee9cd735f562777ae72840ff8119bc90985280c03b814323841f4a571f61b26a2cb73cd9c59a9f7c33cf8bd4ef947ff5c7a0120ad275847
+  checksum: 10/a407c6ce3755aec3eeeae8b707a087c1e293efd1848fa354a6c3affc696b3baa4ca7b7663bd4accb8cbf5a54271a18452ce3dc427865aaf38133ac542be7e8b6
   languageName: node
   linkType: hard
 
-"@rocketh/read-execute@npm:^0.19":
-  version: 0.19.0
-  resolution: "@rocketh/read-execute@npm:0.19.0"
+"@rocketh/read-execute@npm:^0.19.1":
+  version: 0.19.1
+  resolution: "@rocketh/read-execute@npm:0.19.1"
   dependencies:
-    "@rocketh/core": "npm:0.19.0"
-    abitype: "npm:^1.2.3"
+    "@rocketh/core": "npm:0.19.1"
+    abitype: "npm:^1.2.4"
     eip-1193: "npm:^0.6.5"
     named-logs: "npm:^0.4.1"
-    viem: "npm:^2.45.1"
-  checksum: 10/f74e4c78b2dee3dab522dc62fca9ec05b422771760dc63f26e80aed63eeefb81726ca7f2b10c271373572efb8e81a34ae3739f23e9a8b8216f29abf0bfcd55d2
+    viem: "npm:^2.48.2"
+  checksum: 10/82e6ee0fc5ac2ccb0c9757d3bfde05b086e4fa09faab7dfa09157aa5e6832019ac73730bbfd50816ce6de3fb022456c422c14e5bb12e9ce6fe04beb148f118b9
   languageName: node
   linkType: hard
 
@@ -4810,9 +4966,9 @@ __metadata:
     "@nomicfoundation/hardhat-verify": "npm:^3"
     "@nomicfoundation/ignition-core": "npm:^3"
     "@openzeppelin/contracts": "npm:^5.0.2"
-    "@rocketh/deploy": "npm:^0.19"
-    "@rocketh/node": "npm:^0.19"
-    "@rocketh/read-execute": "npm:^0.19"
+    "@rocketh/deploy": "npm:^0.19.2"
+    "@rocketh/node": "npm:^0.19.4"
+    "@rocketh/read-execute": "npm:^0.19.1"
     "@rocketh/signer": "npm:^0.19"
     "@rocketh/verifier": "npm:^0.19"
     "@types/eslint": "npm:^9.6.1"
@@ -4829,12 +4985,12 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.2.4"
     ethers: "npm:^6.13.2"
     hardhat: "npm:^3.4.0"
-    hardhat-deploy: "npm:^2"
+    hardhat-deploy: "npm:^2.0.5"
     mocha: "npm:^11"
     prettier: "npm:^3.5.3"
     prettier-plugin-solidity: "npm:^1.4.1"
     qrcode: "npm:^1.5.4"
-    rocketh: "npm:^0.19"
+    rocketh: "npm:^0.19.4"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.8.2"
   languageName: unknown
@@ -8054,6 +8210,21 @@ __metadata:
     zod:
       optional: true
   checksum: 10/04eb6bb8eec9422c538995cd508db851e6e59b84fb90e20207e43a6a1d1dcb4d434abacb7c5a277a0c039447dc666e676bbc1548e917e554c499ce86443416a5
+  languageName: node
+  linkType: hard
+
+"abitype@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "abitype@npm:1.2.4"
+  peerDependencies:
+    typescript: ">=5.0.4"
+    zod: ^3.22.0 || ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10/500b317a53b34cb6ffe3e4f090e135972b43cd2fbdfebe64fc497dfd8515d9117919e5f88f0aaede332d29a21c1826be64a3ffa620b0b91c16e8b560b6635714
   languageName: node
   linkType: hard
 
@@ -12162,9 +12333,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat-deploy@npm:^2":
-  version: 2.0.3
-  resolution: "hardhat-deploy@npm:2.0.3"
+"hardhat-deploy@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "hardhat-deploy@npm:2.0.5"
   dependencies:
     "@nomicfoundation/hardhat-zod-utils": "npm:^3.0.1"
     commander: "npm:^14.0.3"
@@ -12172,12 +12343,12 @@ __metadata:
     named-logs-console: "npm:^0.5.1"
     zod: "npm:^3.25.76"
   peerDependencies:
-    "@rocketh/node": ^0.19.3
-    hardhat: ^3.1.8
-    rocketh: ^0.19.3
+    "@rocketh/node": ^0.19.4
+    hardhat: ^3.4.0
+    rocketh: ^0.19.4
   bin:
     hardhat-deploy: dist/cli.js
-  checksum: 10/dfdc3a220c67a97f216284904ffe38dea2d0a4ba0e70b6b3156ca0c1d80d9ce534933362e957a3746dddf0b0de05785ae2fedc990ce122726cc7a801cc8f171f
+  checksum: 10/6bd9a96a4c887132af6d6f97bb47c6bdff3492c32fe24070b1fd8f4d2ca8831f5c9b470d86514a82d966e20c6b8753fc8d4e187e936a5c1377710327cb240e2a
   languageName: node
   linkType: hard
 
@@ -13768,6 +13939,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ldenv@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "ldenv@npm:0.5.0"
+  dependencies:
+    "@parcel/watcher": "npm:^2.5.6"
+    cross-spawn: "npm:^7.0.6"
+    dotenv: "npm:^16.0.3"
+    dotenv-expand: "npm:^10.0.0"
+    lodash-es: "npm:^4.17.23"
+  bin:
+    ldenv: dist/cli.cjs
+  checksum: 10/7763d6bbfc202163dfbf32b0a5a1a88062f137b15cbeee23b482e8df38cf8b1c172be219a4112e1113a448af94421b03f144a0f538b9015c2e5ef661fb862ab7
+  languageName: node
+  linkType: hard
+
 "levn@npm:^0.4.1":
   version: 0.4.1
   resolution: "levn@npm:0.4.1"
@@ -14122,6 +14308,13 @@ __metadata:
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
   checksum: 10/03f39878ea1e42b3199bd3f478150ab723f93cc8730ad86fec1f2804f4a07c6e30deaac73cad53a88e9c3db33348bb8ceeb274552390e7a75d7849021c02df43
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.23":
+  version: 4.18.1
+  resolution: "lodash-es@npm:4.18.1"
+  checksum: 10/8bfad225ef09ef42b04283cdaf7830efcc2ba29ae41b56501c74422155ee1ccaa1f0f6e8319def3451a1fe54dec501c8e4bee622bae2b2d98ac993731e0a5cce
   languageName: node
   linkType: hard
 
@@ -15036,6 +15229,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^7.0.0":
+  version: 7.1.1
+  resolution: "node-addon-api@npm:7.1.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10/ee1e1ed6284a2f8cd1d59ac6175ecbabf8978dcf570345e9a8095a9d0a2b9ced591074ae77f9009287b00c402352b38aa9322a34f2199cdc9f567b842a636b94
+  languageName: node
+  linkType: hard
+
 "node-fetch-native@npm:^1.6.4, node-fetch-native@npm:^1.6.6":
   version: 1.6.6
   resolution: "node-fetch-native@npm:1.6.6"
@@ -15676,6 +15878,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ox@npm:0.14.20":
+  version: 0.14.20
+  resolution: "ox@npm:0.14.20"
+  dependencies:
+    "@adraffy/ens-normalize": "npm:^1.11.0"
+    "@noble/ciphers": "npm:^1.3.0"
+    "@noble/curves": "npm:1.9.1"
+    "@noble/hashes": "npm:^1.8.0"
+    "@scure/bip32": "npm:^1.7.0"
+    "@scure/bip39": "npm:^1.6.0"
+    abitype: "npm:^1.2.3"
+    eventemitter3: "npm:5.0.1"
+  peerDependencies:
+    typescript: ">=5.4.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/96526073193f3a6dd2ccd21bcc255e82c7226d6de63fa17a2021c75232fdc9bc969e75e2cbc0c8d5163d88c575e08dc4c75dec7333b1727f080585f07fc6c1ed
+  languageName: node
+  linkType: hard
+
 "ox@npm:0.6.7":
   version: 0.6.7
   resolution: "ox@npm:0.6.7"
@@ -16257,6 +16480,13 @@ __metadata:
   version: 4.0.2
   resolution: "picomatch@npm:4.0.2"
   checksum: 10/ce617b8da36797d09c0baacb96ca8a44460452c89362d7cb8f70ca46b4158ba8bc3606912de7c818eb4a939f7f9015cef3c766ec8a0c6bfc725fdc078e39c717
+  languageName: node
+  linkType: hard
+
+"picomatch@npm:^4.0.3":
+  version: 4.0.4
+  resolution: "picomatch@npm:4.0.4"
+  checksum: 10/f6ef80a3590827ce20378ae110ac78209cc4f74d39236370f1780f957b7ee41c12acde0e4651b90f39983506fd2f5e449994716f516db2e9752924aff8de93ce
   languageName: node
   linkType: hard
 
@@ -17266,18 +17496,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rocketh@npm:^0.19":
-  version: 0.19.3
-  resolution: "rocketh@npm:0.19.3"
+"rocketh@npm:^0.19.4":
+  version: 0.19.4
+  resolution: "rocketh@npm:0.19.4"
   dependencies:
-    "@rocketh/core": "npm:0.19.0"
-    abitype: "npm:^1.2.3"
+    "@rocketh/core": "npm:0.19.1"
+    abitype: "npm:^1.2.4"
     change-case: "npm:^5.4.4"
     eip-1193: "npm:^0.6.5"
     eip-1193-jsonrpc-provider: "npm:^0.4.3"
-    ldenv: "npm:^0.3.16"
+    ldenv: "npm:^0.5.0"
     named-logs: "npm:^0.4.1"
-  checksum: 10/2e54dfdeef4469c8d898187cff897a2017e638e40daf6888718cf1a5df46779781ca2494393219ea27b3944de33537d7ca79eddaef91110ecab440d9230dde19
+  checksum: 10/155d96df267c9f54475d61551c5cb28e6fa38569565c948ca2870ea8c1301e9dc43633b28df9fbf083860eb3ca7c0356d2ed830c6d98c77668eacecd7423be25
   languageName: node
   linkType: hard
 
@@ -19638,6 +19868,27 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/6a0d4b43e4e4f0dcd6046d7408b1354d661bdc39d005acb1ec2f39efac911f36e81fd327d5c67b407fb179ff4d7cb01b7ee2a6ac010e6df0a1557575ad42f624
+  languageName: node
+  linkType: hard
+
+"viem@npm:^2.48.2":
+  version: 2.48.4
+  resolution: "viem@npm:2.48.4"
+  dependencies:
+    "@noble/curves": "npm:1.9.1"
+    "@noble/hashes": "npm:1.8.0"
+    "@scure/bip32": "npm:1.7.0"
+    "@scure/bip39": "npm:1.6.0"
+    abitype: "npm:1.2.3"
+    isows: "npm:1.0.7"
+    ox: "npm:0.14.20"
+    ws: "npm:8.18.3"
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/79ab1c8941013e1b4d12ef0bd7fcca6108cfc078b669cc02ae5a08c94d4e3b6de182071cfb40fb4e33ddc40b3aa997f3ebb50d269c85512cefcefdce49b193a0
   languageName: node
   linkType: hard
 
