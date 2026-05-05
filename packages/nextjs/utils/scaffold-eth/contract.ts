@@ -12,8 +12,7 @@ import {
   ExtractAbiFunction,
 } from "abitype";
 import type { ExtractAbiFunctionNames } from "abitype";
-import type { Simplify } from "type-fest";
-import type { MergeDeepRecord } from "type-fest/source/merge-deep";
+import type { MergeDeep, Simplify } from "type-fest";
 import {
   Address,
   Block,
@@ -58,7 +57,7 @@ const deepMergeContracts = <L extends Record<PropertyKey, any>, E extends Record
     );
     result[key] = { ...local[key], ...amendedExternal };
   }
-  return result as MergeDeepRecord<AddExternalFlag<L>, AddExternalFlag<E>, { arrayMergeMode: "replace" }>;
+  return result as MergeDeep<AddExternalFlag<L>, AddExternalFlag<E>, { arrayMergeMode: "replace" }>;
 };
 
 const contractsData = deepMergeContracts(deployedContractsData, externalContractsData);
