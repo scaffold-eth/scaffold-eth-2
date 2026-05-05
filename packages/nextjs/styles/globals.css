@@ -41,18 +41,18 @@
 @plugin "daisyui/theme" {
   name: "dark";
 
-  --color-primary: #ededed;
-  --color-primary-content: #0a0a0a;
-  --color-secondary: #1a1a1a;
-  --color-secondary-content: #fafafa;
+  --color-primary: #4f4d4d;
+  --color-primary-content: #e5e5e5;
+  --color-secondary: #4f4d4d;
+  --color-secondary-content: #e5e5e5;
   --color-accent: #60a5fa;
   --color-accent-content: #0a0a0a;
-  --color-neutral: #fafafa;
+  --color-neutral: #a3a3a3;
   --color-neutral-content: #0a0a0a;
-  --color-base-100: #0a0a0a;
-  --color-base-200: #000000;
-  --color-base-300: #1a1a1a;
-  --color-base-content: #fafafa;
+  --color-base-100: #171717;
+  --color-base-200: #0a0a0a;
+  --color-base-300: #262626;
+  --color-base-content: #e5e5e5;
   --color-info: #60a5fa;
   --color-success: #00d97e;
   --color-warning: #ff9500;
