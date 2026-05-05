@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true",
   },
-  turbopack: {},
 };
 
 const isIpfs = process.env.NEXT_PUBLIC_IPFS_BUILD === "true";
