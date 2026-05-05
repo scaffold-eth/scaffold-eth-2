@@ -3674,9 +3674,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:2.2.9":
-  version: 2.2.9
-  resolution: "@rainbow-me/rainbowkit@npm:2.2.9"
+"@rainbow-me/rainbowkit@npm:2.2.10":
+  version: 2.2.10
+  resolution: "@rainbow-me/rainbowkit@npm:2.2.10"
   dependencies:
     "@vanilla-extract/css": "npm:1.17.3"
     "@vanilla-extract/dynamic": "npm:2.1.4"
@@ -3691,7 +3691,7 @@ __metadata:
     react-dom: ">=18"
     viem: 2.x
     wagmi: ^2.9.0
-  checksum: 10/f16e9f87e6b51e5b6dc5cdb0ec1b6937ae1115764bba52553e98b963f6f53815c71464bbac0dbeced652fd0c358889eb59e68379a877135d3130c18bd3fb6a67
+  checksum: 10/5ea96c1f719ff70557bbab64b2ab1c4fdd068f1c66c2f82ce5ecbbfb7ba09ed48f833cc6e7f8c9092489f76259a8384a68aaa6947179aa5014ca29708e1e8723
   languageName: node
   linkType: hard
 
@@ -4222,20 +4222,20 @@ __metadata:
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
-    "@rainbow-me/rainbowkit": "npm:2.2.9"
+    "@rainbow-me/rainbowkit": "npm:2.2.10"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
     "@scaffold-ui/components": "npm:^0.1.10"
     "@scaffold-ui/debug-contracts": "npm:^0.1.9"
     "@scaffold-ui/hooks": "npm:^0.1.8"
     "@tailwindcss/postcss": "npm:^4.2.4"
-    "@tanstack/react-query": "npm:^5.59.15"
+    "@tanstack/react-query": "npm:^5.100.5"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
     "@types/node": "npm:^18.19.130"
     "@types/react": "npm:^19.2.14"
-    abitype: "npm:1.0.6"
+    abitype: "npm:1.2.4"
     bgipfs: "npm:^0.0.18"
     blo: "npm:^2.0.0"
-    burner-connector: "npm:0.0.20"
+    burner-connector: ../../../burner-connector/packages/burner-connector
     daisyui: "npm:^5.5.19"
     eslint: "npm:^9.39.0"
     eslint-config-next: "npm:^16.2.4"
@@ -4256,7 +4256,7 @@ __metadata:
     typescript: "npm:^5.8.2"
     usehooks-ts: "npm:^3.1.1"
     vercel: "npm:~52.0.0"
-    viem: "npm:2.39.0"
+    viem: "npm:2.48.4"
     wagmi: "npm:2.19.5"
     zustand: "npm:^5.0.12"
   languageName: unknown
@@ -5275,21 +5275,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.59.13":
-  version: 5.59.13
-  resolution: "@tanstack/query-core@npm:5.59.13"
-  checksum: 10/dc28f8a667095a98e22411a0f067f0c03701c9c92355d1cb74e9b160c49acdf0e5e362cc027ece6a70e4faec721170da2ee38e71f07814c664a2c4cbd494d736
+"@tanstack/query-core@npm:5.100.5":
+  version: 5.100.5
+  resolution: "@tanstack/query-core@npm:5.100.5"
+  checksum: 10/07f42dd4186057d85e5edcbdbd3a040cbf6f22621287b802c79339aa230aa16ff285330fac744ec471b7bbeb0181a916979dbc74613fb5342328ac1f6dc1a9a8
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.59.15":
-  version: 5.59.15
-  resolution: "@tanstack/react-query@npm:5.59.15"
+"@tanstack/react-query@npm:^5.100.5":
+  version: 5.100.5
+  resolution: "@tanstack/react-query@npm:5.100.5"
   dependencies:
-    "@tanstack/query-core": "npm:5.59.13"
+    "@tanstack/query-core": "npm:5.100.5"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10/a55168650140c6e0a3a20adad9e1ef2088a6834a26d7f3455e90177c7dcff2b9ba92fdc330f4d2b1afe246233330b27f71dec003e883ed6aa195490fcf43e803
+  checksum: 10/ad14776bb73b62ea337d12c35e2f041e96a8c4939568b4035247d6e138a4ada66124b6b8604b5c8d7f267f70e0b7754d220aa957cd7dda1c67c9d228ca7f4d2d
   languageName: node
   linkType: hard
 
@@ -7118,6 +7118,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"abitype@npm:1.2.3":
+  version: 1.2.3
+  resolution: "abitype@npm:1.2.3"
+  peerDependencies:
+    typescript: ">=5.0.4"
+    zod: ^3.22.0 || ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10/94e744c2fc301b1cff59163a21b499aae0ddecdf4d3bef1579ff16b705e6f5738fd314125d791ed142487db2473d4fadcdbabb1e05e4b5d35715bc4ef35e400a
+  languageName: node
+  linkType: hard
+
+"abitype@npm:1.2.4, abitype@npm:^1.2.3":
+  version: 1.2.4
+  resolution: "abitype@npm:1.2.4"
+  peerDependencies:
+    typescript: ">=5.0.4"
+    zod: ^3.22.0 || ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10/500b317a53b34cb6ffe3e4f090e135972b43cd2fbdfebe64fc497dfd8515d9117919e5f88f0aaede332d29a21c1826be64a3ffa620b0b91c16e8b560b6635714
+  languageName: node
+  linkType: hard
+
 "abitype@npm:^1.0.8":
   version: 1.0.9
   resolution: "abitype@npm:1.0.9"
@@ -8259,14 +8289,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burner-connector@npm:0.0.20":
+"burner-connector@file:../../../burner-connector/packages/burner-connector::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.0.20
-  resolution: "burner-connector@npm:0.0.20"
+  resolution: "burner-connector@file:../../../burner-connector/packages/burner-connector#../../../burner-connector/packages/burner-connector::hash=9c1be7&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
-    "@rainbow-me/rainbowkit": "npm:2.2.9"
-    viem: "npm:2.39.0"
+    "@rainbow-me/rainbowkit": "npm:2.2.10"
+    viem: "npm:2.48.4"
     wagmi: "npm:2.19.5"
-  checksum: 10/1ddc2449ab835d56e3b50397a34072c36a9a35492d5b2eba6a386bbf7b73e009e3f87bbfdf702a5aa4f330edb863965013db0d13f1af858990955a6321c57782
+  checksum: 10/c70d5850444458ca79e8b257bb6cd4b0d87cbf8114137e47cb301fadd91f8bcda6f58f846422c1d23aa3467e059cc4bed4a39ce517f0d4d78be21e68dc208c0e
   languageName: node
   linkType: hard
 
@@ -16044,6 +16074,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ox@npm:0.14.20":
+  version: 0.14.20
+  resolution: "ox@npm:0.14.20"
+  dependencies:
+    "@adraffy/ens-normalize": "npm:^1.11.0"
+    "@noble/ciphers": "npm:^1.3.0"
+    "@noble/curves": "npm:1.9.1"
+    "@noble/hashes": "npm:^1.8.0"
+    "@scure/bip32": "npm:^1.7.0"
+    "@scure/bip39": "npm:^1.6.0"
+    abitype: "npm:^1.2.3"
+    eventemitter3: "npm:5.0.1"
+  peerDependencies:
+    typescript: ">=5.4.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/96526073193f3a6dd2ccd21bcc255e82c7226d6de63fa17a2021c75232fdc9bc969e75e2cbc0c8d5163d88c575e08dc4c75dec7333b1727f080585f07fc6c1ed
+  languageName: node
+  linkType: hard
+
 "ox@npm:0.6.7":
   version: 0.6.7
   resolution: "ox@npm:0.6.7"
@@ -20418,24 +20469,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:2.39.0":
-  version: 2.39.0
-  resolution: "viem@npm:2.39.0"
+"viem@npm:2.48.4":
+  version: 2.48.4
+  resolution: "viem@npm:2.48.4"
   dependencies:
     "@noble/curves": "npm:1.9.1"
     "@noble/hashes": "npm:1.8.0"
     "@scure/bip32": "npm:1.7.0"
     "@scure/bip39": "npm:1.6.0"
-    abitype: "npm:1.1.0"
+    abitype: "npm:1.2.3"
     isows: "npm:1.0.7"
-    ox: "npm:0.9.6"
+    ox: "npm:0.14.20"
     ws: "npm:8.18.3"
   peerDependencies:
     typescript: ">=5.0.4"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10/f8aa35b86af76bf0b30611a4c29cd3c3d1f66e5962c1e5a1f7dbdbfb0a06c08cafef0c5277c702e7e29fee6632b8172a7f24b5a115d1a5f674c97d96d58a1e46
+  checksum: 10/79ab1c8941013e1b4d12ef0bd7fcca6108cfc078b669cc02ae5a08c94d4e3b6de182071cfb40fb4e33ddc40b3aa997f3ebb50d269c85512cefcefdce49b193a0
   languageName: node
   linkType: hard
 

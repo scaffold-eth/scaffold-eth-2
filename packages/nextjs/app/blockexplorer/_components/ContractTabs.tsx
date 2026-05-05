@@ -32,7 +32,7 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
 
   useEffect(() => {
     const checkIsContract = async () => {
-      const contractCode = await publicClient.getBytecode({ address: address });
+      const contractCode = await publicClient.getCode({ address: address });
       setIsContract(contractCode !== undefined && contractCode !== "0x");
     };
 
