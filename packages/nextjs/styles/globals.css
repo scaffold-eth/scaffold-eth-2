@@ -16,50 +16,50 @@
 @plugin "daisyui/theme" {
   name: "light";
 
-  --color-primary: #93bbfb;
-  --color-primary-content: #212638;
-  --color-secondary: #dae8ff;
+  --color-primary: #0f172a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #ededed;
   --color-secondary-content: #212638;
-  --color-accent: #93bbfb;
-  --color-accent-content: #212638;
-  --color-neutral: #212638;
+  --color-accent: #2563eb;
+  --color-accent-content: #ffffff;
+  --color-neutral: #0f172a;
   --color-neutral-content: #ffffff;
   --color-base-100: #ffffff;
-  --color-base-200: #f4f8ff;
-  --color-base-300: #dae8ff;
+  --color-base-200: #fdfdfd;
+  --color-base-300: #f0f0f0;
   --color-base-content: #212638;
-  --color-info: #93bbfb;
-  --color-success: #34eeb6;
-  --color-warning: #ffcf72;
-  --color-error: #ff8863;
+  --color-info: #2563eb;
+  --color-success: #00d97e;
+  --color-warning: #ff9500;
+  --color-error: #ff3344;
 
-  --radius-field: 1rem;
-  --radius-box: 1rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
   --tt-tailw: 6px;
 }
 
 @plugin "daisyui/theme" {
   name: "dark";
 
-  --color-primary: #212638;
-  --color-primary-content: #f9fbff;
-  --color-secondary: #323f61;
-  --color-secondary-content: #f9fbff;
-  --color-accent: #4969a6;
-  --color-accent-content: #f9fbff;
-  --color-neutral: #f9fbff;
-  --color-neutral-content: #385183;
-  --color-base-100: #385183;
-  --color-base-200: #2a3655;
-  --color-base-300: #212638;
-  --color-base-content: #f9fbff;
-  --color-info: #385183;
-  --color-success: #34eeb6;
-  --color-warning: #ffcf72;
-  --color-error: #ff8863;
+  --color-primary: #ededed;
+  --color-primary-content: #0a0a0a;
+  --color-secondary: #1a1a1a;
+  --color-secondary-content: #fafafa;
+  --color-accent: #60a5fa;
+  --color-accent-content: #0a0a0a;
+  --color-neutral: #fafafa;
+  --color-neutral-content: #0a0a0a;
+  --color-base-100: #0a0a0a;
+  --color-base-200: #000000;
+  --color-base-300: #1a1a1a;
+  --color-base-content: #fafafa;
+  --color-info: #60a5fa;
+  --color-success: #00d97e;
+  --color-warning: #ff9500;
+  --color-error: #ff5566;
 
-  --radius-field: 1rem;
-  --radius-box: 1rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
 
   --tt-tailw: 6px;
   --tt-bg: var(--color-primary);
@@ -96,6 +96,8 @@
   h4 {
     margin-bottom: 0.5rem;
     line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
   }
 }
 
@@ -105,12 +107,8 @@
 }
 
 .btn {
-  @apply shadow-md;
-  border-radius: 9999rem;
-}
-
-.btn.btn-ghost {
-  @apply shadow-none;
+  font-weight: 600;
+  box-shadow: none;
 }
 
 .link {

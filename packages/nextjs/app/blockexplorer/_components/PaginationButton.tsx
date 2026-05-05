@@ -26,7 +26,7 @@ export const PaginationButton = ({ currentPage, totalItems, setCurrentPage }: Pa
       >
         <ArrowLeftIcon className="h-4 w-4" />
       </button>
-      <span className="self-center text-primary-content font-medium">Page {currentPage + 1}</span>
+      <span className="self-center font-medium">Page {currentPage + 1}</span>
       <button
         className={`btn btn-sm ${nextButtonClass}`}
         disabled={isNextButtonDisabled}
