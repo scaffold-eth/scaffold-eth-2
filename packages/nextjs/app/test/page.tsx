@@ -1,5 +1,15 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  PALETTE_STORAGE_KEY,
+  PALETTE_STYLE_ID,
+  applyPalette,
+  palettes,
+  resetPalette,
+} from "~~/components/test/palettes";
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="mb-12">
@@ -8,10 +18,67 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
   </section>
 );
 
+const SWATCH_KEYS = ["primary", "secondary", "accent", "base-100", "base-300"] as const;
+
 const Test: NextPage = () => {
+  const [activePalette, setActivePalette] = useState<string | null>(null);
+
+  useEffect(() => {
+    const style = document.getElementById(PALETTE_STYLE_ID) as HTMLStyleElement | null;
+    if (style?.dataset.palette) setActivePalette(style.dataset.palette);
+  }, []);
+
   return (
     <div className="container mx-auto px-6 py-10 max-w-5xl">
       <h1 className="text-4xl mb-8">Theme Test Page</h1>
+
+      <Section title="Palettes">
+        <div className="flex flex-col gap-4 mb-4">
+          {palettes.map(p => {
+            const active = activePalette === p.name;
+            return (
+              <div key={p.name}>
+                <div className={`font-medium mb-2 ${active ? "text-primary" : ""}`}>{p.name}</div>
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1">
+                    {SWATCH_KEYS.map(k => (
+                      <div
+                        key={k}
+                        className="w-5 h-5 border border-base-content/20"
+                        style={{ background: p.light[k] }}
+                        title={`${k}: ${p.light[k]}`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      applyPalette(p);
+                      localStorage.setItem(PALETTE_STORAGE_KEY, p.name);
+                      setActivePalette(p.name);
+                    }}
+                    disabled={active}
+                  >
+                    {active ? "Active" : "Apply"}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {activePalette && (
+          <button
+            className="btn btn-sm btn-ghost"
+            onClick={() => {
+              resetPalette();
+              localStorage.removeItem(PALETTE_STORAGE_KEY);
+              setActivePalette(null);
+            }}
+          >
+            Reset
+          </button>
+        )}
+      </Section>
 
       <Section title="Buttons — color variants">
         <div className="flex flex-wrap gap-3">
