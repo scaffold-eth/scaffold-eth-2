@@ -33,7 +33,7 @@ const Test: NextPage = () => {
       <h1 className="text-4xl mb-8">Theme Test Page</h1>
 
       <Section title="Palettes">
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
           {palettes.map(p => {
             const active = activePalette === p.name;
             return (
