@@ -117,7 +117,7 @@ export const Faucet = () => {
                 onValueChange={({ valueInEth }) => setSendValue(valueInEth)}
                 style={{ width: "100%" }}
               />
-              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+              <button className="h-10 btn btn-primary btn-sm px-2" onClick={sendETH} disabled={loading}>
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />
                 ) : (
