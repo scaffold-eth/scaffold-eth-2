@@ -144,10 +144,10 @@ export const palettes: Palette[] = [
   {
     name: "Ethereum",
     light: {
-      primary: "#6f47ff",
+      primary: "#6c24e0",
       "primary-content": "#ffffff",
-      secondary: "#525252",
-      "secondary-content": "#ffffff",
+      secondary: "#dde1e6",
+      "secondary-content": "#1f2937",
       accent: "#06b6d4",
       "accent-content": "#ffffff",
       neutral: "#737373",
@@ -164,8 +164,8 @@ export const palettes: Palette[] = [
     dark: {
       primary: "#a48aff",
       "primary-content": "#0a0a0a",
-      secondary: "#4f4d4d",
-      "secondary-content": "#fafafa",
+      secondary: "#3d4250",
+      "secondary-content": "#e5e7eb",
       accent: "#67e8f9",
       "accent-content": "#0a0a0a",
       neutral: "#a3a3a3",
