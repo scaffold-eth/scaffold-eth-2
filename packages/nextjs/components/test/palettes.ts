@@ -68,8 +68,8 @@ export const palettes: Palette[] = [
     light: {
       primary: "#0f172a",
       "primary-content": "#ffffff",
-      secondary: "#525252",
-      "secondary-content": "#ffffff",
+      secondary: "#dde1e6",
+      "secondary-content": "#1f2937",
       accent: "#2563eb",
       "accent-content": "#ffffff",
       neutral: "#737373",
@@ -86,8 +86,8 @@ export const palettes: Palette[] = [
     dark: {
       primary: "#d4d4d4",
       "primary-content": "#0a0a0a",
-      secondary: "#4f4d4d",
-      "secondary-content": "#fafafa",
+      secondary: "#3d4250",
+      "secondary-content": "#e5e7eb",
       accent: "#60a5fa",
       "accent-content": "#0a0a0a",
       neutral: "#a3a3a3",
@@ -107,7 +107,7 @@ export const palettes: Palette[] = [
     light: {
       primary: "#404040",
       "primary-content": "#ffffff",
-      secondary: "#a3a3a3",
+      secondary: "#dde1e6",
       "secondary-content": "#1f2937",
       accent: "#3b82f6",
       "accent-content": "#ffffff",
@@ -125,8 +125,8 @@ export const palettes: Palette[] = [
     dark: {
       primary: "#b3b3b3",
       "primary-content": "#1a1a1a",
-      secondary: "#5a5a5a",
-      "secondary-content": "#fafafa",
+      secondary: "#3d4250",
+      "secondary-content": "#e5e7eb",
       accent: "#93c5fd",
       "accent-content": "#0a0a0a",
       neutral: "#888888",
