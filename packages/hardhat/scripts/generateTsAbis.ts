@@ -127,11 +127,7 @@ function getContractDataFromDeployments() {
       const blockNumber = receipt?.blockNumber != null ? Number(receipt.blockNumber) : undefined;
       contracts[contractName] = { address, abi, inheritedFunctions, deployedOnBlock: blockNumber };
     }
-    // Merge instead of overwrite so multiple deployment folders sharing a
-    // chainId (e.g. `default/` and `localhost/`, both chainId 31337) combine
-    // their contracts. Without this, the alphabetically-last folder wins and
-    // can clobber freshly-deployed contracts that only exist in another folder.
-    output[chainId] = { ...output[chainId], ...contracts };
+    output[chainId] = contracts;
   }
   return output;
 }
