@@ -180,6 +180,7 @@ export type UseDeployedContractConfig<TContractName extends ContractName> = {
 export type UseScaffoldWriteConfig<TContractName extends ContractName> = {
   contractName: TContractName;
   chainId?: AllowedChainIds;
+  contractAddress?: Address;
   disableSimulate?: boolean;
   writeContractParams?: UseWriteContractParameters;
 };
@@ -190,6 +191,7 @@ export type UseScaffoldReadConfig<
 > = {
   contractName: TContractName;
   chainId?: AllowedChainIds;
+  contractAddress?: Address;
   watch?: boolean;
 } & IsContractDeclarationMissing<
   Partial<UseReadContractParameters>,
