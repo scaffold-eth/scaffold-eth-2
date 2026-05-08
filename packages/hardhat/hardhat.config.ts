@@ -13,7 +13,7 @@ const deployerPrivateKey =
 // You can get your own at https://dashboard.alchemyapi.io
 const providerApiKey = process.env.ALCHEMY_API_KEY || "cR4WnXePioePZ5fFrnSiR";
 
-// TODO: We need to figure out where should the etherscan api key live. Currently we've runVerify.ts
+export const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
 export default defineConfig({
   plugins: [hardhatToolbox, HardhatDeploy],
@@ -38,6 +38,11 @@ export default defineConfig({
         mode: "typescript",
       },
     ],
+  },
+  verify: {
+    etherscan: {
+      apiKey: etherscanApiKey,
+    },
   },
   networks: {
     // View the networks that are pre-configured.

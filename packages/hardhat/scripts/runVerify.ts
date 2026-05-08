@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { spawn } from "child_process";
-
-const DEFAULT_ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
+import { etherscanApiKey } from "../hardhat.config.js";
 
 /**
  * Forwards `yarn verify --network <name> [args]` to the rocketh-verify CLI.
@@ -35,8 +34,8 @@ async function main() {
 
   const env = { ...process.env };
   const userKey = process.env.ETHERSCAN_API_KEY;
-  env.ETHERSCAN_API_KEY = userKey || DEFAULT_ETHERSCAN_KEY;
-  if (!userKey || userKey === DEFAULT_ETHERSCAN_KEY) {
+  env.ETHERSCAN_API_KEY = etherscanApiKey;
+  if (!userKey) {
     console.log(
       "ℹ️  Using shared Etherscan API key (rate-limited). Set your own ETHERSCAN_API_KEY in .env for production.\n",
     );
