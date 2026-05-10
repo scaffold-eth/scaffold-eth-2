@@ -14,13 +14,14 @@ import {
 } from "~~/utils/scaffold-eth/contract";
 
 /**
- * Wrapper around wagmi's useContractRead hook which automatically loads (by name) the contract ABI and address from
+ * Wrapper around wagmi's useReadContract hook which automatically loads (by name) the contract ABI and address from
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  * @param config - The config settings, including extra wagmi configuration
  * @param config.contractName - deployed contract name
  * @param config.functionName - name of the function to be called
  * @param config.args - args to be passed to the function call
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
+ * @param config.contractAddress - optional contract address
  */
 export const useScaffoldReadContract = <
   TContractName extends ContractName,
@@ -30,6 +31,7 @@ export const useScaffoldReadContract = <
   functionName,
   args,
   chainId,
+  contractAddress,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
   const selectedNetwork = useSelectedNetwork(chainId);
@@ -45,7 +47,7 @@ export const useScaffoldReadContract = <
   const readContractHookRes = useReadContract({
     chainId: selectedNetwork.id,
     functionName,
-    address: deployedContract?.address,
+    address: contractAddress ?? deployedContract?.address,
     abi: deployedContract?.abi,
     args,
     ...(readContractConfig as any),
