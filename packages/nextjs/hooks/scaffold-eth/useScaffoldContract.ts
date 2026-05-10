@@ -13,6 +13,7 @@ import { Contract, ContractName } from "~~/utils/scaffold-eth/contract";
  * @param config.contractName - deployed contract name
  * @param config.walletClient - optional walletClient from wagmi useWalletClient hook can be passed for doing write transactions
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
+ * @param config.contractAddress - optional contract address to override deployed contract address
  */
 export const useScaffoldContract = <
   TContractName extends ContractName,
@@ -21,10 +22,12 @@ export const useScaffoldContract = <
   contractName,
   walletClient,
   chainId,
+  contractAddress,
 }: {
   contractName: TContractName;
   walletClient?: TWalletClient | null;
   chainId?: AllowedChainIds;
+  contractAddress?: Address;
 }) => {
   const selectedNetwork = useSelectedNetwork(chainId);
   const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo({
@@ -49,7 +52,7 @@ export const useScaffoldContract = <
       Chain,
       Account
     >({
-      address: deployedContractData.address,
+      address: contractAddress ?? deployedContractData.address,
       abi: deployedContractData.abi as Contract<TContractName>["abi"],
       client: {
         public: publicClient,
