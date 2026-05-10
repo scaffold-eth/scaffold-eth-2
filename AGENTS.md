@@ -69,6 +69,15 @@ yarn vercel:yolo --prod # for deployment of frontend
     deployMyContract.tags = ["MyContract"];
     ```
   - `yarn deploy --tags MyContract`
+  - **Gas limit in deploy scripts**: Manual post-deploy calls (e.g. `transferOwnership`, `grantRole`, `initialize`) can silently inherit `blockGasLimit` as their gas cap, causing failures. **Fix at the call site, not in `hardhat.config.ts`:**
+    ```typescript
+    // Preferred: estimateGas + 20% margin
+    const gas = await myContract.myMethod.estimateGas(arg1, arg2);
+    await myContract.myMethod(arg1, arg2, { gasLimit: (gas * 120n) / 100n });
+
+    // Or: explicit limit for simple admin calls
+    await myContract.transferOwnership(newOwner, { gasLimit: 100_000 });
+    ```
 
 #### Foundry Flavor
 
