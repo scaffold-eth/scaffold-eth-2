@@ -49,6 +49,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
  * the contracts present in deployedContracts.ts & externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  * @param contractName - name of the contract to be written to
  * @param config.chainId - optional chainId that is configured with the scaffold project to make use for multi-chain interactions.
+ * @param config.contractAddress - optional contract address
  * @param writeContractParams - wagmi's useWriteContract parameters
  */
 export function useScaffoldWriteContract<TContractName extends ContractName>(
@@ -59,7 +60,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     typeof configOrName === "string"
       ? { contractName: configOrName, writeContractParams, chainId: undefined }
       : (configOrName as UseScaffoldWriteConfig<TContractName>);
-  const { contractName, chainId, writeContractParams: finalWriteContractParams } = finalConfig;
+  const { contractName, chainId, contractAddress, writeContractParams: finalWriteContractParams } = finalConfig;
 
   const wagmiConfig = useConfig();
 
@@ -111,7 +112,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
 
       const writeContractObject = {
         abi: deployedContractData.abi as Abi,
-        address: deployedContractData.address,
+        address: contractAddress ?? deployedContractData.address,
         ...variables,
       } as WriteContractVariables<Abi, string, any[], Config, number>;
 
@@ -169,7 +170,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
     wagmiContractWrite.writeContract(
       {
         abi: deployedContractData.abi as Abi,
-        address: deployedContractData.address,
+        address: contractAddress ?? deployedContractData.address,
         ...variables,
       } as WriteContractVariables<Abi, string, any[], Config, number>,
       options as
