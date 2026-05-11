@@ -18,6 +18,7 @@ export const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4U
 export default defineConfig({
   plugins: [hardhatToolbox, HardhatDeploy],
   solidity: {
+    npmFilesToBuild: ["poseidon-solidity/PoseidonT3.sol", "@zk-kit/lean-imt.sol/LeanIMT.sol"],
     profiles: {
       default: {
         version: "0.8.30",
