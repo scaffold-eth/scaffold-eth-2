@@ -4804,7 +4804,7 @@ __metadata:
     bgipfs: "npm:^0.0.12"
     blo: "npm:^1.2.0"
     burner-connector: "npm:0.0.20"
-    daisyui: "npm:^5.0.9"
+    daisyui: "npm:^5.5.19"
     eslint: "npm:^9.23.0"
     eslint-config-next: "npm:^15.2.3"
     eslint-config-prettier: "npm:^10.1.1"
@@ -10039,10 +10039,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"daisyui@npm:^5.0.9":
-  version: 5.0.9
-  resolution: "daisyui@npm:5.0.9"
-  checksum: 10/c7392694a5ca4ec073cbbaf079843340bac3132d2469b72923f85985cd19ac814bd0e890bd12ad07571baa313b61db3eb8a0917e572a0b7193671d8419366ac0
+"daisyui@npm:^5.5.19":
+  version: 5.5.19
+  resolution: "daisyui@npm:5.5.19"
+  checksum: 10/b152e2ebed9d97c1a7b49b0cd4f2d2f6f6a653f5c56c880571ab0168971080ebc2ac6b23a84609cd1a88330a529ad825b72e597fcb7df7353945395fe01454bf
   languageName: node
   linkType: hard
 

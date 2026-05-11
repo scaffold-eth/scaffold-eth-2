@@ -25,7 +25,7 @@
     "@tanstack/react-query": "^5.59.15",
     "blo": "^1.2.0",
     "burner-connector": "0.0.20",
-    "daisyui": "^5.0.9",
+    "daisyui": "^5.5.19",
     "kubo-rpc-client": "^5.0.2",
     "next": "^15.2.8",
     "next-nprogress-bar": "^2.3.13",
