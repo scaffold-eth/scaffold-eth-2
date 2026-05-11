@@ -35,6 +35,8 @@
 
   --radius-field: 0rem;
   --radius-box: 0rem;
+  --radius-selector: 0rem;
+
   --tt-tailw: 6px;
 }
 
@@ -60,6 +62,7 @@
 
   --radius-field: 0rem;
   --radius-box: 0rem;
+  --radius-selector: 0rem;
 
   --tt-tailw: 6px;
   --tt-bg: var(--color-primary);
