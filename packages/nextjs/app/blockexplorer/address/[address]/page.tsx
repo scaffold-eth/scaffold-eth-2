@@ -47,19 +47,7 @@ const getContractData = async (address: Address) => {
 
   let contractPath = "";
 
-  const buildInfoDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "hardhat",
-    "artifacts",
-    "build-info",
-  );
+  const buildInfoDirectory = path.join(process.cwd(), "..", "hardhat", "artifacts", "build-info");
 
   if (!fs.existsSync(buildInfoDirectory)) {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
