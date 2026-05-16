@@ -67,6 +67,23 @@ yarn start
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
+## Timelock Governance Example
+
+This repo now includes a role-based timelock admin module for the Hardhat flavor:
+
+- `TimelockController`: OpenZeppelin timelock deployed with proposer, executor, and canceller roles
+- `TimelockedAdminTarget`: example managed contract whose admin functions are protected by timelock ownership
+- `/timelock`: dedicated frontend flow for scheduling, cancelling, and executing predefined admin actions
+
+Local usage:
+
+1. Run `yarn chain`
+2. Run `yarn deploy`
+3. Run `yarn start`
+4. Visit `/timelock`
+
+The deployment script assigns the deployer account as proposer, executor, and canceller, then renounces the bootstrap admin role. If you want to use the local frontend with those privileges, import the deployer key into your wallet with `yarn account:reveal-pk`.
+
 **What's next**:
 
 Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
