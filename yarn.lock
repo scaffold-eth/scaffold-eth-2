@@ -8291,12 +8291,12 @@ __metadata:
 
 "burner-connector@file:../../../burner-connector/packages/burner-connector::locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs":
   version: 0.0.20
-  resolution: "burner-connector@file:../../../burner-connector/packages/burner-connector#../../../burner-connector/packages/burner-connector::hash=9c1be7&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
+  resolution: "burner-connector@file:../../../burner-connector/packages/burner-connector#../../../burner-connector/packages/burner-connector::hash=ca2e71&locator=%40se-2%2Fnextjs%40workspace%3Apackages%2Fnextjs"
   dependencies:
     "@rainbow-me/rainbowkit": "npm:2.2.10"
     viem: "npm:2.48.4"
     wagmi: "npm:2.19.5"
-  checksum: 10/c70d5850444458ca79e8b257bb6cd4b0d87cbf8114137e47cb301fadd91f8bcda6f58f846422c1d23aa3467e059cc4bed4a39ce517f0d4d78be21e68dc208c0e
+  checksum: 10/5fc0d619f83698b86346849c5aefc85f6c5f49dd47e71e2d8613370405713ee5f938282842fa361aeb8216707a4a283be4b8249ebb031019c7ea35fc7a3e2c06
   languageName: node
   linkType: hard
 
