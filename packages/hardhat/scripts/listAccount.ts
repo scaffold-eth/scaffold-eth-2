@@ -33,7 +33,8 @@ async function main() {
     try {
       const network = availableNetworks[networkName];
       if (!("url" in network)) continue;
-      const provider = new ethers.JsonRpcProvider(network.url);
+      const url = await network.url.getUrl();
+      const provider = new ethers.JsonRpcProvider(url);
       await provider._detectNetwork();
       const balance = await provider.getBalance(address);
       console.log("--", networkName, "-- 📡");
