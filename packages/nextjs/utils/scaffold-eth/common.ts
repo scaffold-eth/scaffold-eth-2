@@ -10,3 +10,6 @@ export const isZeroAddress = (address: string) => address === ZERO_ADDRESS;
 // Treat any dot-separated string as a potential ENS name
 const ensRegex = /.+\..+/;
 export const isENS = (address = "") => ensRegex.test(address);
+
+export const getChainById = <TChain extends { id: number }>(chains: readonly TChain[], chainId?: number | null) =>
+  chains.find(chain => chain.id === chainId) ?? chains[0] ?? null;
