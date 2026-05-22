@@ -48,7 +48,8 @@
     "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
     "ipfs": "yarn workspace @se-2/nextjs ipfs",
     "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
-    "verify": "yarn hardhat:verify"
+    "verify": "yarn hardhat:verify",
+    "hardhat-verify": "yarn hardhat:hardhat-verify"
   },
   "packageManager": "yarn@4.13.0",
   "devDependencies": {
@@ -56,6 +57,6 @@
     "lint-staged": "^15.2.10"
   },
   "engines": {
-    "node": ">=20.18.3"
+    "node": ">=22.10.0"
   }
 }
