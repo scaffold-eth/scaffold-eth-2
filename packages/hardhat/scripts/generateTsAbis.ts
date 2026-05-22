@@ -49,39 +49,40 @@ function getContractNames(path: string) {
     .map(dirent => dirent.name.split(".")[0]);
 }
 
-function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
-  for (const sourcePath of Object.keys(sources)) {
-    const sourceName = sourcePath.split("/").pop()?.split(".sol")[0];
-    if (sourceName === contractName) {
-      const contractContent = sources[sourcePath].content as string;
-      const regex = /contract\s+(\w+)\s+is\s+([^{}]+)\{/;
-      const match = contractContent.match(regex);
+// Resolve a contract by its NAME, not its .sol filename (handles multi-contract
+// files and contracts inherited from npm packages).
+function getSourcePathForContract(contractName: string) {
+  return Object.keys(buildInfoContracts).find(sourcePath => buildInfoContracts[sourcePath]?.[contractName]);
+}
 
-      if (match) {
-        const inheritancePart = match[2];
-        const inheritedContracts = inheritancePart.split(",").map(contract => `${contract.trim()}.sol`);
-        return inheritedContracts;
-      }
-      return [];
-    }
-  }
-  return [];
+function getActualSourcesForContract(sources: Record<string, any>, contractName: string) {
+  const sourcePath = getSourcePathForContract(contractName);
+  const contractContent = sourcePath ? (sources[sourcePath]?.content as string | undefined) : undefined;
+  if (!contractContent) return [];
+
+  // Anchor to this contract so multi-contract files match the right declaration.
+  const escapedName = contractName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = contractContent.match(new RegExp(`contract\\s+${escapedName}\\s+is\\s+([^{}]+)\\{`));
+  if (!match) return [];
+
+  // Parent names, without any constructor args like `ERC20("n", "s")`.
+  return match[1]
+    .split(",")
+    .map(parent => parent.trim().split(/[\s(]/)[0])
+    .filter(Boolean);
 }
 
 function getInheritedFunctions(sources: Record<string, any>, contractName: string) {
-  const actualSources = getActualSourcesForContract(sources, contractName);
+  const parentContractNames = getActualSourcesForContract(sources, contractName);
   const inheritedFunctions = {} as Record<string, any>;
 
-  for (const sourceContractName of actualSources) {
-    const sourcePath = Object.keys(sources).find(key => key.includes(`/${sourceContractName}`));
-    if (sourcePath) {
-      const sourceName = sourcePath?.split("/").pop()?.split(".sol")[0];
-      const abi = buildInfoContracts[sourcePath]?.[sourceName!]?.abi;
-      if (abi) {
-        for (const functionAbi of abi) {
-          if (functionAbi.type === "function") {
-            inheritedFunctions[functionAbi.name] = sourcePath;
-          }
+  for (const parentName of parentContractNames) {
+    const sourcePath = getSourcePathForContract(parentName);
+    const abi = sourcePath ? buildInfoContracts[sourcePath]?.[parentName]?.abi : undefined;
+    if (abi) {
+      for (const functionAbi of abi) {
+        if (functionAbi.type === "function") {
+          inheritedFunctions[functionAbi.name] = sourcePath;
         }
       }
     }
