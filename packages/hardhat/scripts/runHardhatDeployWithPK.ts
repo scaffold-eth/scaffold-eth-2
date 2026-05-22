@@ -34,10 +34,7 @@ async function main() {
   }
 
   // Run hardhat deploy (compilation already handled by the npm script)
-  const deployArgs = ["deploy", "--no-compile", ...process.argv.slice(2)];
-  if (isLocalNetwork) {
-    deployArgs.push("--skip-prompts");
-  }
+  const deployArgs = ["deploy", "--no-compile", "--skip-prompts", ...process.argv.slice(2)];
 
   const hardhat = spawn("hardhat", deployArgs, {
     stdio: "inherit",
