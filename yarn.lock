@@ -4032,16 +4032,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rocketh/deploy@npm:^0.19.6":
-  version: 0.19.6
-  resolution: "@rocketh/deploy@npm:0.19.6"
+"@rocketh/deploy@npm:^0.19.7":
+  version: 0.19.7
+  resolution: "@rocketh/deploy@npm:0.19.7"
   dependencies:
     "@rocketh/core": "npm:0.19.3"
     abitype: "npm:^1.2.4"
     eip-1193: "npm:^0.6.5"
     named-logs: "npm:^0.4.1"
     viem: "npm:^2.48.2"
-  checksum: 10/54085ecbe623e66e081f8eeb19ef6f2ce30c5cdce1e7aa7a6357f5bb581eaf480e97223728c6ad9e128ccaae58ecac845894962067c466f25a93dcbfbbc71f98
+  checksum: 10/935af7db0fadf3045abc53c7a68cbe16d52626e9f7e3162aaa83069585dcf6ffe50a776a7272168b51378632a6937424470a81d6e18a7c3a04b37b8acfc01b7c
   languageName: node
   linkType: hard
 
@@ -4434,7 +4434,7 @@ __metadata:
     "@nomicfoundation/hardhat-verify": "npm:^3"
     "@nomicfoundation/ignition-core": "npm:^3"
     "@openzeppelin/contracts": "npm:^5.0.2"
-    "@rocketh/deploy": "npm:^0.19.6"
+    "@rocketh/deploy": "npm:^0.19.7"
     "@rocketh/node": "npm:^0.19.7"
     "@rocketh/read-execute": "npm:^0.19.3"
     "@rocketh/signer": "npm:^0.19"
