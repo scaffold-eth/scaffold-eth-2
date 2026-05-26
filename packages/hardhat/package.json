@@ -34,7 +34,7 @@
     "@nomicfoundation/hardhat-typechain": "^3",
     "@nomicfoundation/hardhat-verify": "^3",
     "@nomicfoundation/ignition-core": "^3",
-    "@rocketh/deploy": "^0.19.6",
+    "@rocketh/deploy": "^0.19.7",
     "@rocketh/node": "^0.19.7",
     "@rocketh/read-execute": "^0.19.3",
     "@rocketh/signer": "^0.19",
