@@ -55,8 +55,10 @@ export const Faucet = () => {
     getFaucetAddress();
   }, []);
 
+  const isSendDisabled = loading || !faucetAddress || !inputAddress || !sendValue.trim();
+
   const sendETH = async () => {
-    if (!faucetAddress || !inputAddress) {
+    if (!faucetAddress || !inputAddress || !sendValue.trim()) {
       return;
     }
     try {
@@ -117,7 +119,11 @@ export const Faucet = () => {
                 onValueChange={({ valueInEth }) => setSendValue(valueInEth)}
                 style={{ width: "100%" }}
               />
-              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+              <button
+                className="h-10 btn btn-primary btn-sm px-2 rounded-full"
+                onClick={sendETH}
+                disabled={isSendDisabled}
+              >
                 {!loading ? (
                   <BanknotesIcon className="h-6 w-6" />
                 ) : (

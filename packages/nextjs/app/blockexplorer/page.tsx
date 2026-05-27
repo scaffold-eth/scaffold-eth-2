@@ -21,8 +21,8 @@ const BlockExplorer: NextPage = () => {
   }, [targetNetwork.id]);
 
   useEffect(() => {
-    if (targetNetwork.id === hardhat.id && error) {
-      setHasError(true);
+    if (targetNetwork.id === hardhat.id) {
+      setHasError(!!error);
     }
   }, [targetNetwork.id, error]);
 
@@ -34,7 +34,7 @@ const BlockExplorer: NextPage = () => {
             <code className="italic bg-base-300 text-base font-bold"> targetNetwork </code> is not localhost
           </p>
           <p className="m-0">
-            - You are on <code className="italic bg-base-300 text-base font-bold">{targetNetwork.name}</code> .This
+            - You are on <code className="italic bg-base-300 text-base font-bold">{targetNetwork.name}</code>. This
             block explorer is only for <code className="italic bg-base-300 text-base font-bold">localhost</code>.
           </p>
           <p className="mt-1 break-normal">
