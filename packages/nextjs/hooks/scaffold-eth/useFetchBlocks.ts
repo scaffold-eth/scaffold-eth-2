@@ -136,8 +136,6 @@ export const useFetchBlocks = () => {
   useEffect(() => {
     const handleNewBlock = async (newBlock: Block) => {
       try {
-        setTotalTransactions(prevTotal => prevTotal + newBlock.transactions.length);
-
         if (currentPage === 0 && newBlock.transactions.length > 0) {
           let blockWithTxDetails = newBlock;
 
@@ -165,11 +163,19 @@ export const useFetchBlocks = () => {
           setBlocks(prevBlocks => {
             const latestBlockNumber = blockWithTxDetails.number!;
             const existingBlockIndex = prevBlocks.findIndex(block => block.number === latestBlockNumber);
+            const existingBlockTransactionsCount =
+              existingBlockIndex >= 0 ? prevBlocks[existingBlockIndex].transactions.length : 0;
+            const latestBlockTransactionsCount = blockWithTxDetails.transactions.length;
 
             const nextBlocks =
               existingBlockIndex >= 0
                 ? prevBlocks.map((block, index) => (index === existingBlockIndex ? blockWithTxDetails : block))
                 : [blockWithTxDetails, ...prevBlocks];
+
+            const transactionsDelta = latestBlockTransactionsCount - existingBlockTransactionsCount;
+            if (transactionsDelta !== 0) {
+              setTotalTransactions(prevTotal => Math.max(0, prevTotal + transactionsDelta));
+            }
 
             const trimmedBlocks = [...nextBlocks];
             while (
