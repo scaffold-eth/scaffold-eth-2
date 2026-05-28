@@ -18,8 +18,8 @@ export const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4U
 export default defineConfig({
   plugins: [hardhatToolbox, HardhatDeploy],
   solidity: {
-    profiles: {
-      default: {
+    compilers: [
+      {
         version: "0.8.30",
         settings: {
           optimizer: {
@@ -29,7 +29,7 @@ export default defineConfig({
           },
         },
       },
-    },
+    ],
   },
   generateTypedArtifacts: {
     destinations: [
