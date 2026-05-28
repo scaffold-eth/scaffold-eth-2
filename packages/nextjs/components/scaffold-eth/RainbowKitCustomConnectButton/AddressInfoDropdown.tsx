@@ -61,7 +61,7 @@ export const AddressInfoDropdown = ({
           </span>
           <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
         </summary>
-        <ul className="dropdown-content menu z-2 p-2 mt-2 shadow-lg bg-base-200 rounded-box gap-1">
+        <ul className="dropdown-content menu z-2 p-2 mt-2 shadow-lg bg-base-200 gap-1">
           <NetworkOptions hidden={!selectingNetwork} />
           <li className={selectingNetwork ? "hidden" : ""}>
             <div

@@ -78,7 +78,7 @@ export const Header = () => {
             <Bars3Icon className="h-1/2" />
           </summary>
           <ul
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 w-52"
             onClick={() => {
               burgerMenuRef?.current?.removeAttribute("open");
             }}
