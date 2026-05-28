@@ -1,5 +1,4 @@
-import { deployScript } from "../rocketh/deploy.js";
-import * as artifacts from "../generated/artifacts/index.js";
+import { deployScript, artifacts } from "../rocketh/deploy.js";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and

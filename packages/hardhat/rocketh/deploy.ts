@@ -3,3 +3,5 @@ import { setupDeployScripts } from "rocketh";
 
 const { deployScript } = setupDeployScripts<Extensions, Accounts, Data>(extensions);
 export { deployScript };
+
+export * as artifacts from "../generated/artifacts/index.js";
