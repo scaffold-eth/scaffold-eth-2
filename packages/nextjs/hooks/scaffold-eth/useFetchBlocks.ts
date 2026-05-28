@@ -178,11 +178,16 @@ export const useFetchBlocks = () => {
             }
 
             const trimmedBlocks = [...nextBlocks];
-            while (
-              trimmedBlocks.reduce((count, block) => count + block.transactions.length, 0) > TRANSACTIONS_PER_PAGE &&
-              trimmedBlocks.length > 0
-            ) {
-              trimmedBlocks.pop();
+            let transactionsInTrimmedBlocks = trimmedBlocks.reduce(
+              (count, block) => count + block.transactions.length,
+              0,
+            );
+
+            while (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE && trimmedBlocks.length > 0) {
+              const removedBlock = trimmedBlocks.pop();
+              if (removedBlock) {
+                transactionsInTrimmedBlocks -= removedBlock.transactions.length;
+              }
             }
 
             return trimmedBlocks;
