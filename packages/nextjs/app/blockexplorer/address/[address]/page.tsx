@@ -12,7 +12,7 @@ type PageProps = {
 };
 
 async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
-  const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
+  const buildInfoFiles = fs.readdirSync(buildInfoDirectory).filter(f => f.endsWith(".output.json"));
   let bytecode = "";
   let assembly = "";
 
@@ -21,7 +21,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 
     const buildInfo = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-    if (buildInfo.output.contracts[contractPath]) {
+    if (buildInfo.output?.contracts?.[contractPath]) {
       for (const contract in buildInfo.output.contracts[contractPath]) {
         bytecode = buildInfo.output.contracts[contractPath][contract].evm.bytecode.object;
         assembly = buildInfo.output.contracts[contractPath][contract].evm.bytecode.opcodes;
@@ -47,19 +47,7 @@ const getContractData = async (address: Address) => {
 
   let contractPath = "";
 
-  const buildInfoDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "hardhat",
-    "artifacts",
-    "build-info",
-  );
+  const buildInfoDirectory = path.join(process.cwd(), "..", "hardhat", "artifacts", "build-info");
 
   if (!fs.existsSync(buildInfoDirectory)) {
     throw new Error(`Directory ${buildInfoDirectory} not found.`);
@@ -68,7 +56,7 @@ const getContractData = async (address: Address) => {
   const deployedContractsOnChain = contracts[chainId];
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address.toLowerCase()) {
-      contractPath = `contracts/${contractName}.sol`;
+      contractPath = `project/contracts/${contractName}.sol`;
       break;
     }
   }
