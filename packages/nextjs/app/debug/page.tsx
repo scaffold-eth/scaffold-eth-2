@@ -11,7 +11,7 @@ const Debug: NextPage = () => {
   return (
     <>
       <DebugContracts />
-      <div className="text-center mt-8 bg-secondary text-secondary-content p-10">
+      <div className="text-center mt-8 bg-base-300 p-10">
         <h1 className="text-4xl my-0">Debug Contracts</h1>
         <p>
           You can debug & interact with your deployed contracts here.

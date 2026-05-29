@@ -45,8 +45,8 @@ export const HeaderMenuLinks = () => {
               href={href}
               passHref
               className={`${
-                isActive ? "bg-base-300" : ""
-              } hover:bg-base-300 focus:!bg-base-300 h-full px-4 text-sm gap-2 flex items-center`}
+                isActive ? "bg-secondary text-secondary-content" : "hover:bg-base-300 focus:!bg-base-300"
+              } h-full px-4 text-sm gap-2 flex items-center`}
             >
               {icon}
               <span>{label}</span>
@@ -71,7 +71,7 @@ export const Header = () => {
   });
 
   return (
-    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-16 shrink-0 justify-between z-20 border-b-2 border-base-300 p-0 sm:px-2">
+    <div className="sticky lg:static top-0 navbar bg-base-200 min-h-16 shrink-0 justify-between z-20 border-b-2 border-base-300 p-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2 self-stretch">
         <details className="dropdown" ref={burgerMenuRef}>
           <summary className="ml-1 btn btn-ghost lg:hidden hover:bg-transparent">

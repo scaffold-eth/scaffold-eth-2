@@ -11,10 +11,17 @@ export const WrongNetworkDropdown = () => {
         <span>Wrong network</span>
         <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
       </label>
-      <ul tabIndex={0} className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-200 gap-1">
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu p-2 mt-1 shadow-lg bg-base-200 gap-1 [--menu-active-bg:var(--color-secondary)] [--menu-active-fg:var(--color-base-content)]"
+      >
         <NetworkOptions />
         <li>
-          <button className="menu-item text-error btn-sm flex gap-3 py-3" type="button" onClick={() => disconnect()}>
+          <button
+            className="menu-item !text-error btn-sm flex gap-3 py-3 hover:bg-base-300 focus:bg-secondary"
+            type="button"
+            onClick={() => disconnect()}
+          >
             <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" />
             <span>Disconnect</span>
           </button>
