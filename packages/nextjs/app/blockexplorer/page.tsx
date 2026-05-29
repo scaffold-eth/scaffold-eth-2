@@ -39,7 +39,7 @@ const BlockExplorer: NextPage = () => {
           </p>
           <p className="mt-1 break-normal">
             - You can use{" "}
-            <a className="text-accent" href={targetNetwork.blockExplorers?.default.url}>
+            <a className="link link-primary" href={targetNetwork.blockExplorers?.default.url}>
               {targetNetwork.blockExplorers?.default.name}
             </a>{" "}
             instead
