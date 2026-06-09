@@ -32,7 +32,7 @@ export const RevealBurnerPKModal = () => {
           <label className="modal-box relative">
             {/* dummy input to capture event onclick on modal box */}
             <input className="h-0 w-0 absolute top-0 left-0" />
-            <label htmlFor="reveal-burner-pk-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
+            <label htmlFor="reveal-burner-pk-modal" className="btn btn-ghost btn-sm absolute right-3 top-3">
               ✕
             </label>
             <div>

@@ -4262,9 +4262,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@scaffold-ui/components@npm:^0.1.10":
-  version: 0.1.10
-  resolution: "@scaffold-ui/components@npm:0.1.10"
+"@scaffold-ui/components@npm:^0.1.12":
+  version: 0.1.12
+  resolution: "@scaffold-ui/components@npm:0.1.12"
   peerDependencies:
     "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
@@ -4272,25 +4272,25 @@ __metadata:
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/e2a61b134c4d5b57b45d1baae89aa8bed041c14bc646b6686190c1e00ea34ae7ff3078e4b5e61b139b57572232ebc057255ac0f6f0d4f978ed1d79568edee867
+  checksum: 10/22322c0fc0344c783e00314136fb993be429a6808b6266b92ffbe7bfced9bf5aa48af7f026496a183b2735dc8b95a73a52457e7e07003c65ad171ab38744ba3d
   languageName: node
   linkType: hard
 
-"@scaffold-ui/debug-contracts@npm:^0.1.9":
-  version: 0.1.9
-  resolution: "@scaffold-ui/debug-contracts@npm:0.1.9"
+"@scaffold-ui/debug-contracts@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "@scaffold-ui/debug-contracts@npm:0.1.11"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
     react-hot-toast: "npm:^2.5.2"
   peerDependencies:
-    "@scaffold-ui/components": 0.1.10
+    "@scaffold-ui/components": 0.1.12
     "@scaffold-ui/hooks": 0.1.8
     "@tanstack/react-query": ^5.59.15
     "@types/react": ^19.0.7
     react: ^19.2.3
     viem: ^2.23.0
     wagmi: ^2.14.11
-  checksum: 10/286e84123f98b46aca224cb4197801b9f0f2a6be884c2366f3c7e6e41b357f4c038120b75ee5620f4975b706db11526ef6d548609008c8f8837c19a1bacfedb6
+  checksum: 10/a72b4cca79bf3331dee3a1b3f1383113c5620e7bccdcd863b6472c6a359850f852aecfadc255baea200d997b6e673e869adb689779a690f3bac11281e4be20a2
   languageName: node
   linkType: hard
 
@@ -4471,8 +4471,8 @@ __metadata:
     "@heroicons/react": "npm:^2.2.0"
     "@rainbow-me/rainbowkit": "npm:2.2.9"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
-    "@scaffold-ui/components": "npm:^0.1.10"
-    "@scaffold-ui/debug-contracts": "npm:^0.1.9"
+    "@scaffold-ui/components": "npm:^0.1.12"
+    "@scaffold-ui/debug-contracts": "npm:^0.1.11"
     "@scaffold-ui/hooks": "npm:^0.1.8"
     "@tailwindcss/postcss": "npm:^4.2.4"
     "@tanstack/react-query": "npm:^5.59.15"
@@ -5597,12 +5597,9 @@ __metadata:
   linkType: hard
 
 "@types/chai@npm:*":
-  version: 5.2.3
-  resolution: "@types/chai@npm:5.2.3"
-  dependencies:
-    "@types/deep-eql": "npm:*"
-    assertion-error: "npm:^2.0.1"
-  checksum: 10/e79947307dc235953622e65f83d2683835212357ca261389116ab90bed369ac862ba28b146b4fed08b503ae1e1a12cb93ce783f24bb8d562950469f4320e1c7c
+  version: 4.3.6
+  resolution: "@types/chai@npm:4.3.6"
+  checksum: 10/cfdcee881619c1719909f7f6ca083851f5694527fa28ca1be4eb4733fa729e244f443a0cfcb43ad0caf9367067612eaa3628963dfd2acf19f1e03a49e46adcd8
   languageName: node
   linkType: hard
 
@@ -5621,13 +5618,6 @@ __metadata:
   dependencies:
     "@types/ms": "npm:*"
   checksum: 10/47876a852de8240bfdaf7481357af2b88cb660d30c72e73789abf00c499d6bc7cd5e52f41c915d1b9cd8ec9fef5b05688d7b7aef17f7f272c2d04679508d1053
-  languageName: node
-  linkType: hard
-
-"@types/deep-eql@npm:*":
-  version: 4.0.2
-  resolution: "@types/deep-eql@npm:4.0.2"
-  checksum: 10/249a27b0bb22f6aa28461db56afa21ec044fa0e303221a62dff81831b20c8530502175f1a49060f7099e7be06181078548ac47c668de79ff9880241968d43d0c
   languageName: node
   linkType: hard
 
