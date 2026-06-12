@@ -48,14 +48,72 @@ const groupTransactionsByBlock = (items: { block: Block; tx: Transaction }[]): B
   return groupedBlocks;
 };
 
-const fetchTransactionsPage = async (
-  latestBlock: bigint,
-  page: number,
-): Promise<{ items: { block: Block; tx: Transaction }[]; totalTransactions: number }> => {
+type TransactionIndexCache = {
+  latestBlock: bigint;
+  totalTransactions: number;
+};
+
+let txIndexCache: TransactionIndexCache | null = null;
+
+const fetchBlocksWithTransactions = async (fromBlock: bigint, toBlock: bigint): Promise<Block[]> => {
+  const blocks: Block[] = [];
+
+  for (let blockNum = toBlock; blockNum >= fromBlock; ) {
+    const batchEnd = blockNum - BigInt(BLOCK_BATCH_SIZE - 1);
+    const batchStart = batchEnd < fromBlock ? fromBlock : batchEnd;
+
+    const blockNumbers: bigint[] = [];
+    for (let b = blockNum; b >= batchStart; b--) {
+      blockNumbers.push(b);
+    }
+
+    const fetchedBlocks = await Promise.all(
+      blockNumbers.map(blockNumber => testClient.getBlock({ blockNumber, includeTransactions: true })),
+    );
+
+    blocks.push(...fetchedBlocks);
+    blockNum = batchStart - 1n;
+  }
+
+  return blocks;
+};
+
+const countTransactionsInBlocks = (blocks: Block[]): number =>
+  blocks.reduce((count, block) => count + (block.transactions as Transaction[]).length, 0);
+
+const getTotalTransactions = async (latestBlock: bigint): Promise<number> => {
+  if (txIndexCache && latestBlock === txIndexCache.latestBlock) {
+    return txIndexCache.totalTransactions;
+  }
+
+  if (txIndexCache && latestBlock > txIndexCache.latestBlock) {
+    const newBlocks = await fetchBlocksWithTransactions(txIndexCache.latestBlock + 1n, latestBlock);
+    txIndexCache = {
+      latestBlock,
+      totalTransactions: txIndexCache.totalTransactions + countTransactionsInBlocks(newBlocks),
+    };
+    return txIndexCache.totalTransactions;
+  }
+
+  const allBlocks = await fetchBlocksWithTransactions(0n, latestBlock);
+  const totalTransactions = countTransactionsInBlocks(allBlocks);
+  txIndexCache = { latestBlock, totalTransactions };
+  return totalTransactions;
+};
+
+const applyTransactionDeltaToCache = (blockNumber: bigint, delta: number) => {
+  if (!txIndexCache || delta === 0) return;
+
+  txIndexCache.totalTransactions = Math.max(0, txIndexCache.totalTransactions + delta);
+  if (blockNumber > txIndexCache.latestBlock) {
+    txIndexCache.latestBlock = blockNumber;
+  }
+};
+
+const fetchPageItems = async (latestBlock: bigint, page: number): Promise<{ block: Block; tx: Transaction }[]> => {
   const skipCount = page * TRANSACTIONS_PER_PAGE;
   const pageItems: { block: Block; tx: Transaction }[] = [];
   let skipped = 0;
-  let totalTransactions = 0;
 
   for (let blockNum = latestBlock; blockNum >= 0n; ) {
     const batchEnd = blockNum - BigInt(BLOCK_BATCH_SIZE - 1);
@@ -72,15 +130,14 @@ const fetchTransactionsPage = async (
 
     for (const block of fetchedBlocks) {
       for (const tx of block.transactions as Transaction[]) {
-        totalTransactions++;
-
         if (skipped < skipCount) {
           skipped++;
           continue;
         }
 
-        if (pageItems.length < TRANSACTIONS_PER_PAGE) {
-          pageItems.push({ block, tx });
+        pageItems.push({ block, tx });
+        if (pageItems.length >= TRANSACTIONS_PER_PAGE) {
+          return pageItems;
         }
       }
     }
@@ -88,7 +145,7 @@ const fetchTransactionsPage = async (
     blockNum = batchStart - 1n;
   }
 
-  return { items: pageItems, totalTransactions };
+  return pageItems;
 };
 
 export const useFetchBlocks = () => {
@@ -105,7 +162,10 @@ export const useFetchBlocks = () => {
 
     try {
       const blockNumber = await testClient.getBlockNumber();
-      const { items, totalTransactions: totalTxCount } = await fetchTransactionsPage(blockNumber, currentPage);
+      const [items, totalTxCount] = await Promise.all([
+        fetchPageItems(blockNumber, currentPage),
+        getTotalTransactions(blockNumber),
+      ]);
 
       items.forEach(({ tx }) => decodeTransactionData(tx));
 
@@ -175,6 +235,7 @@ export const useFetchBlocks = () => {
             const transactionsDelta = latestBlockTransactionsCount - existingBlockTransactionsCount;
             if (transactionsDelta !== 0) {
               setTotalTransactions(prevTotal => Math.max(0, prevTotal + transactionsDelta));
+              applyTransactionDeltaToCache(latestBlockNumber, transactionsDelta);
             }
 
             const trimmedBlocks = [...nextBlocks];
