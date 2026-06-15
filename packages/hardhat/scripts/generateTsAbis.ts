@@ -155,6 +155,9 @@ export default async function generateTsAbis() {
  const deployedContracts = {${fileContent}} as const; \n\n export default deployedContracts satisfies GenericContractsDeclaration`,
       {
         parser: "typescript",
+        // Match the nextjs prettier config (printWidth 120) so the generated file
+        // passes the frontend lint/build instead of defaulting to printWidth 80.
+        printWidth: 120,
       },
     ),
   );
