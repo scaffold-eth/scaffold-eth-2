@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  Address,
   Block,
   Hash,
   Transaction,
@@ -48,69 +49,14 @@ const groupTransactionsByBlock = (items: { block: Block; tx: Transaction }[]): B
   return groupedBlocks;
 };
 
-type TransactionIndexCache = {
-  latestBlock: bigint;
-  totalTransactions: number;
-};
-
-let txIndexCache: TransactionIndexCache | null = null;
-
-const fetchBlocksWithTransactions = async (fromBlock: bigint, toBlock: bigint): Promise<Block[]> => {
-  const blocks: Block[] = [];
-
-  for (let blockNum = toBlock; blockNum >= fromBlock; ) {
-    const batchEnd = blockNum - BigInt(BLOCK_BATCH_SIZE - 1);
-    const batchStart = batchEnd < fromBlock ? fromBlock : batchEnd;
-
-    const blockNumbers: bigint[] = [];
-    for (let b = blockNum; b >= batchStart; b--) {
-      blockNumbers.push(b);
-    }
-
-    const fetchedBlocks = await Promise.all(
-      blockNumbers.map(blockNumber => testClient.getBlock({ blockNumber, includeTransactions: true })),
-    );
-
-    blocks.push(...fetchedBlocks);
-    blockNum = batchStart - 1n;
-  }
-
-  return blocks;
-};
-
-const countTransactionsInBlocks = (blocks: Block[]): number =>
-  blocks.reduce((count, block) => count + (block.transactions as Transaction[]).length, 0);
-
-const getTotalTransactions = async (latestBlock: bigint): Promise<number> => {
-  if (txIndexCache && latestBlock === txIndexCache.latestBlock) {
-    return txIndexCache.totalTransactions;
-  }
-
-  if (txIndexCache && latestBlock > txIndexCache.latestBlock) {
-    const newBlocks = await fetchBlocksWithTransactions(txIndexCache.latestBlock + 1n, latestBlock);
-    txIndexCache = {
-      latestBlock,
-      totalTransactions: txIndexCache.totalTransactions + countTransactionsInBlocks(newBlocks),
-    };
-    return txIndexCache.totalTransactions;
-  }
-
-  const allBlocks = await fetchBlocksWithTransactions(0n, latestBlock);
-  const totalTransactions = countTransactionsInBlocks(allBlocks);
-  txIndexCache = { latestBlock, totalTransactions };
-  return totalTransactions;
-};
-
-const applyTransactionDeltaToCache = (blockNumber: bigint, delta: number) => {
-  if (!txIndexCache || delta === 0) return;
-
-  txIndexCache.totalTransactions = Math.max(0, txIndexCache.totalTransactions + delta);
-  if (blockNumber > txIndexCache.latestBlock) {
-    txIndexCache.latestBlock = blockNumber;
-  }
-};
-
-const fetchPageItems = async (latestBlock: bigint, page: number): Promise<{ block: Block; tx: Transaction }[]> => {
+// Collects the requested page plus one extra transaction (the cheap "is there a next page?"
+// signal), counting only transactions that pass matchesFilter — so address views paginate over
+// the address's own transactions instead of slicing a global page.
+const fetchPageItems = async (
+  latestBlock: bigint,
+  page: number,
+  matchesFilter: (tx: Transaction) => boolean,
+): Promise<{ block: Block; tx: Transaction }[]> => {
   const skipCount = page * TRANSACTIONS_PER_PAGE;
   const pageItems: { block: Block; tx: Transaction }[] = [];
   let skipped = 0;
@@ -130,13 +76,17 @@ const fetchPageItems = async (latestBlock: bigint, page: number): Promise<{ bloc
 
     for (const block of fetchedBlocks) {
       for (const tx of block.transactions as Transaction[]) {
+        if (!matchesFilter(tx)) {
+          continue;
+        }
+
         if (skipped < skipCount) {
           skipped++;
           continue;
         }
 
         pageItems.push({ block, tx });
-        if (pageItems.length >= TRANSACTIONS_PER_PAGE) {
+        if (pageItems.length > TRANSACTIONS_PER_PAGE) {
           return pageItems;
         }
       }
@@ -148,24 +98,31 @@ const fetchPageItems = async (latestBlock: bigint, page: number): Promise<{ bloc
   return pageItems;
 };
 
-export const useFetchBlocks = () => {
+export const useFetchBlocks = (addressFilter?: Address) => {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [transactionReceipts, setTransactionReceipts] = useState<{
     [key: string]: TransactionReceipt;
   }>({});
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalTransactions, setTotalTransactions] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const matchesAddressFilter = useCallback(
+    (tx: Transaction) => {
+      if (!addressFilter) return true;
+      const filter = addressFilter.toLowerCase();
+      return tx.from.toLowerCase() === filter || tx.to?.toLowerCase() === filter;
+    },
+    [addressFilter],
+  );
 
   const fetchBlocks = useCallback(async () => {
     setError(null);
 
     try {
       const blockNumber = await testClient.getBlockNumber();
-      const [items, totalTxCount] = await Promise.all([
-        fetchPageItems(blockNumber, currentPage),
-        getTotalTransactions(blockNumber),
-      ]);
+      const fetchedItems = await fetchPageItems(blockNumber, currentPage, matchesAddressFilter);
+      const items = fetchedItems.slice(0, TRANSACTIONS_PER_PAGE);
 
       items.forEach(({ tx }) => decodeTransactionData(tx));
 
@@ -182,12 +139,12 @@ export const useFetchBlocks = () => {
       );
 
       setBlocks(groupTransactionsByBlock(items));
-      setTotalTransactions(totalTxCount);
+      setHasNextPage(fetchedItems.length > TRANSACTIONS_PER_PAGE);
       setTransactionReceipts(prevReceipts => ({ ...prevReceipts, ...Object.assign({}, ...txReceipts) }));
     } catch (err) {
       setError(err instanceof Error ? err : new Error("An error occurred."));
     }
-  }, [currentPage]);
+  }, [currentPage, matchesAddressFilter]);
 
   useEffect(() => {
     fetchBlocks();
@@ -206,6 +163,12 @@ export const useFetchBlocks = () => {
             blockWithTxDetails = { ...newBlock, transactions: transactionsDetails };
           }
 
+          const matchingTransactions = (blockWithTxDetails.transactions as Transaction[]).filter(matchesAddressFilter);
+          if (matchingTransactions.length === 0) {
+            return;
+          }
+          blockWithTxDetails = { ...blockWithTxDetails, transactions: matchingTransactions };
+
           (blockWithTxDetails.transactions as Transaction[]).forEach(tx => decodeTransactionData(tx));
 
           const receipts = await Promise.all(
@@ -223,26 +186,22 @@ export const useFetchBlocks = () => {
           setBlocks(prevBlocks => {
             const latestBlockNumber = blockWithTxDetails.number!;
             const existingBlockIndex = prevBlocks.findIndex(block => block.number === latestBlockNumber);
-            const existingBlockTransactionsCount =
-              existingBlockIndex >= 0 ? prevBlocks[existingBlockIndex].transactions.length : 0;
-            const latestBlockTransactionsCount = blockWithTxDetails.transactions.length;
 
             const nextBlocks =
               existingBlockIndex >= 0
                 ? prevBlocks.map((block, index) => (index === existingBlockIndex ? blockWithTxDetails : block))
                 : [blockWithTxDetails, ...prevBlocks];
 
-            const transactionsDelta = latestBlockTransactionsCount - existingBlockTransactionsCount;
-            if (transactionsDelta !== 0) {
-              setTotalTransactions(prevTotal => Math.max(0, prevTotal + transactionsDelta));
-              applyTransactionDeltaToCache(latestBlockNumber, transactionsDelta);
-            }
-
             const trimmedBlocks = [...nextBlocks];
             let transactionsInTrimmedBlocks = trimmedBlocks.reduce(
               (count, block) => count + block.transactions.length,
               0,
             );
+
+            // More than one page of transactions are now in view, so a next page exists.
+            if (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE) {
+              setHasNextPage(true);
+            }
 
             while (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE && trimmedBlocks.length > 0) {
               const removedBlock = trimmedBlocks.pop();
@@ -262,13 +221,13 @@ export const useFetchBlocks = () => {
     };
 
     return testClient.watchBlocks({ onBlock: handleNewBlock, includeTransactions: true });
-  }, [currentPage]);
+  }, [currentPage, matchesAddressFilter]);
 
   return {
     blocks,
     transactionReceipts,
     currentPage,
-    totalTransactions,
+    hasNextPage,
     setCurrentPage,
     error,
   };
