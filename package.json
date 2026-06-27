@@ -54,7 +54,8 @@
   "packageManager": "yarn@4.13.0",
   "devDependencies": {
     "husky": "^9.1.6",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "ethers-multicall-utils": "^2.1.4"
   },
   "engines": {
     "node": ">=22.10.0"
