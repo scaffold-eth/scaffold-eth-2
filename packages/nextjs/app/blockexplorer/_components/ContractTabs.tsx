@@ -26,7 +26,7 @@ const publicClient = createPublicClient({
 });
 
 export const ContractTabs = ({ address, contractData }: PageProps) => {
-  const { blocks, transactionReceipts, currentPage, totalTransactions, setCurrentPage } = useFetchBlocks();
+  const { blocks, transactionReceipts, currentPage, hasNextPage, setCurrentPage } = useFetchBlocks(address);
   const [activeTab, setActiveTab] = useState("transactions");
   const [isContract, setIsContract] = useState(false);
 
@@ -38,15 +38,6 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
 
     checkIsContract();
   }, [address]);
-
-  const filteredBlocks = blocks.filter(block =>
-    block.transactions.some(tx => {
-      if (typeof tx === "string") {
-        return false;
-      }
-      return tx.from.toLowerCase() === address.toLowerCase() || tx.to?.toLowerCase() === address.toLowerCase();
-    }),
-  );
 
   return (
     <>
@@ -84,8 +75,8 @@ export const ContractTabs = ({ address, contractData }: PageProps) => {
       )}
       {activeTab === "transactions" && (
         <div className="pt-4">
-          <TransactionsTable blocks={filteredBlocks} transactionReceipts={transactionReceipts} />
-          <PaginationButton currentPage={currentPage} totalItems={totalTransactions} setCurrentPage={setCurrentPage} />
+          <TransactionsTable blocks={blocks} transactionReceipts={transactionReceipts} />
+          <PaginationButton currentPage={currentPage} hasNextPage={hasNextPage} setCurrentPage={setCurrentPage} />
         </div>
       )}
       {activeTab === "code" && contractData && (
