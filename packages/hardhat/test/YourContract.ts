@@ -28,4 +28,31 @@ describe("YourContract", function () {
       expect(await yourContract.greeting()).to.equal(newGreeting);
     });
   });
+
+  describe("Withdraw", function () {
+    it("Should allow the owner to withdraw contract balance", async function () {
+      const { yourContract } = await networkHelpers.loadFixture(deployFixture);
+      const amount = ethers.parseEther("1");
+
+      await yourContract.setGreeting("Premium greeting", { value: amount });
+
+      const contractAddress = await yourContract.getAddress();
+      expect(await ethers.provider.getBalance(contractAddress)).to.equal(amount);
+
+      await yourContract.withdraw();
+
+      expect(await ethers.provider.getBalance(contractAddress)).to.equal(0n);
+    });
+
+    it("Should not allow non-owners to withdraw contract balance", async function () {
+      const { yourContract } = await networkHelpers.loadFixture(deployFixture);
+      const [, nonOwner] = await ethers.getSigners();
+
+      const nonOwnerContract = yourContract.connect(
+        nonOwner as unknown as Parameters<typeof yourContract.connect>[0],
+      ) as typeof yourContract;
+
+      await expect(nonOwnerContract.withdraw()).to.be.revertedWith("Not the Owner");
+    });
+  });
 });
