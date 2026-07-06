@@ -35,7 +35,7 @@
     "react-dom": "^19.2.5",
     "react-hot-toast": "^2.6.0",
     "usehooks-ts": "^3.1.1",
-    "viem": "2.48.4",
+    "viem": "2.53.1",
     "wagmi": "2.19.5",
     "zustand": "^5.0.12"
   },
