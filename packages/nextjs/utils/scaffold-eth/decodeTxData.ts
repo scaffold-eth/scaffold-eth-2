@@ -16,8 +16,15 @@ const interfaces = chainMetaData
     }, {} as ContractsInterfaces)
   : {};
 
+// Standard Solidity contract creation (init code) bytecode prefixes. These
+// transactions are deployments and can't be decoded as function calls, so we
+// skip them. `0x60806040` is the common prefix (PUSH1 0x80 PUSH1 0x40 MSTORE);
+// `0x60e06040` appears when the contract stores immutables.
+const CONTRACT_CREATION_PREFIXES = ["0x60806040", "0x60e06040"];
+
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
-  if (tx.input.length >= 10 && !tx.input.startsWith("0x60e06040")) {
+  const isContractCreation = CONTRACT_CREATION_PREFIXES.some(prefix => tx.input.startsWith(prefix));
+  if (tx.input.length >= 10 && !isContractCreation) {
     let foundInterface = false;
     for (const [, contractAbi] of Object.entries(interfaces)) {
       try {
