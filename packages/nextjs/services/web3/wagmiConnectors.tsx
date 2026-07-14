@@ -1,6 +1,6 @@
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
-  baseAccount,
+  base,
   ledgerWallet,
   metaMaskWallet,
   rainbowWallet,
@@ -21,7 +21,7 @@ const wallets = [
   metaMaskWallet,
   walletConnectWallet,
   ledgerWallet,
-  baseAccount,
+  base,
   rainbowWallet,
   safeWallet,
   ...(showBurnerWallet ? [rainbowkitBurnerWallet] : []),

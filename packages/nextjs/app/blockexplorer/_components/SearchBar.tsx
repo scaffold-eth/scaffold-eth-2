@@ -12,7 +12,7 @@ export const SearchBar = () => {
 
   const client = usePublicClient({ chainId: hardhat.id });
 
-  const handleSearch = async (event: React.FormEvent) => {
+  const handleSearch = async (event: React.SubmitEvent) => {
     event.preventDefault();
     if (isHex(searchInput)) {
       try {
