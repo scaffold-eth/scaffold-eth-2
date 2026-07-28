@@ -56,6 +56,9 @@
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10"
   },
+  "resolutions": {
+    "@coinbase/cdp-sdk": "1.52.0"
+  },
   "engines": {
     "node": ">=22.10.0"
   }
