@@ -178,6 +178,7 @@ export type UseDeployedContractConfig<TContractName extends ContractName> = {
 
 export type UseScaffoldWriteConfig<TContractName extends ContractName> = {
   contractName: TContractName;
+  address?: Address;
   chainId?: AllowedChainIds;
   disableSimulate?: boolean;
   writeContractParams?: UseWriteContractParameters;
@@ -188,6 +189,7 @@ export type UseScaffoldReadConfig<
   TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, ReadAbiStateMutability>,
 > = {
   contractName: TContractName;
+  address?: Address;
   chainId?: AllowedChainIds;
   watch?: boolean;
 } & IsContractDeclarationMissing<
@@ -233,6 +235,7 @@ export type UseScaffoldEventConfig<
   >,
 > = {
   contractName: TContractName;
+  address?: Address;
   eventName: TEventName;
   chainId?: AllowedChainIds;
 } & IsContractDeclarationMissing<

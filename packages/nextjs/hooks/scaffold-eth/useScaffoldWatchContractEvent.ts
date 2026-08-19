@@ -20,6 +20,7 @@ export const useScaffoldWatchContractEvent = <
   TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
 >({
   contractName,
+  address,
   eventName,
   chainId,
   onLogs,
@@ -31,7 +32,7 @@ export const useScaffoldWatchContractEvent = <
   });
 
   return useWatchContractEvent({
-    address: deployedContractData?.address,
+    address: address ?? deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
     chainId: selectedNetwork.id,
     onLogs: (logs: Log[]) => onLogs(logs as Parameters<typeof onLogs>[0]),
