@@ -192,21 +192,31 @@ export const useFetchBlocks = (addressFilter?: Address) => {
                 ? prevBlocks.map((block, index) => (index === existingBlockIndex ? blockWithTxDetails : block))
                 : [blockWithTxDetails, ...prevBlocks];
 
-            const trimmedBlocks = [...nextBlocks];
-            let transactionsInTrimmedBlocks = trimmedBlocks.reduce(
-              (count, block) => count + block.transactions.length,
-              0,
-            );
+            const totalTransactions = nextBlocks.reduce((count, block) => count + block.transactions.length, 0);
 
             // More than one page of transactions are now in view, so a next page exists.
-            if (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE) {
+            if (totalTransactions > TRANSACTIONS_PER_PAGE) {
               setHasNextPage(true);
             }
 
-            while (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE && trimmedBlocks.length > 0) {
-              const removedBlock = trimmedBlocks.pop();
-              if (removedBlock) {
-                transactionsInTrimmedBlocks -= removedBlock.transactions.length;
+            // Keep a page worth of transactions, trimming by transaction rather than by whole
+            // block: dropping an entire block overshoots, and a single block holding more than
+            // TRANSACTIONS_PER_PAGE removes everything and leaves the page empty. The block that
+            // straddles the boundary is kept with its newest transactions only, which is how
+            // fetchPageItems already renders a partial block on the fetched page.
+            const trimmedBlocks: Block[] = [];
+            let remainingTransactions = TRANSACTIONS_PER_PAGE;
+
+            for (const block of nextBlocks) {
+              if (remainingTransactions <= 0) break;
+
+              const blockTransactions = block.transactions as Transaction[];
+              if (blockTransactions.length <= remainingTransactions) {
+                trimmedBlocks.push(block);
+                remainingTransactions -= blockTransactions.length;
+              } else {
+                trimmedBlocks.push({ ...block, transactions: blockTransactions.slice(0, remainingTransactions) });
+                remainingTransactions = 0;
               }
             }
 
