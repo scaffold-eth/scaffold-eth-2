@@ -1,4 +1,46 @@
-# 🏗 Scaffold-ETH 2
+#Scaffold-ETH 2 is a powerful toolkit for building dApps on Ethereum, but it is not directly relevant to your current ACCX deployment phase.
+
+---
+
+What Scaffold-ETH 2 Is
+
+Aspect Details
+Purpose Full-stack toolkit for Ethereum dApp development
+Includes NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, TypeScript
+Features Contract hot reload, custom hooks, burner wallet, local faucet
+AI-Ready Yes (.agents/, .claude/, .cursor/ folders)
+Network Ethereum Mainnet + Testnets
+
+---
+
+Why It's Not Relevant for ACCX Right Now
+
+Reason Explanation
+ACCX uses BNB Smart Chain Scaffold-ETH 2 is primarily Ethereum-focused
+Contract not deployed yet Scaffold-ETH 2 is for frontend + contract interaction
+You're in foundation phase Scaffold-ETH 2 is for dApp development, not deployment foundation
+
+---
+
+When Scaffold-ETH 2 Could Be Useful
+
+Phase Use
+After Mainnet deployment Build ACCX dApp frontend
+When building ACCX Wallet Use wallet integration features
+For ACCX dApp UI Use components and hooks
+
+---
+
+Current Recommendation
+
+Action Status
+Skip Scaffold-ETH 2 now ✅ Recommended
+Focus on contract deployment ✅ Priority
+Revisit for dApp later ✅ Future consideration
+
+---
+
+Scaffold-ETH 2 is a future tool. For now, focus on deploying ACCX to Testnet and Mainnet. 🏗 Scaffold-ETH 2
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
