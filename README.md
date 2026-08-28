@@ -67,6 +67,33 @@ yarn start
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
+### ERC-7730 Clear Signing metadata (experimental)
+
+After deploying a contract, the Hardhat flavor can scaffold and validate an [ERC-7730](https://eips.ethereum.org/EIPS/eip-7730) calldata descriptor from the saved Rocketh deployment:
+
+```bash
+yarn clear-signing init \
+  --network sepolia \
+  --contract YourContract \
+  --entity my-project \
+  --url https://example.com
+```
+
+The generated `packages/hardhat/clear-signing/<network>/<contract>.config.json` deliberately starts with every function excluded and unreviewed. Select the functions users sign, author their intent and display fields, and add representative test arguments. Then run `check`, inspect its human-readable preview, and mark each selected function as reviewed before `prepare`:
+
+```bash
+yarn clear-signing check --network sepolia --contract YourContract
+yarn clear-signing prepare --network sepolia --contract YourContract
+```
+
+`check` uses the official Python `erc7730` linter, the Sourcify Clear Signing formatter, and Sourcify's verified ABI. Install [uv](https://docs.astral.sh/uv/) to run the pinned linter without managing a Python environment. If the contract is not verified yet, the existing verification flow can be invoked automatically:
+
+```bash
+yarn clear-signing check --network sepolia --contract YourContract --verify-sourcify
+```
+
+`prepare` creates a registry-shaped directory containing the v2 descriptor and its `testsv2` fixture. Publication remains manual. This first version covers calldata descriptors for direct, non-proxy deployments; proxy constraints and EIP-712 descriptors remain manual. The accompanying provenance report establishes deployment, ABI, verification, lint, and rendering evidence; it does not claim the descriptor was independently audited or that the contract is safe.
+
 **What's next**:
 
 Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
