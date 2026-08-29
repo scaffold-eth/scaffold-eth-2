@@ -131,8 +131,36 @@ export type FixtureFile = {
 export type SourcifyEvidence = {
   checkedAt: string;
   url: string;
-  match: string;
-  abiCompatible: boolean;
+  match: "match";
+  proxy: false;
+  abiComparison: "exact-function-abi";
+  functionAbiSha256: string;
+};
+
+export type ValidationEvidence = {
+  formatter: {
+    package: "@ethereum-sourcify/clear-signing";
+    version: string;
+    warnings: "rejected";
+    chainMetadata: {
+      repository: "ethereum-lists/chains";
+      commit: string;
+    };
+  };
+  linter: {
+    command: "erc7730 lint";
+    version: string;
+    descriptorWarnings: "rejected";
+    abiValidation: "skipped-in-favor-of-sourcify";
+    ignoredInfrastructureWarnings: string[];
+  };
+  schemas: {
+    validator: "check-jsonschema";
+    validatorVersion: string;
+    registryCommit: string;
+    descriptor: string;
+    fixture: string;
+  };
 };
 
 export type GeneratedArtifacts = {

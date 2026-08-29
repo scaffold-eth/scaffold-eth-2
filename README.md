@@ -86,13 +86,15 @@ yarn clear-signing check --network sepolia --contract YourContract
 yarn clear-signing prepare --network sepolia --contract YourContract
 ```
 
-`check` uses the official Python `erc7730` linter, the Sourcify Clear Signing formatter, and Sourcify's verified ABI. Install [uv](https://docs.astral.sh/uv/) to run the pinned linter without managing a Python environment. If the contract is not verified yet, the existing verification flow can be invoked automatically:
+`check` uses pinned versions of the official Python `erc7730` linter, registry schemas, chain metadata, the Sourcify Clear Signing formatter, and Sourcify's verified ABI. It requires a full Sourcify match, an explicitly non-proxy deployment, and exact equality between the normalized deployment and Sourcify function ABIs. Install [uv](https://docs.astral.sh/uv/) to run the pinned Python tools without managing an environment. If the contract is not verified yet, the existing verification flow can be invoked automatically:
 
 ```bash
 yarn clear-signing check --network sepolia --contract YourContract --verify-sourcify
 ```
 
-`prepare` creates a registry-shaped directory containing the v2 descriptor and its `testsv2` fixture. Publication remains manual. This first version covers calldata descriptors for direct, non-proxy deployments; proxy constraints and EIP-712 descriptors remain manual. The accompanying provenance report establishes deployment, ABI, verification, lint, and rendering evidence; it does not claim the descriptor was independently audited or that the contract is safe.
+Formatter and descriptor warnings fail the workflow instead of being hidden in a clean preview. In particular, an `addressName`, token, NFT, chain, or constrained address type must be resolvable from the fixture data provider; otherwise use an honest raw format or supply representative fixture metadata. The v2 linter's explorer-ABI fetch is replaced by the exact Sourcify comparison; if that fetch still emits its known infrastructure warning, the exception is shown and recorded in provenance. Test descriptions must be unique.
+
+`prepare` creates a registry-shaped directory containing the v2 descriptor and its `testsv2` fixture. Publication remains manual. Relative schema links resolve after the entity folder is copied into the registry. This first version covers calldata descriptors for direct, non-proxy deployments; proxy constraints and EIP-712 descriptors remain manual. The accompanying provenance report establishes deployment, exact function-ABI equality, verification, pinned lint/schema validation, and rendering self-consistency. Fixture expectations are generated from the descriptor being tested, so they are not an independent semantic oracle. None of this claims the descriptor was independently audited or that the contract is safe.
 
 **What's next**:
 

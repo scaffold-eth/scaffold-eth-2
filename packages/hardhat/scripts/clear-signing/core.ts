@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash, randomUUID } from "node:crypto";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import {
   format,
@@ -7,6 +7,7 @@ import {
   type DisplayField as LibraryDisplayField,
   type DisplayFieldGroup,
   type DisplayModel,
+  type Warning,
 } from "@ethereum-sourcify/clear-signing";
 import { createFilesystemResolver } from "@ethereum-sourcify/clear-signing/filesystem";
 import { getAddress, Interface, Transaction, type InterfaceAbi } from "ethers";
@@ -24,10 +25,13 @@ import type {
   GeneratedArtifacts,
   RenderedDisplay,
   RenderedField,
+  SourcifyEvidence,
+  ValidationEvidence,
 } from "./types.js";
 
 export const DESCRIPTOR_SCHEMA = "../../specs/erc7730-v2.schema.json";
 export const FIXTURE_SCHEMA = "../../../specs/erc7730-tests-v2.schema.json";
+export const CHAIN_METADATA_COMMIT = "e198a42191481c2074384aa7b176a94b20869758";
 
 export function getConfigPath(packageRoot: string, network: string, contractName: string) {
   return join(packageRoot, "clear-signing", network, `${contractName}.config.json`);
@@ -67,14 +71,30 @@ export function createConfig(
 }
 
 export async function readConfig(path: string): Promise<ClearSigningConfig> {
-  const config = JSON.parse(await readFile(path, "utf8")) as ClearSigningConfig;
+  const config = JSON.parse(await readFile(path, "utf8")) as unknown;
+  if (!isRecord(config)) throw new Error(`Clear-signing config at ${path} must be a JSON object.`);
   if (config.version !== 1) throw new Error(`Unsupported clear-signing config version in ${path}.`);
-  return config;
+  return config as ClearSigningConfig;
 }
 
-export async function writeJson(path: string, value: unknown) {
+export async function writeJson(path: string, value: unknown, options: { exclusive?: boolean } = {}) {
+  await writeText(path, `${JSON.stringify(value, null, 2)}\n`, options);
+}
+
+export async function writeText(path: string, value: string, options: { exclusive?: boolean } = {}) {
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  if (options.exclusive) {
+    await writeFile(path, value, { encoding: "utf8", flag: "wx" });
+    return;
+  }
+
+  const temporaryPath = join(dirname(path), `.${basename(path)}.${randomUUID()}.tmp`);
+  try {
+    await writeFile(temporaryPath, value, { encoding: "utf8", flag: "wx" });
+    await rename(temporaryPath, path);
+  } finally {
+    await rm(temporaryPath, { force: true });
+  }
 }
 
 export function validateConfig(
@@ -83,27 +103,42 @@ export function validateConfig(
   options: { requireReviewed?: boolean } = {},
 ): string[] {
   const errors: string[] = [];
+  const rawConfig = config as unknown as Record<string, unknown>;
 
-  if (config.network !== deployment.network)
-    errors.push(`Config network is ${config.network}, expected ${deployment.network}.`);
-  if (config.contract !== deployment.contractName) {
-    errors.push(`Config contract is ${config.contract}, expected ${deployment.contractName}.`);
+  if (rawConfig.network !== deployment.network)
+    errors.push(`Config network is ${String(rawConfig.network)}, expected ${deployment.network}.`);
+  if (rawConfig.contract !== deployment.contractName) {
+    errors.push(`Config contract is ${String(rawConfig.contract)}, expected ${deployment.contractName}.`);
   }
 
   try {
-    assertEntity(config.entity);
+    assertEntity(rawConfig.entity);
   } catch (error) {
     errors.push(errorMessage(error));
   }
+  const metadata = isRecord(rawConfig.metadata) ? rawConfig.metadata : undefined;
+  const info = isRecord(metadata?.info) ? metadata.info : undefined;
   try {
-    assertHttpUrl(config.metadata?.info?.url);
+    assertHttpUrl(info?.url);
   } catch (error) {
     errors.push(errorMessage(error));
   }
-  if (!config.metadata?.owner?.trim()) errors.push("metadata.owner must not be empty.");
-  if (!config.metadata?.contractName?.trim()) errors.push("metadata.contractName must not be empty.");
+  if (typeof metadata?.owner !== "string" || !metadata.owner.trim()) errors.push("metadata.owner must not be empty.");
+  if (typeof metadata?.contractName !== "string" || !metadata.contractName.trim())
+    errors.push("metadata.contractName must not be empty.");
 
-  if (!config.functions || typeof config.functions !== "object") {
+  if (rawConfig.dataProvider !== undefined) {
+    if (!isRecord(rawConfig.dataProvider)) {
+      errors.push("dataProvider must be an object.");
+    } else {
+      for (const key of ["tokens", "addressNames", "ensNames", "nftCollectionNames", "blockTimestamps"]) {
+        const value = rawConfig.dataProvider[key];
+        if (value !== undefined && !isRecord(value)) errors.push(`dataProvider.${key} must be an object.`);
+      }
+    }
+  }
+
+  if (!isRecord(rawConfig.functions)) {
     errors.push("functions must be an object.");
     return errors;
   }
@@ -111,9 +146,20 @@ export function validateConfig(
   const writableBySignature = new Map(
     getWritableFunctions(deployment.abi).map(fn => [formatFunctionSignature(fn), fn]),
   );
-  const included = Object.entries(config.functions).filter(([, value]) => value.include);
+  const functionEntries = Object.entries(rawConfig.functions);
+  const included: Array<[string, Record<string, unknown>]> = [];
+  for (const [signature, value] of functionEntries) {
+    if (!isRecord(value)) {
+      errors.push(`${signature}: function config must be an object.`);
+      continue;
+    }
+    if (typeof value.include !== "boolean") errors.push(`${signature}: include must be a boolean.`);
+    if (typeof value.reviewed !== "boolean") errors.push(`${signature}: reviewed must be a boolean.`);
+    if (value.include === true) included.push([signature, value]);
+  }
   if (included.length === 0) errors.push("Select at least one function by setting include to true.");
 
+  const descriptions = new Map<string, string[]>();
   for (const [signature, functionConfig] of included) {
     const abiFunction = writableBySignature.get(signature);
     if (!abiFunction) {
@@ -122,30 +168,52 @@ export function validateConfig(
     }
     if (options.requireReviewed !== false && !functionConfig.reviewed)
       errors.push(`${signature}: set reviewed to true after checking its semantics and preview.`);
-    if (!functionConfig.intent?.trim()) errors.push(`${signature}: intent must not be empty.`);
-    if (!functionConfig.test?.description?.trim()) errors.push(`${signature}: test.description must not be empty.`);
-    if (!Array.isArray(functionConfig.test?.args)) errors.push(`${signature}: test.args must be an array.`);
-    if ((functionConfig.test?.args?.length ?? -1) !== (abiFunction.inputs?.length ?? 0)) {
+    if (typeof functionConfig.intent !== "string" || !functionConfig.intent.trim())
+      errors.push(`${signature}: intent must not be empty.`);
+
+    const test = isRecord(functionConfig.test) ? functionConfig.test : undefined;
+    if (!test) errors.push(`${signature}: test must be an object.`);
+    const description = typeof test?.description === "string" ? test.description.trim() : "";
+    if (!description) errors.push(`${signature}: test.description must not be empty.`);
+    else descriptions.set(description, [...(descriptions.get(description) ?? []), signature]);
+    if (!Array.isArray(test?.args)) errors.push(`${signature}: test.args must be an array.`);
+    if ((Array.isArray(test?.args) ? test.args.length : -1) !== (abiFunction.inputs?.length ?? 0)) {
       errors.push(`${signature}: expected ${abiFunction.inputs?.length ?? 0} test arguments.`);
     }
     if ((abiFunction.inputs?.length ?? 0) > 0 && !Array.isArray(functionConfig.fields)) {
       errors.push(`${signature}: fields must be an array.`);
+    } else if (Array.isArray(functionConfig.fields) && functionConfig.fields.some(field => !isRecord(field))) {
+      errors.push(`${signature}: every field must be an object.`);
     }
-    try {
-      normalizeValue(functionConfig.test.value);
-    } catch (error) {
-      errors.push(`${signature}: ${errorMessage(error)}`);
-    }
-    if (functionConfig.test.from) {
+
+    if (test?.value !== undefined && typeof test.value !== "string") {
+      errors.push(`${signature}: test.value must be a decimal wei string.`);
+    } else {
       try {
-        getAddress(functionConfig.test.from);
+        const value = normalizeValue(test?.value as string | undefined);
+        if (abiFunction.stateMutability !== "payable" && value !== 0n)
+          errors.push(`${signature}: nonpayable functions cannot have a nonzero test.value.`);
+      } catch (error) {
+        errors.push(`${signature}: ${errorMessage(error)}`);
+      }
+    }
+    if (test?.from !== undefined && typeof test.from !== "string") {
+      errors.push(`${signature}: test.from must be an Ethereum address string.`);
+    } else if (test?.from) {
+      try {
+        getAddress(test.from as string);
       } catch {
         errors.push(`${signature}: test.from is not a valid Ethereum address.`);
       }
     }
   }
 
-  for (const signature of Object.keys(config.functions)) {
+  for (const [description, signatures] of descriptions) {
+    if (signatures.length > 1)
+      errors.push(`test.description must be unique; "${description}" is used by ${signatures.join(", ")}.`);
+  }
+
+  for (const signature of Object.keys(rawConfig.functions)) {
     if (!writableBySignature.has(signature))
       errors.push(`${signature}: config entry no longer matches the deployment ABI.`);
   }
@@ -231,7 +299,8 @@ export function buildDescriptor(config: ClearSigningConfig, deployment: ClearSig
 export function createProvenance(
   deployment: ClearSigningDeployment,
   artifacts: GeneratedArtifacts,
-  sourcify: { checkedAt: string; url: string; match: string; abiCompatible: boolean },
+  sourcify: SourcifyEvidence,
+  validation: ValidationEvidence,
 ) {
   return {
     version: 1,
@@ -246,6 +315,7 @@ export function createProvenance(
       blockNumber: deployment.blockNumber,
     },
     sourceVerification: { provider: "Sourcify", ...sourcify },
+    validation,
     descriptor: {
       file: basename(artifacts.descriptorPath),
       sha256: sha256(artifacts.descriptor),
@@ -256,13 +326,14 @@ export function createProvenance(
     },
     establishes: [
       "The descriptor is bound to the recorded deployment address and chain ID.",
-      "The selected function signatures are compatible with the deployment and Sourcify ABIs.",
-      "The descriptor passed the configured lint and fixture-rendering checks.",
+      "The normalized deployment function ABI exactly matches the normalized Sourcify function ABI.",
+      "The descriptor passed the pinned lint, schema, and fixture self-consistency checks; formatter and descriptor warnings were rejected, and any replaced infrastructure warning is recorded.",
     ],
     doesNotEstablish: [
       "The contract is safe or free of vulnerabilities.",
       "The descriptor has been independently audited or attested.",
       "The human-authored intents and labels cover every runtime behavior.",
+      "The generated fixture expectations are an independent semantic oracle; they are produced from the descriptor being tested.",
     ],
   };
 }
@@ -290,8 +361,7 @@ export function getWritableFunctions(abi: AbiItem[]): AbiFunction[] {
     (item): item is AbiFunction =>
       item.type === "function" &&
       typeof item.name === "string" &&
-      item.stateMutability !== "view" &&
-      item.stateMutability !== "pure",
+      (item.stateMutability === "nonpayable" || item.stateMutability === "payable"),
   );
 }
 
@@ -300,7 +370,7 @@ export function getAbiFunctions(abi: AbiItem[]): AbiFunction[] {
 }
 
 function createFunctionConfig(fn: AbiFunction): ClearSigningFunctionConfig {
-  const fields = (fn.inputs ?? []).map((input, index) => createField(input, input.name || `arg${index}`));
+  const fields = (fn.inputs ?? []).flatMap((input, index) => createFields(input, input.name || `arg${index}`));
   if (fn.stateMutability === "payable") {
     fields.push({ path: "@.value", label: "Native value", format: "amount", visible: "always" });
   }
@@ -318,23 +388,23 @@ function createFunctionConfig(fn: AbiFunction): ClearSigningFunctionConfig {
   };
 }
 
-function createField(parameter: AbiParameter, fallbackName: string): DisplayField {
+function createFields(parameter: AbiParameter, fallbackName: string, prefix = ""): DisplayField[] {
   const name = parameter.name || fallbackName;
   const { baseType, arrayDepth } = splitArrayType(parameter.type);
-  const path = [name, ...Array.from({ length: arrayDepth }, () => "[]")].join(".");
+  const path = [prefix, name, ...Array.from({ length: arrayDepth }, () => "[]")].filter(Boolean).join(".");
   const label = humanize(name);
 
   if (baseType === "tuple") {
-    return {
-      path,
-      label,
-      ...(arrayDepth > 0 ? { iteration: "sequential" as const } : {}),
-      fields: (parameter.components ?? []).map((component, index) =>
-        createField(component, component.name || `field${index}`),
-      ),
-    };
+    return (parameter.components ?? []).flatMap((component, index) =>
+      createFields(component, component.name || `field${index}`, path),
+    );
   }
 
+  return [createScalarField(parameter, path, label)];
+}
+
+function createScalarField(parameter: AbiParameter, path: string, label: string): DisplayField {
+  const { baseType } = splitArrayType(parameter.type);
   return {
     path,
     label,
@@ -344,8 +414,13 @@ function createField(parameter: AbiParameter, fallbackName: string): DisplayFiel
 }
 
 function createExampleValue(parameter: AbiParameter): unknown {
-  const { baseType, arrayDepth } = splitArrayType(parameter.type);
-  if (arrayDepth > 0) return [];
+  const outerArray = parameter.type.match(/^(.*)\[([0-9]*)\]$/);
+  if (outerArray) {
+    const length = outerArray[2] === "" ? 0 : Number(outerArray[2]);
+    const element = { ...parameter, type: outerArray[1] };
+    return Array.from({ length }, () => createExampleValue(element));
+  }
+  const { baseType } = splitArrayType(parameter.type);
   if (baseType === "tuple") {
     return (parameter.components ?? []).map(createExampleValue);
   }
@@ -423,8 +498,10 @@ async function renderPreview(
   );
 
   if (model.warnings?.length) {
-    throw new Error(model.warnings.map(warning => `${warning.code}: ${warning.message}`).join("; "));
+    throw new Error(formatWarnings(model.warnings));
   }
+  const fieldWarnings = collectFieldWarnings(model.fields ?? []);
+  if (fieldWarnings.length) throw new Error(formatWarnings(fieldWarnings));
   return mapDisplayModel(model);
 }
 
@@ -461,6 +538,24 @@ function mapFields(fields: ReadonlyArray<LibraryDisplayField | DisplayFieldGroup
   return rendered;
 }
 
+function collectFieldWarnings(fields: ReadonlyArray<LibraryDisplayField | DisplayFieldGroup>): Warning[] {
+  const warnings: Warning[] = [];
+  for (const field of fields) {
+    if (field.warning) warnings.push(field.warning);
+    if (isFieldGroup(field)) {
+      warnings.push(...collectFieldWarnings(field.fields));
+    } else if ("embeddedCalldata" in field && field.embeddedCalldata?.display) {
+      warnings.push(...(field.embeddedCalldata.display.warnings ?? []));
+      warnings.push(...collectFieldWarnings(field.embeddedCalldata.display.fields ?? []));
+    }
+  }
+  return warnings;
+}
+
+function formatWarnings(warnings: Warning[]) {
+  return [...new Set(warnings.map(warning => `${warning.code}: ${warning.message}`))].join("; ");
+}
+
 function buildExternalDataProvider(input: DataProvider | undefined) {
   const tokens = lowercaseKeys(input?.tokens ?? {});
   const addressNames = lowercaseKeys(input?.addressNames ?? {});
@@ -470,13 +565,13 @@ function buildExternalDataProvider(input: DataProvider | undefined) {
 
   return {
     resolveToken: async (_chainId: number, address: string) => tokens[address.toLowerCase()] ?? null,
-    resolveLocalName: async (address: string) => {
+    resolveLocalName: async (address: string, acceptedTypes?: AddressType[]) => {
       const name = addressNames[address.toLowerCase()];
-      return name ? { name, typeMatch: true } : null;
+      return name ? { name, typeMatch: !acceptedTypes?.length } : null;
     },
-    resolveEnsName: async (address: string) => {
+    resolveEnsName: async (address: string, acceptedTypes?: AddressType[]) => {
       const name = ensNames[address.toLowerCase()];
-      return name ? { name, typeMatch: true } : null;
+      return name ? { name, typeMatch: !acceptedTypes?.length } : null;
     },
     resolveNftCollectionName: async (_chainId: number, address: string) => {
       const name = nftNames[address.toLowerCase()];
@@ -498,17 +593,17 @@ const chainInfoCache = new Map<
 async function lookupChainInfo(chainId: number) {
   const cached = chainInfoCache.get(chainId);
   if (cached) return cached;
-  const response = await fetch("https://chainid.network/chains_mini.json");
+  const response = await fetch(
+    `https://raw.githubusercontent.com/ethereum-lists/chains/${CHAIN_METADATA_COMMIT}/_data/chains/eip155-${chainId}.json`,
+    { signal: AbortSignal.timeout(10_000) },
+  );
   if (!response.ok) return null;
-  const chains = (await response.json()) as Array<{
-    chainId: number;
+  const chain = (await response.json()) as {
     name?: string;
     nativeCurrency?: { name: string; symbol: string; decimals: number };
-  }>;
-  for (const chain of chains) {
-    if (chain.name && chain.nativeCurrency)
-      chainInfoCache.set(chain.chainId, { name: chain.name, nativeCurrency: chain.nativeCurrency });
-  }
+  };
+  if (chain.name && chain.nativeCurrency)
+    chainInfoCache.set(chainId, { name: chain.name, nativeCurrency: chain.nativeCurrency });
   return chainInfoCache.get(chainId) ?? null;
 }
 
@@ -558,15 +653,16 @@ function functionId(signature: string) {
   return `${name}-${suffix}`;
 }
 
-function assertEntity(entity: string) {
-  if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(entity) || entity === "." || entity === "..") {
+function assertEntity(entity: unknown) {
+  if (typeof entity !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(entity) || entity === "." || entity === "..") {
     throw new Error(
       "entity must be a registry folder name containing only letters, numbers, periods, underscores, and hyphens.",
     );
   }
 }
 
-function assertHttpUrl(value: string) {
+function assertHttpUrl(value: unknown) {
+  if (typeof value !== "string") throw new Error("metadata.info.url must be an HTTP(S) URL.");
   const url = new URL(value);
   if (url.protocol !== "https:" && url.protocol !== "http:")
     throw new Error("metadata.info.url must be an HTTP(S) URL.");
@@ -575,6 +671,12 @@ function assertHttpUrl(value: string) {
 function lowercaseKeys<T>(input: Record<string, T>) {
   return Object.fromEntries(Object.entries(input).map(([key, value]) => [key.toLowerCase(), value]));
 }
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+type AddressType = "wallet" | "eoa" | "contract" | "token" | "collection";
 
 function hasEntries(value: object | undefined) {
   return value != null && Object.values(value).some(entry => entry != null && Object.keys(entry).length > 0);
