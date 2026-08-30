@@ -67,6 +67,37 @@ yarn start
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
 
+### ERC-7730 Clear Signing metadata (experimental)
+
+After deploying a contract, the Hardhat flavor can scaffold and validate an [ERC-7730](https://eips.ethereum.org/EIPS/eip-7730) calldata descriptor from the saved Rocketh deployment:
+
+This integration targets the active ERC-7730 2.0.0 registry schema. The draft `3.0.0-next` schema is intentionally out of scope until it becomes stable.
+
+```bash
+yarn clear-signing init \
+  --network sepolia \
+  --contract YourContract \
+  --entity my-project \
+  --url https://example.com
+```
+
+The generated `packages/hardhat/clear-signing/<network>/<contract>.config.json` deliberately starts with every function excluded and unreviewed. Select the functions users sign, author their intent and display fields, and add representative test arguments. Then run `check`, inspect its human-readable preview, and mark each selected function as reviewed before `prepare`:
+
+```bash
+yarn clear-signing check --network sepolia --contract YourContract
+yarn clear-signing prepare --network sepolia --contract YourContract
+```
+
+`check` uses pinned versions of the official Python `erc7730` linter, registry schemas, chain metadata, the Sourcify Clear Signing formatter, and Sourcify's verified ABI. It requires a full Sourcify match, an explicitly non-proxy deployment, and exact equality between the normalized deployment and Sourcify function ABIs. Install [uv](https://docs.astral.sh/uv/) to run the pinned Python tools without managing an environment. If the contract is not verified yet, the existing verification flow can be invoked automatically:
+
+```bash
+yarn clear-signing check --network sepolia --contract YourContract --verify-sourcify
+```
+
+Formatter and descriptor warnings fail the workflow instead of being hidden in a clean preview. In particular, an `addressName`, token, NFT, chain, or constrained address type must be resolvable from the fixture data provider; otherwise use an honest raw format or supply representative fixture metadata. The v2 linter's explorer-ABI fetch is replaced by the exact Sourcify comparison; if that fetch still emits its known infrastructure warning, the exception is shown and recorded in provenance. Test descriptions must be unique.
+
+`prepare` creates a registry-shaped directory containing the v2 descriptor and its `testsv2` fixture. Publication remains manual. Relative schema links resolve after the entity folder is copied into the registry. This first version covers calldata descriptors for direct, non-proxy deployments; proxy constraints and EIP-712 descriptors remain manual. The accompanying provenance report establishes deployment, exact function-ABI equality, verification, pinned lint/schema validation, and rendering self-consistency. Fixture expectations are generated from the descriptor being tested, so they are not an independent semantic oracle. None of this claims the descriptor was independently audited or that the contract is safe.
+
 **What's next**:
 
 Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:

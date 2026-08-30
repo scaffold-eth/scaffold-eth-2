@@ -898,6 +898,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ethereum-sourcify/clear-signing@npm:0.2.2":
+  version: 0.2.2
+  resolution: "@ethereum-sourcify/clear-signing@npm:0.2.2"
+  dependencies:
+    "@noble/hashes": "npm:^1.7.1"
+  checksum: 10/830d555f810e8965636989487ca0f7175c21c86e1549586efd18eb263851ae2ae8d8d7c3abd62e1c1060033f0081431c4b86a540c4adfee1005c0d18b1511c5b
+  languageName: node
+  linkType: hard
+
 "@ethereumjs/common@npm:^3.2.0":
   version: 3.2.0
   resolution: "@ethereumjs/common@npm:3.2.0"
@@ -2695,7 +2704,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/hashes@npm:1.8.0, @noble/hashes@npm:^1.3.1, @noble/hashes@npm:^1.5.0, @noble/hashes@npm:^1.8.0, @noble/hashes@npm:~1.8.0":
+"@noble/hashes@npm:1.8.0, @noble/hashes@npm:^1.3.1, @noble/hashes@npm:^1.5.0, @noble/hashes@npm:^1.7.1, @noble/hashes@npm:^1.8.0, @noble/hashes@npm:~1.8.0":
   version: 1.8.0
   resolution: "@noble/hashes@npm:1.8.0"
   checksum: 10/474b7f56bc6fb2d5b3a42132561e221b0ea4f91e590f4655312ca13667840896b34195e2b53b7f097ec080a1fdd3b58d902c2a8d0fbdf51d2e238b53808a177e
@@ -4414,6 +4423,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@se-2/hardhat@workspace:packages/hardhat"
   dependencies:
+    "@ethereum-sourcify/clear-signing": "npm:0.2.2"
     "@inquirer/password": "npm:^4.0.2"
     "@nomicfoundation/hardhat-ethers": "npm:^4"
     "@nomicfoundation/hardhat-ethers-chai-matchers": "npm:^3"
