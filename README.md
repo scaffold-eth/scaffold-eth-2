@@ -71,6 +71,8 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 After deploying a contract, the Hardhat flavor can scaffold and validate an [ERC-7730](https://eips.ethereum.org/EIPS/eip-7730) calldata descriptor from the saved Rocketh deployment:
 
+This integration targets the active ERC-7730 2.0.0 registry schema. The draft `3.0.0-next` schema is intentionally out of scope until it becomes stable.
+
 ```bash
 yarn clear-signing init \
   --network sepolia \
