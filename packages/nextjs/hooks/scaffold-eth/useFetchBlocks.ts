@@ -61,7 +61,7 @@ const fetchPageItems = async (
   const pageItems: { block: Block; tx: Transaction }[] = [];
   let skipped = 0;
 
-  for (let blockNum = latestBlock; blockNum >= 0n; ) {
+  for (let blockNum = latestBlock; blockNum >= 0n;) {
     const batchEnd = blockNum - BigInt(BLOCK_BATCH_SIZE - 1);
     const batchStart = batchEnd < 0n ? 0n : batchEnd;
 
