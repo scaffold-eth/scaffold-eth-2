@@ -51,15 +51,15 @@
     "verify": "yarn hardhat:verify",
     "hardhat-verify": "yarn hardhat:hardhat-verify"
   },
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "yarn@4.18.1",
   "devDependencies": {
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
   },
   "resolutions": {
     "@coinbase/cdp-sdk": "1.52.0"
   },
   "engines": {
-    "node": ">=22.10.0"
+    "node": ">=22.13.0"
   }
 }
