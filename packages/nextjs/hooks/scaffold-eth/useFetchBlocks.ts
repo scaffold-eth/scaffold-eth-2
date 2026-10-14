@@ -192,21 +192,29 @@ export const useFetchBlocks = (addressFilter?: Address) => {
                 ? prevBlocks.map((block, index) => (index === existingBlockIndex ? blockWithTxDetails : block))
                 : [blockWithTxDetails, ...prevBlocks];
 
-            const trimmedBlocks = [...nextBlocks];
-            let transactionsInTrimmedBlocks = trimmedBlocks.reduce(
-              (count, block) => count + block.transactions.length,
-              0,
-            );
+            const totalTransactions = nextBlocks.reduce((count, block) => count + block.transactions.length, 0);
 
             // More than one page of transactions are now in view, so a next page exists.
-            if (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE) {
+            if (totalTransactions > TRANSACTIONS_PER_PAGE) {
               setHasNextPage(true);
             }
 
-            while (transactionsInTrimmedBlocks > TRANSACTIONS_PER_PAGE && trimmedBlocks.length > 0) {
-              const removedBlock = trimmedBlocks.pop();
-              if (removedBlock) {
-                transactionsInTrimmedBlocks -= removedBlock.transactions.length;
+            // Keep one page of transactions. Whole blocks are kept while they fit, and the block
+            // straddling the boundary keeps only the transactions that fit, so a single block
+            // larger than a page cannot empty the view. This is the shape fetchPageItems already
+            // produces for a page, so TransactionsTable renders no new case.
+            const trimmedBlocks: Block[] = [];
+            let remainingTransactions = TRANSACTIONS_PER_PAGE;
+
+            for (const block of nextBlocks) {
+              if (remainingTransactions === 0) break;
+
+              if (block.transactions.length <= remainingTransactions) {
+                trimmedBlocks.push(block);
+                remainingTransactions -= block.transactions.length;
+              } else {
+                trimmedBlocks.push({ ...block, transactions: block.transactions.slice(0, remainingTransactions) });
+                remainingTransactions = 0;
               }
             }
 
