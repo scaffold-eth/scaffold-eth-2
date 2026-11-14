@@ -59,14 +59,14 @@ yarn vercel:yolo --prod # for deployment of frontend
 #### Hardhat Flavor
 
 - Contracts: `packages/hardhat/contracts/`
-- Deployment scripts: `packages/hardhat/deploy/` (uses hardhat-deploy plugin)
+- Deployment scripts: `packages/hardhat/deploy/` (hardhat-deploy v2 with rocketh; scripts use `deployScript` from `packages/hardhat/rocketh/deploy.ts`)
 - Tests: `packages/hardhat/test/`
 - Config: `packages/hardhat/hardhat.config.ts`
 - Deploying specific contract:
-  - If the deploy script has:
+  - If the deploy script passes tags as the second argument of `deployScript`:
     ```typescript
     // In packages/hardhat/deploy/01_deploy_my_contract.ts
-    deployMyContract.tags = ["MyContract"];
+    export default deployScript(async env => { /* ... */ }, { tags: ["MyContract"] });
     ```
   - `yarn deploy --tags MyContract`
   - **Gas limit in deploy scripts**: Manual post-deploy calls (e.g. `transferOwnership`, `grantRole`, `initialize`) can silently inherit `blockGasLimit` as their gas cap, causing failures. **Fix at the call site, not in `hardhat.config.ts`:**
@@ -143,7 +143,7 @@ const { data: events, isLoading } = useScaffoldEventHistory({
 
 SE-2 also provides other hooks to interact with blockchain data: `useScaffoldWatchContractEvent`, `useScaffoldEventHistory`, `useDeployedContractInfo`, `useScaffoldContract`, `useTransactor`.
 
-**IMPORTANT: Always use hooks from `packages/nextjs/hooks/scaffold-eth` for contract interactions. Always refer to the hook names as they exist in the codebase.**
+Use the hooks from `packages/nextjs/hooks/scaffold-eth` for contract interactions, with the hook names as they exist in the codebase.
 
 ### UI Components
 
