@@ -8,8 +8,13 @@ import { spawn } from "child_process";
  * then generates TypeScript ABIs for the frontend.
  */
 async function main() {
-  const networkIndex = process.argv.indexOf("--network");
-  const networkName = networkIndex !== -1 ? process.argv[networkIndex + 1] : "default";
+  // Hardhat also accepts `--network=<name>` and, without the flag, the HARDHAT_NETWORK env variable.
+  // Missing either one would treat a live network as local and deploy with the public hardhat account 0 key.
+  const args = process.argv
+    .slice(2)
+    .flatMap(arg => (arg.startsWith("--network=") ? ["--network", arg.slice("--network=".length)] : arg));
+  const networkIndex = args.indexOf("--network");
+  const networkName = networkIndex !== -1 ? args[networkIndex + 1] : (process.env.HARDHAT_NETWORK ?? "default");
 
   const isLocalNetwork = networkName === "default" || networkName === "hardhat";
 
@@ -34,7 +39,7 @@ async function main() {
   }
 
   // Run hardhat deploy (compilation already handled by the npm script)
-  const deployArgs = ["deploy", "--no-compile", "--skip-prompts", ...process.argv.slice(2)];
+  const deployArgs = ["deploy", "--no-compile", "--skip-prompts", ...args];
 
   const hardhat = spawn("hardhat", deployArgs, {
     stdio: "inherit",

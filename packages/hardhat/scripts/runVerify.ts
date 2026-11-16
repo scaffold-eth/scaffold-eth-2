@@ -6,7 +6,10 @@ import { etherscanApiKey } from "../hardhat.config.js";
  * Forwards `yarn verify --network <name> [args]` to the rocketh-verify CLI.
  */
 async function main() {
-  const argv = process.argv.slice(2);
+  // Accept `--network=<name>` as well as `--network <name>`
+  const argv = process.argv
+    .slice(2)
+    .flatMap(arg => (arg.startsWith("--network=") ? ["--network", arg.slice("--network=".length)] : arg));
 
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(
