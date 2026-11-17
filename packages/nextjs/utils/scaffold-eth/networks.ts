@@ -23,7 +23,6 @@ export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.polygon.id]: "polygon-mainnet",
   [chains.polygonAmoy.id]: "polygon-amoy",
   [chains.astar.id]: "astar-mainnet",
-  [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
   [chains.base.id]: "base-mainnet",
   [chains.baseSepolia.id]: "base-sepolia",
   [chains.celo.id]: "celo-mainnet",
@@ -67,12 +66,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   },
   [chains.fantom.id]: {
     color: "#1969ff",
-  },
-  [chains.fantomTestnet.id]: {
-    color: "#1969ff",
-  },
-  [chains.scrollSepolia.id]: {
-    color: "#fbebd4",
   },
   [chains.celo.id]: {
     color: "#FCFF52",
