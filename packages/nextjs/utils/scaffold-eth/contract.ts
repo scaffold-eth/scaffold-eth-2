@@ -4,7 +4,6 @@ import { notification } from "./notification";
 import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
-  AbiParameter,
   AbiParameterToPrimitiveType,
   AbiParametersToPrimitiveTypes,
   ExtractAbiEvent,
@@ -332,8 +331,6 @@ export type UseScaffoldEventHistoryData<
       } & Log<bigint, number, false, TEvent, false, [TEvent], TEventName>[]
     >
   | undefined;
-
-export type AbiParameterTuple = Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
 
 /**
  * Enhanced error parsing that creates a lookup table from all deployed contracts

@@ -138,8 +138,6 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       const writeTxResult = await writeTx(makeWriteWithParams, { blockConfirmations, onBlockConfirmation });
 
       return writeTxResult;
-    } catch (e: any) {
-      throw e;
     } finally {
       setIsMining(false);
     }

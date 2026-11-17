@@ -23,8 +23,7 @@ const getWalletFromPrivateKey = async () => {
     try {
       const wallet = new ethers.Wallet(privateKey);
       return wallet;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
+    } catch {
       console.log("❌ Invalid private key format. Please try again.");
     }
   }

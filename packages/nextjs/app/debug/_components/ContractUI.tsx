@@ -8,7 +8,6 @@ import { ContractName } from "~~/utils/scaffold-eth/contract";
 
 type ContractUIProps = {
   contractName: ContractName;
-  className?: string;
 };
 
 /**

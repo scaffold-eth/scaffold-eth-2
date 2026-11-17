@@ -26,8 +26,7 @@ async function main() {
     try {
       const wallet = await Wallet.fromEncryptedJson(encryptedKey, pass);
       process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY = wallet.privateKey;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
+    } catch {
       console.error("Failed to decrypt private key. Wrong password?");
       process.exit(1);
     }
