@@ -8,13 +8,16 @@ import { spawn } from "child_process";
  * then generates TypeScript ABIs for the frontend.
  */
 async function main() {
-  // Hardhat also accepts `--network=<name>` and, without the flag, the HARDHAT_NETWORK env variable.
-  // Missing either one would treat a live network as local and deploy with the public hardhat account 0 key.
-  const args = process.argv
-    .slice(2)
-    .flatMap(arg => (arg.startsWith("--network=") ? ["--network", arg.slice("--network=".length)] : arg));
-  const networkIndex = args.indexOf("--network");
-  const networkName = networkIndex !== -1 ? args[networkIndex + 1] : (process.env.HARDHAT_NETWORK ?? "default");
+  // We only look for `--network <name>`, but Hardhat accepts `--network=<name>` too. Without this check
+  // it would skip the password prompt and deploy to that network with the public hardhat account 0 key.
+  if (process.argv.some(arg => arg.startsWith("--network="))) {
+    console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
+    process.exit(1);
+  }
+
+  const networkIndex = process.argv.indexOf("--network");
+  // Without the flag, Hardhat takes the network from the HARDHAT_NETWORK env variable
+  const networkName = networkIndex !== -1 ? process.argv[networkIndex + 1] : (process.env.HARDHAT_NETWORK ?? "default");
 
   const isLocalNetwork = networkName === "default" || networkName === "hardhat";
 
@@ -39,7 +42,7 @@ async function main() {
   }
 
   // Run hardhat deploy (compilation already handled by the npm script)
-  const deployArgs = ["deploy", "--no-compile", "--skip-prompts", ...args];
+  const deployArgs = ["deploy", "--no-compile", "--skip-prompts", ...process.argv.slice(2)];
 
   const hardhat = spawn("hardhat", deployArgs, {
     stdio: "inherit",

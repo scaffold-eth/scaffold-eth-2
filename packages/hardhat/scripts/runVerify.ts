@@ -6,10 +6,7 @@ import { etherscanApiKey } from "../hardhat.config.js";
  * Forwards `yarn verify --network <name> [args]` to the rocketh-verify CLI.
  */
 async function main() {
-  // Accept `--network=<name>` as well as `--network <name>`
-  const argv = process.argv
-    .slice(2)
-    .flatMap(arg => (arg.startsWith("--network=") ? ["--network", arg.slice("--network=".length)] : arg));
+  const argv = process.argv.slice(2);
 
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(
@@ -24,6 +21,12 @@ async function main() {
       ].join("\n"),
     );
     return;
+  }
+
+  // We only look for `--network <name>`. Without this check `--network=<name>` would silently verify on "default".
+  if (argv.some(arg => arg.startsWith("--network="))) {
+    console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
+    process.exit(1);
   }
 
   const networkIdx = argv.indexOf("--network");
