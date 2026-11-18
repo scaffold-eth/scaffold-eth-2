@@ -122,7 +122,6 @@ export function useScaffoldWriteContract<TContractName extends ContractName>({
   };
 
   const sendContractWriteTx = <
-    TContractName extends ContractName,
     TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
   >(
     variables: ScaffoldWriteContractVariables<TContractName, TFunctionName>,

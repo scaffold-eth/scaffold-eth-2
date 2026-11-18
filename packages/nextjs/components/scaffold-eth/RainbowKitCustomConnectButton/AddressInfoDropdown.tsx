@@ -86,12 +86,15 @@ export const AddressInfoDropdown = ({
           </label>
         </li>
         <li className={selectingNetwork ? "hidden" : ""}>
-          <button className="h-8 btn-sm flex gap-3 py-3" type="button">
+          <a
+            target="_blank"
+            href={blockExplorerAddressLink}
+            rel="noopener noreferrer"
+            className="h-8 btn-sm flex gap-3 py-3"
+          >
             <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
-            <a target="_blank" href={blockExplorerAddressLink} rel="noopener noreferrer" className="whitespace-nowrap">
-              View on Block Explorer
-            </a>
-          </button>
+            <span className="whitespace-nowrap">View on Block Explorer</span>
+          </a>
         </li>
         {allowedNetworks.length > 1 ? (
           <li className={selectingNetwork ? "hidden" : ""}>
