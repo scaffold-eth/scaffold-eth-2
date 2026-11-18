@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
-import { getAddress } from "viem";
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import {
   ArrowLeftEndOnRectangleIcon,
