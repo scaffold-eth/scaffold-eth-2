@@ -325,7 +325,7 @@ export type UseScaffoldEventHistoryData<
               IndexedOnly: false;
             }
           >;
-        blockData: TBlockData extends true ? Block<bigint, true> : null;
+        blockData: TBlockData extends true ? Block<bigint, false> : null;
         receiptData: TReceiptData extends true ? GetTransactionReceiptReturnType : null;
         transactionData: TTransactionData extends true ? GetTransactionReturnType : null;
       } & Log<bigint, number, false, TEvent, false, [TEvent], TEventName>)[]

@@ -91,6 +91,7 @@ export const AddressInfoDropdown = ({
             href={blockExplorerAddressLink}
             rel="noopener noreferrer"
             className="h-8 btn-sm flex gap-3 py-3"
+            onClick={closeDropdown}
           >
             <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
             <span className="whitespace-nowrap">View on Block Explorer</span>
