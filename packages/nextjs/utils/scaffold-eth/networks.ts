@@ -15,22 +15,15 @@ export type AllowedChainIds = (typeof scaffoldConfig.targetNetworks)[number]["id
 // Mapping of chainId to RPC chain name an format followed by alchemy and infura
 export const RPC_CHAIN_NAMES: Record<number, string> = {
   [chains.mainnet.id]: "eth-mainnet",
-  [chains.goerli.id]: "eth-goerli",
   [chains.sepolia.id]: "eth-sepolia",
   [chains.optimism.id]: "opt-mainnet",
-  [chains.optimismGoerli.id]: "opt-goerli",
   [chains.optimismSepolia.id]: "opt-sepolia",
   [chains.arbitrum.id]: "arb-mainnet",
-  [chains.arbitrumGoerli.id]: "arb-goerli",
   [chains.arbitrumSepolia.id]: "arb-sepolia",
   [chains.polygon.id]: "polygon-mainnet",
-  [chains.polygonMumbai.id]: "polygon-mumbai",
   [chains.polygonAmoy.id]: "polygon-amoy",
   [chains.astar.id]: "astar-mainnet",
-  [chains.polygonZkEvm.id]: "polygonzkevm-mainnet",
-  [chains.polygonZkEvmTestnet.id]: "polygonzkevm-testnet",
   [chains.base.id]: "base-mainnet",
-  [chains.baseGoerli.id]: "base-goerli",
   [chains.baseSepolia.id]: "base-sepolia",
   [chains.celo.id]: "celo-mainnet",
   [chains.celoSepolia.id]: "celo-sepolia",
@@ -59,10 +52,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
     color: "#2bbdf7",
     nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
   },
-  [chains.polygonMumbai.id]: {
-    color: "#92D9FA",
-    nativeCurrencyTokenAddress: "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
-  },
   [chains.optimismSepolia.id]: {
     color: "#f01a37",
   },
@@ -77,12 +66,6 @@ export const NETWORKS_EXTRA_DATA: Record<string, ChainAttributes> = {
   },
   [chains.fantom.id]: {
     color: "#1969ff",
-  },
-  [chains.fantomTestnet.id]: {
-    color: "#1969ff",
-  },
-  [chains.scrollSepolia.id]: {
-    color: "#fbebd4",
   },
   [chains.celo.id]: {
     color: "#FCFF52",
