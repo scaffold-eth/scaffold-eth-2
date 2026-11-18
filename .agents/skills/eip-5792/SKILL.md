@@ -69,7 +69,7 @@ Use `useWriteContracts` to send multiple calls in one wallet interaction. Get th
 import { useWriteContracts } from "wagmi/experimental";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
-const { data: deployedContract } = useDeployedContractInfo("YourContract");
+const { data: deployedContract } = useDeployedContractInfo({ contractName: "YourContract" });
 const { writeContractsAsync, isPending } = useWriteContracts();
 
 // Batch two calls
