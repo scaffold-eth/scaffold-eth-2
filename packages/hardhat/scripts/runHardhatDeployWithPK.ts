@@ -8,8 +8,14 @@ import { spawn } from "child_process";
  * then generates TypeScript ABIs for the frontend.
  */
 async function main() {
+  if (process.argv.some(arg => arg.startsWith("--network="))) {
+    console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
+    process.exit(1);
+  }
+
   const networkIndex = process.argv.indexOf("--network");
-  const networkName = networkIndex !== -1 ? process.argv[networkIndex + 1] : "default";
+  // Without the flag, Hardhat takes the network from the HARDHAT_NETWORK env variable
+  const networkName = networkIndex !== -1 ? process.argv[networkIndex + 1] : (process.env.HARDHAT_NETWORK ?? "default");
 
   const isLocalNetwork = networkName === "default" || networkName === "hardhat";
 
