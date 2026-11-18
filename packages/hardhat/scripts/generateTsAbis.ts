@@ -111,8 +111,7 @@ function getContractDataFromDeployments() {
         console.log(`No chain file found for ${chainName}`);
         continue;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
       console.log(`Error reading chain data for ${chainName}`);
       continue;
     }
@@ -167,8 +166,6 @@ export default async function generateTsAbis() {
 
 // Run directly when executed as a script (e.g. `hardhat run scripts/generateTsAbis.ts`)
 // but not when imported by hardhat.config.ts for the task override
-const isDirectRun =
-  process.argv[1]?.includes("generateTsAbis") || process.argv.some(arg => arg.includes("generateTsAbis"));
-if (isDirectRun) {
+if (process.argv.some(arg => arg.includes("generateTsAbis"))) {
   generateTsAbis();
 }

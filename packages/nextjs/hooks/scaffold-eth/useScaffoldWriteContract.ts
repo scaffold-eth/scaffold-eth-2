@@ -100,7 +100,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       return;
     }
 
-    if (accountChain?.id !== selectedNetwork.id) {
+    if (accountChain.id !== selectedNetwork.id) {
       notification.error(`Wallet is connected to the wrong network. Please switch to ${selectedNetwork.name}`);
       return;
     }
@@ -138,8 +138,6 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       const writeTxResult = await writeTx(makeWriteWithParams, { blockConfirmations, onBlockConfirmation });
 
       return writeTxResult;
-    } catch (e: any) {
-      throw e;
     } finally {
       setIsMining(false);
     }
@@ -161,7 +159,7 @@ export function useScaffoldWriteContract<TContractName extends ContractName>(
       return;
     }
 
-    if (accountChain?.id !== selectedNetwork.id) {
+    if (accountChain.id !== selectedNetwork.id) {
       notification.error(`Wallet is connected to the wrong network. Please switch to ${selectedNetwork.name}`);
       return;
     }
