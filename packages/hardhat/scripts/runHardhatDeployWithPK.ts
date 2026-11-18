@@ -8,8 +8,6 @@ import { spawn } from "child_process";
  * then generates TypeScript ABIs for the frontend.
  */
 async function main() {
-  // We only look for `--network <name>`, but Hardhat accepts `--network=<name>` too. Without this check
-  // it would skip the password prompt and deploy to that network with the public hardhat account 0 key.
   if (process.argv.some(arg => arg.startsWith("--network="))) {
     console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
     process.exit(1);

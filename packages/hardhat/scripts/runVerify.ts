@@ -23,7 +23,6 @@ async function main() {
     return;
   }
 
-  // We only look for `--network <name>`. Without this check `--network=<name>` would silently verify on "default".
   if (argv.some(arg => arg.startsWith("--network="))) {
     console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
     process.exit(1);
