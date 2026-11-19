@@ -1,10 +1,8 @@
-# 🏗 create-eth
-
-CLI to create decentralized applications (dapps) using Scaffold-ETH 2.
+# 🏗 Scaffold-ETH 2
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">SE-2 Documentation</a> |
-  <a href="https://scaffoldeth.io">SE-2 Website</a>
+  <a href="https://docs.scaffoldeth.io">Documentation</a> |
+  <a href="https://scaffoldeth.io">Website</a>
 </h4>
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
@@ -71,7 +69,14 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 **What's next**:
 
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to customize your contracts, frontend, and more.
+Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
+
+- Edit your smart contracts
+- Edit your deployment scripts
+- Customize your frontend
+- Edit the app config
+- Writing and running tests
+- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
 
 ## Documentation
 
@@ -81,11 +86,13 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 
 Watch [BG Labs](https://youtube.com/playlist?list=PLJz1HruEnenD77QAsqnk7KG8rSOMk0B99&si=JXZRn78_NBcvJJoZ) - our video series on building with Scaffold-ETH 2.
 
-## Contributing
+## Contributing to Scaffold-ETH 2
 
-Built by [BuidlGuidl](https://buidlguidl.com) builders, we welcome contributions to create-eth!
+Built by [BuidlGuidl](https://buidlguidl.com) builders, we welcome contributions to Scaffold-ETH 2!
 
-For more information and guidelines for contributing, please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/create-eth/blob/main/CONTRIBUTING.md)
+This repository holds the `create-eth` CLI and the templates it uses to generate a project. The root of the repository is not a runnable app: the app code lives in `templates/`. To work on it, see the [Developer Guide](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/contributors/DEVELOPER-GUIDE.md).
+
+Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
 
 ## Community
 

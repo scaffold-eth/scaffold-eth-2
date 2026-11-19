@@ -1,20 +1,31 @@
-# Welcome to create-eth Contributing Guide
+# Welcome to Scaffold-ETH 2 Contributing Guide
 
-Thank you for investing your time in contributing to create-eth!
+Thank you for investing your time in contributing to Scaffold-ETH 2!
 
 This guide aims to provide an overview of the contribution workflow to help us make the contribution process effective for everyone involved.
 
 ## About the Project
 
-create-eth is a CLI tool to create a minimal repo to build decentralized applications on Ethereum, providing builders with a starter kit based on Scaffold-ETH 2.
+Scaffold-ETH 2 is a starter kit for building decentralized applications on Ethereum. Projects are created with the `create-eth` CLI (`npx create-eth@latest`).
+
+This repository holds the CLI and the templates it uses to generate a project.
 
 Read the [README](README.md) to get an overview of the project.
 
+### Repository layout
+
+- `src/`: source code of the `create-eth` CLI.
+- `templates/base/`: files that every generated project gets (the Next.js app, root config, agent config).
+- `templates/solidity-frameworks/hardhat/` and `templates/solidity-frameworks/foundry/`: files added for the chosen Solidity framework.
+- `contributors/`: guides for contributors.
+
+The root of the repository is not a runnable app. To run the app and work on it, build the CLI with `yarn build` and create a project linked to the `templates/` folder with `yarn cli --dev`. See the [Developer Guide](#developer-guide).
+
+Paths in a generated project map to the templates like this: `packages/nextjs/...` lives in `templates/base/packages/nextjs/...`, and `packages/hardhat/...` lives in `templates/solidity-frameworks/hardhat/packages/hardhat/...`. Some files are generated from `*.template.mjs` files, see [TEMPLATING.md](contributors/TEMPLATING.md).
+
 ### Vision
 
-The goal of create-eth is to be a "toolkit creator", using Scaffold-ETH 2 as a base to provide the primary building blocks for a decentralized application. In the future we plan to add "curated" packages to it, and open the possibility to import 3rd party packages (that follow our standard).
-
-The repo can be forked to include integrations and more features, but we want to keep the `main` branch simple and minimal.
+The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application. We want to keep the `main` branch simple and minimal.
 
 ### Project Status
 
@@ -51,7 +62,7 @@ Issues should be used to report problems, request a new feature, or discuss pote
 
 #### Solve an issue
 
-Scan through our [existing issues](https://github.com/scaffold-eth/create-eth/issues) to find one that interests you.
+Scan through our [existing issues](https://github.com/scaffold-eth/scaffold-eth-2/issues) to find one that interests you.
 
 If a contributor is working on the issue, they will be assigned to the individual. If you find an issue to work on, you are welcome to assign it to yourself and open a PR with a fix for it.
 
@@ -73,15 +84,11 @@ We follow the ["fork-and-pull" Git workflow](https://github.com/susam/gitpr)
 
 1. Fork the repo
 2. Clone the project
-3. Create a new branch (based in create-eth main branch) with a descriptive name
+3. Create a new branch with a descriptive name
 4. Commit your changes to the new branch
 5. Add [changeset](#changeset) if applicable
 6. Push changes to your fork
 7. Open a PR in our repository and tag one of the maintainers to review your PR
-
-> ⚠️ **Important.** Please make sure to choose **create-eth** repo when you create your branch and compare your changes.
->
-> This repo is a fork of Scaffold-ETH 2, and it may appear as default repo when creating a branch or PR.
 
 Here are some tips for a high-quality pull request:
 
@@ -106,8 +113,6 @@ When adding new features or fixing bugs, we'll need to bump the package versions
 Each changeset defines the version should be a major/minor/patch release, as well as providing release notes that will be added to the changelog upon release.
 
 To create a new changeset, run `yarn changeset add`. This will run the Changesets CLI, prompting you for details about the change. You’ll be able to edit the file after it’s created — don’t worry about getting everything perfect up front.
-
-Since we’re currently in beta, all changes should be marked as a minor/patch release to keep us within the `v0.x` range.
 
 Even though you can technically use any markdown formatting you like, headings should be avoided since each changeset will ultimately be nested within a bullet list. Instead, bold text should be used as section headings.
 
