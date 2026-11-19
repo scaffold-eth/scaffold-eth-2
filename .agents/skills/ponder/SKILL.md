@@ -7,27 +7,36 @@ description: "Integrate Ponder into a Scaffold-ETH 2 project for blockchain even
 
 ## Prerequisites
 
-Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
+This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts` exists). If it isn't one, follow https://docs.scaffoldeth.io/SKILL.md to scaffold it first.
 
 ## Overview
 
-[Ponder](https://ponder.sh/) is an open-source framework for blockchain application backends. It indexes smart contract events and serves the data via a GraphQL API. This skill covers integrating Ponder into a Scaffold-ETH 2 (SE-2) project.
+[Ponder](https://ponder.sh/) is an open-source framework for blockchain application backends. It indexes smart contract events into a database and serves the data via GraphQL and SQL APIs.
 
-For anything not covered here, refer to the [Ponder docs](https://ponder.sh/docs/get-started) or search the web. This skill provides the SE-2-specific integration knowledge, not a complete Ponder reference.
+This skill covers the SE-2-specific integration; for everything else, see the [Ponder docs](https://ponder.sh/docs/get-started). Ponder goes in a new workspace at `packages/ponder/`, and its config reads `deployedContracts` and `scaffold.config` from the nextjs package, so it picks up deployed contracts without duplicating ABIs or addresses.
 
-Ponder gets added as a new workspace at `packages/ponder/`. The key integration point is that Ponder reads `deployedContracts` and `scaffold.config` from the nextjs package, so it automatically knows about all deployed contracts without duplicating ABIs or addresses.
+Look at the project's actual contracts and events before setting things up; the examples below index SE-2's default `YourContract`.
 
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
+## Workspace Setup
 
-## Dependencies & Scripts
+Running `npm create ponder@latest -- --template empty` (in a temp dir) shows the current official boilerplate — compare with it if anything below looks outdated.
 
-### Ponder package (`packages/ponder/`)
+If the root `package.json` lists its workspaces explicitly (as the SE-2 repo does), add the new one there. Projects created with `create-eth` use `"packages": ["packages/*"]`, which already picks it up:
 
-The `packages/ponder/package.json` should follow SE-2's workspace naming convention (`@se-2/ponder`). Check [npm](https://www.npmjs.com/package/ponder) or the [Ponder docs](https://ponder.sh/docs/requirements) for the latest versions before installing:
+```json
+"workspaces": {
+  "packages": ["packages/hardhat", "packages/nextjs", "packages/ponder"]
+}
+```
+
+(Keep whichever of `packages/hardhat` / `packages/foundry` the project uses.)
+
+Create `packages/ponder/package.json`:
 
 ```json
 {
   "name": "@se-2/ponder",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -35,37 +44,62 @@ The `packages/ponder/package.json` should follow SE-2's workspace naming convent
     "start": "ponder start",
     "db": "ponder db",
     "codegen": "ponder codegen",
-    "serve": "ponder serve",
-    "lint": "eslint .",
     "typecheck": "tsc"
-  },
-  "dependencies": {
-    "ponder": "latest",
-    "hono": "^4.5.0",
-    "viem": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "eslint": "^8.54.0",
-    "eslint-config-ponder": "latest",
-    "typescript": "^5.0.4"
-  },
-  "engines": {
-    "node": ">=18.18"
   }
 }
 ```
 
-### NextJS package additions
+Then install from the repo root (Ponder requires Node.js >= 22.12):
 
-For querying Ponder's GraphQL API from the frontend, add to `packages/nextjs/`:
+```bash
+yarn install
+yarn workspace @se-2/ponder add ponder hono viem
+yarn workspace @se-2/ponder add -D typescript@^6 @types/node@^22
+```
 
-```json
+Use the same `typescript` version as `packages/nextjs/package.json` (e.g. `^6` in the SE-2 repo, `~5.8.2` in projects created with `create-eth`; both work) and `@types/node@^22` for Ponder's Node.js 22 runtime. Don't take `latest`.
+
+`packages/ponder/tsconfig.json` is the Ponder template's, plus two additions so the config can type-check SE-2's `deployedContracts.ts` (it imports a type through the nextjs `~~` alias). Without them `tsc` fails and the contracts are typed as `unknown`, so typos in event names or `event.args` go unnoticed:
+
+```jsonc
+// packages/ponder/tsconfig.json
 {
-  "graphql": "^16.9.0",
-  "graphql-request": "^7.1.0"
+  "compilerOptions": {
+    // Type checking
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    // Interop constraints
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // Language and environment
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "noEmit": true,
+    "lib": ["ES2022"],
+    "target": "ES2022",
+
+    // Skip type checking for node modules
+    "skipLibCheck": true,
+
+    // SE-2 additions: resolve the nextjs `~~` alias used by deployedContracts.ts,
+    // and allow the .tsx files that its type imports pull in
+    "paths": { "~~/*": ["../nextjs/*"] },
+    "jsx": "preserve"
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
 }
 ```
+
+Other files in `packages/ponder/`:
+
+- **`.gitignore`** — `node_modules`, `.env*.local`, `/.ponder/`, `/generated/`
+- **`ponder-env.d.ts`** — generated by Ponder (`ponder dev` / `ponder codegen`) and gives types to the `ponder:*` virtual modules. Don't write or edit it by hand; commit it.
 
 ### Root package.json scripts
 
@@ -74,30 +108,29 @@ For querying Ponder's GraphQL API from the frontend, add to `packages/nextjs/`:
   "ponder:dev": "yarn workspace @se-2/ponder dev",
   "ponder:start": "yarn workspace @se-2/ponder start",
   "ponder:codegen": "yarn workspace @se-2/ponder codegen",
-  "ponder:serve": "yarn workspace @se-2/ponder serve",
-  "ponder:lint": "yarn workspace @se-2/ponder lint",
   "ponder:typecheck": "yarn workspace @se-2/ponder typecheck"
 }
 ```
 
 ### Environment variables
 
-A `.env.example` in `packages/ponder/` for reference:
+`packages/ponder/.env.local` (mirror the keys in a `.env.example`):
 
-```
+```env
+# RPC for the indexed chain; falls back to the local chain (http://127.0.0.1:8545)
 PONDER_RPC_URL_{chainId}=
-DATABASE_SCHEMA=my_schema
+# Optional: Postgres for production. Without it, Ponder uses PGlite (embedded) in .ponder/
 DATABASE_URL=
 ```
 
-The frontend uses `NEXT_PUBLIC_PONDER_URL` to know where the Ponder API lives (defaults to `http://localhost:42069` in dev).
-
 ## ponder.config.ts — Bridging SE-2 and Ponder
 
-This is the critical integration piece. The config below is a reference implementation that dynamically reads SE-2's deployed contracts and scaffold config so Ponder automatically knows what to index. Adapt it based on the project's actual setup:
+This is the key integration piece: it reads SE-2's deployed contracts and the first target network, so Ponder indexes whatever `yarn deploy` produced. Adapt it to the project (e.g. several networks, or only some contracts):
 
 ```ts
+// packages/ponder/ponder.config.ts
 import { createConfig } from "ponder";
+import { hardhat } from "viem/chains";
 import deployedContracts from "../nextjs/contracts/deployedContracts";
 import scaffoldConfig from "../nextjs/scaffold.config";
 
@@ -105,53 +138,44 @@ const targetNetwork = scaffoldConfig.targetNetworks[0];
 
 const deployedContractsForNetwork = deployedContracts[targetNetwork.id];
 if (!deployedContractsForNetwork) {
-  throw new Error(
-    `No deployed contracts found for network ID ${targetNetwork.id}`,
-  );
+  throw new Error(`No deployed contracts found for network ID ${targetNetwork.id}. Run \`yarn deploy\` first.`);
 }
 
 const chains = {
   [targetNetwork.name]: {
     id: targetNetwork.id,
-    rpc:
-      process.env[`PONDER_RPC_URL_${targetNetwork.id}`] ||
-      "http://127.0.0.1:8545",
+    rpc: process.env[`PONDER_RPC_URL_${targetNetwork.id}`] || "http://127.0.0.1:8545",
+    // The local chain restarts from block 0, so don't cache its RPC data between runs
+    cacheRpcRequests: targetNetwork.id !== hardhat.id,
   },
 };
 
-const contractNames = Object.keys(deployedContractsForNetwork);
-
 const contracts = Object.fromEntries(
-  contractNames.map((contractName) => {
-    return [
-      contractName,
-      {
-        chain: targetNetwork.name as string,
-        abi: deployedContractsForNetwork[contractName].abi,
-        address: deployedContractsForNetwork[contractName].address,
-        startBlock:
-          deployedContractsForNetwork[contractName].deployedOnBlock || 0,
-      },
-    ];
-  }),
+  Object.entries(deployedContractsForNetwork).map(([contractName, contract]) => [
+    contractName,
+    {
+      chain: targetNetwork.name,
+      abi: contract.abi,
+      address: contract.address,
+      startBlock: contract.deployedOnBlock ?? 0,
+    },
+  ]),
 );
 
-export default createConfig({
-  chains: chains,
-  contracts: contracts,
-});
+export default createConfig({ chains, contracts });
 ```
 
 ## Schema, Handlers, and API
 
 ### Schema (`ponder.schema.ts`)
 
-Use `onchainTable` to define tables. Adapt to the project's actual contract events:
+Use `onchainTable` to define tables:
 
 ```ts
+// packages/ponder/ponder.schema.ts
 import { onchainTable } from "ponder";
 
-export const greeting = onchainTable("greeting", (t) => ({
+export const greeting = onchainTable("greeting", t => ({
   id: t.text().primaryKey(),
   text: t.text().notNull(),
   setterId: t.hex().notNull(),
@@ -161,13 +185,14 @@ export const greeting = onchainTable("greeting", (t) => ({
 }));
 ```
 
-For the full schema API (column types, indexes, enums), see [Ponder schema docs](https://ponder.sh/docs/schema/tables).
+For the full schema API (column types, indexes, relations, enums), see the [Ponder schema docs](https://ponder.sh/docs/schema/tables).
 
 ### Event handlers (`src/`)
 
-Use Ponder's virtual module imports. Handler name format is `"ContractName:EventName"`:
+Handlers use Ponder's virtual modules. The event name format is `"ContractName:EventName"`:
 
 ```ts
+// packages/ponder/src/YourContract.ts
 import { ponder } from "ponder:registry";
 import { greeting } from "ponder:schema";
 
@@ -183,50 +208,136 @@ ponder.on("YourContract:GreetingChange", async ({ event, context }) => {
 });
 ```
 
-### GraphQL API (`src/api/index.ts`)
+Event names and `event.args` are typed from the `deployedContracts` ABIs, so `yarn ponder:typecheck` catches typos (as long as the tsconfig above resolves the `~~` alias).
 
-Ponder serves data via Hono. Minimal setup:
+### API (`src/api/index.ts`)
+
+Ponder serves custom endpoints with [Hono](https://hono.dev/). This exposes the auto-generated GraphQL API and the SQL-over-HTTP endpoint used by `@ponder/client`:
 
 ```ts
+// packages/ponder/src/api/index.ts
 import { db } from "ponder:api";
 import schema from "ponder:schema";
 import { Hono } from "hono";
-import { graphql } from "ponder";
+import { client, graphql } from "ponder";
 
 const app = new Hono();
 
+app.use("/sql/*", client({ db, schema }));
+app.use("/", graphql({ db, schema }));
 app.use("/graphql", graphql({ db, schema }));
 
 export default app;
 ```
 
-### Required boilerplate
-
-- **`ponder-env.d.ts`**: type declarations for Ponder's virtual modules (`ponder:registry`, `ponder:schema`, `ponder:api`, etc.). Without this, TypeScript won't resolve the virtual imports.
-- **`tsconfig.json`**: strict TS config with `moduleResolution: "bundler"`, `module: "ESNext"`, `target: "ES2022"`
-- **`.gitignore`**: include `node_modules`, `.ponder`, `/generated/`
-
 ## Frontend
 
-Use `graphql-request` and `@tanstack/react-query` (both available in SE-2) to query the Ponder API. Ponder auto-generates GraphQL queries from your schema — each `onchainTable` gets a pluralized query with `items`, `orderBy`, and `orderDirection` support:
+Each `onchainTable` gets a pluralized GraphQL query returning `{ items, pageInfo, totalCount }`, with `where`, `orderBy`, `orderDirection` and cursor pagination. Plain `fetch` + TanStack Query (already in SE-2) is enough — no extra dependencies:
 
 ```tsx
-import { gql, request } from "graphql-request";
+// packages/nextjs/app/ponder-greetings/page.tsx
+"use client";
+
+import { Address } from "@scaffold-ui/components";
 import { useQuery } from "@tanstack/react-query";
+import type { NextPage } from "next";
+import { formatEther } from "viem";
 
 const PONDER_URL = process.env.NEXT_PUBLIC_PONDER_URL || "http://localhost:42069";
 
-const { data } = useQuery({
-  queryKey: ["ponder-greetings"],
-  queryFn: () => request(`${PONDER_URL}/graphql`, gql`{
-    greetings(orderBy: "timestamp", orderDirection: "desc") {
+const GREETINGS_QUERY = `
+  query {
+    greetings(orderBy: "timestamp", orderDirection: "desc", limit: 25) {
       items { id text setterId premium value timestamp }
     }
-  }`),
-});
+  }
+`;
+
+type Greeting = {
+  id: string;
+  text: string;
+  setterId: string;
+  premium: boolean;
+  value: string; // bigint columns are serialized as strings
+  timestamp: number;
+};
+
+async function fetchGreetings() {
+  const res = await fetch(`${PONDER_URL}/graphql`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query: GREETINGS_QUERY }),
+  });
+  const { data, errors } = await res.json();
+  if (errors?.length) throw new Error(errors[0].message);
+  return data.greetings.items as Greeting[];
+}
+
+const PonderGreetings: NextPage = () => {
+  const {
+    data: greetings = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["ponder-greetings"],
+    queryFn: fetchGreetings,
+    refetchInterval: 5_000,
+  });
+
+  if (isLoading) return <span className="loading loading-spinner m-10" />;
+  if (error) return <div className="alert alert-error m-10">{error.message}</div>;
+
+  return (
+    <table className="table m-10 w-auto">
+      <thead>
+        <tr>
+          <th>Setter</th>
+          <th>Greeting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {greetings.map(g => (
+          <tr key={g.id}>
+            <td>
+              <Address address={g.setterId} />
+            </td>
+            <td>{g.text}</td>
+            <td>{g.premium ? `${formatEther(BigInt(g.value))} ETH` : "-"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default PonderGreetings;
 ```
 
-## Development & Production
+**Alternative:** [`@ponder/react`](https://ponder.sh/docs/query/client) (`usePonderQuery`, built on TanStack Query) queries the `/sql/*` endpoint with Drizzle-style typed queries and live updates. It needs the Ponder schema importable from the nextjs package (e.g. `import * as schema from "../ponder/ponder.schema"`).
 
-- `yarn ponder:dev` starts the dev server with hot reload. GraphiQL explorer available at `http://localhost:42069` for testing queries interactively.
-- For production, set `PONDER_RPC_URL_{chainId}` with a production RPC, optionally configure `DATABASE_URL` for Postgres (defaults to PGlite in dev), and point `NEXT_PUBLIC_PONDER_URL` to the deployed Ponder URL. See [Ponder deployment docs](https://ponder.sh/docs/production/railway).
+## Gotchas
+
+**Restarting the local chain.** `yarn chain` starts from block 0 each time. The config above disables RPC caching for the local chain; if Ponder still shows stale data or errors after a chain restart + redeploy, stop it and delete `packages/ponder/.ponder/`.
+
+**Redeploying changes addresses and ABIs.** `ponder dev` hot-reloads when `ponder.config.ts` or its imports change (including `deployedContracts.ts`) and reindexes from `startBlock`.
+
+**Harmless local warnings.** On the local chain Ponder logs `No new block received within expected time` (Hardhat/Anvil only mine when there are transactions) and `Detected public RPC URL`. Both can be ignored in development.
+
+**Port 42069.** `ponder dev` serves the API and GraphiQL at `http://localhost:42069` (`--port` to change it). Update `NEXT_PUBLIC_PONDER_URL` accordingly.
+
+**`startBlock` on live networks.** `deployedOnBlock` (written by `yarn deploy`) keeps Ponder from scanning from genesis. If it's missing for a contract, set `startBlock` manually.
+
+## How to Test
+
+1. `yarn chain`, then `yarn deploy`
+2. `yarn ponder:dev` — indexes the local chain; GraphiQL at `http://localhost:42069`
+3. Send a transaction that emits the event (e.g. `setGreeting` from the Debug Contracts page)
+4. Query `greetings` in GraphiQL, or `yarn start` and open the frontend page
+
+## Production
+
+- Set `PONDER_RPC_URL_{chainId}` to a production RPC and `DATABASE_URL` to a Postgres database
+- Run `ponder start` (with `--schema <name>`, or the `DATABASE_SCHEMA` env var, for zero-downtime redeploys)
+- Point `NEXT_PUBLIC_PONDER_URL` to the deployed Ponder URL
+- See the [Ponder deployment docs](https://ponder.sh/docs/production/self-hosting)
