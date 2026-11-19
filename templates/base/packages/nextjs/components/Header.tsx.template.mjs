@@ -48,7 +48,6 @@ export const HeaderMenuLinks = () => {
           <li key={href} className="h-full">
             <Link
               href={href}
-              passHref
               className={\`\${
                 isActive ? "bg-base-300" : ""
               } hover:bg-base-300 focus:!bg-base-300 h-full px-4 text-sm gap-2 flex items-center whitespace-nowrap\`}
@@ -72,7 +71,7 @@ export const Header = () => {
 
   const burgerMenuRef = useRef<HTMLDetailsElement>(null);
   useOutsideClick(burgerMenuRef, () => {
-    burgerMenuRef?.current?.removeAttribute("open");
+    burgerMenuRef.current?.removeAttribute("open");
   });
 
   return (
@@ -85,13 +84,13 @@ export const Header = () => {
           <ul
             className="menu menu-compact dropdown-content mt-3 p-2 shadow-lg bg-base-100 w-52"
             onClick={() => {
-              burgerMenuRef?.current?.removeAttribute("open");
+              burgerMenuRef.current?.removeAttribute("open");
             }}
           >
             <HeaderMenuLinks />
           </ul>
         </details>
-        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+        <Link href="/" className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>

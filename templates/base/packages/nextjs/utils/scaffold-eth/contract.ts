@@ -4,7 +4,6 @@ import { notification } from "./notification";
 import { MutateOptions } from "@tanstack/react-query";
 import {
   Abi,
-  AbiParameter,
   AbiParameterToPrimitiveType,
   AbiParametersToPrimitiveTypes,
   ExtractAbiEvent,
@@ -317,7 +316,7 @@ export type UseScaffoldEventHistoryData<
 > =
   | IsContractDeclarationMissing<
       any[],
-      {
+      ({
         args: AbiParametersToPrimitiveTypes<TEvent["inputs"]> &
           GetEventArgs<
             ContractAbi<TContractName>,
@@ -326,14 +325,12 @@ export type UseScaffoldEventHistoryData<
               IndexedOnly: false;
             }
           >;
-        blockData: TBlockData extends true ? Block<bigint, true> : null;
-        receiptData: TReceiptData extends true ? GetTransactionReturnType : null;
-        transactionData: TTransactionData extends true ? GetTransactionReceiptReturnType : null;
-      } & Log<bigint, number, false, TEvent, false, [TEvent], TEventName>[]
+        blockData: TBlockData extends true ? Block<bigint, false> : null;
+        receiptData: TReceiptData extends true ? GetTransactionReceiptReturnType : null;
+        transactionData: TTransactionData extends true ? GetTransactionReturnType : null;
+      } & Log<bigint, number, false, TEvent, false, [TEvent], TEventName>)[]
     >
   | undefined;
-
-export type AbiParameterTuple = Extract<AbiParameter, { type: "tuple" | `tuple[${string}]` }>;
 
 /**
  * Enhanced error parsing that creates a lookup table from all deployed contracts

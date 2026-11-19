@@ -19,32 +19,11 @@ type DeployedContractData<TContractName extends ContractName> = {
  * Gets the matching contract info for the provided contract name from the contracts present in deployedContracts.ts
  * and externalContracts.ts corresponding to targetNetworks configured in scaffold.config.ts
  */
-export function useDeployedContractInfo<TContractName extends ContractName>(
-  config: UseDeployedContractConfig<TContractName>,
-): DeployedContractData<TContractName>;
-/**
- * @deprecated Use object parameter version instead: useDeployedContractInfo({ contractName: "YourContract" })
- */
-export function useDeployedContractInfo<TContractName extends ContractName>(
-  contractName: TContractName,
-): DeployedContractData<TContractName>;
-
-export function useDeployedContractInfo<TContractName extends ContractName>(
-  configOrName: UseDeployedContractConfig<TContractName> | TContractName,
-): DeployedContractData<TContractName> {
+export function useDeployedContractInfo<TContractName extends ContractName>({
+  contractName,
+  chainId,
+}: UseDeployedContractConfig<TContractName>): DeployedContractData<TContractName> {
   const isMounted = useIsMounted();
-
-  const finalConfig: UseDeployedContractConfig<TContractName> =
-    typeof configOrName === "string" ? { contractName: configOrName } : (configOrName as any);
-
-  useEffect(() => {
-    if (typeof configOrName === "string") {
-      console.warn(
-        "Using `useDeployedContractInfo` with a string parameter is deprecated. Please use the object parameter version instead.",
-      );
-    }
-  }, [configOrName]);
-  const { contractName, chainId } = finalConfig;
   const selectedNetwork = useSelectedNetwork(chainId);
   const deployedContract = contracts?.[selectedNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);

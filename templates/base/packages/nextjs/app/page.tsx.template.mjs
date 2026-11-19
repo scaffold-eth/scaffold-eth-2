@@ -21,47 +21,45 @@ const Home: NextPage = () => {
   const { targetNetwork } = useTargetNetwork();
 
   return (
-    <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-            ${externalExtensionName[0] ? `<span className="block text-xl font-bold">(${externalExtensionName[0]} extension)</span>` : ''}
-          </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} chain={targetNetwork} />
-          </div>
-          ${description}
+    <div className="flex items-center flex-col grow pt-10">
+      <div className="px-5">
+        <h1 className="text-center">
+          <span className="block text-2xl mb-2">Welcome to</span>
+          <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+          ${externalExtensionName[0] ? `<span className="block text-xl font-bold">(${externalExtensionName[0]} extension)</span>` : ''}
+        </h1>
+        <div className="flex justify-center items-center space-x-2 flex-col">
+          <p className="my-2 font-medium">Connected Address:</p>
+          <Address address={connectedAddress} chain={targetNetwork} />
         </div>
+        ${description}
+      </div>
 
-        <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 border border-base-300 px-10 py-10 text-center items-center max-w-xs">
-              <BugAntIcon className="h-8 w-8" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 border border-base-300 px-10 py-10 text-center items-center max-w-xs">
-              <MagnifyingGlassIcon className="h-8 w-8" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
+      <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
+        <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
+          <div className="flex flex-col bg-base-100 border border-base-300 px-10 py-10 text-center items-center max-w-xs">
+            <BugAntIcon className="h-8 w-8" />
+            <p>
+              Tinker with your smart contract using the{" "}
+              <Link href="/debug" className="link">
+                Debug Contracts
+              </Link>{" "}
+              tab.
+            </p>
+          </div>
+          <div className="flex flex-col bg-base-100 border border-base-300 px-10 py-10 text-center items-center max-w-xs">
+            <MagnifyingGlassIcon className="h-8 w-8" />
+            <p>
+              Explore your local transactions with the{" "}
+              <Link href="/blockexplorer" className="link">
+                Block Explorer
+              </Link>{" "}
+              tab.
+            </p>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

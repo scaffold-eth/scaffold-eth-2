@@ -80,11 +80,6 @@ const defaultConfig = {
       url: `https://arb-sepolia.g.alchemy.com/v2/\${providerApiKey}`,
       accounts: ["$$deployerPrivateKey$$"],
     },
-    scrollSepolia: {
-      type: "http",
-      url: "https://sepolia-rpc.scroll.io",
-      accounts: ["$$deployerPrivateKey$$"],
-    },
     scroll: {
       type: "http",
       url: "https://rpc.scroll.io",
@@ -118,16 +113,6 @@ const defaultConfig = {
     chiado: {
       type: "http",
       url: "https://rpc.chiadochain.net",
-      accounts: ["$$deployerPrivateKey$$"],
-    },
-    polygonZkEvm: {
-      type: "http",
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: ["$$deployerPrivateKey$$"],
-    },
-    polygonZkEvmCardona: {
-      type: "http",
-      url: `https://polygonzkevm-cardona.g.alchemy.com/v2/\${providerApiKey}`,
       accounts: ["$$deployerPrivateKey$$"],
     },
   },

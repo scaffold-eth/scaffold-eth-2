@@ -27,47 +27,41 @@ export const RainbowKitCustomConnectButton = () => {
           ? getBlockExplorerAddressLink(targetNetwork, account.address)
           : undefined;
 
+        if (!connected) {
+          return (
+            <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
+              Connect Wallet
+            </button>
+          );
+        }
+
+        if (chain.unsupported || chain.id !== targetNetwork.id) {
+          return <WrongNetworkDropdown />;
+        }
+
         return (
           <>
-            {(() => {
-              if (!connected) {
-                return (
-                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
-                  </button>
-                );
-              }
-
-              if (chain.unsupported || chain.id !== targetNetwork.id) {
-                return <WrongNetworkDropdown />;
-              }
-
-              return (
-                <>
-                  <div className="flex flex-col items-center mr-2">
-                    <Balance
-                      address={account.address as Address}
-                      style={{
-                        minHeight: "0",
-                        height: "auto",
-                        fontSize: "0.8em",
-                      }}
-                    />
-                    <span className="text-xs" style={{ color: networkColor }}>
-                      {chain.name}
-                    </span>
-                  </div>
-                  <AddressInfoDropdown
-                    address={account.address as Address}
-                    displayName={account.displayName}
-                    ensAvatar={account.ensAvatar}
-                    blockExplorerAddressLink={blockExplorerAddressLink}
-                  />
-                  <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
-                  <RevealBurnerPKModal />
-                </>
-              );
-            })()}
+            <div className="flex flex-col items-center mr-2">
+              <Balance
+                address={account.address as Address}
+                style={{
+                  minHeight: "0",
+                  height: "auto",
+                  fontSize: "0.8em",
+                }}
+              />
+              <span className="text-xs" style={{ color: networkColor }}>
+                {chain.name}
+              </span>
+            </div>
+            <AddressInfoDropdown
+              address={account.address as Address}
+              displayName={account.displayName}
+              ensAvatar={account.ensAvatar}
+              blockExplorerAddressLink={blockExplorerAddressLink}
+            />
+            <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
+            <RevealBurnerPKModal />
           </>
         );
       }}

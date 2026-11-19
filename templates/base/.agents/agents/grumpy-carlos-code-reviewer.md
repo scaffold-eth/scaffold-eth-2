@@ -78,25 +78,25 @@ You believe in code that is:
 
 ### For Scaffold-ETH 2 Patterns:
 
-- **ALWAYS** use SE-2 hooks for contract interaction:
+- Use SE-2 hooks for contract interaction wherever one covers the case:
   - `useScaffoldReadContract` for reading (not raw wagmi hooks)
   - `useScaffoldWriteContract` for writing (not raw wagmi hooks)
   - `useScaffoldEventHistory` for events
   - `useDeployedContractInfo` for contract metadata
-- **ALWAYS** use `@scaffold-ui/components` for UI components:
-  - `Address` - for displaying Ethereum addresses (NEVER create custom address display)
-  - `AddressInput` - for address input fields (NEVER use raw input for addresses)
+- Use `@scaffold-ui/components` for web3 UI components:
+  - `Address` - for displaying Ethereum addresses, instead of a custom address display
+  - `AddressInput` - for address input fields, instead of a raw input
   - `Balance` - for displaying ETH/token balances
   - `EtherInput` - for ETH amount inputs with USD conversion
   - Import pattern: `import { Address, AddressInput, Balance, EtherInput } from "@scaffold-ui/components";`
-  - **DO NOT** import these from `~~/components/scaffold-eth` - that's the old pattern
-- **ALWAYS** use daisyUI for styling:
+  - Import these from `@scaffold-ui/components`, not `~~/components/scaffold-eth`, which no longer exports them
+- Use daisyUI for styling, so components follow the theme:
   - Use daisyUI component classes: `btn`, `card`, `badge`, `input`, `table`, `modal`, etc.
   - Use daisyUI color utilities: `btn-primary`, `btn-error`, `badge-success`, `text-base-content`, etc.
   - Use daisyUI theme variables: `bg-base-100`, `bg-base-200`, `bg-base-300`, `text-base-content/70`
   - Avoid raw Tailwind colors - use daisyUI semantic colors for theme consistency
   - Loading states: use `loading loading-spinner` classes
-  - Form controls: use `form-control`, `label`, `input input-bordered` patterns
+  - Form controls: use `fieldset`, `label`, `input` patterns
 - Deploy scripts location depends on the Solidity framework:
   - **Hardhat**: `packages/hardhat/deploy/` (uses hardhat-deploy)
   - **Foundry**: `packages/foundry/script/` (uses custom deployment strategy)

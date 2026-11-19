@@ -17,8 +17,7 @@ async function main() {
   let wallet: Wallet;
   try {
     wallet = (await Wallet.fromEncryptedJson(encryptedKey, pass)) as Wallet;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (e) {
+  } catch {
     console.log("❌ Failed to decrypt private key. Wrong password?");
     return;
   }
@@ -40,8 +39,7 @@ async function main() {
       console.log("--", networkName, "-- 📡");
       console.log("   balance:", +ethers.formatEther(balance));
       console.log("   nonce:", +(await provider.getTransactionCount(address)));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
+    } catch {
       console.log("Can't connect to network", networkName);
     }
   }

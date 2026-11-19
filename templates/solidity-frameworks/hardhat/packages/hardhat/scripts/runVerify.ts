@@ -23,6 +23,11 @@ async function main() {
     return;
   }
 
+  if (argv.some(arg => arg.startsWith("--network="))) {
+    console.error("🚫️ `--network=<name>` is not supported. Use `--network <name>` instead");
+    process.exit(1);
+  }
+
   const networkIdx = argv.indexOf("--network");
   const network = networkIdx !== -1 ? argv[networkIdx + 1] : "default";
   const forwarded = argv.filter((_, i) => i !== networkIdx && i !== networkIdx + 1);
