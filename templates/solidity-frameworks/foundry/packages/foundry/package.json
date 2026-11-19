@@ -1,0 +1,33 @@
+{
+  "name": "@se-2/foundry",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "account": "make account",
+    "account:generate": "node scripts-js/generateKeystore.js",
+    "account:import": "node scripts-js/importAccount.js",
+    "account:reveal-pk": "node scripts-js/revealPK.js",
+    "chain": "make chain",
+    "clean": "forge clean",
+    "compile": "make compile",
+    "deploy": "node scripts-js/parseArgs.js",
+    "flatten": "make flatten",
+    "fork": "make fork FORK_URL=${1:-mainnet}",
+    "format": "make format",
+    "lint": "make lint",
+    "test": "forge test",
+    "verify": "make verify RPC_URL=${1:-localhost}",
+    "postinstall": "shx cp -n .env.example .env"
+  },
+  "dependencies": {
+    "dotenv": "~16.3.1",
+    "envfile": "~6.18.0",
+    "ethers": "~5.7.1",
+    "prettier": "~2.8.8",
+    "qrcode": "~1.5.3",
+    "toml": "~3.0.0"
+  },
+  "devDependencies": {
+    "shx": "^0.3.4"
+  }
+}
