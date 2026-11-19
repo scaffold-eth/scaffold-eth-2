@@ -40,7 +40,7 @@ export const Footer = () => {
         <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
       </div>
       <div className="w-full">
-        <ul className="menu menu-horizontal w-full">
+        <div className="menu menu-horizontal w-full">
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
               <a href="https://github.com/scaffold-eth/se-2" target="_blank" rel="noreferrer" className="link">
@@ -69,7 +69,7 @@ export const Footer = () => {
               </a>
             </div>
           </div>
-        </ul>
+        </div>
       </div>
     </div>
   );
