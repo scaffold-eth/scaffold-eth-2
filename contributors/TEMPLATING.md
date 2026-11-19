@@ -334,7 +334,7 @@ import { stringify, deepMerge } from "../path/to/templates/utils.js";
 | Object, deep merge (Arrays are replaced) | `const deepMergedObj = ${deepMerge({ key1: "value1", key2: "value2", key3: ["value3_0", "value3_1"]}, objToDeepMerge[0] ))};` | `const objToDeepMerge = { key1: "replacedValue_1", key3: ["replacedValue3_0"], key4: "value4" }` | `const deepMergedObj = { key1: "replacedValue_1", key2: "value2", key3: ["replacedValue3_0"], key4: "value4" }` |
 | BigInt                                   | `const bigInt = ${stringify(someBigInt[0])};`                                                                                 | `const someBigInt = 123n`                                                                        | `const bigInt = 123n;`                                                                                          |
 
-> NOTE: If the object contains function as a value `stringify` utility truncates it to `[Function keyName]`. In this case we have to use object spread operator while merging the objects and `JSON.stringify` while replacing the objects. Checkout [`next.config.js.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/next.config.js.template.mjs) for an example.
+> NOTE: If the object contains function as a value `stringify` utility truncates it to `[Function keyName]`. In this case we have to use object spread operator while merging the objects and `JSON.stringify` while replacing the objects. Checkout [`next.config.js.template.mjs`](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/base/packages/nextjs/next.config.js.template.mjs) for an example.
 
 ## Merging package.json files
 

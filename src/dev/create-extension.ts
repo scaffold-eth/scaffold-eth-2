@@ -180,7 +180,7 @@ const copyChanges = async (
       const constants = convertDefaultArgsToConstants(defaultArgs);
 
       const referenceArgsFileComment = `// Reference the example args file: https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/${file}.args.mjs`;
-      const referenceTemplateComment = `// Reference the template file that will use this file: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
+      const referenceTemplateComment = `// Reference the template file that will use this file: https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
 
       const fileContent = `${referenceArgsFileComment}\n${referenceTemplateComment}\n\n// Default args:\n${constants}\n`;
       await fs.promises.writeFile(argsFilePath, fileContent);

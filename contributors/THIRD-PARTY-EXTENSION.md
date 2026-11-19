@@ -1,6 +1,6 @@
 ## Introduction
 
-Welcome to the guide for developing third-party extensions in the `create-eth` repository. Third-party extensions allow developers to extend the base instance created by `npx create-eth@latest`.
+Welcome to the guide for developing third-party extensions in the Scaffold-ETH 2 repository. Third-party extensions allow developers to extend the base instance created by `npx create-eth@latest`.
 
 > Video Guide: For a visual walkthrough of the extension development process, check out our [YouTube tutorial](https://youtu.be/XQCv533XGZk?si=dlJH4zd4b99_6soW).
 
@@ -47,7 +47,7 @@ your-extension/
 
 ### Key Points:
 
-1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/package.json), [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/package.json) and [foundry](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files. You can also add scripts to your root `package.json` based on the solidity framework by using a `root.package.json` file.
+1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/base/packages/nextjs/package.json), [hardhat](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/solidity-frameworks/hardhat/package.json) and [foundry](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/templates/solidity-frameworks/foundry/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files. You can also add scripts to your root `package.json` based on the solidity framework by using a `root.package.json` file.
 
 2. The presence of `hardhat` and/or `foundry` directories in your extension affects the CLI options:
    - If you include only one, users won't see a solidity framework selection prompt.
@@ -95,11 +95,11 @@ These utilities can be used independently or together, depending on your needs:
 
 ### Extension Development Utility
 
-1. **Clone the `create-eth` Repository:**
+1. **Clone the Scaffold-ETH 2 Repository:**
 
    ```bash
-   git clone https://github.com/scaffold-eth/create-eth.git
-   cd create-eth
+   git clone https://github.com/scaffold-eth/scaffold-eth-2.git
+   cd scaffold-eth-2
    yarn install
    ```
 
@@ -118,7 +118,7 @@ These utilities can be used independently or together, depending on your needs:
    ```
 
    This command will create a **new base instance**, similar to running `npx create-eth@latest`.
-   Note: It's recommended to create a **new base instance** outside of the `create-eth` folder, so use `../<your-instance-name>`.
+   Note: It's recommended to create a **new base instance** outside of the `scaffold-eth-2` folder, so use `../<your-instance-name>`.
 
    The name mentioned for the "Your project name" question will be used as the **extension name**. For example, if you provide `../eip` as the value to the question, then the final extension name will be `eip`.
 
@@ -129,7 +129,7 @@ These utilities can be used independently or together, depending on your needs:
 
 5. **Create the Extension:**
 
-   Return to the `create-eth` folder.
+   Return to the `scaffold-eth-2` folder.
 
    ```bash
    yarn create-extension {projectName}
@@ -137,14 +137,14 @@ These utilities can be used independently or together, depending on your needs:
 
    Example: `yarn create-extension ../eip`
 
-   This command gathers all changes from the instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory (notice it contains only the extra files related to your extension changes), which can be published to GitHub and used by others.
+   This command gathers all changes from the instance and creates an extension in the `scaffold-eth-2/externalExtensions/${extensionName}` directory. This directory is the actual extension directory (notice it contains only the extra files related to your extension changes), which can be published to GitHub and used by others.
 
 6. **Publish the Extension:**
    - Go inside the extension directory.
    - Push the extension to GitHub.
 
    ```bash
-   cd create-eth/externalExtensions/${extensionName}
+   cd scaffold-eth-2/externalExtensions/${extensionName}
    git init
    git add .
    git commit -m "Initial commit of my extension"
@@ -162,7 +162,7 @@ These utilities can be used independently or together, depending on your needs:
 
 This phase allows you to test your extension locally and see how it works when used by other developers before publishing it to GitHub.
 
-> NOTE: If you've already published your extension to GitHub using the "Developing a Simple Extension" approach, make sure to clone that extension repository into the `create-eth/externalExtensions/` directory before proceeding with local testing.
+> NOTE: If you've already published your extension to GitHub using the "Developing a Simple Extension" approach, make sure to clone that extension repository into the `scaffold-eth-2/externalExtensions/` directory before proceeding with local testing.
 
 1. **Run the CLI in dev mode:**
 
@@ -172,19 +172,19 @@ This phase allows you to test your extension locally and see how it works when u
 
    Example: `yarn cli -e eip --dev`
 
-   The `extensionName` should be present in `create-eth/externalExtensions/${extensionName}`.
+   The `extensionName` should be present in `scaffold-eth-2/externalExtensions/${extensionName}`.
 
    Let's suppose you named your project "../my-dev-instance". Then this `../my-dev-instance` should contain all your extension changes. `--dev` will symlink the extension to the instance project.
 
 2. **Test and Tweak the Extension:**
-   Since the instance is symlinked with the extension, make necessary changes directly in the symlinked files within `../my-dev-instance`, and the changes should be automatically reflected in the `create-eth/externalExtensions/${extensionName}` directory.
+   Since the instance is symlinked with the extension, make necessary changes directly in the symlinked files within `../my-dev-instance`, and the changes should be automatically reflected in the `scaffold-eth-2/externalExtensions/${extensionName}` directory.
 
 3. **Push the tweaked changes**
    - Go inside the extension directory.
    - Push the changes to GitHub.
 
    ```bash
-   cd create-eth/externalExtensions/${extensionName}
+   cd scaffold-eth-2/externalExtensions/${extensionName}
    git add .
    git commit -m "some changes"
    git push

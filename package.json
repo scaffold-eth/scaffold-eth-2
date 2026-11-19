@@ -4,7 +4,7 @@
   "description": "Create a Scaffold-ETH-2 app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scaffold-eth/create-eth.git"
+    "url": "https://github.com/scaffold-eth/scaffold-eth-2.git"
   },
   "main": "dist/cli.js",
   "type": "module",
