@@ -1,6 +1,6 @@
 ---
 name: siwe
-description: "Use when the user wants to sign in with their wallet (SIWE, EIP-4361), or keep a server session tied to a wallet address."
+description: "Use when the user wants wallet sign-in (SIWE, EIP-4361), or a server session tied to a wallet address."
 ---
 
 # Sign-In with Ethereum (SIWE) for Scaffold-ETH 2
