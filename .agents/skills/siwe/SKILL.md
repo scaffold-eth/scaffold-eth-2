@@ -1,6 +1,6 @@
 ---
 name: siwe
-description: "Add Sign-In with Ethereum (SIWE) authentication to a Scaffold-ETH 2 project. Use when the user wants to: add wallet-based login, implement SIWE, authenticate users with their Ethereum wallet, add session management with wallet signing, build sign-in with Ethereum, or add Web3 authentication."
+description: "Use when the user wants to sign in with their wallet (SIWE, EIP-4361), or keep a server session tied to a wallet address."
 ---
 
 # Sign-In with Ethereum (SIWE) for Scaffold-ETH 2
@@ -11,18 +11,11 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 ## Overview
 
-[SIWE (EIP-4361)](https://eips.ethereum.org/EIPS/eip-4361) lets users authenticate by signing a structured message with their wallet. The flow:
+[SIWE (EIP-4361)](https://eips.ethereum.org/EIPS/eip-4361): the user signs a message containing a server-issued nonce, the server verifies it and keeps the session in an encrypted cookie ([iron-session](https://github.com/vvo/iron-session)).
 
-1. Client asks the server for a **nonce** (stored in the session)
-2. Client builds a SIWE message with that nonce and the user signs it
-3. Server **verifies** the signature, domain and nonce, then marks the session as signed in
-4. Session lives in an encrypted cookie ([iron-session](https://github.com/vvo/iron-session))
+Use viem's SIWE utilities from `viem/siwe` (`createSiweMessage`, `parseSiweMessage`, `verifySiweMessage`, `generateSiweNonce`). The `siwe` npm package pulls in `ethers`, which SE-2 doesn't use.
 
-The code below is a minimal reference implementation; adapt file names, session fields and UI to the project.
-
-## Use viem's Native SIWE — Not the `siwe` npm Package
-
-Viem provides the SIWE utilities in `viem/siwe` (`createSiweMessage`, `parseSiweMessage`, `verifySiweMessage`, `generateSiweNonce`). Don't install the `siwe` npm package: it requires `ethers`, which SE-2 doesn't need since it already uses viem.
+Only the parts where a mistake fails silently are shown in full; write the rest to fit the project.
 
 ## Dependencies
 
@@ -33,7 +26,7 @@ yarn workspace @se-2/nextjs add iron-session
 Add to `packages/nextjs/.env.local` (and the key, without value, to `.env.example`):
 
 ```env
-# 32+ random characters, e.g. `openssl rand -base64 32`. Required in production.
+# 32+ random characters, e.g. `openssl rand -base64 32`. Required in production; changing it logs everyone out.
 IRON_SESSION_SECRET=
 ```
 
@@ -78,9 +71,11 @@ export async function getSiweSession() {
 }
 ```
 
+To protect other routes or Server Components, call `getSiweSession()` and check `isLoggedIn` (and `address` for per-user data).
+
 ## Verifying on the Right Chain (incl. Smart Wallets)
 
-`verifySiweMessage` checks the signature with the client's `verifyHash`, which also supports smart contract wallets (ERC-1271, and ERC-6492 for not-yet-deployed ones like Coinbase Smart Wallet). That needs an RPC for the chain the user signed on, so build the client from SE-2's own network config instead of hardcoding a chain list:
+`verifySiweMessage` checks the signature with the client's `verifyHash`, which also supports smart contract wallets (ERC-1271, and ERC-6492 for not-yet-deployed ones like Coinbase Smart Wallet). That calls the chain the user signed on, so build the client from SE-2's network config, limited to `targetNetworks`:
 
 ```typescript
 // packages/nextjs/services/siwe/publicClient.ts
@@ -89,7 +84,8 @@ import scaffoldConfig from "~~/scaffold.config";
 // Import from the file, not "~~/utils/scaffold-eth": the index also exports client-only UI helpers
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth/networks";
 
-// Same RPC priority as the frontend (rpcOverrides → Alchemy → chain default), limited to targetNetworks
+// Same RPC priority as the frontend (rpcOverrides → Alchemy → chain default).
+// On the local chain that default is http://127.0.0.1:8545, so `yarn chain` must be running.
 export function getSiwePublicClient(chainId: number) {
   const chain = scaffoldConfig.targetNetworks.find(c => c.id === chainId);
   if (!chain) return undefined;
@@ -101,19 +97,9 @@ export function getSiwePublicClient(chainId: number) {
 
 ## API Routes
 
-```typescript
-// packages/nextjs/app/api/siwe/nonce/route.ts
-import { NextResponse } from "next/server";
-import { generateSiweNonce } from "viem/siwe";
-import { getSiweSession } from "~~/utils/siwe";
-
-export async function GET() {
-  const session = await getSiweSession();
-  session.nonce = generateSiweNonce();
-  await session.save();
-  return NextResponse.json({ nonce: session.nonce });
-}
-```
+- `GET /api/siwe/nonce`: set `session.nonce = generateSiweNonce()`, save the session, return the nonce
+- `POST /api/siwe/verify`: below
+- `GET /api/siwe/session` returns `{ isLoggedIn, address, chainId }`; `DELETE` calls `session.destroy()`
 
 ```typescript
 // packages/nextjs/app/api/siwe/verify/route.ts
@@ -131,7 +117,9 @@ export async function POST(req: NextRequest) {
   session.nonce = undefined;
   await session.save();
 
+  // Behind a proxy that rewrites Host, compare against the configured public host instead (e.g. an env var)
   const domain = req.headers.get("host");
+  // parseSiweMessage returns partial data: require the fields, and only accept target chains
   const { address, chainId } = parseSiweMessage(message);
   if (!nonce || !domain || !address || !chainId) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -140,10 +128,11 @@ export async function POST(req: NextRequest) {
   const client = getSiwePublicClient(chainId);
   if (!client) return NextResponse.json({ error: "Unsupported chain" }, { status: 400 });
 
-  // Checks signature, nonce, domain and the message's expirationTime/notBefore
+  // Checks signature, nonce, domain (so signatures phished by another site are rejected) and expirationTime/notBefore
   const isValid = await verifySiweMessage(client, { message, signature, nonce, domain });
   if (!isValid) return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
 
+  // Use the address from the verified message, never one sent separately by the client
   session.address = address;
   session.chainId = chainId;
   session.isLoggedIn = true;
@@ -152,123 +141,52 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-```typescript
-// packages/nextjs/app/api/siwe/session/route.ts
-import { NextResponse } from "next/server";
-import { getSiweSession } from "~~/utils/siwe";
-
-export async function GET() {
-  const { isLoggedIn, address, chainId } = await getSiweSession();
-  return NextResponse.json({ isLoggedIn, address, chainId });
-}
-
-export async function DELETE() {
-  const session = await getSiweSession();
-  session.destroy();
-  return NextResponse.json({ isLoggedIn: false });
-}
-```
-
-To protect other routes or Server Components, call `getSiweSession()` and check `isLoggedIn` (and `address` for per-user data).
-
 ## Client Hook
 
+A `useSiwe` hook (`packages/nextjs/hooks/useSiwe.ts`) loads the session on mount and exposes `signIn` / `signOut`. The non-obvious parts:
+
 ```typescript
-// packages/nextjs/hooks/useSiwe.ts
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { Address } from "viem";
-import { createSiweMessage } from "viem/siwe";
-import { useAccount, useSignMessage } from "wagmi";
+// signIn
+const { nonce } = await fetch("/api/siwe/nonce").then(res => res.json());
+const message = createSiweMessage({
+  domain: window.location.host, // must match the Host header the server checks
+  address,
+  chainId,
+  nonce,
+  uri: window.location.origin,
+  version: "1",
+  statement: "Sign in with Ethereum to this app.",
+});
+const signature = await signMessageAsync({ message }); // throws if the user rejects
+const res = await fetch("/api/siwe/verify", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message, signature }),
+});
+if (!res.ok) throw new Error((await res.json()).error);
 
-type SiweState = { isLoggedIn: boolean; address?: Address };
-
-export const useSiwe = () => {
-  const { address, chainId, isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage();
-  const [state, setState] = useState<SiweState>({ isLoggedIn: false });
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Bumped by signIn/signOut so a slow initial session fetch can't overwrite a newer state
-  const stateVersion = useRef(0);
-
-  useEffect(() => {
-    const version = stateVersion.current;
-    fetch("/api/siwe/session")
-      .then(res => res.json())
-      .then(session => {
-        if (stateVersion.current === version) setState(session);
-      });
-  }, []);
-
-  const signIn = useCallback(async () => {
-    if (!address || !chainId) return;
-    setIsLoading(true);
-    try {
-      const { nonce } = await fetch("/api/siwe/nonce").then(res => res.json());
-      const message = createSiweMessage({
-        domain: window.location.host, // must match the Host header the server sees
-        address,
-        statement: "Sign in with Ethereum to this app.",
-        uri: window.location.origin,
-        version: "1",
-        chainId,
-        nonce,
-      });
-      const signature = await signMessageAsync({ message });
-      const res = await fetch("/api/siwe/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, signature }),
-      });
-      if (!res.ok) throw new Error((await res.json()).error);
-      stateVersion.current++;
-      setState({ isLoggedIn: true, address });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [address, chainId, signMessageAsync]);
-
-  const signOut = useCallback(async () => {
-    await fetch("/api/siwe/session", { method: "DELETE" });
-    stateVersion.current++;
-    setState({ isLoggedIn: false });
-  }, []);
-
-  // On page load the wallet reconnects asynchronously, so `isConnected` is briefly false.
-  // Only sign out once the wallet was connected and then actually disconnected (or switched accounts).
-  const hasSeenWalletConnected = useRef(false);
-  useEffect(() => {
-    if (isConnected) hasSeenWalletConnected.current = true;
-    if (!state.isLoggedIn || !hasSeenWalletConnected.current) return;
-    if (!isConnected || (address && state.address && address.toLowerCase() !== state.address.toLowerCase())) {
-      signOut();
-    }
-  }, [isConnected, address, state.isLoggedIn, state.address, signOut]);
-
-  return { ...state, isLoading, signIn, signOut };
-};
+// Sign out when the wallet disconnects or switches accounts. On page load the wallet reconnects
+// asynchronously, so `isConnected` is briefly false: only act once it has been connected.
+const hasSeenWalletConnected = useRef(false);
+useEffect(() => {
+  if (isConnected) hasSeenWalletConnected.current = true;
+  if (!state.isLoggedIn || !hasSeenWalletConnected.current) return;
+  if (!isConnected || (address && state.address && address.toLowerCase() !== state.address.toLowerCase())) {
+    signOut();
+  }
+}, [isConnected, address, state.isLoggedIn, state.address, signOut]);
 ```
 
-Show errors from `signIn` with `notification.error(getParsedError(e))` from `~~/utils/scaffold-eth` (a user rejecting the signature throws).
+Ignore the mount-time session response once `signIn` or `signOut` has run (e.g. with a counter in a ref), or a slow fetch overwrites the newer state.
 
 **Alternative:** RainbowKit (already in SE-2) has a built-in SIWE flow — [`RainbowKitAuthenticationProvider` + `createAuthenticationAdapter`](https://rainbowkit.com/docs/custom-authentication) — that prompts for the signature right after connecting. It calls the same nonce/verify/session routes; wire it in `components/ScaffoldEthAppWithProviders.tsx` if the user prefers that UX.
 
-## Gotchas
+## Done When
 
-**Always validate the domain.** Without the `domain` check in `verifySiweMessage`, a signature obtained by another site (phishing) can be replayed against yours. The example uses the request's `Host` header; behind a proxy that rewrites `Host`, compare against your configured public host instead (e.g. from an env var).
+With `yarn chain` and `yarn start` running and a wallet connected (SE-2's burner wallet works on localhost), run each check and report what you saw:
 
-**Nonces must be single-use.** Generate them server-side and clear them from the session on every verify attempt. Otherwise a captured message + signature can be replayed until the session expires.
-
-**Don't trust the message blindly.** `parseSiweMessage` returns partial data — check `address` and `chainId` exist, and only accept chains the app supports (here: `targetNetworks`). Use the address from the verified message, never one sent separately by the client.
-
-**Smart wallets need a working RPC.** ERC-1271/6492 verification calls the chain. For the local chain (`hardhat` or `foundry`), `http()` falls back to `http://127.0.0.1:8545`, so `yarn chain` must be running.
-
-**The session secret must be 32+ characters** (iron-session requirement) and must be set in production. Changing it logs everyone out.
-
-## How to Test
-
-1. Set `IRON_SESSION_SECRET` in `packages/nextjs/.env.local`
-2. `yarn chain` and `yarn start`, connect a wallet (SE-2's burner wallet works on localhost), call `signIn` from a button using `useSiwe`
-3. `GET /api/siwe/session` should return `{ isLoggedIn: true, address }`; refreshing the page should keep you signed in
-4. Disconnect the wallet → the session should be cleared
-5. Replaying the same `message` + `signature` to `/api/siwe/verify` should fail (nonce already used)
+1. After `signIn`, `GET /api/siwe/session` returns `{ isLoggedIn: true, address }`, and still does after a page refresh
+2. Disconnecting the wallet or switching accounts clears the session
+3. Replaying the same `message` + `signature` to `/api/siwe/verify` is rejected
+4. A message signed for a chain not in `targetNetworks` is rejected with `Unsupported chain`
+5. `yarn next:build` passes without `IRON_SESSION_SECRET` set
