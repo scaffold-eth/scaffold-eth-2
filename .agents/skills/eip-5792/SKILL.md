@@ -22,7 +22,7 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 ## Smart Contract
 
-EIP-5792 works with any contract — the point is batching multiple calls into a single wallet interaction. Use the user's existing contracts; if a demo is needed, any contract with two or more state-changing functions works (e.g. `setGreeting` + `incrementCounter`).
+EIP-5792 works with any contract — the point is batching multiple calls into a single wallet interaction. Use the user's existing contracts. On a fresh SE-2 project, batching two `setGreeting` calls on `YourContract` is enough for a demo.
 
 Deploy using the project's existing deployment pattern (Hardhat `deploy/` or Foundry `script/`).
 
@@ -69,7 +69,8 @@ const { id } = await sendCallsAsync({
     {
       to: deployedContract.address,
       abi: deployedContract.abi,
-      functionName: "incrementCounter",
+      functionName: "setGreeting",
+      args: ["Second call, same batch"],
     },
   ],
   // Optional: only if the wallet reports paymasterService support for this chain.
