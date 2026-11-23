@@ -2,7 +2,7 @@
   "mode": "pre",
   "tag": "beta",
   "initialVersions": {
-    "create-eth": "2.0.23"
+    "create-eth": "2.0.24"
   },
   "changesets": []
 }
