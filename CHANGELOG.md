@@ -1,5 +1,12 @@
 # create-eth
 
+## 2.0.24
+
+### Patch Changes
+
+- 500607f: Add `--skip-simulation` to non-localhost Foundry deploys so gas limits come from the node's `eth_estimateGas`. Forge simulates Ethereum chains with the `evm_version` from `foundry.toml` rather than the target chain's active fork, so deploys to Amsterdam chains (EIP-8037, e.g. Sepolia) ran out of gas. Note: skipping simulation makes the broadcast sequential and drops the pre-broadcast cost summary.
+- 0d7cc97: Pin `hardhat-deploy` to `2.0.24` in the Hardhat template. Newer `hardhat-deploy` releases need newer `rocketh` packages than the template has, so `yarn deploy` failed in new Hardhat projects with `HHE202`.
+
 ## 2.0.23
 
 ### Patch Changes
