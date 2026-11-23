@@ -143,7 +143,7 @@ import { x402Client } from "@x402/core/client";
 import { registerExactEvmScheme } from "@x402/evm/exact/client";
 import { wrapFetchWithPayment } from "@x402/fetch";
 
-const URL = process.argv[2] ?? "http://localhost:3000/api/payment/builder";
+const TARGET_URL = process.argv[2] ?? "http://localhost:3000/api/payment/builder";
 
 async function main() {
   const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
@@ -158,7 +158,7 @@ async function main() {
   registerExactEvmScheme(client, { signer: privateKeyToAccount(wallet.privateKey as `0x${string}`) });
 
   const fetchWithPayment = wrapFetchWithPayment(fetch, client);
-  const response = await fetchWithPayment(URL, { method: "GET" });
+  const response = await fetchWithPayment(TARGET_URL, { method: "GET" });
   console.log(response.status, await response.json());
 }
 
