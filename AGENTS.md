@@ -240,11 +240,11 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **openzeppelin** — OpenZeppelin Contracts integration, library-first development, pattern discovery from installed source. Use for any contract using OZ (tokens, access control, security primitives)
 - **erc-721** — NFT-specific pitfalls: `_safeMint` reentrancy, on-chain SVG stack-too-deep, marketplace metadata `attributes`, IPFS base URI trailing slash
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
-- **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
+- **ponder** — blockchain event indexing with a self-hosted (centralized) indexer, GraphQL/SQL APIs. For The Graph's decentralized network, use subgraph
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
-- **subgraph** — The Graph subgraph integration, blockchain event indexing, GraphQL APIs
+- **subgraph** — blockchain event indexing on The Graph's decentralized network (local Graph Node, Subgraph Studio), GraphQL APIs. For a self-hosted indexer, use ponder
 
 **Agents** (in `.agents/agents/`):
 
