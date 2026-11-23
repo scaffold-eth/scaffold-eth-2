@@ -38,10 +38,6 @@ APIs, override points and import paths change between major versions (e.g. v5 re
    - **Tests and mocks**, when the NatSpec isn't enough: in the [GitHub repo](https://github.com/OpenZeppelin/openzeppelin-contracts) (`test/`, `contracts/mocks/`) and in Foundry's `lib/openzeppelin-contracts/`, but not in the npm package
 3. **Apply the minimal change** to the user's contract: imports, inheritance, constructor chaining, and the required overrides. When two parents define the same function, the compiler error names it and both parents: override it listing them and call `super`.
 
-## Reference Generator
-
-For standard contracts (ERC20, ERC721, ERC1155, Governor, etc.), the [OpenZeppelin Wizard](https://wizard.openzeppelin.com/) generates the canonical combination of imports, inheritance and overrides. Generate the contract without and with a feature, compare the two, and apply only the difference to the user's contract. The Wizard targets the latest OZ release, so check its output against the installed version.
-
 ## Other OZ Packages
 
 `@openzeppelin/contracts` is pre-installed in both flavors. For others (e.g. `@openzeppelin/contracts-upgradeable`): `yarn workspace @se-2/hardhat add <package>` in Hardhat; `forge install OpenZeppelin/<repo>` plus a line in `remappings.txt` in Foundry.
