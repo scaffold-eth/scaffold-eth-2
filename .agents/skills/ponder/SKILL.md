@@ -133,7 +133,7 @@ Query the GraphQL API at `NEXT_PUBLIC_PONDER_URL` (default `http://localhost:420
 - `bigint` columns arrive as strings
 - GraphQL errors arrive with status 200, so check `errors` before reading `data`
 
-**Alternative:** [`@ponder/react`](https://ponder.sh/docs/query/client) (`usePonderQuery`, built on TanStack Query) queries the `/sql/*` endpoint with Drizzle-style typed queries and live updates. It needs the Ponder schema importable from the nextjs package (e.g. `import * as schema from "../ponder/ponder.schema"`).
+**Alternative:** [`@ponder/react`](https://ponder.sh/docs/query/sql-over-http) (`usePonderQuery`, built on TanStack Query) queries the `/sql/*` endpoint with Drizzle-style typed queries and live updates. It needs the Ponder schema importable from the nextjs package (e.g. `import * as schema from "../ponder/ponder.schema"`).
 
 ## Local Development Notes
 
