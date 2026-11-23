@@ -13,7 +13,7 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 [Drizzle ORM](https://orm.drizzle.team/) is a type-safe TypeScript ORM; [Neon](https://neon.com/) is serverless PostgreSQL. This skill adds both to SE-2's Next.js package: local Postgres (Docker) in development, Neon in production.
 
-This skill covers the SE-2 glue; for the rest, see the [Drizzle docs](https://orm.drizzle.team/docs/overview) and the [Neon docs](https://neon.com/docs). The snippets target Drizzle's stable 0.x line; if the project is on 1.x, check the docs for API changes. The `services/database/...` layout is a suggestion; follow the project's structure if it has one.
+This skill covers the SE-2 glue; for the rest, see the [Drizzle docs](https://orm.drizzle.team/docs/overview) and the [Neon docs](https://neon.com/docs). The snippets target the current stable release (0.x, what `yarn add` installs); Drizzle 1.0 is still a release candidate, so if the project is on 1.x, check the docs for API changes. The `services/database/...` layout is a suggestion; follow the project's structure if it has one.
 
 ## Setup
 
