@@ -6,15 +6,26 @@ This guide aims to provide an overview of the contribution workflow to help us m
 
 ## About the Project
 
-Scaffold-ETH 2 is a minimal and forkable repo providing builders with a starter kit to build decentralized applications on Ethereum.
+Scaffold-ETH 2 is a starter kit for building decentralized applications on Ethereum. Projects are created with the `create-eth` CLI (`npx create-eth@latest`).
+
+This repository holds the CLI and the templates it uses to generate a project.
 
 Read the [README](README.md) to get an overview of the project.
 
+### Repository layout
+
+- `src/`: source code of the `create-eth` CLI.
+- `templates/base/`: files that every generated project gets (the Next.js app, root config, agent config).
+- `templates/solidity-frameworks/hardhat/` and `templates/solidity-frameworks/foundry/`: files added for the chosen Solidity framework.
+- `contributors/`: guides for contributors.
+
+The root of the repository is not a runnable app. To run the app and work on it, build the CLI with `yarn build` and create a project linked to the `templates/` folder with `yarn cli --dev`. See the [Developer Guide](#developer-guide).
+
+Paths in a generated project map to the templates like this: `packages/nextjs/...` lives in `templates/base/packages/nextjs/...`, and `packages/hardhat/...` lives in `templates/solidity-frameworks/hardhat/packages/hardhat/...`. Some files are generated from `*.template.mjs` files, see [TEMPLATING.md](contributors/TEMPLATING.md).
+
 ### Vision
 
-The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application.
-
-The repo can be forked to include integrations and more features, but we want to keep the `main` branch simple and minimal.
+The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application. We want to keep the `main` branch simple and minimal.
 
 ### Project Status
 
@@ -43,6 +54,7 @@ Contributions are made via Issues and Pull Requests (PRs). A few general guideli
 - If you're running into an error, please give context. Explain what you're trying to do and how to reproduce the error.
 - Please use the same formatting in the code repository. You can configure your IDE to do it by using the prettier / linting config files included in each package.
 - If applicable, please edit the README.md file to reflect the changes.
+- If you're adding a new template file or modifying arguments of existing templates, please create a corresponding PR to the [Example Extension branch](https://github.com/scaffold-eth/create-eth-extensions/tree/example) of the [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) repository
 
 ### Issues
 
@@ -74,8 +86,9 @@ We follow the ["fork-and-pull" Git workflow](https://github.com/susam/gitpr)
 2. Clone the project
 3. Create a new branch with a descriptive name
 4. Commit your changes to the new branch
-5. Push changes to your fork
-6. Open a PR in our repository and tag one of the maintainers to review your PR
+5. Add [changeset](#changeset) if applicable
+6. Push changes to your fork
+7. Open a PR in our repository and tag one of the maintainers to review your PR
 
 Here are some tips for a high-quality pull request:
 
@@ -90,3 +103,21 @@ Once you submit your PR:
 - As you update your PR and apply changes, mark each conversation resolved.
 
 Once the PR is approved, we'll "squash-and-merge" to keep the git commit history clean.
+
+### Changeset
+
+When adding new features or fixing bugs, we'll need to bump the package versions. We use [Changesets](https://github.com/changesets/changesets) to do this.
+
+> Note: Only changes to the codebase that affect the public API or existing behavior (e.g. bugs) need changesets.
+
+Each changeset defines the version should be a major/minor/patch release, as well as providing release notes that will be added to the changelog upon release.
+
+To create a new changeset, run `yarn changeset add`. This will run the Changesets CLI, prompting you for details about the change. You’ll be able to edit the file after it’s created — don’t worry about getting everything perfect up front.
+
+Even though you can technically use any markdown formatting you like, headings should be avoided since each changeset will ultimately be nested within a bullet list. Instead, bold text should be used as section headings.
+
+If your PR is making changes to an area that already has a changeset (e.g. there’s an existing changeset covering theme API changes but you’re making further changes to the same API), you should update the existing changeset in your PR rather than creating a new one.
+
+## Developer Guide
+
+You can find a detailed guide on [`contributors/DEVELOPER-GUIDE.md`](contributors/DEVELOPER-GUIDE.md)

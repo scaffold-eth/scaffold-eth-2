@@ -84,8 +84,20 @@ Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
+Watch [BG Labs](https://youtube.com/playlist?list=PLJz1HruEnenD77QAsqnk7KG8rSOMk0B99&si=JXZRn78_NBcvJJoZ) - our video series on building with Scaffold-ETH 2.
+
 ## Contributing to Scaffold-ETH 2
 
-We welcome contributions to Scaffold-ETH 2!
+Built by [BuidlGuidl](https://buidlguidl.com) builders, we welcome contributions to Scaffold-ETH 2!
+
+This repository holds the `create-eth` CLI and the templates it uses to generate a project. The root of the repository is not a runnable app: the app code lives in `templates/`. To work on it, see the [Developer Guide](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/contributors/DEVELOPER-GUIDE.md).
 
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+
+## Community
+
+<h4 align="center">
+  <a href="https://x.com/buidlguidl">Buidlguidl X</a> |
+  <a href="https://x.com/ScaffoldETH">SE-2 X</a> |
+  <a href="https://t.me/joinchat/F7nCRK3kI93PoCOk">SE-2 developers chat</a>
+</h4>

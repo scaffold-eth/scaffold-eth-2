@@ -1,0 +1,36 @@
+{
+  "name": "se-2",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "start": "yarn workspace @se-2/nextjs dev",
+    "next:lint": "yarn workspace @se-2/nextjs lint",
+    "next:format": "yarn workspace @se-2/nextjs format",
+    "next:check-types": "yarn workspace @se-2/nextjs check-types",
+    "next:build": "yarn workspace @se-2/nextjs build",
+    "next:serve": "yarn workspace @se-2/nextjs serve",
+    "format": "yarn next:format",
+    "postinstall": "husky install",
+    "precommit": "lint-staged",
+    "vercel": "yarn workspace @se-2/nextjs vercel",
+    "vercel:yolo": "yarn workspace @se-2/nextjs vercel:yolo",
+    "vercel:login": "yarn workspace @se-2/nextjs vercel:login",
+    "ipfs": "yarn workspace @se-2/nextjs ipfs"
+  },
+  "packageManager": "yarn@4.18.1",
+  "devDependencies": {
+    "husky": "~9.1.7",
+    "lint-staged": "~16.4.0"
+  },
+  "resolutions": {
+    "@coinbase/cdp-sdk": "1.52.0"
+  },
+  "engines": {
+    "node": ">=20.18.3"
+  }
+}
