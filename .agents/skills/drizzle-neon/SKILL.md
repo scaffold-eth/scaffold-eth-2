@@ -84,6 +84,7 @@ export const isProductionDatabase = () =>
   normalizeHost(new URL(getDatabaseUrl()).hostname) === normalizeHost(PRODUCTION_DATABASE_HOSTNAME);
 
 // All three drivers expose the same query API; type the instance as one of them.
+// The type is node-postgres's: neon-http's batch() isn't on it, and db.transaction() type-checks but throws on neon-http.
 type Db = ReturnType<typeof drizzle<typeof schema>>;
 
 let dbInstance: Db | null = null;
