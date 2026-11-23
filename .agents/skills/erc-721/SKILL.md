@@ -59,7 +59,7 @@ A function's parameters, return values and locals share the 16 reachable stack s
 
 ## Combining Extensions
 
-Combining `ERC721` with `ERC721Enumerable` and/or `ERC721URIStorage` requires explicit overrides of the functions both parents define (`_update`, `_increaseBalance`, `tokenURI`, `supportsInterface`). The compiler error names each one and its parents; the [OpenZeppelin Wizard](https://wizard.openzeppelin.com/#erc721) generates the full combination.
+Combining `ERC721` with `ERC721Enumerable` and/or `ERC721URIStorage` requires explicit overrides of the functions both parents define (`_update`, `_increaseBalance`, `tokenURI`, `supportsInterface`). The compiler error names each one and the parents to list in its `override(...)`.
 
 ## Done When
 
