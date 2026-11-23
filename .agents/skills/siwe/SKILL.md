@@ -84,7 +84,7 @@ import scaffoldConfig from "~~/scaffold.config";
 // Import from the file, not "~~/utils/scaffold-eth": the index also exports client-only UI helpers
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth/networks";
 
-// Same RPC priority as the frontend (rpcOverrides → Alchemy → chain default).
+// rpcOverrides, then Alchemy, then the chain's default RPC (first one set, no fallback).
 // On the local chain that default is http://127.0.0.1:8545, so `yarn chain` must be running.
 export function getSiwePublicClient(chainId: number) {
   const chain = scaffoldConfig.targetNetworks.find(c => c.id === chainId);
@@ -113,7 +113,8 @@ export async function POST(req: NextRequest) {
   const session = await getSiweSession();
   const nonce = session.nonce;
 
-  // Nonces are single-use: clear it before verifying so a failed or replayed attempt can't reuse it
+  // Single-use per cookie: iron-session keeps the nonce in the cookie, so clearing it only changes
+  // the cookie this response sets. An older copy still holds it until the message's expirationTime
   session.nonce = undefined;
   await session.save();
 
@@ -156,6 +157,7 @@ const message = createSiweMessage({
   uri: window.location.origin,
   version: "1",
   statement: "Sign in with Ethereum to this app.",
+  expirationTime: new Date(Date.now() + 10 * 60 * 1000), // bounds replays with an older cookie
 });
 const signature = await signMessageAsync({ message }); // throws if the user rejects
 const res = await fetch("/api/siwe/verify", {
@@ -187,6 +189,6 @@ With `yarn chain` and `yarn start` running and a wallet connected (SE-2's burner
 
 1. After `signIn`, `GET /api/siwe/session` returns `{ isLoggedIn: true, address }`, and still does after a page refresh
 2. Disconnecting the wallet or switching accounts clears the session
-3. Replaying the same `message` + `signature` to `/api/siwe/verify` is rejected
+3. Replaying the same `message` + `signature` to `/api/siwe/verify` with the cookie returned by the first verify is rejected
 4. A message signed for a chain not in `targetNetworks` is rejected with `Unsupported chain`
 5. `yarn next:build` passes without `IRON_SESSION_SECRET` set
