@@ -23,6 +23,8 @@ The root of the repository is not a runnable app. To run the app and work on it,
 
 Paths in a generated project map to the templates like this: `packages/nextjs/...` lives in `templates/base/packages/nextjs/...`, and `packages/hardhat/...` lives in `templates/solidity-frameworks/hardhat/packages/hardhat/...`. Some files are generated from `*.template.mjs` files, see [TEMPLATING.md](contributors/TEMPLATING.md).
 
+The history of `src/` and `templates/` before 3.0 lives in the archived [create-eth](https://github.com/scaffold-eth/create-eth) repository, at the same paths.
+
 ### Vision
 
 The goal of Scaffold-ETH 2 is to provide the primary building blocks for a decentralized application. We want to keep the `main` branch simple and minimal.
