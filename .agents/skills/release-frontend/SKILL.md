@@ -23,16 +23,17 @@ NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
 
 `yarn ipfs` builds the static export (`NEXT_PUBLIC_IPFS_BUILD=true` turns it on in `next.config.ts`), uploads `out/` to BuidlGuidl IPFS and prints `https://community.bgipfs.com/ipfs/<CID>`. It always exits 0: success is the `🚀 Upload complete` line with the CID, and `❌ Upload failed` means it failed. Without `NEXT_PUBLIC_PRODUCTION_URL`, Open Graph and Twitter metadata point at `http://localhost:3000` (`utils/scaffold-eth/getMetadata.ts`).
 
-The upload needs a bgipfs API key (https://www.bgipfs.com) or a per-upload USDC payment; without either it fails with "Payment required". Never set either up yourself, enter keys or pay: give the user these commands to run in their own terminal, from the repo root. To pay from the `yarn account` wallet, which needs USDC on the chain the error names:
+The upload needs a bgipfs API key (https://www.bgipfs.com) or a per-upload USDC payment; without either it fails with "Payment required". Never set either up yourself, enter keys or pay: give the user these commands to run in their own terminal, from the repo root. To pay from the `yarn account` wallet (or a dedicated low-balance one; each upload is capped at 0.05 USDC by default), which needs USDC on the chain the error names:
 
 ```bash
 cd packages/nextjs
-# `config init` never overwrites an existing config, and `yarn ipfs` creates one without payment; this keeps a backup (e.g. of an API-key setup)
-[ -f ipfs-upload.config.json ] && mv ipfs-upload.config.json ipfs-upload.config.json.bak
-# Hardhat: save the encrypted keystore from packages/hardhat/.env where it persists (the config stores its path)
-umask 077; mkdir -p ~/.foundry/keystores
-node -e 'require("dotenv").config({path:"../hardhat/.env"});process.stdout.write(process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED)' > ~/.foundry/keystores/se2-deployer
-yarn bgipfs upload config init -u https://upload.bgipfs.com --keystore se2-deployer # Foundry: --keystore scaffold-eth-custom
+# `config init` never overwrites an existing config, and `yarn ipfs` creates one without payment; keep a backup (e.g. of an API-key setup)
+if [ -f ipfs-upload.config.json ]; then mv -n ipfs-upload.config.json ipfs-upload.config.json.bak; fi
+# Hardhat only (Foundry: skip this and use --keystore scaffold-eth-custom below). Copies the encrypted keystore
+# to ~/.foundry/keystores/se2-deployer, which the config references by name; it never overwrites, so pick
+# another name for a second project, and re-create it after changing accounts
+(cd ../hardhat && node -e 'require("dotenv").config({quiet:true});const k=process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;if(!k)throw new Error("No deployer account: run yarn generate or yarn account:import");const fs=require("fs"),d=require("os").homedir()+"/.foundry/keystores";fs.mkdirSync(d,{recursive:true,mode:0o700});fs.writeFileSync(d+"/se2-deployer",k,{flag:"wx",mode:0o600})')
+yarn bgipfs upload config init --keystore se2-deployer
 # `yarn ipfs` captures the upload output, so bgipfs can't prompt; an empty value counts as unset
 read -rsp "Keystore password: " BGIPFS_KEYSTORE_PASSWORD; echo; export BGIPFS_KEYSTORE_PASSWORD
 NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
