@@ -1,230 +1,185 @@
 ---
 name: x402
-description: "Add x402 payment-gated routes to a Scaffold-ETH 2 project. Use when the user wants to: monetize an API with micropayments, add HTTP 402 payment required to routes, gate content behind crypto payments, implement pay-per-call APIs, or integrate the x402 protocol."
+description: "Use when the user wants to charge for API routes or pages with x402 (HTTP 402) stablecoin micropayments."
 ---
 
 # x402 Payment Protocol Integration for Scaffold-ETH 2
 
 ## Prerequisites
 
-Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
+This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts` exists). If it isn't one, follow https://docs.scaffoldeth.io/SKILL.md to scaffold it first.
 
 ## Overview
 
-[x402](https://www.x402.org/) is an open payment protocol by Coinbase that uses HTTP status code 402 ("Payment Required") to enable instant stablecoin micropayments over HTTP. When a client requests a protected resource without payment, the server responds with 402 + payment instructions. The client signs a payment, retries the request, and gets access.
+[x402](https://www.x402.org/) gates HTTP resources behind stablecoin payments: the server answers `402 Payment Required` with payment instructions, the client signs an authorization (EIP-3009 for USDC) and retries, and a **facilitator** verifies the signature and settles it onchain. The payer only signs, so they need the token (e.g. USDC) but no ETH for gas.
 
-This skill covers integrating x402 into SE-2 using Next.js middleware. For the full protocol spec and advanced usage, refer to the [x402 docs](https://docs.cdp.coinbase.com/x402/welcome) or the [GitHub repo](https://github.com/coinbase/x402). This skill focuses on SE-2 integration specifics and gotchas.
+This skill covers x402 v2 (`@x402/*` packages) in SE-2's Next.js app. Older examples use the v1 packages (`x402-next`, `x402-fetch`) and `X-PAYMENT` headers; the v2 packages handle the `PAYMENT-*` headers for you. For the rest, see the [x402 docs](https://docs.cdp.coinbase.com/x402/welcome) and the package READMEs in the [GitHub repo](https://github.com/coinbase/x402).
 
-## Dependencies
+## Setup
 
-### NextJS package
-
-Add to `packages/nextjs/package.json`:
-
-```json
-{
-  "dependencies": {
-    "@x402/core": "^2.2.0",
-    "@x402/evm": "^2.2.0",
-    "@x402/next": "^2.2.0",
-    "@x402/paywall": "^2.2.0"
-  }
-}
+```bash
+yarn workspace @se-2/nextjs add @x402/core @x402/evm @x402/next @x402/paywall
 ```
 
-### Hardhat package (for CLI payment script)
+**Check the `next` peer dependency.** `@x402/next` releases often require a newer Next.js than the project's. If yarn warns about an unmet `next` peer, either upgrade `next` in `packages/nextjs`, or find the newest release whose range fits (`npm view @x402/next@<version> peerDependencies`) and install every `@x402/*` package at that same version.
 
-If the user wants a CLI script to test API routes programmatically, add to `packages/hardhat/package.json`:
-
-```json
-{
-  "scripts": {
-    "send402request": "hardhat run scripts/send402request.ts"
-  },
-  "dependencies": {
-    "@x402/core": "^2.2.0",
-    "@x402/evm": "^2.2.0",
-    "@x402/fetch": "^2.2.0"
-  }
-}
-```
-
-Add to root `package.json`: `"send402request": "yarn workspace @se-2/hardhat send402request"`
-
-### Environment variables
-
-Create `packages/nextjs/.env.development` (or `.env.local`):
+Add to `packages/nextjs/.env.local` (and the keys, without values, to `.env.example`). They're read only on the server, so no `NEXT_PUBLIC_` prefix:
 
 ```env
-# Facilitator service URL — verifies and settles payments
-# Default testnet facilitator (free, no signup needed):
-NEXT_PUBLIC_FACILITATOR_URL=https://x402.org/facilitator
-
-# Address that receives payments (set to your deployer or any wallet)
+# Verifies and settles payments. https://x402.org/facilitator is the default testnet facilitator (no signup)
+FACILITATOR_URL=https://x402.org/facilitator
+# Address that receives payments
 RESOURCE_WALLET_ADDRESS=0xYourAddressHere
-
-# CAIP-2 network identifier (eip155:84532 = Base Sepolia, eip155:8453 = Base Mainnet)
+# CAIP-2 network ID: eip155:84532 = Base Sepolia (test USDC from https://faucet.circle.com/), eip155:8453 = Base
 NETWORK=eip155:84532
 ```
 
-### scaffold.config.ts
+The facilitator settles on a real chain, so local `hardhat`/`anvil` chains don't work: develop on a testnet like Base Sepolia, and add it to `targetNetworks` in `scaffold.config.ts`. A `"$0.01"` price is paid in the network's default stablecoin (USDC on Base); which networks work depends on what the facilitator supports (its `/supported` endpoint).
 
-x402 payments happen onchain, so `targetNetworks` must include a supported chain. For development, use `baseSepolia`:
+## Server Setup
 
-```typescript
-targetNetworks: [chains.baseSepolia],
-```
-
-**Do not use `hardhat` (localhost) as the target network for x402** — the facilitator needs a real chain to verify/settle payments.
-
-## x402 Protocol Flow
-
-```
-Client GET /api/protected
-    → Server: no X-PAYMENT header → responds 402 + PAYMENT-REQUIRED header
-Client: signs EIP-712 payment authorization (USDC approve)
-Client GET /api/protected + X-PAYMENT header
-    → Server middleware: sends payment to facilitator for verification
-    → Facilitator: verifies signature, checks balance
-    → Server: serves content
-    → Server middleware: sends settlement to facilitator
-    → Facilitator: executes the USDC transfer onchain
-```
-
-Key insight: **The user never sends a transaction themselves.** They sign an EIP-712 message authorizing a USDC transfer. The facilitator executes it after the server confirms content was delivered.
-
-## Middleware Configuration
-
-The core of x402 integration is `middleware.ts` in the Next.js app root. The v2 API uses `paymentProxy` from `@x402/next` with explicit server and paywall setup.
+One resource server, shared by the proxy and the route handlers:
 
 ```typescript
-// packages/nextjs/middleware.ts
-import { paymentProxy } from "@x402/next";
-import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+// packages/nextjs/services/x402.ts
+// Server-only: it reads server env vars
+import { HTTPFacilitatorClient } from "@x402/core/server";
 import { registerExactEvmScheme } from "@x402/evm/exact/server";
+import { x402ResourceServer } from "@x402/next";
+
+export const network = process.env.NETWORK as `${string}:${string}`;
+export const payTo = process.env.RESOURCE_WALLET_ADDRESS as `0x${string}`;
+
+const facilitatorClient = new HTTPFacilitatorClient({ url: process.env.FACILITATOR_URL });
+export const x402Server = new x402ResourceServer(facilitatorClient);
+registerExactEvmScheme(x402Server); // without it, the server can't build or verify EVM payment requirements
+```
+
+### API routes: `withX402`
+
+`withX402` settles only **after** the handler returns a successful response (status < 400), so clients aren't charged for failed calls:
+
+```typescript
+// packages/nextjs/app/api/payment/builder/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { withX402 } from "@x402/next";
+import { network, payTo, x402Server } from "~~/services/x402";
+
+const handler = async (_req: NextRequest) => {
+  return NextResponse.json({ data: "premium data" });
+};
+
+export const GET = withX402(
+  handler,
+  {
+    accepts: [{ scheme: "exact", price: "$0.01", network, payTo }],
+    description: "Access to premium API data",
+    mimeType: "application/json",
+  },
+  x402Server,
+);
+```
+
+For dynamic routes (`[id]`, `[...slug]`), key the config by the route pattern (`{ "/api/users/[id]": { accepts: [...] } }`). If a keyed pattern doesn't match the request path, the handler runs **unprotected** (with a one-time warning).
+
+### Pages: `paymentProxy` in `proxy.ts`
+
+Next.js 16 renamed `middleware.ts` to `proxy.ts` (on Next.js < 16, use `middleware.ts` and export `middleware`). `paymentProxy` charges even when the response is an error, so use it for pages and `withX402` for APIs:
+
+```typescript
+// packages/nextjs/proxy.ts
+import { paymentProxy } from "@x402/next";
 import { createPaywall } from "@x402/paywall";
 import { evmPaywall } from "@x402/paywall/evm";
+import * as chains from "viem/chains";
+import { network, payTo, x402Server } from "~~/services/x402";
 
-const facilitatorUrl = process.env.NEXT_PUBLIC_FACILITATOR_URL!;
-const payTo = process.env.RESOURCE_WALLET_ADDRESS as `0x${string}`;
-const network = process.env.NETWORK as `${string}:${string}`;
+const chain = Object.values(chains).find(c => `eip155:${c.id}` === network);
 
-// Create facilitator client and resource server
-const facilitatorClient = new HTTPFacilitatorClient({ url: facilitatorUrl });
-const server = new x402ResourceServer(facilitatorClient);
-registerExactEvmScheme(server);
-
-// Create paywall UI (shown to browsers visiting protected pages)
+// Paywall UI shown to browsers visiting protected pages
 const paywall = createPaywall()
   .withNetwork(evmPaywall)
   .withConfig({
     appName: "My dApp",
-    appLogo: "/logo.png",
-    testnet: true, // set false for mainnet
+    appLogo: "/logo.svg",
+    testnet: chain?.testnet ?? false, // viem marks testnets on each chain definition
   })
   .build();
 
-export const middleware = paymentProxy(
+export const proxy = paymentProxy(
   {
-    "/api/payment/:path*": {
-      accepts: [
-        {
-          scheme: "exact",
-          price: "$0.01",
-          network,
-          payTo,
-        },
-      ],
-      description: "Access to premium API data",
-      mimeType: "application/json",
-    },
     "/payment/:path*": {
-      accepts: [
-        {
-          scheme: "exact",
-          price: "$0.01",
-          network,
-          payTo,
-        },
-      ],
+      accepts: [{ scheme: "exact", price: "$0.01", network, payTo }],
       description: "Access to premium content",
       mimeType: "text/html",
     },
   },
-  server,
-  undefined, // optional request context
+  x402Server,
+  undefined, // paywallConfig (using the custom paywall below instead)
   paywall,
 );
 
-// IMPORTANT: matcher must cover all protected routes
+// The proxy only runs on these paths: a route listed above but missing here is served for free
 export const config = {
-  matcher: ["/api/payment/:path*", "/payment/:path*"],
+  matcher: ["/payment/:path*"],
 };
 ```
 
-## CAIP-2 Network Identifiers
+## CLI Payment Script (optional)
 
-The v2 API uses [CAIP-2](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-2.md) network identifiers — format: `eip155:{chainId}` for EVM chains.
+To test paid API routes without a browser, use `@x402/fetch`. SE-2 stores the deployer key encrypted (`DEPLOYER_PRIVATE_KEY_ENCRYPTED`), so decrypt it the way `packages/hardhat/scripts/runHardhatDeployWithPK.ts` does (Hardhat flavor shown; for Foundry, load the signer from its keystore):
 
-| CAIP-2 ID | Chain | Notes |
-|-----------|-------|-------|
-| `eip155:84532` | Base Sepolia | Default for development — [Circle faucet](https://faucet.circle.com/) for test USDC |
-| `eip155:8453` | Base | Recommended for production — lowest fees |
-
-Legacy network names (`base-sepolia`, `base`, etc.) may still work for backwards compatibility, but prefer CAIP-2 format. For the full list of supported networks, check the [x402 docs](https://docs.cdp.coinbase.com/x402/welcome).
-
-## Gotchas & Common Pitfalls
-
-**Facilitator is required.** x402 doesn't do peer-to-peer payments. The facilitator service verifies signatures and executes settlements. For testnet, `https://x402.org/facilitator` works without signup. For production, you may need to run your own — check [x402 docs](https://docs.cdp.coinbase.com/x402/welcome).
-
-**Register the EVM scheme.** The server needs `registerExactEvmScheme(server)` in middleware.ts. Without this, payment payloads won't be understood.
-
-**Payments are in USDC by default.** The `$0.01` price syntax means USDC.
-
-**Don't use `hardhat` localhost as the network.** The facilitator can't verify or settle payments on a local chain. Always use a testnet (`eip155:84532`) even during development.
-
-**The `matcher` in `middleware.ts` must cover protected routes.** If you add a new protected route in the routes config but forget to add it to `matcher`, the middleware won't run on that route.
-
-## CLI Payment Script
-
-For testing API routes programmatically (without a browser), create a script using `@x402/fetch`:
+```bash
+yarn workspace @se-2/hardhat add @x402/core @x402/evm @x402/fetch viem
+```
 
 ```typescript
 // packages/hardhat/scripts/send402request.ts
+import "dotenv/config";
+import { Wallet } from "ethers";
+import password from "@inquirer/password";
 import { privateKeyToAccount } from "viem/accounts";
-import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
+import { x402Client } from "@x402/core/client";
 import { registerExactEvmScheme } from "@x402/evm/exact/client";
+import { wrapFetchWithPayment } from "@x402/fetch";
+
+const TARGET_URL = process.argv[2] ?? "http://localhost:3000/api/payment/builder";
 
 async function main() {
-  const privateKey = process.env.DEPLOYER_PRIVATE_KEY as `0x${string}`;
-  if (!privateKey) { console.log("No deployer key. Run `yarn generate` first."); return; }
+  const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
+  if (!encryptedKey) {
+    console.log("🚫️ No deployer account. Run `yarn generate` or `yarn account:import` first");
+    return;
+  }
+  const pass = await password({ message: "Enter password to decrypt private key:" });
+  const wallet = await Wallet.fromEncryptedJson(encryptedKey, pass);
 
-  const signer = privateKeyToAccount(privateKey);
   const client = new x402Client();
-  registerExactEvmScheme(client, { signer });
+  registerExactEvmScheme(client, { signer: privateKeyToAccount(wallet.privateKey as `0x${string}`) });
 
   const fetchWithPayment = wrapFetchWithPayment(fetch, client);
-  const response = await fetchWithPayment("http://localhost:3000/api/payment/builder", { method: "GET" });
-  console.log("Response:", await response.json());
+  const response = await fetchWithPayment(TARGET_URL, { method: "GET" });
+  console.log(response.status, await response.json());
 }
 
-main().catch(console.error);
+main().catch(error => {
+  console.error(error);
+  process.exit(1);
+});
 ```
 
-> **Note:** Register the EVM scheme on the client side too — `registerExactEvmScheme(client, { signer })` from `@x402/evm/exact/client`.
+Add `"send402request": "tsx scripts/send402request.ts"` to `packages/hardhat/package.json`, and a root script that forwards to it.
 
-## How to Test
+## Done When
 
-1. Set `targetNetworks: [chains.baseSepolia]` in `scaffold.config.ts`
-2. Configure `.env.development` with facilitator URL, pay-to address, and `NETWORK=eip155:84532`
-3. `yarn start` — visit `http://localhost:3000`
-4. Navigate to a protected page — you should see the x402 paywall
-5. To test API routes: `curl http://localhost:3000/api/payment/builder` should return 402 with `PAYMENT-REQUIRED` header
-6. To test paid access: `yarn send402request` (needs funded wallet on Base Sepolia — get test USDC from [Circle faucet](https://faucet.circle.com/))
+With `yarn start` running and the env vars set, run each check and report what you saw:
 
-### Production
+1. `curl -i http://localhost:3000/api/payment/builder` returns `402` with a `PAYMENT-REQUIRED` header
+2. Opening a protected page (e.g. `http://localhost:3000/payment/...`) in a browser shows the x402 paywall
+3. If the payer holds test USDC: `yarn send402request` returns `200` with the data
 
-- Switch `NETWORK` to `eip155:8453` (Base mainnet)
-- Update `scaffold.config.ts` to target the mainnet chain
-- Set `RESOURCE_WALLET_ADDRESS` to your production payment receiver
-- Set `testnet: false` in paywall config
+## Production
+
+- Switch `NETWORK` to the mainnet CAIP-2 ID (e.g. `eip155:8453`) and `targetNetworks` to the mainnet chain
+- Point `FACILITATOR_URL` to a facilitator that supports it: `https://x402.org/facilitator` is for testnets; use e.g. Coinbase CDP's (requires API keys) or run your own
+- Set `RESOURCE_WALLET_ADDRESS` to the production payment receiver

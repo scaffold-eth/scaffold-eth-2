@@ -1,79 +1,51 @@
 ---
 name: openzeppelin
-description: "Develop smart contracts using OpenZeppelin Contracts library. Use when the user wants to create or modify Solidity contracts that use OpenZeppelin — including token standards (ERC20, ERC721, ERC1155), access control (Ownable, AccessControl), security primitives (Pausable, ReentrancyGuard), or any OZ extension. Covers library-first integration, pattern discovery from installed source, and version-safe development."
+description: "Use when writing or changing a Solidity contract that uses OpenZeppelin: tokens (ERC20, ERC721, ERC1155), access control, pausing, reentrancy guards or any other OZ component."
 ---
 
 # Develop Smart Contracts with OpenZeppelin
 
-Adapted from [OpenZeppelin's official skill](https://github.com/OpenZeppelin/openzeppelin-skills) for Scaffold-ETH 2 Solidity projects.
+Adapted from [OpenZeppelin's official skill](https://github.com/OpenZeppelin/openzeppelin-skills) (`develop-secure-contracts`) for Scaffold-ETH 2 Solidity projects.
 
 ## Prerequisites
 
-Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
+This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts` exists). If it isn't one, follow https://docs.scaffoldeth.io/SKILL.md to scaffold it first. Check which flavor it is (Hardhat or Foundry) as described in `AGENTS.md`.
 
-Detect the Solidity framework flavor:
-- If `packages/hardhat` exists → **Hardhat flavor**
-- If `packages/foundry` exists → **Foundry flavor**
+## Core Principle: Library First
 
-## Core Principle: Prefer Library Components Over Custom Code
+Build each feature from the installed OpenZeppelin library, and write custom logic only for what it doesn't provide:
 
-Before writing ANY contract logic, search the installed OpenZeppelin library for an existing component:
+1. **Exact match?** Import it and inherit, overriding only what's needed
+2. **Close match?** Import and extend, overriding only functions the library marks `virtual`
+3. **No match?** Write custom logic, after browsing the library to confirm
 
-1. **Exact match exists?** Import and use it directly — inherit, override only what's needed
-2. **Close match exists?** Import and extend — override only functions the library marks as `virtual`
-3. **No match?** Only then write custom logic. Confirm by browsing the library's directory first
+For example: a supply cap is `ERC20Capped`, owner-only functions are `Ownable` (or `AccessControl` for several roles), and per-transfer logic goes in an override of `_update`. Always import from the dependency rather than copying its source, so the project gets security updates.
 
-**Never hand-write what the library already provides:**
-- Don't write `require(totalSupply() + amount <= cap)` when `ERC20Capped` exists
-- Don't write `require(msg.sender == owner)` when `Ownable` exists
-- Don't implement token transfer hooks manually when the library's base contracts handle it
-- Don't copy library source into your contract — always import from the dependency so the project gets security updates
+Integrate into the project's existing contracts: "add pausability" means changing the current contract, not writing a new one.
 
 ## Pattern Discovery: Read the Installed Source
 
-APIs, override points, and import syntax change between major versions. Don't assume patterns from memory — always verify by reading the installed source.
+APIs, override points and import paths change between major versions (e.g. v5 replaced `_beforeTokenTransfer`/`_afterTokenTransfer` with a single `_update`), so verify against the installed source rather than memory.
 
-### Step 1: Identify the installed version and browse the library
+1. **Find the installed version and source:**
+   - **Hardhat**: `packages/hardhat/node_modules/@openzeppelin/contracts/` (SE-2's Yarn config keeps dependencies per workspace; if it's not there, check the root `node_modules/`). Read the **installed** version from that folder's `package.json`: the range in `packages/hardhat/package.json` (e.g. `^5.6.1`) can resolve to a newer release.
+   - **Foundry**: `packages/foundry/lib/openzeppelin-contracts/contracts/` (version in `lib/openzeppelin-contracts/package.json`), mapped by `@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts` in `packages/foundry/remappings.txt`.
+2. **Read the source file of each component you use**, for:
+   - **Import syntax**: OZ v5 uses named imports (`import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";`); mirror how the library's own files import each other
+   - **`virtual` functions**: only these can be overridden, and that can change between versions
+   - **Constructor parameters**: what must be passed at deployment (e.g. v5's `Ownable(initialOwner)`)
+   - **NatSpec notes** like `NOTE: This function is not virtual, {X} should be overridden instead`: follow them
+   - **Tests and mocks**, when the NatSpec isn't enough: in the [GitHub repo](https://github.com/OpenZeppelin/openzeppelin-contracts) (`test/`, `contracts/mocks/`) and in Foundry's `lib/openzeppelin-contracts/`, but not in the npm package
+3. **Apply the minimal change** to the user's contract: imports, inheritance, constructor chaining, and the required overrides. When two parents define the same function, the compiler error names it and both parents: override it listing them and call `super`.
 
-Find the OpenZeppelin version and locate the installed source:
+## Other OZ Packages
 
-- **Hardhat**: check `packages/hardhat/package.json` for `@openzeppelin/contracts` version, then browse `packages/hardhat/node_modules/@openzeppelin/contracts/`
-- **Foundry**: check `packages/foundry/lib/openzeppelin-contracts/` and the remappings in `packages/foundry/foundry.toml`
+`@openzeppelin/contracts` is pre-installed in both flavors. For others (e.g. `@openzeppelin/contracts-upgradeable`): `yarn workspace @se-2/hardhat add <package>` in Hardhat; `forge install OpenZeppelin/<repo>` plus a line in `remappings.txt` in Foundry.
 
-Browse the library's directory structure to discover available components. Key directories inside the OZ contracts root:
-- `token/{ERC20,ERC721,ERC1155}/` — token standards and their base implementations
-- `token/{ERC20,ERC721}/extensions/` — Capped, Burnable, Pausable, Permit, Votes, Enumerable, etc.
-- `access/` — Ownable, AccessControl, AccessManager
-- `utils/` — ReentrancyGuard, Pausable, math, structs
+## Done When
 
-### Step 2: Read the source file for the component you need
+Run each check and report what you saw:
 
-Look at:
-- **Import syntax**: how the library's own files import each other — mirror that style. OZ v5+ uses named imports:
-  ```solidity
-  // ✅ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  // ❌ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-  ```
-- **`virtual` functions**: only these can be overridden. Functions that were virtual in one version may not be in another
-- **Constructor parameters**: what must be passed during deployment
-- **NatSpec comments**: `NOTE: This function is not virtual, {X} should be overridden instead` — follow these
-
-### Step 3: Extract the minimal integration pattern
-
-From the source, identify only what's needed:
-- Imports to add
-- Inheritance chain
-- Constructor parameters and chaining
-- Required overrides (when inheriting multiple contracts that define the same virtual function, you must override it and call `super`)
-- New functions to expose
-
-### Step 4: Apply to the user's contract
-
-Integrate into existing code. Check for conflicts: duplicate access control, incompatible inheritance, missing overrides. The Solidity compiler will error if two parent contracts define the same function and you don't explicitly override it.
-
-## SE-2 Integration Notes
-
-- OpenZeppelin is pre-installed in both flavors — no additional dependency installation needed
-- Contracts: `packages/hardhat/contracts/` (Hardhat) or `packages/foundry/contracts/` (Foundry)
-- Deploy scripts: `packages/hardhat/deploy/` (Hardhat) or `packages/foundry/script/` (Foundry)
-- Frontend reads contract ABIs from `packages/nextjs/contracts/deployedContracts.ts` (auto-generated by `yarn deploy`)
+1. `yarn compile` passes
+2. Each feature comes from an OZ component where one exists, imported from the installed package (no copied library source)
+3. After `yarn deploy`, the new or changed functions behave as expected when called from the Debug Contracts page or a test (e.g. `pause()` blocks transfers, a non-owner call reverts)
