@@ -1,6 +1,6 @@
 ---
 name: fork-demo
-description: "Use when the app needs real chain state locally: forking mainnet or an L2, funding demo accounts with real tokens, or a live demo where deadlines, expiry or vesting must tick."
+description: "Use when the app needs real chain state locally: forking mainnet or an L2, funding demo accounts with real tokens, impersonating a whale, testing against an existing protocol (Uniswap, Aave…) locally, or a live demo where deadlines, expiry or vesting must tick."
 ---
 
 # Forked-Chain Demos for Scaffold-ETH 2
@@ -11,7 +11,7 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 ## Start the fork
 
-Run `yarn fork` instead of `yarn chain`, then `yarn deploy` and `yarn start` as usual. The fork still runs at chain ID 31337, so `scaffold.config.ts` keeps `chains.hardhat` (Hardhat) or `chains.foundry` (Foundry) — switch `targetNetworks` to the real chain only for a real deployment.
+Run `yarn fork` instead of `yarn chain`, then `yarn deploy` and `yarn start` as usual. The fork runs at chain ID 31337 (see `AGENTS.md`).
 
 - **Hardhat:** `yarn fork` always forks mainnet (`forking.url` under `networks.hardhat` in `hardhat.config.ts`). To fork another chain, change that URL.
 - **Foundry:** `yarn fork --network <rpc-alias>` (an alias from `[rpc_endpoints]` in `foundry.toml`, default `mainnet`), e.g. `yarn fork --network optimism`. Without `--network`, `yarn fork optimism` silently forks mainnet.
@@ -22,7 +22,7 @@ Protocols already deployed on the forked chain go in `packages/nextjs/contracts/
 
 ## Fund demo accounts from real holders
 
-Move existing tokens from a real holder rather than deploying a mock. Check the holder's balance first: a transfer larger than it reverts. These commands work on both Hardhat and Anvil (Hardhat rejects the `anvil_*` names, and rejects `cast send` / `cast call` because they send both `data` and `input` fields, so go through `cast rpc`):
+Move existing tokens from a real holder rather than deploying a mock. Take the holder address from the user or the token's Holders tab on a block explorer, never from memory, and check its balance first: a transfer larger than it reverts. These commands work on both Hardhat and Anvil (Hardhat rejects the `anvil_*` names, and rejects `cast send` / `cast call` because they send both `data` and `input` fields, so go through `cast rpc`):
 
 ```bash
 RPC=http://127.0.0.1:8545
@@ -32,7 +32,7 @@ cast rpc --rpc-url $RPC eth_sendTransaction \
   "{\"from\":\"<holder>\",\"to\":\"<token>\",\"data\":\"$(cast calldata 'transfer(address,uint256)' <demo-account> <amount>)\"}"
 # Read a balance the same way
 cast rpc --rpc-url $RPC eth_call \
-  "{\"to\":\"<token>\",\"data\":\"$(cast calldata 'balanceOf(address)' <demo-account>)\"}" latest
+  "{\"to\":\"<token>\",\"data\":\"$(cast calldata 'balanceOf(address)' <demo-account>)\"}" latest | tr -d '"' | cast to-dec
 ```
 
 `hardhat_setStorageAt` overrides balances directly when no suitable holder exists. Nothing is broadcast to the real chain.

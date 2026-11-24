@@ -50,7 +50,7 @@ yarn account             # View current account info
 # Deploy to live network
 yarn deploy --network <network>   # e.g., sepolia, mainnet, base
 
-yarn vercel:yolo --prod # for deployment of frontend
+yarn vercel --prod  # deploy frontend (see the release-frontend skill)
 ```
 
 ## Architecture

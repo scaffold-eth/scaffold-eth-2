@@ -1,6 +1,6 @@
 ---
 name: release-frontend
-description: "Use when releasing the frontend: publishing it to IPFS (`yarn ipfs`), Vercel, or an ENS name."
+description: "Use when deploying, hosting or publishing the frontend/website (not contracts): IPFS (`yarn ipfs`), Vercel, or an ENS name."
 ---
 
 # Shipping a Scaffold-ETH 2 Frontend
@@ -11,6 +11,8 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 Before building, `targetNetworks` in `scaffold.config.ts` must list the live chain(s) the contracts are deployed to, and `deployedContracts.ts` / `externalContracts.ts` must hold those chains' addresses. A build pointed at `chains.hardhat` / `chains.foundry` ships fine and then shows nothing.
 
+Set `NEXT_PUBLIC_ALCHEMY_API_KEY` and `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` too (in the shell or `.env.local` for IPFS, in the project env on Vercel). Without them the build silently uses SE-2's shared, rate-limited defaults from `scaffold.config.ts`: the site works at release and degrades later.
+
 ## IPFS
 
 ```bash
@@ -19,20 +21,22 @@ rm -rf .next out # stale .next/dev types and old out/ files survive otherwise
 NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
 ```
 
-`yarn ipfs` builds the static export (`NEXT_PUBLIC_IPFS_BUILD=true` turns it on in `next.config.ts`), uploads `out/` to BuidlGuidl IPFS and prints `https://community.bgipfs.com/ipfs/<CID>`. Without `NEXT_PUBLIC_PRODUCTION_URL`, Open Graph and Twitter metadata point at `http://localhost:3000` (`utils/scaffold-eth/getMetadata.ts`).
+`yarn ipfs` builds the static export (`NEXT_PUBLIC_IPFS_BUILD=true` turns it on in `next.config.ts`), uploads `out/` to BuidlGuidl IPFS and prints `https://community.bgipfs.com/ipfs/<CID>`. It always exits 0: success is the `🚀 Upload complete` line with the CID, and `❌ Upload failed` means it failed. Without `NEXT_PUBLIC_PRODUCTION_URL`, Open Graph and Twitter metadata point at `http://localhost:3000` (`utils/scaffold-eth/getMetadata.ts`).
 
-The upload needs a bgipfs API key (https://www.bgipfs.com) or a per-upload USDC payment; without either it fails with "Payment required". The user sets this up, never the agent: don't enter keys or pay. To pay from the `yarn account` wallet, which needs USDC on the chain the error names:
+The upload needs a bgipfs API key (https://www.bgipfs.com) or a per-upload USDC payment; without either it fails with "Payment required". Never set either up yourself, enter keys or pay: give the user these commands to run in their own terminal, from the repo root. To pay from the `yarn account` wallet, which needs USDC on the chain the error names:
 
 ```bash
 cd packages/nextjs
-rm -f ipfs-upload.config.json # `config init` never overwrites it, and `yarn ipfs` creates one without payment
-# Hardhat: the keystore is the encrypted JSON in packages/hardhat/.env
-node -e 'require("dotenv").config({path:"../hardhat/.env"});process.stdout.write(process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED)' > /tmp/se2-keystore.json
-yarn bgipfs upload config init -u https://upload.bgipfs.com --keystore /tmp/se2-keystore.json # Foundry: --keystore scaffold-eth-custom
+# `config init` never overwrites an existing config, and `yarn ipfs` creates one without payment; this keeps a backup (e.g. of an API-key setup)
+[ -f ipfs-upload.config.json ] && mv ipfs-upload.config.json ipfs-upload.config.json.bak
+# Hardhat: save the encrypted keystore from packages/hardhat/.env where it persists (the config stores its path)
+umask 077; mkdir -p ~/.foundry/keystores
+node -e 'require("dotenv").config({path:"../hardhat/.env"});process.stdout.write(process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED)' > ~/.foundry/keystores/se2-deployer
+yarn bgipfs upload config init -u https://upload.bgipfs.com --keystore se2-deployer # Foundry: --keystore scaffold-eth-custom
 # `yarn ipfs` captures the upload output, so bgipfs can't prompt; an empty value counts as unset
 read -rsp "Keystore password: " BGIPFS_KEYSTORE_PASSWORD; echo; export BGIPFS_KEYSTORE_PASSWORD
 NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
-unset BGIPFS_KEYSTORE_PASSWORD; rm /tmp/se2-keystore.json
+unset BGIPFS_KEYSTORE_PASSWORD
 ```
 
 What a static export can't serve:
@@ -46,7 +50,7 @@ What a static export can't serve:
 
 ## ENS
 
-Point an ENS name at the release by setting its contenthash to `ipfs://<CID>` (in the ENS app, or on-chain via the resolver). That's a mainnet transaction from the name's owner: do it only after the user has reviewed the gateway URL and approved that CID.
+Point an ENS name at the release by setting its contenthash to `ipfs://<CID>` (in the ENS app, or on-chain via the resolver). That's a mainnet transaction the user sends from the name's owner account, never you: hand it over only after the user has reviewed the gateway URL and approved that CID.
 
 ## Done When
 
