@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 
-const productionUrl = process.env.NEXT_PUBLIC_PRODUCTION_URL?.replace(/\/+$/, "");
-// Vercel sets VERCEL_PROJECT_PRODUCTION_URL (a bare host) when NEXT_PUBLIC_PRODUCTION_URL is empty
-const baseUrl = productionUrl
-  ? /^https?:\/\//i.test(productionUrl)
+const productionUrl = (process.env.NEXT_PUBLIC_PRODUCTION_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL)
+  ?.trim()
+  .replace(/\/+$/, "");
+const baseUrl = !productionUrl
+  ? `http://localhost:${process.env.PORT || 3000}`
+  : /^https?:\/\//i.test(productionUrl)
     ? productionUrl
-    : `https://${productionUrl}`
-  : process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : `http://localhost:${process.env.PORT || 3000}`;
+    : `https://${productionUrl}`;
 const titleTemplate = "%s | Scaffold-ETH 2";
 
 export const getMetadata = ({
