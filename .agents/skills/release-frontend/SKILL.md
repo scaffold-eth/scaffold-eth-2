@@ -40,6 +40,8 @@ NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
 unset BGIPFS_KEYSTORE_PASSWORD
 ```
 
+If it fails with "the configured payment was not accepted", nothing was charged: retry the upload once before changing the setup.
+
 What a static export can't serve:
 
 - **API routes** (`app/api/**`, e.g. from the siwe, x402 or drizzle-neon skills): the export build fails. Host those on a server (Vercel) instead.
