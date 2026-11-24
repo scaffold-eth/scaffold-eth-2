@@ -248,7 +248,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
 - **subgraph** — blockchain event indexing on The Graph's decentralized network (local Graph Node, Subgraph Studio), GraphQL APIs. For a self-hosted indexer, use ponder
 - **fork-demo** — forking a real chain locally, funding demo accounts from real holders, interval mining for live deadline/vesting demos
-- **ship** — releasing the frontend: IPFS (`yarn ipfs`), Vercel, ENS contenthash
+- **release-frontend** — releasing the frontend: IPFS (`yarn ipfs`), Vercel, ENS contenthash
 
 **Agents** (in `.agents/agents/`):
 

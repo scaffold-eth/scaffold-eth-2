@@ -1,5 +1,5 @@
 ---
-name: ship
+name: release-frontend
 description: "Use when releasing the frontend: publishing it to IPFS (`yarn ipfs`), Vercel, or an ENS name."
 ---
 
