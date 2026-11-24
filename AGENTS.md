@@ -27,6 +27,7 @@ Commands work the same for both flavors unless noted otherwise:
 ```bash
 # Development workflow (run each in separate terminal)
 yarn chain          # Start local blockchain (Hardhat or Anvil)
+yarn fork           # Local mainnet fork instead (Foundry: yarn fork --network <rpc-alias>; Hardhat: edit forking.url)
 yarn deploy         # Deploy contracts to local network
 yarn start          # Start Next.js frontend at http://localhost:3000
 
@@ -92,6 +93,7 @@ yarn vercel:yolo --prod # for deployment of frontend
 #### Both Flavors
 
 - After `yarn deploy`, ABIs are auto-generated to `packages/nextjs/contracts/deployedContracts.ts`
+- A fork (`yarn fork`) still runs at chain ID 31337: keep `chains.hardhat` / `chains.foundry` in `targetNetworks`, and add forked protocols to `externalContracts.ts` under `31337`, not the upstream chain ID
 
 ### Frontend Contract Interaction
 
@@ -245,6 +247,8 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
 - **subgraph** — blockchain event indexing on The Graph's decentralized network (local Graph Node, Subgraph Studio), GraphQL APIs. For a self-hosted indexer, use ponder
+- **fork-demo** — forking a real chain locally, funding demo accounts from real holders, interval mining for live deadline/vesting demos
+- **ship** — releasing the frontend: IPFS (`yarn ipfs`), Vercel, ENS contenthash
 
 **Agents** (in `.agents/agents/`):
 
