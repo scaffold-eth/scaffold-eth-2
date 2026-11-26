@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
-const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : `http://localhost:${process.env.PORT || 3000}`;
+const productionHost = (
+  process.env.NEXT_PUBLIC_PRODUCTION_URL?.trim() || process.env.VERCEL_PROJECT_PRODUCTION_URL
+)?.replace(/^https?:\/\//i, "");
+const baseUrl = productionHost ? `https://${productionHost}` : `http://localhost:${process.env.PORT || 3000}`;
 const titleTemplate = "%s | Scaffold-ETH 2";
 
 export const getMetadata = ({
@@ -14,8 +15,6 @@ export const getMetadata = ({
   description: string;
   imageRelativePath?: string;
 }): Metadata => {
-  const imageUrl = `${baseUrl}${imageRelativePath}`;
-
   return {
     metadataBase: new URL(baseUrl),
     title: {
@@ -31,7 +30,7 @@ export const getMetadata = ({
       description: description,
       images: [
         {
-          url: imageUrl,
+          url: imageRelativePath,
         },
       ],
     },
@@ -41,7 +40,7 @@ export const getMetadata = ({
         template: titleTemplate,
       },
       description: description,
-      images: [imageUrl],
+      images: [imageRelativePath],
     },
     icons: {
       icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
