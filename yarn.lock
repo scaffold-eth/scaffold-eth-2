@@ -389,6 +389,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eip-1193/jsonrpc-provider@npm:^0.6.0":
+  version: 0.6.1
+  resolution: "@eip-1193/jsonrpc-provider@npm:0.6.1"
+  dependencies:
+    eip-1193: "npm:^0.7.0"
+    named-logs: "npm:^0.3.2"
+    promise-throttle: "npm:^1.1.2"
+  checksum: 10/7a98c5f98c04ff6e5c0ba7f1c8fdb417f968439a44d6d410ce89f5338bdd5e6e57d52fd7a6ae1dc14a291dbaf1b66e63147dca895f509cda24e06e40b3413aeb
+  languageName: node
+  linkType: hard
+
+"@eip-1193/signer@npm:^0.4.0":
+  version: 0.4.1
+  resolution: "@eip-1193/signer@npm:0.4.1"
+  dependencies:
+    eip-1193: "npm:^0.7.4"
+    viem: "npm:^2.23.12"
+  checksum: 10/839bda10349886406fcdd3b74b2b0b0f0313247bae3ad833ae47a804bc07ca406fbb948920d803d13153a7d476dd526fd216d28b64cd4da828459e81ed160608
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:^1.11.1":
   version: 1.11.3
   resolution: "@emnapi/core@npm:1.11.3"
@@ -4368,40 +4389,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rocketh/core@npm:0.23.1":
-  version: 0.23.1
-  resolution: "@rocketh/core@npm:0.23.1"
+"@rocketh/core@npm:0.26.1":
+  version: 0.26.1
+  resolution: "@rocketh/core@npm:0.26.1"
   dependencies:
     abitype: "npm:^1.3.0"
-    eip-1193: "npm:^0.6.5"
+    eip-1193: "npm:^0.7.1"
     named-logs: "npm:^0.4.1"
     viem: "npm:^2.55.13"
-  checksum: 10/227a001bb979b879c15549be14fdea3e5a92cbafd5d71ad7ec709d761eb92f49bf9780f9ceb487592a6aae0ad0c4c3c664391c051f586194e76ae6463320e44b
+  checksum: 10/6f9c4617f65bac4d409cc652bc143780a0639671756a42876256879196f7337e0007971cdc1bf6cdb92287be5902073a9430bb225c117e940aa05a9e354003db
   languageName: node
   linkType: hard
 
-"@rocketh/deploy@npm:^0.20.1":
-  version: 0.20.1
-  resolution: "@rocketh/deploy@npm:0.20.1"
+"@rocketh/deploy@npm:0.22.5":
+  version: 0.22.5
+  resolution: "@rocketh/deploy@npm:0.22.5"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
+    "@rocketh/core": "npm:0.26.1"
     abitype: "npm:^1.3.0"
-    eip-1193: "npm:^0.6.5"
+    eip-1193: "npm:^0.7.1"
     named-logs: "npm:^0.4.1"
     viem: "npm:^2.55.13"
-  checksum: 10/daf668852c503a5b15d79cde451cdc6daf3ca67bfe872d8d3d42c1483bf2e3cf91d66982925e5f23e8b039845e8667510ee964eca168ac01cbe622f40445159c
+  checksum: 10/18252279089fbb19d2f1ae1c1c5643764dc2afde381adf43c4ad79792d6b09c087a67425465b8a605facd61e6220159a026235ddc6e3e86d05588cc4de0e96c0
   languageName: node
   linkType: hard
 
-"@rocketh/node@npm:^0.21.4":
-  version: 0.21.4
-  resolution: "@rocketh/node@npm:0.21.4"
+"@rocketh/node@npm:0.22.5":
+  version: 0.22.5
+  resolution: "@rocketh/node@npm:0.22.5"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
+    "@rocketh/core": "npm:0.26.1"
     "@types/prompts": "npm:^2.4.9"
     change-case: "npm:^5.4.4"
     commander: "npm:^15.0.0"
-    eip-1193: "npm:^0.6.5"
+    eip-1193: "npm:^0.7.1"
     ldenv: "npm:^0.6.0"
     named-logs: "npm:^0.4.1"
     named-logs-console: "npm:^0.5.1"
@@ -4409,42 +4430,42 @@ __metadata:
     tsx: "npm:^4.23.12"
     viem: "npm:^2.55.13"
   peerDependencies:
-    rocketh: ^0.23.0
+    rocketh: ^0.26.3
   bin:
     rocketh: dist/cli.js
-  checksum: 10/fb7c486b2c2f66f118a2a16eaf53fde789007d65e1253cf7c4b5e3c915e3174100f1c457bf6337c0e0ee4f30d9998a924e415a04dfc9170c21342bb800e81531
+  checksum: 10/ca86694466dfa9d4993cf5e356392312174e013f9a6e4a6eebe1235e958454ea51be1da30d935b05ed1fd22668b7eb3ebc9dd43c6353f8c0f9b045c903224efe
   languageName: node
   linkType: hard
 
-"@rocketh/read-execute@npm:^0.21.1":
-  version: 0.21.1
-  resolution: "@rocketh/read-execute@npm:0.21.1"
+"@rocketh/read-execute@npm:0.23.1":
+  version: 0.23.1
+  resolution: "@rocketh/read-execute@npm:0.23.1"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
+    "@rocketh/core": "npm:0.26.1"
     abitype: "npm:^1.3.0"
-    eip-1193: "npm:^0.6.5"
+    eip-1193: "npm:^0.7.1"
     named-logs: "npm:^0.4.1"
     viem: "npm:^2.55.13"
-  checksum: 10/5716e1e5276c6d44db26a33b4e205a72c9edaa95f6a609c7378d90ed81d9856e94201824ebf3d5a5a99708a5a1b6944af9dbeaeda6842a277f915a82484418cb
+  checksum: 10/60668f63bc711b2fcee4ef69e63496dbff2791f67ab6b1c8cd64dc7b63c979f109b1401370f356435a827735a83182c8a5435c15ea0cd288933818552c8e2dd3
   languageName: node
   linkType: hard
 
-"@rocketh/signer@npm:^0.19.19":
-  version: 0.19.19
-  resolution: "@rocketh/signer@npm:0.19.19"
+"@rocketh/signer@npm:0.20.4":
+  version: 0.20.4
+  resolution: "@rocketh/signer@npm:0.20.4"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
-    eip-1193: "npm:^0.6.5"
-    eip-1193-signer: "npm:^0.2.0"
-  checksum: 10/23e07950090d19d88065789257808a2479c756af7945cff55da2138cc64aedd7b3dc18b0689eb2e889a584e4dffb0d9ddd634f420b59caca223fc1efa5e68529
+    "@eip-1193/signer": "npm:^0.4.0"
+    "@rocketh/core": "npm:0.26.1"
+    eip-1193: "npm:^0.7.1"
+  checksum: 10/e317dc4cfc543b1f6630c9a25ac68ae6d32e7f747e8dafcb75dd41032e31ed83da2b7fb04849dbaa0826634b83dc93f4eb1a762136b918fe98c0a8399f2f40db
   languageName: node
   linkType: hard
 
-"@rocketh/verifier@npm:^0.19.28":
-  version: 0.19.28
-  resolution: "@rocketh/verifier@npm:0.19.28"
+"@rocketh/verifier@npm:0.19.34":
+  version: 0.19.34
+  resolution: "@rocketh/verifier@npm:0.19.34"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
+    "@rocketh/core": "npm:0.26.1"
     "@types/fs-extra": "npm:^11.0.4"
     "@types/qs": "npm:^6.15.1"
     chalk: "npm:6.0.0"
@@ -4453,10 +4474,10 @@ __metadata:
     ldenv: "npm:^0.6.0"
     neoqs: "npm:^6.13.0"
   peerDependencies:
-    "@rocketh/node": ^0.21.3
+    "@rocketh/node": ^0.22.4
   bin:
     rocketh-verify: dist/cli.js
-  checksum: 10/a8a9b1998a8910b3fb84a28f0ef327e564c86730f8d5b0948aeb11ee4cee68c64fb45eb960c10779215a95cc2a0a35283de75e0b6be04d3c3fa30f4ede7b8068
+  checksum: 10/627e12d5dc6981ed69f41d3234075e99116152776494be621d0c821f680438bd44dca126fc2ae11cb2950f14dac1a53262177365ad14779eb7dcf3ff3c7477a8
   languageName: node
   linkType: hard
 
@@ -4789,11 +4810,11 @@ __metadata:
     "@nomicfoundation/hardhat-verify": "npm:^3.1.2"
     "@nomicfoundation/ignition-core": "npm:^3.1.10"
     "@openzeppelin/contracts": "npm:^5.6.1"
-    "@rocketh/deploy": "npm:^0.20.1"
-    "@rocketh/node": "npm:^0.21.4"
-    "@rocketh/read-execute": "npm:^0.21.1"
-    "@rocketh/signer": "npm:^0.19.19"
-    "@rocketh/verifier": "npm:^0.19.28"
+    "@rocketh/deploy": "npm:0.22.5"
+    "@rocketh/node": "npm:0.22.5"
+    "@rocketh/read-execute": "npm:0.23.1"
+    "@rocketh/signer": "npm:0.20.4"
+    "@rocketh/verifier": "npm:0.19.34"
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:^22.20.5"
     "@types/qrcode": "npm:^1.5.6"
@@ -4806,12 +4827,12 @@ __metadata:
     ethers: "npm:^6.17.0"
     globals: "npm:^17.13.0"
     hardhat: "npm:^3.18.1"
-    hardhat-deploy: "npm:^2.0.30"
+    hardhat-deploy: "npm:2.4.0"
     mocha: "npm:^12.0.3"
     prettier: "npm:^3.9.9"
     prettier-plugin-solidity: "npm:^2.4.1"
     qrcode: "npm:^1.5.4"
-    rocketh: "npm:^0.23.1"
+    rocketh: "npm:0.26.4"
     tsx: "npm:^4.23.15"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.71.0"
@@ -9867,29 +9888,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eip-1193-jsonrpc-provider@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "eip-1193-jsonrpc-provider@npm:0.4.4"
-  dependencies:
-    named-logs: "npm:^0.3.2"
-    promise-throttle: "npm:^1.1.2"
-  checksum: 10/e984655373bd477976c48d2c1e16c1eb3029f468648a5c75e7917432c51507224723d44881de8b73428e65410c83850fecada9fc9c234e0aff47037b684a321f
-  languageName: node
-  linkType: hard
-
-"eip-1193-signer@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "eip-1193-signer@npm:0.2.0"
-  dependencies:
-    viem: "npm:^2.23.12"
-  checksum: 10/ebfa4b040e31a6e65764de07098a2747812aa0391f8801a55f2d1c18826126d1625af75dd8e47d964b76bcd4f5634cb7257ad863f6e704e8d6517af64434ed9d
-  languageName: node
-  linkType: hard
-
-"eip-1193@npm:^0.6.5":
-  version: 0.6.5
-  resolution: "eip-1193@npm:0.6.5"
-  checksum: 10/e462ddd94499c0699297aca0af694b0dbddd5a7ad9d732b611a575eb6a6aef7aef3743ad629209d2886903757020a6ca99b9b5bde89ede827ff7799b349dbc7f
+"eip-1193@npm:^0.7.0, eip-1193@npm:^0.7.1, eip-1193@npm:^0.7.4":
+  version: 0.7.4
+  resolution: "eip-1193@npm:0.7.4"
+  checksum: 10/b02df7f02a252162acde8f2ad2507a108b29c9e023e0a05aaff63a714d2bb18589ac699a8d7c4ac1502703eddb6ae0b1e7127e4ce313d28755a0eaed4551d73f
   languageName: node
   linkType: hard
 
@@ -12132,9 +12134,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat-deploy@npm:^2.0.30":
-  version: 2.0.30
-  resolution: "hardhat-deploy@npm:2.0.30"
+"hardhat-deploy@npm:2.4.0":
+  version: 2.4.0
+  resolution: "hardhat-deploy@npm:2.4.0"
   dependencies:
     "@nomicfoundation/hardhat-zod-utils": "npm:^3.0.4"
     commander: "npm:^15.0.0"
@@ -12142,12 +12144,12 @@ __metadata:
     named-logs-console: "npm:^0.5.1"
     zod: "npm:^3.25.76"
   peerDependencies:
-    "@rocketh/node": ^0.21.4
+    "@rocketh/node": ^0.22.5
     hardhat: ^3.6.0
-    rocketh: ^0.23.0
+    rocketh: ^0.26.3
   bin:
     hardhat-deploy: dist/cli.js
-  checksum: 10/48ac49b4e66023e7929fc51e83595151fcc4e68b2078763e314303cb7b0b135e67e02ce20df567ff456e8ec8a91fa87e434ce7562cbee900315d74b81042e20a
+  checksum: 10/3c9bc7ed0a8e14959432c7b34f29498239947a4a737613eb7213755cc4626512948ffd2e9f780d5d2cd5b8dbc16e0a35215244f1027396f70d7c7fe228334c95
   languageName: node
   linkType: hard
 
@@ -17378,18 +17380,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rocketh@npm:^0.23.1":
-  version: 0.23.1
-  resolution: "rocketh@npm:0.23.1"
+"rocketh@npm:0.26.4":
+  version: 0.26.4
+  resolution: "rocketh@npm:0.26.4"
   dependencies:
-    "@rocketh/core": "npm:0.23.1"
+    "@eip-1193/jsonrpc-provider": "npm:^0.6.0"
+    "@rocketh/core": "npm:0.26.1"
     abitype: "npm:^1.3.0"
     change-case: "npm:^5.4.4"
-    eip-1193: "npm:^0.6.5"
-    eip-1193-jsonrpc-provider: "npm:^0.4.4"
+    eip-1193: "npm:^0.7.1"
     ldenv: "npm:^0.6.0"
     named-logs: "npm:^0.4.1"
-  checksum: 10/df64b0b9257d7a67cdf8247abb96f72d0a03e4e3451de22bffc6e5c186834c4f7f50959883e94de316e8bb99d84922f7bd78e8b32912c13f16e110a74aebb610
+  checksum: 10/26206d2718aaa624075d7b5590b12700b692ac26a0cb43af1a53e4fc01efcaf2e8879832e997d96478a71551a6a6ee93788afc93a9877ada60c33bfee8ecc0b7
   languageName: node
   linkType: hard
 
