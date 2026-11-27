@@ -21,3 +21,9 @@ node_modules
 
 # cli
 dist
+
+# vercel: `yarn vercel` links the repo root, and the Vercel CLI appends `.env*` on the first link unless this exact line exists.
+# `.env*` ignores env files at any depth, including ones Next.js lets you commit like `.env.production`; add a `!` line to commit one.
+.vercel
+.env*
+!.env.example
