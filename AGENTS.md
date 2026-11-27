@@ -27,6 +27,7 @@ Commands work the same for both flavors unless noted otherwise:
 ```bash
 # Development workflow (run each in separate terminal)
 yarn chain          # Start local blockchain (Hardhat or Anvil)
+yarn fork           # Local fork of a live chain instead of yarn chain (see Forking)
 yarn deploy         # Deploy contracts to local network
 yarn start          # Start Next.js frontend at http://localhost:3000
 
@@ -83,6 +84,12 @@ yarn vercel --prod # for deployment of frontend
 #### Both Flavors
 
 - After `yarn deploy`, ABIs are auto-generated to `packages/nextjs/contracts/deployedContracts.ts`
+
+#### Forking
+
+- Hardhat's `yarn fork` always forks mainnet (`forking.url` under `networks.hardhat` in `hardhat.config.ts`); Foundry takes `yarn fork --network <rpc-alias>` from `[rpc_endpoints]` in `foundry.toml` (default `mainnet`)
+- The fork still runs at chain ID 31337: keep `chains.hardhat` / `chains.foundry` in `targetNetworks`, and add forked protocols to `externalContracts.ts` under `31337`, not the upstream chain ID
+- Local node RPCs: Hardhat rejects `anvil_*`, `cast send` and `cast call`, so send `hardhat_*` methods (works on Anvil too) and transactions through `cast rpc`. `evm_setIntervalMining` takes milliseconds on Hardhat but seconds on Anvil
 
 ### Frontend Contract Interaction
 
@@ -237,6 +244,7 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
 - **subgraph** — blockchain event indexing on The Graph's decentralized network (local Graph Node, Subgraph Studio), GraphQL APIs. For a self-hosted indexer, use ponder
+- **deploy-frontend** — deploying the frontend (not contracts): IPFS (`yarn ipfs`), Vercel, ENS contenthash, production keys, RPC and branding checks
 
 **Agents** (in `.agents/agents/`):
 
