@@ -1,0 +1,7 @@
+# `yarn vercel` uploads the whole repo, but only packages/nextjs needs its env files (other packages hold keys)
+.env*
+!.env.example
+!packages/nextjs/**/.env*
+# Exclude again what the Vercel CLI excludes by default
+.env.local
+.env.*.local
