@@ -98,7 +98,6 @@ yarn vercel:yolo --prod # for deployment of frontend
 
 - Hardhat's `yarn fork` always forks mainnet (`forking.url` under `networks.hardhat` in `hardhat.config.ts`); Foundry takes `yarn fork --network <rpc-alias>` from `[rpc_endpoints]` in `foundry.toml` (default `mainnet`)
 - The fork still runs at chain ID 31337: keep `chains.hardhat` / `chains.foundry` in `targetNetworks`, and add forked protocols to `externalContracts.ts` under `31337`, not the upstream chain ID
-- Hardhat: run `yarn deploy --reset` after every fork restart. The fork's genesis is the upstream chain's, so hardhat-deploy otherwise reuses addresses that have no code (`AbiDecodingZeroDataError` on the first read)
 - Local node RPCs: Hardhat rejects `anvil_*`, `cast send` and `cast call`, so send `hardhat_*` methods (works on Anvil too) and transactions through `cast rpc`. `evm_setIntervalMining` takes milliseconds on Hardhat but seconds on Anvil
 
 ### Frontend Contract Interaction

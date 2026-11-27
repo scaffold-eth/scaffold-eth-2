@@ -20,7 +20,7 @@ This skill assumes a Scaffold-ETH 2 project (`packages/nextjs/scaffold.config.ts
 
 ```bash
 cd packages/nextjs
-rm -rf .next out # stale .next/dev types and old out/ files survive otherwise
+rm -rf .next/dev/types # route types from an earlier `next dev` fail the build (TS2307) if a route was deleted
 NEXT_PUBLIC_PRODUCTION_URL="https://<production-domain>" yarn ipfs
 ```
 
