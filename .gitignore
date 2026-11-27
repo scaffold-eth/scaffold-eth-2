@@ -21,3 +21,8 @@ node_modules
 
 # cli
 dist
+
+# vercel (`yarn vercel` links the repo root; the Vercel CLI appends `.env*` unless this exact line exists)
+.vercel
+.env*
+!.env.example
