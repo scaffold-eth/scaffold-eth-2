@@ -109,7 +109,7 @@ const { data: totalCounter } = useScaffoldReadContract({
 #### Writing to Contracts
 
 ```typescript
-// isMining stays true until the tx is mined; wagmi's isPending clears once the wallet returns the hash
+// isMining tracks writeContractAsync until the tx is mined (sync writeContract doesn't set it; wagmi's isPending clears at the tx hash)
 const { writeContractAsync, isMining } = useScaffoldWriteContract({
   contractName: "YourContract",
 });
