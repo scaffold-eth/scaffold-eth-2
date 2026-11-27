@@ -23,8 +23,8 @@ async function main() {
     const encryptedKey = process.env.DEPLOYER_PRIVATE_KEY_ENCRYPTED;
 
     if (!encryptedKey) {
-      console.log("🚫️ You don't have a deployer account. Run `yarn generate` or `yarn account:import` first");
-      return;
+      console.error("🚫️ You don't have a deployer account. Run `yarn generate` or `yarn account:import` first");
+      process.exit(1);
     }
 
     const pass = await password({ message: "Enter password to decrypt private key:" });
@@ -52,4 +52,7 @@ async function main() {
   });
 }
 
-main().catch(console.error);
+main().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
