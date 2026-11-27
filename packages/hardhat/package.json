@@ -13,7 +13,7 @@
     "compile": "hardhat compile",
     "deploy": "hardhat compile && tsx scripts/runHardhatDeployWithPK.ts",
     "flatten": "hardhat flatten",
-    "fork": "MAINNET_FORKING_ENABLED=true hardhat node --network hardhat",
+    "fork": "node -e \"require('fs').rmSync('deployments/default', { recursive: true, force: true })\" && MAINNET_FORKING_ENABLED=true hardhat node --network hardhat",
     "format": "prettier --write './**/*.(ts|sol)'",
     "generate": "yarn account:generate",
     "hardhat-verify": "hardhat verify",
