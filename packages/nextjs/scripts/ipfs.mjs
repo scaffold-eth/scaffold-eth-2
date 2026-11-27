@@ -38,8 +38,11 @@ upload.stdout.on("data", chunk => {
   process.stdout.write(chunk);
   output += chunk;
 });
+upload.on("error", () => fail("Upload failed"));
 upload.on("close", code => {
   const cid = output.replace(/\x1b\[[0-9;]*m/g, "").match(/CID: (\S+)/)?.[1];
-  if (code !== 0 || !cid) fail("Upload failed");
+  if (!cid) fail("Upload failed");
   console.log(`🚀 Upload complete! Your site is now available at: ${GATEWAY_URL}/${cid}`);
+  // bgipfs prints the CID and still exits 1 when some of the configured nodes failed
+  if (code !== 0) fail("Upload finished with errors (see above)");
 });
