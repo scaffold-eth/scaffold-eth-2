@@ -17,7 +17,8 @@ const interfaces = chainMetaData
   : {};
 
 export const decodeTransactionData = (tx: TransactionWithFunction) => {
-  if (tx.input.length >= 10 && !tx.input.startsWith("0x60806040") && !tx.input.startsWith("0x60e06040")) {
+  // Contract creations have no `to`, their input is bytecode and not a function call
+  if (tx.to && tx.input.length >= 10) {
     let foundInterface = false;
     for (const [, contractAbi] of Object.entries(interfaces)) {
       try {

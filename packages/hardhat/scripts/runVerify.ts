@@ -30,7 +30,7 @@ async function main() {
 
   const networkIdx = argv.indexOf("--network");
   const network = networkIdx !== -1 ? argv[networkIdx + 1] : "default";
-  const forwarded = argv.filter((_, i) => i !== networkIdx && i !== networkIdx + 1);
+  const forwarded = networkIdx === -1 ? argv : argv.filter((_, i) => i !== networkIdx && i !== networkIdx + 1);
 
   const subcommands = ["etherscan", "sourcify", "blockscout", "metadata"];
   const hasSubcommand = forwarded.some(a => subcommands.includes(a));
